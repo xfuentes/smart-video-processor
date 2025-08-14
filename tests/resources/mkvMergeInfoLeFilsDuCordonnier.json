@@ -1,0 +1,38 @@
+{
+  "attachments": [],
+  "chapters": [],
+  "container": {
+    "properties": {
+      "container_type": 5,
+      "is_providing_timestamps": true
+    },
+    "recognized": true,
+    "supported": true,
+    "type": "AVI"
+  },
+  "errors": [],
+  "file_name": "C:\\Download\\Le fils du cordonnier saison 01 épisode 01.avi",
+  "global_tags": [],
+  "identification_format_version": 20,
+  "track_tags": [],
+  "tracks": [
+    {
+      "codec": "MPEG-4p2",
+      "id": 0,
+      "properties": {
+        "pixel_dimensions": "720x408"
+      },
+      "type": "video"
+    },
+    {
+      "codec": "AC-3",
+      "id": 1,
+      "properties": {
+        "audio_channels": 2,
+        "audio_sampling_frequency": 48000
+      },
+      "type": "audio"
+    }
+  ],
+  "warnings": []
+}
