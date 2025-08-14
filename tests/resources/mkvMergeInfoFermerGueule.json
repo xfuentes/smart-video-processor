@@ -1,0 +1,86 @@
+{
+  "attachments": [],
+  "chapters": [],
+  "container": {
+    "properties": {
+      "container_type": 17,
+      "duration": 5375616000000,
+      "is_providing_timestamps": true,
+      "muxing_application": "Lavf58.44.100",
+      "segment_uid": "f82cde6f9711f1001610326477bbd4b4",
+      "timestamp_scale": 1000000,
+      "writing_application": "Lavf58.44.100"
+    },
+    "recognized": true,
+    "supported": true,
+    "type": "Matroska"
+  },
+  "errors": [],
+  "file_name": ".\\C'Est.Pas.Parce.Qu'On.A.Rien.À.Dire.Qu'Il.Faut.Fermer.Sa.Gueule.(1975).FRENCH.HDLight.1080p.AAC.x264-Notag.mkv",
+  "global_tags": [
+    {
+      "num_entries": 1
+    }
+  ],
+  "identification_format_version": 20,
+  "track_tags": [
+    {
+      "num_entries": 1,
+      "track_id": 0
+    },
+    {
+      "num_entries": 1,
+      "track_id": 1
+    }
+  ],
+  "tracks": [
+    {
+      "codec": "AVC/H.264/MPEG-4p10",
+      "id": 0,
+      "properties": {
+        "codec_id": "V_MPEG4/ISO/AVC",
+        "codec_private_data": "014d4028ffe10024674d402895a01e0089f9701100000303e80000c3506000003d0900000302faf09bbcb82801000468ee3c80",
+        "codec_private_length": 51,
+        "color_range": 1,
+        "default_duration": 40000000,
+        "default_track": true,
+        "display_dimensions": "1920x1080",
+        "display_unit": 0,
+        "enabled_track": true,
+        "forced_track": false,
+        "language": "und",
+        "minimum_timestamp": 43000000,
+        "num_index_entries": 5376,
+        "number": 1,
+        "packetizer": "mpeg4_p10_video",
+        "pixel_dimensions": "1920x1080",
+        "tag_duration": "01:29:35.563000000",
+        "uid": 3102499686702593966
+      },
+      "type": "video"
+    },
+    {
+      "codec": "AAC",
+      "id": 1,
+      "properties": {
+        "audio_bits_per_sample": 16,
+        "audio_channels": 2,
+        "audio_sampling_frequency": 48000,
+        "codec_id": "A_AAC",
+        "codec_private_data": "1190",
+        "codec_private_length": 2,
+        "default_track": true,
+        "enabled_track": true,
+        "forced_track": false,
+        "language": "fre",
+        "minimum_timestamp": 0,
+        "num_index_entries": 0,
+        "number": 2,
+        "tag_duration": "01:29:35.616000000",
+        "uid": 2451228501103375664
+      },
+      "type": "audio"
+    }
+  ],
+  "warnings": []
+}

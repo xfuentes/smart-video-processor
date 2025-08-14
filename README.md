@@ -1,6 +1,10 @@
 # Smart Video Processor
 
-An Electron application with React and TypeScript
+This small Electron application is a frontend for various great free command line tools.
+It is accessible from desktop environment or command line.
+It uses Fluent UI React (https://github.com/microsoft/fluentui) and vite (https://vite.dev/) frameworks.
+Its purpose is to help process and/or encode your DVD or Blu-ray backups.
+Backups can eventually be made with the excellent MakeMKV (https://www.makemkv.com/).
 
 ## Recommended IDE Setup
 
