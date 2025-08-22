@@ -17,7 +17,7 @@
  */
 
 import { expect, test } from 'vitest'
-import Strings from '../../src/util/strings'
+import Strings from '../../src/main/util/strings'
 
 test('Pixels Dimension To 8K', async () => {
   const res = Strings.pixelsToVideoFormat('7680x4320')

@@ -16,15 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
-import { getCmdHint } from '../../src/main/cli/hints'
-import { Hint, HintType } from '../../src/common/Hint'
+import { app } from 'electron'
+import * as fs from 'node:fs'
 
-test('CMD Hints replace all bug', () => {
-  const hint1 = new Hint(1, HintType.LANGUAGE, 'en')
-  const hint2 = new Hint(2, HintType.LANGUAGE, 'fr-BE')
-  const result = getCmdHint(hint1, ['fr-FR', 'en-US'])
-  const result2 = getCmdHint(hint2, ['fr-FR', 'en-US'])
-  expect(result).toBe('en-US')
-  expect(result2).toBe('fr-FR')
-})
+export const getConfigPath = (): string => {
+  const path = app.getPath('userData')
+
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path, { recursive: true })
+  }
+  return path
+}

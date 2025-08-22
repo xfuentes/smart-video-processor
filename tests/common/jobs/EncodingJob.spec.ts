@@ -17,7 +17,7 @@
  */
 
 import {expect, test, vi} from "vitest";
-import Processes from "../../../src/util/processes";
+import Processes from "../../../src/main/util/processes";
 import {JobStateChange, recordJobStates, simulateFFmpegFailure, simulateFFmpegProgression} from "../testUtils";
 import {EncoderSettings} from "../../../src/common/Encoding";
 import EncodingJob from "../../../src/common/jobs/EncodingJob";

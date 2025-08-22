@@ -17,7 +17,7 @@
  */
 
 import { expect, test } from 'vitest'
-import Numbers from '../../src/util/numbers'
+import Numbers from '../../src/main/util/numbers'
 
 test('Convert duration to seconds', async () => {
   const seconds = Numbers.durationToSeconds('01:59:57.250000000')

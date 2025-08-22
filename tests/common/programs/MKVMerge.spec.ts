@@ -19,12 +19,12 @@
 import {expect, test, vi} from "vitest";
 import {Change} from "../../../src/common/Change";
 import {MKVMerge} from "../../../src/common/programs/MKVMerge";
-import Processes from "../../../src/util/processes";
+import Processes from "../../../src/main/util/processes";
 import {ChildProcessWithoutNullStreams} from "node:child_process";
 import {SpawnOptionsWithStdioTuple, StdioPipe} from "child_process";
 import {changeListToMap, simulateFileInfoResponse, simulateMKVmergeFailure, simulateProgramNotFound} from "../testUtils";
 import Track, {TrackType} from "../../../src/common/Track";
-import {pathBasename} from "../../../src/util/path";
+import {pathBasename} from "../../../src/main/util/path";
 
 const genSpawnSpyFileInfo = (jsonFileName: string) => vi.spyOn(Processes, "spawn").mockImplementation(
     (): ChildProcessWithoutNullStreams =>

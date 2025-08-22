@@ -17,11 +17,11 @@
  */
 
 import {expect, test, vi} from "vitest";
-import Processes from "../../../src/util/processes";
+import Processes from "../../../src/main/util/processes";
 import ProcessingJob from "../../../src/common/jobs/ProcessingJob";
 import {Change} from "../../../src/common/Change";
 import {changeListToMap, JobStateChange, recordJobStates, simulateMKVmergeFailure, simulateMKVMergeProgression} from "../testUtils";
-import {pathBasename} from "../../../src/util/path";
+import {pathBasename} from "../../../src/main/util/path";
 
 test('Processing Progression data', async () => {
     vi.spyOn(Processes, "setPriority").mockImplementation(vi.fn());

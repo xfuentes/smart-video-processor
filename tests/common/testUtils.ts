@@ -21,10 +21,10 @@ import Video from "../../src/common/Video";
 import {Hint} from "../../src/common/Hint";
 import Job, {JobStatus} from "../../src/common/jobs/Job";
 import {ChildProcessWithoutNullStreams} from "node:child_process";
-import Files from "../../src/util/files";
+import Files from "../../src/main/util/files";
 import {EncoderSettings} from "../../src/common/Encoding";
 import {SpawnOptionsWithStdioTuple, StdioPipe} from "child_process";
-import {Progression} from "../../src/util/processes";
+import {Progression} from "../../src/main/util/processes";
 
 export const changeListToMap = (changes: Change[]) => {
     return changes.reduce((previousValue, currentValue) => {
