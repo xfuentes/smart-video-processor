@@ -19,7 +19,7 @@
 import {expect, test} from "vitest";
 import {TMDBClient} from "../../../src/common/clients/TMDBClient";
 import {currentSettings} from "../../../src/common/Settings";
-import Files from "../../../src/util/files";
+import Files from "../../../src/main/util/files";
 import {tvdbLanguages} from "../TVDBLanguages";
 import Languages from "../../../src/common/LanguageIETF";
 import {tmdbLanguages} from "../TMDBLanguages";

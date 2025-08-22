@@ -17,7 +17,7 @@
  */
 
 import { expect, test, vi } from 'vitest'
-import Processes from '../../../src/util/processes'
+import Processes from '../../../src/main/util/processes'
 import { simulateFFmpegProgression } from '../testUtils'
 import { FFmpeg } from '../../../src/common/programs/FFmpeg'
 import { EncoderSettings } from '../../../src/common/Encoding'

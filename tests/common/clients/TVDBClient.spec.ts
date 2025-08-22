@@ -21,7 +21,7 @@ import {TVDBClient} from "../../../src/common/clients/TVDBClient";
 import {tvdbLanguages} from "../TVDBLanguages";
 import Languages from "../../../src/common/LanguageIETF";
 import {currentSettings} from "../../../src/common/Settings";
-import Files from "../../../src/util/files";
+import Files from "../../../src/main/util/files";
 
 test('Search Series', async () => {
     currentSettings.favoriteLanguages = ["en"];

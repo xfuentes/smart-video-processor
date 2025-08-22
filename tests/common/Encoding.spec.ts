@@ -21,7 +21,7 @@ import {Brain} from "../../src/common/Brain";
 import {changeListToMap, encoderSettingsListToMap} from "./testUtils";
 import {Encoding} from "../../src/common/Encoding";
 import Track from "../../src/common/Track";
-import Strings from "../../src/util/strings";
+import Strings from "../../src/main/util/strings";
 import {currentSettings} from "../../src/common/Settings";
 
 const queLaFeteCommenceTracks = [

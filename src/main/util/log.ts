@@ -16,15 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
-import { getCmdHint } from '../../src/main/cli/hints'
-import { Hint, HintType } from '../../src/common/Hint'
+import { currentSettings } from '../domain/Settings'
 
-test('CMD Hints replace all bug', () => {
-  const hint1 = new Hint(1, HintType.LANGUAGE, 'en')
-  const hint2 = new Hint(2, HintType.LANGUAGE, 'fr-BE')
-  const result = getCmdHint(hint1, ['fr-FR', 'en-US'])
-  const result2 = getCmdHint(hint2, ['fr-FR', 'en-US'])
-  expect(result).toBe('en-US')
-  expect(result2).toBe('fr-FR')
-})
+export function debug(message?: unknown): void {
+  if (currentSettings.isDebugEnabled) {
+    console.log(message)
+  }
+}

@@ -17,7 +17,7 @@
  */
 
 import {expect, test} from "vitest";
-import Files from "../../src/util/files";
+import Files from "../../src/main/util/files";
 import {Stats} from "node:fs";
 
 const nodeFs = require("fs");

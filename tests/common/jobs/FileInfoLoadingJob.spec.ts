@@ -17,9 +17,9 @@
  */
 
 import {expect, test, vi} from "vitest";
-import Processes from "../../../src/util/processes";
+import Processes from "../../../src/main/util/processes";
 import {ChildProcessWithoutNullStreams, SpawnOptionsWithStdioTuple, StdioPipe} from "node:child_process";
-import Files from "../../../src/util/files";
+import Files from "../../../src/main/util/files";
 import FileInfoLoadingJob from "../../../src/common/jobs/FileInfoLoadingJob";
 import Track, {TrackType} from "../../../src/common/Track";
 import {JobStatus} from "../../../src/common/jobs/Job";

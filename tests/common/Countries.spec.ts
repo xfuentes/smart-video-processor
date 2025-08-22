@@ -18,8 +18,8 @@
 
 import { expect, test } from 'vitest'
 import Countries from '../../src/common/Countries'
-import Files from '../../src/util/files'
-import { pathSep } from '../../src/util/path'
+import Files from '../../src/main/util/files'
+import { pathSep } from '../../src/main/util/path'
 
 test('Search country by alpha3 ignore case', () => {
   const country = Countries.getCountryByCode('usa')
