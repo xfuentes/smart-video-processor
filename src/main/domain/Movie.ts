@@ -24,10 +24,10 @@ import { TMDBClient } from './clients/TMDBClient'
 import Chalk from 'chalk'
 import { Countries, Country } from './Countries'
 import { Languages, LanguageIETF } from './LanguageIETF'
-import { JobStatus } from './jobs/Job'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
+import { JobStatus } from '../../common/@types/Jobs'
 
 export enum EditionType {
   THEATRICAL = 'Theatrical',

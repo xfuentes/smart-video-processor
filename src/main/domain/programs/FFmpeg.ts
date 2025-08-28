@@ -16,16 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Processes, ProgressNotifier } from '../../util/processes'
-import { EncoderSettings, VideoCodec } from '../Encoding'
+import { Processes } from '../../util/processes'
 import { CommandProgress } from './CommandProgress'
 import { JobManager } from '../jobs/JobManager'
 import { v4 as UUIDv4 } from 'uuid'
-import { Track, TrackType } from '../Track'
+import { Track } from '../Track'
 import { ChildProcess } from 'node:child_process'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
 import path from 'node:path'
+import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
+import { TrackType } from '../../../common/@types/Track'
+import { ProgressNotifier } from '../../../common/@types/processes'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936

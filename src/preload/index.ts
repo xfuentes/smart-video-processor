@@ -1,10 +1,29 @@
-import { contextBridge } from 'electron'
+import { webUtils, contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
+import { Settings } from '../common/@types/Settings'
+import { IVideo } from '../common/@types/Video'
+
+const version = await ipcRenderer.invoke('main:getVersion')
 
 // Custom APIs for renderer
 const api = {
-  version: () => ipcRenderer.invoke('retrieve:version')
+  main: {
+    version,
+    getCurrentSettings: (): Promise<Settings> => ipcRenderer.invoke('main:getCurrentSettings'),
+    saveSettings: (settings: Settings): Promise<Settings> => ipcRenderer.invoke('main:saveSettings', settings)
+  },
+  video: {
+    openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),
+    openFiles: (files: File[]) => {
+      const filePaths = files.map((f) => webUtils.getPathForFile(f))
+      return ipcRenderer.invoke('video:openFiles', filePaths)
+    },
+    addFilesChangedListener: (callback: (value: IVideo[]) => void) =>
+      ipcRenderer.on('video:filesChanged', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
+    removeFilesChangedListener: (callback: (value: IVideo[]) => void) =>
+      ipcRenderer.off('video:filesChanged', (_event, value: IVideo[]) => callback(value))
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

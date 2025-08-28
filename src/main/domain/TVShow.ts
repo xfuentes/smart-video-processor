@@ -22,13 +22,13 @@ import { SearchResult } from './SearchResult'
 import Chalk from 'chalk'
 import { LanguageIETF } from './LanguageIETF'
 import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
-import { Strings } from '../util/strings'
+import { Strings } from '../../common/Strings'
 import { Country } from './Countries'
 import { Numbers } from '../util/numbers'
-import { JobStatus } from './jobs/Job'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
+import { JobStatus } from '../../common/@types/Jobs'
 
 export class TVShow {
   public video: Video

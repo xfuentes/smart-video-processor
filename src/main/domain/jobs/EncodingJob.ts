@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Job, JobStatus } from './Job'
+import { Job } from './Job'
 import { FFmpeg } from '../programs/FFmpeg'
-import { EncoderSettings } from '../Encoding'
-import { Strings } from '../../util/strings'
+import { Strings } from '../../../common/Strings'
 import { Track } from '../Track'
+import { EncoderSettings } from '../../../common/@types/Encoding'
+import { JobStatus } from '../../../common/@types/Jobs'
 
 export class EncodingJob extends Job<string> {
   private readonly path: string

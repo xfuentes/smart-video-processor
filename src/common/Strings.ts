@@ -16,14 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum VideoFormats {
-  SD = 'SD',
-  HD_720p = '720p',
-  HD_1080p = '1080p',
-  UHD_4K = '4k',
-  UHD_8K = '8k',
-  HD_1440p = '1440p'
-}
+import { VideoFormats } from './@types/Strings'
 
 export class Strings {
   static humanBitrate(

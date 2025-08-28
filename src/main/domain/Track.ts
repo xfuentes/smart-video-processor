@@ -15,25 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-export enum TrackType {
-  VIDEO = 'Video',
-  AUDIO = 'Audio',
-  SUBTITLES = 'Subtitles'
-}
-
-export interface TrackProperties {
-  videoDimensions?: string // "720x576"
-  audioChannels?: number
-  audioSamplingFrequency?: number
-  textSubtitles?: boolean
-  bitRate?: number
-  frames?: number
-  /**
-   * Calculated Frames per seconds
-   */
-  fps?: number
-}
+import { TrackProperties, TrackType } from '../../common/@types/Track'
 
 export class Track {
   public id: number

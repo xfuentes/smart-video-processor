@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from './Change'
-import { Track, TrackType } from './Track'
+import { Change } from './Change'
+import { Track } from './Track'
 import { AudioVersion, AudioVersions } from './AudioVersions'
 import { Hint, HintType } from './Hint'
-import { Strings } from '../util/strings'
+import { Strings } from '../../common/Strings'
 import { SubtitlesType, SubtitlesTypeUtil } from './SubtitlesType'
 import { Files } from '../util/files'
 import { LanguageIETF, Languages } from './LanguageIETF'
@@ -28,6 +28,8 @@ import { currentSettings } from './Settings'
 import { Country } from './Countries'
 import { EditionType } from './Movie'
 import path from 'node:path'
+import { TrackType } from '../../common/@types/Track'
+import { Attachment, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/@types/Change'
 
 const MAX_FORCED_FRAMES = 40
 
@@ -133,15 +135,10 @@ export class Brain {
 
     this.guessedSubtitleTypeMap.clear()
     for (const tracks of languageTracksMap.values()) {
-      const sortedTracks = [...tracks].sort(
-        (t1, t2) => (t1.properties.frames ?? -1) - (t2.properties.frames ?? -1)
-      )
+      const sortedTracks = [...tracks].sort((t1, t2) => (t1.properties.frames ?? -1) - (t2.properties.frames ?? -1))
       let fullAdded = false
       for (const track of sortedTracks) {
-        if (
-          track.properties.frames &&
-          (track.properties.frames < MAX_FORCED_FRAMES || track.forced)
-        ) {
+        if (track.properties.frames && (track.properties.frames < MAX_FORCED_FRAMES || track.forced)) {
           this.guessedSubtitleTypeMap.set(track.id, SubtitlesType.FORCED)
         } else if (!fullAdded) {
           this.guessedSubtitleTypeMap.set(track.id, SubtitlesType.FULL)
@@ -206,14 +203,7 @@ export class Brain {
 
     if (tagCount > 0) {
       changes.push(
-        new Change(
-          ChangeSourceType.CONTAINER,
-          ChangeType.DELETE,
-          undefined,
-          ChangeProperty.TAGS,
-          undefined,
-          undefined
-        )
+        new Change(ChangeSourceType.CONTAINER, ChangeType.DELETE, undefined, ChangeProperty.TAGS, undefined, undefined)
       )
     }
 
@@ -253,14 +243,7 @@ export class Brain {
 
       if (!containerAttachments || posterNeeded) {
         changes.push(
-          new Change(
-            ChangeSourceType.CONTAINER,
-            ChangeType.UPDATE,
-            undefined,
-            ChangeProperty.POSTER,
-            undefined,
-            poster
-          )
+          new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.POSTER, undefined, poster)
         )
       }
     }
@@ -268,45 +251,19 @@ export class Brain {
     return { changes }
   }
 
-  private analyseVideoTrack(
-    track: Track,
-    originalLanguageIETF: LanguageIETF | undefined
-  ): Change[] {
+  private analyseVideoTrack(track: Track, originalLanguageIETF: LanguageIETF | undefined): Change[] {
     const changes: Change[] = []
     if (track.name) {
-      changes.push(
-        new Change(
-          ChangeSourceType.VIDEO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.NAME,
-          track.name,
-          ''
-        )
-      )
+      changes.push(new Change(ChangeSourceType.VIDEO, ChangeType.UPDATE, track.id, ChangeProperty.NAME, track.name, ''))
     }
     if (track.default) {
       changes.push(
-        new Change(
-          ChangeSourceType.VIDEO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.DEFAULT,
-          track.default,
-          false
-        )
+        new Change(ChangeSourceType.VIDEO, ChangeType.UPDATE, track.id, ChangeProperty.DEFAULT, track.default, false)
       )
     }
     if (track.forced) {
       changes.push(
-        new Change(
-          ChangeSourceType.VIDEO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.FORCED,
-          track.forced,
-          false
-        )
+        new Change(ChangeSourceType.VIDEO, ChangeType.UPDATE, track.id, ChangeProperty.FORCED, track.forced, false)
       )
     }
     if (originalLanguageIETF?.code !== track.language) {
@@ -348,18 +305,13 @@ export class Brain {
           } else if (version.ietf) {
             languageHint = version.ietf
           } else if (version.alpha2) {
-            languageHint = Languages.guessLanguageIETFFromCountries(
-              version.alpha2,
-              originalCountries
-            )?.code
+            languageHint = Languages.guessLanguageIETFFromCountries(version.alpha2, originalCountries)?.code
           }
         }
         if (!languageHint) {
           const temp = Languages.findLanguageFromDescription(track.name)?.code
           languageHint =
-            temp != undefined
-              ? Languages.guessLanguageIETFFromCountries(temp, originalCountries)?.code
-              : temp
+            temp != undefined ? Languages.guessLanguageIETFFromCountries(temp, originalCountries)?.code : temp
         }
       }
       if (!languageHint) {
@@ -368,10 +320,7 @@ export class Brain {
             if (audioVersion.ietf) {
               languageHint = audioVersion.ietf
             } else if (audioVersion.alpha2) {
-              languageHint = Languages.guessLanguageIETFFromCountries(
-                audioVersion.alpha2,
-                originalCountries
-              )?.code
+              languageHint = Languages.guessLanguageIETFFromCountries(audioVersion.alpha2, originalCountries)?.code
             }
           } else if (trackLanguage && audioVersion.ietf?.indexOf(trackLanguage) === 0) {
             languageHint = audioVersions[0]?.ietf
@@ -380,10 +329,7 @@ export class Brain {
       }
 
       const originalLanguage = Languages.fromIETF(originalLanguageIETF?.code)?.language
-      if (
-        (languageHint && languageHint === originalLanguage) ||
-        trackLanguage === originalLanguage
-      ) {
+      if ((languageHint && languageHint === originalLanguage) || trackLanguage === originalLanguage) {
         languageHint = originalLanguageIETF?.code
       }
 
@@ -392,8 +338,7 @@ export class Brain {
         languageHint === undefined &&
         (trackLanguage === undefined || track.language?.indexOf('-') === -1)
       ) {
-        const languageInfo =
-          trackLanguage !== undefined ? Languages.getLanguageByCode(trackLanguage) : undefined
+        const languageInfo = trackLanguage !== undefined ? Languages.getLanguageByCode(trackLanguage) : undefined
         if (languageInfo !== undefined) {
           if (languageInfo.isRegionImportant) {
             // no hint and region missing for language where it matters, lets add a user input request.
@@ -407,19 +352,14 @@ export class Brain {
       }
     }
 
-    const isRegionImportant =
-      Languages.getLanguageByCode(trackLanguage ?? languageHint)?.isRegionImportant ?? false
+    const isRegionImportant = Languages.getLanguageByCode(trackLanguage ?? languageHint)?.isRegionImportant ?? false
     let trackLanguageIETFUpdated: string | undefined = undefined
     if (
       track.language === undefined ||
       track.language === 'und' ||
       (track.language.indexOf('-') === -1 && track.type === TrackType.AUDIO && isRegionImportant) ||
-      (languageHint !== undefined &&
-        languageHint.indexOf('-') != -1 &&
-        track.language !== languageHint) ||
-      (languageHint !== undefined &&
-        languageHint === originalLanguageIETF?.code &&
-        track.language !== languageHint)
+      (languageHint !== undefined && languageHint.indexOf('-') != -1 && track.language !== languageHint) ||
+      (languageHint !== undefined && languageHint === originalLanguageIETF?.code && track.language !== languageHint)
     ) {
       if (languageHint === undefined) {
         languageHint = track.language ?? ''
@@ -453,9 +393,7 @@ export class Brain {
     audioVersions: AudioVersion[],
     userHints: Hint[]
   ): { changes: Change[]; hints: Hint[] } {
-    const { language: originalLanguage, region: originalRegion } = Languages.fromIETF(
-      originalLanguageIETF?.code
-    )
+    const { language: originalLanguage, region: originalRegion } = Languages.fromIETF(originalLanguageIETF?.code)
     let { language: trackLanguage, region: trackRegion } = Languages.fromIETF(track.language)
     let changes: Change[] = []
     let hints: Hint[] = []
@@ -464,14 +402,7 @@ export class Brain {
       changes: c,
       hints: h,
       trackLanguageIETFUpdated
-    } = this.guessTrackLanguage(
-      track,
-      originalLanguageIETF,
-      originalCountries,
-      nbAudioTracks,
-      audioVersions,
-      userHints
-    )
+    } = this.guessTrackLanguage(track, originalLanguageIETF, originalCountries, nbAudioTracks, audioVersions, userHints)
     changes = changes.concat(c)
     hints = hints.concat(h)
 
@@ -482,10 +413,7 @@ export class Brain {
     }
 
     const nameBuilder: string[] = []
-    if (
-      originalLanguage === trackLanguage ||
-      (trackRegion !== undefined && originalRegion === trackRegion)
-    ) {
+    if (originalLanguage === trackLanguage || (trackRegion !== undefined && originalRegion === trackRegion)) {
       const versions = AudioVersions.extractVersionsIncluding(track.name, ['VO'])
       if (versions.length > 0) {
         nameBuilder.push(versions[0].key)
@@ -506,38 +434,17 @@ export class Brain {
 
     if (track.name !== newName) {
       changes.push(
-        new Change(
-          ChangeSourceType.AUDIO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.NAME,
-          track.name,
-          newName
-        )
+        new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, track.id, ChangeProperty.NAME, track.name, newName)
       )
     }
     if (track.default) {
       changes.push(
-        new Change(
-          ChangeSourceType.AUDIO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.DEFAULT,
-          track.default,
-          false
-        )
+        new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, track.id, ChangeProperty.DEFAULT, track.default, false)
       )
     }
     if (track.forced) {
       changes.push(
-        new Change(
-          ChangeSourceType.AUDIO,
-          ChangeType.UPDATE,
-          track.id,
-          ChangeProperty.FORCED,
-          track.forced,
-          false
-        )
+        new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, track.id, ChangeProperty.FORCED, track.forced, false)
       )
     }
 
@@ -592,12 +499,7 @@ export class Brain {
         subTypeHint = winner
       }
 
-      const subTypeUserHint = Hint.retrieve(
-        userHints,
-        track.id,
-        HintType.SUBTITLES_TYPE,
-        subTypeHint
-      ) as SubtitlesType
+      const subTypeUserHint = Hint.retrieve(userHints, track.id, HintType.SUBTITLES_TYPE, subTypeHint) as SubtitlesType
       hints.push(new Hint(track.id, HintType.SUBTITLES_TYPE, subTypeUserHint ?? subTypeHint))
       subTypeHint = subTypeUserHint
     }
@@ -721,10 +623,7 @@ export class Brain {
       if (favLanguage !== undefined && favLanguageIETF !== undefined) {
         if (favLanguage === favLanguageIETF) {
           for (const [, type] of Object.entries(TrackType)) {
-            if (
-              tracksByLanguage[type] !== undefined &&
-              tracksByLanguage[type][favLanguage] !== undefined
-            ) {
+            if (tracksByLanguage[type] !== undefined && tracksByLanguage[type][favLanguage] !== undefined) {
               for (const indexes of Object.values(tracksByLanguage[type][favLanguage])) {
                 indexes.forEach((i) => selectedTrackIds.add(i))
               }
@@ -732,14 +631,9 @@ export class Brain {
           }
         } else {
           for (const [, type] of Object.entries(TrackType)) {
-            if (
-              tracksByLanguage[type] != undefined &&
-              tracksByLanguage[type][favLanguage] !== undefined
-            ) {
+            if (tracksByLanguage[type] != undefined && tracksByLanguage[type][favLanguage] !== undefined) {
               if (tracksByLanguage[type][favLanguage][favLanguageIETF] !== undefined) {
-                tracksByLanguage[type][favLanguage][favLanguageIETF].forEach((i) =>
-                  selectedTrackIds.add(i)
-                )
+                tracksByLanguage[type][favLanguage][favLanguageIETF].forEach((i) => selectedTrackIds.add(i))
               } else {
                 for (const indexes of Object.values(tracksByLanguage[type][favLanguage])) {
                   indexes.forEach((i) => selectedTrackIds.add(i))
@@ -753,36 +647,20 @@ export class Brain {
     const changes: Change[] = []
     const totalAudios = tracks.filter((t) => t.type === TrackType.AUDIO).length
     const audiosToDelete = tracks
-      .filter(
-        (t) => t.type === TrackType.AUDIO && !selectedTrackIds.has(t.id) && t.language !== undefined
-      )
+      .filter((t) => t.type === TrackType.AUDIO && !selectedTrackIds.has(t.id) && t.language !== undefined)
       .map((t) => t.id)
     const totalSubs = tracks.filter((t) => t.type === TrackType.SUBTITLES).length
     const subsToDelete = tracks
-      .filter(
-        (t) =>
-          t.type === TrackType.SUBTITLES && !selectedTrackIds.has(t.id) && t.language !== undefined
-      )
+      .filter((t) => t.type === TrackType.SUBTITLES && !selectedTrackIds.has(t.id) && t.language !== undefined)
       .map((t) => t.id)
     if (totalAudios > audiosToDelete.length) {
       for (const id of audiosToDelete) {
-        changes.push(
-          new Change(ChangeSourceType.AUDIO, ChangeType.DELETE, id, undefined, undefined, undefined)
-        )
+        changes.push(new Change(ChangeSourceType.AUDIO, ChangeType.DELETE, id, undefined, undefined, undefined))
       }
     }
     if (totalSubs > subsToDelete.length) {
       for (const id of subsToDelete) {
-        changes.push(
-          new Change(
-            ChangeSourceType.SUBTITLES,
-            ChangeType.DELETE,
-            id,
-            undefined,
-            undefined,
-            undefined
-          )
-        )
+        changes.push(new Change(ChangeSourceType.SUBTITLES, ChangeType.DELETE, id, undefined, undefined, undefined))
       }
     }
     return { changes }

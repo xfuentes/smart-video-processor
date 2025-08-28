@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Job, JobStatus } from './Job'
+import { Job } from './Job'
 import { MKVMerge } from '../programs/MKVMerge'
 import { Change } from '../Change'
 import { Track } from '../Track'
 import path from 'node:path'
+import { JobStatus } from '../../../common/@types/Jobs'
 
 export class ProcessingJob extends Job<string> {
   private readonly originalFilename: string

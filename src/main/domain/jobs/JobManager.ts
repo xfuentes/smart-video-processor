@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Job, JobStatus, JobType } from './Job'
+import { Job } from './Job'
 import { Files } from '../../util/files'
 import path from 'node:path'
 import * as fs from 'node:fs'
+import { JobStatus, JobType } from '../../../common/@types/Jobs'
 
 export class JobManager {
   private static instance: JobManager

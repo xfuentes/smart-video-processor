@@ -16,15 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Processes, ProgressNotifier } from '../../util/processes'
-import { Track, TrackType } from '../Track'
+import { Processes } from '../../util/processes'
+import { Track } from '../Track'
 import { Numbers } from '../../util/numbers'
 import { Languages } from '../LanguageIETF'
-import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../Change'
+import { Change } from '../Change'
 import { Files } from '../../util/files'
 import { CommandProgress } from './CommandProgress'
 import { ChildProcess } from 'node:child_process'
 import path from 'node:path'
+import { TrackType } from '../../../common/@types/Track'
+import { ProgressNotifier } from '../../../common/@types/processes'
+import { Attachment, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
 
 export interface Container {
   type: string
@@ -38,10 +41,7 @@ export class MKVMerge extends CommandProgress {
   private static instance: MKVMerge
 
   private constructor() {
-    super(
-      Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
-      [0, 1]
-    )
+    super(Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'), [0, 1])
   }
 
   public static getInstance(): MKVMerge {
@@ -51,16 +51,9 @@ export class MKVMerge extends CommandProgress {
     return MKVMerge.instance
   }
 
-  public async retrieveFileInformation(
-    path: string
-  ): Promise<{ tracks: Track[]; container: Container }> {
+  public async retrieveFileInformation(path: string): Promise<{ tracks: Track[]; container: Container }> {
     const tracks: Track[] = []
-    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, [
-      '-J',
-      path,
-      '--ui-language',
-      'en'
-    ])
+    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', 'en'])
     const mkvInfo = JSON.parse(mkvMergeOutput) as MKVMergeIdentify
     let durationSeconds = 0
     mkvInfo?.tracks?.forEach((track) => {
@@ -113,9 +106,7 @@ export class MKVMerge extends CommandProgress {
       type: mkvInfo?.container?.type,
       attachments: !mkvInfo?.attachments
         ? []
-        : mkvInfo?.attachments?.map(
-            (mkva) => new Attachment(mkva.file_name, mkva.content_type, mkva.description)
-          ),
+        : mkvInfo?.attachments?.map((mkva) => new Attachment(mkva.file_name, mkva.content_type, mkva.description)),
       title: mkvInfo?.container?.properties?.title,
       tagCount: (mkvInfo?.global_tags?.length ?? 0) + (mkvInfo?.track_tags?.length ?? 0),
       durationSeconds
@@ -131,13 +122,7 @@ export class MKVMerge extends CommandProgress {
     tracks: Track[] = [],
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
-    const args = this.generateProcessingArguments(
-      originalFilename,
-      path,
-      outputDirectory,
-      changes,
-      tracks
-    )
+    const args = this.generateProcessingArguments(originalFilename, path, outputDirectory, changes, tracks)
     const progressionPattern: RegExp = /Progress: (?<progress>\d+)%/i
     const errorPattern: RegExp = /Error: (?<message>.*)/i
 
@@ -264,9 +249,7 @@ export class MKVMerge extends CommandProgress {
     const mkOptions: string[] = []
 
     const updatedTrackLanguages: number[] = []
-    const updateTrackRequests = changes.filter(
-      (c) => c.trackId != undefined && c.changeType === ChangeType.UPDATE
-    )
+    const updateTrackRequests = changes.filter((c) => c.trackId != undefined && c.changeType === ChangeType.UPDATE)
 
     for (const uChange of updateTrackRequests) {
       switch (uChange.property) {
@@ -278,16 +261,10 @@ export class MKVMerge extends CommandProgress {
           mkOptions.push('--track-name', `${uChange.trackId}:${uChange.newValue as string}`)
           break
         case ChangeProperty.DEFAULT:
-          mkOptions.push(
-            '--default-track',
-            `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`
-          )
+          mkOptions.push('--default-track', `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`)
           break
         case ChangeProperty.FORCED:
-          mkOptions.push(
-            '--forced-track',
-            `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`
-          )
+          mkOptions.push('--forced-track', `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`)
           break
       }
     }
@@ -296,10 +273,7 @@ export class MKVMerge extends CommandProgress {
       if (track.copy && !updatedTrackLanguages.includes(track.id)) {
         // If the track is to be copied and language was not updated,
         // we preserve the original track language IETF because ffmpeg removes them.
-        mkOptions.push(
-          '--language',
-          `${track.id}:${track.language === undefined ? 'und' : track.language}`
-        )
+        mkOptions.push('--language', `${track.id}:${track.language === undefined ? 'und' : track.language}`)
       }
     }
 

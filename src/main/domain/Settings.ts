@@ -16,74 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Processes, ProcessesPriority } from '../util/processes'
+import { Processes } from '../util/processes'
 import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
-import { VideoCodec } from './Encoding'
 import path from 'node:path'
-
-export type Settings = {
-  /**
-   * Enable this for detailed output for debugging.
-   */
-  isDebugEnabled: boolean
-  /**
-   * Language to use for retrieving movies descriptions and to display this program.
-   */
-  language: string
-  /**
-   * Output path where processed movies will be saved (can be relative to the original file or absolute)
-   */
-  moviesOutputPath: string
-  /**
-   * Output path where processed TV Shows will be saved (can be relative to the original file or absolute)
-   */
-  tvShowsOutputPath: string
-  /**
-   * Output path where other processed files will be saved (can be relative to the original file or absolute)
-   */
-  othersOutputPath: string
-  /**
-   * if enabled automatically encode and/or process the files as soon as they are added (if no user input is requested)
-   */
-  isAutoStartEnabled: boolean
-  /**
-   * Process priority to use when merging or encoding
-   */
-  priority: keyof typeof ProcessesPriority
-  /**
-   * If enabled, will only keep tracks in your favorite languages list.
-   */
-  isTrackFilteringEnabled: boolean
-  /**
-   * List of languages ietf ordered by preference.
-   */
-  favoriteLanguages: string[]
-  /**
-   * If enabled, keep VO tracks even if not in favorite languages.
-   */
-  isKeepVOEnabled: boolean
-  /**
-   * If enabled allows automatic track encoding if below conditions are met.
-   */
-  isTrackEncodingEnabled: boolean
-  /**
-   * When enabled only encode a 30s section of the video to verify quality.
-   */
-  isTestEncodingEnabled: boolean
-  /**
-   * Video Codec to use to re-encode video tracks.
-   */
-  videoCodec: VideoCodec
-  /**
-   * Video size reduction needed to allow re-encoding.
-   */
-  videoSizeReduction: number
-  /**
-   * Audio size reduction needed to allow re-encoding.
-   */
-  audioSizeReduction: number
-}
+import { Settings } from '../../common/@types/Settings'
+import { VideoCodec } from '../../common/@types/Encoding'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -126,6 +64,10 @@ export function loadSettings() {
   }
 }
 
-export function saveSettings() {
-  Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
+export function saveSettings(settings?: Settings) {
+  Files.writeFileSync(
+    getConfigPath(),
+    'settings.json',
+    JSON.stringify(settings ?? currentSettings, null, 2)
+  )
 }

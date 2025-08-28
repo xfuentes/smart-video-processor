@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Strings } from '../util/strings'
+import { Strings } from '../../common/Strings'
 import { Country } from './Countries'
 import { LanguageIETF } from './LanguageIETF'
 

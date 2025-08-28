@@ -16,15 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Job, JobStatus } from './Job'
+import { Job } from './Job'
 import { Container, MKVMerge } from '../programs/MKVMerge'
-import { Track, TrackType } from '../Track'
+import { Track } from '../Track'
 import { v4 as UUIDv4 } from 'uuid'
-import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../Change'
+import { Change } from '../Change'
 import { JobManager } from './JobManager'
 import { Files } from '../../util/files'
 import { FFprobe } from '../programs/FFprobe'
 import path from 'node:path'
+import { JobStatus } from '../../../common/@types/Jobs'
+import { TrackType } from '../../../common/@types/Track'
+import { ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
 
 export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string
@@ -36,11 +39,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
 
   protected async executeInternal(): Promise<{ tracks: Track[]; container: Container }> {
     let result = await MKVMerge.getInstance().retrieveFileInformation(this.sourcePath)
-    await FFprobe.getInstance().completeFileInformation(
-      this.sourcePath,
-      result.tracks,
-      result.container
-    )
+    await FFprobe.getInstance().completeFileInformation(this.sourcePath, result.tracks, result.container)
     if (!result?.tracks?.length) {
       return Promise.reject(new Error('Unsupported video file format.'))
     }

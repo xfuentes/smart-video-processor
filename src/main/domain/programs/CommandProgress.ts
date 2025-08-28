@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Processes, ProcessesPriority } from '../../util/processes'
+import { Processes } from '../../util/processes'
 import { ChildProcess } from 'node:child_process'
 import { currentSettings, defaultSettings } from '../Settings'
+import { ProcessesPriority } from '../../../common/@types/processes'
 
 export abstract class CommandProgress {
   protected readonly command: string

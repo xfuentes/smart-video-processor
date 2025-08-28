@@ -17,59 +17,17 @@
  */
 
 import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
+import * as child_process from 'node:child_process'
 import { ChildProcess, ChildProcessWithoutNullStreams } from 'node:child_process'
 import lcid from 'lcid'
 import { debug } from './log'
 import * as os from 'node:os'
-import * as child_process from 'node:child_process'
 import * as fs from 'node:fs'
+import { Dict, ProcessEnv, ProcessesPriority } from '../../common/@types/processes'
 
 const defaultOptions = { spawn: true }
 const defaultLocale = 'en-US'
 const cache = new Map()
-
-interface Dict<T> {
-  [key: string]: T | undefined
-}
-
-interface ProcessEnv extends Dict<string> {
-  /**
-   * Can be used to change the default timezone at runtime
-   */
-  TZ?: string
-}
-
-export type Progression = {
-  /**
-   * Float between 0 and 1, -1 means stopped, undefined means indeterminate.
-   */
-  progress: number | undefined
-  /**
-   * The current speed in float number of times compared to normal playback speed.
-   */
-  xSpeed?: number
-  /**
-   * Estimated number of seconds until completion.
-   */
-  countdown?: number
-  /**
-   * Current pass if using multi pass encoding.
-   */
-  pass?: number
-  /**
-   * The current process to allow controlling it.
-   */
-  process?: ChildProcess
-}
-export type ProgressNotifier = (progression: Progression) => void
-
-export enum ProcessesPriority {
-  LOW = os.constants.priority.PRIORITY_LOW,
-  BELOW_NORMAL = os.constants.priority.PRIORITY_BELOW_NORMAL,
-  NORMAL = os.constants.priority.PRIORITY_NORMAL,
-  ABOVE_NORMAL = os.constants.priority.PRIORITY_ABOVE_NORMAL,
-  HIGH = os.constants.priority.PRIORITY_HIGH
-}
 
 export class Processes {
   private static readonly isUsingWindows = process.platform === 'win32'
@@ -86,8 +44,8 @@ export class Processes {
   static async pause(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        const ntsuspend = await import('ntsuspend')
-        ntsuspend && ntsuspend.suspend(proc.pid)
+        /*const ntsuspend = await import('ntsuspend')
+        ntsuspend && ntsuspend.suspend(proc.pid)*/
       } else {
         proc.kill('SIGSTOP')
       }
@@ -97,8 +55,8 @@ export class Processes {
   static async resume(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        const ntsuspend = await import('ntsuspend')
-        ntsuspend && ntsuspend.resume(proc.pid)
+        /* const ntsuspend = await import('ntsuspend')
+        ntsuspend && ntsuspend.resume(proc.pid) */
       } else {
         proc.kill('SIGCONT')
       }
@@ -141,7 +99,25 @@ export class Processes {
   }
 
   static setPriority(pid: number, priority: ProcessesPriority) {
-    os.setPriority(pid, priority)
+    let priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
+    switch (priority) {
+      case ProcessesPriority.LOW:
+        priorityNum = os.constants.priority.PRIORITY_LOW
+        break
+      case ProcessesPriority.BELOW_NORMAL:
+        priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
+        break
+      case ProcessesPriority.NORMAL:
+        priorityNum = os.constants.priority.PRIORITY_NORMAL
+        break
+      case ProcessesPriority.ABOVE_NORMAL:
+        priorityNum = os.constants.priority.PRIORITY_ABOVE_NORMAL
+        break
+      case ProcessesPriority.HIGH:
+        priorityNum = os.constants.priority.PRIORITY_HIGH
+        break
+    }
+    os.setPriority(pid, priorityNum)
   }
 
   static isWindowsPlatform() {
