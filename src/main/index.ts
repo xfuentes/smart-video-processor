@@ -1,9 +1,14 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { currentSettings, loadSettings, saveSettings } from './domain/Settings'
+import { initializeIcons } from '@uifabric/icons'
+import { VideoController } from './controller/VideoController'
+import { JobManager } from './domain/jobs/JobManager'
+import { Settings } from '../common/@types/Settings'
 
-function createWindow(): void {
+function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -12,12 +17,13 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform !== 'darwin' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
     }
   })
 
   mainWindow.on('ready-to-show', () => {
+    mainWindow.setMinimumSize(750, 450)
     mainWindow.show()
   })
 
@@ -33,22 +39,57 @@ function createWindow(): void {
   } else {
     void mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-}
-
-function handleRetrieveVersion(): string {
-  return app.getVersion()
+  return mainWindow
 }
 
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron.svp')
 
+  loadSettings()
+  initializeIcons()
+
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  ipcMain.handle('retrieve:version', handleRetrieveVersion)
-  createWindow()
+  const mainWindow = createWindow()
+
+  ipcMain.handle('main:getVersion', () => app.getVersion())
+  ipcMain.handle('video:openFileExplorer', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select video files',
+      properties: ['openFile', 'multiSelections', 'dontAddToRecent']
+    })
+    if (!result.canceled) {
+      VideoController.getInstance().openFiles(result.filePaths)
+    }
+  })
+  ipcMain.handle('video:openFiles', (_event, filePaths: string[]) => {
+    VideoController.getInstance().openFiles(filePaths)
+  })
+  ipcMain.handle('main:getCurrentSettings', () => currentSettings)
+  ipcMain.handle('main:saveSettings', (_event, settings: Settings) => {
+    const priorityUpdated = currentSettings.priority !== settings.priority
+    const encoderSettingsUpdated =
+      currentSettings.isTrackEncodingEnabled !== settings.isTrackEncodingEnabled ||
+      currentSettings.videoCodec !== settings.videoCodec ||
+      currentSettings.isTestEncodingEnabled !== settings.isTestEncodingEnabled
+
+    saveSettings(settings)
+    if (priorityUpdated) {
+      JobManager.getInstance().updatePriority()
+    }
+    if (encoderSettingsUpdated) {
+      VideoController.getInstance().encoderSettingsUpdated()
+    }
+    return currentSettings
+  })
+  VideoController.getInstance().addChangeListener((videos) => {
+    console.log('*** SENDING VIDEOS UPDATES ***')
+    console.log(JSON.stringify(videos))
+    mainWindow.webContents.send('video:filesChanged', JSON.stringify(videos))
+  })
 
   app.on('activate', function () {
     // On macOS, it's common to re-create a window in the app when the

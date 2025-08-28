@@ -1,0 +1,478 @@
+/*
+ * Smart Video Processor
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTrigger,
+  Divider,
+  InfoLabel,
+  Input,
+  InputOnChangeData,
+  Label,
+  Select,
+  SelectTabData,
+  SelectTabEvent,
+  Slider,
+  Switch,
+  Tab,
+  TabList,
+  ToolbarButton
+} from '@fluentui/react-components'
+import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from 'react'
+import { LanguageSelector } from './LanguageSelector'
+import {
+  DocumentSettings20Regular,
+  SearchSettings20Regular,
+  Settings24Regular,
+  VideoSettings20Regular
+} from '@fluentui/react-icons'
+import { SettingsContext } from '@renderer/components/SettingsContext'
+import { SettingsContextType } from '@renderer/@types/SettingsContext'
+import { Settings } from '../../../common/@types/Settings'
+import { ProcessesPriority } from '../../../common/@types/processes'
+import { VideoCodec } from '../../../common/@types/Encoding'
+
+export const SettingsDialog = () => {
+  const { settings, setSettings } = useContext(SettingsContext) as SettingsContextType
+  const [selectedTab, setSelectedTab] = useState('general')
+
+  const handleSubmit = async (ev: React.FormEvent) => {
+    ev.preventDefault()
+    const newSettings: Settings = {
+      ...settings,
+      language,
+      moviesOutputPath,
+      tvShowsOutputPath,
+      othersOutputPath,
+      isAutoStartEnabled,
+      priority,
+      isDebugEnabled,
+      isTrackFilteringEnabled,
+      favoriteLanguages,
+      isKeepVOEnabled,
+      isTrackEncodingEnabled,
+      videoCodec,
+      isTestEncodingEnabled,
+      videoSizeReduction,
+      audioSizeReduction
+    }
+    setSettings(await window.api.main.saveSettings(newSettings))
+  }
+
+  const handleFormInputChange = (
+    setData: Dispatch<SetStateAction<string>>,
+    _ev: ChangeEvent<HTMLInputElement>,
+    data: InputOnChangeData
+  ) => {
+    setData(data.value)
+  }
+
+  const handleCancel = (_ev: React.FormEvent) => {
+    setLanguage(settings.language)
+    setMoviesOutputPath(settings.moviesOutputPath)
+    setTVShowsOutputPath(settings.tvShowsOutputPath)
+    setOthersOutputPath(settings.othersOutputPath)
+    setAutoStartEnabled(settings.isAutoStartEnabled)
+    setPriority(settings.priority)
+    setDebugEnabled(settings.isDebugEnabled)
+    setTrackFilteringEnabled(settings.isTrackFilteringEnabled)
+    setFavoriteLanguages(settings.favoriteLanguages)
+    setKeepVOEnabled(settings.isKeepVOEnabled)
+    setTrackEncodingEnabled(settings.isTrackEncodingEnabled)
+    setTestEncodingEnabled(settings.isTestEncodingEnabled)
+    setVideoCodec(settings.videoCodec)
+    setVideoSizeReduction(settings.videoSizeReduction)
+    setAudioSizeReduction(settings.audioSizeReduction)
+  }
+
+  const priorityToNumber = (priority: keyof typeof ProcessesPriority): number => {
+    switch (priority) {
+      case 'HIGH':
+        return 2
+      case 'ABOVE_NORMAL':
+        return 1
+      case 'NORMAL':
+        return 0
+      case 'BELOW_NORMAL':
+        return -1
+      case 'LOW':
+        return -2
+      default:
+        return 0
+    }
+  }
+
+  const numberToPriority = (priority: number): keyof typeof ProcessesPriority => {
+    switch (priority) {
+      case 2:
+        return 'HIGH'
+      case 1:
+        return 'ABOVE_NORMAL'
+      case 0:
+        return 'NORMAL'
+      case -1:
+        return 'BELOW_NORMAL'
+      case -2:
+        return 'LOW'
+      default:
+        return 'NORMAL'
+    }
+  }
+
+  const [language, setLanguage] = useState(settings.language)
+  const [moviesOutputPath, setMoviesOutputPath] = useState(settings.moviesOutputPath)
+  const [tvShowsOutputPath, setTVShowsOutputPath] = useState(settings.tvShowsOutputPath)
+  const [othersOutputPath, setOthersOutputPath] = useState(settings.othersOutputPath)
+  const [isAutoStartEnabled, setAutoStartEnabled] = useState(settings.isAutoStartEnabled)
+  const [priority, setPriority] = useState(settings.priority)
+  const priorityClass = 'priority-' + priority.toLowerCase()
+  const [isDebugEnabled, setDebugEnabled] = useState(settings.isDebugEnabled)
+  const [isTrackFilteringEnabled, setTrackFilteringEnabled] = useState(settings.isTrackFilteringEnabled)
+  const [favoriteLanguages, setFavoriteLanguages] = useState(settings.favoriteLanguages)
+  const [isKeepVOEnabled, setKeepVOEnabled] = useState(settings.isKeepVOEnabled)
+  const [isTrackEncodingEnabled, setTrackEncodingEnabled] = useState(settings.isTrackEncodingEnabled)
+  const [isTestEncodingEnabled, setTestEncodingEnabled] = useState(settings.isTestEncodingEnabled)
+  const [videoSizeReduction, setVideoSizeReduction] = useState(settings.videoSizeReduction)
+  const [videoCodec, setVideoCodec] = useState(settings.videoCodec)
+  const [audioSizeReduction, setAudioSizeReduction] = useState(settings.audioSizeReduction)
+
+  return (
+    <Dialog modalType="modal">
+      <DialogTrigger>
+        <ToolbarButton vertical icon={<Settings24Regular />}>
+          Settings
+        </ToolbarButton>
+      </DialogTrigger>
+      <DialogSurface
+        aria-label="Settings"
+        style={{ padding: '5px', minHeight: '500px', display: 'flex', flexFlow: 'column' }}
+      >
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            height: '100%',
+            flexGrow: 1,
+            display: 'flex',
+            flexFlow: 'column',
+            padding: '5px'
+          }}
+        >
+          <DialogBody style={{ gap: 0, flexGrow: 1 }}>
+            <DialogContent className="settings-dialog">
+              <TabList
+                selectedValue={selectedTab}
+                size="small"
+                onTabSelect={(_event: SelectTabEvent, data: SelectTabData) => setSelectedTab(data.value as string)}
+              >
+                <Tab value="general" icon={<DocumentSettings20Regular />}>
+                  General
+                </Tab>
+                <Tab value="filtering" icon={<SearchSettings20Regular />}>
+                  Filtering
+                </Tab>
+                <Tab value="encoding" icon={<VideoSettings20Regular />}>
+                  Encoding
+                </Tab>
+              </TabList>
+              <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column' }}>
+                {selectedTab === 'general' && (
+                  <div className="settings-form">
+                    <div className="field">
+                      <Label size={'small'} required htmlFor="languageInput">
+                        Language
+                      </Label>
+                      <LanguageSelector
+                        multiselect={false}
+                        size={'small'}
+                        id="languageInput"
+                        required
+                        value={language}
+                        onChange={(data) => setLanguage(data)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label size={'small'} required htmlFor="moviesOutputPathInput">
+                        Movies Output Path (Can be relative to source file path)
+                      </Label>
+                      <Input
+                        required
+                        size={'small'}
+                        type="text"
+                        id="moviesOutputPathInput"
+                        value={moviesOutputPath}
+                        onChange={handleFormInputChange.bind(null, setMoviesOutputPath)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label size={'small'} required htmlFor="tvShowsOutputPathInput">
+                        TV Shows Output Path (Can be relative to source file path)
+                      </Label>
+                      <Input
+                        required
+                        size={'small'}
+                        type="text"
+                        id="tvShowsOutputPathInput"
+                        value={tvShowsOutputPath}
+                        onChange={handleFormInputChange.bind(null, setTVShowsOutputPath)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label size={'small'} required htmlFor="othersOutputPathInput">
+                        Others Output Path (Can be relative to source file path)
+                      </Label>
+                      <Input
+                        required
+                        size={'small'}
+                        type="text"
+                        id="othersOutputPathInput"
+                        value={othersOutputPath}
+                        onChange={handleFormInputChange.bind(null, setOthersOutputPath)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Switch
+                        label="Auto Start"
+                        checked={isAutoStartEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setAutoStartEnabled(ev.currentTarget.checked)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label htmlFor="prioritySlider">Processes Priority</Label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                        <Slider
+                          min={-2}
+                          max={2}
+                          value={priorityToNumber(priority)}
+                          step={1}
+                          size="small"
+                          className={priorityClass}
+                          onChange={(_ev, data) => setPriority(numberToPriority(data.value))}
+                          id="prioritySlider"
+                        />
+                        <div>
+                          <Label className={priorityClass} htmlFor="prioritySlider">
+                            {ProcessesPriority[priority]}
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <Switch
+                        label="Debug Mode"
+                        checked={isDebugEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setDebugEnabled(ev.currentTarget.checked)}
+                      />
+                    </div>
+                  </div>
+                )}
+                {selectedTab === 'filtering' && (
+                  <div className="settings-form">
+                    <div className="field">
+                      <Switch
+                        label="Track Filtering"
+                        checked={isTrackFilteringEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                          setTrackFilteringEnabled(ev.currentTarget.checked)
+                        }
+                      />
+                    </div>
+                    <>
+                      <div className="field">
+                        <Label
+                          disabled={!isTrackFilteringEnabled}
+                          size={'small'}
+                          required
+                          htmlFor="favoriteLanguagesInput"
+                        >
+                          Favorite Languages
+                        </Label>
+                        <LanguageSelector
+                          disabled={!isTrackFilteringEnabled}
+                          multiselect
+                          size={'small'}
+                          id="favoriteLanguagesInput"
+                          required
+                          values={favoriteLanguages}
+                          onChanges={(data) => setFavoriteLanguages(data)}
+                        />
+                      </div>
+                      <div className="field">
+                        <Switch
+                          disabled={!isTrackFilteringEnabled}
+                          label="Keep VO"
+                          checked={isKeepVOEnabled}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) => setKeepVOEnabled(ev.currentTarget.checked)}
+                        />
+                      </div>
+                    </>
+                  </div>
+                )}
+                {selectedTab === 'encoding' && (
+                  <div className="settings-form">
+                    <div className="field">
+                      <Switch
+                        label={
+                          <div>
+                            Track Encoding
+                            <InfoLabel
+                              info={
+                                <div>
+                                  If enabled allow automatic track encoding when the given criteria are fulfilled.
+                                </div>
+                              }
+                            />
+                          </div>
+                        }
+                        checked={isTrackEncodingEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                          setTrackEncodingEnabled(ev.currentTarget.checked)
+                        }
+                      />
+                    </div>
+                    <div className="field">
+                      <Switch
+                        disabled={!isTrackEncodingEnabled}
+                        label={
+                          <div>
+                            Test Encoding
+                            <InfoLabel
+                              info={<div>If enabled will encode only a 30s chunk of video for testing quality.</div>}
+                            />
+                          </div>
+                        }
+                        checked={isTestEncodingEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                          setTestEncodingEnabled(ev.currentTarget.checked)
+                        }
+                      />
+                    </div>
+                    <>
+                      <Divider style={{ flexGrow: '0' }}>Video</Divider>
+                      <div className="field">
+                        <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
+                          <Label htmlFor="codecSelection" disabled={!isTrackEncodingEnabled}>
+                            Codec
+                            <InfoLabel
+                              info={
+                                <div>
+                                  Choose your favorite video codec. It will be used by default when video encoding is
+                                  recommended. Auto will select the most appropriate codec depending on the video
+                                  resolution.
+                                </div>
+                              }
+                            />
+                          </Label>
+                          <Select
+                            id="codecSelection"
+                            value={videoCodec}
+                            disabled={!isTrackEncodingEnabled}
+                            onChange={(_ev, data) => {
+                              setVideoCodec(data.value as VideoCodec)
+                            }}
+                          >
+                            {Object.values(VideoCodec).map((key) => (
+                              <option key={key} value={key}>
+                                {key}
+                              </option>
+                            ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="field">
+                        <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
+                          <Label htmlFor="videoSizeReductionSlider" disabled={!isTrackEncodingEnabled}>
+                            Size Reduction
+                            <InfoLabel
+                              info={
+                                <div>
+                                  Choose the minimum size reduction ratio required to enable re-encoding a video track.
+                                </div>
+                              }
+                            />
+                          </Label>
+                          <Slider
+                            min={10}
+                            max={90}
+                            value={videoSizeReduction}
+                            step={10}
+                            size="small"
+                            disabled={!isTrackEncodingEnabled}
+                            onChange={(_ev, data) => setVideoSizeReduction(data.value)}
+                            id="videoSizeReductionSlider"
+                          />
+                          <div>
+                            <Label htmlFor="videoSizeReductionSlider">{videoSizeReduction + ' %'}</Label>
+                          </div>
+                        </div>
+                      </div>
+                      <Divider style={{ flexGrow: '0' }}>Audio</Divider>
+                      <div className="field">
+                        <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
+                          <Label htmlFor="audioSizeReductionSlider" disabled={!isTrackEncodingEnabled}>
+                            Size Reduction
+                            <InfoLabel
+                              info={
+                                <div>
+                                  Choose the minimum size reduction ratio required to enable re-encoding an audio track.
+                                </div>
+                              }
+                            />
+                          </Label>
+                          <Slider
+                            min={10}
+                            max={90}
+                            value={audioSizeReduction}
+                            step={10}
+                            size="small"
+                            disabled={!isTrackEncodingEnabled}
+                            onChange={(_ev, data) => setAudioSizeReduction(data.value)}
+                            id="audioSizeReductionSlider"
+                          />
+                          <div>
+                            <Label htmlFor="audioSizeReductionSlider">{audioSizeReduction + ' %'}</Label>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+            <DialogActions style={{ paddingTop: '10px' }}>
+              <DialogTrigger disableButtonEnhancement>
+                <Button type="submit" appearance="primary">
+                  Apply
+                </Button>
+              </DialogTrigger>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </DialogTrigger>
+            </DialogActions>
+          </DialogBody>
+        </form>
+      </DialogSurface>
+    </Dialog>
+  )
+}

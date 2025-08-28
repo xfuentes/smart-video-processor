@@ -16,31 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Track, TrackType } from './Track'
-import { Strings, VideoFormats } from '../util/strings'
+import { Track } from './Track'
+import { Strings } from '../../common/Strings'
 import { currentSettings } from './Settings'
-
-export type EncoderSettings = {
-  trackId: number
-  trackType: TrackType
-  codec: VideoCodec | AudioCodec
-  bitrate?: number
-  fps?: number
-  compressionPercent?: number
-  originalSize?: number
-  targetSize?: number
-  audioChannels?: number
-}
-
-export enum VideoCodec {
-  AUTO = 'Auto',
-  H264 = 'H.264',
-  H265 = 'H.265'
-}
-
-export enum AudioCodec {
-  AAC_LC = 'AAC LC'
-}
+import { AudioCodec, EncoderSettings, VideoCodec } from '../../common/@types/Encoding'
+import { TrackType } from '../../common/@types/Track'
+import { VideoFormats } from '../../common/@types/Strings'
 
 export class Encoding {
   private static instance: Encoding
@@ -55,10 +36,7 @@ export class Encoding {
     return Encoding.instance
   }
 
-  public analyse(
-    tracks: Track[],
-    trackEncodingEnabled: Map<string, boolean> = new Map()
-  ): EncoderSettings[] {
+  public analyse(tracks: Track[], trackEncodingEnabled: Map<string, boolean> = new Map()): EncoderSettings[] {
     let settings: EncoderSettings[] = []
 
     for (const track of tracks) {
@@ -98,8 +76,7 @@ export class Encoding {
 
       if (
         trackEncodingEnabled.get(videoTrack.type + ' ' + videoTrack.id) === true ||
-        (currentSettings.isTrackEncodingEnabled &&
-          currentSettings.videoSizeReduction <= proposedCompression)
+        (currentSettings.isTrackEncodingEnabled && currentSettings.videoSizeReduction <= proposedCompression)
       ) {
         const setting: EncoderSettings = {
           trackId: videoTrack.id,
@@ -131,9 +108,7 @@ export class Encoding {
 
   public getVideoBPFByFormat(format: VideoFormats) {
     const codec =
-      currentSettings.videoCodec === VideoCodec.AUTO
-        ? this.getVideoCodecByFormat(format)
-        : currentSettings.videoCodec
+      currentSettings.videoCodec === VideoCodec.AUTO ? this.getVideoCodecByFormat(format) : currentSettings.videoCodec
     let bpf = 0.085
     switch (format) {
       case VideoFormats.UHD_8K:
@@ -179,8 +154,7 @@ export class Encoding {
 
       if (
         trackEncodingEnabled.get(audioTrack.type + ' ' + audioTrack.id) === true ||
-        (currentSettings.isTrackEncodingEnabled &&
-          currentSettings.audioSizeReduction <= proposedCompression) ||
+        (currentSettings.isTrackEncodingEnabled && currentSettings.audioSizeReduction <= proposedCompression) ||
         audioTrack.unsupported
       ) {
         const setting: EncoderSettings = {

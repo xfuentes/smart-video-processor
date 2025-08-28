@@ -18,28 +18,15 @@
 
 import { v4 as UUIDv4 } from 'uuid'
 import { JobManager } from './JobManager'
-import { Processes, ProcessesPriority, Progression } from '../../util/processes'
-import { Strings } from '../../util/strings'
+import { Processes } from '../../util/processes'
+import { Strings } from '../../../common/Strings'
 import { isEqual } from 'lodash'
 import { currentSettings, defaultSettings } from '../Settings'
 import { debug } from '../../util/log'
+import { ProcessesPriority, Progression } from '../../../common/@types/processes'
+import { JobStatus, JobType } from '../../../common/@types/Jobs'
 
-type JobChangeListener = (job: Job<object | unknown>) => void
-
-export enum JobStatus {
-  WAITING = 'Waiting',
-  QUEUED = 'Queued',
-  LOADING = 'Loading',
-  ENCODING = 'Encoding',
-  MERGING = 'Merging',
-  SUCCESS = 'Success',
-  WARNING = 'Warning',
-  ERROR = 'Error',
-  ABORTED = 'Aborted',
-  PAUSED = 'Paused'
-}
-
-export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING
+export type JobChangeListener = (job: Job<object | unknown>) => void
 
 export abstract class Job<T> {
   public readonly uuid: string = UUIDv4()
@@ -83,7 +70,7 @@ export abstract class Job<T> {
 
   async execute(): Promise<T> {
     this.startedAt = Date.now()
-    let promise
+    let promise: Promise<T>
     try {
       this.status = this.type
       this.emitChangeEvent()
@@ -137,11 +124,7 @@ export abstract class Job<T> {
   }
 
   isProcessing() {
-    return (
-      this.status === JobStatus.MERGING ||
-      this.status === JobStatus.ENCODING ||
-      this.status === JobStatus.PAUSED
-    )
+    return this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
   }
 
   getResult(): T | undefined {
@@ -172,11 +155,7 @@ export abstract class Job<T> {
   }
 
   getDuration() {
-    if (
-      this.endedAt !== undefined &&
-      this.startedAt !== undefined &&
-      this.endedAt > this.startedAt
-    ) {
+    if (this.endedAt !== undefined && this.startedAt !== undefined && this.endedAt > this.startedAt) {
       return (this.endedAt - this.startedAt) / 1000 + (this.extraDuration ?? 0)
     } else {
       return this.extraDuration
