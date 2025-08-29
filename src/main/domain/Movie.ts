@@ -17,26 +17,23 @@
  */
 
 import { Files } from '../util/files'
-import { Video, SearchBy } from './Video'
+import { Video } from './Video'
 import { SearchResult } from './SearchResult'
 import { Numbers } from '../util/numbers'
 import { TMDBClient } from './clients/TMDBClient'
 import Chalk from 'chalk'
-import { Countries, Country } from './Countries'
-import { Languages, LanguageIETF } from './LanguageIETF'
+import { Countries } from './Countries'
+import { Languages } from './LanguageIETF'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
-import { JobStatus } from '../../common/@types/Jobs'
+import { JobStatus } from '../../common/@types/Job'
+import { SearchBy } from '../../common/@types/Video'
+import { EditionType, IMovie } from '../../common/@types/Movie'
+import { Country } from '../../common/@types/Countries'
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
 
-export enum EditionType {
-  THEATRICAL = 'Theatrical',
-  EXTENDED = 'Extended',
-  DIRECTORS_CUT = "Director's cut",
-  UNRATED = 'Unrated'
-}
-
-export default class Movie {
+export default class Movie implements IMovie {
   public video: Video
   public title: string = ''
   public year?: number
@@ -45,7 +42,6 @@ export default class Movie {
   public posterURL?: string
   public tmdb?: number
   public imdb?: string
-  public searchResults: SearchResult[] = []
   public originalLanguage?: LanguageIETF
   public rating?: number
   public originalCountries: Country[] = []
@@ -57,7 +53,7 @@ export default class Movie {
   }
 
   async search(by: SearchBy) {
-    this.searchResults = []
+    this.video.searchResults = []
     if (by === SearchBy.TMDB) {
       await this.load()
     } else {
@@ -76,16 +72,13 @@ export default class Movie {
       this.video.message = 'Searching movie on TMDB.'
       this.video.emitChangeEvent()
       if (by === SearchBy.TITLE) {
-        this.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(
-          this.title,
-          this.year
-        )
+        this.video.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(this.title, this.year)
       } else if (this.imdb) {
-        this.searchResults = await TMDBClient.getInstance().searchMovieByImdb(this.imdb)
+        this.video.searchResults = await TMDBClient.getInstance().searchMovieByImdb(this.imdb)
       }
       debug('### SEARCH RESULTS ###')
-      debug(this.searchResults)
-      const movieMatched = SearchResult.getPerfectMatch(this.searchResults, this.title, this.year)
+      debug(this.video.searchResults)
+      const movieMatched = SearchResult.getPerfectMatch(this.video.searchResults, this.title, this.year)
 
       if (!movieMatched) {
         this.video.autoModePossible = false
@@ -117,10 +110,7 @@ export default class Movie {
       this.originalCountries = movieData.countries
         .map((c) => Countries.getCountryByCode(c))
         .filter((c) => c != undefined)
-      this.originalLanguage = Languages.guessLanguageIETFFromCountries(
-        movieData.language,
-        this.originalCountries
-      )
+      this.originalLanguage = Languages.guessLanguageIETFFromCountries(movieData.language, this.originalCountries)
       this.title = movieData.title
       this.overview = movieData.overview
       this.year = movieData.year
@@ -141,8 +131,8 @@ export default class Movie {
       debug('GUESS COUNTRY')
       debug(movieData.countries)
       debug(this.originalLanguage)
-      if (this.searchResults.length === 0) {
-        this.searchResults.push(
+      if (this.video.searchResults.length === 0) {
+        this.video.searchResults.push(
           new SearchResult(
             this.tmdb,
             this.title,
@@ -231,5 +221,21 @@ export default class Movie {
   setEdition(edition: EditionType) {
     this.edition = edition
     this.video.emitChangeEvent()
+  }
+
+  toJSON(): IMovie {
+    return {
+      title: this.title,
+      year: this.year,
+      overview: this.overview,
+      poster: this.poster,
+      posterURL: this.posterURL,
+      tmdb: this.tmdb,
+      imdb: this.imdb,
+      originalLanguage: this.originalLanguage,
+      rating: this.rating,
+      originalCountries: this.originalCountries,
+      edition: this.edition
+    }
   }
 }

@@ -16,16 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Country } from './Countries'
-
-export interface LanguageIETF {
-  code: string
-  label: string
-  altCodes?: string[]
-  matchNames?: string[]
-  matchCountries?: string[]
-  isRegionImportant?: boolean
-}
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
+import { Country } from '../../common/@types/Countries'
 
 const languages: LanguageIETF[] = [
   { code: 'und', label: 'Undetermined', altCodes: ['xx'] },
@@ -343,9 +335,7 @@ export class Languages {
   }
 
   static toIETF(language?: string, region?: string): string | undefined {
-    return language !== undefined
-      ? language + (region !== undefined ? '-' + region : '')
-      : undefined
+    return language !== undefined ? language + (region !== undefined ? '-' + region : '') : undefined
   }
 
   static descriptionMatchLanguage(description: string, lang: LanguageIETF): boolean {
@@ -355,9 +345,7 @@ export class Languages {
     let langCodePat = lang.code === 'vo' ? '' : `${lang.code.toUpperCase()}`
     const altCodesPat = lang.altCodes ? lang.altCodes.map((l) => l.toUpperCase()).join('|') : ''
     langCodePat =
-      langCodePat.length > 0 && altCodesPat.length > 0
-        ? `${langCodePat}|${altCodesPat}`
-        : langCodePat + altCodesPat
+      langCodePat.length > 0 && altCodesPat.length > 0 ? `${langCodePat}|${altCodesPat}` : langCodePat + altCodesPat
     const codePattern = new RegExp(prev + `(?:${langCodePat})` + next, 'u')
     const descPat = prev + lang.label + next
 

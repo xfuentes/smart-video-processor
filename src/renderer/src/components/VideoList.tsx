@@ -76,7 +76,7 @@ const columns: TableColumnDefinition<IVideo>[] = [
 
 type Props = {
   videos: IVideo[]
-  onSelectionChange?: (selection: IVideo[] | undefined) => void
+  onSelectionChange?: (selection: IVideo[]) => void
   onImportVideos: (files: File[]) => void
 }
 

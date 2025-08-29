@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Divider } from '@fluentui/react-components'
 import { MainToolbar } from '@renderer/components/MainToolbar'
 import { SettingsContext } from '@renderer/components/SettingsContext'
@@ -6,6 +6,7 @@ import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
 import { FilesChangedListener } from '../../preload/@types'
 import { VideoList } from '@renderer/components/VideoList'
+import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 
 const initialSettings = await window.api.main.getCurrentSettings()
 
@@ -13,7 +14,7 @@ export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
     e.preventDefault()
   }
-  const handleSelectionChange = (videos: IVideo[] | undefined) => {
+  const handleSelectionChange = (videos: IVideo[]) => {
     setSelectedVideos(videos)
   }
   const handleImportVideos = (files: File[]) => {
@@ -23,16 +24,26 @@ export const App = (): React.JSX.Element => {
   }
 
   const [settings, setSettings] = useState(initialSettings)
-  const [videos, setVideos] = React.useState<IVideo[]>([])
-  const [selectedVideos, setSelectedVideos] = React.useState<IVideo[] | undefined>([])
+  const [videos, setVideos] = useState<IVideo[]>([])
+  const [selectedVideos, setSelectedVideos] = useState<IVideo[]>([])
+  const selectedVideosRef = useRef(selectedVideos)
 
   useEffect(() => {
-    const listener: FilesChangedListener = (videos: IVideo[]) => {
-      console.log('*** Received Video Update ***')
-      console.log(videos)
-      setVideos(videos)
-    }
+    selectedVideosRef.current = selectedVideos
+  }, [selectedVideos])
 
+  const listener: FilesChangedListener = (videos: IVideo[]) => {
+    console.log('*** Received Video Update ***')
+    console.log(videos)
+    setVideos(videos)
+    if (selectedVideosRef.current.length > 0) {
+      setSelectedVideos((prevSelectedVideos) =>
+        prevSelectedVideos?.map((sv) => videos.find((v) => v.uuid === sv.uuid)).filter((sv) => sv !== undefined)
+      )
+    }
+  }
+
+  useEffect(() => {
     void window.api.video.addFilesChangedListener(listener)
 
     return () => {
@@ -64,6 +75,12 @@ export const App = (): React.JSX.Element => {
                 />
               </div>
             </div>
+            {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
+              <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
+                <Divider />
+                <PreviewTabs video={selectedVideos[0]} />
+              </div>
+            )}
           </div>
         </div>
       </div>

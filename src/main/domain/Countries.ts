@@ -17,14 +17,7 @@
  */
 
 import { Strings } from '../../common/Strings'
-
-export interface Country {
-  id: string
-  label: string
-  alias?: string
-  alpha2: string
-  alpha3: string
-}
+import { Country } from '../../common/@types/Countries'
 
 const countries: Country[] = [
   { id: '004', label: 'Afghanistan', alpha2: 'AF', alpha3: 'AFG' },
@@ -338,9 +331,7 @@ export class Countries {
         return ret
       })
     } else {
-      return countries.find(
-        (country) => country[prop]?.localeCompare(search, undefined, { sensitivity: 'base' }) === 0
-      )
+      return countries.find((country) => country[prop]?.localeCompare(search, undefined, { sensitivity: 'base' }) === 0)
     }
   }
 }

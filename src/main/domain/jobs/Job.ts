@@ -24,15 +24,20 @@ import { isEqual } from 'lodash'
 import { currentSettings, defaultSettings } from '../Settings'
 import { debug } from '../../util/log'
 import { ProcessesPriority, Progression } from '../../../common/@types/processes'
-import { JobStatus, JobType } from '../../../common/@types/Jobs'
+import { IJob, JobStatus, JobType } from '../../../common/@types/Job'
 
 export type JobChangeListener = (job: Job<object | unknown>) => void
 
-export abstract class Job<T> {
+export abstract class Job<T> implements IJob {
   public readonly uuid: string = UUIDv4()
   public readonly type: JobType
   public readonly title: string
-  private status: JobStatus
+  public status: JobStatus
+  public processingOrPaused: boolean = false
+  public started: boolean = false
+  public finished: boolean = false
+  public success: boolean = false
+  public failed: boolean = false
   private result?: T
   private error?: string
   private changeListeners: JobChangeListener[] = []
@@ -43,9 +48,21 @@ export abstract class Job<T> {
 
   protected constructor(type: JobType, title: string, extraDuration?: number) {
     this.type = type
-    this.status = JobStatus.WAITING
     this.title = title
     this.extraDuration = extraDuration
+    this.status = JobStatus.WAITING
+    this.setStatus(JobStatus.WAITING)
+  }
+
+  private setStatus(status: JobStatus): void {
+    this.status = status
+    this.processingOrPaused =
+      this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
+    this.started = this.status !== JobStatus.WAITING
+    this.finished =
+      this.status === JobStatus.ABORTED || this.status === JobStatus.ERROR || this.status === JobStatus.SUCCESS
+    this.success = this.status === JobStatus.SUCCESS
+    this.failed = this.status === JobStatus.ERROR
   }
 
   addChangeListener(listener: JobChangeListener) {
@@ -72,18 +89,18 @@ export abstract class Job<T> {
     this.startedAt = Date.now()
     let promise: Promise<T>
     try {
-      this.status = this.type
+      this.setStatus(this.type)
       this.emitChangeEvent()
       this.progression.progress = undefined
       this.result = await this.executeInternal()
-      this.status = JobStatus.SUCCESS
+      this.setStatus(JobStatus.SUCCESS)
       this.progression = { progress: -1 }
       promise = Promise.resolve(this.result)
     } catch (error) {
       if (error === 'Aborted') {
-        this.status = JobStatus.ABORTED
+        this.setStatus(JobStatus.ABORTED)
       } else {
-        this.status = JobStatus.ERROR
+        this.setStatus(JobStatus.ERROR)
       }
       this.error = error as string
       promise = Promise.reject(this.error)
@@ -95,36 +112,9 @@ export abstract class Job<T> {
   }
 
   queue(): Promise<T> {
-    this.status = JobStatus.QUEUED
+    this.setStatus(JobStatus.QUEUED)
     this.emitChangeEvent()
     return JobManager.getInstance().queue(this)
-  }
-
-  isStarted() {
-    return this.status !== JobStatus.WAITING
-  }
-
-  isFinished() {
-    switch (this.status) {
-      case JobStatus.ABORTED:
-      case JobStatus.ERROR:
-      case JobStatus.SUCCESS:
-        return true
-      default:
-        return false
-    }
-  }
-
-  isSuccess() {
-    return this.status === JobStatus.SUCCESS
-  }
-
-  isError() {
-    return this.status === JobStatus.ERROR
-  }
-
-  isProcessing() {
-    return this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
   }
 
   getResult(): T | undefined {
@@ -194,7 +184,7 @@ export abstract class Job<T> {
   pause() {
     if (this.progression.process) {
       debug('Pause !')
-      Processes.pause(this.progression.process)
+      void Processes.pause(this.progression.process)
       this.status = JobStatus.PAUSED
       this.emitChangeEvent()
     } else {
@@ -205,7 +195,7 @@ export abstract class Job<T> {
   resume() {
     if (this.progression.process) {
       debug('Resume !')
-      Processes.resume(this.progression.process)
+      void Processes.resume(this.progression.process)
       this.status = this.type
       this.emitChangeEvent()
     } else {

@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { VideoCodec } from '../../main/domain/Encoding'
+import { ProcessesPriority } from './processes'
+import { VideoCodec } from './Encoding'
 
 export type Settings = {
   /**

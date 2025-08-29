@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { TrackProperties, TrackType } from '../../common/@types/Track'
+import { ITrack, TrackProperties, TrackType } from '../../common/@types/Track'
 
-export class Track {
+export class Track implements ITrack {
   public id: number
   public name: string
   public type: TrackType
@@ -67,6 +67,23 @@ export class Track {
         fps = Math.round(fps)
       }
       this.properties.fps = fps
+    }
+  }
+
+  toJSON(): ITrack {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      codec: this.codec,
+      language: this.language,
+      properties: this.properties,
+      default: this.default,
+      forced: this.forced,
+      duration: this.duration,
+      size: this.size,
+      copy: this.copy,
+      unsupported: this.unsupported
     }
   }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Movie, { EditionType } from './Movie'
+import Movie from './Movie'
 import { AudioVersion, AudioVersions } from './AudioVersions'
 import { TVShow } from './TVShow'
 import { Files } from '../util/files'
@@ -24,12 +24,15 @@ import { v4 as UUIDv4 } from 'uuid'
 import { Container } from './programs/MKVMerge'
 import {
   Attachment,
+  Change,
   ChangeProperty,
   ChangePropertyValue,
   ChangeSourceType,
-  ChangeType
+  ChangeType,
+  containerItems,
+  containerProperties,
+  trackProperties
 } from '../../common/@types/Change'
-import { Change, containerItems, containerProperties, trackProperties } from './Change'
 import { Brain } from './Brain'
 import { Hint } from './Hint'
 import { Job } from './jobs/Job'
@@ -47,40 +50,14 @@ import path from 'node:path'
 import * as fs from 'node:fs'
 import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
-import { JobStatus } from '../../common/@types/Jobs'
+import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
-import { IVideo } from '../../common/@types/Video'
+import { IVideo, SearchBy, TrackChanges, VideoTune, VideoType } from '../../common/@types/Video'
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
+import { Country } from '../../common/@types/Countries'
+import { EditionType } from '../../common/@types/Movie'
 
 type VideoChangeListener = (video: Video) => void
-
-export enum VideoType {
-  MOVIE = 'Movie',
-  TV_SHOW = 'TV-Show',
-  OTHER = 'Other'
-}
-
-export enum VideoTune {
-  FILM = 'Film',
-  ANIMATION = 'Animation',
-  GRAIN = 'Grain'
-}
-
-export enum SearchBy {
-  TITLE = 'Title',
-  IMDB = 'IMDB ID',
-  TMDB = 'TMDB ID',
-  TVDB = 'TVDB ID'
-}
-
-interface TrackChanges {
-  id: number
-  type: TrackType
-  score: number
-  name?: string
-  language?: string
-  default?: boolean
-  forced?: boolean
-}
 
 export class Video implements IVideo {
   public readonly uuid: string = UUIDv4()
@@ -99,6 +76,9 @@ export class Video implements IVideo {
   public status: JobStatus
   public message: string | undefined
   public progression: Progression
+  public searchResults: SearchResult[] = []
+  public selectedSearchResultID?: number
+
   /**
    * This flag is set to false once video file has been loaded.
    */
@@ -183,7 +163,7 @@ export class Video implements IVideo {
   }
 
   static sourceTypeTrackIDToSource(sourceType: ChangeSourceType, trackId?: number): string {
-    let source
+    let source: string
     switch (sourceType) {
       case ChangeSourceType.CONTAINER:
         source = 'Container'
@@ -234,13 +214,13 @@ export class Video implements IVideo {
   }
 
   attachJob<T>(job: Job<T>): Job<T> {
-    if (this.job === undefined || this.job.isFinished()) {
+    if (this.job === undefined || this.job.finished) {
       this.job = job
       const listener = () => {
         this.status = job.getStatus()
         this.message = job.getStatusMessage()
         this.progression = job.getProgression()
-        if (job.isFinished()) {
+        if (job.finished) {
           if (this.job === job) {
             this.job = undefined
           }
@@ -258,7 +238,7 @@ export class Video implements IVideo {
   }
 
   async load() {
-    const fij = new FileInfoLoadingJob(this.sourcePath)
+    const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
     const { tracks, container } = await fij.queue()
     this.tracks = tracks
     this.pixels = this.computePixels()
@@ -371,8 +351,8 @@ export class Video implements IVideo {
       })
   }
 
-  getOriginalLanguageIETF() {
-    let originalLanguage
+  getOriginalLanguageIETF(): LanguageIETF | undefined {
+    let originalLanguage: LanguageIETF | undefined
     if (this.type === VideoType.MOVIE) {
       originalLanguage = this.movie.getOriginalLanguage()
     } else {
@@ -381,8 +361,8 @@ export class Video implements IVideo {
     return originalLanguage
   }
 
-  getOriginalCountries() {
-    let originalCountries
+  getOriginalCountries(): Country[] {
+    let originalCountries: Country[]
     if (this.type === VideoType.MOVIE) {
       originalCountries = this.movie.getOriginalCountries()
     } else {
@@ -609,16 +589,6 @@ export class Video implements IVideo {
     this.generateEncoderSettings(false)
   }
 
-  getSearchResults(): SearchResult[] {
-    if (this.type === VideoType.MOVIE) {
-      return this.movie.searchResults
-    } else if (this.type === VideoType.TV_SHOW) {
-      return this.tvShow.searchResults
-    } else {
-      return []
-    }
-  }
-
   getSelectedSearchResultID() {
     if (this.type === VideoType.MOVIE) {
       return this.movie.tmdb
@@ -632,6 +602,7 @@ export class Video implements IVideo {
     this.brainCalled = false
     this.autoModePossible = false
     this.hints = []
+    this.selectedSearchResultID = id
     if (this.type === VideoType.MOVIE) {
       await this.movie.selectSearchResultID(id)
     } else if (this.type === VideoType.TV_SHOW) {
@@ -645,7 +616,7 @@ export class Video implements IVideo {
   }
 
   isProcessing() {
-    return this.job && this.job.isProcessing()
+    return this.job && this.job.processingOrPaused
   }
 
   isProcessed() {
@@ -810,10 +781,21 @@ export class Video implements IVideo {
       uuid: this.uuid,
       filename: this.filename,
       size: this.size,
+      pixels: this.pixels,
+      type: this.type,
+      tracks: this.tracks.map((t) => t.toJSON()),
+      changes: this.changes.map((c) => c.toJSON()),
+      hints: this.hints.map((h) => h.toJSON()),
       status: this.status,
       message: this.message,
       progression: this.progression,
-      pixels: this.pixels
+      loading: this.loading,
+      matched: this.matched,
+      searchBy: this.searchBy,
+      searchResults: this.searchResults.map((sr) => sr.toJSON()),
+      selectedSearchResultID: this.selectedSearchResultID,
+      ...(this.type === VideoType.MOVIE ? { movie: this.movie.toJSON() } : {}),
+      ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {})
     }
   }
 }

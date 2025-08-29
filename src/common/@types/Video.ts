@@ -16,15 +16,61 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { JobStatus } from './Jobs'
+import { JobStatus } from './Job'
 import { Progression } from './processes'
+import { ITrack, TrackType } from './Track'
+import { IChange } from './Change'
+import { IHint } from './Hint'
+import { ISearchResult } from './SearchResult'
+import { IMovie } from './Movie'
+import { ITVShow } from './TVShow'
+
+export enum VideoType {
+  MOVIE = 'Movie',
+  TV_SHOW = 'TV-Show',
+  OTHER = 'Other'
+}
+
+export enum VideoTune {
+  FILM = 'Film',
+  ANIMATION = 'Animation',
+  GRAIN = 'Grain'
+}
+
+export enum SearchBy {
+  TITLE = 'Title',
+  IMDB = 'IMDB ID',
+  TMDB = 'TMDB ID',
+  TVDB = 'TVDB ID'
+}
+
+export interface TrackChanges {
+  id: number
+  type: TrackType
+  score: number
+  name?: string
+  language?: string
+  default?: boolean
+  forced?: boolean
+}
 
 export interface IVideo {
   uuid: string
   filename: string
   size: number
+  pixels?: string
+  type: VideoType
+  tracks: ITrack[]
+  changes: IChange[]
+  hints: IHint[]
+  loading: boolean
+  matched: boolean
   status: JobStatus
   message?: string
   progression: Progression
-  pixels?: string
+  searchBy: SearchBy
+  searchResults: ISearchResult[]
+  selectedSearchResultID?: number
+  movie?: IMovie
+  tvShow?: ITVShow
 }

@@ -28,7 +28,7 @@ import {
 import { Strings } from '../../../../common/Strings'
 import { TrackProperties, TrackType } from '../../../../common/@types/Track'
 import { IVideo } from '../../../../common/@types/Video'
-import { JobStatus } from '../../../../common/@types/Jobs'
+import { JobStatus } from '../../../../common/@types/Job'
 import { Attachment } from '../../../../common/@types/Change'
 import React from 'react'
 

@@ -16,33 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HintType, IHint } from '../../common/@types/Hint'
-
-export class Hint implements IHint {
-  trackId?: number
-  type: HintType
-  value?: string
-
-  constructor(trackId: number, type: HintType, value?: string) {
-    this.trackId = trackId
-    this.type = type
-    this.value = value
-  }
-
-  static retrieve(
-    userHints: Hint[] | undefined,
-    trackId: number,
-    type: HintType,
-    defaultValue?: string
-  ): string | undefined {
-    return userHints?.find((h) => h.trackId === trackId && h.type === type)?.value ?? defaultValue
-  }
-
-  toJSON(): IHint {
-    return {
-      trackId: this.trackId,
-      type: this.type,
-      value: this.value
-    }
-  }
+export interface LanguageIETF {
+  code: string
+  label: string
+  altCodes?: string[]
+  matchNames?: string[]
+  matchCountries?: string[]
+  isRegionImportant?: boolean
 }

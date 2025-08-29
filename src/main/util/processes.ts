@@ -79,23 +79,21 @@ export class Processes {
   }
 
   static async spawnReadStdout(command: string, args: string[]): Promise<string> {
-    return new Promise<string>(
-      (resolve: (result: string) => void, reject: (reason: string) => void) => {
-        let result = ''
-        const cProcess = Processes.spawn(command, args, { stdio: ['pipe', 'pipe', 'pipe'] })
-        if (cProcess?.stdout) {
-          cProcess.stdout.on('data', (data: string | Buffer) => {
-            if (data) {
-              result += data.toString()
-            }
-          })
-        }
-        cProcess?.on('close', () => {
-          resolve(result)
+    return new Promise<string>((resolve: (result: string) => void, reject: (reason: string) => void) => {
+      let result = ''
+      const cProcess = Processes.spawn(command, args, { stdio: ['pipe', 'pipe', 'pipe'] })
+      if (cProcess?.stdout) {
+        cProcess.stdout.on('data', (data: string | Buffer) => {
+          if (data) {
+            result += data.toString()
+          }
         })
-        cProcess?.on('error', reject)
       }
-    )
+      cProcess?.on('close', () => {
+        resolve(result)
+      })
+      cProcess?.on('error', reject)
+    })
   }
 
   static setPriority(pid: number, priority: ProcessesPriority) {
@@ -167,11 +165,7 @@ export class Processes {
 
   private static commandExistsWindowsSync(commandName: string, cleanedCommandName: string) {
     // Regex from Julio from: https://stackoverflow.com/questions/51494579/regex-windows-path-validator
-    if (
-      !/^(?!(?:.*\s|.*\.|\W+)$)(?:[a-zA-Z]:)?(?:[^<>:"|?*\n]+(?:\/\/|\/|\\\\|\\)?)+$/m.test(
-        commandName
-      )
-    ) {
+    if (!/^(?!(?:.*\s|.*\.|\W+)$)(?:[a-zA-Z]:)?(?:[^<>:"|?*\n]+(?:\/\/|\/|\\\\|\\)?)+$/m.test(commandName)) {
       return false
     }
     try {
@@ -251,7 +245,7 @@ export class Processes {
       return cache.get(options.spawn)
     }
 
-    let locale
+    let locale: string | undefined
     try {
       const envLocale = this.getEnvLocale()
 

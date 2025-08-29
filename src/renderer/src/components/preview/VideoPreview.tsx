@@ -16,65 +16,91 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Image, RatingDisplay, Tooltip} from "@fluentui/react-components";
-import {Country} from "../../common/Countries.ts";
+import { Image, RatingDisplay, Tooltip } from '@fluentui/react-components'
+import { Country } from '../../../../common/@types/Countries'
 
 type Props = {
-    poster: string | undefined,
-    secondaryPoster?: string,
-    title: string | undefined,
-    year: number | undefined,
-    subTitle?: string,
-    overview: string | undefined,
-    altOverview?: string,
-    countries: Country[],
-    rating?: number
-};
+  poster: string | undefined
+  secondaryPoster?: string
+  title: string | undefined
+  year: number | undefined
+  subTitle?: string
+  overview: string | undefined
+  altOverview?: string
+  countries: Country[]
+  rating?: number
+}
 
-export const VideoPreview = ({title, year, poster, overview, altOverview, secondaryPoster, subTitle, countries, rating}: Props) => {
-    return <div className="video-preview">
-        {altOverview ?
+export const VideoPreview = ({
+  title,
+  year,
+  poster,
+  overview,
+  altOverview,
+  secondaryPoster,
+  subTitle,
+  countries,
+  rating
+}: Props) => {
+  return (
+    <div className="video-preview">
+      {altOverview ? (
         <Tooltip content={altOverview} relationship="description">
-            <Image alt="No Poster" bordered src={`file://${poster}`} className="poster"/>
-        </Tooltip> :
-            <Image alt="No Poster" bordered src={`file://${poster}`} className="poster"/>
-        }
-        <div className="vertical-stack" style={{height: "173px", justifyContent: "space-between"}}>
-            <div>
-                <div style={{justifyContent: "space-between", display: "grid", gridTemplateColumns: "1fr auto", gridTemplateRows: "1fr"}}>
-                    <div className="title">
-                        <Tooltip content={title + (year ? ` (${year})` : "")} relationship="description">
-                            <div className="shrinkable-text">{title}{year ? ` (${year})` : ""}</div>
-                        </Tooltip>
-                    </div>
-                    <div className="flagNote">
-                        {rating !== undefined && <div style={{flexShrink: 0}}>
-                          <RatingDisplay size="small" color="brand" value={Math.round(rating * 10) / 10} valueText={<span/>}/>
-                        </div>
-                        }
-                        {countries.map(country => <div key={country.alpha3} style={{flexShrink: 0, justifyContent: "end", maxHeight: "24px"}}>
-                          <Tooltip content={country.label} relationship="description">
-                            <Image alt={country.label} width="32px" src={`/flags/${country.alpha3}.png`}/>
-                          </Tooltip>
-                        </div>)}
-                    </div>
+          <Image alt="No Poster" bordered src={`svp:///${poster}`} className="poster" />
+        </Tooltip>
+      ) : (
+        <Image alt="No Poster" bordered src={`svp:///${poster}`} className="poster" />
+      )}
+      <div className="vertical-stack" style={{ height: '173px', justifyContent: 'space-between' }}>
+        <div>
+          <div
+            style={{
+              justifyContent: 'space-between',
+              display: 'grid',
+              gridTemplateColumns: '1fr auto',
+              gridTemplateRows: '1fr'
+            }}
+          >
+            <div className="title">
+              <Tooltip content={title + (year ? ` (${year})` : '')} relationship="description">
+                <div className="shrinkable-text">
+                  {title}
+                  {year ? ` (${year})` : ''}
                 </div>
-                {subTitle &&
-                  <div className="sub-title">
-                    <Tooltip content={subTitle} relationship="description">
-                      <div className="shrinkable-text">{subTitle}</div>
-                    </Tooltip>
-                  </div>
-                }
+              </Tooltip>
             </div>
-            <div style={{columnGap: "5px", display: "grid", flexGrow: 1, gridTemplateRows: "1fr 70px", height: 0}}>
-                <div className="overview">
-                    {overview ? overview : ""}
+            <div className="flagNote">
+              {rating !== undefined && (
+                <div style={{ flexShrink: 0 }}>
+                  <RatingDisplay size="small" color="brand" value={Math.round(rating * 10) / 10} valueText={<span />} />
                 </div>
-                {secondaryPoster && <div style={{gridRow: "2 / 2", gridColumn: "2 / 2"}}>
-                  <Image alt="No Episode Image" bordered src={`file://${secondaryPoster}`} className={"secondary-poster"}/>
-                </div>}
+              )}
+              {countries.map((country) => (
+                <div key={country.alpha3} style={{ flexShrink: 0, justifyContent: 'end', maxHeight: '24px' }}>
+                  <Tooltip content={country.label} relationship="description">
+                    <Image alt={country.label} width="32px" src={`/flags/${country.alpha3}.png`} />
+                  </Tooltip>
+                </div>
+              ))}
             </div>
+          </div>
+          {subTitle && (
+            <div className="sub-title">
+              <Tooltip content={subTitle} relationship="description">
+                <div className="shrinkable-text">{subTitle}</div>
+              </Tooltip>
+            </div>
+          )}
         </div>
+        <div style={{ columnGap: '5px', display: 'grid', flexGrow: 1, gridTemplateRows: '1fr 70px', height: 0 }}>
+          <div className="overview">{overview ? overview : ''}</div>
+          {secondaryPoster && (
+            <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
+              <Image alt="No Episode Image" bordered src={`svp:///${secondaryPoster}`} className={'secondary-poster'} />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-};
+  )
+}

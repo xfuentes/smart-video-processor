@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -23,7 +23,7 @@ function createWindow(): BrowserWindow {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setMinimumSize(750, 450)
+    mainWindow.setMinimumSize(925, 568)
     mainWindow.show()
   })
 
@@ -42,6 +42,17 @@ function createWindow(): BrowserWindow {
   return mainWindow
 }
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'svp',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      bypassCSP: true
+    }
+  }
+])
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron.svp')
@@ -54,6 +65,11 @@ app.whenReady().then(() => {
   })
 
   const mainWindow = createWindow()
+
+  protocol.handle('svp', (req) => {
+    const filePath = new URL(req.url).pathname
+    return net.fetch(`file://${filePath}`)
+  })
 
   ipcMain.handle('main:getVersion', () => app.getVersion())
   ipcMain.handle('video:openFileExplorer', async () => {
