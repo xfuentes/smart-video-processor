@@ -34,3 +34,21 @@ export interface TrackProperties {
    */
   fps?: number
 }
+
+export interface ITrack {
+  id: number
+  name: string
+  type: TrackType
+  codec: string
+  language?: string
+  properties: TrackProperties
+  default: boolean
+  forced: boolean
+  duration: number | undefined
+  // Number of bytes
+  size: number | undefined
+  // if true the track will be copied to destination file.
+  copy: boolean
+  // if true the tracks needs to be re-encoded.
+  unsupported: boolean
+}

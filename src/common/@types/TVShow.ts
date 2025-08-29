@@ -15,34 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { LanguageIETF } from './LanguageIETF'
+import { Country } from './Countries'
 
-import { HintType, IHint } from '../../common/@types/Hint'
-
-export class Hint implements IHint {
-  trackId?: number
-  type: HintType
-  value?: string
-
-  constructor(trackId: number, type: HintType, value?: string) {
-    this.trackId = trackId
-    this.type = type
-    this.value = value
-  }
-
-  static retrieve(
-    userHints: Hint[] | undefined,
-    trackId: number,
-    type: HintType,
-    defaultValue?: string
-  ): string | undefined {
-    return userHints?.find((h) => h.trackId === trackId && h.type === type)?.value ?? defaultValue
-  }
-
-  toJSON(): IHint {
-    return {
-      trackId: this.trackId,
-      type: this.type,
-      value: this.value
-    }
-  }
+export interface ITVShow {
+  title?: string
+  order?: EpisodeOrder
+  season?: number
+  episode?: number
+  episodeTitle: string
+  year?: number
+  overview?: string
+  episodeOverview?: string
+  poster: string
+  posterURL?: string
+  theTVDB?: number
+  imdb?: string
+  absoluteEpisode?: number
+  episodePoster: string
+  episodePosterURL: string
+  originalLanguage?: LanguageIETF
+  originalCountries: Country[]
 }

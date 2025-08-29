@@ -30,3 +30,15 @@ export enum JobStatus {
 }
 
 export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING
+
+export interface IJob {
+  readonly uuid: string
+  readonly type: JobType
+  readonly title: string
+  status?: JobStatus
+  processingOrPaused: boolean
+  started: boolean
+  finished: boolean
+  success: boolean
+  failed: boolean
+}

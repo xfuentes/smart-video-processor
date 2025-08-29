@@ -17,10 +17,11 @@
  */
 
 import { Strings } from '../../common/Strings'
-import { Country } from './Countries'
-import { LanguageIETF } from './LanguageIETF'
+import { ISearchResult } from '../../common/@types/SearchResult'
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
+import { Country } from '../../common/@types/Countries'
 
-export class SearchResult {
+export class SearchResult implements ISearchResult {
   public id: number
   public title: string
   public year: number | undefined
@@ -62,17 +63,9 @@ export class SearchResult {
    * @param title
    * @param year
    */
-  public static getMatchingScore(
-    searchResult: SearchResult,
-    title: string,
-    year: number | undefined
-  ): number {
+  public static getMatchingScore(searchResult: SearchResult, title: string, year: number | undefined): number {
     let matchScore: number = Strings.getMatchScoreByKeywords(searchResult.title, title, true)
-    const originalMatchScore: number = Strings.getMatchScoreByKeywords(
-      searchResult.originalTitle,
-      title,
-      true
-    )
+    const originalMatchScore: number = Strings.getMatchScoreByKeywords(searchResult.originalTitle, title, true)
 
     if (originalMatchScore > matchScore) {
       matchScore = originalMatchScore
@@ -90,16 +83,8 @@ export class SearchResult {
    * @param title
    * @param year
    */
-  public static isPerfectMatch(
-    searchResult: SearchResult,
-    title: string,
-    year: number | undefined
-  ): boolean {
-    const { haystackWords, needleWords } = Strings.getWordsFromNeedleAndHaystack(
-      searchResult.title,
-      title,
-      true
-    )
+  public static isPerfectMatch(searchResult: SearchResult, title: string, year: number | undefined): boolean {
+    const { haystackWords, needleWords } = Strings.getWordsFromNeedleAndHaystack(searchResult.title, title, true)
     let perfectMatch = true
     if (haystackWords.length === 0 || haystackWords.length !== needleWords.length) {
       perfectMatch = false
@@ -155,5 +140,20 @@ export class SearchResult {
       }
     }
     return searchResultMatched
+  }
+
+  toJSON(): ISearchResult {
+    return {
+      id: this.id,
+      title: this.title,
+      year: this.year,
+      originalTitle: this.originalTitle,
+      overview: this.overview,
+      posterURL: this.posterURL,
+      language: this.language,
+      countries: this.countries,
+      imdb: this.imdb,
+      note: this.note
+    }
   }
 }

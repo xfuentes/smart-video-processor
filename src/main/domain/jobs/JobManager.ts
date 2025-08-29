@@ -20,7 +20,7 @@ import { Job } from './Job'
 import { Files } from '../../util/files'
 import path from 'node:path'
 import * as fs from 'node:fs'
-import { JobStatus, JobType } from '../../../common/@types/Jobs'
+import { JobStatus, JobType } from '../../../common/@types/Job'
 
 export class JobManager {
   private static instance: JobManager
@@ -52,12 +52,12 @@ export class JobManager {
     return new Promise<T>((resolve, reject) => {
       this.queues[job.type].push(job)
       job.addChangeListener(() => {
-        if (job.isFinished()) {
+        if (job.finished) {
           if (this.runningJobs[job.type] === job) {
             this.runningJobs[job.type] = undefined
             this.handleQueueUpdated(job.type)
           }
-          if (job.isSuccess()) {
+          if (job.success) {
             resolve(job.getResult() as T)
           } else {
             reject(job.getError())

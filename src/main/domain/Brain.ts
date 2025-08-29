@@ -16,20 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Change } from './Change'
 import { Track } from './Track'
 import { AudioVersion, AudioVersions } from './AudioVersions'
-import { Hint, HintType } from './Hint'
+import { Hint } from './Hint'
 import { Strings } from '../../common/Strings'
 import { SubtitlesType, SubtitlesTypeUtil } from './SubtitlesType'
 import { Files } from '../util/files'
-import { LanguageIETF, Languages } from './LanguageIETF'
+import { Languages } from './LanguageIETF'
 import { currentSettings } from './Settings'
-import { Country } from './Countries'
-import { EditionType } from './Movie'
 import path from 'node:path'
 import { TrackType } from '../../common/@types/Track'
-import { Attachment, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/@types/Change'
+import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/@types/Change'
+import { HintType } from '../../common/@types/Hint'
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
+import { Country } from '../../common/@types/Countries'
+import { EditionType } from '../../common/@types/Movie'
 
 const MAX_FORCED_FRAMES = 40
 

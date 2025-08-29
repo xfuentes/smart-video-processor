@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { v4 as UUIDv4 } from 'uuid'
 
 export class Attachment {
   path?: string
@@ -62,3 +63,76 @@ export enum ChangeProperty {
 }
 
 export type ChangePropertyValue = string | boolean | Attachment
+
+export interface IChange {
+  uuid: string
+  sourceType: ChangeSourceType
+  trackId?: number
+  changeType: ChangeType
+  property?: ChangeProperty
+  currentValue?: ChangePropertyValue
+  newValue?: ChangePropertyValue
+}
+
+export const containerProperties = [ChangeProperty.TITLE, ChangeProperty.FILENAME, ChangeProperty.POSTER]
+export const containerItems = [ChangeProperty.ATTACHMENTS, ChangeProperty.TAGS] // This is used with Remove action
+export const trackProperties = [
+  ChangeProperty.NAME,
+  ChangeProperty.LANGUAGE,
+  ChangeProperty.FORCED,
+  ChangeProperty.DEFAULT
+]
+export const propertyTypes = {
+  [ChangeProperty.NAME]: 'string',
+  [ChangeProperty.LANGUAGE]: 'language',
+  [ChangeProperty.DEFAULT]: 'boolean',
+  [ChangeProperty.FORCED]: 'boolean',
+  [ChangeProperty.TITLE]: 'string',
+  [ChangeProperty.FILENAME]: 'string',
+  [ChangeProperty.POSTER]: 'attachment',
+  [ChangeProperty.ATTACHMENTS]: 'undefined',
+  [ChangeProperty.TAGS]: 'undefined'
+}
+
+export class Change implements IChange {
+  uuid: string
+  sourceType: ChangeSourceType
+  trackId?: number
+  changeType: ChangeType
+  property?: ChangeProperty
+  currentValue?: ChangePropertyValue
+  newValue?: ChangePropertyValue
+
+  constructor(
+    sourceType: ChangeSourceType,
+    changeType: ChangeType,
+    trackId?: number,
+    property?: ChangeProperty,
+    currentValue?: ChangePropertyValue,
+    newValue?: ChangePropertyValue
+  ) {
+    this.uuid = UUIDv4()
+    this.sourceType = sourceType
+    this.changeType = changeType
+    this.trackId = trackId
+    this.property = property
+    this.currentValue = currentValue
+    this.newValue = newValue
+  }
+
+  getSource() {
+    return this.sourceType + (this.trackId !== undefined ? ' ' + this.trackId : '')
+  }
+
+  toJSON(): IChange {
+    return {
+      uuid: this.uuid,
+      sourceType: this.sourceType,
+      trackId: this.trackId,
+      changeType: this.changeType,
+      property: this.property,
+      currentValue: this.currentValue,
+      newValue: this.newValue
+    }
+  }
+}

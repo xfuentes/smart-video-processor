@@ -16,33 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HintType, IHint } from '../../common/@types/Hint'
+import { Country } from './Countries'
+import { LanguageIETF } from './LanguageIETF'
 
-export class Hint implements IHint {
-  trackId?: number
-  type: HintType
-  value?: string
-
-  constructor(trackId: number, type: HintType, value?: string) {
-    this.trackId = trackId
-    this.type = type
-    this.value = value
-  }
-
-  static retrieve(
-    userHints: Hint[] | undefined,
-    trackId: number,
-    type: HintType,
-    defaultValue?: string
-  ): string | undefined {
-    return userHints?.find((h) => h.trackId === trackId && h.type === type)?.value ?? defaultValue
-  }
-
-  toJSON(): IHint {
-    return {
-      trackId: this.trackId,
-      type: this.type,
-      value: this.value
-    }
-  }
+export interface ISearchResult {
+  id: number
+  title: string
+  year?: number
+  originalTitle: string
+  overview: string
+  posterURL?: string
+  language?: LanguageIETF
+  countries: Country[]
+  imdb?: string
+  note?: number
 }

@@ -20,14 +20,13 @@ import { Job } from './Job'
 import { Container, MKVMerge } from '../programs/MKVMerge'
 import { Track } from '../Track'
 import { v4 as UUIDv4 } from 'uuid'
-import { Change } from '../Change'
 import { JobManager } from './JobManager'
 import { Files } from '../../util/files'
 import { FFprobe } from '../programs/FFprobe'
 import path from 'node:path'
-import { JobStatus } from '../../../common/@types/Jobs'
+import { JobStatus } from '../../../common/@types/Job'
 import { TrackType } from '../../../common/@types/Track'
-import { ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
+import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
 
 export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string

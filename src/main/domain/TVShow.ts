@@ -17,20 +17,22 @@
  */
 
 import { Files } from '../util/files'
-import { SearchBy, Video } from './Video'
+import { Video } from './Video'
 import { SearchResult } from './SearchResult'
 import Chalk from 'chalk'
-import { LanguageIETF } from './LanguageIETF'
 import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
 import { Strings } from '../../common/Strings'
-import { Country } from './Countries'
 import { Numbers } from '../util/numbers'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
-import { JobStatus } from '../../common/@types/Jobs'
+import { JobStatus } from '../../common/@types/Job'
+import { SearchBy } from '../../common/@types/Video'
+import { ITVShow } from '../../common/@types/TVShow'
+import { LanguageIETF } from '../../common/@types/LanguageIETF'
+import { Country } from '../../common/@types/Countries'
 
-export class TVShow {
+export class TVShow implements ITVShow {
   public video: Video
   public title?: string
   public order?: EpisodeOrder
@@ -47,7 +49,6 @@ export class TVShow {
   public absoluteEpisode?: number
   public episodePoster: string = ''
   public episodePosterURL: string = ''
-  public searchResults: SearchResult[] = []
   public originalLanguage: LanguageIETF | undefined
   public originalCountries: Country[] = []
 
@@ -56,7 +57,7 @@ export class TVShow {
   }
 
   async search(searchBy: SearchBy) {
-    this.searchResults = []
+    this.video.searchResults = []
     if (searchBy === SearchBy.TVDB) {
       if (!this.theTVDB) {
         throw new Error('TVDB ID is mandatory')
@@ -69,8 +70,8 @@ export class TVShow {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Searching series on TheTVDB'
       this.video.emitChangeEvent()
-      this.searchResults = await TVDBClient.getInstance().searchSeries(this.title, this.year)
-      const seriesMatched = SearchResult.getBestMatch(this.searchResults, this.title, this.year)
+      this.video.searchResults = await TVDBClient.getInstance().searchSeries(this.title, this.year)
+      const seriesMatched = SearchResult.getBestMatch(this.video.searchResults, this.title, this.year)
 
       if (!seriesMatched) {
         this.video.status = JobStatus.WARNING
@@ -79,8 +80,7 @@ export class TVShow {
         console.log(Chalk.red(this.video.message))
         this.video.emitChangeEvent()
       } else {
-        this.theTVDB = seriesMatched.id
-        await this.loadSeries()
+        await this.selectSearchResultID(seriesMatched.id)
       }
     }
   }
@@ -103,8 +103,7 @@ export class TVShow {
     )
     if (!episodeData) {
       this.video.status = JobStatus.WARNING
-      this.video.message =
-        'EpisodeData not found. Please check the information provided and try again.'
+      this.video.message = 'EpisodeData not found. Please check the information provided and try again.'
       console.log(Chalk.red(this.video.message))
       this.video.emitChangeEvent()
     }
@@ -127,8 +126,8 @@ export class TVShow {
     this.overview = seriesData.overview
     this.episodeOverview = episodeData.overview
     this.video.matched = true
-    if (!this.searchResults || this.searchResults.length === 0) {
-      this.searchResults = [seriesData]
+    if (!this.video.searchResults || this.video.searchResults.length === 0) {
+      this.video.searchResults = [seriesData]
     }
 
     const directory = JobManager.getInstance().getTempPath('TVDB-' + this.theTVDB)
@@ -208,6 +207,7 @@ export class TVShow {
 
   setTheTVDB(id: number | string | undefined) {
     this.theTVDB = id !== undefined ? Numbers.toNumber('' + id) : undefined
+    this.video.selectedSearchResultID = this.theTVDB
     this.video.emitChangeEvent()
   }
 
@@ -230,5 +230,27 @@ export class TVShow {
 
   getOriginalCountries() {
     return this.originalCountries
+  }
+
+  toJSON(): ITVShow {
+    return {
+      title: this.title,
+      order: this.order,
+      season: this.season,
+      episode: this.episode,
+      episodeTitle: this.episodeTitle,
+      year: this.year,
+      overview: this.overview,
+      episodeOverview: this.episodeOverview,
+      poster: this.poster,
+      posterURL: this.posterURL,
+      theTVDB: this.theTVDB,
+      imdb: this.imdb,
+      absoluteEpisode: this.absoluteEpisode,
+      episodePoster: this.episodePoster,
+      episodePosterURL: this.episodePosterURL,
+      originalLanguage: this.originalLanguage,
+      originalCountries: this.originalCountries
+    }
   }
 }

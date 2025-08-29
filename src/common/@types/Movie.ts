@@ -15,34 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { LanguageIETF } from './LanguageIETF'
+import { Country } from './Countries'
 
-import { HintType, IHint } from '../../common/@types/Hint'
+export enum EditionType {
+  THEATRICAL = 'Theatrical',
+  EXTENDED = 'Extended',
+  DIRECTORS_CUT = "Director's cut",
+  UNRATED = 'Unrated'
+}
 
-export class Hint implements IHint {
-  trackId?: number
-  type: HintType
-  value?: string
-
-  constructor(trackId: number, type: HintType, value?: string) {
-    this.trackId = trackId
-    this.type = type
-    this.value = value
-  }
-
-  static retrieve(
-    userHints: Hint[] | undefined,
-    trackId: number,
-    type: HintType,
-    defaultValue?: string
-  ): string | undefined {
-    return userHints?.find((h) => h.trackId === trackId && h.type === type)?.value ?? defaultValue
-  }
-
-  toJSON(): IHint {
-    return {
-      trackId: this.trackId,
-      type: this.type,
-      value: this.value
-    }
-  }
+export interface IMovie {
+  title: string
+  year?: number
+  overview?: string
+  poster: string
+  posterURL?: string
+  tmdb?: number
+  imdb?: string
+  originalLanguage?: LanguageIETF
+  rating?: number
+  originalCountries: Country[]
+  edition: EditionType
 }

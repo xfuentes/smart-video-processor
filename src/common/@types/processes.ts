@@ -18,11 +18,11 @@
 
 import { ChildProcess } from 'node:child_process'
 
-interface Dict<T> {
+export interface Dict<T> {
   [key: string]: T | undefined
 }
 
-interface ProcessEnv extends Dict<string> {
+export interface ProcessEnv extends Dict<string> {
   /**
    * Can be used to change the default timezone at runtime
    */

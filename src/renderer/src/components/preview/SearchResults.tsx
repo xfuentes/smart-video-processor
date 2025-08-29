@@ -17,101 +17,99 @@
  */
 
 import {
-    createTableColumn,
-    DataGrid,
-    DataGridBody,
-    DataGridCell,
-    DataGridHeader,
-    DataGridHeaderCell,
-    DataGridProps,
-    DataGridRow,
-    TableColumnDefinition,
-    TableColumnSizingOptions
-} from "@fluentui/react-components";
-import Track from "../../common/Track.ts";
-import Video from "../../common/Video.ts";
-import {SearchResult} from "../../common/SearchResult.ts";
+  createTableColumn,
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridProps,
+  DataGridRow,
+  TableColumnDefinition,
+  TableColumnSizingOptions
+} from '@fluentui/react-components'
+import { SearchResult } from '../../../../main/domain/SearchResult'
+import { IVideo } from '../../../../common/@types/Video'
+import { ITrack } from '../../../../common/@types/Track'
+import { ISearchResult } from '../../../../common/@types/SearchResult'
 
 const columns: TableColumnDefinition<SearchResult>[] = [
-    createTableColumn<SearchResult>({
-        columnId: "id",
-        compare: (a, b) => a.id - b.id,
-        renderHeaderCell: () => "ID",
-        renderCell: (item) => item.id
-    }),
-    createTableColumn<SearchResult>({
-        columnId: "title",
-        compare: (a, b) => a.title.localeCompare(b.title),
-        renderHeaderCell: () => "Title",
-        renderCell: (item) => <div className="overflow-safe">{item.title}</div>
-    }),
-    createTableColumn<SearchResult>({
-        columnId: "year",
-        compare: (a, b) => (a.year ?? -1) - (b.year ?? -1),
-        renderHeaderCell: () => "Year",
-        renderCell: (item) => item.year
-    })
-];
+  createTableColumn<SearchResult>({
+    columnId: 'id',
+    compare: (a, b) => a.id - b.id,
+    renderHeaderCell: () => 'ID',
+    renderCell: (item) => item.id
+  }),
+  createTableColumn<SearchResult>({
+    columnId: 'title',
+    compare: (a, b) => a.title.localeCompare(b.title),
+    renderHeaderCell: () => 'Title',
+    renderCell: (item) => <div className="overflow-safe">{item.title}</div>
+  }),
+  createTableColumn<SearchResult>({
+    columnId: 'year',
+    compare: (a, b) => (a.year ?? -1) - (b.year ?? -1),
+    renderHeaderCell: () => 'Year',
+    renderCell: (item) => item.year
+  })
+]
 
 type Props = {
-    results: SearchResult[],
-    selectedID: number | undefined,
-    onSelectionChange?: (selection: SearchResult | undefined) => void
-};
+  results: ISearchResult[]
+  selectedID: number | undefined
+  onSelectionChange?: (selection: ISearchResult | undefined) => void
+}
 
 const columnSizingOptions: TableColumnSizingOptions = {
-    id: {defaultWidth: 35, minWidth: 35, idealWidth: 35},
-    title: {defaultWidth: 80, minWidth: 80, idealWidth: 600},
-    year: {defaultWidth: 50, minWidth: 50, idealWidth: 50}
-};
+  id: { defaultWidth: 35, minWidth: 35, idealWidth: 35 },
+  title: { defaultWidth: 80, minWidth: 80, idealWidth: 600 },
+  year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
+}
 
-export const SearchResultList = ({results, selectedID, onSelectionChange}: Props) => {
-    const handleSelectionChange: DataGridProps["onSelectionChange"] = (_e, data) => {
-        const selectedResult = results.find(result => data.selectedItems.has(result.id));
-        if (onSelectionChange !== undefined) {
-            onSelectionChange(selectedResult);
-        }
-    };
+export const SearchResultList = ({ results, selectedID, onSelectionChange }: Props) => {
+  const handleSelectionChange: DataGridProps['onSelectionChange'] = (_e, data) => {
+    const selectedResult = results.find((result) => data.selectedItems.has(result.id))
+    if (onSelectionChange !== undefined) {
+      onSelectionChange(selectedResult)
+    }
+  }
 
-    return (<div className="search-results">
-            <div>
-                <DataGrid
-                    aria-label="search results"
-                    items={results}
-                    columns={columns}
-                    sortable
-                    selectionMode={"single"}
-                    onSelectionChange={handleSelectionChange}
-                    selectedItems={selectedID === undefined ? [] : [selectedID]}
-                    getRowId={(item: Track) => item.id}
-                    focusMode="composite"
-                    resizableColumns
-                    columnSizingOptions={columnSizingOptions}
-                    size="extra-small"
-                    style={{maxHeight: "150px", minHeight: "150px"}}
-                >
-                    <DataGridHeader unselectable={"on"}>
-                        <DataGridRow selectionCell={{
-                            invisible: true
-                        }}>
-                            {({renderHeaderCell}) => (
-                                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                            )}
-                        </DataGridRow>
-                    </DataGridHeader>
-                    <DataGridBody<Video>>
-                        {({item, rowId}) => (
-                            <DataGridRow<Video> key={rowId}>
-                                {({renderCell}) => (
-                                    <DataGridCell as={"div"}>
-                                        {renderCell(item)}
-                                    </DataGridCell>
-                                )}
-                            </DataGridRow>
-                        )}
-                    </DataGridBody>
-                </DataGrid>
-            </div>
-        </div>
-    );
-};
+  return (
+    <div className="search-results">
+      <div>
+        <DataGrid
+          aria-label="search results"
+          items={results}
+          columns={columns}
+          sortable
+          selectionMode={'single'}
+          onSelectionChange={handleSelectionChange}
+          selectedItems={selectedID === undefined ? [] : [selectedID]}
+          getRowId={(item: ITrack) => item.id}
+          focusMode="composite"
+          resizableColumns
+          columnSizingOptions={columnSizingOptions}
+          size="extra-small"
+          style={{ maxHeight: '150px', minHeight: '150px' }}
+        >
+          <DataGridHeader unselectable={'on'}>
+            <DataGridRow
+              selectionCell={{
+                invisible: true
+              }}
+            >
+              {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody<IVideo>>
+            {({ item, rowId }) => (
+              <DataGridRow<IVideo> key={rowId}>
+                {({ renderCell }) => <DataGridCell as={'div'}>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </div>
+    </div>
+  )
+}

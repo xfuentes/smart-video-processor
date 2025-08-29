@@ -21,7 +21,7 @@ import { FFmpeg } from '../programs/FFmpeg'
 import { Strings } from '../../../common/Strings'
 import { Track } from '../Track'
 import { EncoderSettings } from '../../../common/@types/Encoding'
-import { JobStatus } from '../../../common/@types/Jobs'
+import { JobStatus } from '../../../common/@types/Job'
 
 export class EncodingJob extends Job<string> {
   private readonly path: string
