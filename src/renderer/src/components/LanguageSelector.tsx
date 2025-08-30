@@ -20,7 +20,7 @@ import { Button, Combobox, ComboboxProps, Option, Tooltip } from '@fluentui/reac
 import React from 'react'
 import { Dismiss12Regular } from '@fluentui/react-icons'
 import { searchAncestorsMatching } from '../utils'
-import { Languages } from '../../../main/domain/LanguageIETF'
+import { Languages } from '../../../common/LanguageIETF'
 
 type MultipleProps = {
   multiselect: true
@@ -62,11 +62,7 @@ export const LanguageSelector = (props: Props) => {
     setValue(ev.target.value)
   }
 
-  const onTagClick = (
-    option: string,
-    _index: number,
-    _event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const onTagClick = (option: string, _index: number, _event: React.MouseEvent<HTMLButtonElement>) => {
     if (props.multiselect && _event.target instanceof Element) {
       const button = searchAncestorsMatching(_event.target, (e) => e instanceof HTMLButtonElement)
       if (button?.nextElementSibling instanceof HTMLButtonElement) {

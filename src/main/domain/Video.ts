@@ -22,17 +22,7 @@ import { TVShow } from './TVShow'
 import { Files } from '../util/files'
 import { v4 as UUIDv4 } from 'uuid'
 import { Container } from './programs/MKVMerge'
-import {
-  Attachment,
-  Change,
-  ChangeProperty,
-  ChangePropertyValue,
-  ChangeSourceType,
-  ChangeType,
-  containerItems,
-  containerProperties,
-  trackProperties
-} from '../../common/@types/Change'
+import { Attachment, Change, ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { Brain } from './Brain'
 import { Hint } from './Hint'
 import { Job } from './jobs/Job'
@@ -52,10 +42,18 @@ import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
 import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
-import { IVideo, SearchBy, TrackChanges, VideoTune, VideoType } from '../../common/@types/Video'
-import { LanguageIETF } from '../../common/@types/LanguageIETF'
-import { Country } from '../../common/@types/Countries'
+import {
+  IVideo,
+  retrieveChangePropertyValue,
+  SearchBy,
+  sourceToSourceTypeTrackID,
+  TrackChanges,
+  VideoTune,
+  VideoType
+} from '../../common/@types/Video'
 import { EditionType } from '../../common/@types/Movie'
+import { LanguageIETF } from '../../common/LanguageIETF'
+import { Country } from '../../common/Countries'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -66,7 +64,7 @@ export class Video implements IVideo {
   public sourcePath: string
   public type: VideoType = VideoType.OTHER
   public changeListeners: VideoChangeListener[] = []
-  public container: Container | undefined
+  public container?: Container
   public tracks: Track[] = []
   public pixels?: string
   public changes: Change[] = []
@@ -86,6 +84,7 @@ export class Video implements IVideo {
   public matched: boolean = false
   public brainCalled: boolean = false
   public autoModePossible: boolean = true
+  public queued: boolean = false
   /**
    * True if processing was completed successfully
    */
@@ -93,6 +92,8 @@ export class Video implements IVideo {
   public removeTracksChecked: boolean = true
   public trackLanguageSelection = new Map()
   public trackTypeSelection = new Map()
+  public hintMissing: boolean = false
+
   /*
    * Audio versions hint from filename
    */
@@ -113,9 +114,9 @@ export class Video implements IVideo {
   /*
    * User preference input by video.
    */
-  public trackEncodingEnabled: Map<string, boolean> = new Map()
+  public trackEncodingEnabled: { [key: string]: boolean } = {}
   // Currently running job
-  private job?: Job<unknown>
+  public job?: Job<unknown>
   public lastPromise?: Promise<unknown>
 
   constructor(sourcePath: string) {
@@ -125,53 +126,6 @@ export class Video implements IVideo {
     this.message = 'Analysing file name.'
     this.progression = { progress: undefined }
     this.extractInfosFromFilename()
-  }
-
-  public static getAvailablePropertiesBySource(source: string, type: ChangeType) {
-    if (type === ChangeType.UPDATE) {
-      return Object.values(ChangeProperty).filter(
-        (key) =>
-          (source === 'Container' && containerProperties.includes(key)) ||
-          (source !== 'Container' && trackProperties.includes(key))
-      )
-    } else {
-      return Object.values(ChangeProperty).filter((key) => source === 'Container' && containerItems.includes(key))
-    }
-  }
-
-  public static getAvailableChangeTypesBySource = (source: string) => {
-    if (source === 'Container') {
-      return Object.values(ChangeType)
-    } else {
-      return [ChangeType.UPDATE]
-    }
-  }
-
-  static sourceToSourceTypeTrackID(source: string): {
-    sourceType: ChangeSourceType
-    trackId?: number
-  } {
-    const sepIndex = source.indexOf(' ')
-    const trackId = sepIndex !== -1 ? Number(source.substring(source.indexOf(' ') + 1)) : undefined
-    const sourceTypeStr =
-      sepIndex !== -1 ? (source.substring(0, source.indexOf(' ')) as ChangeSourceType) : (source as ChangeSourceType)
-    const sourceType = Object.values(ChangeSourceType).find((type) => sourceTypeStr === type)
-    if (sourceType === undefined) {
-      throw new Error('Invalid ChangeSourceType extracted from ' + source)
-    }
-    return { sourceType, trackId }
-  }
-
-  static sourceTypeTrackIDToSource(sourceType: ChangeSourceType, trackId?: number): string {
-    let source: string
-    switch (sourceType) {
-      case ChangeSourceType.CONTAINER:
-        source = 'Container'
-        break
-      default:
-        source = `${sourceType} ${trackId}`
-    }
-    return source
   }
 
   public computeVersions() {
@@ -252,7 +206,7 @@ export class Video implements IVideo {
   generateEncoderSettings(init = true) {
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.trackEncodingEnabled)
     if (init) {
-      this.trackEncodingEnabled.clear()
+      this.trackEncodingEnabled = {}
       this.encoderSettings.forEach((s) => this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, true))
     }
     debug('### ENCODER SETTINGS ###')
@@ -307,6 +261,7 @@ export class Video implements IVideo {
         this.changes = processingResults.changes
       }
       this.hints = processingResults.hints
+      this.hintMissing = this.hints.find((h) => !h.value) !== undefined
 
       debug('### CHANGES ###')
       debug(this.changes)
@@ -314,7 +269,7 @@ export class Video implements IVideo {
       debug(this.hints)
       this.status = JobStatus.WAITING
       this.progression.progress = -1
-      if (this.hintMissing()) {
+      if (this.hintMissing) {
         this.message = 'Waiting for your hints.'
         this.autoModePossible = false
       } else if (this.changes.length > 0) {
@@ -332,7 +287,7 @@ export class Video implements IVideo {
       }
       this.emitChangeEvent()
       if (this.autoModePossible && currentSettings.isAutoStartEnabled) {
-        await this.encode()
+        await this.process()
       }
     }
   }
@@ -371,27 +326,28 @@ export class Video implements IVideo {
     return originalCountries
   }
 
-  async encode() {
+  async process() {
     let encodingRequired = false
     let encodingJob: Job<string> | undefined = undefined
     const finalEncoderSettings = this.getFinalEncoderSettings()
     if (finalEncoderSettings.length > 0) {
       encodingRequired = true
     }
+    this.queued = true
     if (encodingRequired && this.container !== undefined) {
       encodingJob = this.job = this.attachJob(
         new EncodingJob(this.sourcePath, this.container.durationSeconds, this.tracks, finalEncoderSettings)
       )
       this.encodedPath = (await this.job.queue()) as string
     }
-    await this.process(encodingJob?.getDuration())
+    await this.merge(encodingJob?.getDuration())
   }
 
   getFinalEncoderSettings() {
     return this.encoderSettings.filter((s) => this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId))
   }
 
-  async process(extraDuration?: number) {
+  async merge(extraDuration?: number) {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
@@ -418,6 +374,7 @@ export class Video implements IVideo {
     )
     await this.job.queue()
     this.encodedPath = undefined
+    this.queued = false
     if (this.status === JobStatus.SUCCESS) {
       this.processed = true
     }
@@ -448,58 +405,6 @@ export class Video implements IVideo {
     this.emitChangeEvent()
   }
 
-  getPossibleSources(): string[] {
-    const possibleSources: string[] = []
-    Object.values(ChangeSourceType).forEach((k) => {
-      if (k === ChangeSourceType.CONTAINER) {
-        possibleSources.push(k)
-      } else {
-        for (const t of this.tracks) {
-          if (t.type.toString() === k.toString()) {
-            possibleSources.push(`${k} ${t.id}`)
-          }
-        }
-      }
-    })
-    return possibleSources
-  }
-
-  getPropertyValue(source: string, property: ChangeProperty | undefined): string | boolean | undefined {
-    if (property === undefined) {
-      return property
-    }
-    let value
-    if (source === 'Container') {
-      switch (property) {
-        case ChangeProperty.TITLE:
-          value = this.container?.title ?? ''
-          break
-        default:
-          value = undefined
-      }
-    } else {
-      const trackId = Number(source.substring(source.indexOf(' ') + 1))
-      const track = this.tracks.find((t) => t.id === trackId)
-      switch (property) {
-        case ChangeProperty.DEFAULT:
-          value = track?.default
-          break
-        case ChangeProperty.FORCED:
-          value = track?.forced
-          break
-        case ChangeProperty.NAME:
-          value = track?.name
-          break
-        case ChangeProperty.LANGUAGE:
-          value = track?.language
-          break
-        default:
-          value = undefined
-      }
-    }
-    return value
-  }
-
   public setHint(hint: Hint, value?: string) {
     const foundHint = this.hints.find((h) => h.type === hint.type && h.trackId === hint.trackId)
     if (foundHint !== undefined) {
@@ -508,30 +413,14 @@ export class Video implements IVideo {
     }
   }
 
-  changeExists(uuid: string | undefined, source: string, changeType: ChangeType, property?: ChangeProperty): boolean {
-    const { sourceType, trackId } = Video.sourceToSourceTypeTrackID(source)
-    for (const change of this.changes) {
-      if (
-        change.uuid !== uuid &&
-        change.sourceType === sourceType &&
-        change.changeType === changeType &&
-        change.trackId === trackId &&
-        change.property === property
-      ) {
-        return true
-      }
-    }
-    return false
-  }
-
   addChange(source: string, changeType: ChangeType, property?: ChangeProperty, newValue?: ChangePropertyValue): string {
-    const { sourceType, trackId } = Video.sourceToSourceTypeTrackID(source)
+    const { sourceType, trackId } = sourceToSourceTypeTrackID(source)
     const newChange = new Change(
       sourceType,
       changeType,
       trackId,
       property,
-      this.getPropertyValue(source, property),
+      retrieveChangePropertyValue(this, source, property),
       newValue
     )
     this.changes.push(newChange)
@@ -546,14 +435,14 @@ export class Video implements IVideo {
     property?: ChangeProperty,
     newValue?: ChangePropertyValue
   ) {
-    const { sourceType, trackId } = Video.sourceToSourceTypeTrackID(source)
+    const { sourceType, trackId } = sourceToSourceTypeTrackID(source)
     const change = this.changes.find((c) => c.uuid === uuid)
     if (change !== undefined) {
       change.sourceType = sourceType
       change.changeType = changeType
       change.trackId = trackId
       change.property = property
-      change.currentValue = this.getPropertyValue(source, property)
+      change.currentValue = retrieveChangePropertyValue(this, source, property)
       change.newValue = newValue
       this.changes = this.changes.slice(0)
       this.emitChangeEvent()
@@ -565,14 +454,6 @@ export class Video implements IVideo {
     this.emitChangeEvent()
   }
 
-  getChangeByUUID(changeUUID: string) {
-    return this.changes.find((c) => c.uuid === changeUUID)
-  }
-
-  hintMissing() {
-    return this.hints.find((h) => !h.value) !== undefined
-  }
-
   abortJob() {
     if (this.job) {
       JobManager.getInstance().removeFromQueueAndAbort(this.job)
@@ -581,11 +462,11 @@ export class Video implements IVideo {
   }
 
   isTrackEncodingEnabled(source: string) {
-    return this.trackEncodingEnabled.get(source) ?? false
+    return this.trackEncodingEnabled[source] ?? false
   }
 
   setTrackEncodingEnabled(source: string, value: boolean) {
-    this.trackEncodingEnabled.set(source, value)
+    this.trackEncodingEnabled[source] = value
     this.generateEncoderSettings(false)
   }
 
@@ -609,10 +490,6 @@ export class Video implements IVideo {
       await this.tvShow.selectSearchResultID(id)
     }
     void this.analyse()
-  }
-
-  isQueued() {
-    return this.job !== undefined
   }
 
   isProcessing() {
@@ -646,13 +523,7 @@ export class Video implements IVideo {
   }
 
   getTrackEncodingEnabledCount() {
-    let encodingCount = 0
-    this.trackEncodingEnabled.forEach((value, _key) => {
-      if (value) {
-        encodingCount++
-      }
-    })
-    return encodingCount
+    return Object.values(this.trackEncodingEnabled).filter((enabled) => enabled).length
   }
 
   getTracksDuration() {
@@ -772,10 +643,6 @@ export class Video implements IVideo {
     this.audioVersions = AudioVersions.extractVersions(filename)
   }
 
-  canProcess() {
-    return this.matched && !this.hintMissing() && !this.isQueued() && !this.isProcessing()
-  }
-
   toJSON(): IVideo {
     return {
       uuid: this.uuid,
@@ -783,19 +650,26 @@ export class Video implements IVideo {
       size: this.size,
       pixels: this.pixels,
       type: this.type,
+      container: this.container,
       tracks: this.tracks.map((t) => t.toJSON()),
       changes: this.changes.map((c) => c.toJSON()),
       hints: this.hints.map((h) => h.toJSON()),
+      job: this.job,
       status: this.status,
       message: this.message,
       progression: this.progression,
       loading: this.loading,
       matched: this.matched,
+      queued: this.queued,
+      processed: this.processed,
       searchBy: this.searchBy,
       searchResults: this.searchResults.map((sr) => sr.toJSON()),
       selectedSearchResultID: this.selectedSearchResultID,
       ...(this.type === VideoType.MOVIE ? { movie: this.movie.toJSON() } : {}),
-      ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {})
+      ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {}),
+      hintMissing: this.hintMissing,
+      encoderSettings: this.encoderSettings,
+      trackEncodingEnabled: this.trackEncodingEnabled
     }
   }
 }

@@ -16,8 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Strings } from '../../common/Strings'
-import { Country } from '../../common/@types/Countries'
+import { Strings } from './Strings'
+
+export interface Country {
+  id: string
+  label: string
+  alias?: string
+  alpha2: string
+  alpha3: string
+}
 
 const countries: Country[] = [
   { id: '004', label: 'Afghanistan', alpha2: 'AF', alpha3: 'AFG' },

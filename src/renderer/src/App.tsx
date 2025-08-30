@@ -63,7 +63,11 @@ export const App = (): React.JSX.Element => {
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
           <div className="vertical-stack">
             <div style={{ backgroundColor: '#f7f8fa' }}>
-              <MainToolbar onOpen={() => window.api.video.openFileExplorer()} selectedVideos={selectedVideos} />
+              <MainToolbar
+                onOpen={() => window.api.video.openFileExplorer()}
+                videos={videos}
+                selectedVideos={selectedVideos}
+              />
             </div>
             <Divider />
             <div className="stack-item-grow">

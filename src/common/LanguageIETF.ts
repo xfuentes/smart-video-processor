@@ -16,8 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LanguageIETF } from '../../common/@types/LanguageIETF'
-import { Country } from '../../common/@types/Countries'
+import { Country } from './Countries'
+
+export interface LanguageIETF {
+  code: string
+  label: string
+  altCodes?: string[]
+  matchNames?: string[]
+  matchCountries?: string[]
+  isRegionImportant?: boolean
+}
 
 const languages: LanguageIETF[] = [
   { code: 'und', label: 'Undetermined', altCodes: ['xx'] },

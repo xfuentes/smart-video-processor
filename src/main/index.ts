@@ -3,7 +3,6 @@ import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { currentSettings, loadSettings, saveSettings } from './domain/Settings'
-import { initializeIcons } from '@uifabric/icons'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
 import { Settings } from '../common/@types/Settings'
@@ -58,7 +57,6 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron.svp')
 
   loadSettings()
-  initializeIcons()
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
