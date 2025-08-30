@@ -29,7 +29,7 @@ import { Strings } from '../../../../common/Strings'
 import { TrackProperties, TrackType } from '../../../../common/@types/Track'
 import { IVideo } from '../../../../common/@types/Video'
 import { JobStatus } from '../../../../common/@types/Job'
-import { Attachment } from '../../../../common/@types/Change'
+import { Attachment } from '../../../../common/Change'
 import React from 'react'
 
 export function bitrateRenderer(bitrate?: number) {
@@ -115,11 +115,7 @@ export function attachmentRenderer(value: Attachment) {
   }
 }
 
-export function statusRenderer(
-  status: JobStatus,
-  message: string | undefined,
-  size: 'small' | 'large' = 'small'
-) {
+export function statusRenderer(status: JobStatus, message: string | undefined, size: 'small' | 'large' = 'small') {
   let intent: MessageBarIntent
   switch (status) {
     case JobStatus.ERROR:
@@ -139,11 +135,7 @@ export function statusRenderer(
   if (size === 'small') {
     const messageGroup = (
       <MessageBarGroup>
-        <MessageBar
-          style={{ minHeight: '20px', minWidth: '100px' }}
-          shape="rounded"
-          intent={intent}
-        >
+        <MessageBar style={{ minHeight: '20px', minWidth: '100px' }} shape="rounded" intent={intent}>
           {status}
         </MessageBar>
       </MessageBarGroup>
@@ -158,11 +150,7 @@ export function statusRenderer(
   } else {
     return (
       <MessageBarGroup>
-        <MessageBar
-          style={{ minHeight: '20px', minWidth: '100px' }}
-          shape="rounded"
-          intent={intent}
-        >
+        <MessageBar style={{ minHeight: '20px', minWidth: '100px' }} shape="rounded" intent={intent}>
           {message}
         </MessageBar>
       </MessageBarGroup>

@@ -21,6 +21,8 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 import { IVideo, SearchBy, VideoType } from '../../common/@types/Video'
 import { EditionType } from '../../common/@types/Movie'
 import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { Hint } from '../../main/domain/Hint'
+import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 
 export type FilesChangedListener = (value: IVideo[]) => void
 
@@ -29,6 +31,7 @@ interface SvpAPI {
     version: string
     getCurrentSettings: () => Promise<Settings>
     saveSettings: (settings: Settings) => Promise<Settings>
+    switchPaused: () => Promise<boolean>
   }
   video: {
     openFileExplorer: () => Promise<void>
@@ -40,6 +43,28 @@ interface SvpAPI {
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
     search: (uuid: string) => Promise<void>
     switchTrackSelection: (uuid: string, changedItems: number[]) => Promise<void>
+    setHint: (uuid: string, hint: IHint, value?: string) => Promise<void>
+    addChange: (
+      uuid: string,
+      source: string,
+      changeType: ChangeType,
+      property?: ChangeProperty,
+      newValue?: ChangePropertyValue
+    ) => Promise<string>
+    saveChange: (
+      uuid: string,
+      changeUuid: string,
+      source: string,
+      changeType: ChangeType,
+      property?: ChangeProperty,
+      newValue?: ChangePropertyValue
+    ) => Promise<void>
+    deleteChange: (uuid: string, changeUuid: string) => Promise<void>
+    setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
+    process: (uuid: string) => Promise<void>
+    abortJob: (uuid: string) => Promise<void>
+    remove: (videoUuidList: string[]) => Promise<void>
+    clearCompleted: () => Promise<void>
     movie: {
       setTitle: (uuid: string, title: string) => Promise<void>
       setYear: (uuid: string, year: string) => Promise<void>

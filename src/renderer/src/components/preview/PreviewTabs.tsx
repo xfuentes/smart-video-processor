@@ -26,9 +26,18 @@ import {
   Tab,
   TabList
 } from '@fluentui/react-components'
-import { Search20Regular, TextBulletList20Regular } from '@fluentui/react-icons'
+import {
+  DataUsageSettings20Regular,
+  ResizeVideo20Regular,
+  Search20Regular,
+  SquareHintArrowBack20Regular,
+  TextBulletList20Regular
+} from '@fluentui/react-icons'
 import { Matching } from './Matching'
 import { IVideo } from '../../../../common/@types/Video'
+import { Hints } from '@renderer/components/preview/Hints'
+import { ChangeList } from '@renderer/components/preview/Processing'
+import { Encoding } from '@renderer/components/preview/Encoding'
 
 type Props = {
   video: IVideo
@@ -43,6 +52,10 @@ export const PreviewTabs = ({ video }: Props) => {
 
   const tracksCount = video.tracks.length
   const matchingCount = video.searchResults?.length ?? 0
+  const changesCount = video.changes.length
+  const encodingCount = Object.values(video.trackEncodingEnabled).filter((v) => v).length
+  const hintCount = video.hints.length
+  const hintMissing = video.hints.find((h) => !h.value) !== undefined
 
   return (
     <div
@@ -69,10 +82,25 @@ export const PreviewTabs = ({ video }: Props) => {
           Tracks{' '}
           <CounterBadge color={tracksCount === 0 ? 'important' : 'informative'} size={'small'} count={tracksCount} />
         </Tab>
+        {hintCount > 0 && (
+          <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
+            Hints{' '}
+            <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
+          </Tab>
+        )}
+        <Tab value="processing" icon={<DataUsageSettings20Regular />} disabled={!video.matched || hintMissing}>
+          Processing <CounterBadge color="informative" size={'small'} showZero count={changesCount} />
+        </Tab>
+        <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!video.matched || hintMissing}>
+          Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />
+        </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>
         {selectedTab === 'matching' && <Matching video={video} />}
         {selectedTab === 'tracks' && <TrackList video={video} />}
+        {selectedTab === 'hints' && <Hints video={video} />}
+        {selectedTab === 'processing' && <ChangeList video={video} />}
+        {selectedTab === 'encoding' && <Encoding video={video} />}
       </div>
     </div>
   )

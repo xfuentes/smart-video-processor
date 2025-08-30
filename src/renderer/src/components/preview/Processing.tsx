@@ -43,10 +43,16 @@ import {
   ChangeProperty,
   ChangePropertyValue,
   ChangeType,
+  getChangeSource,
   IChange,
   propertyTypes
-} from '../../../../common/@types/Change'
-import { IVideo } from '../../../../common/@types/Video'
+} from '../../../../common/Change'
+import {
+  changeExists,
+  IVideo,
+  retrieveChangePropertyValue,
+  retrievePossibleSources
+} from '../../../../common/@types/Video'
 import { LanguageSelector } from '@renderer/components/LanguageSelector'
 
 const valueRenderer = (item: IChange, value: ChangePropertyValue | undefined) => {
@@ -64,31 +70,31 @@ const valueRenderer = (item: IChange, value: ChangePropertyValue | undefined) =>
   return res
 }
 
-const columns: TableColumnDefinition<Change>[] = [
-  createTableColumn<Change>({
+const columns: TableColumnDefinition<IChange>[] = [
+  createTableColumn<IChange>({
     columnId: 'source',
-    compare: (a, b) => a.getSource().localeCompare(b.getSource()),
+    compare: (a, b) => getChangeSource(a).localeCompare(getChangeSource(b)),
     renderHeaderCell: () => <b>Source</b>,
-    renderCell: (item) => <div style={{ whiteSpace: 'nowrap' }}>{item.getSource()}</div>
+    renderCell: (item) => <div style={{ whiteSpace: 'nowrap' }}>{getChangeSource(item)}</div>
   }),
-  createTableColumn<Change>({
+  createTableColumn<IChange>({
     columnId: 'type',
     compare: (a, b) => a.changeType.localeCompare(b.changeType),
     renderHeaderCell: () => <b>Type</b>,
     renderCell: (item) => item.changeType
   }),
-  createTableColumn<Change>({
+  createTableColumn<IChange>({
     columnId: 'property',
     compare: (a, b) => (a.property ?? '').localeCompare(b.property ?? ''),
     renderHeaderCell: () => <b>Property</b>,
     renderCell: (item) => item.property ?? ''
   }),
-  createTableColumn<Change>({
+  createTableColumn<IChange>({
     columnId: 'currentValue',
     renderHeaderCell: () => <b>Current Value</b>,
     renderCell: (item) => valueRenderer(item, item.currentValue)
   }),
-  createTableColumn<Change>({
+  createTableColumn<IChange>({
     columnId: 'newValue',
     renderHeaderCell: () => <b>New Value</b>,
     renderCell: (item) => valueRenderer(item, item.newValue)
@@ -110,7 +116,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
 export const ChangeList = ({ video }: Props) => {
   const [source, setSource] = useState<string>('Container')
   const [type, setType] = useState<ChangeType>(ChangeType.UPDATE)
-  const availableProperties = Video.getAvailablePropertiesBySource(source, type)
+  const availableProperties = Change.getAvailablePropertiesBySource(source, type)
   const [property, setProperty] = useState<ChangeProperty>(availableProperties[0])
   const [newValue, setNewValue] = useState<ChangePropertyValue>('')
   // const [language, setLanguage] = useState<string>("und");
@@ -121,11 +127,11 @@ export const ChangeList = ({ video }: Props) => {
     const value = data.selectedItems.values().next().value
     const changeUUID = typeof value === 'string' ? value : undefined
     if (changeUUID !== undefined) {
-      const change = video.getChangeByUUID(changeUUID)
+      const change = video.changes.find((c) => c.uuid === changeUUID)
       if (change) {
         setSelectedRows(new Set<TableRowId>([changeUUID]))
         setSelectedChangeUuid(changeUUID)
-        setSource(Video.sourceTypeTrackIDToSource(change.sourceType, change.trackId))
+        setSource(Change.sourceTypeTrackIDToSource(change.sourceType, change.trackId))
         setType(change.changeType)
         if (change.property !== undefined) {
           setProperty(change.property)
@@ -145,23 +151,23 @@ export const ChangeList = ({ video }: Props) => {
             value={source}
             onChange={(_ev, data) => {
               const nextSource = data.value
-              const nextTypes = Video.getAvailableChangeTypesBySource(nextSource)
+              const nextTypes = Change.getAvailableChangeTypesBySource(nextSource)
               setSource(nextSource)
               let nextType = type
               if (type !== undefined && !nextTypes.includes(nextType)) {
                 nextType = nextTypes[0]
                 setType(nextType)
               }
-              const nextProperties = Video.getAvailablePropertiesBySource(nextSource, nextType)
+              const nextProperties = Change.getAvailablePropertiesBySource(nextSource, nextType)
               let nextProperty = property
               if (property !== undefined && !nextProperties.includes(property)) {
                 nextProperty = nextProperties[0]
                 setProperty(nextProperty)
               }
-              setNewValue(video.getPropertyValue(nextSource, nextProperty) ?? '')
+              setNewValue(retrieveChangePropertyValue(video, nextSource, nextProperty) ?? '')
             }}
           >
-            {video.getPossibleSources().map((key) => (
+            {retrievePossibleSources(video).map((key) => (
               <option key={key} value={key}>
                 {key}
               </option>
@@ -190,7 +196,7 @@ export const ChangeList = ({ video }: Props) => {
             onChange={(_ev, data) => {
               const nextProperty = data.value as ChangeProperty
               setProperty(nextProperty)
-              setNewValue(video.getPropertyValue(source, nextProperty) ?? '')
+              setNewValue(retrieveChangePropertyValue(video, source, nextProperty) ?? '')
             }}
           >
             {availableProperties.map((key) => (
@@ -236,21 +242,24 @@ export const ChangeList = ({ video }: Props) => {
           <Button
             size={'small'}
             icon={<TaskListAddRegular />}
-            onClick={() => {
-              const newUuid = video.addChange(source, type, property, newValue)
+            onClick={async () => {
+              const newUuid = await window.api.video.addChange(video.uuid, source, type, property, newValue)
               setSelectedRows(new Set<TableRowId>([newUuid]))
               setSelectedChangeUuid(newUuid)
             }}
-            disabled={video.changeExists(undefined, source, type, property)}
+            disabled={changeExists(video, undefined, source, type, property)}
           >
             Insert
           </Button>
           <Button
             size={'small'}
             icon={<SaveRegular />}
-            onClick={() => selectedChangeUuid && video.saveChange(selectedChangeUuid, source, type, property, newValue)}
+            onClick={async () =>
+              selectedChangeUuid &&
+              (await window.api.video.saveChange(video.uuid, selectedChangeUuid, source, type, property, newValue))
+            }
             disabled={
-              selectedChangeUuid === undefined || video.changeExists(selectedChangeUuid, source, type, property)
+              selectedChangeUuid === undefined || changeExists(video, selectedChangeUuid, source, type, property)
             }
           >
             Update
@@ -258,9 +267,9 @@ export const ChangeList = ({ video }: Props) => {
           <Button
             size={'small'}
             icon={<SubtractCircleRegular />}
-            onClick={() => {
+            onClick={async () => {
               if (selectedChangeUuid !== undefined) {
-                video.deleteChange(selectedChangeUuid)
+                await window.api.video.deleteChange(video.uuid, selectedChangeUuid)
                 setSelectedRows(new Set<TableRowId>([]))
                 setSelectedChangeUuid(undefined)
               }

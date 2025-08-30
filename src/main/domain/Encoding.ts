@@ -36,7 +36,7 @@ export class Encoding {
     return Encoding.instance
   }
 
-  public analyse(tracks: Track[], trackEncodingEnabled: Map<string, boolean> = new Map()): EncoderSettings[] {
+  public analyse(tracks: Track[], trackEncodingEnabled: { [key: string]: boolean }): EncoderSettings[] {
     let settings: EncoderSettings[] = []
 
     for (const track of tracks) {
@@ -54,7 +54,7 @@ export class Encoding {
 
   public analyseVideoTrack(
     videoTrack: Track,
-    trackEncodingEnabled: Map<string, boolean> = new Map()
+    trackEncodingEnabled: { [key: string]: boolean } = {}
   ): EncoderSettings[] {
     const settings: EncoderSettings[] = []
 
@@ -75,7 +75,7 @@ export class Encoding {
       const proposedCompression = Math.round((1 - bitrate / videoTrack.properties.bitRate) * 100)
 
       if (
-        trackEncodingEnabled.get(videoTrack.type + ' ' + videoTrack.id) === true ||
+        trackEncodingEnabled[videoTrack.type + ' ' + videoTrack.id] ||
         (currentSettings.isTrackEncodingEnabled && currentSettings.videoSizeReduction <= proposedCompression)
       ) {
         const setting: EncoderSettings = {
@@ -139,7 +139,7 @@ export class Encoding {
 
   public analyseAudioTrack(
     audioTrack: Track,
-    trackEncodingEnabled: Map<string, boolean> = new Map()
+    trackEncodingEnabled: { [key: string]: boolean } = {}
   ): EncoderSettings[] {
     const settings: EncoderSettings[] = []
 
@@ -153,7 +153,7 @@ export class Encoding {
       const proposedCompression = Math.round((1 - bitrate / audioTrack.properties.bitRate) * 100)
 
       if (
-        trackEncodingEnabled.get(audioTrack.type + ' ' + audioTrack.id) === true ||
+        trackEncodingEnabled[audioTrack.type + ' ' + audioTrack.id] ||
         (currentSettings.isTrackEncodingEnabled && currentSettings.audioSizeReduction <= proposedCompression) ||
         audioTrack.unsupported
       ) {

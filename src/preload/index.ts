@@ -5,6 +5,8 @@ import { Settings } from '../common/@types/Settings'
 import { IVideo, SearchBy, VideoType } from '../common/@types/Video'
 import { EditionType } from '../common/@types/Movie'
 import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
+import { IHint } from '../common/@types/Hint'
+import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -13,7 +15,8 @@ const api = {
   main: {
     version,
     getCurrentSettings: (): Promise<Settings> => ipcRenderer.invoke('main:getCurrentSettings'),
-    saveSettings: (settings: Settings): Promise<Settings> => ipcRenderer.invoke('main:saveSettings', settings)
+    saveSettings: (settings: Settings): Promise<Settings> => ipcRenderer.invoke('main:saveSettings', settings),
+    switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused')
   },
   video: {
     openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),
@@ -34,6 +37,32 @@ const api = {
     search: (uuid: string): Promise<void> => ipcRenderer.invoke('video:search', uuid),
     switchTrackSelection: (uuid: string, changedItems: number[]): Promise<void> =>
       ipcRenderer.invoke('video:switchTrackSelection', uuid, changedItems),
+    setHint: (uuid: string, hint: IHint, value?: string): Promise<void> =>
+      ipcRenderer.invoke('video:setHint', uuid, hint, value),
+    addChange: (
+      uuid: string,
+      source: string,
+      changeType: ChangeType,
+      property?: ChangeProperty,
+      newValue?: ChangePropertyValue
+    ): Promise<void> => ipcRenderer.invoke('video:addChange', uuid, source, changeType, property, newValue),
+    saveChange: (
+      uuid: string,
+      changeUuid: string,
+      source: string,
+      changeType: ChangeType,
+      property?: ChangeProperty,
+      newValue?: ChangePropertyValue
+    ): Promise<void> =>
+      ipcRenderer.invoke('video:saveChange', uuid, changeUuid, source, changeType, property, newValue),
+    deleteChange: (uuid: string, changeUuid: string): Promise<void> =>
+      ipcRenderer.invoke('video:deleteChange', uuid, changeUuid),
+    setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
+      ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
+    process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
+    abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
+    remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
+    clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
     movie: {
       setTitle: (uuid: string, title: string): Promise<void> => ipcRenderer.invoke('video.movie:setTitle', uuid, title),
       setYear: (uuid: string, year: string): Promise<void> => ipcRenderer.invoke('video.movie:setYear', uuid, year),

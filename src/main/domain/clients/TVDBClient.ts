@@ -16,16 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import { SearchResult } from '../SearchResult'
 import { EpisodeData } from '../EpisodeData'
 import { RateLimiter } from './RateLimiter'
-import { Languages } from '../LanguageIETF'
-import { Countries } from '../Countries'
+import { Languages } from '../../../common/LanguageIETF'
+import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
 
-import axios from 'axios'
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
 const THE_TVDB_API_URL = 'https://api4.thetvdb.com/v4'
 
@@ -56,10 +55,7 @@ export class TVDBClient {
     return title.replace(/\s*\((\d+|\w+)\)$/gi, '')
   }
 
-  public async searchSeries(
-    name: string,
-    year: number | undefined = undefined
-  ): Promise<SearchResult[]> {
+  public async searchSeries(name: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tvdb = await this.getTVDBSession()
     // TODO: Handle pagination
     let response
@@ -164,10 +160,7 @@ export class TVDBClient {
       throw new Error('TVDB: Episode Data Not Found')
     }
     const country = Countries.getCountryByCode(seriesData.originalCountry)
-    const language = Languages.guessLanguageIETFFromCountries(
-      seriesData.originalLanguage,
-      country ? [country] : []
-    )
+    const language = Languages.guessLanguageIETFFromCountries(seriesData.originalLanguage, country ? [country] : [])
     const name = this.cleanupSeriesTitle(seriesData.name)
     const result = {
       episodeData: new EpisodeData(
@@ -195,20 +188,12 @@ export class TVDBClient {
     }
     const favoriteLanguage = Languages.getLanguageByCode(langCode)
     let trCode: string | undefined = undefined
-    if (
-      favoriteLanguage != undefined &&
-      favoriteLanguage.code !== result.seriesData.language?.code
-    ) {
-      trCode = Languages.getMatchingCodeFromCodeList(
-        favoriteLanguage,
-        response.data.data.series.nameTranslations
-      )
+    if (favoriteLanguage != undefined && favoriteLanguage.code !== result.seriesData.language?.code) {
+      trCode = Languages.getMatchingCodeFromCodeList(favoriteLanguage, response.data.data.series.nameTranslations)
     }
     if (trCode != undefined) {
       try {
-        const seriesTranslation = await tvdb.get<TVDBTranslation>(
-          `/series/${tvdbId}/translations/${trCode}`
-        )
+        const seriesTranslation = await tvdb.get<TVDBTranslation>(`/series/${tvdbId}/translations/${trCode}`)
         if (seriesTranslation.data.data.name) {
           result.seriesData.title = this.cleanupSeriesTitle(seriesTranslation.data.data.name)
         }
@@ -259,15 +244,11 @@ export class TVDBClient {
       return tvdb
     } else {
       if (this.retrieveTokenPromise === undefined) {
-        this.retrieveTokenPromise = axios.post(
-          `${THE_TVDB_API_URL}/login`,
-          `{"apikey": "${THE_TVDB_API_KEY}"}`,
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            }
+        this.retrieveTokenPromise = axios.post(`${THE_TVDB_API_URL}/login`, `{"apikey": "${THE_TVDB_API_KEY}"}`, {
+          headers: {
+            'Content-Type': 'application/json'
           }
-        )
+        })
       }
       let response
       try {

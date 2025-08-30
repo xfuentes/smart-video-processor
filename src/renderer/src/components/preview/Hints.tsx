@@ -16,55 +16,73 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Video from "../../common/Video.ts";
-import {Divider, Field, Select} from "@fluentui/react-components";
-import {HintType} from "../../common/Hint.ts";
-import {LanguageSelector} from "../components/LanguageSelector.tsx";
-import {SubtitlesType} from "../../common/SubtitlesType.ts";
+import { Divider, Field, Select } from '@fluentui/react-components'
+import { IVideo } from '../../../../common/@types/Video'
+import { HintType } from '../../../../common/@types/Hint'
+import { LanguageSelector } from '@renderer/components/LanguageSelector'
+import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
-    video: Video
-};
+  video: IVideo
+}
 
-export const Hints = ({video}: Props) => {
-    const languageHints = video.hints.filter((h) => h.type === HintType.LANGUAGE);
-    const subtitlesTypeHints = video.hints.filter((h) => h.type === HintType.SUBTITLES_TYPE);
-    return <div className="hints-main">
-        {languageHints.length > 0 &&
-          <>
-            <Divider appearance="brand">Missing Language</Divider>
-            <div className="hints-form">
-                {languageHints.map(hint => {
-                    const key = hint.type + " " + hint.trackId;
-                    const track = video.tracks.find(t => t.id === hint.trackId);
-                    return <Field key={key} size="small" label={`${track?.type ?? "Unknown"} ${hint.trackId}`} required>
-                        <LanguageSelector id={key} size={"small"} multiselect={false}
-                            value={hint.value || ""} onChange={(value) => video.setHint(hint, value)} required/>
-                    </Field>;
-                })}
-            </div>
-          </>
-        }
-        {subtitlesTypeHints.length > 0 &&
-          <>
-            <Divider appearance="brand">Missing Subtitles Type</Divider>
-            <div className="hints-form">
-                {subtitlesTypeHints.map(hint => {
-                    const key = hint.type + " " + hint.trackId;
-                    const track = video.tracks.find(t => t.id === hint.trackId);
-                    return <Field key={key} size="small" label={`${track?.type ?? "Unknown"} ${hint.trackId}`} required>
-                        <Select value={hint.value || ""}
-                            onChange={(_ev, data) => {
-                                video.setHint(hint, data.value);
-                            }}>
-                            {Object.values(SubtitlesType)
-                                .map(key => <option key={key} value={key}>{key}</option>)
-                            }
-                        </Select>
-                    </Field>;
-                })}
-            </div>
-          </>
-        }
-    </div>;
+export const Hints = ({ video }: Props) => {
+  const languageHints = video.hints.filter((h) => h.type === HintType.LANGUAGE)
+  const subtitlesTypeHints = video.hints.filter((h) => h.type === HintType.SUBTITLES_TYPE)
+  return (
+    <div className="hints-main">
+      {languageHints.length > 0 && (
+        <>
+          <Divider appearance="brand">Missing Language</Divider>
+          <div className="hints-form">
+            {languageHints.map((hint) => {
+              const key = hint.type + ' ' + hint.trackId
+              const track = video.tracks.find((t) => t.id === hint.trackId)
+              return (
+                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                  <LanguageSelector
+                    id={key}
+                    size={'small'}
+                    multiselect={false}
+                    value={hint.value || ''}
+                    onChange={async (value) => {
+                      if (value) {
+                        await window.api.video.setHint(video.uuid, hint, value)
+                      }
+                    }}
+                    required
+                  />
+                </Field>
+              )
+            })}
+          </div>
+        </>
+      )}
+      {subtitlesTypeHints.length > 0 && (
+        <>
+          <Divider appearance="brand">Missing Subtitles Type</Divider>
+          <div className="hints-form">
+            {subtitlesTypeHints.map((hint) => {
+              const key = hint.type + ' ' + hint.trackId
+              const track = video.tracks.find((t) => t.id === hint.trackId)
+              return (
+                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                  <Select
+                    value={hint.value || ''}
+                    onChange={async (_ev, data) => await window.api.video.setHint(video.uuid, hint, data.value)}
+                  >
+                    {Object.values(SubtitlesType).map((key) => (
+                      <option key={key} value={key}>
+                        {key}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              )
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  )
 }

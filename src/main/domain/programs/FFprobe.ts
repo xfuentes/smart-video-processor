@@ -20,7 +20,7 @@ import { Processes } from '../../util/processes'
 import { Track } from '../Track'
 import { Numbers } from '../../util/numbers'
 import { CommandProgress } from './CommandProgress'
-import { Attachment } from '../../../common/@types/Change'
+import { Attachment } from '../../../common/Change'
 
 export interface Container {
   type: string

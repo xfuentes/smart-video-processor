@@ -21,7 +21,7 @@ import { SearchResult } from '../SearchResult'
 import { MovieData } from '../MovieData'
 import { RateLimiter } from './RateLimiter'
 import { currentSettings } from '../Settings'
-import { Languages } from '../LanguageIETF'
+import { Languages } from '../../../common/LanguageIETF'
 import { debug } from '../../util/log'
 
 const TMDB_TOKEN =
@@ -76,10 +76,7 @@ export class TMDBClient {
     return results
   }
 
-  public async searchMovieByNameYear(
-    title: string,
-    year: number | undefined = undefined
-  ): Promise<SearchResult[]> {
+  public async searchMovieByNameYear(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tmdb = await this.getTMDBSession()
     // TODO: Handle pagination
     let response: AxiosResponse<TMDBSearchResults>

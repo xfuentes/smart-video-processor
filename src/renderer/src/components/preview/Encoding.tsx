@@ -29,7 +29,7 @@ type Props = {
 }
 
 const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolean = false) => {
-  const selectedTrackIds = video.getSelectedTracks().map((t) => t.id)
+  const selectedTrackIds = video.tracks.filter((t) => t.copy).map((t) => t.id)
   const filteredTracks = video.tracks.filter((t) => t.type === type).filter((s) => selectedTrackIds.includes(s.id))
   return (
     filteredTracks.length > 0 && (
@@ -80,10 +80,10 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolea
             return (
               <Checkbox
                 key={key}
-                checked={video.isTrackEncodingEnabled(key)}
-                onChange={(_ev, data) => {
+                checked={video.trackEncodingEnabled[key] ?? false}
+                onChange={async (_ev, data) => {
                   if (data.checked !== 'mixed') {
-                    video.setTrackEncodingEnabled(key, data.checked)
+                    await window.api.video.setTrackEncodingEnabled(video.uuid, key, data.checked)
                   }
                 }}
                 disabled={disabled}
@@ -154,8 +154,8 @@ export const Encoding = ({ video }: Props) => {
               size={'medium'}
               appearance="primary"
               icon={<WrenchSettings20Regular />}
-              disabled={video.isQueued()}
-              onClick={() => void video.encode()}
+              disabled={video.queued}
+              onClick={() => void window.api.video.process()}
             >
               Process
             </Button>

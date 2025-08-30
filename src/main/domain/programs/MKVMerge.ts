@@ -19,15 +19,14 @@
 import { Processes } from '../../util/processes'
 import { Track } from '../Track'
 import { Numbers } from '../../util/numbers'
-import { Languages } from '../LanguageIETF'
-import { Change } from '../Change'
+import { Languages } from '../../../common/LanguageIETF'
 import { Files } from '../../util/files'
 import { CommandProgress } from './CommandProgress'
 import { ChildProcess } from 'node:child_process'
 import path from 'node:path'
 import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
-import { Attachment, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
+import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
 
 export interface Container {
   type: string

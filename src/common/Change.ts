@@ -120,8 +120,36 @@ export class Change implements IChange {
     this.newValue = newValue
   }
 
-  getSource() {
-    return this.sourceType + (this.trackId !== undefined ? ' ' + this.trackId : '')
+  public static getAvailablePropertiesBySource(source: string, type: ChangeType) {
+    if (type === ChangeType.UPDATE) {
+      return Object.values(ChangeProperty).filter(
+        (key) =>
+          (source === 'Container' && containerProperties.includes(key)) ||
+          (source !== 'Container' && trackProperties.includes(key))
+      )
+    } else {
+      return Object.values(ChangeProperty).filter((key) => source === 'Container' && containerItems.includes(key))
+    }
+  }
+
+  public static getAvailableChangeTypesBySource = (source: string) => {
+    if (source === 'Container') {
+      return Object.values(ChangeType)
+    } else {
+      return [ChangeType.UPDATE]
+    }
+  }
+
+  static sourceTypeTrackIDToSource(sourceType: ChangeSourceType, trackId?: number): string {
+    let source: string
+    switch (sourceType) {
+      case ChangeSourceType.CONTAINER:
+        source = 'Container'
+        break
+      default:
+        source = `${sourceType} ${trackId}`
+    }
+    return source
   }
 
   toJSON(): IChange {
@@ -135,4 +163,8 @@ export class Change implements IChange {
       newValue: this.newValue
     }
   }
+}
+
+export const getChangeSource = (change: IChange) => {
+  return change.sourceType + (change.trackId !== undefined ? ' ' + change.trackId : '')
 }

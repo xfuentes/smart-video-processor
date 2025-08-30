@@ -26,7 +26,7 @@ import { FFprobe } from '../programs/FFprobe'
 import path from 'node:path'
 import { JobStatus } from '../../../common/@types/Job'
 import { TrackType } from '../../../common/@types/Track'
-import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/@types/Change'
+import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
 
 export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string

@@ -16,14 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { JobStatus } from './Job'
+import { IJob, JobStatus } from './Job'
 import { Progression } from './processes'
 import { ITrack, TrackType } from './Track'
-import { IChange } from './Change'
+import { ChangeProperty, ChangeSourceType, ChangeType, IChange } from '../Change'
 import { IHint } from './Hint'
 import { ISearchResult } from './SearchResult'
 import { IMovie } from './Movie'
 import { ITVShow } from './TVShow'
+import { Container } from '../../main/domain/programs/MKVMerge'
+import { EncoderSettings } from './Encoding'
 
 export enum VideoType {
   MOVIE = 'Movie',
@@ -60,11 +62,15 @@ export interface IVideo {
   size: number
   pixels?: string
   type: VideoType
+  container?: Container
   tracks: ITrack[]
   changes: IChange[]
   hints: IHint[]
   loading: boolean
   matched: boolean
+  queued: boolean
+  processed: boolean
+  job?: IJob
   status: JobStatus
   message?: string
   progression: Progression
@@ -73,4 +79,114 @@ export interface IVideo {
   selectedSearchResultID?: number
   movie?: IMovie
   tvShow?: ITVShow
+  encoderSettings: EncoderSettings[]
+  trackEncodingEnabled: { [key: string]: boolean }
+  hintMissing: boolean
+}
+
+export const retrieveChangePropertyValue = (
+  video: IVideo,
+  source: string,
+  property: ChangeProperty | undefined
+): string | boolean | undefined => {
+  if (property === undefined) {
+    return property
+  }
+  let value: string | boolean | undefined
+  if (source === 'Container') {
+    switch (property) {
+      case ChangeProperty.TITLE:
+        value = video.container?.title ?? ''
+        break
+      default:
+        value = undefined
+    }
+  } else {
+    const trackId = Number(source.substring(source.indexOf(' ') + 1))
+    const track = video.tracks.find((t) => t.id === trackId)
+    switch (property) {
+      case ChangeProperty.DEFAULT:
+        value = track?.default
+        break
+      case ChangeProperty.FORCED:
+        value = track?.forced
+        break
+      case ChangeProperty.NAME:
+        value = track?.name
+        break
+      case ChangeProperty.LANGUAGE:
+        value = track?.language
+        break
+      default:
+        value = undefined
+    }
+  }
+  return value
+}
+
+export const retrievePossibleSources = (video: IVideo): string[] => {
+  const possibleSources: string[] = []
+  Object.values(ChangeSourceType).forEach((k) => {
+    if (k === ChangeSourceType.CONTAINER) {
+      possibleSources.push(k)
+    } else {
+      for (const t of video.tracks) {
+        if (t.type.toString() === k.toString()) {
+          possibleSources.push(`${k} ${t.id}`)
+        }
+      }
+    }
+  })
+  return possibleSources
+}
+
+export const changeExists = (
+  video: IVideo,
+  uuid: string | undefined,
+  source: string,
+  changeType: ChangeType,
+  property?: ChangeProperty
+): boolean => {
+  const { sourceType, trackId } = sourceToSourceTypeTrackID(source)
+  for (const change of video.changes) {
+    if (
+      change.uuid !== uuid &&
+      change.sourceType === sourceType &&
+      change.changeType === changeType &&
+      change.trackId === trackId &&
+      change.property === property
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
+export const sourceToSourceTypeTrackID = (
+  source: string
+): {
+  sourceType: ChangeSourceType
+  trackId?: number
+} => {
+  const sepIndex = source.indexOf(' ')
+  const trackId = sepIndex !== -1 ? Number(source.substring(source.indexOf(' ') + 1)) : undefined
+  const sourceTypeStr =
+    sepIndex !== -1 ? (source.substring(0, source.indexOf(' ')) as ChangeSourceType) : (source as ChangeSourceType)
+  const sourceType = Object.values(ChangeSourceType).find((type) => sourceTypeStr === type)
+  if (sourceType === undefined) {
+    throw new Error('Invalid ChangeSourceType extracted from ' + source)
+  }
+  return { sourceType, trackId }
+}
+
+export const checkVideoIsProcessing = (video: IVideo) => {
+  return video.job && video.job.processingOrPaused
+}
+
+export const checkVideoProcessingEnabled = (video: IVideo) => {
+  return video.matched && !video.hintMissing && !video.queued && !checkVideoIsProcessing(video)
+}
+
+export const checkVideoProcessingSuccessful = (video: IVideo) => {
+  return video.status === JobStatus.SUCCESS && video.processed
 }
