@@ -8,6 +8,8 @@ on:
 jobs:
   release:
     permissions:
+      contents: write
+      discussions: write
       deployments: write
     runs-on: ${{ matrix.os }}
 
@@ -55,4 +57,4 @@ jobs:
             out/make/**/*.yml
             out/make/**/*.blockmap
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
