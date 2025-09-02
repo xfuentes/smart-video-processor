@@ -42,15 +42,15 @@ jobs:
         with:
           draft: true
           files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
-            dist/*.blockmap
+            out/make/**/*.exe
+            out/make/**/*.zip
+            out/make/**/*.dmg
+            out/make/**/*.AppImage
+            out/make/**/*.snap
+            out/make/**/*.deb
+            out/make/**/*.rpm
+            out/make/**/*.tar.gz
+            out/make/**/*.yml
+            out/make/**/*.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
