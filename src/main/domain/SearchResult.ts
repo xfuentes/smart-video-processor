@@ -108,7 +108,7 @@ export class SearchResult implements ISearchResult {
   }
 
   static getBestMatch(searchResults: SearchResult[], title: string, year: number | undefined) {
-    let searchResultMatched: SearchResult | undefined = undefined
+    let searchResultMatched: SearchResult | undefined
     if (searchResults.length === 1) {
       searchResultMatched = searchResults[0]
     } else {
