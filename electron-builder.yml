@@ -15,7 +15,7 @@ win:
   executableName: smart-video-processor
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
+  shortcutName: Smart Video Processor
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:

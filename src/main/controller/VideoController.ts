@@ -17,6 +17,9 @@
  */
 
 import { Video } from '../domain/Video'
+import { SearchBy, VideoType } from '../../common/@types/Video'
+import { IHint } from '../../common/@types/Hint'
+import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
 type VideosChangeListener = (videos: Video[]) => void
 
@@ -76,5 +79,98 @@ export class VideoController {
     for (const video of this.videos) {
       video.generateEncoderSettings(true)
     }
+  }
+
+  private getVideoByUuid(uuid: string) {
+    const video = this.videos.find((video) => video.uuid === uuid)
+    if (video == undefined) {
+      throw new Error("Video with uuid '" + uuid + "' not found")
+    }
+    return video
+  }
+
+  setType(uuid: string, videoType: VideoType) {
+    this.getVideoByUuid(uuid).setType(videoType)
+  }
+
+  setSearchBy(uuid: string, searchBy: SearchBy) {
+    this.getVideoByUuid(uuid).setSearchBy(searchBy)
+  }
+
+  selectSearchResultID(uuid: string, searchResultID?: number) {
+    return this.getVideoByUuid(uuid).selectSearchResultID(searchResultID)
+  }
+
+  search(uuid: string) {
+    return this.getVideoByUuid(uuid).search()
+  }
+
+  switchTrackSelection(uuid: string, changedItems: number[]) {
+    this.getVideoByUuid(uuid).switchTrackSelection(changedItems)
+  }
+
+  setHint(uuid: string, hint: IHint, value?: string) {
+    this.getVideoByUuid(uuid).setHint(hint, value)
+  }
+
+  addChange(
+    uuid: string,
+    source: string,
+    changeType: ChangeType,
+    property?: ChangeProperty,
+    newValue?: string | Attachment | boolean
+  ) {
+    return this.getVideoByUuid(uuid).addChange(source, changeType, property, newValue)
+  }
+
+  saveChange(
+    uuid: string,
+    changeUuid: string,
+    source: string,
+    changeType: ChangeType,
+    property?: ChangeProperty,
+    newValue?: string | Attachment | boolean
+  ) {
+    this.getVideoByUuid(uuid).saveChange(changeUuid, source, changeType, property, newValue)
+  }
+
+  deleteChange(uuid: string, changeUuid: string) {
+    this.getVideoByUuid(uuid).deleteChange(changeUuid)
+  }
+
+  setTrackEncodingEnabled(uuid: string, source: string, value: boolean) {
+    this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
+  }
+
+  process(uuid: string) {
+    return this.getVideoByUuid(uuid).process()
+  }
+
+  abortJob(uuid: string) {
+    return this.getVideoByUuid(uuid).abortJob()
+  }
+
+  remove(videoUuidList: string[]) {
+    this.videos = this.videos.filter((v) => {
+      if (videoUuidList.includes(v.uuid)) {
+        v.abortJob()
+        return false
+      }
+      return true
+    })
+    this.fireChangeEvent()
+  }
+
+  clearCompleted() {
+    this.videos = this.videos.filter((v) => !v.isProcessed())
+    this.fireChangeEvent()
+  }
+
+  getMovie(uuid: string) {
+    return this.getVideoByUuid(uuid).movie
+  }
+
+  getTVShow(uuid: string) {
+    return this.getVideoByUuid(uuid).tvShow
   }
 }

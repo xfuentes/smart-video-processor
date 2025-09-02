@@ -54,6 +54,7 @@ import {
 import { EditionType } from '../../common/@types/Movie'
 import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
+import { IHint } from '../../common/@types/Hint'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -161,7 +162,7 @@ export class Video implements IVideo {
     this.changeListeners = listeners
   }
 
-  emitChangeEvent() {
+  fireChangeEvent() {
     this.changeListeners.forEach((listener) => {
       listener(this)
     })
@@ -182,7 +183,7 @@ export class Video implements IVideo {
         } else {
           this.processed = false
         }
-        this.emitChangeEvent()
+        this.fireChangeEvent()
       }
       job.addChangeListener(listener)
     } else {
@@ -199,7 +200,7 @@ export class Video implements IVideo {
     this.container = container
     this.generateEncoderSettings()
     this.loading = false
-    this.emitChangeEvent()
+    this.fireChangeEvent()
     await this.search()
   }
 
@@ -211,7 +212,7 @@ export class Video implements IVideo {
     }
     debug('### ENCODER SETTINGS ###')
     debug(this.encoderSettings)
-    this.emitChangeEvent()
+    this.fireChangeEvent()
   }
 
   async search() {
@@ -285,7 +286,7 @@ export class Video implements IVideo {
         this.unselectBrainDeletedTracks()
         this.brainCalled = true
       }
-      this.emitChangeEvent()
+      this.fireChangeEvent()
       if (this.autoModePossible && currentSettings.isAutoStartEnabled) {
         await this.process()
       }
@@ -392,24 +393,24 @@ export class Video implements IVideo {
 
   setType(type: VideoType) {
     this.type = type
-    this.emitChangeEvent()
+    this.fireChangeEvent()
   }
 
   setTune(tune: VideoTune) {
     this.tune = tune
-    this.emitChangeEvent()
+    this.fireChangeEvent()
   }
 
   setSearchBy(searchBy: SearchBy) {
     this.searchBy = searchBy
-    this.emitChangeEvent()
+    this.fireChangeEvent()
   }
 
-  public setHint(hint: Hint, value?: string) {
+  public async setHint(hint: IHint, value?: string) {
     const foundHint = this.hints.find((h) => h.type === hint.type && h.trackId === hint.trackId)
     if (foundHint !== undefined) {
       foundHint.value = value
-      void this.analyse()
+      await this.analyse()
     }
   }
 
@@ -424,7 +425,7 @@ export class Video implements IVideo {
       newValue
     )
     this.changes.push(newChange)
-    this.emitChangeEvent()
+    this.fireChangeEvent()
     return newChange.uuid
   }
 
@@ -445,13 +446,13 @@ export class Video implements IVideo {
       change.currentValue = retrieveChangePropertyValue(this, source, property)
       change.newValue = newValue
       this.changes = this.changes.slice(0)
-      this.emitChangeEvent()
+      this.fireChangeEvent()
     }
   }
 
   deleteChange(uuid: string) {
     this.changes = this.changes.filter((c) => c.uuid !== uuid)
-    this.emitChangeEvent()
+    this.fireChangeEvent()
   }
 
   abortJob() {

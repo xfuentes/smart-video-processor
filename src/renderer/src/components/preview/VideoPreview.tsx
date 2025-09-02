@@ -17,7 +17,7 @@
  */
 
 import { Image, RatingDisplay, Tooltip } from '@fluentui/react-components'
-import { Country } from '../../../../common/@types/Countries'
+import { Country } from '../../../../common/Countries'
 
 type Props = {
   poster: string | undefined
@@ -46,10 +46,10 @@ export const VideoPreview = ({
     <div className="video-preview">
       {altOverview ? (
         <Tooltip content={altOverview} relationship="description">
-          <Image alt="No Poster" bordered src={`svp:///${poster}`} className="poster" />
+          <Image alt="No Poster" bordered src={poster ? 'svp:///' + poster : ''} className="poster" />
         </Tooltip>
       ) : (
-        <Image alt="No Poster" bordered src={`svp:///${poster}`} className="poster" />
+        <Image alt="No Poster" bordered src={poster ? 'svp:///' + poster : ''} className="poster" />
       )}
       <div className="vertical-stack" style={{ height: '173px', justifyContent: 'space-between' }}>
         <div>
@@ -78,7 +78,11 @@ export const VideoPreview = ({
               {countries.map((country) => (
                 <div key={country.alpha3} style={{ flexShrink: 0, justifyContent: 'end', maxHeight: '24px' }}>
                   <Tooltip content={country.label} relationship="description">
-                    <Image alt={country.label} width="32px" src={`/flags/${country.alpha3}.png`} />
+                    <Image
+                      alt={country.label}
+                      width="32px"
+                      src={country.flagURL.replace("file://", "svp://")}
+                    />
                   </Tooltip>
                 </div>
               ))}
@@ -96,7 +100,12 @@ export const VideoPreview = ({
           <div className="overview">{overview ? overview : ''}</div>
           {secondaryPoster && (
             <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
-              <Image alt="No Episode Image" bordered src={`svp:///${secondaryPoster}`} className={'secondary-poster'} />
+              <Image
+                alt="No Episode Image"
+                bordered
+                src={secondaryPoster ? 'svp:///' + secondaryPoster : ''}
+                className={'secondary-poster'}
+              />
             </div>
           )}
         </div>

@@ -22,16 +22,14 @@ import { SearchResult } from './SearchResult'
 import { Numbers } from '../util/numbers'
 import { TMDBClient } from './clients/TMDBClient'
 import Chalk from 'chalk'
-import { Countries } from '../../common/Countries'
-import { Languages } from '../../common/LanguageIETF'
+import { Countries, Country } from '../../common/Countries'
+import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
-import { Country } from '../../common/@types/Countries'
-import { LanguageIETF } from '../../common/@types/LanguageIETF'
 
 export default class Movie implements IMovie {
   public video: Video
@@ -70,7 +68,7 @@ export default class Movie implements IMovie {
       }
       this.video.status = JobStatus.LOADING
       this.video.message = 'Searching movie on TMDB.'
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
       if (by === SearchBy.TITLE) {
         this.video.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(this.title, this.year)
       } else if (this.imdb) {
@@ -90,10 +88,9 @@ export default class Movie implements IMovie {
           this.video.message = 'Unable to find the movie on TMDB.'
         }
         debug(Chalk.red(this.video.message))
-        this.video.emitChangeEvent()
+        this.video.fireChangeEvent()
       } else {
-        this.tmdb = movieMatched.id
-        await this.load()
+        await this.selectSearchResultID(movieMatched.id)
       }
     }
   }
@@ -104,7 +101,7 @@ export default class Movie implements IMovie {
     }
     this.video.status = JobStatus.LOADING
     this.video.message = 'Retrieving movie details from TMDB.'
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
     try {
       const movieData = await TMDBClient.getInstance().retrieveMovieDetails(this.tmdb)
       this.originalCountries = movieData.countries
@@ -158,7 +155,7 @@ export default class Movie implements IMovie {
       } else if (this.posterURL) {
         this.video.status = JobStatus.LOADING
         this.video.message = 'Downloading poster image from TMDB.'
-        this.video.emitChangeEvent()
+        this.video.fireChangeEvent()
         this.poster = await Files.downloadFile(this.posterURL, directory, filename)
         debug(`Wrote poster file://${this.poster}`)
       }
@@ -174,40 +171,39 @@ export default class Movie implements IMovie {
       this.video.matched = true
       this.video.status = JobStatus.WAITING
       this.video.message = ''
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
     } catch (error) {
       this.video.status = JobStatus.ERROR
       this.video.message = (error as Error).message
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
     }
   }
 
   setTitle(newTitle: string) {
     this.title = newTitle
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setYear(newYear: string) {
     this.year = Numbers.toNumber(newYear)
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setIMDB(newIMDB: string) {
     this.imdb = newIMDB
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setTMDB(tmdbId: number | string | undefined) {
     this.tmdb = tmdbId !== undefined ? Numbers.toNumber('' + tmdbId) : undefined
-    this.video.emitChangeEvent()
+    this.video.selectedSearchResultID = this.tmdb
+    this.video.fireChangeEvent()
   }
 
   async selectSearchResultID(id: number | string | undefined) {
     const idNum = id !== undefined ? Numbers.toNumber('' + id) : undefined
-    if (this.tmdb !== id) {
-      this.setTMDB(idNum)
-      await this.load()
-    }
+    this.setTMDB(idNum)
+    await this.load()
   }
 
   getOriginalLanguage() {
@@ -220,7 +216,7 @@ export default class Movie implements IMovie {
 
   setEdition(edition: EditionType) {
     this.edition = edition
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   toJSON(): IMovie {

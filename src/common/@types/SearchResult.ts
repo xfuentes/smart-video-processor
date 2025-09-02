@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Country } from './Countries'
-import { LanguageIETF } from './LanguageIETF'
+import { LanguageIETF } from '../LanguageIETF'
+import { Country } from '../Countries'
 
 export interface ISearchResult {
   id: number

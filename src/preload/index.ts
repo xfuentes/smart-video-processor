@@ -79,13 +79,13 @@ const api = {
       setIMDB: (uuid: string, imdb: string): Promise<void> => ipcRenderer.invoke('video.tvShow:setIMDB', uuid, imdb),
       setTheTVDB: (uuid: string, tvdb: number | string | undefined): Promise<void> =>
         ipcRenderer.invoke('video.tvShow:setTheTVDB', uuid, tvdb),
-      setOrder: (uuid: string, order: EpisodeOrder): Promise<void> => ipcRenderer.invoke('video:setOrder', uuid, order),
+      setOrder: (uuid: string, order: EpisodeOrder): Promise<void> => ipcRenderer.invoke('video.tvShow:setOrder', uuid, order),
       setSeason: (uuid: string, newSeason: string): Promise<void> =>
-        ipcRenderer.invoke('video:setSeason', uuid, newSeason),
+        ipcRenderer.invoke('video.tvShow:setSeason', uuid, newSeason),
       setEpisode: (uuid: string, newEpisode: string): Promise<void> =>
-        ipcRenderer.invoke('video:setEpisode', uuid, newEpisode),
+        ipcRenderer.invoke('video.tvShow:setEpisode', uuid, newEpisode),
       setAbsoluteEpisode: (uuid: string, newAbsoluteEpisode: string): Promise<void> =>
-        ipcRenderer.invoke('video:setAbsoluteEpisode', uuid, newAbsoluteEpisode)
+        ipcRenderer.invoke('video.tvShow:setAbsoluteEpisode', uuid, newAbsoluteEpisode)
     }
   }
 }

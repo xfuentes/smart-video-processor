@@ -18,10 +18,10 @@
 
 import { Job } from './Job'
 import { MKVMerge } from '../programs/MKVMerge'
-import { Change } from '../Change'
 import { Track } from '../Track'
 import path from 'node:path'
 import { JobStatus } from '../../../common/@types/Job'
+import { Change } from '../../../common/Change'
 
 export class ProcessingJob extends Job<string> {
   private readonly originalFilename: string

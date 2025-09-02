@@ -22,15 +22,14 @@ import { Hint } from './Hint'
 import { Strings } from '../../common/Strings'
 import { SubtitlesType, SubtitlesTypeUtil } from '../../common/SubtitlesType'
 import { Files } from '../util/files'
-import { Languages } from '../../common/LanguageIETF'
+import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { currentSettings } from './Settings'
 import path from 'node:path'
 import { TrackType } from '../../common/@types/Track'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/Change'
 import { HintType } from '../../common/@types/Hint'
-import { LanguageIETF } from '../../common/@types/LanguageIETF'
-import { Country } from '../../common/@types/Countries'
 import { EditionType } from '../../common/@types/Movie'
+import { Country } from '../../common/Countries'
 
 const MAX_FORCED_FRAMES = 40
 
