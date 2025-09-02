@@ -155,7 +155,7 @@ export const Encoding = ({ video }: Props) => {
               appearance="primary"
               icon={<WrenchSettings20Regular />}
               disabled={video.queued}
-              onClick={() => void window.api.video.process()}
+              onClick={() => void window.api.video.process(video.uuid)}
             >
               Process
             </Button>

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, net, protocol, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -6,6 +6,11 @@ import { currentSettings, loadSettings, saveSettings } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
 import { Settings } from '../common/@types/Settings'
+import { initVideoControllerIPC } from './VideoControllerIPC'
+
+import electron_squirrel_startup from 'electron-squirrel-startup'
+
+if (electron_squirrel_startup) app.quit()
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -20,7 +25,6 @@ function createWindow(): BrowserWindow {
       sandbox: false
     }
   })
-
   mainWindow.on('ready-to-show', () => {
     mainWindow.setMinimumSize(925, 568)
     mainWindow.show()
@@ -54,8 +58,7 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron.svp')
-
+  electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
   loadSettings()
 
   app.on('browser-window-created', (_, window) => {
@@ -63,6 +66,7 @@ app.whenReady().then(() => {
   })
 
   const mainWindow = createWindow()
+  mainWindow.removeMenu()
 
   protocol.handle('svp', (req) => {
     const filePath = new URL(req.url).pathname
@@ -70,18 +74,6 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('main:getVersion', () => app.getVersion())
-  ipcMain.handle('video:openFileExplorer', async () => {
-    const result = await dialog.showOpenDialog(mainWindow, {
-      title: 'Select video files',
-      properties: ['openFile', 'multiSelections', 'dontAddToRecent']
-    })
-    if (!result.canceled) {
-      VideoController.getInstance().openFiles(result.filePaths)
-    }
-  })
-  ipcMain.handle('video:openFiles', (_event, filePaths: string[]) => {
-    VideoController.getInstance().openFiles(filePaths)
-  })
   ipcMain.handle('main:getCurrentSettings', () => currentSettings)
   ipcMain.handle('main:saveSettings', (_event, settings: Settings) => {
     const priorityUpdated = currentSettings.priority !== settings.priority
@@ -99,11 +91,7 @@ app.whenReady().then(() => {
     }
     return currentSettings
   })
-  VideoController.getInstance().addChangeListener((videos) => {
-    console.log('*** SENDING VIDEOS UPDATES ***')
-    console.log(JSON.stringify(videos))
-    mainWindow.webContents.send('video:filesChanged', JSON.stringify(videos))
-  })
+  initVideoControllerIPC(mainWindow)
 
   app.on('activate', function () {
     // On macOS, it's common to re-create a window in the app when the

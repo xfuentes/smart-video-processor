@@ -39,7 +39,7 @@ interface SvpAPI {
     addFilesChangedListener: (callback: FilesChangedListener) => Promise<void>
     removeFilesChangedListener: (callback: FilesChangedListener) => Promise<void>
     setType: (uuid: string, videoType: VideoType) => Promise<void>
-    setSearchBy: (uuid: string, videoType: SearchBy) => Promise<void>
+    setSearchBy: (uuid: string, searchBy: SearchBy) => Promise<void>
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
     search: (uuid: string) => Promise<void>
     switchTrackSelection: (uuid: string, changedItems: number[]) => Promise<void>

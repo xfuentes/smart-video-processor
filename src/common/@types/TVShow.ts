@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
-import { LanguageIETF } from './LanguageIETF'
-import { Country } from './Countries'
+import { LanguageIETF } from '../LanguageIETF'
+import { Country } from '../Countries'
 
 export interface ITVShow {
   title?: string

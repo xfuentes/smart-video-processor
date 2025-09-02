@@ -29,8 +29,8 @@ import path from 'node:path'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
-import { LanguageIETF } from '../../common/@types/LanguageIETF'
-import { Country } from '../../common/@types/Countries'
+import { LanguageIETF } from '../../common/LanguageIETF'
+import { Country } from '../../common/Countries'
 
 export class TVShow implements ITVShow {
   public video: Video
@@ -69,7 +69,7 @@ export class TVShow implements ITVShow {
       }
       this.video.status = JobStatus.LOADING
       this.video.message = 'Searching series on TheTVDB'
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
       this.video.searchResults = await TVDBClient.getInstance().searchSeries(this.title, this.year)
       const seriesMatched = SearchResult.getBestMatch(this.video.searchResults, this.title, this.year)
 
@@ -78,7 +78,7 @@ export class TVShow implements ITVShow {
         this.video.message =
           'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
         console.log(Chalk.red(this.video.message))
-        this.video.emitChangeEvent()
+        this.video.fireChangeEvent()
       } else {
         await this.selectSearchResultID(seriesMatched.id)
       }
@@ -105,7 +105,7 @@ export class TVShow implements ITVShow {
       this.video.status = JobStatus.WARNING
       this.video.message = 'EpisodeData not found. Please check the information provided and try again.'
       console.log(Chalk.red(this.video.message))
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
     }
     this.imdb = seriesData.imdb
     this.title = seriesData.title
@@ -140,7 +140,7 @@ export class TVShow implements ITVShow {
     } else if (this.posterURL) {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image from TheTVDB.'
-      this.video.emitChangeEvent()
+      this.video.fireChangeEvent()
       this.poster = await Files.downloadFile(this.posterURL, directory, filename)
       debug(`Wrote poster file://${this.poster}`)
     }
@@ -154,7 +154,7 @@ export class TVShow implements ITVShow {
         }
       } else if (this.episodePosterURL) {
         this.video.message = 'Downloading episode image from TheTVDB.'
-        this.video.emitChangeEvent()
+        this.video.fireChangeEvent()
         filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode) : this.absoluteEpisode}.jpg`
         this.episodePoster = await Files.downloadFile(this.episodePosterURL, directory, filename)
         debug(`wrote episode image file://${this.episodePoster}`)
@@ -171,57 +171,55 @@ export class TVShow implements ITVShow {
     } else {
       this.video.title = `${this.title}${this.absoluteEpisode ? ' - E' + Strings.toLeadingZeroNumber(this.absoluteEpisode) : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
     }
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setTitle(newTitle: string) {
     this.title = newTitle
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setIMDB(newIMDB: string) {
     this.imdb = newIMDB
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setOrder(order: EpisodeOrder) {
     this.order = order
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setSeason(newSeason: string) {
     this.season = Numbers.toNumber(newSeason)
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setEpisode(newEpisode: string) {
     this.episode = Numbers.toNumber(newEpisode)
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
     this.season = 1
     this.absoluteEpisode = Numbers.toNumber(newAbsoluteEpisode)
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setTheTVDB(id: number | string | undefined) {
     this.theTVDB = id !== undefined ? Numbers.toNumber('' + id) : undefined
     this.video.selectedSearchResultID = this.theTVDB
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   setYear(newYear: string) {
     this.year = Numbers.toNumber(newYear)
-    this.video.emitChangeEvent()
+    this.video.fireChangeEvent()
   }
 
   async selectSearchResultID(id: number | string | undefined) {
     const idNum = id !== undefined ? Numbers.toNumber('' + id) : undefined
-    if (this.theTVDB !== id) {
-      this.setTheTVDB(idNum)
-      await this.loadSeries()
-    }
+    this.setTheTVDB(idNum)
+    await this.loadSeries()
   }
 
   getOriginalLanguage() {

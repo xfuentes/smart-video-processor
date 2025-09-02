@@ -15,26 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { LanguageIETF } from '../LanguageIETF'
-import { Country } from '../Countries'
 
-export enum EditionType {
-  THEATRICAL = 'Theatrical',
-  EXTENDED = 'Extended',
-  DIRECTORS_CUT = "Director's cut",
-  UNRATED = 'Unrated'
-}
-
-export interface IMovie {
-  title: string
-  year?: number
-  overview?: string
-  poster: string
-  posterURL?: string
-  tmdb?: number
-  imdb?: string
-  originalLanguage?: LanguageIETF
-  rating?: number
-  originalCountries: Country[]
-  edition: EditionType
+module.exports = {
+  packagerConfig: {
+    ignore: [/^\/src/, /(.eslintrc.json)|(.gitignore)|(electron.vite.config.ts)|(forge.config.cjs)|(tsconfig.*)/],
+    icon: __dirname + '/resources/icon'
+  },
+  rebuildConfig: {},
+  makers: [
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: {
+        iconUrl: __dirname + '/resources/icon.ico',
+        setupIcon: __dirname + '/resources/icon.ico'
+      }
+    },
+    {
+      name: '@electron-forge/maker-zip',
+      platforms: ['darwin']
+    },
+    {
+      name: '@electron-forge/maker-deb',
+      config: {}
+    },
+    {
+      name: '@electron-forge/maker-rpm',
+      config: {}
+    }
+  ]
 }
