@@ -16,13 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Video from '../common/Video'
-import { Hint, HintType } from '../common/Hint'
 import * as chalk from 'chalk'
 import { search } from '@inquirer/prompts'
-import Languages from '../common/LanguageIETF'
 import { promptStringArray } from './matching'
 import { SubtitlesType } from '../common/SubtitlesType'
+import { Languages } from '../common/LanguageIETF'
+import { Hint } from '../main/domain/Hint'
+import { Video } from '../main/domain/Video'
+import { HintType } from '../common/@types/Hint'
 
 export const promptLanguage = async (label: string, v: string | undefined) => {
   return search({
@@ -69,11 +70,7 @@ export const getCmdHint = (hint: Hint, languageHint?: string[]) => {
   }
 }
 
-export const requestHints = async (
-  video: Video,
-  languageHint?: string[],
-  auto: boolean = false
-) => {
+export const requestHints = async (video: Video, languageHint?: string[], auto: boolean = false) => {
   const languageHints = video.hints.filter((h) => h.type === HintType.LANGUAGE)
   const subtitlesTypeHints = video.hints.filter((h) => h.type === HintType.SUBTITLES_TYPE)
 
@@ -83,7 +80,7 @@ export const requestHints = async (
       const track = video.tracks.find((t) => t.id === hint.trackId)
       const cmdHint = getCmdHint(hint, languageHint)
       if (cmdHint) {
-        video.setHint(hint, cmdHint)
+        await video.setHint(hint, cmdHint)
         const languageName = Languages.getLanguageByCode(cmdHint)?.label
         console.log(
           `${chalk.greenBright('✔  ')}${chalk.whiteBright((track?.type ?? 'Unknown') + ' ' + hint.trackId + ':')} ${chalk.blueBright(languageName)}`
@@ -93,7 +90,7 @@ export const requestHints = async (
           `${chalk.greenBright('✔  ')}${chalk.whiteBright((track?.type ?? 'Unknown') + ' ' + hint.trackId + ':')} ${chalk.blueBright(Languages.getLanguageByCode(hint.value)?.label)}`
         )
       } else {
-        video.setHint(
+        await video.setHint(
           hint,
           await promptLanguage(
             `${track?.type ?? 'Unknown'} ${hint.trackId}`,
@@ -109,10 +106,7 @@ export const requestHints = async (
     console.log(chalk.blueBright('Missing Subtitles Type'))
     for (const hint of subtitlesTypeHints) {
       const track = video.tracks.find((t) => t.id === hint.trackId)
-      video.setHint(
-        hint,
-        await promptSubtitlesType(`${track?.type ?? 'Unknown'} ${hint.trackId}`, hint.value)
-      )
+      await video.setHint(hint, await promptSubtitlesType(`${track?.type ?? 'Unknown'} ${hint.trackId}`, hint.value))
     }
     console.log()
   }

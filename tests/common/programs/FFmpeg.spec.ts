@@ -17,16 +17,15 @@
  */
 
 import { expect, test, vi } from 'vitest'
-import Processes from '../../../src/main/util/processes'
 import { simulateFFmpegProgression } from '../testUtils'
-import { FFmpeg } from '../../../src/common/programs/FFmpeg'
-import { EncoderSettings } from '../../../src/common/Encoding'
-import { JobManager } from '../../../src/common/jobs/JobManager'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
-import { currentSettings } from '../../../src/common/Settings'
+import { Processes } from '../../../src/main/util/processes'
+import { EncoderSettings } from '../../../src/common/@types/Encoding'
+import { JobManager } from '../../../src/main/domain/jobs/JobManager'
+import { currentSettings } from '../../../src/main/domain/Settings'
+import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
 
-const genSpawnSpyProgress = () =>
-  vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
+const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
 const encoderSettings = [
   {
@@ -77,14 +76,7 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
       progresses.push(progress)
     }
   )
-  expect(progresses).toStrictEqual([
-    undefined,
-    0.1696,
-    0.4341333333333333,
-    0.7093333333333334,
-    0.9568,
-    1
-  ])
+  expect(progresses).toStrictEqual([undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
   expect(result).toContain(encodedPath)
 })
 
@@ -97,16 +89,10 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
   const progresses: number[] = []
   const xSpeeds: number[] = []
   currentSettings.isTestEncodingEnabled = true
-  const result = await FFmpeg.getInstance().encodeFile(
-    fullPath,
-    6120,
-    [],
-    encoderSettings,
-    ({ progress, xSpeed }) => {
-      progresses.push(progress)
-      xSpeeds.push(xSpeed)
-    }
-  )
+  const result = await FFmpeg.getInstance().encodeFile(fullPath, 6120, [], encoderSettings, ({ progress, xSpeed }) => {
+    progresses.push(progress)
+    xSpeeds.push(xSpeed)
+  })
   let lastProgress = -1
   for (const progress of progresses) {
     if (progress !== undefined) {
@@ -115,20 +101,7 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
     }
   }
   expect(lastProgress).toBe(1)
-  expect(xSpeeds).toStrictEqual([
-    undefined,
-    0.508,
-    1.24,
-    1.93,
-    2.49,
-    2.56,
-    undefined,
-    0.508,
-    1.24,
-    1.93,
-    2.49,
-    2.56
-  ])
+  expect(xSpeeds).toStrictEqual([undefined, 0.508, 1.24, 1.93, 2.49, 2.56, undefined, 0.508, 1.24, 1.93, 2.49, 2.56])
   expect(result).toContain(encodedPath)
 })
 

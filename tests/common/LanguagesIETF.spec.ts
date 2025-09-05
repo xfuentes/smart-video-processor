@@ -17,8 +17,8 @@
  */
 
 import { expect, test } from 'vitest'
-import Languages from '../../src/common/LanguageIETF'
-import Countries from '../../src/common/Countries'
+import { Languages } from '../../src/common/LanguageIETF'
+import { Countries } from '../../src/common/Countries'
 
 test('Unique language IETF code', async () => {
   const codes = []
@@ -63,34 +63,26 @@ test('Find Language From Description Failed Bug 2', async () => {
 })
 
 test('Find Language From Description Failed Bug 3', async () => {
-  expect(
-    Languages.findLanguageFromDescription('French complet pour sourds et malentendants')?.code
-  ).toBe('fr')
+  expect(Languages.findLanguageFromDescription('French complet pour sourds et malentendants')?.code).toBe('fr')
 })
 
 test('Test Guess Original language', async () => {
   expect(
-    Languages.guessLanguageIETFFromCountries('en', [
-      Countries.getCountryByCode('BE'),
-      Countries.getCountryByCode('FR')
-    ]).code
+    Languages.guessLanguageIETFFromCountries('en', [Countries.getCountryByCode('BE'), Countries.getCountryByCode('FR')])
+      .code
   ).toBe('en')
 })
 
 test('Test Guess Original language 2', async () => {
   expect(
-    Languages.guessLanguageIETFFromCountries('en', [
-      Countries.getCountryByCode('GB'),
-      Countries.getCountryByCode('US')
-    ]).code
+    Languages.guessLanguageIETFFromCountries('en', [Countries.getCountryByCode('GB'), Countries.getCountryByCode('US')])
+      .code
   ).toBe('en')
 })
 
 test('Test Guess Original language 3', async () => {
   expect(
-    Languages.guessLanguageIETFFromCountries('cn', [
-      Countries.getCountryByCode('CN'),
-      Countries.getCountryByCode('HK')
-    ]).code
+    Languages.guessLanguageIETFFromCountries('cn', [Countries.getCountryByCode('CN'), Countries.getCountryByCode('HK')])
+      .code
   ).toBe('yue')
 })

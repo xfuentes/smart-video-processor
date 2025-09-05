@@ -17,7 +17,7 @@
  */
 
 import { expect, test } from 'vitest'
-import Strings from '../../src/common/Strings'
+import { Strings } from '../../src/common/Strings'
 
 test('Pixels Dimension To 8K', async () => {
   const res = Strings.pixelsToVideoFormat('7680x4320')
@@ -52,11 +52,7 @@ test('Pixels Dimension Bug To 1080p - 1', async () => {
 test('Matches movie', () => {
   const needle = 'Captain America - Civil War'
   const goodScore = Strings.getMatchScoreByKeywords('Captain America : Civil War', needle, true)
-  const lessGoodScore = Strings.getMatchScoreByKeywords(
-    'Captain America: Civil War Reenactors',
-    needle,
-    true
-  )
+  const lessGoodScore = Strings.getMatchScoreByKeywords('Captain America: Civil War Reenactors', needle, true)
   expect(goodScore).toBeGreaterThan(lessGoodScore)
 })
 

@@ -17,7 +17,7 @@
  */
 
 import { expect, test } from 'vitest'
-import { JobManager } from '../../../src/common/jobs/JobManager'
+import { JobManager } from '../../../src/main/domain/jobs/JobManager'
 
 test('TempPath No SubDir', async () => {
   const tmpPath = JobManager.getInstance().getTempPath()

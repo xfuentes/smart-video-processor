@@ -17,9 +17,9 @@
  */
 
 import { expect, test } from 'vitest'
-import Countries from '../../src/common/Countries'
-import Files from '../../src/main/util/files'
-import { pathSep } from '../../src/main/util/path'
+import { Countries } from '../../src/common/Countries'
+import { Files } from '../../src/main/util/files'
+import * as path from 'node:path'
 
 test('Search country by alpha3 ignore case', () => {
   const country = Countries.getCountryByCode('usa')
@@ -33,9 +33,7 @@ test('Search country by alpha3 ignore case', () => {
 test('Verify all countries have a flag', () => {
   const missingFlags: string[] = []
   for (const country of Countries.getList()) {
-    const flagPath =
-      __dirname +
-      `/../../src/renderer/src/assets/flags/${country.alpha3}.png`.replace(/\//g, pathSep)
+    const flagPath = __dirname + `/../../resources/flags/${country.alpha3}.png`.replace(/\//g, path.sep)
     const hasFlag = Files.fileExistsAndIsReadable(flagPath)
     if (!hasFlag) {
       missingFlags.push(`${country.alpha3}.png`)
