@@ -1,8 +1,11 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>ffprobe</w>
       <w>fmpeg</w>
+      <w>fprobe</w>
       <w>lcid</w>
+      <w>mkvmerge</w>
       <w>ntsuspend</w>
       <w>tmdb</w>
       <w>tseslint</w>

@@ -80,4 +80,16 @@ export type Settings = {
    * Audio size reduction needed to allow re-encoding.
    */
   audioSizeReduction: number
+  /**
+   * MKVMerge command full path.
+   */
+  mkvMergePath: string
+  /**
+   * ffmpeg command full path.
+   */
+  ffmpegPath: string
+  /**
+   * ffprobe command full path.
+   */
+  ffprobePath: string
 }

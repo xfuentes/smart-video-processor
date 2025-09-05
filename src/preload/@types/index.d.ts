@@ -23,6 +23,7 @@ import { EditionType } from '../../common/@types/Movie'
 import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
 import { Hint } from '../../main/domain/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
+import { FormValidation } from '../../common/FormValidation'
 
 export type FilesChangedListener = (value: IVideo[]) => void
 
@@ -30,8 +31,9 @@ interface SvpAPI {
   main: {
     version: string
     getCurrentSettings: () => Promise<Settings>
-    saveSettings: (settings: Settings) => Promise<Settings>
+    saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     switchPaused: () => Promise<boolean>
+    openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
   }
   video: {
     openFileExplorer: () => Promise<void>

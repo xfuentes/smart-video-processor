@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, net, protocol, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -9,6 +9,7 @@ import { Settings } from '../common/@types/Settings'
 import { initVideoControllerIPC } from './VideoControllerIPC'
 
 import electron_squirrel_startup from 'electron-squirrel-startup'
+import { FormValidation } from '../common/FormValidation'
 
 if (electron_squirrel_startup) app.quit()
 
@@ -72,24 +73,37 @@ app.whenReady().then(() => {
     const filePath = new URL(req.url).pathname
     return net.fetch(`file://${filePath}`)
   })
-
   ipcMain.handle('main:getVersion', () => app.getVersion())
   ipcMain.handle('main:getCurrentSettings', () => currentSettings)
-  ipcMain.handle('main:saveSettings', (_event, settings: Settings) => {
+  ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
     const priorityUpdated = currentSettings.priority !== settings.priority
     const encoderSettingsUpdated =
       currentSettings.isTrackEncodingEnabled !== settings.isTrackEncodingEnabled ||
       currentSettings.videoCodec !== settings.videoCodec ||
       currentSettings.isTestEncodingEnabled !== settings.isTestEncodingEnabled
 
-    saveSettings(settings)
-    if (priorityUpdated) {
-      JobManager.getInstance().updatePriority()
+    const validation = saveSettings(settings)
+    if (validation.status === 'success') {
+      if (priorityUpdated) {
+        JobManager.getInstance().updatePriority()
+      }
+      if (encoderSettingsUpdated) {
+        VideoController.getInstance().encoderSettingsUpdated()
+      }
     }
-    if (encoderSettingsUpdated) {
-      VideoController.getInstance().encoderSettingsUpdated()
+    validation.result = currentSettings
+    return validation
+  })
+  ipcMain.handle('main:openSingleFileExplorer', async (_event, title: string, defaultPath?: string) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title,
+      defaultPath,
+      properties: ['openFile', 'dontAddToRecent']
+    })
+    if (!result.canceled) {
+      return result.filePaths[0]
     }
-    return currentSettings
+    return ''
   })
   initVideoControllerIPC(mainWindow)
 

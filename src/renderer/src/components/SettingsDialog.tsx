@@ -41,6 +41,7 @@ import {
 import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { LanguageSelector } from './LanguageSelector'
 import {
+  ArchiveSettings20Regular,
   DocumentSettings20Regular,
   SearchSettings20Regular,
   Settings24Regular,
@@ -51,13 +52,15 @@ import { SettingsContextType } from '@renderer/@types/SettingsContext'
 import { Settings } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
+import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
+import { ProgressButton } from '@renderer/components/ProgressButton'
+import { FormValidation } from '../../../common/FormValidation'
 
 export const SettingsDialog = () => {
   const { settings, setSettings } = useContext(SettingsContext) as SettingsContextType
   const [selectedTab, setSelectedTab] = useState('general')
 
-  const handleSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault()
+  const handleSubmit = async () => {
     const newSettings: Settings = {
       ...settings,
       language,
@@ -74,9 +77,18 @@ export const SettingsDialog = () => {
       videoCodec,
       isTestEncodingEnabled,
       videoSizeReduction,
-      audioSizeReduction
+      audioSizeReduction,
+      mkvMergePath,
+      ffmpegPath,
+      ffprobePath
     }
-    setSettings(await window.api.main.saveSettings(newSettings))
+    const validation = await window.api.main.saveSettings(newSettings)
+    setFormValidation(validation)
+    if (validation.status === 'success') {
+      setSettings(validation.result)
+    } else {
+      throw new Error('Validation error')
+    }
   }
 
   const handleFormInputChange = (
@@ -103,6 +115,9 @@ export const SettingsDialog = () => {
     setVideoCodec(settings.videoCodec)
     setVideoSizeReduction(settings.videoSizeReduction)
     setAudioSizeReduction(settings.audioSizeReduction)
+    setMkvMergePath(settings.mkvMergePath)
+    setFfmpegPath(settings.ffmpegPath)
+    setFfprobePath(settings.ffprobePath)
   }
 
   const priorityToNumber = (priority: keyof typeof ProcessesPriority): number => {
@@ -155,6 +170,10 @@ export const SettingsDialog = () => {
   const [videoSizeReduction, setVideoSizeReduction] = useState(settings.videoSizeReduction)
   const [videoCodec, setVideoCodec] = useState(settings.videoCodec)
   const [audioSizeReduction, setAudioSizeReduction] = useState(settings.audioSizeReduction)
+  const [mkvMergePath, setMkvMergePath] = useState(settings.mkvMergePath)
+  const [ffmpegPath, setFfmpegPath] = useState(settings.ffmpegPath)
+  const [ffprobePath, setFfprobePath] = useState(settings.ffprobePath)
+  const [formValidation, setFormValidation] = useState<FormValidation<Settings> | undefined>()
 
   return (
     <Dialog modalType="modal">
@@ -168,7 +187,6 @@ export const SettingsDialog = () => {
         style={{ padding: '5px', minHeight: '500px', display: 'flex', flexFlow: 'column' }}
       >
         <form
-          onSubmit={handleSubmit}
           style={{
             height: '100%',
             flexGrow: 1,
@@ -186,6 +204,9 @@ export const SettingsDialog = () => {
               >
                 <Tab value="general" icon={<DocumentSettings20Regular />}>
                   General
+                </Tab>
+                <Tab value="output" icon={<ArchiveSettings20Regular />}>
+                  Output
                 </Tab>
                 <Tab value="filtering" icon={<SearchSettings20Regular />}>
                   Filtering
@@ -210,6 +231,71 @@ export const SettingsDialog = () => {
                         onChange={(data) => setLanguage(data)}
                       />
                     </div>
+                    <FileSelectorField
+                      label="MKVMerge Path"
+                      required
+                      size={'small'}
+                      value={mkvMergePath}
+                      onChange={(newFile) => setMkvMergePath(newFile)}
+                      validationState={formValidation?.fields['mkvMergePath']?.status}
+                      validationMessage={formValidation?.fields['mkvMergePath']?.message}
+                    />
+                    <FileSelectorField
+                      label="FFmpeg Path"
+                      required
+                      size={'small'}
+                      value={ffmpegPath}
+                      onChange={(newFile) => setFfmpegPath(newFile)}
+                      validationState={formValidation?.fields['ffmpegPath']?.status}
+                      validationMessage={formValidation?.fields['ffmpegPath']?.message}
+                    />
+                    <FileSelectorField
+                      label="FFprobe Path"
+                      required
+                      size={'small'}
+                      value={ffprobePath}
+                      onChange={(newFile) => setFfprobePath(newFile)}
+                      validationState={formValidation?.fields['ffmpegPath']?.status}
+                      validationMessage={formValidation?.fields['ffmpegPath']?.message}
+                    />
+                    <div className="field">
+                      <Switch
+                        label="Auto Start"
+                        checked={isAutoStartEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setAutoStartEnabled(ev.currentTarget.checked)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label htmlFor="prioritySlider">Processes Priority</Label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                        <Slider
+                          min={-2}
+                          max={2}
+                          value={priorityToNumber(priority)}
+                          step={1}
+                          size="small"
+                          className={priorityClass}
+                          onChange={(_ev, data) => setPriority(numberToPriority(data.value))}
+                          id="prioritySlider"
+                        />
+                        <div>
+                          <Label className={priorityClass} htmlFor="prioritySlider">
+                            {ProcessesPriority[priority]}
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <Switch
+                        label="Debug Mode"
+                        checked={isDebugEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setDebugEnabled(ev.currentTarget.checked)}
+                      />
+                    </div>
+                  </div>
+                )}
+                {selectedTab === 'output' && (
+                  <div className="settings-form">
                     <div className="field">
                       <Label size={'small'} required htmlFor="moviesOutputPathInput">
                         Movies Output Path (Can be relative to source file path)
@@ -247,40 +333,6 @@ export const SettingsDialog = () => {
                         id="othersOutputPathInput"
                         value={othersOutputPath}
                         onChange={handleFormInputChange.bind(null, setOthersOutputPath)}
-                      />
-                    </div>
-                    <div className="field">
-                      <Switch
-                        label="Auto Start"
-                        checked={isAutoStartEnabled}
-                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setAutoStartEnabled(ev.currentTarget.checked)}
-                      />
-                    </div>
-                    <div className="field">
-                      <Label htmlFor="prioritySlider">Processes Priority</Label>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                        <Slider
-                          min={-2}
-                          max={2}
-                          value={priorityToNumber(priority)}
-                          step={1}
-                          size="small"
-                          className={priorityClass}
-                          onChange={(_ev, data) => setPriority(numberToPriority(data.value))}
-                          id="prioritySlider"
-                        />
-                        <div>
-                          <Label className={priorityClass} htmlFor="prioritySlider">
-                            {ProcessesPriority[priority]}
-                          </Label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="field">
-                      <Switch
-                        label="Debug Mode"
-                        checked={isDebugEnabled}
-                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setDebugEnabled(ev.currentTarget.checked)}
                       />
                     </div>
                   </div>
@@ -460,9 +512,9 @@ export const SettingsDialog = () => {
             </DialogContent>
             <DialogActions style={{ paddingTop: '10px' }}>
               <DialogTrigger disableButtonEnhancement>
-                <Button type="submit" appearance="primary">
+                <ProgressButton appearance="primary" execute={handleSubmit}>
                   Apply
-                </Button>
+                </ProgressButton>
               </DialogTrigger>
               <DialogTrigger disableButtonEnhancement>
                 <Button appearance="secondary" onClick={handleCancel}>

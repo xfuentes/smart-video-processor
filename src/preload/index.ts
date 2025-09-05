@@ -7,6 +7,7 @@ import { EditionType } from '../common/@types/Movie'
 import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
+import { FormValidation } from '../common/FormValidation'
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -15,8 +16,11 @@ const api = {
   main: {
     version,
     getCurrentSettings: (): Promise<Settings> => ipcRenderer.invoke('main:getCurrentSettings'),
-    saveSettings: (settings: Settings): Promise<Settings> => ipcRenderer.invoke('main:saveSettings', settings),
-    switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused')
+    saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
+      ipcRenderer.invoke('main:saveSettings', settings),
+    switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused'),
+    openSingleFileExplorer: (title: string, defaultPath?: string): Promise<string> =>
+      ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath)
   },
   video: {
     openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),
@@ -79,7 +83,8 @@ const api = {
       setIMDB: (uuid: string, imdb: string): Promise<void> => ipcRenderer.invoke('video.tvShow:setIMDB', uuid, imdb),
       setTheTVDB: (uuid: string, tvdb: number | string | undefined): Promise<void> =>
         ipcRenderer.invoke('video.tvShow:setTheTVDB', uuid, tvdb),
-      setOrder: (uuid: string, order: EpisodeOrder): Promise<void> => ipcRenderer.invoke('video.tvShow:setOrder', uuid, order),
+      setOrder: (uuid: string, order: EpisodeOrder): Promise<void> =>
+        ipcRenderer.invoke('video.tvShow:setOrder', uuid, order),
       setSeason: (uuid: string, newSeason: string): Promise<void> =>
         ipcRenderer.invoke('video.tvShow:setSeason', uuid, newSeason),
       setEpisode: (uuid: string, newEpisode: string): Promise<void> =>
