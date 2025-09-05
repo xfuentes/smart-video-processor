@@ -22,6 +22,8 @@ import { getConfigPath } from '../util/path'
 import path from 'node:path'
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
+import * as fs from 'node:fs'
+import { FormValidationBuilder } from '../../common/FormValidation'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -40,7 +42,10 @@ export const defaultSettings: Settings = {
   isTestEncodingEnabled: false,
   videoCodec: VideoCodec.H265,
   videoSizeReduction: 50,
-  audioSizeReduction: 70
+  audioSizeReduction: 70,
+  mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
+  ffmpegPath: Processes.findCommandSync('ffmpeg', 'c:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe'),
+  ffprobePath: Processes.findCommandSync('ffprobe', 'c:\\Program Files\\ffmpeg\\bin\\ffprobe.exe')
 }
 export let currentSettings: Settings = defaultSettings
 
@@ -64,10 +69,37 @@ export function loadSettings() {
   }
 }
 
-export function saveSettings(settings?: Settings) {
-  Files.writeFileSync(
-    getConfigPath(),
-    'settings.json',
-    JSON.stringify(settings ?? currentSettings, null, 2)
-  )
+export function saveSettings(settings: Settings) {
+  const validation = validateSettings(settings)
+  if (validation.status === 'success') {
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(settings ?? currentSettings, null, 2))
+  }
+  return validation
+}
+
+function isValidExecutable(path: string) {
+  if (!fs.existsSync(path)) {
+    return false
+  }
+  if (!fs.lstatSync(path).isFile()) {
+    return false
+  }
+  try {
+    fs.accessSync(path, fs.constants.X_OK)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+export function validateSettings(settings: Settings) {
+  const validationBuilder = new FormValidationBuilder<Settings>()
+  isValidExecutable(settings.mkvMergePath) ||
+    validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
+  isValidExecutable(settings.ffmpegPath) ||
+    validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
+  isValidExecutable(settings.ffprobePath) ||
+    validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
+
+  return validationBuilder.build()
 }

@@ -27,6 +27,7 @@ import path from 'node:path'
 import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
+import { currentSettings } from '../Settings'
 
 export interface Container {
   type: string
@@ -40,7 +41,7 @@ export class MKVMerge extends CommandProgress {
   private static instance: MKVMerge
 
   private constructor() {
-    super(Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'), [0, 1])
+    super(currentSettings.mkvMergePath, [0, 1])
   }
 
   public static getInstance(): MKVMerge {

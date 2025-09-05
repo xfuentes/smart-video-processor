@@ -39,7 +39,7 @@ export class FFmpeg extends CommandProgress {
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
 
   private constructor() {
-    super(Processes.findCommandSync('ffmpeg', 'c:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe'), [0])
+    super(currentSettings.ffmpegPath, [0])
   }
 
   public static getInstance(): FFmpeg {

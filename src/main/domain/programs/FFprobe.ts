@@ -21,6 +21,7 @@ import { Track } from '../Track'
 import { Numbers } from '../../util/numbers'
 import { CommandProgress } from './CommandProgress'
 import { Attachment } from '../../../common/Change'
+import { currentSettings } from '../Settings'
 
 export interface Container {
   type: string
@@ -34,7 +35,7 @@ export class FFprobe extends CommandProgress {
   private static instance: FFprobe
 
   private constructor() {
-    super(Processes.findCommandSync('ffprobe', 'c:\\Program Files\\ffmpeg\\bin\\ffprobe.exe'), [0])
+    super(currentSettings.ffprobePath, [0])
   }
 
   public static getInstance(): FFprobe {
