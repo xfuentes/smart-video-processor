@@ -16,18 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {expect, test} from "vitest";
-import Files from "../../src/main/util/files";
-import {Stats} from "node:fs";
-
-const nodeFs = require("fs");
+import { expect, test } from 'vitest'
+import * as fs from 'node:fs'
+import { Stats } from 'node:fs'
+import { Files } from '../../src/main/util/files'
 
 test('Download a poster from TVDB', async () => {
-    const path = await Files.downloadFile("https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg", "./", "test.jpg");
-    expect(path).toBe("test.jpg");
-    const stats: Stats = await nodeFs.lstatSync(path);
-    expect(stats.size).toBe(87572);
-    expect(stats.isFile()).toBeTruthy();
-    nodeFs.unlinkSync(path);
-});
-
+  const path = await Files.downloadFile(
+    'https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg',
+    './',
+    'test.jpg'
+  )
+  expect(path).toBe('test.jpg')
+  const stats: Stats = fs.lstatSync(path)
+  expect(stats.size).toBe(87572)
+  expect(stats.isFile()).toBeTruthy()
+  fs.unlinkSync(path)
+})

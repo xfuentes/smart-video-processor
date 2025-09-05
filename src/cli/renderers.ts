@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TrackProperties, TrackType } from '../common/Track.ts'
-import Strings from '../util/strings.ts'
-import chalk from 'chalk'
+import * as chalk from 'chalk'
+import { Strings } from '../common/Strings'
+import { TrackProperties, TrackType } from '../common/@types/Track'
 
 export function codecRenderer(codec: string) {
   if (codec.indexOf('H.264') >= 0) {

@@ -17,8 +17,9 @@
  */
 
 import { expect, test } from 'vitest'
-import { getCmdHint } from '../../src/main/cli/hints'
-import { Hint, HintType } from '../../src/common/Hint'
+import { Hint } from '../../src/main/domain/Hint'
+import { HintType } from '../../src/common/@types/Hint'
+import { getCmdHint } from '../../src/cli/hints'
 
 test('CMD Hints replace all bug', () => {
   const hint1 = new Hint(1, HintType.LANGUAGE, 'en')

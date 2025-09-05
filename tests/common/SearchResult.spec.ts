@@ -17,8 +17,8 @@
  */
 
 import { expect, test } from 'vitest'
-import { currentSettings } from '../../src/common/Settings'
-import { SearchResult } from '../../src/common/SearchResult'
+import { currentSettings } from '../../src/main/domain/Settings'
+import { SearchResult } from '../../src/main/domain/SearchResult'
 
 const inDarknessResults = [
   {
@@ -606,11 +606,7 @@ const silenceOfTheLambSearchResults = [
 test('Silence of the lamb match bug', async () => {
   currentSettings.language = 'fr'
   currentSettings.favoriteLanguages = ['fr-FR']
-  const movieResult = SearchResult.getBestMatch(
-    silenceOfTheLambSearchResults,
-    'The Silence of the Lambs',
-    1991
-  )
+  const movieResult = SearchResult.getBestMatch(silenceOfTheLambSearchResults, 'The Silence of the Lambs', 1991)
   expect(movieResult).toBeDefined()
   expect(movieResult.id).toBe(274)
 })
@@ -875,8 +871,7 @@ const runSearchResults = [
     title: 'Régner sur la ville',
     year: 2020,
     originalTitle: 'Run This Town',
-    overview:
-      "Un jeune journaliste décroche un scoop sur les agissements d'un homme politique véreux.",
+    overview: "Un jeune journaliste décroche un scoop sur les agissements d'un homme politique véreux.",
     posterURL: 'https://image.tmdb.org/t/p/w1280/nMgBR5hRxg725jAJFLEn5jlCeIz.jpg',
     language: {
       code: 'en',

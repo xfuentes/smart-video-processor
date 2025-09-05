@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { SearchResult } from '../common/SearchResult'
 import * as chalk from 'chalk'
 import { confirm, input, rawlist, select } from '@inquirer/prompts'
-import Video, { SearchBy, VideoType } from '../common/Video'
 import { toNumber } from 'lodash'
-import { EditionType } from '../common/Movie'
-import { EpisodeOrder } from '../common/clients/TVDBClient'
 import { ratingRenderer } from './renderers'
-import Strings from '../util/strings'
+import { SearchResult } from '../main/domain/SearchResult'
+import { SearchBy, VideoType } from '../common/@types/Video'
+import { EditionType } from '../common/@types/Movie'
+import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
+import { Video } from '../main/domain/Video'
+import { Strings } from '../common/Strings'
 import * as CLI from 'clui'
 
 export const promptSearchResultID = async (searchResults: SearchResult[]) => {
@@ -38,11 +39,7 @@ export const promptSearchResultID = async (searchResults: SearchResult[]) => {
   })
 }
 
-export const promptStringArray = async <VALUE>(
-  message: string,
-  values: VALUE[],
-  defaultValue: VALUE
-) => {
+export const promptStringArray = async <VALUE>(message: string, values: VALUE[], defaultValue: VALUE) => {
   const options = values.map((key) => {
     return { value: key }
   })
@@ -98,13 +95,9 @@ export const promptTVShowOrder = async (v: EpisodeOrder | undefined) => {
   })) as EpisodeOrder
 }
 
-export const matchVideo = async (
-  outputBuffer: CLI.LineBuffer,
-  video: Video,
-  auto: boolean = false
-) => {
+export const matchVideo = async (outputBuffer: CLI.LineBuffer, video: Video, auto: boolean = false) => {
   while (!video.matched) {
-    const searchResults = video.getSearchResults()
+    const searchResults = video.searchResults
     if (searchResults.length > 0) {
       const selectedID = await promptSearchResultID(searchResults)
       if (selectedID != -1) {
@@ -116,66 +109,38 @@ export const matchVideo = async (
       if (video.type === VideoType.MOVIE) {
         video.setSearchBy(await promptMovieSearchBy(video.searchBy))
         if (video.searchBy === SearchBy.TITLE) {
-          video.movie.setTitle(
-            await input({ message: ' Title:', default: video.movie.title, required: true })
-          )
-          video.movie.setYear(
-            await promptNumber('Year:', video.movie.year ? '' + video.movie.year : '')
-          )
+          video.movie.setTitle(await input({ message: ' Title:', default: video.movie.title, required: true }))
+          video.movie.setYear(await promptNumber('Year:', video.movie.year ? '' + video.movie.year : ''))
         }
         if (video.searchBy === SearchBy.IMDB) {
-          video.movie.setIMDB(
-            await input({ message: ' IMDB ID:', default: video.movie.imdb, required: true })
-          )
+          video.movie.setIMDB(await input({ message: ' IMDB ID:', default: video.movie.imdb, required: true }))
         }
         if (video.searchBy === SearchBy.TMDB) {
-          video.movie.setTMDB(
-            await promptNumber('TMDB ID:', video.movie.tmdb ? '' + video.movie.tmdb : '', true)
-          )
+          video.movie.setTMDB(await promptNumber('TMDB ID:', video.movie.tmdb ? '' + video.movie.tmdb : '', true))
         }
         video.movie.setEdition(await promptMovieEdition(video.movie.edition))
       } else if (video.type === VideoType.TV_SHOW) {
         video.setSearchBy(await promptTVShowSearchBy(video.searchBy))
         if (video.searchBy === SearchBy.TITLE) {
-          video.tvShow.setTitle(
-            await input({ message: ' Title:', default: video.tvShow.title, required: true })
-          )
-          video.tvShow.setYear(
-            await promptNumber('Year:', video.tvShow.year ? '' + video.tvShow.year : '')
-          )
+          video.tvShow.setTitle(await input({ message: ' Title:', default: video.tvShow.title, required: true }))
+          video.tvShow.setYear(await promptNumber('Year:', video.tvShow.year ? '' + video.tvShow.year : ''))
         }
         if (video.searchBy === SearchBy.TVDB) {
           video.tvShow.setTheTVDB(
-            await promptNumber(
-              'TVDB ID:',
-              video.tvShow.theTVDB ? '' + video.tvShow.theTVDB : '',
-              true
-            )
+            await promptNumber('TVDB ID:', video.tvShow.theTVDB ? '' + video.tvShow.theTVDB : '', true)
           )
         }
         video.tvShow.setOrder(await promptTVShowOrder(video.tvShow.order))
         if (video.tvShow.order !== 'absolute') {
           video.tvShow.setSeason(
-            await promptNumber(
-              'Season:',
-              !video.tvShow.season ? '' : '' + video.tvShow.season,
-              true
-            )
+            await promptNumber('Season:', !video.tvShow.season ? '' : '' + video.tvShow.season, true)
           )
           video.tvShow.setEpisode(
-            await promptNumber(
-              'Episode:',
-              !video.tvShow.episode ? '' : '' + video.tvShow.episode,
-              true
-            )
+            await promptNumber('Episode:', !video.tvShow.episode ? '' : '' + video.tvShow.episode, true)
           )
         } else {
           video.tvShow.setAbsoluteEpisode(
-            await promptNumber(
-              'Episode:',
-              !video.tvShow.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode,
-              true
-            )
+            await promptNumber('Episode:', !video.tvShow.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode, true)
           )
         }
       }
