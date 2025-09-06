@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -29,16 +29,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: build-linux
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run make
-
-      - name: build-mac
-        if: matrix.os == 'macos-latest'
-        run: npm run make
-
-      - name: build-win
-        if: matrix.os == 'windows-latest'
+      - name: build
         run: npm run make
 
       - name: release
