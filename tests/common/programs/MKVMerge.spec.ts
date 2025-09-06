@@ -685,7 +685,7 @@ test('MKVMerge Program not found', async () => {
   const fullPath = 'C:\\Download\\something.mkv'
   await expect(
     MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', [])
-  ).rejects.toThrowError('Command "C:\\Program Files\\MKVToolNix\\mkvmerge.exe" not found.')
+  ).rejects.toThrowError(/Command "C:\\Program Files\\MKVToolNix\\mkvmerge.exe" not found\./i)
 })
 
 test('Tags And Attachments updated', async () => {
