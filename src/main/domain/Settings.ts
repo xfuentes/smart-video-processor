@@ -93,13 +93,12 @@ function isValidExecutable(path: string) {
 }
 
 export function validateSettings(settings: Settings) {
-  const validationBuilder = new FormValidationBuilder<Settings>()
+  const validationBuilder = new FormValidationBuilder<Settings>(settings)
   isValidExecutable(settings.mkvMergePath) ||
     validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
   isValidExecutable(settings.ffmpegPath) ||
     validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
   isValidExecutable(settings.ffprobePath) ||
     validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
-
   return validationBuilder.build()
 }

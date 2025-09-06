@@ -31,10 +31,11 @@ export interface FormValidation<T> {
 export class FormValidationBuilder<T> {
   private readonly formValidation: FormValidation<T>
 
-  constructor() {
+  constructor(result: T) {
     this.formValidation = {
       fields: {},
-      status: 'success'
+      status: 'success',
+      result: result
     }
   }
 

@@ -79,7 +79,6 @@
     "glob": "^11.0.3",
     "lcid": "^5.0.0",
     "lodash": "^4.17.21",
-    "ntsuspend": "^1.0.2",
     "prettier": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -89,5 +88,8 @@
     "vitest": "^3.0.9",
     "yargs": "^18.0.0",
     "clui": "^0.3.6"
+  },
+  "optionalDependencies": {
+    "ntsuspend": "^1.0.2"
   }
 }

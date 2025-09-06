@@ -29,6 +29,7 @@ import {
   Input,
   InputOnChangeData,
   Label,
+  Link,
   Select,
   SelectTabData,
   SelectTabEvent,
@@ -54,15 +55,19 @@ import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { ProgressButton } from '@renderer/components/ProgressButton'
-import { FormValidation } from '../../../common/FormValidation'
 
 export const SettingsDialog = () => {
-  const { settings, setSettings } = useContext(SettingsContext) as SettingsContextType
+  const { settingsValidation, setSettingsValidation } = useContext(SettingsContext) as SettingsContextType
   const [selectedTab, setSelectedTab] = useState('general')
+  const [opened, setOpened] = useState(settingsValidation.status !== 'success')
+
+  const handleOpenChange = (_event, data) => {
+    setOpened(data.open)
+  }
 
   const handleSubmit = async () => {
     const newSettings: Settings = {
-      ...settings,
+      ...settingsValidation.result,
       language,
       moviesOutputPath,
       tvShowsOutputPath,
@@ -83,10 +88,8 @@ export const SettingsDialog = () => {
       ffprobePath
     }
     const validation = await window.api.main.saveSettings(newSettings)
-    setFormValidation(validation)
-    if (validation.status === 'success') {
-      setSettings(validation.result)
-    } else {
+    setSettingsValidation(validation)
+    if (validation.status != 'success') {
       throw new Error('Validation error')
     }
   }
@@ -100,24 +103,25 @@ export const SettingsDialog = () => {
   }
 
   const handleCancel = (_ev: React.FormEvent) => {
-    setLanguage(settings.language)
-    setMoviesOutputPath(settings.moviesOutputPath)
-    setTVShowsOutputPath(settings.tvShowsOutputPath)
-    setOthersOutputPath(settings.othersOutputPath)
-    setAutoStartEnabled(settings.isAutoStartEnabled)
-    setPriority(settings.priority)
-    setDebugEnabled(settings.isDebugEnabled)
-    setTrackFilteringEnabled(settings.isTrackFilteringEnabled)
-    setFavoriteLanguages(settings.favoriteLanguages)
-    setKeepVOEnabled(settings.isKeepVOEnabled)
-    setTrackEncodingEnabled(settings.isTrackEncodingEnabled)
-    setTestEncodingEnabled(settings.isTestEncodingEnabled)
-    setVideoCodec(settings.videoCodec)
-    setVideoSizeReduction(settings.videoSizeReduction)
-    setAudioSizeReduction(settings.audioSizeReduction)
-    setMkvMergePath(settings.mkvMergePath)
-    setFfmpegPath(settings.ffmpegPath)
-    setFfprobePath(settings.ffprobePath)
+    setLanguage(settingsValidation?.result?.language)
+    setMoviesOutputPath(settingsValidation?.result?.moviesOutputPath)
+    setTVShowsOutputPath(settingsValidation?.result?.tvShowsOutputPath)
+    setOthersOutputPath(settingsValidation?.result?.othersOutputPath)
+    setAutoStartEnabled(settingsValidation?.result?.isAutoStartEnabled)
+    setPriority(settingsValidation?.result?.priority)
+    setDebugEnabled(settingsValidation?.result?.isDebugEnabled)
+    setTrackFilteringEnabled(settingsValidation?.result?.isTrackFilteringEnabled)
+    setFavoriteLanguages(settingsValidation?.result?.favoriteLanguages)
+    setKeepVOEnabled(settingsValidation?.result?.isKeepVOEnabled)
+    setTrackEncodingEnabled(settingsValidation?.result?.isTrackEncodingEnabled)
+    setTestEncodingEnabled(settingsValidation?.result?.isTestEncodingEnabled)
+    setVideoCodec(settingsValidation?.result?.videoCodec)
+    setVideoSizeReduction(settingsValidation?.result?.videoSizeReduction)
+    setAudioSizeReduction(settingsValidation?.result?.audioSizeReduction)
+    setMkvMergePath(settingsValidation?.result?.mkvMergePath)
+    setFfmpegPath(settingsValidation?.result?.ffmpegPath)
+    setFfprobePath(settingsValidation?.result?.ffprobePath)
+    setOpened(false)
   }
 
   const priorityToNumber = (priority: keyof typeof ProcessesPriority): number => {
@@ -154,29 +158,30 @@ export const SettingsDialog = () => {
     }
   }
 
-  const [language, setLanguage] = useState(settings.language)
-  const [moviesOutputPath, setMoviesOutputPath] = useState(settings.moviesOutputPath)
-  const [tvShowsOutputPath, setTVShowsOutputPath] = useState(settings.tvShowsOutputPath)
-  const [othersOutputPath, setOthersOutputPath] = useState(settings.othersOutputPath)
-  const [isAutoStartEnabled, setAutoStartEnabled] = useState(settings.isAutoStartEnabled)
-  const [priority, setPriority] = useState(settings.priority)
-  const priorityClass = 'priority-' + priority.toLowerCase()
-  const [isDebugEnabled, setDebugEnabled] = useState(settings.isDebugEnabled)
-  const [isTrackFilteringEnabled, setTrackFilteringEnabled] = useState(settings.isTrackFilteringEnabled)
-  const [favoriteLanguages, setFavoriteLanguages] = useState(settings.favoriteLanguages)
-  const [isKeepVOEnabled, setKeepVOEnabled] = useState(settings.isKeepVOEnabled)
-  const [isTrackEncodingEnabled, setTrackEncodingEnabled] = useState(settings.isTrackEncodingEnabled)
-  const [isTestEncodingEnabled, setTestEncodingEnabled] = useState(settings.isTestEncodingEnabled)
-  const [videoSizeReduction, setVideoSizeReduction] = useState(settings.videoSizeReduction)
-  const [videoCodec, setVideoCodec] = useState(settings.videoCodec)
-  const [audioSizeReduction, setAudioSizeReduction] = useState(settings.audioSizeReduction)
-  const [mkvMergePath, setMkvMergePath] = useState(settings.mkvMergePath)
-  const [ffmpegPath, setFfmpegPath] = useState(settings.ffmpegPath)
-  const [ffprobePath, setFfprobePath] = useState(settings.ffprobePath)
-  const [formValidation, setFormValidation] = useState<FormValidation<Settings> | undefined>()
+  const [language, setLanguage] = useState(settingsValidation?.result?.language)
+  const [moviesOutputPath, setMoviesOutputPath] = useState(settingsValidation?.result?.moviesOutputPath)
+  const [tvShowsOutputPath, setTVShowsOutputPath] = useState(settingsValidation?.result?.tvShowsOutputPath)
+  const [othersOutputPath, setOthersOutputPath] = useState(settingsValidation?.result?.othersOutputPath)
+  const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
+  const [priority, setPriority] = useState(settingsValidation?.result?.priority)
+  const priorityClass = 'priority-' + priority?.toLowerCase()
+  const [isDebugEnabled, setDebugEnabled] = useState(settingsValidation?.result?.isDebugEnabled)
+  const [isTrackFilteringEnabled, setTrackFilteringEnabled] = useState(
+    settingsValidation?.result?.isTrackFilteringEnabled
+  )
+  const [favoriteLanguages, setFavoriteLanguages] = useState(settingsValidation?.result?.favoriteLanguages)
+  const [isKeepVOEnabled, setKeepVOEnabled] = useState(settingsValidation?.result?.isKeepVOEnabled)
+  const [isTrackEncodingEnabled, setTrackEncodingEnabled] = useState(settingsValidation?.result?.isTrackEncodingEnabled)
+  const [isTestEncodingEnabled, setTestEncodingEnabled] = useState(settingsValidation?.result?.isTestEncodingEnabled)
+  const [videoSizeReduction, setVideoSizeReduction] = useState(settingsValidation?.result?.videoSizeReduction)
+  const [videoCodec, setVideoCodec] = useState(settingsValidation?.result?.videoCodec)
+  const [audioSizeReduction, setAudioSizeReduction] = useState(settingsValidation?.result?.audioSizeReduction)
+  const [mkvMergePath, setMkvMergePath] = useState(settingsValidation?.result?.mkvMergePath)
+  const [ffmpegPath, setFfmpegPath] = useState(settingsValidation?.result?.ffmpegPath)
+  const [ffprobePath, setFfprobePath] = useState(settingsValidation?.result?.ffprobePath)
 
   return (
-    <Dialog modalType="modal">
+    <Dialog modalType="modal" open={opened} onOpenChange={handleOpenChange}>
       <DialogTrigger>
         <ToolbarButton vertical icon={<Settings24Regular />}>
           Settings
@@ -232,31 +237,71 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <FileSelectorField
-                      label="MKVMerge Path"
+                      label={
+                        <>
+                          MKVMerge Path
+                          <InfoLabel
+                            info={
+                              <div>
+                                MKVMerge is a command line program which is part of the&nbsp;
+                                <Link onClick={() => window.open('https://mkvtoolnix.org/', '_blank')}>
+                                  MKVToolNix suite
+                                </Link>
+                                . MKVToolNix is a powerful tool for editing, merging, and splitting MKV files.
+                              </div>
+                            }
+                          />
+                        </>
+                      }
                       required
                       size={'small'}
                       value={mkvMergePath}
                       onChange={(newFile) => setMkvMergePath(newFile)}
-                      validationState={formValidation?.fields['mkvMergePath']?.status}
-                      validationMessage={formValidation?.fields['mkvMergePath']?.message}
-                    />
+                      validationState={settingsValidation?.fields['mkvMergePath']?.status}
+                      validationMessage={settingsValidation?.fields['mkvMergePath']?.message}
+                    ></FileSelectorField>
                     <FileSelectorField
-                      label="FFmpeg Path"
+                      label={
+                        <>
+                          FFmpeg Path
+                          <InfoLabel
+                            info={
+                              <div>
+                                <Link onClick={() => window.open('https://www.ffmpeg.org/', '_blank')}>FFmpeg</Link> is
+                                a complete, cross-platform solution to record, convert and stream audio and video. make
+                                sure to have it installed with x264 and x265 codecs.
+                              </div>
+                            }
+                          />
+                        </>
+                      }
                       required
                       size={'small'}
                       value={ffmpegPath}
                       onChange={(newFile) => setFfmpegPath(newFile)}
-                      validationState={formValidation?.fields['ffmpegPath']?.status}
-                      validationMessage={formValidation?.fields['ffmpegPath']?.message}
+                      validationState={settingsValidation?.fields['ffmpegPath']?.status}
+                      validationMessage={settingsValidation?.fields['ffmpegPath']?.message}
                     />
                     <FileSelectorField
-                      label="FFprobe Path"
+                      label={
+                        <>
+                          FFprobe Path
+                          <InfoLabel
+                            info={
+                              <div>
+                                FFprobe is a command line program which is distributed with&nbsp;
+                                <Link onClick={() => window.open('https://www.ffmpeg.org/', '_blank')}>FFmpeg</Link>.
+                              </div>
+                            }
+                          />
+                        </>
+                      }
                       required
                       size={'small'}
                       value={ffprobePath}
                       onChange={(newFile) => setFfprobePath(newFile)}
-                      validationState={formValidation?.fields['ffmpegPath']?.status}
-                      validationMessage={formValidation?.fields['ffmpegPath']?.message}
+                      validationState={settingsValidation?.fields['ffmpegPath']?.status}
+                      validationMessage={settingsValidation?.fields['ffmpegPath']?.message}
                     />
                     <div className="field">
                       <Switch

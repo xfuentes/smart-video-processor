@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { FormValidation } from '../../../common/FormValidation'
+
 export type SettingsContextType = {
-  settings: Settings
-  setSettings: Dispatch<never>
+  settingsValidation: FormValidation<Settings>
+  setSettingsValidation: Dispatch<never>
 }

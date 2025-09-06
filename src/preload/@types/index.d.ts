@@ -24,14 +24,17 @@ import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
 import { Hint } from '../../main/domain/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
+import { ipcRenderer } from 'electron/renderer'
 
+export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type FilesChangedListener = (value: IVideo[]) => void
 
 interface SvpAPI {
   main: {
     version: string
-    getCurrentSettings: () => Promise<Settings>
+    getCurrentSettings: () => Promise<FormValidation<Settings>>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
+    addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
     switchPaused: () => Promise<boolean>
     openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
   }
