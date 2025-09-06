@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="make" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="make" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs>
+      <env name="DEBUG" value="electron-windows-installer*" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
