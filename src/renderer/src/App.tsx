@@ -8,7 +8,7 @@ import { FilesChangedListener } from '../../preload/@types'
 import { VideoList } from '@renderer/components/VideoList'
 import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 
-const initialSettings = await window.api.main.getCurrentSettings()
+const validation = await window.api.main.getCurrentSettings()
 
 export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
@@ -23,7 +23,7 @@ export const App = (): React.JSX.Element => {
     }
   }
 
-  const [settings, setSettings] = useState(initialSettings)
+  const [settingsValidation, setSettingsValidation] = useState(validation)
   const [videos, setVideos] = useState<IVideo[]>([])
   const [selectedVideos, setSelectedVideos] = useState<IVideo[]>([])
   const selectedVideosRef = useRef(selectedVideos)
@@ -52,7 +52,7 @@ export const App = (): React.JSX.Element => {
   }, [])
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
+    <SettingsContext.Provider value={{ settingsValidation, setSettingsValidation }}>
       <div
         onDrop={preventDefault}
         onDragOver={preventDefault}

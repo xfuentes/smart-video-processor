@@ -8,6 +8,7 @@ import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
+import { FilesChangedListener, InvalidSettingsListener } from './@types'
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -15,9 +16,11 @@ const version = await ipcRenderer.invoke('main:getVersion')
 const api = {
   main: {
     version,
-    getCurrentSettings: (): Promise<Settings> => ipcRenderer.invoke('main:getCurrentSettings'),
+    getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
+    addInvalidSettingsListener: (callback: InvalidSettingsListener) =>
+      ipcRenderer.on('main:invalidSettings', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
     switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused'),
     openSingleFileExplorer: (title: string, defaultPath?: string): Promise<string> =>
       ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath)
@@ -28,9 +31,9 @@ const api = {
       const filePaths = files.map((f) => webUtils.getPathForFile(f))
       return ipcRenderer.invoke('video:openFiles', filePaths)
     },
-    addFilesChangedListener: (callback: (value: IVideo[]) => void) =>
+    addFilesChangedListener: (callback: FilesChangedListener) =>
       ipcRenderer.on('video:filesChanged', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
-    removeFilesChangedListener: (callback: (value: IVideo[]) => void) =>
+    removeFilesChangedListener: (callback: FilesChangedListener) =>
       ipcRenderer.off('video:filesChanged', (_event, value: IVideo[]) => callback(value)),
     setType: (uuid: string, videoType: VideoType): Promise<void> =>
       ipcRenderer.invoke('video:setType', uuid, videoType),

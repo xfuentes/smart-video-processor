@@ -2,7 +2,7 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'elect
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { currentSettings, loadSettings, saveSettings } from './domain/Settings'
+import { currentSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
 import { Settings } from '../common/@types/Settings'
@@ -74,7 +74,7 @@ app.whenReady().then(() => {
     return net.fetch(`file://${filePath}`)
   })
   ipcMain.handle('main:getVersion', () => app.getVersion())
-  ipcMain.handle('main:getCurrentSettings', () => currentSettings)
+  ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
     const priorityUpdated = currentSettings.priority !== settings.priority
     const encoderSettingsUpdated =
