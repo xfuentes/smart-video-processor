@@ -1,6 +1,5 @@
 {
   "name": "smart-video-processor",
-  "productName": "Smart Video Processor",
   "version": "0.1.0",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and icon when needed.",
   "main": "./dist/main/index.js",
