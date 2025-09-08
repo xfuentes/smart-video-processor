@@ -19,10 +19,14 @@
 import { expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
+import { getFakeAbsolutePath } from './testUtils'
 
 test('TV-Show extracts season and episode number', () => {
   const video = new Video(
-    'c:\\out put\\One Piece - S12E003 - Le rêve sombrant dans le nouveau monde ! Le pirate du désespoir, Puzzle.mkv'
+    getFakeAbsolutePath(
+      'out put',
+      'One Piece - S12E003 - Le rêve sombrant dans le nouveau monde ! Le pirate du désespoir, Puzzle.mkv'
+    )
   )
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.season).toBe(12)
@@ -32,7 +36,10 @@ test('TV-Show extracts season and episode number', () => {
 
 test('TV-Show extracts tvdb ID', async () => {
   const video = new Video(
-    'c:\\out put\\T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{TVDB-427202}.mkv'
+    getFakeAbsolutePath(
+      'out put',
+      'T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{TVDB-427202}.mkv'
+    )
   )
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.season).toBe(1)
@@ -43,7 +50,10 @@ test('TV-Show extracts tvdb ID', async () => {
 
 test('TV-Show extracts imdb ID', async () => {
   const video = new Video(
-    'c:\\out put\\T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{TT9859436}.mkv'
+    getFakeAbsolutePath(
+      'out put',
+      'T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{TT9859436}.mkv'
+    )
   )
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.season).toBe(1)
@@ -64,7 +74,10 @@ test('Movie extracts tmdb ID', async () => {
 
 test('TV-Show Retrieve Language IETF', async () => {
   const video = new Video(
-    'c:\\out put\\T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{tvdb-427202}.mkv'
+    getFakeAbsolutePath(
+      'out put',
+      'T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{tvdb-427202}.mkv'
+    )
   )
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.theTVDB).toBe(427202)
@@ -101,7 +114,7 @@ test('Movie Search by TMDB', async () => {
 })
 
 test('TV-Show fils cordonnier extracts season and episode number', () => {
-  const video = new Video('c:\\out put\\Le fils du cordonnier saison 01 épisode 01.avi')
+  const video = new Video(getFakeAbsolutePath('out put', 'Le fils du cordonnier saison 01 épisode 01.avi'))
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.season).toBe(1)
   expect(video.tvShow.episode).toBe(1)
@@ -109,7 +122,9 @@ test('TV-Show fils cordonnier extracts season and episode number', () => {
 })
 
 test('Movie Terence Hill un cowboy pacifiste', () => {
-  const video = new Video('C:\\Download\\Terence.Hill.un.cowboy.pacifiste.2025.DOC.VFF.HDTV.720p.H264.AAC-NoX.mkv')
+  const video = new Video(
+    getFakeAbsolutePath('Download', 'Terence.Hill.un.cowboy.pacifiste.2025.DOC.VFF.HDTV.720p.H264.AAC-NoX.mkv')
+  )
   expect(video.type).toBe(VideoType.MOVIE)
   expect(video.movie.title).toBe('Terence Hill un cowboy pacifiste')
   expect(video.movie.year).toBe(2025)
@@ -117,7 +132,7 @@ test('Movie Terence Hill un cowboy pacifiste', () => {
 })
 
 test('Movie House 1000 corpse', () => {
-  const video = new Video('C:\\Download\\House of 1000 Corpses (2003).mkv')
+  const video = new Video(getFakeAbsolutePath('Download', 'House of 1000 Corpses (2003).mkv'))
   expect(video.type).toBe(VideoType.MOVIE)
   expect(video.movie.title).toBe('House of 1000 Corpses')
   expect(video.movie.year).toBe(2003)

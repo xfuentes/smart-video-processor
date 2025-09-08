@@ -25,6 +25,8 @@ import { JobStatus } from '../../src/common/@types/Job'
 import { Progression } from '../../src/common/@types/processes'
 import { Job } from '../../src/main/domain/jobs/Job'
 import { Files } from '../../src/main/util/files'
+import * as os from 'node:os'
+import * as path from 'node:path'
 
 export const changeListToMap = (changes: Change[]) => {
   return changes.reduce((previousValue, currentValue) => {
@@ -324,4 +326,19 @@ export const simulateFileInfoResponse = (jsonFileName: string): ChildProcessWith
       }
     }
   } as unknown as ChildProcessWithoutNullStreams
+}
+
+export const getFakeAbsolutePath = (...paths: string[]) => {
+  let output = ''
+  if (os.platform() === 'win32') {
+    output += 'C:'
+  }
+  if (!paths) {
+    output += path.sep
+  } else {
+    for (const inPath of paths) {
+      output += path.sep + inPath
+    }
+  }
+  return output
 }

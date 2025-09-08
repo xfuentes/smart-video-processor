@@ -36,7 +36,16 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {}
+      config: {
+        options: {
+          icon: __dirname + '/resources/icon.png',
+          productName: 'Smart Video Processor',
+          section: 'video',
+          depends: ['mkvtoolnix', 'ffmpeg'],
+          categories: 'Video',
+          mimeType: ['video/x-matroska', 'video/x-msvideo', 'video/mp4']
+        }
+      }
     }
   ]
 }

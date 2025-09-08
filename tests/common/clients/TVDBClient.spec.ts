@@ -113,26 +113,26 @@ test('Rate limiter', async () => {
   const prom1 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
     .then((_result) => {
-      firstExecutedAt = Date.now()
+      firstExecutedAt = Math.round(Date.now() / 1000)
     })
   let secondExecutedAt: number
   const prom2 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 5, undefined, 2)
     .then((_result) => {
-      secondExecutedAt = Date.now()
+      secondExecutedAt = Math.round(Date.now() / 1000)
     })
   let thirdExecutedAt: number
   const prom3 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 4, undefined, 2)
     .then((_result) => {
-      thirdExecutedAt = Date.now()
+      thirdExecutedAt = Math.round(Date.now() / 1000)
     })
 
   await Promise.allSettled([prom1, prom2, prom3])
 
-  expect(Math.round((secondExecutedAt - firstExecutedAt) / 1000)).toBe(1)
-  expect(Math.round((thirdExecutedAt - secondExecutedAt) / 1000)).toBe(1)
-  expect(Math.round((thirdExecutedAt - firstExecutedAt) / 1000)).toBe(2)
+  expect(secondExecutedAt - firstExecutedAt).toBe(1)
+  expect(thirdExecutedAt - secondExecutedAt).toBe(1)
+  expect(thirdExecutedAt - firstExecutedAt).toBe(2)
 })
 
 test('check TVDB language id mappable to Language IETF', async () => {

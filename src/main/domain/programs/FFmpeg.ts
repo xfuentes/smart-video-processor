@@ -67,25 +67,12 @@ export class FFmpeg extends CommandProgress {
   ): Promise<string> {
     const uuid = UUIDv4()
     if (!this.isTwoPassesRequired(settings)) {
-      return this.encodeFileInternal(
-        uuid,
-        path,
-        durationSeconds,
-        tracks,
-        settings,
-        undefined,
-        progressNotifier
-      )
+      return this.encodeFileInternal(uuid, path, durationSeconds, tracks, settings, undefined, progressNotifier)
     }
 
     let currentPass = 1
 
-    const progressNotifierAggregator: ProgressNotifier = ({
-      progress,
-      xSpeed,
-      countdown,
-      process
-    }) => {
+    const progressNotifierAggregator: ProgressNotifier = ({ progress, xSpeed, countdown, process }) => {
       if (progressNotifier !== undefined) {
         // const globalXSpeed = xSpeed !== undefined ? xSpeed / 2 : undefined;
         if (progress === undefined) {
@@ -198,14 +185,7 @@ export class FFmpeg extends CommandProgress {
       return await super.execute(args, outputInterpreter)
     } catch (error) {
       if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
-        const workaroundArgs = this.generateEncodingArguments(
-          sourcePath,
-          encodedPath,
-          tracks,
-          settings,
-          pass,
-          true
-        )
+        const workaroundArgs = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, true)
         return await super.execute(workaroundArgs, outputInterpreter)
       }
       throw error
@@ -263,11 +243,7 @@ export class FFmpeg extends CommandProgress {
           if (setting.bitrate) {
             ffOptions.push('-b:v:' + videoIndex, setting.bitrate / 1000 + 'k')
           }
-        } else if (
-          setting.trackType === TrackType.AUDIO &&
-          setting.bitrate !== undefined &&
-          pass !== 1
-        ) {
+        } else if (setting.trackType === TrackType.AUDIO && setting.bitrate !== undefined && pass !== 1) {
           ffOptions.push('-c:a:' + audioIndex, 'aac')
           ffOptions.push('-b:a:' + audioIndex, setting.bitrate / 1000 + 'k')
         }

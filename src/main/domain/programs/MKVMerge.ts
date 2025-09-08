@@ -53,8 +53,14 @@ export class MKVMerge extends CommandProgress {
 
   public async retrieveFileInformation(path: string): Promise<{ tracks: Track[]; container: Container }> {
     const tracks: Track[] = []
-    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', 'en'])
-    const mkvInfo = JSON.parse(mkvMergeOutput) as MKVMergeIdentify
+    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', 'en_US'])
+    let mkvInfo: MKVMergeIdentify
+    try {
+      mkvInfo = JSON.parse(mkvMergeOutput) as MKVMergeIdentify
+    } catch (e) {
+      throw new Error(mkvMergeOutput)
+    }
+
     let durationSeconds = 0
     mkvInfo?.tracks?.forEach((track) => {
       let type: TrackType | undefined = undefined
@@ -184,7 +190,7 @@ export class MKVMerge extends CommandProgress {
     newFilename = Files.removeSpecialCharsFromFilename(newFilename)
     newFilename = path.join(outputDirectory, newFilename)
 
-    mkOptions.push('--ui-language', 'en')
+    mkOptions.push('--ui-language', 'en_US')
     if (newFilename) {
       mkOptions.push('--output', newFilename)
     }

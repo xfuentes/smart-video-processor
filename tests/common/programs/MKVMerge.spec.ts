@@ -21,7 +21,7 @@ import { Change } from '../../../src/common/Change'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
 import {
-  changeListToMap,
+  changeListToMap, getFakeAbsolutePath,
   simulateFileInfoResponse,
   simulateMKVmergeFailure,
   simulateProgramNotFound
@@ -31,6 +31,7 @@ import { MKVMerge } from '../../../src/main/domain/programs/MKVMerge'
 import { Track } from '../../../src/main/domain/Track'
 import { TrackType } from '../../../src/common/@types/Track'
 import * as path from 'node:path'
+import * as os from 'node:os'
 
 const genSpawnSpyFileInfo = (jsonFileName: string) =>
   vi
@@ -163,7 +164,7 @@ test('MKVMerge Electric State File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   expect(container.title).toBe('The Electric State')
   expect(container.type).toBe('Matroska')
@@ -259,7 +260,7 @@ test('MKVMerge Fermer Gueule File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   const identifyIdx = spawnArgs.indexOf('-J')
   expect(identifyIdx).toBeGreaterThanOrEqual(0)
@@ -321,7 +322,7 @@ test('MKVMerge Le Fils Du Cordonnier File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   const identifyIdx = spawnArgs.indexOf('-J')
   expect(identifyIdx).toBeGreaterThanOrEqual(0)
@@ -375,21 +376,27 @@ test('MKVMerge Le Fils Du Cordonnier File Info', async () => {
   )
 })
 
+function isWindows() {
+  return os.platform() === 'win32'
+}
+
 test('MKVMerge Input&Output&Language Arguments', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spy = genSpawnSpy()
-  const fullPath = 'C:\\Download\\something.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', [])
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [])
 
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[outputIdx + 1]).toBe('C:\\Download\\ReworkedTest\\something.mkv')
+  expect(spawnArgs[outputIdx + 1]).toBe(outputPath + path.sep + 'something.mkv')
 
   const inputIdx = spawnArgs.indexOf('(')
   expect(inputIdx, 'input file not found').toBeGreaterThanOrEqual(0)
@@ -405,7 +412,7 @@ test('MKVMerge Progression data', async () => {
   await MKVMerge.getInstance().processFile(
     path.basename(fullPath),
     fullPath,
-    'C:\\Download\\ReworkedTest',
+    '/tmp/Download/ReworkedTest',
     [],
     [],
     (progression) => {
@@ -556,15 +563,16 @@ test('MKVMerge Filename changed', async () => {
   ] as Change[]
   const changesMap = changeListToMap(changes)
 
-  const fullPath = 'C:\\Download\\something.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', changes)
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
 
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx, '--output not found').toBeGreaterThanOrEqual(0)
   expect(spawnArgs[outputIdx + 1]).toBe(
-    'C:\\Download\\ReworkedTest\\' + changesMap['Container']['Update_Filename'].newValue
+    outputPath + path.sep + changesMap['Container']['Update_Filename'].newValue
   )
 })
 
@@ -661,8 +669,9 @@ test('Title changed', async () => {
     }
   ] as Change[]
   const changesMap = changeListToMap(changes)
-  const fullPath = 'C:\\Download\\something.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', changes)
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const titleIdx = spawnArgs.indexOf('--title')
@@ -673,19 +682,21 @@ test('Title changed', async () => {
 test('MKVMerge Provokes error', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateMKVmergeFailure)
-  const fullPath = 'C:\\Download\\something.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
   await expect(
-    MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', [])
+    MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [])
   ).rejects.toThrowError("The file '-P' could not be opened for reading: open file error.")
 })
 
 test('MKVMerge Program not found', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation((cmd, args) => simulateProgramNotFound(cmd, args))
-  const fullPath = 'C:\\Download\\something.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
   await expect(
-    MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', [])
-  ).rejects.toThrowError(/Command "C:\\Program Files\\MKVToolNix\\mkvmerge.exe" not found\./i)
+    MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [])
+  ).rejects.toThrowError(/Command "[^"]+" not found\./i)
 })
 
 test('Tags And Attachments updated', async () => {
@@ -722,8 +733,9 @@ test('Tags And Attachments updated', async () => {
       }
     }
   ] as Change[]
-  const fullPath = 'C:\\Download\\savate.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', changes)
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   expect(spawnArgs.indexOf('--no-global-tags'), '--no-global-tags not found').toBeGreaterThanOrEqual(0)
@@ -815,8 +827,9 @@ test('Track Properties updated', async () => {
       newValue: 'Forced FR'
     }
   ] as Change[]
-  const fullPath = 'C:\\Download\\savate.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'C:\\Download\\ReworkedTest', changes)
+  const fullPath = getFakeAbsolutePath('Download', 'savate.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const defaultIndexes = spawnArgs
@@ -879,8 +892,9 @@ test('Track Properties updated 2', async () => {
       newValue: false
     }
   ] as Change[]
-  const fullPath = 'C:\\Download\\savate.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'c:\\ReworkedTest\\', changes)
+  const fullPath = getFakeAbsolutePath('Download', 'savate.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const defaultIndexes = spawnArgs
@@ -929,9 +943,11 @@ test('Fake mkvmerge error output for coverage 1', async () => {
       newValue: false
     }
   ] as Change[]
-  const fullPath = 'C:\\Download\\savate.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'savate.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+
   try {
-    await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'c:\\ReworkedTest\\', changes)
+    await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
     expect.unreachable('This should not happen')
   } catch (error) {
     expect(error.message).toBe('Unexpected error.')
@@ -971,9 +987,10 @@ test('Fake mkvmerge error output for coverage 2', async () => {
       newValue: false
     }
   ] as Change[]
-  const fullPath = 'C:\\Download\\savate.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
   try {
-    await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'c:\\ReworkedTest\\', changes)
+    await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes)
     expect.unreachable('This should not happen')
   } catch (error) {
     expect(error.message).toBe('stranger than fiction')
@@ -1001,8 +1018,9 @@ test('Track Removed', async () => {
       copy: false
     }
   ] as Track[]
-  const fullPath = 'C:\\Download\\savate.mkv'
-  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, 'c:\\ReworkedTest\\', [], tracks)
+  const fullPath = getFakeAbsolutePath('Download', 'savate.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [], tracks)
   expect(spy).toHaveBeenCalled()
   const spawnArgs = spy.mock.lastCall[1]
   const videoTracksOptionIdx = spawnArgs.indexOf('--video-tracks')
