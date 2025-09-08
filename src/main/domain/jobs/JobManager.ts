@@ -60,7 +60,7 @@ export class JobManager {
           if (job.success) {
             resolve(job.getResult() as T)
           } else {
-            reject(job.getError())
+            reject(new Error(job.getError()))
           }
         }
       })
@@ -72,7 +72,7 @@ export class JobManager {
     if (!this.isPaused(jobType) && !this.runningJobs[jobType]) {
       this.runningJobs[jobType] = this.queues[jobType].shift()
       if (this.runningJobs[jobType]) {
-        this.runningJobs[jobType].execute().catch(() => {
+        this.runningJobs[jobType].execute().catch((_err) => {
           // Error ignored because it was handled by the job change handler above.
         })
       }

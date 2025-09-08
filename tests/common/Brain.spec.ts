@@ -18,7 +18,7 @@
 
 import { expect, test } from 'vitest'
 import { SubtitlesType } from '../../src/common/SubtitlesType'
-import { changeListToMap, hintListToMap } from './testUtils'
+import { changeListToMap, getFakeAbsolutePath, hintListToMap } from './testUtils'
 import { Attachment, ChangeProperty } from '../../src/common/Change'
 import { Track } from '../../src/main/domain/Track'
 import { Brain } from '../../src/main/domain/Brain'
@@ -31,7 +31,7 @@ const defaultPoster1: Attachment = {
   filename: 'cover.jpg',
   description: 'TMDB Poster /rgjrjgsdjdfsl.jpg',
   mimeType: 'image/jpeg',
-  path: 'C:\\images\\poster.jpg'
+  path: getFakeAbsolutePath('images', 'poster.jpg')
 }
 
 const questOfFireTracks = [
@@ -74,7 +74,7 @@ const questOfFireTracks = [
 test('Analysis of Quest for Fire', () => {
   const results = Brain.getInstance().analyse(
     questOfFireTracks,
-    'C:\\Download\\quest-fire.mkv',
+    getFakeAbsolutePath('Download', 'quest-fire.mkv'),
     'Quest of Fire',
     defaultPoster1,
     'Quest of Fire By Team XYZ',
@@ -193,7 +193,7 @@ const nobodyHasToKnowTracks = [
 test('Nobody Has to Know', () => {
   const results = Brain.getInstance().analyse(
     nobodyHasToKnowTracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -269,7 +269,7 @@ const mesMeilleursCopainsTracks = [
 test('Mes meilleurs copains issue', () => {
   const results = Brain.getInstance().analyse(
     mesMeilleursCopainsTracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -351,7 +351,7 @@ const laSoifDeLorTracks = [
 test('La soif de l or issue', () => {
   const results = Brain.getInstance().analyse(
     laSoifDeLorTracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -426,7 +426,7 @@ const leNouveauProtocoleTracks = [
 test('Le nouveau protocole fake for coverage', () => {
   const results = Brain.getInstance().analyse(
     leNouveauProtocoleTracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -499,7 +499,7 @@ const lesHommesPreferentLesGrossesTracks = [
 test('Les hommes preferent les grosses', () => {
   const results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesTracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -567,7 +567,7 @@ const lesHommesPreferentLesGrossesFake1Tracks = [
 test('Les hommes preferent les grosses fake for coverage 1', () => {
   const results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake1Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -630,7 +630,7 @@ const lesHommesPreferentLesGrossesFake2Tracks = [
 test('Les hommes preferent les grosses fake for coverage 2', () => {
   const results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake2Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -718,7 +718,7 @@ const lesHommesPreferentLesGrossesFake3Tracks = [
 test('Les hommes preferent les grosses fake for coverage 3', () => {
   let results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake3Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -749,7 +749,7 @@ test('Les hommes preferent les grosses fake for coverage 3', () => {
 
   results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake3Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -845,7 +845,7 @@ const lesHommesPreferentLesGrossesFake4Tracks = [
 test('Les hommes preferent les grosses fake for coverage 4', () => {
   let results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake4Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -875,7 +875,7 @@ test('Les hommes preferent les grosses fake for coverage 4', () => {
 
   results = Brain.getInstance().analyse(
     lesHommesPreferentLesGrossesFake4Tracks,
-    'C:\\Download\\hommes-grosses.mkv',
+    getFakeAbsolutePath('Download', 'hommes-grosses.mkv'),
     'Les hommes preferent les grosses',
     defaultPoster1,
     'Les hommes preferent les grosses By Team XYZ',
@@ -1004,7 +1004,7 @@ const nobodyHasToKnow2Tracks = [
 test('Nobody Has to Know 2 faked', () => {
   let results = Brain.getInstance().analyse(
     nobodyHasToKnow2Tracks,
-    'C:\\Download\\nobody-has-to-know.mkv',
+    getFakeAbsolutePath('Download', 'nobody-has-to-know.mkv'),
     'Nobody Has to Know',
     defaultPoster1,
     'Nobody Has to Know By Team XYZ',
@@ -1028,7 +1028,7 @@ test('Nobody Has to Know 2 faked', () => {
 
   results = Brain.getInstance().analyse(
     nobodyHasToKnow2Tracks,
-    'C:\\Download\\nobody-has-to-know.mkv',
+    getFakeAbsolutePath('Download', 'nobody-has-to-know.mkv'),
     'Nobody Has to Know',
     defaultPoster1,
     'Nobody Has to Know By Team XYZ',
@@ -1088,7 +1088,7 @@ const nobodyHasToKnow3Tracks = [
 test('Nobody Has to Know 3 faked', () => {
   let results = Brain.getInstance().analyse(
     nobodyHasToKnow3Tracks,
-    'C:\\Download\\nobody-has-to-know.mkv',
+    getFakeAbsolutePath('Download', 'nobody-has-to-know.mkv'),
     'Nobody Has to Know',
     defaultPoster1,
     'Nobody Has to Know By Team XYZ',
@@ -1107,7 +1107,7 @@ test('Nobody Has to Know 3 faked', () => {
 
   results = Brain.getInstance().analyse(
     nobodyHasToKnow3Tracks,
-    'C:\\Download\\nobody-has-to-know.mkv',
+    getFakeAbsolutePath('Download', 'nobody-has-to-know.mkv'),
     'Nobody Has to Know',
     defaultPoster1,
     'Nobody Has to Know By Team XYZ',
@@ -1172,7 +1172,7 @@ const savateBadAttachmentsAttachments: Attachment[] = [
 test('Savate Bad Attachments Tests', () => {
   const results = Brain.getInstance().analyse(
     savateBadAttachmentsTracks,
-    'C:\\Download\\savate.mkv',
+    getFakeAbsolutePath('Download', 'savate.mkv'),
     'Savate',
     defaultPoster1,
     'Savate By Team XYZ',
@@ -1219,7 +1219,7 @@ const savateBadAttachmentsAttachments2: Attachment[] = [
 test('Savate Bad Attachments Tests clear', () => {
   const results = Brain.getInstance().analyse(
     savateBadAttachmentsTracks,
-    'C:\\Download\\savate.mkv',
+    getFakeAbsolutePath('Download', 'savate.mkv'),
     'Savate',
     defaultPoster1,
     'Savate By Team XYZ',
@@ -1323,7 +1323,7 @@ test('Capitaine Marleau undefined and qad cases', () => {
 
   const results = Brain.getInstance().analyse(
     tracks,
-    'C:\\Download\\captain-marleau.mkv',
+    getFakeAbsolutePath('Download', 'captain-marleau.mkv'),
     'Captain Marleau',
     defaultPoster1,
     'Captain Marleau By Team XYZ',
@@ -1458,7 +1458,7 @@ const nefariousTracks = [
 test('Nefarious brain', () => {
   const results = Brain.getInstance().analyse(
     nefariousTracks,
-    'C:\\Ripped\\nefarious (2023).mkv',
+    getFakeAbsolutePath('Ripped', 'nefarious (2023).mkv'),
     'Nefarious',
     defaultPoster1,
     'Nefarious XYZ',
@@ -1609,7 +1609,7 @@ const guadalupeTracks = [
 test('Guadalupe Already Processed Brain', () => {
   const results = Brain.getInstance().analyse(
     guadalupeTracks,
-    'C:\\Ripped\\Guadalupe։ Mother of Humanity (2024).mkv',
+    getFakeAbsolutePath('Ripped', 'Guadalupe։ Mother of Humanity (2024).mkv'),
     'Guadalupe: Mother of Humanity (2024)',
     {
       filename: 'cover.jpg',
@@ -1769,7 +1769,7 @@ const ashTracks = [
 test('Ash brain', () => {
   const results = Brain.getInstance().analyse(
     ashTracks,
-    'C:\\Download\\Ash.2025.FRENCH.720p.WEB.H264-SUPPLY.mkv',
+    getFakeAbsolutePath('Download', 'Ash.2025.FRENCH.720p.WEB.H264-SUPPLY.mkv'),
     'Ash (2025)',
     defaultPoster1,
     'Ash (2025) XYZ',
@@ -1830,7 +1830,7 @@ const cowboyPacifisteTracks = [
 test('Cowboy Pacifiste', () => {
   const results = Brain.getInstance().analyse(
     cowboyPacifisteTracks,
-    'C:\\Download\\Terence.Hill.un.cowboy.pacifiste.2025.DOC.VFF.HDTV.720p.H264.AAC-NoX.mkv',
+    getFakeAbsolutePath('Download', 'Terence.Hill.un.cowboy.pacifiste.2025.DOC.VFF.HDTV.720p.H264.AAC-NoX.mkv'),
     'Terence Hill, un cowboy pacifiste (2025)',
     defaultPoster1,
     'Terence Hill, un cowboy pacifiste (2025) XYZ',
@@ -2208,7 +2208,10 @@ const savingPrivateRyanTracks = [
 test('Saving Private Ryan', () => {
   const results = Brain.getInstance().analyse(
     savingPrivateRyanTracks,
-    'C:\\Download\\Il faut sauver le soldat Ryan 1998 MULTi VFF 1080p Blu-ray Remux AVC DTS-HD MA 5.1-QBDom.mkv',
+    getFakeAbsolutePath(
+      'Download',
+      'Il faut sauver le soldat Ryan 1998 MULTi VFF 1080p Blu-ray Remux AVC DTS-HD MA 5.1-QBDom.mkv'
+    ),
     'Il faut sauver le soldat Ryan (1998)',
     defaultPoster1,
     'Il faut sauver le soldat Ryan (1998) XYZ',
@@ -2241,7 +2244,10 @@ test('Saving Private Ryan Delete Tracks', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     savingPrivateRyanTracks,
-    'C:\\Download\\Il faut sauver le soldat Ryan 1998 MULTi VFF 1080p Blu-ray Remux AVC DTS-HD MA 5.1-QBDom.mkv',
+    getFakeAbsolutePath(
+      'Download',
+      'Il faut sauver le soldat Ryan 1998 MULTi VFF 1080p Blu-ray Remux AVC DTS-HD MA 5.1-QBDom.mkv'
+    ),
     'Il faut sauver le soldat Ryan (1998)',
     defaultPoster1,
     'Il faut sauver le soldat Ryan (1998) XYZ',
@@ -2319,7 +2325,7 @@ test('Hold Out', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     holdOutTracks,
-    'C:\\Download\\Hold Out (2022).mp4',
+    getFakeAbsolutePath('Download', 'Hold Out (2022).mp4'),
     'Hold Out (2022)',
     defaultPoster1,
     'Hold Out (2022)',
@@ -2414,7 +2420,7 @@ test('Chickenhare guess of french language', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     chickenHareTracks,
-    'C:\\Download\\Chickenhare and the Hamster of Darkness (2022).mkv',
+    getFakeAbsolutePath('Download', 'Chickenhare and the Hamster of Darkness (2022).mkv'),
     'Hopper et le hamster des ténèbres (2022)',
     defaultPoster1,
     'Chickenhare and the Hamster of Darkness (2022)',
@@ -2529,7 +2535,7 @@ test('10x10 wrong VO for french language', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     tenxtenTracks,
-    'C:\\Download\\bugs\\10x10 (2018).mkv',
+    getFakeAbsolutePath('Download', 'bugs', '10x10 (2018).mkv'),
     'Outfall (2018)',
     defaultPoster1,
     'Outfall (2018)',
@@ -2629,7 +2635,7 @@ test('Twelve rounds no language on sub track bug', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     twelveRoundsTracks,
-    'C:\\Download\\bugs\\12 Rounds (2009).mkv',
+    getFakeAbsolutePath('Download', 'bugs', '12 Rounds (2009).mkv'),
     '12 Rounds (2009)',
     defaultPoster1,
     '12 Rounds (2009)',
@@ -2764,7 +2770,7 @@ test('Savable sub track removal bug', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     salvableTracks,
-    'C:\\Download\\bugs\\Salvable.2025.MULTi.VFi.1080p.WEBRip.AC3.5.1.H264-LiHDL.mkv',
+    getFakeAbsolutePath('Download', 'bugs', 'Salvable.2025.MULTi.VFi.1080p.WEBRip.AC3.5.1.H264-LiHDL.mkv'),
     'Salvable (2025)',
     defaultPoster1,
     'Salvable (2025)',
@@ -3029,7 +3035,7 @@ test('Captain America Civil War SDH bug', () => {
   currentSettings.isKeepVOEnabled = true
   const results = Brain.getInstance().analyse(
     captainAmericaTracks,
-    'C:\\Download\\bugs\\Captain America - Civil War (2016).mkv',
+    getFakeAbsolutePath('Download', 'bugs', 'Captain America - Civil War (2016).mkv'),
     'Captain America : Civil War (2016)',
     defaultPoster1,
     'Captain America : Civil War (2016)',
