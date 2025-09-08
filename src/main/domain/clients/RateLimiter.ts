@@ -17,33 +17,33 @@
  */
 
 export class RateLimiter {
-    /**
-     * @private rate in terms of request per second allowed.
-     */
-    private _rate: number;
-    private _lastTimestamp: number = 0;
+  /**
+   * @private rate in terms of request per second allowed.
+   */
+  private _rate: number
+  private _lastTimestamp: number = 0
 
-    constructor(rate:number) {
-        this._rate = rate;
-    }
+  constructor(rate: number) {
+    this._rate = rate
+  }
 
-    public setRate(rate: number) {
-        this._rate = rate;
-    }
+  public setRate(rate: number) {
+    this._rate = rate
+  }
 
-    public async slows() {
-        const now = Date.now();
-        const pause = Math.round(1000 / this._rate);
-        if (this._lastTimestamp) {
-            const wait = pause - (now - this._lastTimestamp);
-            if (wait > 0) {
-                this._lastTimestamp = now + wait;
-                await new Promise(res => setTimeout(res, wait));
-            } else {
-                this._lastTimestamp = now;
-            }
-        } else {
-            this._lastTimestamp = now;
-        }
+  public async slows() {
+    const now = Date.now()
+    const pause = Math.round(1000 / this._rate)
+    if (this._lastTimestamp) {
+      const wait = pause - (now - this._lastTimestamp)
+      if (wait > 0) {
+        this._lastTimestamp = now + wait
+        await new Promise((res) => setTimeout(res, wait))
+      } else {
+        this._lastTimestamp = now
+      }
+    } else {
+      this._lastTimestamp = now
     }
+  }
 }

@@ -20,6 +20,7 @@ import { expect, test, vi } from 'vitest'
 import { Change } from '../../../src/common/Change'
 import {
   changeListToMap,
+  getFakeAbsolutePath,
   JobStateChange,
   recordJobStates,
   simulateMKVmergeFailure,
@@ -32,7 +33,6 @@ import * as path from 'node:path'
 test('Processing Progression data', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateMKVMergeProgression)
-  const fullPath = 'C:\\Download\\something.mkv'
   const changes = [
     {
       uuid: '4a98799c-f5a9-489a-b0b0-6b4e1bd797db',
@@ -51,7 +51,9 @@ test('Processing Progression data', async () => {
     }
   ] as Change[]
   const changesMap = changeListToMap(changes)
-  const job: ProcessingJob = new ProcessingJob(path.basename(fullPath), fullPath, changes, [], 'C:\\Download\\Reworked')
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'Reworked')
+  const job: ProcessingJob = new ProcessingJob(path.basename(fullPath), fullPath, changes, [], outputPath)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.finished).toBe(false)
@@ -63,13 +65,11 @@ test('Processing Progression data', async () => {
   const spawnArgs = spawnSpy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[outputIdx + 1]).toBe(
-    'C:\\Download\\Reworked\\' + changesMap['Container']['Update_Filename'].newValue
-  )
+  expect(spawnArgs[outputIdx + 1]).toBe(outputPath + path.sep + changesMap['Container']['Update_Filename'].newValue)
 
   const progresses: number[] = stateChanges.map((c) => c.progression.progress)
   expect(progresses).toStrictEqual([undefined, undefined, 0, 0.25, 0.5, 0.75, 1, -1])
@@ -78,7 +78,8 @@ test('Processing Progression data', async () => {
 test('Failing Processing Job', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateMKVmergeFailure)
-  const fullPath = 'C:\\Download\\something.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'Reworked')
   const changes = [
     {
       uuid: '4a98799c-f5a9-489a-b0b0-6b4e1bd797db',
@@ -93,10 +94,19 @@ test('Failing Processing Job', async () => {
       sourceType: 'Container',
       changeType: 'Attach',
       property: 'Poster Image',
-      newValue: 'C:\\Users\\xfuentes\\Documents\\Projets\\smart-video-processor\\tmp-svp-QxfMkk\\TMDB-822119\\cover.jpg'
+      newValue: getFakeAbsolutePath(
+        'Users',
+        'xfuentes',
+        'Documents',
+        'Projets',
+        'smart-video-processor',
+        'tmp-svp-QxfMkk',
+        'TMDB-822119',
+        'cover.jpg'
+      )
     }
   ] as Change[]
-  const job: ProcessingJob = new ProcessingJob(path.basename(fullPath), fullPath, changes, [], 'C:\\Download\\Reworked')
+  const job: ProcessingJob = new ProcessingJob(path.basename(fullPath), fullPath, changes, [], outputPath)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.started).toBe(false)

@@ -102,8 +102,11 @@ export abstract class Job<T> implements IJob {
       } else {
         this.setStatus(JobStatus.ERROR)
       }
-      this.error = error as string
-      promise = Promise.reject(this.error)
+      this.error = (error as Error).message
+      if (this.progression?.progress === undefined) {
+        this.progression = { progress: -1 }
+      }
+      promise = Promise.reject(error)
     } finally {
       this.endedAt = Date.now()
       this.emitChangeEvent()

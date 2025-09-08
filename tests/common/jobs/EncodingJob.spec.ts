@@ -17,7 +17,7 @@
  */
 
 import { expect, test, vi } from 'vitest'
-import { JobStateChange, recordJobStates, simulateFFmpegFailure, simulateFFmpegProgression } from '../testUtils'
+import { getFakeAbsolutePath, JobStateChange, recordJobStates, simulateFFmpegFailure, simulateFFmpegProgression } from '../testUtils'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { Processes } from '../../../src/main/util/processes'
 import { JobManager } from '../../../src/main/domain/jobs/JobManager'
@@ -131,7 +131,7 @@ test('Encoding Progression data', async () => {
 test('Failing Processing Job', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegFailure)
-  const fullPath = 'C:\\Download\\something.mkv'
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
   const job: EncodingJob = new EncodingJob(fullPath, 30, [], encoderSettings)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)

@@ -70,7 +70,7 @@ test('Job Fermer Gueule Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en')
+  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
 
   expect(container.title).toBe(undefined)
   expect(container.type).toBe('Matroska')
