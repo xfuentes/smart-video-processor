@@ -198,16 +198,18 @@ export class Video implements IVideo {
     this.tracks = tracks
     this.pixels = this.computePixels()
     this.container = container
-    this.generateEncoderSettings()
+    this.generateEncoderSettings(true)
     this.loading = false
     this.fireChangeEvent()
     await this.search()
   }
 
   generateEncoderSettings(init = true) {
-    this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.trackEncodingEnabled)
     if (init) {
       this.trackEncodingEnabled = {}
+    }
+    this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.trackEncodingEnabled)
+    if (init) {
       this.encoderSettings.forEach((s) => this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, true))
     }
     debug('### ENCODER SETTINGS ###')
