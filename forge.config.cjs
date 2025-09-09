@@ -26,6 +26,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
+        title: 'Smart Video Processor',
         iconUrl: __dirname + '/resources/icon.ico',
         setupIcon: __dirname + '/resources/icon.ico'
       }

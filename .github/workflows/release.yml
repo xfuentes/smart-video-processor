@@ -1,4 +1,4 @@
-name: Build/release Smart Video Processor
+name: Release
 
 on:
   push:
