@@ -1,10 +1,7 @@
 # Smart Video Processor
 
-<h1><div align="center">
-
-[![Build]][build_url]
-
-</div></h1>
+[![Continuous Integration](https://github.com/xfuentes/smart-video-processor/actions/workflows/build.yml/badge.svg)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=github&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 
 This small application in JavaScript is a frontend for various great free command line tools. It is accessible from
 desktop environment or command line.
