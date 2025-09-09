@@ -229,7 +229,7 @@ export class FFmpeg extends CommandProgress {
           if (setting.codec === VideoCodec.H265) {
             ffOptions.push('-c:v:' + videoIndex, 'libx265')
             if (pass !== undefined) {
-              ffOptions.push('-x265-params', `pass=${pass}:stats=${encodedPath}`)
+              ffOptions.push('-x265-params', `log-level=error,pass=${pass}:stats=${encodedPath}`)
             }
           } else {
             ffOptions.push('-c:v:' + videoIndex, 'libx264')
