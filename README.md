@@ -3,10 +3,9 @@
 [![Continuous Integration](https://github.com/xfuentes/smart-video-processor/actions/workflows/build.yml/badge.svg)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=github&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 
-This small application in JavaScript is a frontend for various great free command line tools. It is accessible from
-desktop environment or command line.
-It uses NW.js (https://nwjs.io/), Fluent UI React (https://github.com/microsoft/fluentui) and vite (https://vite.dev/)
-frameworks.
+This small application in JavaScript is a frontend for various great free command line tools.
+It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and
+Vite (https://vite.dev/) frameworks.
 Its purpose is to help process and encode your DVD or Blu-ray backups.
 These can eventually be made with the excellent MakeMKV (https://www.makemkv.com/).
 
@@ -17,8 +16,13 @@ This application depends on FFmpeg and MKVToolNix.
 ### a) Ubuntu Linux
 
   ```shell
-    sudo apt-get install mkvtoolnix mkvtoolnix-gui ffmpeg
+    sudo apt-get install mkvtoolnix ffmpeg
   ```
+
+### b) Windows 10 or later
+
+Install MKVToolNix (https://www.matroska.org/downloads/mkvtoolnix.html)
+and FFmpeg (https://ffmpeg.org/) you can get the binaries from: https://www.gyan.dev/ffmpeg/builds/
 
 ## 2) Set your preferences
 
@@ -92,6 +96,3 @@ background.
 
 You can see progression info and estimated time left.
 ![Waiting](./docs/img/waiting.png)
-
-[build_url]: https://github.com/xfuentes/smart-video-processor
-[Build]: https://github.com/xfuentes/smart-video-processor/actions/workflows/build.yml/badge.svg

@@ -41,6 +41,9 @@ module.exports = {
         options: {
           icon: __dirname + '/resources/icon.png',
           productName: 'Smart Video Processor',
+          productDescription:
+            'This small application in JavaScript is a frontend for various great free command line tools. It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and Vite (https://vite.dev/) frameworks. Its purpose is to help process and encode your DVD or Blu-ray backups.',
+          maintainer: 'Xavier Fuentes',
           section: 'video',
           depends: ['mkvtoolnix', 'ffmpeg'],
           categories: ['Video', 'Audio', 'AudioVideo'],
