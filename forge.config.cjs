@@ -42,7 +42,7 @@ module.exports = {
           productName: 'Smart Video Processor',
           section: 'video',
           depends: ['mkvtoolnix', 'ffmpeg'],
-          categories: 'Video',
+          categories: ['Video', 'Audio', 'AudioVideo'],
           mimeType: ['video/x-matroska', 'video/x-msvideo', 'video/mp4']
         }
       }
