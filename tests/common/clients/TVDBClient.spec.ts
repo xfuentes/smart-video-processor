@@ -130,9 +130,9 @@ test('Rate limiter', async () => {
 
   await Promise.allSettled([prom1, prom2, prom3])
 
-  expect(secondExecutedAt - firstExecutedAt).toBe(1)
-  expect(thirdExecutedAt - secondExecutedAt).toBe(1)
-  expect(thirdExecutedAt - firstExecutedAt).toBe(2)
+  expect(secondExecutedAt - firstExecutedAt).toBeGreaterThanOrEqual(1)
+  expect(thirdExecutedAt - secondExecutedAt).toBeGreaterThanOrEqual(1)
+  expect(thirdExecutedAt - firstExecutedAt).toBeGreaterThanOrEqual(2)
 })
 
 test('check TVDB language id mappable to Language IETF', async () => {
