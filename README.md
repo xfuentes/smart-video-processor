@@ -17,6 +17,7 @@ This application depends on FFmpeg and MKVToolNix.
 
   ```shell
     sudo apt-get install mkvtoolnix ffmpeg
+    sudo dpkg -i ./smart-video-processor_0.2.0_amd64.deb
   ```
 
 ### b) Windows 10 or later

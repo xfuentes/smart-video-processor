@@ -72,7 +72,8 @@ export function loadSettings() {
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
   if (validation.status === 'success') {
-    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(settings ?? currentSettings, null, 2))
+    currentSettings = { ...settings }
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
   }
   return validation
 }
