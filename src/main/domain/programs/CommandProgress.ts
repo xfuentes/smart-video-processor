@@ -24,27 +24,23 @@ import { ProcessesPriority } from '../../../common/@types/processes'
 export abstract class CommandProgress {
   protected readonly command: string
   protected readonly successCodes: number[]
+  protected readonly abortCode?: number
 
-  protected constructor(command: string, successCodes: number[]) {
+  protected constructor(command: string, successCodes: number[], abortCode?: number) {
     this.command = command
     this.successCodes = successCodes
+    this.abortCode = abortCode
   }
 
   protected execute(
     args: string[],
-    outputInterpreter: (
-      stdin?: string,
-      stdout?: string,
-      process?: ChildProcess
-    ) => { response: string; error?: string }
+    outputInterpreter: (stdin?: string, stdout?: string, process?: ChildProcess) => { response: string; error?: string }
   ): Promise<string> {
     return new Promise((resolve: (data: string) => void, reject: (reason: Error) => void) => {
       const process = Processes.spawn(this.command, args, { stdio: ['pipe', 'pipe', 'pipe'] })
+      outputInterpreter(undefined, undefined, process)
       if (process.pid) {
-        Processes.setPriority(
-          process.pid,
-          ProcessesPriority[currentSettings.priority ?? defaultSettings.priority]
-        )
+        Processes.setPriority(process.pid, ProcessesPriority[currentSettings.priority ?? defaultSettings.priority])
       }
       const result: { response: string; error?: string } = { response: '' }
       if (process?.stdout) {
@@ -66,7 +62,7 @@ export abstract class CommandProgress {
         })
       }
       process?.on('close', (code: number, signal: string) => {
-        if (signal === 'SIGTERM') {
+        if (signal === 'SIGTERM' || code === this.abortCode) {
           reject(new Error('Aborted'))
         } else if (this.successCodes.includes(code)) {
           resolve(result.response)

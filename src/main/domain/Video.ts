@@ -179,6 +179,7 @@ export class Video implements IVideo {
           if (this.job === job) {
             this.job = undefined
           }
+          this.queued = false
           job.removeChangeListener(listener)
         } else {
           this.processed = false

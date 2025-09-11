@@ -105,6 +105,7 @@ app.whenReady().then(() => {
     }
     return ''
   })
+  ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   initVideoControllerIPC(mainWindow)
 
   app.on('activate', function () {

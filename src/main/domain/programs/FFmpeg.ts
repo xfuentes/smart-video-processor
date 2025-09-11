@@ -39,7 +39,7 @@ export class FFmpeg extends CommandProgress {
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
 
   private constructor() {
-    super(currentSettings.ffmpegPath, [0])
+    super(currentSettings.ffmpegPath, [0], 255)
   }
 
   public static getInstance(): FFmpeg {
@@ -149,35 +149,40 @@ export class FFmpeg extends CommandProgress {
     const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = encodedPath
       let error: string | undefined = undefined
-      if (stdout != undefined && progressNotifier != undefined) {
-        const timeMatches = this.timePattern.exec(stdout)
-        const speedMatches = this.speedPattern.exec(stdout)
-        const endMatches = this.endPattern.exec(stdout)
-        let xSpeed = 0
-        if (speedMatches?.groups) {
-          xSpeed = Number.parseFloat(speedMatches.groups.speed)
-        }
-
-        if (endMatches) {
-          progressNotifier({ progress: 1, xSpeed, countdown: 0, process })
-        } else if (timeMatches?.groups) {
-          const currentTimeSeconds = Number(timeMatches.groups.time) / 1000000
-          let progress: number | undefined = 0
-          if (!durationSeconds) {
-            progress = undefined
-            progressNotifier({ progress, xSpeed, process })
-          } else if (currentTimeSeconds > 0) {
-            progress = currentTimeSeconds / durationSeconds
-            const secondsLeft = (1 - progress) * durationSeconds
-            const countdown = xSpeed !== undefined && xSpeed != 0 ? secondsLeft / xSpeed : undefined
-            progressNotifier({ progress, xSpeed, countdown, process })
+      if (progressNotifier != undefined) {
+        if (stdout != undefined) {
+          const timeMatches = this.timePattern.exec(stdout)
+          const speedMatches = this.speedPattern.exec(stdout)
+          const endMatches = this.endPattern.exec(stdout)
+          let xSpeed = 0
+          if (speedMatches?.groups) {
+            xSpeed = Number.parseFloat(speedMatches.groups.speed)
           }
+
+          if (endMatches) {
+            progressNotifier({ progress: 1, xSpeed, countdown: 0, process })
+          } else if (timeMatches?.groups) {
+            const currentTimeSeconds = Number(timeMatches.groups.time) / 1000000
+            let progress: number | undefined = 0
+            if (!durationSeconds) {
+              progress = undefined
+              progressNotifier({ progress, xSpeed, process })
+            } else if (currentTimeSeconds > 0) {
+              progress = currentTimeSeconds / durationSeconds
+              const secondsLeft = (1 - progress) * durationSeconds
+              const countdown = xSpeed !== undefined && xSpeed != 0 ? secondsLeft / xSpeed : undefined
+              progressNotifier({ progress, xSpeed, countdown, process })
+            }
+          }
+        } else if (stderr !== undefined) {
+          // get first line;
+          const end = stderr.indexOf('\n')
+          error = stderr.substring(0, end !== -1 ? end : undefined)
+        } else {
+          progressNotifier({ process })
         }
-      } else if (stderr !== undefined) {
-        // get first line;
-        const end = stderr.indexOf('\n')
-        error = stderr.substring(0, end !== -1 ? end : undefined)
       }
+
       return { response, error }
     }
     // const errorPattern: RegExp = /Error: (?<message>.*)/i;
