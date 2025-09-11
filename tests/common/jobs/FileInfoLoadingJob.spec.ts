@@ -26,6 +26,7 @@ import * as fs from 'node:fs'
 import { FileInfoLoadingJob } from '../../../src/main/domain/jobs/FileInfoLoadingJob'
 import { TrackType } from '../../../src/common/@types/Track'
 import { JobStatus } from '../../../src/common/@types/Job'
+import { MKVMERGE_ENGLISH } from '../../../src/main/domain/programs/MKVMerge'
 
 const genSpawnSpyFileInfo = (origPath: string, origJsonFileName: string, processedJsonFileName: string) =>
   vi
@@ -70,7 +71,7 @@ test('Job Fermer Gueule Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   expect(container.title).toBe(undefined)
   expect(container.type).toBe('Matroska')
