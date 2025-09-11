@@ -44,8 +44,9 @@ export class Processes {
   static async pause(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        /*const ntsuspend = await import('ntsuspend')
-        ntsuspend && ntsuspend.suspend(proc.pid)*/
+        // @ts-ignore ntsuspend only available on windows
+        const ntsuspend = await import('ntsuspend')
+        ntsuspend && ntsuspend.suspend(proc.pid)
       } else {
         proc.kill('SIGSTOP')
       }
@@ -55,8 +56,9 @@ export class Processes {
   static async resume(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        /* const ntsuspend = await import('ntsuspend')
-        ntsuspend && ntsuspend.resume(proc.pid) */
+        // @ts-ignore ntsuspend only available on windows
+        const ntsuspend = await import('ntsuspend')
+        ntsuspend && ntsuspend.resume(proc.pid)
       } else {
         proc.kill('SIGCONT')
       }

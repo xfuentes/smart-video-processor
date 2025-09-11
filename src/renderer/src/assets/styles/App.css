@@ -363,3 +363,16 @@ button:disabled.is-disabled.ms-Pivot-link {
 .quality-icon.gold .long {
   background: linear-gradient(90deg,rgba(184, 131, 21, 1) 0%, rgba(223, 186, 82, 1) 50%, rgba(255, 239, 160, 1) 100%);
 }
+
+.drop-zone {
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.drop-zone.is-dragover {
+  background: whitesmoke;
+  outline: 2px dashed black;
+  outline-offset: -5px;
+  border-radius: 5px;
+}

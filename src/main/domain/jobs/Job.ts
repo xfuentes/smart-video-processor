@@ -20,11 +20,11 @@ import { v4 as UUIDv4 } from 'uuid'
 import { JobManager } from './JobManager'
 import { Processes } from '../../util/processes'
 import { Strings } from '../../../common/Strings'
-import { isEqual } from 'lodash'
 import { currentSettings, defaultSettings } from '../Settings'
 import { debug } from '../../util/log'
 import { ProcessesPriority, Progression } from '../../../common/@types/processes'
 import { IJob, JobStatus, JobType } from '../../../common/@types/Job'
+import { isDeepStrictEqual } from 'node:util'
 
 export type JobChangeListener = (job: Job<object | unknown>) => void
 
@@ -45,6 +45,7 @@ export abstract class Job<T> implements IJob {
   private startedAt?: number
   private endedAt?: number
   private readonly extraDuration?: number
+  private abortLaunched: boolean = false
 
   protected constructor(type: JobType, title: string, extraDuration?: number) {
     this.type = type
@@ -97,7 +98,7 @@ export abstract class Job<T> implements IJob {
       this.progression = { progress: -1 }
       promise = Promise.resolve(this.result)
     } catch (error) {
-      if (error === 'Aborted') {
+      if (this.abortLaunched || error === 'Aborted') {
         this.setStatus(JobStatus.ABORTED)
       } else {
         this.setStatus(JobStatus.ERROR)
@@ -133,7 +134,7 @@ export abstract class Job<T> implements IJob {
   }
 
   setProgression(progression: Progression) {
-    if (!isEqual(progression, this.progression)) {
+    if (!this.abortLaunched && !isDeepStrictEqual(progression, this.progression)) {
       this.progression = progression
       this.emitChangeEvent()
     }
@@ -210,6 +211,7 @@ export abstract class Job<T> implements IJob {
     if (this.progression.process) {
       debug('Abort !')
       this.progression.process.kill('SIGTERM')
+      this.abortLaunched = true
     } else {
       debug("Can't Abort no process !")
     }

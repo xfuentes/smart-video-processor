@@ -33,7 +33,7 @@ export type Progression = {
   /**
    * Float between 0 and 1, -1 means stopped, undefined means indeterminate.
    */
-  progress: number | undefined
+  progress?: number
   /**
    * The current speed in float number of times compared to normal playback speed.
    */

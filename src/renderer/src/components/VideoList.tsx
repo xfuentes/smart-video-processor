@@ -35,6 +35,7 @@ import React, { useEffect, useState } from 'react'
 import xor from 'lodash/xor'
 import { Strings } from '../../../common/Strings'
 import { IVideo } from '../../../common/@types/Video'
+import { DropZone } from '@renderer/components/DropZone'
 
 const columns: TableColumnDefinition<IVideo>[] = [
   createTableColumn<IVideo>({
@@ -108,10 +109,6 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
       onSelectionChange(selectedVideos)
     }
   }
-  const handleDrop = (e: React.DragEvent) => {
-    const files = Array.from(e.dataTransfer.files)
-    onImportVideos(files)
-  }
   const handleShortcuts = (event: React.KeyboardEvent) => {
     console.log(event)
   }
@@ -134,7 +131,7 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
   }, [selectedItems, videos, onSelectionChange])
 
   return (
-    <div onDrop={handleDrop} style={{ height: '100%' }} onKeyUp={handleShortcuts} role={'none'}>
+    <DropZone onDropFiles={onImportVideos} style={{ height: '100%' }} onKeyUp={handleShortcuts}>
       <DataGrid
         items={videos}
         columns={columns}
@@ -174,6 +171,6 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
           )}
         </DataGridBody>
       </DataGrid>
-    </div>
+    </DropZone>
   )
 }

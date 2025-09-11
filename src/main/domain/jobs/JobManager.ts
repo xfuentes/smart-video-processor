@@ -122,6 +122,7 @@ export class JobManager {
       this.handleQueueUpdated(JobStatus.ENCODING)
       this.handleQueueUpdated(JobStatus.MERGING)
     }
+    return this.paused
   }
 
   updatePriority() {
