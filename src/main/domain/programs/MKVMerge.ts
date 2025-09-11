@@ -28,6 +28,9 @@ import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
 import { currentSettings } from '../Settings'
+import * as os from 'node:os'
+
+export const MKVMERGE_ENGLISH = os.platform() === 'win32' ? 'en' : 'en_US'
 
 export interface Container {
   type: string
@@ -53,7 +56,7 @@ export class MKVMerge extends CommandProgress {
 
   public async retrieveFileInformation(path: string): Promise<{ tracks: Track[]; container: Container }> {
     const tracks: Track[] = []
-    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', 'en_US'])
+    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', MKVMERGE_ENGLISH])
     let mkvInfo: MKVMergeIdentify
     try {
       mkvInfo = JSON.parse(mkvMergeOutput) as MKVMergeIdentify
@@ -190,7 +193,7 @@ export class MKVMerge extends CommandProgress {
     newFilename = Files.removeSpecialCharsFromFilename(newFilename)
     newFilename = path.join(outputDirectory, newFilename)
 
-    mkOptions.push('--ui-language', 'en_US')
+    mkOptions.push('--ui-language', MKVMERGE_ENGLISH)
     if (newFilename) {
       mkOptions.push('--output', newFilename)
     }
