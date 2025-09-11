@@ -76,7 +76,7 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
       progresses.push(progress)
     }
   )
-  expect(progresses).toStrictEqual([undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
+  expect(progresses).toStrictEqual([undefined, undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
   expect(result).toContain(encodedPath)
 })
 
@@ -101,7 +101,22 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
     }
   }
   expect(lastProgress).toBe(1)
-  expect(xSpeeds).toStrictEqual([undefined, 0.508, 1.24, 1.93, 2.49, 2.56, undefined, 0.508, 1.24, 1.93, 2.49, 2.56])
+  expect(xSpeeds).toStrictEqual([
+    undefined,
+    undefined,
+    0.508,
+    1.24,
+    1.93,
+    2.49,
+    2.56,
+    undefined,
+    undefined,
+    0.508,
+    1.24,
+    1.93,
+    2.49,
+    2.56
+  ])
   expect(result).toContain(encodedPath)
 })
 
@@ -433,6 +448,7 @@ test('FFmpeg Marcelino audio progression', async () => {
     }
   )
   expect(progresses).toStrictEqual([
+    undefined,
     undefined,
     1.1640333333333333,
     2.617366666666667,
