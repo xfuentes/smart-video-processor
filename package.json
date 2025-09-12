@@ -1,5 +1,6 @@
 {
   "name": "smart-video-processor",
+  "private": true,
   "version": "0.2.1",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and icon when needed.",
   "main": "./dist/main/index.js",
@@ -31,13 +32,15 @@
     "build": "npm run typecheck && electron-vite build --outDir=dist",
     "package": "electron-vite build --outDir=dist && electron-forge package",
     "make": "electron-vite build --outDir=dist && electron-forge make",
+    "publish": "electron-vite build --outDir=dist && electron-forge publish",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "electron-updater": "^6.3.9"
+    "electron-updater": "^6.3.9",
+    "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.3",
@@ -45,6 +48,8 @@
     "@electron-forge/maker-rpm": "^7.8.3",
     "@electron-forge/maker-squirrel": "^7.8.3",
     "@electron-forge/maker-zip": "^7.8.3",
+    "@reforged/maker-appimage": "^5.0.0",
+    "@reforged/maker-types" : "^1.0.1",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -52,9 +57,9 @@
     "@fluentui/react-components": "^9.69.0",
     "@fluentui/react-icons": "^2.0.308",
     "@inquirer/prompts": "^7.7.1",
-    "@types/clui": "^0.3.4",
     "@types/cli-color": "0.3.29",
     "@types/cli-progress": "^3.11.6",
+    "@types/clui": "^0.3.4",
     "@types/electron-squirrel-startup": "^1.0.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.16.5",
@@ -67,6 +72,7 @@
     "axios": "^1.11.0",
     "cli-color": "0.3.2",
     "cli-progress": "^3.12.0",
+    "clui": "^0.3.6",
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",
     "electron-squirrel-startup": "^1.0.1",
@@ -83,12 +89,14 @@
     "react-dom": "^18.3.1",
     "typescript": "^5.8.3",
     "uuid": "^11.1.0",
-    "vite": "^7.0.5",
+    "vite": "^7.1.5",
     "vitest": "^3.0.9",
-    "yargs": "^18.0.0",
-    "clui": "^0.3.6"
+    "yargs": "^18.0.0"
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
+  },
+  "config": {
+    "forge": "./forge.config.ts"
   }
 }
