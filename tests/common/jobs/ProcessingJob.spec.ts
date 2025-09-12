@@ -29,6 +29,7 @@ import {
 import { Processes } from '../../../src/main/util/processes'
 import { ProcessingJob } from '../../../src/main/domain/jobs/ProcessingJob'
 import * as path from 'node:path'
+import { MKVMERGE_ENGLISH } from '../../../src/main/domain/programs/MKVMerge'
 
 test('Processing Progression data', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
@@ -65,7 +66,7 @@ test('Processing Progression data', async () => {
   const spawnArgs = spawnSpy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx).toBeGreaterThanOrEqual(0)
