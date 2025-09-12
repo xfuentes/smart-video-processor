@@ -10,8 +10,11 @@ import { initVideoControllerIPC } from './VideoControllerIPC'
 
 import electron_squirrel_startup from 'electron-squirrel-startup'
 import { FormValidation } from '../common/FormValidation'
+import { updateElectronApp } from 'update-electron-app'
 
 if (electron_squirrel_startup) app.quit()
+
+updateElectronApp()
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
