@@ -21,13 +21,14 @@ import { Change } from '../../../src/common/Change'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
 import {
-  changeListToMap, getFakeAbsolutePath,
+  changeListToMap,
+  getFakeAbsolutePath,
   simulateFileInfoResponse,
   simulateMKVmergeFailure,
   simulateProgramNotFound
 } from '../testUtils'
 import { Processes } from '../../../src/main/util/processes'
-import { MKVMerge } from '../../../src/main/domain/programs/MKVMerge'
+import { MKVMerge, MKVMERGE_ENGLISH } from '../../../src/main/domain/programs/MKVMerge'
 import { Track } from '../../../src/main/domain/Track'
 import { TrackType } from '../../../src/common/@types/Track'
 import * as path from 'node:path'
@@ -164,7 +165,7 @@ test('MKVMerge Electric State File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   expect(container.title).toBe('The Electric State')
   expect(container.type).toBe('Matroska')
@@ -260,7 +261,7 @@ test('MKVMerge Fermer Gueule File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   const identifyIdx = spawnArgs.indexOf('-J')
   expect(identifyIdx).toBeGreaterThanOrEqual(0)
@@ -322,7 +323,7 @@ test('MKVMerge Le Fils Du Cordonnier File Info', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   const identifyIdx = spawnArgs.indexOf('-J')
   expect(identifyIdx).toBeGreaterThanOrEqual(0)
@@ -392,7 +393,7 @@ test('MKVMerge Input&Output&Language Arguments', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[uiLangIdx + 1]).toBe('en_US')
+  expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx).toBeGreaterThanOrEqual(0)
@@ -571,9 +572,7 @@ test('MKVMerge Filename changed', async () => {
   const spawnArgs = spy.mock.lastCall[1]
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx, '--output not found').toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[outputIdx + 1]).toBe(
-    outputPath + path.sep + changesMap['Container']['Update_Filename'].newValue
-  )
+  expect(spawnArgs[outputIdx + 1]).toBe(outputPath + path.sep + changesMap['Container']['Update_Filename'].newValue)
 })
 
 test('Title changed', async () => {
