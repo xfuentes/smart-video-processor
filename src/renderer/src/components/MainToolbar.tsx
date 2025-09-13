@@ -35,6 +35,7 @@ import {
   checkVideoProcessingSuccessful,
   IVideo
 } from '../../../common/@types/Video'
+import { AboutDialog } from '@renderer/components/AboutDialog'
 
 type Props = {
   onOpen: () => void
@@ -140,6 +141,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
       </ToolbarGroup>
       <ToolbarGroup>
         <SettingsDialog />
+        <AboutDialog />
       </ToolbarGroup>
     </Toolbar>
   )
