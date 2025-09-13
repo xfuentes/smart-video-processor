@@ -29,12 +29,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-
-      - name: build
-        run: npm run publish
-
       - name: test
         run: npm run test
+
+      - name: build
+        run: npm run make
 
       - name: release
         uses: softprops/action-gh-release@v1
