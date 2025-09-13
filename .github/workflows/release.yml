@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ windows-latest, ubuntu-latest ]
 
     steps:
       - name: Check out Git repository
@@ -29,15 +29,21 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+
       - name: build
-        run: npm run make
+        run: npm run publish
+
+      - name: test
+        run: npm run test
 
       - name: release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           files: |
+            out/make/**/RELEASES
             out/make/**/*.exe
+            out/make/**/*.nupkg
             out/make/**/*.zip
             out/make/**/*.dmg
             out/make/**/*.AppImage
