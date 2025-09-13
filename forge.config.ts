@@ -22,6 +22,7 @@ import { FreeDesktopCategories } from '@reforged/maker-types'
 import { MakerAppImageConfig } from '@reforged/maker-appimage'
 import { MakerSquirrelConfig } from '@electron-forge/maker-squirrel'
 import { MakerDebConfig } from '@electron-forge/maker-deb'
+import * as os from 'node:os'
 
 const iconDir = path.resolve(__dirname, 'resources')
 
@@ -47,13 +48,15 @@ const config: ForgeConfig = {
       /^\/\..*/,
       /(electron.vite.config.ts)|(forge.config.*)|(tsconfig.*)|eslint.config.mjs|(tmp-svp-.*)/
     ],
-    icon: path.resolve(__dirname, 'resources', 'icon')
+    icon: path.resolve(__dirname, 'resources', 'icon'),
+    name: os.platform() === 'win32' ? 'Smart Video Processor' : 'smart-video-processor'
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
+        title: 'Smart Video Processor',
         iconUrl: path.resolve(__dirname, 'resources', 'icon.ico'),
         setupIcon: path.resolve(__dirname, 'resources', 'icon.ico')
       } as MakerSquirrelConfig
