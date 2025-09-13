@@ -1,7 +1,7 @@
 {
   "name": "smart-video-processor",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and icon when needed.",
   "main": "./dist/main/index.js",
   "author": "Xavier Fuentes",
@@ -53,6 +53,7 @@
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@electron-forge/publisher-github": "^7.9.0",
     "@fluentui/react": "^8.123.4",
     "@fluentui/react-components": "^9.69.0",
     "@fluentui/react-icons": "^2.0.308",
