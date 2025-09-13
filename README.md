@@ -1,8 +1,11 @@
 # Smart Video Processor
 
-[![Linux Build](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml/badge.svg)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
-[![Windows Build](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-windows.yml/badge.svg)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-windows.yml)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=github&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
+[![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
+[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-windows.yml?label=win%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-windows.yml)
+[![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
+![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
+![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xfuentes/smart-video-processor/total)
 
 This small application in JavaScript is a frontend for various great free command line tools.
 It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and
