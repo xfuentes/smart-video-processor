@@ -85,8 +85,8 @@ const config: ForgeConfig = {
           owner: 'xfuentes',
           name: 'smart-video-processor'
         },
-        draft: true,
-        prerelease: true,
+        draft: false,
+        prerelease: false,
         generateReleaseNotes: true
       }
     }
