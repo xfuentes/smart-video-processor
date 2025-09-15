@@ -40,7 +40,7 @@ export const defaultSettings: Settings = {
   isKeepVOEnabled: true,
   isTrackEncodingEnabled: true,
   isTestEncodingEnabled: false,
-  videoCodec: VideoCodec.H265,
+  videoCodec: VideoCodec.AUTO,
   videoSizeReduction: 50,
   audioSizeReduction: 70,
   mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
