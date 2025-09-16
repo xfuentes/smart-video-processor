@@ -87,6 +87,14 @@ interface SvpAPI {
       setEpisode: (uuid: string, newEpisode: string) => Promise<void>
       setAbsoluteEpisode: (uuid: string, newAbsoluteEpisode: string) => Promise<void>
     }
+    other: {
+      setTitle: (uuid: string, title: string) => Promise<void>
+      setYear: (uuid: string, year: string) => Promise<void>
+      setMonth: (uuid: string, month: string) => Promise<void>
+      setDay: (uuid: string, day: string) => Promise<void>
+      setPosterPath: (uuid: string, posterPath: string) => Promise<void>
+      setOriginalLanguage: (uuid: string, originalLanguageCode: string) => Promise<void>
+    }
   }
 }
 

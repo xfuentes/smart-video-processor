@@ -25,9 +25,9 @@ type Props = {
   title: string | undefined
   year: number | undefined
   subTitle?: string
-  overview: string | undefined
+  overview?: string | undefined
   altOverview?: string
-  countries: Country[]
+  countries?: Country[]
   rating?: number
 }
 
@@ -75,17 +75,14 @@ export const VideoPreview = ({
                   <RatingDisplay size="small" color="brand" value={Math.round(rating * 10) / 10} valueText={<span />} />
                 </div>
               )}
-              {countries.map((country) => (
-                <div key={country.alpha3} style={{ flexShrink: 0, justifyContent: 'end', maxHeight: '24px' }}>
-                  <Tooltip content={country.label} relationship="description">
-                    <Image
-                      alt={country.label}
-                      width="32px"
-                      src={country.flagURL.replace("file://", "svp://")}
-                    />
-                  </Tooltip>
-                </div>
-              ))}
+              {countries &&
+                countries.map((country) => (
+                  <div key={country.alpha3} style={{ flexShrink: 0, justifyContent: 'end', maxHeight: '24px' }}>
+                    <Tooltip content={country.label} relationship="description">
+                      <Image alt={country.label} width="32px" src={country.flagURL.replace('file://', 'svp://')} />
+                    </Tooltip>
+                  </div>
+                ))}
             </div>
           </div>
           {subTitle && (
@@ -96,19 +93,21 @@ export const VideoPreview = ({
             </div>
           )}
         </div>
-        <div style={{ columnGap: '5px', display: 'grid', flexGrow: 1, gridTemplateRows: '1fr 70px', height: 0 }}>
-          <div className="overview">{overview ? overview : ''}</div>
-          {secondaryPoster && (
-            <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
-              <Image
-                alt="No Episode Image"
-                bordered
-                src={secondaryPoster ? 'svp:///' + secondaryPoster : ''}
-                className={'secondary-poster'}
-              />
-            </div>
-          )}
-        </div>
+        {(overview || secondaryPoster) && (
+          <div style={{ columnGap: '5px', display: 'grid', flexGrow: 1, gridTemplateRows: '1fr 70px', height: 0 }}>
+            <div className="overview">{overview ? overview : ''}</div>
+            {secondaryPoster && (
+              <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
+                <Image
+                  alt="No Episode Image"
+                  bordered
+                  src={secondaryPoster ? 'svp:///' + secondaryPoster : ''}
+                  className={'secondary-poster'}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

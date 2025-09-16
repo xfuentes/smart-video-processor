@@ -56,7 +56,12 @@ export class MKVMerge extends CommandProgress {
 
   public async retrieveFileInformation(path: string): Promise<{ tracks: Track[]; container: Container }> {
     const tracks: Track[] = []
-    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, ['-J', path, '--ui-language', MKVMERGE_ENGLISH])
+    const mkvMergeOutput = await Processes.spawnReadStdout(this.command, [
+      '-J',
+      path,
+      '--ui-language',
+      MKVMERGE_ENGLISH
+    ])
     let mkvInfo: MKVMergeIdentify
     try {
       mkvInfo = JSON.parse(mkvMergeOutput) as MKVMergeIdentify
@@ -263,7 +268,10 @@ export class MKVMerge extends CommandProgress {
     for (const uChange of updateTrackRequests) {
       switch (uChange.property) {
         case ChangeProperty.LANGUAGE:
-          mkOptions.push('--language', `${uChange.trackId}:${uChange.newValue as string}`)
+          mkOptions.push(
+            '--language',
+            `${uChange.trackId}:${(uChange.newValue === undefined ? 'und' : uChange.newValue) as string}`
+          )
           updatedTrackLanguages.push(uChange.trackId as number)
           break
         case ChangeProperty.NAME:

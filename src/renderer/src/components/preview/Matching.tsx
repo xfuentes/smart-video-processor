@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
+import { Button, Field, Image, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
 import { useState } from 'react'
 import { IVideo, SearchBy, VideoType } from '../../../../common/@types/Video'
@@ -25,6 +25,8 @@ import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EditionType } from '../../../../common/@types/Movie'
 import { EpisodeOrder } from '../../../../main/domain/clients/TVDBClient'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
+import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
+import { LanguageSelector } from '@renderer/components/LanguageSelector'
 
 type Props = {
   video: IVideo
@@ -45,11 +47,9 @@ export const Matching = ({ video }: Props) => {
                 await window.api.video.setSearchBy(video.uuid, SearchBy.TITLE)
               }}
             >
-              {Object.values(VideoType)
-                .filter((t) => t !== VideoType.OTHER)
-                .map((key) => (
-                  <option key={key}>{key}</option>
-                ))}
+              {Object.values(VideoType).map((key) => (
+                <option key={key}>{key}</option>
+              ))}
             </Select>
           </Field>
         </div>
@@ -228,10 +228,41 @@ export const Matching = ({ video }: Props) => {
             )}
           </>
         )}
-        {video.type !== VideoType.OTHER && (
-          <div className="buttons">
+        {video.other !== undefined && (
+          <>
+            <div className="growing-form-field">
+              <Field size="small" label="Title" required>
+                <Input
+                  value={video.other.title || ''}
+                  onChange={async (_ev, data) => await window.api.video.other.setTitle(video.uuid, data.value)}
+                />
+              </Field>
+            </div>
+          </>
+        )}
+        <div className="buttons">
+          {video.type === VideoType.OTHER ? (
+            <Button
+              disabled={
+                !video.other?.title ||
+                (!video.other.year && (!!video.other.day || !!video.other.month)) ||
+                (!video.other.month && !!video.other.day)
+              }
+              size={'small'}
+              appearance={'primary'}
+              onClick={async () =>
+                await window.api.video
+                  .search(video.uuid)
+                  .then(() => setSearchError(undefined))
+                  .catch((error) => setSearchError((error as Error).message))
+              }
+            >
+              Analyse
+            </Button>
+          ) : (
             <Button
               size={'small'}
+              appearance={'primary'}
               icon={<Search16Regular />}
               onClick={async () =>
                 await window.api.video
@@ -242,8 +273,8 @@ export const Matching = ({ video }: Props) => {
             >
               Search
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {searchError !== undefined ? (
         <MessageBarGroup>
@@ -252,42 +283,113 @@ export const Matching = ({ video }: Props) => {
           </MessageBar>
         </MessageBarGroup>
       ) : (
-        <div className={'matching-results'}>
-          <SearchResultList
-            results={video.searchResults}
-            onSelectionChange={async (selection: ISearchResult | undefined) =>
-              await window.api.video
-                .selectSearchResultID(video.uuid, selection?.id)
-                .then(() => setSearchError(undefined))
-                .catch((error) => setSearchError((error as Error).message))
-            }
-            selectedID={video.selectedSearchResultID}
-          />
-          <div className="preview-space">
-            {video.movie !== undefined && (
-              <VideoPreview
-                title={video.movie.title}
-                poster={video.movie.poster}
-                overview={video.movie.overview}
-                countries={video.movie.originalCountries}
-                year={video.movie.year}
-                rating={video.movie.rating}
+        <>
+          {video.other && (
+            <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', flexFlow: 'column', flexGrow: 1 }}>
+                <div className="matching-form">
+                  <Field size="small" label="Year">
+                    <Input
+                      type="number"
+                      required={!!video.other.day || !!video.other.month}
+                      value={video.other.year ? '' + video.other.year : ''}
+                      style={{ minWidth: 1 }}
+                      onChange={async (_ev, data) => await window.api.video.other.setYear(video.uuid, data.value)}
+                    />
+                  </Field>
+                  <Field size="small" label="Month">
+                    <Input
+                      type="number"
+                      required={!!video.other.day}
+                      value={video.other.month ? '' + video.other.month : ''}
+                      style={{ minWidth: 1 }}
+                      onChange={async (_ev, data) => await window.api.video.other.setMonth(video.uuid, data.value)}
+                    />
+                  </Field>
+                  <Field size="small" label="Day">
+                    <Input
+                      type="number"
+                      value={video.other.day ? '' + video.other.day : ''}
+                      style={{ minWidth: 1 }}
+                      onChange={async (_ev, data) => await window.api.video.other.setDay(video.uuid, data.value)}
+                    />
+                  </Field>
+                  <Field size="small" label="Original Language">
+                    <LanguageSelector
+                      size={'small'}
+                      id="customOriginalLanguage"
+                      multiselect={false}
+                      value={video.other.originalLanguage?.code || ''}
+                      onChange={async (value: string) =>
+                        await window.api.video.other.setOriginalLanguage(video.uuid, value)
+                      }
+                    />
+                  </Field>
+                </div>
+                <div className="matching-form">
+                  <FileSelectorField
+                    clearable
+                    label="JPG Poster Path"
+                    size={'small'}
+                    value={video.other.poster || ''}
+                    onChange={async (newFile) => await window.api.video.other.setPosterPath(video.uuid, newFile)}
+                  />
+                </div>
+              </div>
+              <Image
+                style={{
+                  border: '1px solid #7f7f7f',
+                  minWidth: !video.other.poster ? '173px' : '0',
+                  width: 'auto',
+                  height: '173px'
+                }}
+                alt="No Poster"
+                bordered
+                src={video.other.poster ? 'svp:///' + video.other.poster : ''}
+                className="poster"
               />
-            )}
-            {video.tvShow !== undefined && (
-              <VideoPreview
-                title={video.tvShow.title}
-                subTitle={video.tvShow.episodeTitle}
-                poster={video.tvShow.poster}
-                overview={video.tvShow.episodeOverview ?? video.tvShow.overview}
-                altOverview={video.tvShow.episodeOverview !== undefined ? video.tvShow.overview : undefined}
-                year={video.tvShow.year}
-                countries={video.tvShow.originalCountries}
-                secondaryPoster={video.tvShow.episodePoster}
+            </div>
+          )}
+          {video.other === undefined && (
+            <div className={'matching-results'}>
+              <SearchResultList
+                results={video.searchResults}
+                onSelectionChange={async (selection: ISearchResult | undefined) =>
+                  await window.api.video
+                    .selectSearchResultID(video.uuid, selection?.id)
+                    .then(() => setSearchError(undefined))
+                    .catch((error) => setSearchError((error as Error).message))
+                }
+                selectedID={video.selectedSearchResultID}
               />
-            )}
-          </div>
-        </div>
+
+              <div className="preview-space">
+                {video.movie !== undefined && (
+                  <VideoPreview
+                    title={video.movie.title}
+                    poster={video.movie.poster}
+                    overview={video.movie.overview}
+                    countries={video.movie.originalCountries}
+                    year={video.movie.year}
+                    rating={video.movie.rating}
+                  />
+                )}
+                {video.tvShow !== undefined && (
+                  <VideoPreview
+                    title={video.tvShow.title}
+                    subTitle={video.tvShow.episodeTitle}
+                    poster={video.tvShow.poster}
+                    overview={video.tvShow.episodeOverview ?? video.tvShow.overview}
+                    altOverview={video.tvShow.episodeOverview !== undefined ? video.tvShow.overview : undefined}
+                    year={video.tvShow.year}
+                    countries={video.tvShow.originalCountries}
+                    secondaryPoster={video.tvShow.episodePoster}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   )
