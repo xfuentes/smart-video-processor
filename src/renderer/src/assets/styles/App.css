@@ -376,3 +376,15 @@ button:disabled.is-disabled.ms-Pivot-link {
   outline-offset: -5px;
   border-radius: 5px;
 }
+
+.powered-by-list {
+}
+
+.powered-by-list>tr:nth-child(odd) {
+  background-color: white;
+}
+
+.powered-by-list>tr>td:first-child {
+  text-align: center;
+}
+

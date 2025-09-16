@@ -26,6 +26,7 @@ import { IMovie } from './Movie'
 import { ITVShow } from './TVShow'
 import { Container } from '../../main/domain/programs/MKVMerge'
 import { EncoderSettings } from './Encoding'
+import { IOther } from './Other'
 
 export enum VideoType {
   MOVIE = 'Movie',
@@ -79,6 +80,7 @@ export interface IVideo {
   selectedSearchResultID?: number
   movie?: IMovie
   tvShow?: ITVShow
+  other?: IOther
   encoderSettings: EncoderSettings[]
   trackEncodingEnabled: { [key: string]: boolean }
   hintMissing: boolean

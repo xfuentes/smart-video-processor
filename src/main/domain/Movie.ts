@@ -32,7 +32,6 @@ import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
 
 export default class Movie implements IMovie {
-  public video: Video
   public title: string = ''
   public year?: number
   public overview?: string
@@ -44,6 +43,7 @@ export default class Movie implements IMovie {
   public rating?: number
   public originalCountries: Country[] = []
   public edition: EditionType = EditionType.THEATRICAL
+  private video: Video
   private duration?: number
 
   constructor(video: Video) {

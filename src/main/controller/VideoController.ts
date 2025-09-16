@@ -173,4 +173,8 @@ export class VideoController {
   getTVShow(uuid: string) {
     return this.getVideoByUuid(uuid).tvShow
   }
+
+  getOther(uuid: string) {
+    return this.getVideoByUuid(uuid).other
+  }
 }

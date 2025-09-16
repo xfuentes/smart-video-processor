@@ -94,6 +94,16 @@ const api = {
         ipcRenderer.invoke('video.tvShow:setEpisode', uuid, newEpisode),
       setAbsoluteEpisode: (uuid: string, newAbsoluteEpisode: string): Promise<void> =>
         ipcRenderer.invoke('video.tvShow:setAbsoluteEpisode', uuid, newAbsoluteEpisode)
+    },
+    other: {
+      setTitle: (uuid: string, title: string): Promise<void> => ipcRenderer.invoke('video.other:setTitle', uuid, title),
+      setYear: (uuid: string, year: string): Promise<void> => ipcRenderer.invoke('video.other:setYear', uuid, year),
+      setMonth: (uuid: string, month: string): Promise<void> => ipcRenderer.invoke('video.other:setMonth', uuid, month),
+      setDay: (uuid: string, day: string): Promise<void> => ipcRenderer.invoke('video.other:setDay', uuid, day),
+      setPosterPath: (uuid: string, posterPath: string): Promise<void> =>
+        ipcRenderer.invoke('video.other:setPosterPath', uuid, posterPath),
+      setOriginalLanguage: (uuid: string, originalLanguageCode: string): Promise<void> =>
+        ipcRenderer.invoke('video.other:setOriginalLanguage', uuid, originalLanguageCode)
     }
   }
 }
