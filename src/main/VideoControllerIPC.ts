@@ -146,4 +146,24 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video.movie:setEdition', (_event, uuid: string, edition: EditionType) => {
     VideoController.getInstance().getMovie(uuid).setEdition(edition)
   })
+
+  // Others:
+  ipcMain.handle('video.other:setTitle', (_event, uuid: string, title: string) => {
+    VideoController.getInstance().getOther(uuid).setTitle(title)
+  })
+  ipcMain.handle('video.other:setYear', (_event, uuid: string, year: string) => {
+    VideoController.getInstance().getOther(uuid).setYear(year)
+  })
+  ipcMain.handle('video.other:setMonth', (_event, uuid: string, month: string) => {
+    VideoController.getInstance().getOther(uuid).setMonth(month)
+  })
+  ipcMain.handle('video.other:setDay', (_event, uuid: string, day: string) => {
+    VideoController.getInstance().getOther(uuid).setDay(day)
+  })
+  ipcMain.handle('video.other:setPosterPath', (_event, uuid: string, posterPath: string) => {
+    VideoController.getInstance().getOther(uuid).setPosterPath(posterPath)
+  })
+  ipcMain.handle('video.other:setOriginalLanguage', (_event, uuid: string, originalLanguage: string) => {
+    VideoController.getInstance().getOther(uuid).setOriginalLanguage(originalLanguage)
+  })
 }

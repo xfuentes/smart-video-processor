@@ -55,6 +55,7 @@ import { EditionType } from '../../common/@types/Movie'
 import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
+import Other from './Other'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -72,6 +73,7 @@ export class Video implements IVideo {
   public hints: Hint[] = []
   public movie: Movie = new Movie(this)
   public tvShow: TVShow = new TVShow(this)
+  public other: Other = new Other(this)
   public status: JobStatus
   public message: string | undefined
   public progression: Progression
@@ -226,6 +228,8 @@ export class Video implements IVideo {
       await this.movie.search(this.searchBy)
     } else if (this.type === VideoType.TV_SHOW) {
       await this.tvShow.search(this.searchBy)
+    } else if (this.type === VideoType.OTHER) {
+      await this.other.search()
     }
     await this.analyse()
   }
@@ -314,8 +318,10 @@ export class Video implements IVideo {
     let originalLanguage: LanguageIETF | undefined
     if (this.type === VideoType.MOVIE) {
       originalLanguage = this.movie.getOriginalLanguage()
-    } else {
+    } else if(this.type === VideoType.TV_SHOW) {
       originalLanguage = this.tvShow.getOriginalLanguage()
+    } else if(this.type === VideoType.OTHER) {
+      originalLanguage = this.other.getOriginalLanguage()
     }
     return originalLanguage
   }
@@ -396,6 +402,7 @@ export class Video implements IVideo {
 
   setType(type: VideoType) {
     this.type = type
+    this.matched = false
     this.fireChangeEvent()
   }
 
@@ -671,6 +678,7 @@ export class Video implements IVideo {
       selectedSearchResultID: this.selectedSearchResultID,
       ...(this.type === VideoType.MOVIE ? { movie: this.movie.toJSON() } : {}),
       ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {}),
+      ...(this.type === VideoType.OTHER ? { other: this.other.toJSON() } : {}),
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled
