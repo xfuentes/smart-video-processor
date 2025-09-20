@@ -24,8 +24,23 @@ import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
+import { platform } from 'node:os'
+import * as os from 'node:os'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
+
+const getDefaultFFmpegToolPath = (tool: 'ffmpeg' | 'ffprobe') => {
+  if (os.platform() === 'linux') {
+    if (process.env.SNAP) {
+      return `${process.env.SNAP}/ffmpeg/${tool}`
+    }
+    return `/usr/bin/${tool}`
+  } else if (os.platform() === 'win32') {
+    return `c:\\Program Files\\ffmpeg\\bin\\${tool}.exe`
+  } else {
+    return `/usr/local/bin/${tool}`
+  }
+}
 
 export const defaultSettings: Settings = {
   isDebugEnabled: false,
@@ -44,8 +59,8 @@ export const defaultSettings: Settings = {
   videoSizeReduction: 50,
   audioSizeReduction: 70,
   mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
-  ffmpegPath: Processes.findCommandSync('ffmpeg', 'c:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe'),
-  ffprobePath: Processes.findCommandSync('ffprobe', 'c:\\Program Files\\ffmpeg\\bin\\ffprobe.exe')
+  ffmpegPath: Processes.findCommandSync('ffmpeg', getDefaultFFmpegToolPath('ffmpeg')),
+  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe'))
 }
 export let currentSettings: Settings = defaultSettings
 
@@ -97,8 +112,11 @@ export function validateSettings(settings: Settings) {
   const validationBuilder = new FormValidationBuilder<Settings>(settings)
   isValidExecutable(settings.mkvMergePath) ||
     validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
-  isValidExecutable(settings.ffmpegPath) ||
+  if (!isValidExecutable(settings.ffmpegPath)) {
+    if (platform() === 'linux' && process.env.SNAP) {
+    }
     validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
+  }
   isValidExecutable(settings.ffprobePath) ||
     validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
   return validationBuilder.build()

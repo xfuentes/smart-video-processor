@@ -117,7 +117,8 @@ export class Processes {
         priorityNum = os.constants.priority.PRIORITY_HIGH
         break
     }
-    os.setPriority(pid, priorityNum)
+    console.log('Set priority: ' + pid + ' priority: ' + priorityNum)
+    // os.setPriority(pid, priorityNum)
   }
 
   static isWindowsPlatform() {
