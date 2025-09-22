@@ -1,43 +1,129 @@
 name: smart-video-processor
+title: Smart Video Processor
 version: 1.1.0
 summary: 'Automated video processing. Re-Organize, Re-encode, adds metadata and image.'
 description: 'This small application is a frontend for FFmpeg and MKVToolNix. Its purpose is to help process and encode your DVD or Blu-ray backups.'
 
 license: GPL-3.0+
+contact: xfuentes-dev@hotmail.com
+issues: https://github.com/xfuentes/smart-video-processor/issues
+source-code: https://github.com/xfuentes/smart-video-processor
+website: https://github.com/xfuentes/smart-video-processor
+donation: https://paypal.me/xfuentesdev
 icon: resources/icon.png
 
 base: core24
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: strict # use 'strict' once you have the right plugs and slots
+grade: stable
+confinement: strict
 compression: lzo
 
 apps:
   smart-video-processor:
-    command: smart-video-processor-launcher --no-sandbox
+    command: opt/smart-video-processor/smart-video-processor-launcher --no-sandbox
+    desktop: opt/smart-video-processor/smart-video-processor.desktop
     extensions:
       - gnome
     plugs:
       - network
+      - removable-media
     environment:
       TMPDIR: $XDG_RUNTIME_DIR
 
 parts:
+  mkvmerge:
+    plugin: nil
+    source: https://codeberg.org/mbunkus/mkvtoolnix.git
+    source-type: git
+    source-tag: release-95.0
+    override-build: |
+      git submodule update --init --recursive
+      ./autogen.sh
+      ./configure --prefix=$SNAPCRAFT_PART_INSTALL/usr --disable-gui
+      rake
+      install -D src/mkvmerge $SNAPCRAFT_PART_INSTALL/usr/bin
+    build-packages:
+      - git
+      - build-essential
+      - autoconf
+      - automake
+      - libtool
+      - libbz2-dev
+      - libcurl4-openssl-dev
+      - libexpat1-dev
+      - libflac-dev
+      - liblzma-dev
+      - libmagic-dev
+      - libmatroska-dev
+      - libpcre3-dev
+      - libprotobuf-dev
+      - protobuf-compiler
+      - zlib1g-dev
+      - pkg-config
+      - libvorbis-dev
+      - debhelper
+      - docbook-xsl
+      - fakeroot
+      - libboost-date-time-dev
+      - libboost-dev
+      - libboost-filesystem-dev
+      - libboost-math-dev
+      - libboost-regex-dev
+      - libboost-system-dev
+      - libcmark-dev
+      - libdvdread-dev
+      - libfmt-dev
+      - libgmp-dev
+      - libgtest-dev
+      - liblzo2-dev
+      - libogg-dev
+      - libqt6svg6-dev
+      - nlohmann-json3-dev
+      - po4a
+      - qt6-base-dev
+      - qt6-base-dev-tools
+      - qt6-multimedia-dev
+      - rake
+      - ruby
+      - xsltproc
+    stage-packages:
+      - libbz2-1.0
+      - liblzo2-2
+      - libpcre3
+      - libxerces-c3.2
+      - libexpat1
+      - libflac12t64
+      - libogg0
+      - libvorbis0a
+      - libvorbisenc2
+      - libmagic1
+      - zlib1g
+      - libqt6core6t64
+      - libb2-1
+      - libboost-filesystem1.83.0
+      - libdvdread8t64
+      - libebml5
+      - libfmt9
+      - libmatroska7
+
   smart-video-processor:
     plugin: nil
     source: .
     override-build: |
       npm install electron electron-builder
       npx electron-builder --dir --linux --x64
-      cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/smart-video-processor
-      chmod a+rx $SNAPCRAFT_PART_INSTALL/smart-video-processor
-      cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/
+      mkdir $SNAPCRAFT_PART_INSTALL/opt
+      cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
+      chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
+      cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
+      node ./tools/configure.js ./snap/gui/
+      cp ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/
     build-snaps:
       - node/22/stable
     build-packages:
+      - git
       - unzip
     stage-packages:
       - ffmpeg
-      - mkvtoolnix
       - libproxy1v5
       - glib-networking
       - libblas3

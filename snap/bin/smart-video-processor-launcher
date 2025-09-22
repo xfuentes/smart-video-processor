@@ -12,4 +12,4 @@ mkvmerge --version
 #echo '##### MKVMERGE #####'
 #ldd "$(type -P mkvmerge)"
 
-exec "$SNAP/smart-video-processor/smart-video-processor" "$@"
+exec "$SNAP/opt/smart-video-processor/smart-video-processor" "$@"

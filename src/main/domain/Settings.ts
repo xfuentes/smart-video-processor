@@ -24,8 +24,8 @@ import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
-import { platform } from 'node:os'
 import * as os from 'node:os'
+import { omit } from '@fluentui/react'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -60,7 +60,8 @@ export const defaultSettings: Settings = {
   audioSizeReduction: 70,
   mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
   ffmpegPath: Processes.findCommandSync('ffmpeg', getDefaultFFmpegToolPath('ffmpeg')),
-  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe'))
+  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe')),
+  isLimitedPermissions: Processes.isLimitedPermissions()
 }
 export let currentSettings: Settings = defaultSettings
 
@@ -82,13 +83,18 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
+  currentSettings.isLimitedPermissions = defaultSettings.isLimitedPermissions
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
   if (validation.status === 'success') {
     currentSettings = { ...settings }
-    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
+    Files.writeFileSync(
+      getConfigPath(),
+      'settings.json',
+      JSON.stringify(omit(currentSettings, ['isLimitedPermissions']), null, 2)
+    )
   }
   return validation
 }
@@ -110,14 +116,26 @@ function isValidExecutable(path: string) {
 
 export function validateSettings(settings: Settings) {
   const validationBuilder = new FormValidationBuilder<Settings>(settings)
-  isValidExecutable(settings.mkvMergePath) ||
-    validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
-  if (!isValidExecutable(settings.ffmpegPath)) {
-    if (platform() === 'linux' && process.env.SNAP) {
+  if (!isValidExecutable(settings.mkvMergePath)) {
+    if (isValidExecutable(defaultSettings.mkvMergePath)) {
+      settings.mkvMergePath = defaultSettings.mkvMergePath
+    } else {
+      validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
     }
-    validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
   }
-  isValidExecutable(settings.ffprobePath) ||
-    validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
+  if (!isValidExecutable(settings.ffmpegPath)) {
+    if (isValidExecutable(defaultSettings.ffmpegPath)) {
+      settings.ffmpegPath = defaultSettings.ffmpegPath
+    } else {
+      validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
+    }
+  }
+  if (!isValidExecutable(settings.ffprobePath)) {
+    if (isValidExecutable(defaultSettings.ffprobePath)) {
+      settings.ffprobePath = defaultSettings.ffprobePath
+    } else {
+      validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
+    }
+  }
   return validationBuilder.build()
 }
