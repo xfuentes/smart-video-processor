@@ -41,28 +41,16 @@ const commonLinuxConfig: MakerDebConfig = {
       'This small application in JavaScript is a frontend for various great free command line tools. It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and Vite (https://vite.dev/) frameworks. Its purpose is to help process and encode your DVD or Blu-ray backups.'
   }
 }
-/*
-        apps: {
-          electronApp: {
-            extensions: ['gnome']
-          }
-        },
-        parts: {
-          electronApp: {
-            source: '.',
-            plugin: 'dump',
-            'stage-packages': ['libc6']
-          }
-        }
-
- */
 const config: ForgeConfig = {
   packagerConfig: {
     ignore: [
       /^\/src/,
+      /^\/tools/,
+      /^\/snap/,
+      /^\/.*\.snap/,
       /^\/tests/,
       /^\/\..*/,
-      /(electron.vite.config.ts)|(forge.config.*)|(tsconfig.*)|eslint.config.mjs|(tmp-svp-.*)/
+      /(electron.vite.config.ts)|(forge.config.*)|(electron-builder.yml)|(tsconfig.*)|eslint.config.mjs|(tmp-svp-.*)/
     ],
     icon: path.resolve(__dirname, 'resources', 'icon'),
     name: os.platform() === 'win32' ? 'Smart Video Processor' : 'smart-video-processor'
@@ -77,7 +65,7 @@ const config: ForgeConfig = {
         setupIcon: path.resolve(__dirname, 'resources', 'icon.ico')
       } as MakerSquirrelConfig
     },
-    /*    {
+    {
       name: '@reforged/maker-appimage',
       config: {
         options: {
@@ -87,25 +75,10 @@ const config: ForgeConfig = {
           icon: commonLinuxConfig.options.icon
         }
       } as MakerAppImageConfig
-    },*/
+    },
     {
       name: '@electron-forge/maker-deb',
       config: commonLinuxConfig
-    },
-    {
-      name: '@electron-forge/maker-snap',
-      config: {
-        title: commonLinuxConfig.options.productName,
-        summary: commonLinuxConfig.options.description,
-        description: commonLinuxConfig.options.productDescription,
-        website: 'https://github.com/xfuentes/smart-video-processor',
-        'source-code': 'https://github.com/xfuentes/smart-video-processor',
-        issues: 'https://github.com/xfuentes/smart-video-processor/issues',
-        license: 'GPL-3.0+',
-        contact: 'xfuentes-dev@hotmail.com',
-        confinement: 'strict',
-        grade: 'stable'
-      } as MakerSnapConfig
     }
   ],
   publishers: [
