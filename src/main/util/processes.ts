@@ -100,7 +100,7 @@ export class Processes {
   }
 
   static isLimitedPermissions = (): boolean => {
-    return app.getPath('exe').includes('/snap/')
+    return app?.getPath('exe').includes('/snap/') || false
   }
 
   static setPriority(pid: number, priority: ProcessesPriority) {
