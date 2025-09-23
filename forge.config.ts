@@ -23,6 +23,7 @@ import { MakerAppImageConfig } from '@reforged/maker-appimage'
 import { MakerSquirrelConfig } from '@electron-forge/maker-squirrel'
 import { MakerDebConfig } from '@electron-forge/maker-deb'
 import * as os from 'node:os'
+import { MakerSnap, MakerSnapConfig } from '@electron-forge/maker-snap'
 
 const iconDir = path.resolve(__dirname, 'resources')
 
@@ -35,18 +36,21 @@ const commonLinuxConfig: MakerDebConfig = {
     icon: path.resolve(iconDir, 'icon.png'),
     depends: ['mkvtoolnix', 'ffmpeg'],
     section: 'video',
+    description: 'Automated video processing. Re-Organize, Re-encode, adds metadata and images.',
     productDescription:
       'This small application in JavaScript is a frontend for various great free command line tools. It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and Vite (https://vite.dev/) frameworks. Its purpose is to help process and encode your DVD or Blu-ray backups.'
   }
 }
-
 const config: ForgeConfig = {
   packagerConfig: {
     ignore: [
       /^\/src/,
+      /^\/tools/,
+      /^\/snap/,
+      /^\/.*\.snap/,
       /^\/tests/,
       /^\/\..*/,
-      /(electron.vite.config.ts)|(forge.config.*)|(tsconfig.*)|eslint.config.mjs|(tmp-svp-.*)/
+      /(electron.vite.config.ts)|(forge.config.*)|(electron-builder.yml)|(tsconfig.*)|eslint.config.mjs|(tmp-svp-.*)/
     ],
     icon: path.resolve(__dirname, 'resources', 'icon'),
     name: os.platform() === 'win32' ? 'Smart Video Processor' : 'smart-video-processor'

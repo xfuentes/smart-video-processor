@@ -35,6 +35,20 @@ jobs:
       - name: build
         run: npm run make
 
+      - name: build linux snap
+        if: runner.os == 'Linux'
+        uses: snapcore/action-build@v1
+        id: build
+
+      - name: publish to snap store
+        uses: snapcore/action-publish@v1
+        if: runner.os == 'Linux'
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge
+
       - name: release
         uses: softprops/action-gh-release@v1
         with:
@@ -46,7 +60,7 @@ jobs:
             out/make/**/*.zip
             out/make/**/*.dmg
             out/make/**/*.AppImage
-            out/make/**/*.snap
+            **/*.snap
             out/make/**/*.deb
             out/make/**/*.rpm
             out/make/**/*.tar.gz

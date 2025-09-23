@@ -6,3 +6,7 @@ out
 *.log*
 tmp-svp-*
 coverage/
+
+build/
+
+*.snap
