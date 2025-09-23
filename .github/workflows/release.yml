@@ -33,6 +33,9 @@ jobs:
         run: npm run test
 
       - name: build
+        run: npm run build
+
+      - name: package
         run: npm run make
 
       - name: prepare-snap
