@@ -22,8 +22,6 @@ import { Video } from './Video'
 import { Files } from '../util/files'
 import { debug } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
-import { JobManager } from './jobs/JobManager'
-import path from 'node:path'
 import { Numbers } from '../util/numbers'
 
 export default class Other implements IOther {
@@ -49,13 +47,11 @@ export default class Other implements IOther {
     if (this.poster && Files.fileExistsAndIsReadable(this.poster)) {
       debug(`Using poster file://${this.poster}`)
     } else if (this.posterURL) {
-      const directory = JobManager.getInstance().getTempPath()
+      const fullPath = Files.makeTempFile('Other-poster.jpg')
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image.'
       this.video.fireChangeEvent()
-      const url = new URL(this.posterURL)
-      const filename = path.basename(url.pathname)
-      this.poster = await Files.downloadFile(this.posterURL, directory, filename)
+      this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug(`Wrote poster file://${this.poster}`)
     }
     if (this.poster) {
