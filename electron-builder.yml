@@ -1,0 +1,71 @@
+appId: com.electron.smart-video-processor
+productName: Smart Video Processor
+copyright: Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+icon: resources/icon.png
+directories:
+  buildResources: build
+extraResources:
+  - 'LICENSE'
+files:
+  - 'build/**/*'
+  - 'resources/**'
+  - '!**/.vscode/*'
+  - '!**/.idea/*'
+  - '!**/.github/*'
+  - '!src/*'
+  - '!tests/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - resources/**
+win:
+  executableName: SmartVideoProcessor
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: xfuentes-dev@hotmail.com
+  category: AudioVideo
+snap:
+  summary: 'Automated video processing. Re-Organize, Re-encode, adds metadata and image.'
+  description: |
+    This small application in JavaScript is a frontend for various great free command line tools.
+    It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and Vite (https://vite.dev/) frameworks.
+    Its purpose is to help process and encode your DVD or Blu-ray backups.
+
+  mimeTypes:
+    - video/x-matroska
+    - video/x-msvideo
+    - video/mp4
+
+  stagePackages:
+    - ffmpeg
+    - mkvtoolnix
+    - libglu1-mesa
+    - libnss3
+    - libtinfo6
+    - libnspr4
+    - freeglut3
+    - libtinfo5
+
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false

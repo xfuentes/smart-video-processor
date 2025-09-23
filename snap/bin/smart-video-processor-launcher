@@ -1,0 +1,15 @@
+#!/bin/bash
+export PATH="$SNAP/ffmpeg:$PATH"
+
+ffmpeg -version | grep ffmpeg
+ffprobe -version | grep ffprobe
+mkvmerge --version
+
+#echo '##### FFMPEG #####'
+#ldd "$(type -P ffmpeg)"
+#echo '##### FFPROBE #####'
+#ldd "$(type -P ffprobe)"
+#echo '##### MKVMERGE #####'
+#ldd "$(type -P mkvmerge)"
+
+exec "$SNAP/opt/smart-video-processor/smart-video-processor" "$@"

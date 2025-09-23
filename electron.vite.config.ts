@@ -6,6 +6,7 @@ export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
     build: {
+      outDir: 'build/main',
       rollupOptions: {
         external: ['ntsuspend']
       }
@@ -14,6 +15,7 @@ export default defineConfig({
   preload: {
     plugins: [externalizeDepsPlugin()],
     build: {
+      outDir: 'build/preload',
       rollupOptions: {
         external: ['ntsuspend']
       }
@@ -25,6 +27,9 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    build: {
+      outDir: 'build/renderer'
+    }
   }
 })

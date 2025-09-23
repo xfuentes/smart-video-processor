@@ -92,4 +92,8 @@ export type Settings = {
    * ffprobe command full path.
    */
   ffprobePath: string
+  /**
+   * is this application running with limited permissions
+   */
+  isLimitedPermissions: boolean
 }
