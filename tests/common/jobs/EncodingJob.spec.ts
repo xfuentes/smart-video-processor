@@ -23,6 +23,7 @@ import { Processes } from '../../../src/main/util/processes'
 import { JobManager } from '../../../src/main/domain/jobs/JobManager'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { EncodingJob } from '../../../src/main/domain/jobs/EncodingJob'
+import { Files } from '../../../src/main/util/files'
 
 const encoderSettings = [
   {
@@ -55,9 +56,9 @@ const encoderSettings = [
 ] as EncoderSettings[]
 
 test('Encoding Progression data', async () => {
-  const encodedPath = 'C:\\Download\\encoded'
+  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(JobManager.getInstance(), 'getTempPath').mockImplementation(() => encodedPath)
+  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
   const fullPath = 'C:\\Download\\something.mkv'
   currentSettings.isTestEncodingEnabled = true
@@ -125,7 +126,7 @@ test('Encoding Progression data', async () => {
     2.56,
     undefined
   ])
-  expect(result).toContain(encodedPath)
+  expect(result).toContain(encodedFile)
 })
 
 test('Failing Processing Job', async () => {

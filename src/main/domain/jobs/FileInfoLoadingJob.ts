@@ -19,8 +19,6 @@
 import { Job } from './Job'
 import { Container, MKVMerge } from '../programs/MKVMerge'
 import { Track } from '../Track'
-import { v4 as UUIDv4 } from 'uuid'
-import { JobManager } from './JobManager'
 import { Files } from '../../util/files'
 import { FFprobe } from '../programs/FFprobe'
 import path from 'node:path'
@@ -46,7 +44,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
     if (!unsupported) {
       const videoTrack = result.tracks.find((t) => t.type === TrackType.VIDEO)
       if (videoTrack !== undefined && videoTrack.properties.bitRate === undefined) {
-        const filename = UUIDv4() + '.mkv'
+        const outputPath = Files.makeTempFile('processed.mkv')
         const changes = [
           new Change(
             ChangeSourceType.CONTAINER,
@@ -54,15 +52,13 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
             undefined,
             ChangeProperty.FILENAME,
             undefined,
-            filename
+            outputPath
           )
         ]
-        const outputPath = path.join(JobManager.getInstance().getTempPath('processed'), filename)
-
         await MKVMerge.getInstance().processFile(
           path.basename(this.sourcePath),
           this.sourcePath,
-          JobManager.getInstance().getTempPath('processed'),
+          '/',
           changes,
           [],
           this.setProgression.bind(this)

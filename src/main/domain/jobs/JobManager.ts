@@ -17,14 +17,10 @@
  */
 
 import { Job } from './Job'
-import { Files } from '../../util/files'
-import path from 'node:path'
-import * as fs from 'node:fs'
 import { JobStatus, JobType } from '../../../common/@types/Job'
 
 export class JobManager {
   private static instance: JobManager
-  private tempPath: string | undefined
   private paused: boolean = false
 
   private runningJobs: { [K in JobType]: Job<object | unknown> | undefined } = {
@@ -77,26 +73,6 @@ export class JobManager {
         })
       }
     }
-  }
-
-  getTempPath(subDir?: string): string {
-    if (!this.tempPath) {
-      // Cleanup previous temp path
-      try {
-        Files.cleanupTempPaths('tmp-svp-')
-      } catch (e) {
-        // errors don't matter.
-      }
-      this.tempPath = Files.makeTempPath('tmp-svp-')
-    }
-    if (subDir && this.tempPath !== undefined) {
-      const tempPath = path.join(this.tempPath, subDir)
-      if (!fs.existsSync(tempPath)) {
-        fs.mkdirSync(tempPath)
-      }
-      return tempPath
-    }
-    return this.tempPath
   }
 
   isPaused(jobType: JobType = JobStatus.ENCODING) {

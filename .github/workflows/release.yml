@@ -35,6 +35,10 @@ jobs:
       - name: build
         run: npm run make
 
+      - name: prepare-snap
+        if: runner.os == 'Linux'
+        run: npm run prepare-snap
+
       - name: build linux snap
         if: runner.os == 'Linux'
         uses: snapcore/action-build@v1

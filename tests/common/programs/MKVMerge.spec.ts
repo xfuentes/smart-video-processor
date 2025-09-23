@@ -16,13 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test, vi } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 import { Change } from '../../../src/common/Change'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
 import {
   changeListToMap,
+  cleanTmpFiles,
   getFakeAbsolutePath,
+  registerTmpFiles,
   simulateFileInfoResponse,
   simulateMKVmergeFailure,
   simulateProgramNotFound
@@ -381,7 +383,12 @@ function isWindows() {
   return os.platform() === 'win32'
 }
 
+afterEach(() => {
+  cleanTmpFiles()
+})
+
 test('MKVMerge Input&Output&Language Arguments', async () => {
+  registerTmpFiles()
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spy = genSpawnSpy()
   const fullPath = getFakeAbsolutePath('Download', 'something.mkv')

@@ -24,6 +24,7 @@ import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { JobManager } from '../../../src/main/domain/jobs/JobManager'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
+import { Files } from '../../../src/main/util/files'
 
 const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
@@ -58,15 +59,14 @@ const encoderSettings = [
 ] as EncoderSettings[]
 
 test('FFmpeg Guadalupe mother of humanity progression', async () => {
-  const encodedPath = 'C:\\Download\\encoded'
+  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(JobManager.getInstance(), 'getTempPath').mockImplementation(() => encodedPath)
+  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
   const fullPath = 'C:\\Download\\something.mkv'
   const progresses: number[] = []
   currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().encodeFileInternal(
-    'ABC-321',
     fullPath,
     6120,
     [],
@@ -77,13 +77,13 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
     }
   )
   expect(progresses).toStrictEqual([undefined, undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
-  expect(result).toContain(encodedPath)
+  expect(result).toContain(encodedFile)
 })
 
 test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
-  const encodedPath = 'C:\\Download\\encoded'
+  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(JobManager.getInstance(), 'getTempPath').mockImplementation(() => encodedPath)
+  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
   const fullPath = 'C:\\Download\\something.mkv'
   const progresses: number[] = []
@@ -117,7 +117,7 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
     2.49,
     2.56
   ])
-  expect(result).toContain(encodedPath)
+  expect(result).toContain(encodedFile)
 })
 
 const recordedMarcelinoProgresses = [
@@ -429,15 +429,14 @@ const marcelinoEncoderSettings = [
   }
 ] as EncoderSettings[]
 test('FFmpeg Marcelino audio progression', async () => {
-  const encodedPath = 'C:\\Download\\encoded'
+  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(JobManager.getInstance(), 'getTempPath').mockImplementation(() => encodedPath)
+  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgressionMarcelino)
   const fullPath = 'C:\\Download\\something.mkv'
   const progresses: number[] = []
   currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().encodeFileInternal(
-    'ABC-321',
     fullPath,
     4591.4,
     [],
@@ -475,5 +474,5 @@ test('FFmpeg Marcelino audio progression', async () => {
     29.252033333333333,
     1
   ])
-  expect(result).toContain(encodedPath)
+  expect(result).toContain(encodedFile)
 })

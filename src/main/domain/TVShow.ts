@@ -23,9 +23,7 @@ import Chalk from 'chalk'
 import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
 import { Strings } from '../../common/Strings'
 import { Numbers } from '../util/numbers'
-import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
-import path from 'node:path'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
@@ -130,18 +128,12 @@ export class TVShow implements ITVShow {
       this.video.searchResults = [seriesData]
     }
 
-    const directory = JobManager.getInstance().getTempPath('TVDB-' + this.theTVDB)
-
-    let filename = 'cover.jpg'
-    const fullPath = path.join(directory, filename)
-    if (Files.fileExistsAndIsReadable(fullPath)) {
-      this.poster = fullPath
-      debug(`Re-using poster file://${this.poster}`)
-    } else if (this.posterURL) {
+    if (this.posterURL) {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image from TheTVDB.'
       this.video.fireChangeEvent()
-      this.poster = await Files.downloadFile(this.posterURL, directory, filename)
+      const fullPath = Files.makeTempFile('TVDB-' + this.theTVDB + '-cover.jpg')
+      this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug(`Wrote poster file://${this.poster}`)
     }
     if (this.episodePosterURL || this.poster) {
@@ -155,8 +147,9 @@ export class TVShow implements ITVShow {
       } else if (this.episodePosterURL) {
         this.video.message = 'Downloading episode image from TheTVDB.'
         this.video.fireChangeEvent()
-        filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode) : this.absoluteEpisode}.jpg`
-        this.episodePoster = await Files.downloadFile(this.episodePosterURL, directory, filename)
+        const filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode) : this.absoluteEpisode}`
+        const fullPath = Files.makeTempFile('TVDB-' + this.theTVDB + '-' + filename + '.jpg')
+        this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
         debug(`wrote episode image file://${this.episodePoster}`)
         this.video.poster = {
           path: this.episodePoster,

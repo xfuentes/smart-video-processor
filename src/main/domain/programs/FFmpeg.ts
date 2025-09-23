@@ -18,16 +18,14 @@
 
 import { Processes } from '../../util/processes'
 import { CommandProgress } from './CommandProgress'
-import { JobManager } from '../jobs/JobManager'
-import { v4 as UUIDv4 } from 'uuid'
 import { Track } from '../Track'
 import { ChildProcess } from 'node:child_process'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
-import path from 'node:path'
 import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
 import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
+import { Files } from '../../util/files'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
@@ -65,9 +63,8 @@ export class FFmpeg extends CommandProgress {
     settings: EncoderSettings[],
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
-    const uuid = UUIDv4()
     if (!this.isTwoPassesRequired(settings)) {
-      return this.encodeFileInternal(uuid, path, durationSeconds, tracks, settings, undefined, progressNotifier)
+      return this.encodeFileInternal(path, durationSeconds, tracks, settings, undefined, progressNotifier)
     }
 
     let currentPass = 1
@@ -103,7 +100,6 @@ export class FFmpeg extends CommandProgress {
 
     const firstPassAt = Date.now()
     await this.encodeFileInternal(
-      uuid,
       path,
       durationSeconds,
       tracks,
@@ -116,7 +112,6 @@ export class FFmpeg extends CommandProgress {
     currentPass++
     const secondPassAt = Date.now()
     const prom = this.encodeFileInternal(
-      uuid,
       path,
       durationSeconds,
       tracks,
@@ -132,7 +127,6 @@ export class FFmpeg extends CommandProgress {
   }
 
   async encodeFileInternal(
-    uuid: string,
     sourcePath: string,
     durationSeconds: number,
     tracks: Track[],
@@ -144,7 +138,7 @@ export class FFmpeg extends CommandProgress {
     if (progressNotifier) {
       progressNotifier({ progress: undefined, pass })
     }
-    const encodedPath = path.join(JobManager.getInstance().getTempPath('encoded'), uuid + '.mkv')
+    const encodedPath = Files.makeTempFile('encoded.mkv')
     const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass)
     const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = encodedPath
