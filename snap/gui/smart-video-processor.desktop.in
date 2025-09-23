@@ -1,0 +1,12 @@
+[Desktop Entry]
+Exec=__NAME__
+Icon=${SNAP}/meta/gui/__NAME__.png
+Version=__VERSION__
+Type=Application
+Terminal=false
+Name=Smart Video Processor
+Comment=__DESCRIPTION__
+Categories=AudioVideo
+MimeType=video/x-matroska;video/x-msvideo;video/mp4
+Keywords=encode;organize;video;movie;show
+

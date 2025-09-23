@@ -24,6 +24,7 @@ import { debug } from './log'
 import * as os from 'node:os'
 import * as fs from 'node:fs'
 import { Dict, ProcessEnv, ProcessesPriority } from '../../common/@types/processes'
+import { app } from 'electron'
 
 const defaultOptions = { spawn: true }
 const defaultLocale = 'en-US'
@@ -98,26 +99,33 @@ export class Processes {
     })
   }
 
+  static isLimitedPermissions = (): boolean => {
+    return app?.getPath('exe').includes('/snap/') || false
+  }
+
   static setPriority(pid: number, priority: ProcessesPriority) {
-    let priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
-    switch (priority) {
-      case ProcessesPriority.LOW:
-        priorityNum = os.constants.priority.PRIORITY_LOW
-        break
-      case ProcessesPriority.BELOW_NORMAL:
-        priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
-        break
-      case ProcessesPriority.NORMAL:
-        priorityNum = os.constants.priority.PRIORITY_NORMAL
-        break
-      case ProcessesPriority.ABOVE_NORMAL:
-        priorityNum = os.constants.priority.PRIORITY_ABOVE_NORMAL
-        break
-      case ProcessesPriority.HIGH:
-        priorityNum = os.constants.priority.PRIORITY_HIGH
-        break
+    if (!this.isLimitedPermissions()) {
+      let priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
+      switch (priority) {
+        case ProcessesPriority.LOW:
+          priorityNum = os.constants.priority.PRIORITY_LOW
+          break
+        case ProcessesPriority.BELOW_NORMAL:
+          priorityNum = os.constants.priority.PRIORITY_BELOW_NORMAL
+          break
+        case ProcessesPriority.NORMAL:
+          priorityNum = os.constants.priority.PRIORITY_NORMAL
+          break
+        case ProcessesPriority.ABOVE_NORMAL:
+          priorityNum = os.constants.priority.PRIORITY_ABOVE_NORMAL
+          break
+        case ProcessesPriority.HIGH:
+          priorityNum = os.constants.priority.PRIORITY_HIGH
+          break
+      }
+      debug('Set priority: ' + pid + ' priority: ' + priorityNum)
+      os.setPriority(pid, priorityNum)
     }
-    os.setPriority(pid, priorityNum)
   }
 
   static isWindowsPlatform() {
