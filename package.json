@@ -31,7 +31,7 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "package": "electron-vite build && electron-forge package",
-    "make": "electron-vite build && electron-forge make",
+    "make": "electron-forge make",
     "publish": "electron-vite build && electron-forge publish",
     "prepare-snap": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
     "test": "vitest run",
