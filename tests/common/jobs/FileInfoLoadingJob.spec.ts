@@ -16,9 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test, vi } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 import { ChildProcessWithoutNullStreams, SpawnOptionsWithStdioTuple, StdioPipe } from 'node:child_process'
-import { JobStateChange, recordJobStates, simulateFileInfoResponse, simulateMKVMergeProgression } from '../testUtils'
+import {
+  cleanTmpFiles,
+  JobStateChange,
+  recordJobStates,
+  registerTmpFiles,
+  simulateFileInfoResponse,
+  simulateMKVMergeProgression
+} from '../testUtils'
 import { Processes } from '../../../src/main/util/processes'
 import { FFprobe } from '../../../src/main/domain/programs/FFprobe'
 import { Files } from '../../../src/main/util/files'
@@ -47,7 +54,12 @@ const genSpawnSpyFileInfo = (origPath: string, origJsonFileName: string, process
       }
     )
 
+afterEach(() => {
+  cleanTmpFiles()
+})
+
 test('Job Fermer Gueule Info', async () => {
+  registerTmpFiles()
   const origPath = 'C:\\Download\\original.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spy = genSpawnSpyFileInfo(origPath, 'mkvMergeInfoFermerGueule.json', 'mkvMergeInfoFermerGueuleProcessed.json')

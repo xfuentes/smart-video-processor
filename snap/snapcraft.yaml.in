@@ -1,7 +1,7 @@
-name: smart-video-processor
+name: __NAME__
 title: Smart Video Processor
-version: 1.1.0
-summary: 'Automated video processing. Re-Organize, Re-encode, adds metadata and image.'
+version: __VERSION__
+summary: '__DESCRIPTION__'
 description: 'This small application is a frontend for FFmpeg and MKVToolNix. Its purpose is to help process and encode your DVD or Blu-ray backups.'
 
 license: GPL-3.0+
@@ -10,7 +10,7 @@ issues: https://github.com/xfuentes/smart-video-processor/issues
 source-code: https://github.com/xfuentes/smart-video-processor
 website: https://github.com/xfuentes/smart-video-processor
 donation: https://paypal.me/xfuentesdev
-icon: resources/icon.png
+icon: gui/smart-video-processor.png
 
 base: core24
 grade: stable
@@ -115,7 +115,6 @@ parts:
       cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
-      node ./tools/configure.js ./snap/gui/
       cp ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/
     build-snaps:
       - node/22/stable

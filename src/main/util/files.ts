@@ -22,13 +22,10 @@ import http from 'node:http'
 import { debug } from './log'
 import path from 'node:path'
 import * as https from 'node:https'
+import * as tmp from 'tmp'
 
 export class Files {
-  static loadTextFileSync(
-    dir: string,
-    name: string,
-    encoding: BufferEncoding = 'utf8'
-  ): string | undefined {
+  static loadTextFileSync(dir: string, name: string, encoding: BufferEncoding = 'utf8'): string | undefined {
     const filename = path.join(dir, name)
     try {
       debug('Loading file ' + filename)
@@ -69,9 +66,9 @@ export class Files {
     fs.writeFileSync(filename, data, encoding)
   }
 
-  static makeTempPath(template: string): string {
-    const tempPath = path.join(process.cwd(), template)
-    return fs.mkdtempSync(tempPath)
+  static makeTempFile(template: string): string {
+    tmp.setGracefulCleanup()
+    return tmp.fileSync({ template: 'svp-XXXXXX-' + template, discardDescriptor: true }).name
   }
 
   static cleanupTempPaths(template: string) {
@@ -188,10 +185,9 @@ export class Files {
     return arr
   }
 
-  static downloadFile(url: string, directory: string, filename: string): Promise<string> {
+  static downloadFile(url: string, fullPath: string, fd?: number | fs.promises.FileHandle): Promise<string> {
     return new Promise((resolve, reject) => {
-      const fullPath = path.join(directory, filename)
-      const file = fs.createWriteStream(fullPath)
+      const file = fs.createWriteStream(fullPath, { fd })
 
       https
         .get(url, (response: http.IncomingMessage) => {

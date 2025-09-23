@@ -24,9 +24,7 @@ import { TMDBClient } from './clients/TMDBClient'
 import Chalk from 'chalk'
 import { Countries, Country } from '../../common/Countries'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
-import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
-import path from 'node:path'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
@@ -145,18 +143,12 @@ export default class Movie implements IMovie {
         )
       }
 
-      const directory = JobManager.getInstance().getTempPath('TMDB-' + this.tmdb)
-
-      const filename = 'cover.jpg'
-      const fullPath = path.join(directory, filename)
-      if (Files.fileExistsAndIsReadable(fullPath)) {
-        this.poster = fullPath
-        debug(`Re-using poster file://${this.poster}`)
-      } else if (this.posterURL) {
+      const fullPath = Files.makeTempFile('TMDB-' + this.tmdb + '.jpg')
+      if (this.posterURL) {
         this.video.status = JobStatus.LOADING
         this.video.message = 'Downloading poster image from TMDB.'
         this.video.fireChangeEvent()
-        this.poster = await Files.downloadFile(this.posterURL, directory, filename)
+        this.poster = await Files.downloadFile(this.posterURL, fullPath)
         debug(`Wrote poster file://${this.poster}`)
       }
       if (this.poster && this.posterURL) {

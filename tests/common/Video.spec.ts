@@ -16,10 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
+import { afterEach, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
-import { getFakeAbsolutePath } from './testUtils'
+import { cleanTmpFiles, getFakeAbsolutePath, registerTmpFiles } from './testUtils'
+
+afterEach(() => {
+  cleanTmpFiles()
+})
 
 test('TV-Show extracts season and episode number', () => {
   const video = new Video(
@@ -73,6 +77,7 @@ test('Movie extracts tmdb ID', async () => {
 })
 
 test('TV-Show Retrieve Language IETF', async () => {
+  registerTmpFiles()
   const video = new Video(
     getFakeAbsolutePath(
       'out put',

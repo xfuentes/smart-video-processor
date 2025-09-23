@@ -10,3 +10,5 @@ coverage/
 build/
 
 *.snap
+/snap/snapcraft.yaml
+/snap/gui/smart-video-processor.desktop

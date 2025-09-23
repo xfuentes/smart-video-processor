@@ -178,10 +178,6 @@ export class MKVMerge extends CommandProgress {
     changes: Change[],
     tracks: Track[]
   ): string[] {
-    if (!path.isAbsolute(outputDirectory)) {
-      throw Error('Invalid output Directory, it should be absolute: ' + outputDirectory)
-    }
-
     let mkOptions: string[] = []
 
     let newFilename =
@@ -191,6 +187,15 @@ export class MKVMerge extends CommandProgress {
           c.changeType === ChangeType.UPDATE &&
           c.property === ChangeProperty.FILENAME
       )?.newValue as string | undefined) ?? ''
+
+    if (path.isAbsolute(newFilename)) {
+      outputDirectory = path.dirname(newFilename)
+      newFilename = path.basename(newFilename)
+    }
+
+    if (!path.isAbsolute(outputDirectory)) {
+      throw Error('Invalid output Directory, it should be absolute: ' + outputDirectory)
+    }
 
     if (!newFilename) {
       newFilename = originalFilename
