@@ -26,6 +26,7 @@ import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
 import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
+import path from 'node:path'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
@@ -57,14 +58,24 @@ export class FFmpeg extends CommandProgress {
   }
 
   public async encodeFile(
-    path: string,
+    sourcePath: string,
+    destinationPath: string,
     durationSeconds: number,
     tracks: Track[],
     settings: EncoderSettings[],
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     if (!this.isTwoPassesRequired(settings)) {
-      return this.encodeFileInternal(path, durationSeconds, tracks, settings, undefined, undefined, progressNotifier)
+      return this.encodeFileInternal(
+        sourcePath,
+        destinationPath,
+        durationSeconds,
+        tracks,
+        settings,
+        undefined,
+        undefined,
+        progressNotifier
+      )
     }
 
     const statFile = Files.makeTempFile('2pass', true)
@@ -101,7 +112,8 @@ export class FFmpeg extends CommandProgress {
 
     const firstPassAt = Date.now()
     await this.encodeFileInternal(
-      path,
+      sourcePath,
+      destinationPath,
       durationSeconds,
       tracks,
       settings,
@@ -114,7 +126,8 @@ export class FFmpeg extends CommandProgress {
     currentPass++
     const secondPassAt = Date.now()
     const prom = this.encodeFileInternal(
-      path,
+      sourcePath,
+      destinationPath,
       durationSeconds,
       tracks,
       settings,
@@ -132,6 +145,7 @@ export class FFmpeg extends CommandProgress {
 
   async encodeFileInternal(
     sourcePath: string,
+    destinationPath: string,
     durationSeconds: number,
     tracks: Track[],
     settings: EncoderSettings[],
@@ -143,7 +157,8 @@ export class FFmpeg extends CommandProgress {
     if (progressNotifier) {
       progressNotifier({ progress: undefined, pass })
     }
-    const encodedPath = pass === 1 ? undefined : Files.makeTempFile('encoded.mkv')
+    const encodedPath =
+      pass === 1 ? undefined : path.join(destinationPath, path.basename(Files.makeTempFile('encoding-temp.mkv', true)))
     const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, statFile)
     const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = encodedPath ?? statFile ?? ''
