@@ -18,12 +18,13 @@ These can eventually be made with the excellent MakeMKV (https://www.makemkv.com
 This application depends on FFmpeg and MKVToolNix (preferably release-95.0 and above).
 
 ### a) Ubuntu Linux
-As debian package:
+[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
+
+Alternatively as debian package:
   ```shell
     sudo apt-get install mkvtoolnix ffmpeg
     sudo dpkg -i ./smart-video-processor_0.2.0_amd64.deb
   ```
-As snap just go to the *Application Center* and search for *Smart Video Processor*
 
 ### b) Windows 10 or later
 
