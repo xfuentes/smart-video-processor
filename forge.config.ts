@@ -23,7 +23,6 @@ import { MakerAppImageConfig } from '@reforged/maker-appimage'
 import { MakerSquirrelConfig } from '@electron-forge/maker-squirrel'
 import { MakerDebConfig } from '@electron-forge/maker-deb'
 import * as os from 'node:os'
-import { MakerSnap, MakerSnapConfig } from '@electron-forge/maker-snap'
 
 const iconDir = path.resolve(__dirname, 'resources')
 

@@ -72,6 +72,7 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
     [],
     encoderSettings,
     undefined,
+    undefined,
     ({ progress }) => {
       progresses.push(progress)
     }
@@ -441,6 +442,7 @@ test('FFmpeg Marcelino audio progression', async () => {
     4591.4,
     [],
     marcelinoEncoderSettings,
+    undefined,
     undefined,
     ({ progress }) => {
       progresses.push(progress)

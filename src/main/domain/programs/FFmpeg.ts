@@ -125,7 +125,7 @@ export class FFmpeg extends CommandProgress {
     await prom.finally(() => {
       const secondPassEnd = Date.now()
       debug('Second pass completed in ' + (secondPassEnd - secondPassAt) / 1000 + ' seconds.')
-      Files.cleanupFiles(statFile + '*')
+      // Files.cleanupFiles(statFile + '*')
     })
     return prom
   }
@@ -242,10 +242,9 @@ export class FFmpeg extends CommandProgress {
           if (setting.codec === VideoCodec.H265) {
             ffOptions.push('-c:v:' + videoIndex, 'libx265')
             if (pass !== undefined && statFile !== undefined) {
-              ffOptions.push(
-                '-x265-params',
-                `log-level=error:pass=${pass}:stats=${statFile}${pass == 1 ? ':no-slow-firstpass=1' : ''}`
-              )
+              ffOptions.push('-x265-params', `log-level=error${pass == 1 ? ':no-slow-firstpass=1' : ''}`)
+              ffOptions.push('-pass', `${pass}`)
+              ffOptions.push('-passlogfile', statFile)
             }
           } else {
             ffOptions.push('-c:v:' + videoIndex, 'libx264')
