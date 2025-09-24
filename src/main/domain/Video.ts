@@ -318,9 +318,9 @@ export class Video implements IVideo {
     let originalLanguage: LanguageIETF | undefined
     if (this.type === VideoType.MOVIE) {
       originalLanguage = this.movie.getOriginalLanguage()
-    } else if(this.type === VideoType.TV_SHOW) {
+    } else if (this.type === VideoType.TV_SHOW) {
       originalLanguage = this.tvShow.getOriginalLanguage()
-    } else if(this.type === VideoType.OTHER) {
+    } else if (this.type === VideoType.OTHER) {
       originalLanguage = this.other.getOriginalLanguage()
     }
     return originalLanguage
@@ -344,31 +344,39 @@ export class Video implements IVideo {
       encodingRequired = true
     }
     this.queued = true
+    let outputDirectory = this.getOutputDirectory()
+    if (!path.isAbsolute(outputDirectory)) {
+      // Output path is relative to the original filename dirname.
+      outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
+    }
+    fs.mkdirSync(outputDirectory, { recursive: true })
+
     if (encodingRequired && this.container !== undefined) {
       encodingJob = this.job = this.attachJob(
-        new EncodingJob(this.sourcePath, this.container.durationSeconds, this.tracks, finalEncoderSettings)
+        new EncodingJob(
+          this.sourcePath,
+          outputDirectory,
+          this.container.durationSeconds,
+          this.tracks,
+          finalEncoderSettings
+        )
       )
       this.encodedPath = (await this.job.queue()) as string
     }
-    await this.merge(encodingJob?.getDuration())
+    await this.merge(outputDirectory, encodingJob?.getDuration())
   }
 
   getFinalEncoderSettings() {
     return this.encoderSettings.filter((s) => this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId))
   }
 
-  async merge(extraDuration?: number) {
+  async merge(outputDirectory: string, extraDuration?: number) {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
       if (this.tvShow.order === 'official' && this.tvShow.season !== undefined) {
         subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
       }
-    }
-    let outputDirectory = this.getOutputDirectory()
-    if (!path.isAbsolute(outputDirectory)) {
-      // Output path is relative to the original filename dirname.
-      outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
     }
 
     this.job = this.attachJob(
@@ -383,6 +391,9 @@ export class Video implements IVideo {
       )
     )
     await this.job.queue()
+    if (this.encodedPath) {
+      Files.cleanupFiles(this.encodedPath)
+    }
     this.encodedPath = undefined
     this.queued = false
     if (this.status === JobStatus.SUCCESS) {
@@ -556,6 +567,37 @@ export class Video implements IVideo {
     return undefined
   }
 
+  toJSON(): IVideo {
+    return {
+      uuid: this.uuid,
+      filename: this.filename,
+      size: this.size,
+      pixels: this.pixels,
+      type: this.type,
+      container: this.container,
+      tracks: this.tracks.map((t) => t.toJSON()),
+      changes: this.changes.map((c) => c.toJSON()),
+      hints: this.hints.map((h) => h.toJSON()),
+      job: this.job,
+      status: this.status,
+      message: this.message,
+      progression: this.progression,
+      loading: this.loading,
+      matched: this.matched,
+      queued: this.queued,
+      processed: this.processed,
+      searchBy: this.searchBy,
+      searchResults: this.searchResults.map((sr) => sr.toJSON()),
+      selectedSearchResultID: this.selectedSearchResultID,
+      ...(this.type === VideoType.MOVIE ? { movie: this.movie.toJSON() } : {}),
+      ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {}),
+      ...(this.type === VideoType.OTHER ? { other: this.other.toJSON() } : {}),
+      hintMissing: this.hintMissing,
+      encoderSettings: this.encoderSettings,
+      trackEncodingEnabled: this.trackEncodingEnabled
+    }
+  }
+
   private extractInfosFromFilename() {
     const filename = Files.cleanFilename(this.filename)
     try {
@@ -652,36 +694,5 @@ export class Video implements IVideo {
     }
 
     this.audioVersions = AudioVersions.extractVersions(filename)
-  }
-
-  toJSON(): IVideo {
-    return {
-      uuid: this.uuid,
-      filename: this.filename,
-      size: this.size,
-      pixels: this.pixels,
-      type: this.type,
-      container: this.container,
-      tracks: this.tracks.map((t) => t.toJSON()),
-      changes: this.changes.map((c) => c.toJSON()),
-      hints: this.hints.map((h) => h.toJSON()),
-      job: this.job,
-      status: this.status,
-      message: this.message,
-      progression: this.progression,
-      loading: this.loading,
-      matched: this.matched,
-      queued: this.queued,
-      processed: this.processed,
-      searchBy: this.searchBy,
-      searchResults: this.searchResults.map((sr) => sr.toJSON()),
-      selectedSearchResultID: this.selectedSearchResultID,
-      ...(this.type === VideoType.MOVIE ? { movie: this.movie.toJSON() } : {}),
-      ...(this.type === VideoType.TV_SHOW ? { tvShow: this.tvShow.toJSON() } : {}),
-      ...(this.type === VideoType.OTHER ? { other: this.other.toJSON() } : {}),
-      hintMissing: this.hintMissing,
-      encoderSettings: this.encoderSettings,
-      trackEncodingEnabled: this.trackEncodingEnabled
-    }
   }
 }
