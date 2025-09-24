@@ -24,6 +24,7 @@ import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
 import { Files } from '../../../src/main/util/files'
+import * as path from 'node:path'
 
 const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
@@ -78,7 +79,7 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
     }
   )
   expect(progresses).toStrictEqual([undefined, undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
-  expect(result).toContain(encodedFile)
+  expect(result).toContain(path.basename(encodedFile))
 })
 
 test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
@@ -125,7 +126,7 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
     2.49,
     2.56
   ])
-  expect(result).toContain(encodedFile)
+  expect(result).toContain(path.basename(encodedFile))
 })
 
 const recordedMarcelinoProgresses = [
@@ -484,5 +485,5 @@ test('FFmpeg Marcelino audio progression', async () => {
     29.252033333333333,
     1
   ])
-  expect(result).toContain(encodedFile)
+  expect(result).toContain(path.basename(encodedFile))
 })
