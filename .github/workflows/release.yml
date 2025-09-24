@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-11-arm, windows-2025, ubuntu-24.04, ubuntu-24.04-arm ]
+        os: [ windows-2025, ubuntu-24.04, ubuntu-24.04-arm ] # windows-11-arm removed because conflicting with x64
 
     steps:
       - name: Check out Git repository
