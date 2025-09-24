@@ -21,7 +21,6 @@ import { simulateFFmpegProgression } from '../testUtils'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { Processes } from '../../../src/main/util/processes'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
-import { JobManager } from '../../../src/main/domain/jobs/JobManager'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
 import { Files } from '../../../src/main/util/files'
@@ -68,6 +67,7 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
   currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().encodeFileInternal(
     fullPath,
+    '/tmp/',
     6120,
     [],
     encoderSettings,
@@ -90,10 +90,17 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
   const progresses: number[] = []
   const xSpeeds: number[] = []
   currentSettings.isTestEncodingEnabled = true
-  const result = await FFmpeg.getInstance().encodeFile(fullPath, 6120, [], encoderSettings, ({ progress, xSpeed }) => {
-    progresses.push(progress)
-    xSpeeds.push(xSpeed)
-  })
+  const result = await FFmpeg.getInstance().encodeFile(
+    fullPath,
+    '/tmp',
+    6120,
+    [],
+    encoderSettings,
+    ({ progress, xSpeed }) => {
+      progresses.push(progress)
+      xSpeeds.push(xSpeed)
+    }
+  )
   let lastProgress = -1
   for (const progress of progresses) {
     if (progress !== undefined) {
@@ -439,6 +446,7 @@ test('FFmpeg Marcelino audio progression', async () => {
   currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().encodeFileInternal(
     fullPath,
+    '/tmp',
     4591.4,
     [],
     marcelinoEncoderSettings,

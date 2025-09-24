@@ -17,12 +17,13 @@
  */
 
 import * as fs from 'node:fs'
-import { globSync, PathLike, WriteFileOptions } from 'node:fs'
+import { PathLike, WriteFileOptions } from 'node:fs'
 import http from 'node:http'
 import { debug } from './log'
 import path from 'node:path'
 import * as https from 'node:https'
 import * as tmp from 'tmp'
+import { globSync } from 'glob'
 
 export class Files {
   static loadTextFileSync(dir: string, name: string, encoding: BufferEncoding = 'utf8'): string | undefined {
