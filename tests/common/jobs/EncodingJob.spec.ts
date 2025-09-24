@@ -29,6 +29,7 @@ import { Processes } from '../../../src/main/util/processes'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { EncodingJob } from '../../../src/main/domain/jobs/EncodingJob'
 import { Files } from '../../../src/main/util/files'
+import * as path from 'node:path'
 
 const encoderSettings = [
   {
@@ -131,7 +132,7 @@ test('Encoding Progression data', async () => {
     2.56,
     undefined
   ])
-  expect(result).toContain(encodedFile)
+  expect(result).toContain(path.basename(encodedFile))
 })
 
 test('Failing Processing Job', async () => {
