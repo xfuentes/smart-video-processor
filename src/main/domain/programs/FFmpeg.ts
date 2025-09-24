@@ -67,7 +67,7 @@ export class FFmpeg extends CommandProgress {
       return this.encodeFileInternal(path, durationSeconds, tracks, settings, undefined, undefined, progressNotifier)
     }
 
-    const statFile = Files.makeTempFile('first-pass', true)
+    const statFile = Files.makeTempFile('2pass', true)
     let currentPass = 1
 
     const progressNotifierAggregator: ProgressNotifier = ({ progress, xSpeed, countdown, process }) => {
@@ -230,7 +230,7 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push('-map', '0') // Copy all streams by default
 
     if (currentSettings.isTestEncodingEnabled) {
-      ffOptions.push('-ss', '00:30:00', '-t', '30') // Output only a 30 seconds extract to judge quality.
+      ffOptions.push('-ss', '00:01:00', '-t', '30') // Output only a 30 seconds extract to judge quality.
     }
 
     let videoIndex = 0
@@ -242,9 +242,11 @@ export class FFmpeg extends CommandProgress {
           if (setting.codec === VideoCodec.H265) {
             ffOptions.push('-c:v:' + videoIndex, 'libx265')
             if (pass !== undefined && statFile !== undefined) {
-              ffOptions.push('-x265-params', `log-level=error${pass == 1 ? ':no-slow-firstpass=1' : ''}`)
-              ffOptions.push('-pass', `${pass}`)
-              ffOptions.push('-passlogfile', statFile)
+              const statFileEscaped = statFile.replaceAll('\\', '/').replaceAll(':', '\\:');
+              ffOptions.push(
+                '-x265-params',
+                `log-level=error:pass=${pass}:stats=${statFileEscaped}${pass == 1 ? ':no-slow-firstpass=1' : ''}`
+              )
             }
           } else {
             ffOptions.push('-c:v:' + videoIndex, 'libx264')
