@@ -24,14 +24,22 @@ import { EncoderSettings } from '../../../common/@types/Encoding'
 import { JobStatus } from '../../../common/@types/Job'
 
 export class EncodingJob extends Job<string> {
-  private readonly path: string
+  private readonly sourcePath: string
+  private readonly destinationPath: string
   private readonly durationSeconds: number
   private readonly settings: EncoderSettings[]
   private readonly tracks: Track[]
 
-  constructor(path: string, durationSeconds: number, tracks: Track[], settings: EncoderSettings[]) {
+  constructor(
+    sourcePath: string,
+    destinationPath: string,
+    durationSeconds: number,
+    tracks: Track[],
+    settings: EncoderSettings[]
+  ) {
     super(JobStatus.ENCODING, 'Encoding, please wait.')
-    this.path = path
+    this.sourcePath = sourcePath
+    this.destinationPath = destinationPath
     this.durationSeconds = durationSeconds
     this.settings = settings
     this.tracks = tracks
@@ -55,7 +63,8 @@ export class EncodingJob extends Job<string> {
 
   protected executeInternal(): Promise<string> {
     return FFmpeg.getInstance().encodeFile(
-      this.path,
+      this.sourcePath,
+      this.destinationPath,
       this.durationSeconds,
       this.tracks,
       this.settings,

@@ -15,19 +15,21 @@ These can eventually be made with the excellent MakeMKV (https://www.makemkv.com
 
 ## 1) Installation
 
-This application depends on FFmpeg and MKVToolNix.
+This application depends on FFmpeg and MKVToolNix (preferably release-95.0 and above).
 
 ### a) Ubuntu Linux
-
+As debian package:
   ```shell
     sudo apt-get install mkvtoolnix ffmpeg
     sudo dpkg -i ./smart-video-processor_0.2.0_amd64.deb
   ```
+As snap just go to the *Application Center* and search for *Smart Video Processor*
 
 ### b) Windows 10 or later
 
 Install MKVToolNix (https://www.matroska.org/downloads/mkvtoolnix.html)
 and FFmpeg (https://ffmpeg.org/) you can get the binaries from: https://www.gyan.dev/ffmpeg/builds/
+Run the Smart.Video.Processor-1.3.3.Setup.exe it will install and add a desktop shortcut.
 
 ## 2) Set your preferences
 
