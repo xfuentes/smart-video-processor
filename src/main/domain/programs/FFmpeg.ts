@@ -64,9 +64,10 @@ export class FFmpeg extends CommandProgress {
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     if (!this.isTwoPassesRequired(settings)) {
-      return this.encodeFileInternal(path, durationSeconds, tracks, settings, undefined, progressNotifier)
+      return this.encodeFileInternal(path, durationSeconds, tracks, settings, undefined, undefined, progressNotifier)
     }
 
+    const statFile = Files.makeTempFile('first-pass', true)
     let currentPass = 1
 
     const progressNotifierAggregator: ProgressNotifier = ({ progress, xSpeed, countdown, process }) => {
@@ -105,6 +106,7 @@ export class FFmpeg extends CommandProgress {
       tracks,
       settings,
       currentPass,
+      statFile,
       progressNotifierAggregator
     )
     const firstPassEnd = Date.now()
@@ -117,11 +119,13 @@ export class FFmpeg extends CommandProgress {
       tracks,
       settings,
       currentPass,
+      statFile,
       progressNotifierAggregator
     )
     await prom.finally(() => {
       const secondPassEnd = Date.now()
       debug('Second pass completed in ' + (secondPassEnd - secondPassAt) / 1000 + ' seconds.')
+      Files.cleanupFiles(statFile + '*')
     })
     return prom
   }
@@ -132,16 +136,17 @@ export class FFmpeg extends CommandProgress {
     tracks: Track[],
     settings: EncoderSettings[],
     pass?: number,
+    statFile?: string,
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     durationSeconds = currentSettings.isTestEncodingEnabled ? 30 : durationSeconds
     if (progressNotifier) {
       progressNotifier({ progress: undefined, pass })
     }
-    const encodedPath = Files.makeTempFile('encoded.mkv')
-    const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass)
+    const encodedPath = pass === 1 ? undefined : Files.makeTempFile('encoded.mkv')
+    const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, statFile)
     const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
-      const response = encodedPath
+      const response = encodedPath ?? statFile ?? ''
       let error: string | undefined = undefined
       if (progressNotifier != undefined) {
         if (stdout != undefined) {
@@ -184,7 +189,15 @@ export class FFmpeg extends CommandProgress {
       return await super.execute(args, outputInterpreter)
     } catch (error) {
       if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
-        const workaroundArgs = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, true)
+        const workaroundArgs = this.generateEncodingArguments(
+          sourcePath,
+          encodedPath,
+          tracks,
+          settings,
+          pass,
+          statFile,
+          true
+        )
         return await super.execute(workaroundArgs, outputInterpreter)
       }
       throw error
@@ -193,10 +206,11 @@ export class FFmpeg extends CommandProgress {
 
   private generateEncodingArguments(
     sourcePath: string,
-    encodedPath: string,
+    encodedPath: string | undefined,
     tracks: Track[],
     settings: EncoderSettings[],
     pass: number | undefined = undefined,
+    statFile: string | undefined = undefined,
     maxMuxingQueueSizeWorkaround: boolean = false
   ): string[] {
     const ffOptions: string[] = []
@@ -227,14 +241,17 @@ export class FFmpeg extends CommandProgress {
         if (setting.trackType === TrackType.VIDEO) {
           if (setting.codec === VideoCodec.H265) {
             ffOptions.push('-c:v:' + videoIndex, 'libx265')
-            if (pass !== undefined) {
-              ffOptions.push('-x265-params', `log-level=error,pass=${pass}:stats=${encodedPath}`)
+            if (pass !== undefined && statFile !== undefined) {
+              ffOptions.push(
+                '-x265-params',
+                `log-level=error:pass=${pass}:stats=${statFile}${pass == 1 ? ':no-slow-firstpass=1' : ''}`
+              )
             }
           } else {
             ffOptions.push('-c:v:' + videoIndex, 'libx264')
-            if (pass !== undefined) {
+            if (pass !== undefined && statFile !== undefined) {
               ffOptions.push('-pass', `${pass}`)
-              ffOptions.push('-passlogfile', encodedPath)
+              ffOptions.push('-passlogfile', statFile)
             }
             ffOptions.push('-profile:v:' + videoIndex, 'high')
             ffOptions.push('-preset:v:' + videoIndex, 'slow')
@@ -264,7 +281,7 @@ export class FFmpeg extends CommandProgress {
       } else {
         ffOptions.push('-f', 'null', '/dev/null')
       }
-    } else {
+    } else if (encodedPath) {
       ffOptions.push(encodedPath)
     }
     return ffOptions
