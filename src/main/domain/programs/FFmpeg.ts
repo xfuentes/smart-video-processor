@@ -125,7 +125,7 @@ export class FFmpeg extends CommandProgress {
     await prom.finally(() => {
       const secondPassEnd = Date.now()
       debug('Second pass completed in ' + (secondPassEnd - secondPassAt) / 1000 + ' seconds.')
-      // Files.cleanupFiles(statFile + '*')
+      Files.cleanupFiles(statFile + '*')
     })
     return prom
   }
