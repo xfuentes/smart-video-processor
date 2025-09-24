@@ -17,7 +17,7 @@
  */
 
 import * as fs from 'node:fs'
-import { PathLike, WriteFileOptions } from 'node:fs'
+import { globSync, PathLike, WriteFileOptions } from 'node:fs'
 import http from 'node:http'
 import { debug } from './log'
 import path from 'node:path'
@@ -66,9 +66,24 @@ export class Files {
     fs.writeFileSync(filename, data, encoding)
   }
 
-  static makeTempFile(template: string): string {
+  static makeTempFile(template: string, noCreate: boolean = false): string {
     tmp.setGracefulCleanup()
-    return tmp.fileSync({ template: 'svp-XXXXXX-' + template, discardDescriptor: true }).name
+    const out = tmp.fileSync({ template: 'svp-XXXXXX-' + template, discardDescriptor: true })
+    if (noCreate) {
+      out.removeCallback()
+    }
+    return out.name
+  }
+
+  /**
+   * Cleanup files matching fullPathPattern (supported glob style patterns)
+   * @param fullPathPattern
+   */
+  static cleanupFiles(fullPathPattern: string) {
+    const filesToClean = globSync(fullPathPattern)
+    filesToClean.forEach((file) => {
+      fs.unlinkSync(file)
+    })
   }
 
   static cleanupTempPaths(template: string) {
