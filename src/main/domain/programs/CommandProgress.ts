@@ -31,7 +31,7 @@ export abstract class CommandProgress {
   protected readonly successCodes: number[]
   protected readonly abortCode?: number
   private readonly versionArgs?: string[]
-  private versionPattern?: RegExp
+  private readonly versionPattern?: RegExp
 
   protected constructor(
     command: string,
@@ -48,14 +48,11 @@ export abstract class CommandProgress {
   }
 
   public async getVersion(): Promise<string> {
-    if (!this.versionArgs || !this.versionPattern) {
-      return Promise.reject(new Error(`Version Retrieval Not Supported Yet`))
-    } else {
+    if (this.versionArgs && this.versionPattern) {
       const versionOutputInterpreter = (stdout?: string, _stderr?: string, _process?: ChildProcess) => {
         let ver: string = ''
         if (stdout != undefined) {
-          const versionMatches = this.versionPattern.exec(stdout)
-
+          const versionMatches = this.versionPattern?.exec(stdout)
           if (versionMatches?.groups) {
             ver = versionMatches?.groups.version
           }
@@ -64,8 +61,9 @@ export abstract class CommandProgress {
           response: ver
         }
       }
-
-      return await super.execute(this.versionArgs, versionOutputInterpreter)
+      return await this.execute(this.versionArgs, versionOutputInterpreter)
+    } else {
+      return Promise.reject(new Error(`Version Retrieval Not Supported Yet`))
     }
   }
 

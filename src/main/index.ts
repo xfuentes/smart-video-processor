@@ -101,11 +101,11 @@ app.whenReady().then(() => {
       throw error
     }
   })
-  ipcMain.handle('main:getVersion', () => {
+  ipcMain.handle('main:getVersion', async () => {
     return {
       version: app.getVersion(),
-      ffmpegVersion: FFmpeg.getInstance().getVersion(),
-      mkvmergeVersion: MKVMerge.getInstance().getVersion()
+      ffmpegVersion: await FFmpeg.getInstance().getVersion(),
+      mkvmergeVersion: await MKVMerge.getInstance().getVersion()
     }
   })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
