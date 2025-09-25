@@ -36,10 +36,9 @@ export class FFmpeg extends CommandProgress {
   private readonly timePattern: RegExp = /out_time_ms\s*=\s*(?<time>\d+)/i
   private readonly speedPattern: RegExp = /speed\s*=\s*(?<speed>[\d.]+)x/i
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
-  private readonly versionPattern: RegExp = /^ffmpeg\sversion\s(?<version>[\d.]+)/i
 
   private constructor() {
-    super(currentSettings.ffmpegPath, [0], 255)
+    super(currentSettings.ffmpegPath, [0], 255, ['-version'], /^ffmpeg\sversion\s(?<version>[\d.]+)/i)
   }
 
   public static getInstance(): FFmpeg {
@@ -47,24 +46,6 @@ export class FFmpeg extends CommandProgress {
       FFmpeg.instance = new FFmpeg()
     }
     return FFmpeg.instance
-  }
-
-  public async getVersion(): Promise<string> {
-    const versionOutputInterpreter = (stdout?: string, _stderr?: string, _process?: ChildProcess) => {
-      let ver: string = ''
-      if (stdout != undefined) {
-        const versionMatches = this.versionPattern.exec(stdout)
-
-        if (versionMatches?.groups) {
-          ver = versionMatches?.groups.version
-        }
-      }
-      return {
-        response: ver
-      }
-    }
-
-    return await super.execute(['-version'], versionOutputInterpreter)
   }
 
   public isTwoPassesRequired(settings: EncoderSettings[]): boolean {

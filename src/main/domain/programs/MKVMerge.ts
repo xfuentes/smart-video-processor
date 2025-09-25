@@ -42,10 +42,9 @@ export interface Container {
 
 export class MKVMerge extends CommandProgress {
   private static instance: MKVMerge
-  private readonly versionPattern: RegExp = /^ffmpeg\sversion\s(?<version>[\d.]+)/i
 
   private constructor() {
-    super(currentSettings.mkvMergePath, [0, 1], ['--version'], )
+    super(currentSettings.mkvMergePath, [0, 1], undefined, ['--version'], /^mkvmerge\sv(?<version>[\d.]+)/i)
   }
 
   public static getInstance(): MKVMerge {
