@@ -29,6 +29,8 @@ import { initVideoControllerIPC } from './VideoControllerIPC'
 import electron_squirrel_startup from 'electron-squirrel-startup'
 import { FormValidation } from '../common/FormValidation'
 import { updateElectronApp } from 'update-electron-app'
+import { FFmpeg } from './domain/programs/FFmpeg'
+import { MKVMerge } from './domain/programs/MKVMerge'
 
 if (electron_squirrel_startup) app.quit()
 
@@ -99,7 +101,13 @@ app.whenReady().then(() => {
       throw error
     }
   })
-  ipcMain.handle('main:getVersion', () => app.getVersion())
+  ipcMain.handle('main:getVersion', () => {
+    return {
+      version: app.getVersion(),
+      ffmpegVersion: FFmpeg.getInstance().getVersion(),
+      mkvmergeVersion: MKVMerge.getInstance().getVersion()
+    }
+  })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
     const priorityUpdated = currentSettings.priority !== settings.priority

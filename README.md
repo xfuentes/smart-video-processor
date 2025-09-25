@@ -15,7 +15,7 @@ These can eventually be made with the excellent MakeMKV (https://www.makemkv.com
 
 ## 1) Installation
 
-This application depends on FFmpeg and MKVToolNix (preferably release-95.0 and above).
+This application depends on FFmpeg and MKVToolNix (version >= 90.0).
 
 ### a) Ubuntu Linux
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)

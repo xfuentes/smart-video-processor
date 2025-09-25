@@ -15,7 +15,7 @@ const version = await ipcRenderer.invoke('main:getVersion')
 // Custom APIs for renderer
 const api = {
   main: {
-    version,
+    ...version,
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
