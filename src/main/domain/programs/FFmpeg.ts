@@ -36,6 +36,7 @@ export class FFmpeg extends CommandProgress {
   private readonly timePattern: RegExp = /out_time_ms\s*=\s*(?<time>\d+)/i
   private readonly speedPattern: RegExp = /speed\s*=\s*(?<speed>[\d.]+)x/i
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
+  private readonly versionPattern: RegExp = /^ffmpeg\sversion\s(?<version>[\d.]+)/i
 
   private constructor() {
     super(currentSettings.ffmpegPath, [0], 255)
@@ -46,6 +47,24 @@ export class FFmpeg extends CommandProgress {
       FFmpeg.instance = new FFmpeg()
     }
     return FFmpeg.instance
+  }
+
+  public async getVersion(): Promise<string> {
+    const versionOutputInterpreter = (stdout?: string, _stderr?: string, _process?: ChildProcess) => {
+      let ver: string = ''
+      if (stdout != undefined) {
+        const versionMatches = this.versionPattern.exec(stdout)
+
+        if (versionMatches?.groups) {
+          ver = versionMatches?.groups.version
+        }
+      }
+      return {
+        response: ver
+      }
+    }
+
+    return await super.execute(['-version'], versionOutputInterpreter)
   }
 
   public isTwoPassesRequired(settings: EncoderSettings[]): boolean {
@@ -160,7 +179,7 @@ export class FFmpeg extends CommandProgress {
     const encodedPath =
       pass === 1 ? undefined : path.join(destinationPath, path.basename(Files.makeTempFile('encoding-temp.mkv', true)))
     const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, statFile)
-    const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
+    const versionOutputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = encodedPath ?? statFile ?? ''
       let error: string | undefined = undefined
       if (progressNotifier != undefined) {
@@ -201,7 +220,7 @@ export class FFmpeg extends CommandProgress {
     }
     // const errorPattern: RegExp = /Error: (?<message>.*)/i;
     try {
-      return await super.execute(args, outputInterpreter)
+      return await super.execute(args, versionOutputInterpreter)
     } catch (error) {
       if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
         const workaroundArgs = this.generateEncodingArguments(
@@ -213,7 +232,7 @@ export class FFmpeg extends CommandProgress {
           statFile,
           true
         )
-        return await super.execute(workaroundArgs, outputInterpreter)
+        return await super.execute(workaroundArgs, versionOutputInterpreter)
       }
       throw error
     }
