@@ -3,7 +3,7 @@ name: release
 on:
   push:
     tags:
-      - v*.*.*
+      - v*.*.*-beta
 
 jobs:
   release:
@@ -56,7 +56,7 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
         with:
           snap: ${{ steps.build.outputs.snap }}
-          release: stable
+          release: edge
 
       - name: release
         uses: softprops/action-gh-release@v1
