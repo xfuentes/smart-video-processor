@@ -47,7 +47,6 @@ import {
   retrieveChangePropertyValue,
   SearchBy,
   sourceToSourceTypeTrackID,
-  TrackChanges,
   VideoTune,
   VideoType
 } from '../../common/@types/Video'
@@ -92,9 +91,6 @@ export class Video implements IVideo {
    * True if processing was completed successfully
    */
   public processed: boolean = false
-  public removeTracksChecked: boolean = true
-  public trackLanguageSelection = new Map()
-  public trackTypeSelection = new Map()
   public hintMissing: boolean = false
 
   /*
@@ -103,10 +99,6 @@ export class Video implements IVideo {
   public audioVersions: AudioVersion[] = []
   public title: string = ''
   public poster?: Attachment
-  public changedTracks: TrackChanges[] = []
-  public missingLanguageTracks: number[] = []
-  public missingTypeTracks: number[] = []
-  public containerChanges: string[] = []
   public searchBy: SearchBy = SearchBy.TITLE
   /*
    * Encoder Info
@@ -120,7 +112,6 @@ export class Video implements IVideo {
   public trackEncodingEnabled: { [key: string]: boolean } = {}
   // Currently running job
   public job?: Job<unknown>
-  public lastPromise?: Promise<unknown>
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
@@ -364,13 +355,16 @@ export class Video implements IVideo {
       this.encodedPath = (await this.job.queue()) as string
     }
     await this.merge(outputDirectory, encodingJob?.getDuration())
+    this.queued = false
+    this.processed = true
+    this.fireChangeEvent()
   }
 
   getFinalEncoderSettings() {
     return this.encoderSettings.filter((s) => this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId))
   }
 
-  async merge(outputDirectory: string, extraDuration?: number) {
+  private async merge(outputDirectory: string, extraDuration?: number) {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
@@ -395,10 +389,6 @@ export class Video implements IVideo {
       Files.cleanupFiles(this.encodedPath)
     }
     this.encodedPath = undefined
-    this.queued = false
-    if (this.status === JobStatus.SUCCESS) {
-      this.processed = true
-    }
   }
 
   getOutputDirectory() {

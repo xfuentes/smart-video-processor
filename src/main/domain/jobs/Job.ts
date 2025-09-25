@@ -168,9 +168,9 @@ export abstract class Job<T> implements IJob {
         return `Complete.`
       case JobStatus.ABORTED:
         if (duration !== undefined) {
-          return `Aborted after ${Strings.humanDuration(duration)}.`
+          return `Canceled by user after ${Strings.humanDuration(duration)}.`
         }
-        return 'Aborted.'
+        return 'Canceled by user.'
       case JobStatus.PAUSED:
         return 'Paused.'
       case JobStatus.ERROR:
