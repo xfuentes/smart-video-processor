@@ -20,6 +20,11 @@ This application depends on FFmpeg and MKVToolNix (preferably release-95.0 and a
 ### a) Ubuntu Linux
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
 
+After installation from the Snap Store, you can optionally enable removable media write access with this command :
+  ```shell
+    sudo snap connect smart-video-processor:removable-media
+  ```
+
 Alternatively as debian package:
   ```shell
     sudo apt-get install mkvtoolnix ffmpeg
@@ -37,7 +42,7 @@ Run the Smart.Video.Processor-1.3.3.Setup.exe it will install and add a desktop 
 On the main toolbar click the settings button and the settings Dialog will open.
 Set your preferences and click the Apply button.
 
-![Settings-page1](./docs/img/settings-page1.png)
+![Settings-page](docs/img/01-settings-page.png)
 
 ## 3) Opening a video file
 
@@ -47,7 +52,7 @@ The program will then load the file and extract all the needed information.
 In the background the great mkvmerge (https://www.matroska.org/downloads/mkvtoolnix.html) tool is run to retrieve
 tracks and attachments. If some needed metadata are missing the file will be analysed further.
 
-![Video List](./docs/img/video-list.png)
+![Video List](./docs/img/02-video-list.png)
 
 ## 4) Matching
 
@@ -63,7 +68,7 @@ A request is made on TMDB (https://www.themoviedb.org/) to retrieve movie's deta
 If the matched movie is not correct you have the possibility to select another match from the list.
 The movie's poster and description are displayed you can now proceed to the next step.
 
-![Matching a Movie](./docs/img/matching-movie.png)
+![Matching a Movie](docs/img/03-matching-movie.png)
 
 ## 6) The video is a TV Series episode.
 
@@ -75,32 +80,32 @@ A request is made on TheTVDB (https://thetvdb.com/) to retrieve series and episo
 If the matched series and episode is not correct you have the possibility to select another match from the list.
 The series and episode images and description are displayed you can now proceed to the next step.
 
-![Matching a Series Episode](./docs/img/matching-episode.png)
+![Matching a Series Episode](docs/img/04-matching-tv-show-episode.png)
 
 ## 7) Select tracks
 
 Examine the track list and unselect the ones you want to remove.
 
-![Track List](./docs/img/tracks.png)
+![Track List](docs/img/05-tracks.png)
 
 ## 8) Provide hints
 
 If some information from the original file is missing or is incomplete hints will be requested.
 
-![Providing Hints](./docs/img/hints.png)
+![Providing Hints](docs/img/06-hints.png)
 
 ## 9) Add/Review processing changes
 
 Check the changes that will be done. You can also add some custom changes.
 
-![Review Processing](./docs/img/processing.png)
+![Review Processing](docs/img/07-processing.png)
 
 ## 10) Choose tracks to encode and start processing
 
 Select the video or audio tracks to encode. Depending on settings the program will auto-select the tracks
 that needs encoding. Under the information icon you will see the selected codec and the expected size reduction.
 
-![Encoding](./docs/img/encoding.png)
+![Encoding](docs/img/08-encoding.png)
 Clicking the process button will start the processing. The file will be output on ./Reworked directory relative to
 source file.
 This can be changed in the settings.
@@ -112,4 +117,4 @@ background.
 
 You can see progression info and estimated time left.
 
-![Waiting](./docs/img/waiting.png)
+![Waiting](docs/img/09-waiting.png)
