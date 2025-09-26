@@ -31,6 +31,7 @@ import { FormValidation } from '../common/FormValidation'
 import { updateElectronApp } from 'update-electron-app'
 import { FFmpeg } from './domain/programs/FFmpeg'
 import { MKVMerge } from './domain/programs/MKVMerge'
+import packageJSON from '../../package.json' with { type: 'json' }
 
 if (electron_squirrel_startup) app.quit()
 
@@ -105,7 +106,9 @@ app.whenReady().then(() => {
     return {
       version: app.getVersion(),
       ffmpegVersion: await FFmpeg.getInstance().getVersion(),
-      mkvmergeVersion: await MKVMerge.getInstance().getVersion()
+      mkvmergeVersion: await MKVMerge.getInstance().getVersion(),
+      fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
+      viteVersion: packageJSON.devDependencies['vite'].replace(/^\^/, '')
     }
   })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))

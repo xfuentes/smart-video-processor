@@ -44,6 +44,7 @@ import TVDBLogo from '../assets/tvdb.svg'
 import NODEJSLogo from '../assets/Node.js.svg'
 
 const version = window.api.main.version
+const otherVersions = window.electron.process.versions
 
 export const AboutDialog = () => {
   const [selectedTab, setSelectedTab] = useState('powered')
@@ -65,7 +66,7 @@ export const AboutDialog = () => {
         </ToolbarButton>
       </DialogTrigger>
       <DialogSurface aria-label="About" style={{ padding: '5px', display: 'flex', flexFlow: 'column' }}>
-        <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '500px', maxHeight: '500px' }}>
+        <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '600px', maxHeight: '500px' }}>
           <DialogContent className="settings-dialog">
             <div className="vertical-stack">
               <h3 style={{ textAlign: 'center' }}>Smart Video Processor v{version}</h3>
@@ -127,7 +128,12 @@ export const AboutDialog = () => {
                   >
                     <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                       <table
-                        style={{ textSizeAdjust: 'auto', width: '100%', border: 'none', borderCollapse: 'collapse' }}
+                        style={{
+                          textSizeAdjust: 'auto',
+                          width: '100%',
+                          border: 'none',
+                          borderCollapse: 'collapse'
+                        }}
                       >
                         <tbody className={'powered-by-list'}>
                           <tr>
@@ -135,14 +141,14 @@ export const AboutDialog = () => {
                               <img src={MKVToolNixLogo} width={48} alt={'MKVToolNix Logo'} />
                             </td>
                             <td>MKVToolNix</td>
-                            <td>{window.api.main.mkvmergeVersion}</td>
+                            <td className="version">{window.api.main.mkvmergeVersion}</td>
                             <td>
                               <Link
                                 onClick={() =>
                                   window.open('https://www.matroska.org/downloads/mkvtoolnix.html', '_blank')
                                 }
                               >
-                                https://www.matroska.org/downloads/mkvtoolnix.html
+                                https://www.matroska.org/downloads
                               </Link>
                             </td>
                           </tr>
@@ -156,7 +162,7 @@ export const AboutDialog = () => {
                               />
                             </td>
                             <td>The Movie DB</td>
-                            <td></td>
+                            <td>3</td>
                             <td>
                               <Link onClick={() => window.open('https://www.themoviedb.org/', '_blank')}>
                                 https://www.themoviedb.org/
@@ -168,7 +174,7 @@ export const AboutDialog = () => {
                               <img src={FFmpegLogo} width={48} alt={'FFmpeg Logo'} />
                             </td>
                             <td>FFmpeg</td>
-                            <td>{window.api.main.ffmpegVersion}</td>
+                            <td className="version">{window.api.main.ffmpegVersion}</td>
                             <td>
                               <Link onClick={() => window.open('https://ffmpeg.org/', '_blank')}>
                                 https://ffmpeg.org/
@@ -185,7 +191,7 @@ export const AboutDialog = () => {
                               />
                             </td>
                             <td>The TVDB</td>
-                            <td></td>
+                            <td className="version">4</td>
                             <td>
                               <Link onClick={() => window.open('https://thetvdb.com/', '_blank')}>
                                 https://thetvdb.com/
@@ -197,7 +203,7 @@ export const AboutDialog = () => {
                               <img src={NODEJSLogo} width={48} alt={'Node.js Logo'} />
                             </td>
                             <td>Node.js</td>
-                            <td></td>
+                            <td className="version">{otherVersions.node}</td>
                             <td>
                               <Link onClick={() => window.open('https://nodejs.org/', '_blank')}>
                                 https://nodejs.org/
@@ -209,7 +215,7 @@ export const AboutDialog = () => {
                               <img src={ElectronLogo} width={48} alt={'Electron Logo'} />
                             </td>
                             <td>Electron</td>
-                            <td></td>
+                            <td className="version">{otherVersions.electron}</td>
                             <td>
                               <Link onClick={() => window.open('https://www.electronjs.org/', '_blank')}>
                                 https://www.electronjs.org/
@@ -221,7 +227,7 @@ export const AboutDialog = () => {
                               <img src={FluentLogo} width={48} alt={'Fluent Logo'} />
                             </td>
                             <td>Fluent UI React </td>
-                            <td></td>
+                            <td className="version">{window.api.main.fluentUIVersion}</td>
                             <td>
                               <Link onClick={() => window.open('https://github.com/microsoft/fluentui', '_blank')}>
                                 https://github.com/microsoft/fluentui
@@ -233,7 +239,7 @@ export const AboutDialog = () => {
                               <img src={ViteLogo} width={48} alt={'Vite Logo'} />
                             </td>
                             <td>Vite</td>
-                            <td />
+                            <td className="version">{window.api.main.viteVersion}</td>
                             <td>
                               <Link onClick={() => window.open('https://vite.dev/', '_blank')}>https://vite.dev/</Link>
                             </td>
