@@ -21,20 +21,55 @@ import { ChildProcess } from 'node:child_process'
 import { currentSettings, defaultSettings } from '../Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 
+type CommandResult = {
+  response: string
+  error?: string
+}
+
 export abstract class CommandProgress {
   protected readonly command: string
   protected readonly successCodes: number[]
   protected readonly abortCode?: number
+  private readonly versionArgs?: string[]
+  private readonly versionPattern?: RegExp
 
-  protected constructor(command: string, successCodes: number[], abortCode?: number) {
+  protected constructor(
+    command: string,
+    successCodes: number[],
+    abortCode?: number,
+    versionArgs?: string[],
+    versionPattern?: RegExp
+  ) {
     this.command = command
     this.successCodes = successCodes
     this.abortCode = abortCode
+    this.versionArgs = versionArgs
+    this.versionPattern = versionPattern
+  }
+
+  public async getVersion(): Promise<string> {
+    if (this.versionArgs && this.versionPattern) {
+      const versionOutputInterpreter = (stdout?: string, _stderr?: string, _process?: ChildProcess) => {
+        let ver: string = ''
+        if (stdout != undefined) {
+          const versionMatches = this.versionPattern?.exec(stdout)
+          if (versionMatches?.groups) {
+            ver = versionMatches?.groups.version
+          }
+        }
+        return {
+          response: ver
+        }
+      }
+      return await this.execute(this.versionArgs, versionOutputInterpreter)
+    } else {
+      return Promise.reject(new Error(`Version Retrieval Not Supported Yet`))
+    }
   }
 
   protected execute(
     args: string[],
-    outputInterpreter: (stdin?: string, stdout?: string, process?: ChildProcess) => { response: string; error?: string }
+    outputInterpreter: (stdin?: string, stdout?: string, process?: ChildProcess) => CommandResult
   ): Promise<string> {
     return new Promise((resolve: (data: string) => void, reject: (reason: Error) => void) => {
       const process = Processes.spawn(this.command, args, { stdio: ['pipe', 'pipe', 'pipe'] })
@@ -42,7 +77,7 @@ export abstract class CommandProgress {
       if (process.pid) {
         Processes.setPriority(process.pid, ProcessesPriority[currentSettings.priority ?? defaultSettings.priority])
       }
-      const result: { response: string; error?: string } = { response: '' }
+      const result: CommandResult = { response: '' }
       if (process?.stdout) {
         process.stdout.on('data', (data: string | Buffer) => {
           const stdoutResult = outputInterpreter(data.toString(), undefined, process)

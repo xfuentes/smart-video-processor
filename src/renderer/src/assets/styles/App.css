@@ -388,3 +388,10 @@ button:disabled.is-disabled.ms-Pivot-link {
   text-align: center;
 }
 
+table>tbody>tr>td {
+  padding: 2px 5px;
+}
+
+td.version {
+  font-weight: lighter;
+}

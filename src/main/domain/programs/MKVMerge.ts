@@ -44,7 +44,7 @@ export class MKVMerge extends CommandProgress {
   private static instance: MKVMerge
 
   private constructor() {
-    super(currentSettings.mkvMergePath, [0, 1])
+    super(currentSettings.mkvMergePath, [0, 1], undefined, ['--version'], /^mkvmerge\sv(?<version>[\d.]+)/i)
   }
 
   public static getInstance(): MKVMerge {

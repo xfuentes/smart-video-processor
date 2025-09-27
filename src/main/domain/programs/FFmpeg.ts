@@ -38,7 +38,7 @@ export class FFmpeg extends CommandProgress {
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
 
   private constructor() {
-    super(currentSettings.ffmpegPath, [0], 255)
+    super(currentSettings.ffmpegPath, [0], 255, ['-version'], /^ffmpeg\sversion\s(?<version>[\d.]+)/i)
   }
 
   public static getInstance(): FFmpeg {
@@ -160,7 +160,7 @@ export class FFmpeg extends CommandProgress {
     const encodedPath =
       pass === 1 ? undefined : path.join(destinationPath, path.basename(Files.makeTempFile('encoding-temp.mkv', true)))
     const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, statFile)
-    const outputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
+    const versionOutputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = encodedPath ?? statFile ?? ''
       let error: string | undefined = undefined
       if (progressNotifier != undefined) {
@@ -201,7 +201,7 @@ export class FFmpeg extends CommandProgress {
     }
     // const errorPattern: RegExp = /Error: (?<message>.*)/i;
     try {
-      return await super.execute(args, outputInterpreter)
+      return await super.execute(args, versionOutputInterpreter)
     } catch (error) {
       if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
         const workaroundArgs = this.generateEncodingArguments(
@@ -213,7 +213,7 @@ export class FFmpeg extends CommandProgress {
           statFile,
           true
         )
-        return await super.execute(workaroundArgs, outputInterpreter)
+        return await super.execute(workaroundArgs, versionOutputInterpreter)
       }
       throw error
     }

@@ -32,6 +32,10 @@ export type FilesChangedListener = (value: IVideo[]) => void
 interface SvpAPI {
   main: {
     version: string
+    ffmpegVersion: string
+    mkvmergeVersion: string
+    fluentUIVersion: string
+    viteVersion: string
     getCurrentSettings: () => Promise<FormValidation<Settings>>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
