@@ -104,7 +104,7 @@ export const AboutDialog = () => {
                 {selectedTab === 'license' && (
                   <div
                     style={{
-                      height: '250px',
+                      height: '360px',
                       overflowY: 'auto',
                       overflowX: 'hidden',
                       padding: '5px',
@@ -119,7 +119,7 @@ export const AboutDialog = () => {
                   <div
                     style={{
                       backgroundColor: '#f5f5f5',
-                      height: '250px',
+                      height: '360px',
                       overflowY: 'auto',
                       overflowX: 'hidden',
                       padding: '5px',
