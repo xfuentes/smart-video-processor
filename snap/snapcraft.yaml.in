@@ -131,3 +131,8 @@ parts:
       usr/lib/*-linux-gnu/blas/*: usr/lib/
       usr/lib/*-linux-gnu/lapack/*.so*: usr/lib/
 
+plugs:
+  shared-memory:
+    private: true
+  home:
+    interface: home
