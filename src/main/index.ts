@@ -32,10 +32,13 @@ import { updateElectronApp } from 'update-electron-app'
 import { FFmpeg } from './domain/programs/FFmpeg'
 import { MKVMerge } from './domain/programs/MKVMerge'
 import packageJSON from '../../package.json' with { type: 'json' }
+import * as os from 'node:os'
 
 if (electron_squirrel_startup) app.quit()
 
-updateElectronApp()
+if (os.platform() !== 'linux') {
+  updateElectronApp()
+}
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
