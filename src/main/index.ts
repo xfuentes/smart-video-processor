@@ -32,10 +32,13 @@ import { updateElectronApp } from 'update-electron-app'
 import { FFmpeg } from './domain/programs/FFmpeg'
 import { MKVMerge } from './domain/programs/MKVMerge'
 import packageJSON from '../../package.json' with { type: 'json' }
+import * as os from 'node:os'
 
 if (electron_squirrel_startup) app.quit()
 
-updateElectronApp()
+if (os.platform() !== 'linux') {
+  updateElectronApp()
+}
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -81,10 +84,24 @@ protocol.registerSchemesAsPrivileged([
   }
 ])
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
   loadSettings()
+
+  let ffmpegVersion = '-'
+  let mkvmergeVersion = '-'
+  try {
+    ffmpegVersion = await FFmpeg.getInstance().getVersion()
+  } catch (_err) {
+    /* error will be shown in settings */
+  }
+
+  try {
+    mkvmergeVersion = await MKVMerge.getInstance().getVersion()
+  } catch (_err) {
+    /* error will be shown in settings */
+  }
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
@@ -105,8 +122,8 @@ app.whenReady().then(() => {
   ipcMain.handle('main:getVersion', async () => {
     return {
       version: app.getVersion(),
-      ffmpegVersion: await FFmpeg.getInstance().getVersion(),
-      mkvmergeVersion: await MKVMerge.getInstance().getVersion(),
+      ffmpegVersion: ffmpegVersion,
+      mkvmergeVersion: mkvmergeVersion,
       fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
       viteVersion: packageJSON.devDependencies['vite'].replace(/^\^/, '')
     }
