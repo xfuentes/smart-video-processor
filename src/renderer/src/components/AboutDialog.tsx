@@ -162,7 +162,7 @@ export const AboutDialog = () => {
                               />
                             </td>
                             <td>The Movie DB</td>
-                            <td>3</td>
+                            <td className="version">3</td>
                             <td>
                               <Link onClick={() => window.open('https://www.themoviedb.org/', '_blank')}>
                                 https://www.themoviedb.org/
