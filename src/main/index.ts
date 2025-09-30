@@ -89,7 +89,13 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
   loadSettings()
 
-  app.on('browser-window-created', (_, window) => {
+  let ffmpegVersion = '-';
+  let mkvmergeVersion = '-'
+  try {
+  ffmpegVersion: await FFmpeg.getInstance().getVersion(),
+    mkvmergeVersion: await MKVMerge.getInstance().getVersion(),
+
+    app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
