@@ -124,5 +124,5 @@ test('Job Fermer Gueule Info', async () => {
   expect(stateChanges[7].progression.progress).toBe(-1)
   expect(tracks).toStrictEqual(job.getResult().tracks)
   expect(container).toStrictEqual(job.getResult().container)
-  expect(lastFileDeleted.indexOf('processed')).toBeGreaterThanOrEqual(0)
+  expect(lastFileDeleted.indexOf('.pre-process')).toBeGreaterThanOrEqual(0)
 })
