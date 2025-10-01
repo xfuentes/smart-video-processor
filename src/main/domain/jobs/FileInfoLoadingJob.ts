@@ -44,7 +44,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
     if (!unsupported) {
       const videoTrack = result.tracks.find((t) => t.type === TrackType.VIDEO)
       if (videoTrack !== undefined && videoTrack.properties.bitRate === undefined) {
-        const outputPath = Files.makeTempFile('processed.mkv')
+        const outputPath = this.sourcePath + '.pre-process'
         const changes = [
           new Change(
             ChangeSourceType.CONTAINER,
