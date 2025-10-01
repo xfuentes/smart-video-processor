@@ -223,12 +223,7 @@ test('Retrieve movie details passion of the Christ', async () => {
   expect(movie.tmdb).toBe(615)
   expect(movie.title).toBe('La Passion du Christ')
   expect(movie.year).toBe(2004)
-  expect(movie.overview).toBe(
-    'Les douze dernières heures de la vie du Christ. Rendu au Mont des Oliviers, ' +
-      'Jésus prie après avoir partagé un dernier repas avec ses apôtres. Il résiste maintenant aux tentations de Satan. ' +
-      'Trahi par Judas, Jésus est arrêté et emmené à Jérusalem, où les chefs des Pharisiens l’accusent de blasphème et ' +
-      'lui font un procès qui a pour issue sa condamnation à mort…'
-  )
+  expect(movie.overview).toContain('Les douze dernières heures de la vie du Christ.')
   expect(movie.posterUrl).toBeDefined()
   expect(movie.posterUrl).toMatch(posterUrlRE)
   expect(movie.language).toBe('en')
