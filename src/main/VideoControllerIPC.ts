@@ -18,11 +18,9 @@
 
 import { BrowserWindow, dialog, ipcMain } from 'electron'
 import { VideoController } from './controller/VideoController'
-import { SearchBy, VideoType } from '../common/@types/Video'
+import { SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
-import { EpisodeOrder } from './domain/clients/TVDBClient'
-import { EditionType } from '../common/@types/Movie'
 
 export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:openFileExplorer', async () => {
@@ -43,17 +41,11 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   VideoController.getInstance().addVideoChangeListener((video) => {
     mainWindow.webContents.send('video:changed', JSON.stringify(video))
   })
-  ipcMain.handle('video:setType', (_event, uuid: string, videoType: VideoType) => {
-    VideoController.getInstance().setType(uuid, videoType)
-  })
-  ipcMain.handle('video:setSearchBy', (_event, uuid: string, searchBy: SearchBy) => {
-    VideoController.getInstance().setSearchBy(uuid, searchBy)
-  })
   ipcMain.handle('video:selectSearchResultID', (_event, uuid: string, searchResultID?: number) => {
     return VideoController.getInstance().selectSearchResultID(uuid, searchResultID)
   })
-  ipcMain.handle('video:search', (_event, uuid: string) => {
-    return VideoController.getInstance().search(uuid)
+  ipcMain.handle('video:search', (_event, uuid: string, data?: SearchInputData) => {
+    return VideoController.getInstance().search(uuid, data)
   })
   ipcMain.handle('video:switchTrackSelection', (_event, uuid: string, changedItems: number[]) => {
     VideoController.getInstance().switchTrackSelection(uuid, changedItems)
@@ -105,68 +97,5 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   })
   ipcMain.handle('video:clearCompleted', (_event) => {
     VideoController.getInstance().clearCompleted()
-  })
-
-  // TV Shows:
-  ipcMain.handle('video.tvShow:setTitle', (_event, uuid: string, title: string) => {
-    VideoController.getInstance().getTVShow(uuid).setTitle(title)
-  })
-  ipcMain.handle('video.tvShow:setYear', (_event, uuid: string, year: string) => {
-    VideoController.getInstance().getTVShow(uuid).setYear(year)
-  })
-  ipcMain.handle('video.tvShow:setIMDB', (_event, uuid: string, imdb: string) => {
-    VideoController.getInstance().getTVShow(uuid).setIMDB(imdb)
-  })
-  ipcMain.handle('video.tvShow:setTheTVDB', (_event, uuid: string, tvdb: number | string | undefined) => {
-    VideoController.getInstance().getTVShow(uuid).setTheTVDB(tvdb)
-  })
-  ipcMain.handle('video.tvShow:setOrder', (_event, uuid: string, order: EpisodeOrder) => {
-    VideoController.getInstance().getTVShow(uuid).setOrder(order)
-  })
-  ipcMain.handle('video.tvShow:setSeason', (_event, uuid: string, newSeason: string) => {
-    VideoController.getInstance().getTVShow(uuid).setSeason(newSeason)
-  })
-  ipcMain.handle('video.tvShow:setEpisode', (_event, uuid: string, newEpisode: string) => {
-    VideoController.getInstance().getTVShow(uuid).setEpisode(newEpisode)
-  })
-  ipcMain.handle('video.tvShow:setAbsoluteEpisode', (_event, uuid: string, newAbsoluteEpisode: string) => {
-    VideoController.getInstance().getTVShow(uuid).setAbsoluteEpisode(newAbsoluteEpisode)
-  })
-
-  // Movies:
-  ipcMain.handle('video.movie:setTitle', (_event, uuid: string, title: string) => {
-    VideoController.getInstance().getMovie(uuid).setTitle(title)
-  })
-  ipcMain.handle('video.movie:setYear', (_event, uuid: string, year: string) => {
-    VideoController.getInstance().getMovie(uuid).setYear(year)
-  })
-  ipcMain.handle('video.movie:setIMDB', (_event, uuid: string, imdb: string) => {
-    VideoController.getInstance().getMovie(uuid).setIMDB(imdb)
-  })
-  ipcMain.handle('video.movie:setTMDB', (_event, uuid: string, tmdb: number | string | undefined) => {
-    VideoController.getInstance().getMovie(uuid).setTMDB(tmdb)
-  })
-  ipcMain.handle('video.movie:setEdition', (_event, uuid: string, edition: EditionType) => {
-    VideoController.getInstance().getMovie(uuid).setEdition(edition)
-  })
-
-  // Others:
-  ipcMain.handle('video.other:setTitle', (_event, uuid: string, title: string) => {
-    VideoController.getInstance().getOther(uuid).setTitle(title)
-  })
-  ipcMain.handle('video.other:setYear', (_event, uuid: string, year: string) => {
-    VideoController.getInstance().getOther(uuid).setYear(year)
-  })
-  ipcMain.handle('video.other:setMonth', (_event, uuid: string, month: string) => {
-    VideoController.getInstance().getOther(uuid).setMonth(month)
-  })
-  ipcMain.handle('video.other:setDay', (_event, uuid: string, day: string) => {
-    VideoController.getInstance().getOther(uuid).setDay(day)
-  })
-  ipcMain.handle('video.other:setPosterPath', (_event, uuid: string, posterPath: string) => {
-    VideoController.getInstance().getOther(uuid).setPosterPath(posterPath)
-  })
-  ipcMain.handle('video.other:setOriginalLanguage', (_event, uuid: string, originalLanguage: string) => {
-    VideoController.getInstance().getOther(uuid).setOriginalLanguage(originalLanguage)
   })
 }

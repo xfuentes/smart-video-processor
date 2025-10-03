@@ -16,17 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IJob, JobStatus } from './Job'
+import { JobStatus } from './Job'
 import { Progression } from './processes'
 import { ITrack, TrackType } from './Track'
 import { ChangeProperty, ChangeSourceType, ChangeType, IChange } from '../Change'
 import { IHint } from './Hint'
 import { ISearchResult } from './SearchResult'
-import { IMovie } from './Movie'
+import { EditionType, IMovie } from './Movie'
 import { ITVShow } from './TVShow'
 import { Container } from '../../main/domain/programs/MKVMerge'
 import { EncoderSettings } from './Encoding'
 import { IOther } from './Other'
+import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
 
 export enum VideoType {
   MOVIE = 'Movie',
@@ -68,10 +69,10 @@ export interface IVideo {
   changes: IChange[]
   hints: IHint[]
   loading: boolean
+  processing: boolean
   matched: boolean
   queued: boolean
   processed: boolean
-  job?: IJob
   status: JobStatus
   message?: string
   progression: Progression
@@ -84,6 +85,29 @@ export interface IVideo {
   encoderSettings: EncoderSettings[]
   trackEncodingEnabled: { [key: string]: boolean }
   hintMissing: boolean
+}
+
+export type SearchInputData = {
+  type: VideoType
+  searchBy: SearchBy
+  movieTitle: string
+  movieYear: string
+  movieIMDB: string
+  movieTMDB: string
+  movieEdition: EditionType
+  tvShowTitle: string
+  tvShowYear: string
+  tvShowTVDB: string
+  tvShowOrder: EpisodeOrder
+  tvShowSeason: string
+  tvShowEpisode: string
+  tvShowAbsoluteEpisode: string
+  otherTitle: string
+  otherYear: string
+  otherMonth: string
+  otherDay: string
+  otherOriginalLanguage: string
+  otherPosterPath: string
 }
 
 export const retrieveChangePropertyValue = (
@@ -181,12 +205,8 @@ export const sourceToSourceTypeTrackID = (
   return { sourceType, trackId }
 }
 
-export const checkVideoIsProcessing = (video: IVideo) => {
-  return video.job && video.job.processingOrPaused
-}
-
 export const checkVideoProcessingEnabled = (video: IVideo) => {
-  return video.matched && !video.hintMissing && !video.queued && !checkVideoIsProcessing(video)
+  return video.matched && !video.hintMissing && !video.queued && !video.processing
 }
 
 export const checkVideoProcessingSuccessful = (video: IVideo) => {
