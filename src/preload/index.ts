@@ -2,13 +2,14 @@ import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
-import { IVideo, SearchBy, VideoType } from '../common/@types/Video'
+import { SearchBy, VideoType } from '../common/@types/Video'
 import { EditionType } from '../common/@types/Movie'
 import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
-import { FilesChangedListener, InvalidSettingsListener } from './@types'
+import { ListChangedListener, InvalidSettingsListener, VideoChangedListener } from './@types'
+import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -31,10 +32,20 @@ const api = {
       const filePaths = files.map((f) => webUtils.getPathForFile(f))
       return ipcRenderer.invoke('video:openFiles', filePaths)
     },
-    addFilesChangedListener: (callback: FilesChangedListener) =>
-      ipcRenderer.on('video:filesChanged', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
-    removeFilesChangedListener: (callback: FilesChangedListener) =>
-      ipcRenderer.off('video:filesChanged', (_event, value: IVideo[]) => callback(value)),
+    addListChangedListener: (callback: ListChangedListener) => {
+      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      ipcRenderer.on('video:listChanged', subscriber)
+      return () => {
+        ipcRenderer.off('video:listChanged', subscriber)
+      }
+    },
+    addVideoChangedListener: (callback: VideoChangedListener) => {
+      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      ipcRenderer.on('video:changed', subscriber)
+      return () => {
+        ipcRenderer.off('video:changed', subscriber)
+      }
+    },
     setType: (uuid: string, videoType: VideoType): Promise<void> =>
       ipcRenderer.invoke('video:setType', uuid, videoType),
     setSearchBy: (uuid: string, videoType: SearchBy): Promise<void> =>
