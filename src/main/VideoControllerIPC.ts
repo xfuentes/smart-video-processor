@@ -37,8 +37,11 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:openFiles', (_event, filePaths: string[]) => {
     VideoController.getInstance().openFiles(filePaths)
   })
-  VideoController.getInstance().addChangeListener((videos) => {
-    mainWindow.webContents.send('video:filesChanged', JSON.stringify(videos))
+  VideoController.getInstance().addListChangeListener((videos) => {
+    mainWindow.webContents.send('video:listChanged', JSON.stringify(videos))
+  })
+  VideoController.getInstance().addVideoChangeListener((video) => {
+    mainWindow.webContents.send('video:changed', JSON.stringify(video))
   })
   ipcMain.handle('video:setType', (_event, uuid: string, videoType: VideoType) => {
     VideoController.getInstance().setType(uuid, videoType)

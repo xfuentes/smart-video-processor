@@ -27,7 +27,8 @@ import { FormValidation } from '../../common/FormValidation'
 import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
-export type FilesChangedListener = (value: IVideo[]) => void
+export type ListChangedListener = (value: IVideo[]) => void
+export type VideoChangedListener = (value: IVideo) => void
 
 interface SvpAPI {
   main: {
@@ -45,8 +46,8 @@ interface SvpAPI {
   video: {
     openFileExplorer: () => Promise<void>
     openFiles: (files: File[]) => Promise<void>
-    addFilesChangedListener: (callback: FilesChangedListener) => Promise<void>
-    removeFilesChangedListener: (callback: FilesChangedListener) => Promise<void>
+    addListChangedListener: (callback: ListChangedListener) => () => void
+    addVideoChangedListener: (callback: VideoChangedListener) => () => void
     setType: (uuid: string, videoType: VideoType) => Promise<void>
     setSearchBy: (uuid: string, searchBy: SearchBy) => Promise<void>
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
