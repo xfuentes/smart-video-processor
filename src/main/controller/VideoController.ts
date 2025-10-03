@@ -17,7 +17,7 @@
  */
 
 import { Video } from '../domain/Video'
-import { SearchBy, VideoType } from '../../common/@types/Video'
+import { SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
@@ -103,8 +103,8 @@ export class VideoController {
     return this.getVideoByUuid(uuid).selectSearchResultID(searchResultID)
   }
 
-  search(uuid: string) {
-    return this.getVideoByUuid(uuid).search()
+  search(uuid: string, data?: SearchInputData) {
+    return this.getVideoByUuid(uuid).search(data)
   }
 
   switchTrackSelection(uuid: string, changedItems: number[]) {

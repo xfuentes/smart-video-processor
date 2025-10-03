@@ -76,32 +76,26 @@ export default class Other implements IOther {
 
   setTitle(newTitle: string) {
     this.title = newTitle
-    this.video.fireChangeEvent()
   }
 
   setYear(newYear: string) {
     this.year = Numbers.toNumber(newYear)
-    this.video.fireChangeEvent()
   }
 
   setMonth(newMonth: string) {
     this.month = Numbers.toNumber(newMonth)
-    this.video.fireChangeEvent()
   }
 
   setDay(newDay: string) {
     this.day = Numbers.toNumber(newDay)
-    this.video.fireChangeEvent()
   }
 
   setPosterPath(posterPath: string) {
     this.poster = posterPath
-    this.video.fireChangeEvent()
   }
 
   setOriginalLanguage(originalLanguageCode: string) {
     this.originalLanguage = Languages.getLanguageByCode(originalLanguageCode)
-    this.video.fireChangeEvent()
   }
 
   getOriginalLanguage() {

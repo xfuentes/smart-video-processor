@@ -2,9 +2,7 @@ import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
-import { SearchBy, VideoType } from '../common/@types/Video'
-import { EditionType } from '../common/@types/Movie'
-import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
+import { SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
@@ -46,13 +44,9 @@ const api = {
         ipcRenderer.off('video:changed', subscriber)
       }
     },
-    setType: (uuid: string, videoType: VideoType): Promise<void> =>
-      ipcRenderer.invoke('video:setType', uuid, videoType),
-    setSearchBy: (uuid: string, videoType: SearchBy): Promise<void> =>
-      ipcRenderer.invoke('video:setSearchBy', uuid, videoType),
     selectSearchResultID: (uuid: string, searchResultID?: number): Promise<void> =>
       ipcRenderer.invoke('video:selectSearchResultID', uuid, searchResultID),
-    search: (uuid: string): Promise<void> => ipcRenderer.invoke('video:search', uuid),
+    search: (uuid: string, data: SearchInputData): Promise<void> => ipcRenderer.invoke('video:search', uuid, data),
     switchTrackSelection: (uuid: string, changedItems: number[]): Promise<void> =>
       ipcRenderer.invoke('video:switchTrackSelection', uuid, changedItems),
     setHint: (uuid: string, hint: IHint, value?: string): Promise<void> =>
@@ -81,41 +75,6 @@ const api = {
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
     clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
-    movie: {
-      setTitle: (uuid: string, title: string): Promise<void> => ipcRenderer.invoke('video.movie:setTitle', uuid, title),
-      setYear: (uuid: string, year: string): Promise<void> => ipcRenderer.invoke('video.movie:setYear', uuid, year),
-      setIMDB: (uuid: string, imdb: string): Promise<void> => ipcRenderer.invoke('video.movie:setIMDB', uuid, imdb),
-      setTMDB: (uuid: string, tmdb: number | string | undefined): Promise<void> =>
-        ipcRenderer.invoke('video.movie:setTMDB', uuid, tmdb),
-      setEdition: (uuid: string, edition: EditionType): Promise<void> =>
-        ipcRenderer.invoke('video.movie:setEdition', uuid, edition)
-    },
-    tvShow: {
-      setTitle: (uuid: string, title: string): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setTitle', uuid, title),
-      setYear: (uuid: string, year: string): Promise<void> => ipcRenderer.invoke('video.tvShow:setYear', uuid, year),
-      setIMDB: (uuid: string, imdb: string): Promise<void> => ipcRenderer.invoke('video.tvShow:setIMDB', uuid, imdb),
-      setTheTVDB: (uuid: string, tvdb: number | string | undefined): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setTheTVDB', uuid, tvdb),
-      setOrder: (uuid: string, order: EpisodeOrder): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setOrder', uuid, order),
-      setSeason: (uuid: string, newSeason: string): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setSeason', uuid, newSeason),
-      setEpisode: (uuid: string, newEpisode: string): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setEpisode', uuid, newEpisode),
-      setAbsoluteEpisode: (uuid: string, newAbsoluteEpisode: string): Promise<void> =>
-        ipcRenderer.invoke('video.tvShow:setAbsoluteEpisode', uuid, newAbsoluteEpisode)
-    },
-    other: {
-      setTitle: (uuid: string, title: string): Promise<void> => ipcRenderer.invoke('video.other:setTitle', uuid, title),
-      setYear: (uuid: string, year: string): Promise<void> => ipcRenderer.invoke('video.other:setYear', uuid, year),
-      setMonth: (uuid: string, month: string): Promise<void> => ipcRenderer.invoke('video.other:setMonth', uuid, month),
-      setDay: (uuid: string, day: string): Promise<void> => ipcRenderer.invoke('video.other:setDay', uuid, day),
-      setPosterPath: (uuid: string, posterPath: string): Promise<void> =>
-        ipcRenderer.invoke('video.other:setPosterPath', uuid, posterPath),
-      setOriginalLanguage: (uuid: string, originalLanguageCode: string): Promise<void> =>
-        ipcRenderer.invoke('video.other:setOriginalLanguage', uuid, originalLanguageCode)
-    }
   }
 }
 
