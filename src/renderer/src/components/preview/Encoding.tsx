@@ -26,9 +26,15 @@ import { JobStatus } from '../../../../common/@types/Job'
 
 type Props = {
   video: IVideo
+  disabled: boolean
 }
 
-const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolean = false) => {
+const trackTypeEncodingSection = (
+  video: IVideo,
+  type: TrackType,
+  disabled: boolean,
+  expand: boolean = false
+) => {
   const selectedTrackIds = video.tracks.filter((t) => t.copy).map((t) => t.id)
   const filteredTracks = video.tracks.filter((t) => t.type === type).filter((s) => selectedTrackIds.includes(s.id))
   return (
@@ -40,10 +46,10 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolea
             const key = track.type + ' ' + track.id
             const es = video.encoderSettings.find((s) => s.trackId === track.id)
             let infoLabel: ReactElement | undefined = undefined
-            let disabled = false
+            let forceDisabled = false
             if (track.unsupported) {
               infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
-              disabled = true
+              forceDisabled = true
             } else if (es && es.targetSize) {
               infoLabel = (
                 <InfoLabel
@@ -86,7 +92,7 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolea
                     await window.api.video.setTrackEncodingEnabled(video.uuid, key, data.checked)
                   }
                 }}
-                disabled={disabled}
+                disabled={disabled || forceDisabled}
                 label={
                   infoLabel === undefined ? (
                     key
@@ -106,7 +112,7 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, expand: boolea
   )
 }
 
-export const Encoding = ({ video }: Props) => {
+export const Encoding = ({ video, disabled }: Props) => {
   const progression = video.progression.progress
   let progressColor: 'brand' | 'success' | 'warning' | 'error' = 'brand'
   let validation: 'error' | 'warning' | 'success' | 'none' = 'none'
@@ -130,8 +136,8 @@ export const Encoding = ({ video }: Props) => {
 
   return (
     <div className="encoding-main" style={{ flexGrow: '1' }}>
-      {trackTypeEncodingSection(video, TrackType.VIDEO)}
-      {trackTypeEncodingSection(video, TrackType.AUDIO, true)}
+      {trackTypeEncodingSection(video, TrackType.VIDEO, disabled)}
+      {trackTypeEncodingSection(video, TrackType.AUDIO, disabled, true)}
       <>
         {video.message !== undefined && (
           <>
@@ -154,7 +160,7 @@ export const Encoding = ({ video }: Props) => {
               size={'medium'}
               appearance="primary"
               icon={<WrenchSettings20Regular />}
-              disabled={video.queued}
+              disabled={disabled}
               onClick={() => void window.api.video.process(video.uuid)}
             >
               Process

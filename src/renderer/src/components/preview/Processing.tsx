@@ -147,7 +147,7 @@ export const ChangeList = ({ video, disabled }: Props) => {
   return (
     <>
       <div className="processing-form">
-        <Field size="small" label="Source">
+        <Field size="small" label="Source" className={disabled ? 'disabled' : ''}>
           <Select
             value={source}
             disabled={disabled}
@@ -176,7 +176,7 @@ export const ChangeList = ({ video, disabled }: Props) => {
             ))}
           </Select>
         </Field>
-        <Field size="small" label="Type">
+        <Field size="small" label="Type" className={disabled ? 'disabled' : ''}>
           <Select
             value={type}
             disabled={disabled}
@@ -193,7 +193,7 @@ export const ChangeList = ({ video, disabled }: Props) => {
               ))}
           </Select>
         </Field>
-        <Field size="small" label="Property">
+        <Field size="small" label="Property" className={disabled ? 'disabled' : ''}>
           <Select
             value={property}
             disabled={disabled}
@@ -212,7 +212,7 @@ export const ChangeList = ({ video, disabled }: Props) => {
         </Field>
         {type === ChangeType.UPDATE && property !== undefined && (
           <div className="growing-form-field">
-            <Field size="small" label="New Value" required>
+            <Field size="small" label="New Value" required className={disabled ? 'disabled' : ''}>
               {propertyTypes[property] === 'string' && (
                 <Input
                   value={newValue as string}
