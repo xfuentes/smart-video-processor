@@ -434,3 +434,7 @@ table>tbody>tr>td {
 td.version {
   font-weight: lighter;
 }
+
+.disabled label {
+  opacity: 0.5;
+}

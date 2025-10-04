@@ -23,7 +23,7 @@ import { LanguageSelector } from '@renderer/components/LanguageSelector'
 import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
-  video: IVideo,
+  video: IVideo
   disabled?: boolean
 }
 
@@ -40,7 +40,13 @@ export const Hints = ({ video, disabled }: Props) => {
               const key = hint.type + ' ' + hint.trackId
               const track = video.tracks.find((t) => t.id === hint.trackId)
               return (
-                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                <Field
+                  key={key}
+                  size="small"
+                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
                   <LanguageSelector
                     id={key}
                     disabled={disabled}
@@ -68,7 +74,13 @@ export const Hints = ({ video, disabled }: Props) => {
               const key = hint.type + ' ' + hint.trackId
               const track = video.tracks.find((t) => t.id === hint.trackId)
               return (
-                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                <Field
+                  key={key}
+                  size="small"
+                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
                   <Select
                     disabled={disabled}
                     value={hint.value || ''}
