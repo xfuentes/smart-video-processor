@@ -29,12 +29,7 @@ import {
   WrenchSettings20Regular
 } from '@fluentui/react-icons'
 import { SettingsDialog } from '@renderer/components/SettingsDialog'
-import {
-  checkVideoIsProcessing,
-  checkVideoProcessingEnabled,
-  checkVideoProcessingSuccessful,
-  IVideo
-} from '../../../common/@types/Video'
+import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } from '../../../common/@types/Video'
 import { AboutDialog } from '@renderer/components/AboutDialog'
 
 type Props = {
@@ -75,7 +70,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   const handleCancel = async () => {
     if (selectedVideos) {
       for (const video of selectedVideos) {
-        if (checkVideoIsProcessing(video)) {
+        if (video.processing) {
           await window.api.video.abortJob(video.uuid)
         }
       }
@@ -119,9 +114,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
           vertical
           icon={<Stop24Regular />}
           onClick={handleCancel}
-          disabled={
-            selectedVideos === undefined || selectedVideos.find((video) => checkVideoIsProcessing(video)) === undefined
-          }
+          disabled={selectedVideos === undefined || selectedVideos.find((video) => video.processing) === undefined}
         >
           Cancel
         </ToolbarButton>
