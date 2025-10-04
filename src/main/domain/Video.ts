@@ -677,33 +677,6 @@ export class Video implements IVideo {
       this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
       this.tvShow.order = 'absolute'
       this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title)
-    } else {
-      const patterns = [
-        /1080p/i,
-        /720p/i,
-        /\s+FR\s+/,
-        /\s+French\s+/,
-        /\s+hdlight\s+/,
-        /\s+EN\s+/,
-        /\s+x264\s+/i,
-        /\s+AC3\s+/i
-      ]
-      let pos = 0
-      patterns.forEach((pattern) => {
-        const res = pattern.exec(filename)
-        if (res !== null) {
-          const pos2 = res.index
-          if (pos2 > 0 && (pos === 0 || pos2 < pos)) {
-            pos = pos2
-          }
-        }
-      })
-      if (pos > 0) {
-        this.type = VideoType.MOVIE
-        this.movie.title = filename.substring(0, pos)
-        this.movie.title = Files.megaTrim(this.movie.title)
-        this.movie.year = undefined
-      }
     }
 
     this.audioVersions = AudioVersions.extractVersions(filename)

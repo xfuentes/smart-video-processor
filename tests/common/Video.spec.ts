@@ -76,6 +76,13 @@ test('Movie extracts tmdb ID', async () => {
   expect(video.movie.tmdb).toBe(58652)
 })
 
+test('Movie extracts title and year', async () => {
+  const video = new Video('Celine Dion - Live at Tokyo Dome 2018.mkv')
+  expect(video.type).toBe(VideoType.MOVIE)
+  expect(video.movie.title).toBe('Celine Dion - Live at Tokyo Dome')
+  expect(video.movie.year).toBe(2018)
+})
+
 test('TV-Show Retrieve Language IETF', async () => {
   registerTmpFiles()
   const video = new Video(
