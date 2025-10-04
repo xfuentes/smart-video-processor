@@ -103,6 +103,7 @@ const columns: TableColumnDefinition<IChange>[] = [
 
 type Props = {
   video: IVideo
+  disabled?: boolean
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
@@ -113,7 +114,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   newValue: { defaultWidth: 200, minWidth: 50, idealWidth: 300 }
 }
 
-export const ChangeList = ({ video }: Props) => {
+export const ChangeList = ({ video, disabled }: Props) => {
   const [source, setSource] = useState<string>('Container')
   const [type, setType] = useState<ChangeType>(ChangeType.UPDATE)
   const availableProperties = Change.getAvailablePropertiesBySource(source, type)
@@ -149,6 +150,7 @@ export const ChangeList = ({ video }: Props) => {
         <Field size="small" label="Source">
           <Select
             value={source}
+            disabled={disabled}
             onChange={(_ev, data) => {
               const nextSource = data.value
               const nextTypes = Change.getAvailableChangeTypesBySource(nextSource)
@@ -177,6 +179,7 @@ export const ChangeList = ({ video }: Props) => {
         <Field size="small" label="Type">
           <Select
             value={type}
+            disabled={disabled}
             onChange={(_ev, data) => {
               setType(data.value as ChangeType)
             }}
@@ -193,6 +196,7 @@ export const ChangeList = ({ video }: Props) => {
         <Field size="small" label="Property">
           <Select
             value={property}
+            disabled={disabled}
             onChange={(_ev, data) => {
               const nextProperty = data.value as ChangeProperty
               setProperty(nextProperty)
@@ -212,6 +216,7 @@ export const ChangeList = ({ video }: Props) => {
               {propertyTypes[property] === 'string' && (
                 <Input
                   value={newValue as string}
+                  disabled={disabled}
                   onChange={(_ev, data) => {
                     setNewValue(data.value)
                   }}
@@ -219,6 +224,7 @@ export const ChangeList = ({ video }: Props) => {
               )}
               {propertyTypes[property] === 'boolean' && (
                 <Checkbox
+                  disabled={disabled}
                   onChange={(_ev, data) => {
                     setNewValue(data ?? '')
                   }}
@@ -228,6 +234,7 @@ export const ChangeList = ({ video }: Props) => {
               {propertyTypes[property] === 'language' && (
                 <LanguageSelector
                   id="language-input"
+                  disabled={disabled}
                   size={'small'}
                   multiselect={false}
                   value={newValue as string}
@@ -247,7 +254,7 @@ export const ChangeList = ({ video }: Props) => {
               setSelectedRows(new Set<TableRowId>([newUuid]))
               setSelectedChangeUuid(newUuid)
             }}
-            disabled={changeExists(video, undefined, source, type, property)}
+            disabled={disabled || changeExists(video, undefined, source, type, property)}
           >
             Insert
           </Button>
@@ -259,7 +266,9 @@ export const ChangeList = ({ video }: Props) => {
               (await window.api.video.saveChange(video.uuid, selectedChangeUuid, source, type, property, newValue))
             }
             disabled={
-              selectedChangeUuid === undefined || changeExists(video, selectedChangeUuid, source, type, property)
+              disabled ||
+              selectedChangeUuid === undefined ||
+              changeExists(video, selectedChangeUuid, source, type, property)
             }
           >
             Update
@@ -274,7 +283,7 @@ export const ChangeList = ({ video }: Props) => {
                 setSelectedChangeUuid(undefined)
               }
             }}
-            disabled={selectedChangeUuid === undefined}
+            disabled={disabled || selectedChangeUuid === undefined}
           >
             Remove
           </Button>

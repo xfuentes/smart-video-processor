@@ -73,13 +73,51 @@
 }
 
 .search-results {
+  position: relative;
   overflow: hidden;
   overflow-y: auto;
-  padding: 2px;
+  padding: 0;
   background-color: #FFFFFF;
   border: 1px solid #EBEBEB;
   flex-grow: 4;
   min-width: 40vw;
+}
+
+.search-results>div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.search-results>.mask {
+  position: absolute;
+  background-color: whitesmoke;
+  opacity: 50%;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.mask-parent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.mask-parent>div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.mask-parent>.mask {
+  position: absolute;
+  background-color: whitesmoke;
+  opacity: 50%;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
 }
 
 .preview-space {
@@ -175,7 +213,8 @@
 .processing-changes {
   overflow: hidden;
   overflow-y: auto;
-  padding: 2px;
+  padding: 0;
+  flex-grow: 1;
   background-color: #FFFFFF;
   border: 1px solid #EBEBEB;
 }
