@@ -30,9 +30,10 @@ import { LanguageSelector } from '@renderer/components/LanguageSelector'
 
 type Props = {
   video: IVideo
+  disabled?: boolean
 }
 
-export const Matching = ({ video }: Props) => {
+export const Matching = ({ video, disabled }: Props) => {
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
   const [type, setType] = useState<VideoType>(video.type)
   const [searchBy, setSearchBy] = useState<SearchBy>(video.searchBy)
@@ -125,7 +126,6 @@ export const Matching = ({ video }: Props) => {
       })
       .catch((error) => setSearchError((error as Error).message))
   }
-  const inputDisabled = video.queued || video.processing
 
   return (
     <>
@@ -133,7 +133,7 @@ export const Matching = ({ video }: Props) => {
         <div>
           <Field size="small" label="Type">
             <Select
-              disabled={inputDisabled}
+              disabled={disabled}
               value={type}
               onChange={(_ev, data) => {
                 setType(data.value as VideoType)
@@ -152,7 +152,7 @@ export const Matching = ({ video }: Props) => {
               <Field size="small" label="Search By">
                 <Select
                   value={searchBy}
-                  disabled={inputDisabled}
+                  disabled={disabled}
                   onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
                 >
                   <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
@@ -165,11 +165,7 @@ export const Matching = ({ video }: Props) => {
               <>
                 <div className="growing-form-field">
                   <Field size="small" label="Title" required>
-                    <Input
-                      disabled={inputDisabled}
-                      value={movieTitle}
-                      onChange={(_ev, data) => setMovieTitle(data.value)}
-                    />
+                    <Input disabled={disabled} value={movieTitle} onChange={(_ev, data) => setMovieTitle(data.value)} />
                   </Field>
                 </div>
                 <div>
@@ -177,7 +173,7 @@ export const Matching = ({ video }: Props) => {
                     <Input
                       type="number"
                       value={movieYear}
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       style={{ minWidth: 1, maxWidth: 72 }}
                       onChange={(_ev, data) => setMovieYear(data.value)}
                     />
@@ -188,11 +184,7 @@ export const Matching = ({ video }: Props) => {
             {searchBy === SearchBy.IMDB && (
               <div>
                 <Field size="small" label="IMDB ID" required>
-                  <Input
-                    disabled={inputDisabled}
-                    value={movieIMDB}
-                    onChange={(_ev, data) => setMovieIMDB(data.value)}
-                  />
+                  <Input disabled={disabled} value={movieIMDB} onChange={(_ev, data) => setMovieIMDB(data.value)} />
                 </Field>
               </div>
             )}
@@ -200,7 +192,7 @@ export const Matching = ({ video }: Props) => {
               <div>
                 <Field size="small" label="TMDB ID" required>
                   <Input
-                    disabled={inputDisabled}
+                    disabled={disabled}
                     value={movieTMDB}
                     type="number"
                     onChange={(_ev, data) => setMovieTMDB(data.value)}
@@ -210,7 +202,7 @@ export const Matching = ({ video }: Props) => {
             )}
             <Field size="small" label="Edition">
               <Select
-                disabled={inputDisabled}
+                disabled={disabled}
                 value={movieEdition}
                 onChange={(_ev, data) => setMovieEdition(data.value as EditionType)}
               >
@@ -228,7 +220,7 @@ export const Matching = ({ video }: Props) => {
             <div>
               <Field size="small" label="Search By">
                 <Select
-                  disabled={inputDisabled}
+                  disabled={disabled}
                   value={searchBy}
                   onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
                 >
@@ -242,7 +234,7 @@ export const Matching = ({ video }: Props) => {
                 <div>
                   <Field size="small" label="Title" required>
                     <Input
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       value={tvShowTitle}
                       onChange={(_ev, data) => setTvShowTitle(data.value)}
                     />
@@ -252,7 +244,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Year">
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       value={tvShowYear}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowYear(data.value)}
@@ -265,11 +257,7 @@ export const Matching = ({ video }: Props) => {
               <>
                 <div>
                   <Field size="small" label="TVDB ID" required>
-                    <Input
-                      disabled={inputDisabled}
-                      value={tvShowTVDB}
-                      onChange={(_ev, data) => setTvShowTVDB(data.value)}
-                    />
+                    <Input disabled={disabled} value={tvShowTVDB} onChange={(_ev, data) => setTvShowTVDB(data.value)} />
                   </Field>
                 </div>
               </>
@@ -277,7 +265,7 @@ export const Matching = ({ video }: Props) => {
             <div>
               <Field size="small" label="Order">
                 <Select
-                  disabled={inputDisabled}
+                  disabled={disabled}
                   value={tvShowOrder}
                   onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
                 >
@@ -293,7 +281,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Season" required>
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       value={tvShowSeason}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowSeason(data.value)}
@@ -304,7 +292,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Episode" required>
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       value={tvShowEpisode}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowEpisode(data.value)}
@@ -317,7 +305,7 @@ export const Matching = ({ video }: Props) => {
                 <Field size="small" label="Episode" required>
                   <Input
                     type="number"
-                    disabled={inputDisabled}
+                    disabled={disabled}
                     value={tvShowAbsoluteEpisode}
                     style={{ minWidth: 1 }}
                     onChange={(_ev, data) => setTvShowAbsoluteEpisode(data.value)}
@@ -331,11 +319,7 @@ export const Matching = ({ video }: Props) => {
           <>
             <div className="growing-form-field">
               <Field size="small" label="Title" required>
-                <Input
-                  disabled={inputDisabled}
-                  value={otherTitle}
-                  onChange={(_ev, data) => setOtherTitle(data.value)}
-                />
+                <Input disabled={disabled} value={otherTitle} onChange={(_ev, data) => setOtherTitle(data.value)} />
               </Field>
             </div>
           </>
@@ -344,10 +328,7 @@ export const Matching = ({ video }: Props) => {
           {type === VideoType.OTHER ? (
             <Button
               disabled={
-                inputDisabled ||
-                !otherTitle ||
-                (!otherYear && (!!otherDay || !!otherMonth)) ||
-                (!otherMonth && !!otherDay)
+                disabled || !otherTitle || (!otherYear && (!!otherDay || !!otherMonth)) || (!otherMonth && !!otherDay)
               }
               size={'small'}
               appearance={'primary'}
@@ -357,7 +338,7 @@ export const Matching = ({ video }: Props) => {
             </Button>
           ) : (
             <Button
-              disabled={inputDisabled}
+              disabled={disabled}
               size={'small'}
               appearance={'primary'}
               icon={<Search16Regular />}
@@ -383,7 +364,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Year">
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       required={!!otherDay || !!otherMonth}
                       value={otherYear ? '' + otherYear : ''}
                       style={{ minWidth: 1 }}
@@ -393,7 +374,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Month">
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       required={!!otherDay}
                       value={otherMonth}
                       style={{ minWidth: 1 }}
@@ -403,7 +384,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Day">
                     <Input
                       type="number"
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       value={otherDay}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setOtherDay(data.value)}
@@ -412,7 +393,7 @@ export const Matching = ({ video }: Props) => {
                   <Field size="small" label="Original Language">
                     <LanguageSelector
                       size={'small'}
-                      disabled={inputDisabled}
+                      disabled={disabled}
                       id="customOriginalLanguage"
                       multiselect={false}
                       value={otherOriginalLanguage}
@@ -423,7 +404,7 @@ export const Matching = ({ video }: Props) => {
                 <div className="matching-form">
                   <FileSelectorField
                     clearable
-                    disabled={inputDisabled}
+                    disabled={disabled}
                     label="JPG Poster Path"
                     size={'small'}
                     value={otherPosterPath}
@@ -448,6 +429,7 @@ export const Matching = ({ video }: Props) => {
           {type !== VideoType.OTHER && (
             <div className={'matching-results'}>
               <SearchResultList
+                disabled={disabled}
                 results={video.searchResults}
                 onSelectionChange={async (selection: ISearchResult | undefined) =>
                   await window.api.video
