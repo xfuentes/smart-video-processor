@@ -28,6 +28,7 @@ import { Container } from '../../main/domain/programs/MKVMerge'
 import { EncoderSettings } from './Encoding'
 import { IOther } from './Other'
 import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { IProcess } from '../Process'
 
 export enum VideoType {
   MOVIE = 'Movie',
@@ -67,6 +68,7 @@ export interface IVideo {
   container?: Container
   tracks: ITrack[]
   changes: IChange[]
+  processes: IProcess[]
   hints: IHint[]
   loading: boolean
   processing: boolean
