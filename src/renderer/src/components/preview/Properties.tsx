@@ -114,7 +114,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   newValue: { defaultWidth: 200, minWidth: 50, idealWidth: 300 }
 }
 
-export const Processing = ({ video, disabled }: Props) => {
+export const Properties = ({ video, disabled }: Props) => {
   const [source, setSource] = useState<string>('Container')
   const [type, setType] = useState<ChangeType>(ChangeType.UPDATE)
   const availableProperties = Change.getAvailablePropertiesBySource(source, type)
