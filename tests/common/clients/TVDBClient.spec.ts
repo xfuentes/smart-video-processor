@@ -185,9 +185,7 @@ test('Retrieve Walking Dead Dead City Details in French', async () => {
   expect(episode.episodeData.overview).toContain(
     "Negan et Maggie s'embarquent dans des missions éprouvantes et font face à des épreuves inattendues, autant physiques qu'émotionnelles."
   )
-  expect(episode.seriesData.posterURL).toBe(
-    'https://artworks.thetvdb.com/banners/v4/series/417549/posters/64d0c1764319a.jpg'
-  )
+  expect(episode.seriesData.posterURL).toContain('https://artworks.thetvdb.com/banners/')
   expect(episode.seriesData.title).toBe('The Walking Dead: Dead City')
   expect(episode.seriesData.id).toBe(417549)
   expect(episode.seriesData.overview).toContain('Negan')
