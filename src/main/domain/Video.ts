@@ -630,15 +630,17 @@ export class Video implements IVideo {
     const movieMatches = moviePattern.exec(filename)
 
     const tvdbPattern = /\{tvdb-(?<tvdb>\d+)}/i
-    const tvdbMatches = tvdbPattern.exec(this.filename)
+    const tvdbMatches = tvdbPattern.exec(this.sourcePath)
     if (tvdbMatches?.groups) {
       this.tvShow.theTVDB = Number.parseInt(tvdbMatches.groups.tvdb)
+      this.selectedSearchResultID = this.tvShow.theTVDB
       this.searchBy = SearchBy.TVDB
     }
     const tmdbPattern = /\{tmdb-(?<tmdb>\d+)}/i
     const tmdbMatches = tmdbPattern.exec(this.filename)
     if (tmdbMatches?.groups) {
       this.movie.tmdb = Number.parseInt(tmdbMatches.groups.tmdb)
+      this.selectedSearchResultID = this.movie.tmdb
       this.searchBy = SearchBy.TMDB
     }
     const editionPattern = /\{edition-(?<edition>[^}]+)}/i

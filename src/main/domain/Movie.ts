@@ -106,9 +106,9 @@ export default class Movie implements IMovie {
         .map((c) => Countries.getCountryByCode(c))
         .filter((c) => c != undefined)
       this.originalLanguage = Languages.guessLanguageIETFFromCountries(movieData.language, this.originalCountries)
-      this.title = movieData.title
+      this.title = movieData.title || this.title
       this.overview = movieData.overview
-      this.year = movieData.year
+      this.year = movieData.year || this.year // Do not overwrite year if not defined in DB to allow user to manually enter it
       this.posterURL = movieData.posterUrl
       this.imdb = movieData.imdb
       this.rating = movieData.rating
@@ -191,6 +191,11 @@ export default class Movie implements IMovie {
   async selectSearchResultID(id: number | string | undefined) {
     const idNum = id !== undefined ? Numbers.toNumber('' + id) : undefined
     this.setTMDB(idNum)
+    const matchedSearchResult = this.video.searchResults.find((r) => r.id === idNum)
+    if (matchedSearchResult) {
+      this.title = matchedSearchResult.title
+      this.year = matchedSearchResult.year
+    }
     await this.load()
   }
 
