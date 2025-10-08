@@ -131,7 +131,7 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
   }, [selectedItems, videos, onSelectionChange])
 
   return (
-    <DropZone onDropFiles={onImportVideos} style={{ height: '100%' }} onKeyUp={handleShortcuts}>
+    <DropZone onDropFiles={onImportVideos} style={{ minHeight: '100%' }} onKeyUp={handleShortcuts}>
       <DataGrid
         items={videos}
         columns={columns}
