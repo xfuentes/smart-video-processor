@@ -56,6 +56,7 @@ import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
+import { IProcess } from '../../common/Process'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -70,6 +71,7 @@ export class Video implements IVideo {
   public tracks: Track[] = []
   public pixels?: string
   public changes: Change[] = []
+  public processes: IProcess[] = []
   public hints: Hint[] = []
   public movie: Movie = new Movie(this)
   public tvShow: TVShow = new TVShow(this)
@@ -590,6 +592,7 @@ export class Video implements IVideo {
       container: this.container,
       tracks: this.tracks.map((t) => t.toJSON()),
       changes: this.changes.map((c) => c.toJSON()),
+      processes: this.processes,
       hints: this.hints.map((h) => h.toJSON()),
       status: this.status,
       message: this.message,
