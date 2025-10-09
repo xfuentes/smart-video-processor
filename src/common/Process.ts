@@ -26,6 +26,7 @@ export enum ProcessType {
  * Video Process Definition
  */
 export interface IProcess {
-  uuid: string
-  type: ProcessType
+  inputID: number
+  startFrom: string
+  endAt: string
 }
