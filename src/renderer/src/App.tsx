@@ -4,7 +4,7 @@ import { MainToolbar } from '@renderer/components/MainToolbar'
 import { SettingsContext } from '@renderer/components/SettingsContext'
 import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
-import { FilesChangedListener } from '../../preload/@types'
+import { ListChangedListener, VideoChangedListener } from '../../preload/@types'
 import { VideoList } from '@renderer/components/VideoList'
 import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 
@@ -32,22 +32,50 @@ export const App = (): React.JSX.Element => {
     selectedVideosRef.current = selectedVideos
   }, [selectedVideos])
 
-  const listener: FilesChangedListener = (videos: IVideo[]) => {
-    console.log('*** Received Video Update ***')
-    console.log(videos)
+  const listChangedListener: ListChangedListener = (videos: IVideo[]) => {
     setVideos(videos)
     if (selectedVideosRef.current.length > 0) {
-      setSelectedVideos((prevSelectedVideos) =>
-        prevSelectedVideos?.map((sv) => videos.find((v) => v.uuid === sv.uuid)).filter((sv) => sv !== undefined)
-      )
+      setSelectedVideos((prevSelection) => {
+        const newSelection = prevSelection
+          ?.map((sv) => videos.find((v) => v.uuid === sv.uuid))
+          .filter((sv) => sv !== undefined)
+        let selectionChanged = prevSelection.length !== newSelection?.length
+        if (!selectionChanged) {
+          prevSelection.forEach((value, index) => {
+            if (value.uuid !== newSelection[index].uuid) {
+              selectionChanged = true
+            }
+          })
+        }
+        selectionChanged && console.log('Selection changed!')
+        return selectionChanged ? newSelection : prevSelection
+      })
+    }
+  }
+
+  const videoChangedListener: VideoChangedListener = (video: IVideo) => {
+    if (selectedVideosRef.current.length > 0) {
+      setSelectedVideos((prevSelection) => {
+        let selectionChanged: boolean = false
+        const newSelection = prevSelection.map((prevVideo) => {
+          if (prevVideo.uuid === video.uuid) {
+            selectionChanged = true
+            return video
+          }
+          return prevVideo
+        })
+        selectionChanged && console.log('Selection changed!')
+        return selectionChanged ? newSelection : prevSelection
+      })
     }
   }
 
   useEffect(() => {
-    void window.api.video.addFilesChangedListener(listener)
-
+    const removeListChangedListener = window.api.video.addListChangedListener(listChangedListener)
+    const removeVideoChangedListener = window.api.video.addVideoChangedListener(videoChangedListener)
     return () => {
-      void window.api.video.removeFilesChangedListener(listener)
+      removeListChangedListener()
+      removeVideoChangedListener()
     }
   }, [])
 

@@ -119,7 +119,8 @@ const columns: TableColumnDefinition<ITrack>[] = [
 ]
 
 type Props = {
-  video: IVideo
+  video: IVideo,
+  disabled?: boolean
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
@@ -137,7 +138,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 }
 }
 
-export const TrackList = ({ video }: Props) => {
+export const TrackList = ({ video, disabled }: Props) => {
   const handleSelectionChange: DataGridProps['onSelectionChange'] = async (
     _e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,
     data: OnSelectionChangeData
@@ -149,36 +150,39 @@ export const TrackList = ({ video }: Props) => {
   const selectedItems = new Set<number>(video.tracks.filter((t) => t.copy).map((t) => t.id))
 
   return (
-    <div>
-      <DataGrid
-        items={video.tracks}
-        columns={columns}
-        getRowId={(item: ITrack) => item.id}
-        focusMode="composite"
-        resizableColumns
-        columnSizingOptions={columnSizingOptions}
-        size="extra-small"
-        selectionMode="multiselect"
-        selectedItems={selectedItems}
-        onSelectionChange={handleSelectionChange}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody<IVideo>>
-          {({ item, rowId }) => (
-            <DataGridRow<IVideo> key={rowId}>
-              {({ renderCell }) => (
-                <DataGridCell as={'div'} className={'cell'}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
+    <div className="mask-parent">
+      <div>
+        <DataGrid
+          items={video.tracks}
+          columns={columns}
+          getRowId={(item: ITrack) => item.id}
+          focusMode="composite"
+          resizableColumns
+          columnSizingOptions={columnSizingOptions}
+          size="extra-small"
+          selectionMode="multiselect"
+          selectedItems={selectedItems}
+          onSelectionChange={handleSelectionChange}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+          </DataGridHeader>
+          <DataGridBody<IVideo>>
+            {({ item, rowId }) => (
+              <DataGridRow<IVideo> key={rowId}>
+                {({ renderCell }) => (
+                  <DataGridCell as={'div'} className={'cell'}>
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </div>
+      {disabled === true && <div className="mask" />}
     </div>
   )
 }

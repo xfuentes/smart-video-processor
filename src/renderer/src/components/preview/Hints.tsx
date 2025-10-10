@@ -24,24 +24,32 @@ import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
   video: IVideo
+  disabled?: boolean
 }
 
-export const Hints = ({ video }: Props) => {
+export const Hints = ({ video, disabled }: Props) => {
   const languageHints = video.hints.filter((h) => h.type === HintType.LANGUAGE)
   const subtitlesTypeHints = video.hints.filter((h) => h.type === HintType.SUBTITLES_TYPE)
   return (
     <div className="hints-main">
       {languageHints.length > 0 && (
         <>
-          <Divider appearance="brand">Missing Language</Divider>
+          <Divider appearance="default">Missing Language</Divider>
           <div className="hints-form">
             {languageHints.map((hint) => {
               const key = hint.type + ' ' + hint.trackId
               const track = video.tracks.find((t) => t.id === hint.trackId)
               return (
-                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                <Field
+                  key={key}
+                  size="small"
+                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
                   <LanguageSelector
                     id={key}
+                    disabled={disabled}
                     size={'small'}
                     multiselect={false}
                     value={hint.value || ''}
@@ -60,14 +68,21 @@ export const Hints = ({ video }: Props) => {
       )}
       {subtitlesTypeHints.length > 0 && (
         <>
-          <Divider appearance="brand">Missing Subtitles Type</Divider>
+          <Divider appearance="default">Missing Subtitles Type</Divider>
           <div className="hints-form">
             {subtitlesTypeHints.map((hint) => {
               const key = hint.type + ' ' + hint.trackId
               const track = video.tracks.find((t) => t.id === hint.trackId)
               return (
-                <Field key={key} size="small" label={`${track?.type ?? 'Unknown'} ${hint.trackId}`} required>
+                <Field
+                  key={key}
+                  size="small"
+                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
                   <Select
+                    disabled={disabled}
                     value={hint.value || ''}
                     onChange={async (_ev, data) => await window.api.video.setHint(video.uuid, hint, data.value)}
                   >
