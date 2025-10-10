@@ -58,6 +58,7 @@ type Props = {
   results: ISearchResult[]
   selectedID: number | undefined
   onSelectionChange?: (selection: ISearchResult | undefined) => void
+  disabled?: boolean
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
@@ -66,7 +67,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
 }
 
-export const SearchResultList = ({ results, selectedID, onSelectionChange }: Props) => {
+export const SearchResultList = ({ results, selectedID, onSelectionChange, disabled }: Props) => {
   const handleSelectionChange: DataGridProps['onSelectionChange'] = (_e, data) => {
     const selectedResult = results.find((result) => data.selectedItems.has(result.id))
     if (onSelectionChange !== undefined) {
@@ -110,6 +111,7 @@ export const SearchResultList = ({ results, selectedID, onSelectionChange }: Pro
           </DataGridBody>
         </DataGrid>
       </div>
+      {disabled === true && <div className="mask" />}
     </div>
   )
 }

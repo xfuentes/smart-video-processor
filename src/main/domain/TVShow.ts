@@ -169,44 +169,36 @@ export class TVShow implements ITVShow {
 
   setTitle(newTitle: string) {
     this.title = newTitle
-    this.video.fireChangeEvent()
   }
 
   setIMDB(newIMDB: string) {
     this.imdb = newIMDB
-    this.video.fireChangeEvent()
   }
 
   setOrder(order: EpisodeOrder) {
     this.order = order
-    this.video.fireChangeEvent()
   }
 
   setSeason(newSeason: string) {
     this.season = Numbers.toNumber(newSeason)
-    this.video.fireChangeEvent()
   }
 
   setEpisode(newEpisode: string) {
     this.episode = Numbers.toNumber(newEpisode)
-    this.video.fireChangeEvent()
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
     this.season = 1
     this.absoluteEpisode = Numbers.toNumber(newAbsoluteEpisode)
-    this.video.fireChangeEvent()
   }
 
   setTheTVDB(id: number | string | undefined) {
     this.theTVDB = id !== undefined ? Numbers.toNumber('' + id) : undefined
     this.video.selectedSearchResultID = this.theTVDB
-    this.video.fireChangeEvent()
   }
 
   setYear(newYear: string) {
     this.year = Numbers.toNumber(newYear)
-    this.video.fireChangeEvent()
   }
 
   async selectSearchResultID(id: number | string | undefined) {
