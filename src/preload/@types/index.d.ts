@@ -23,6 +23,8 @@ import { EditionType } from '../../common/@types/Movie'
 import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
+import { IProcess } from '../../common/Process'
+import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
@@ -67,6 +69,7 @@ interface SvpAPI {
     ) => Promise<void>
     deleteChange: (uuid: string, changeUuid: string) => Promise<void>
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
+    addPart: (uuid: string) => Promise<IProcess>
     process: (uuid: string) => Promise<void>
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>

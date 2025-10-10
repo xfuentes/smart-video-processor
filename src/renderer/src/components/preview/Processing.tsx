@@ -19,7 +19,7 @@
 import { IVideo } from '../../../../common/@types/Video'
 import { Button, Divider, Field } from '@fluentui/react-components'
 import { TimePicker } from '@fluentui/react-timepicker-compat'
-import { SaveRegular } from '@fluentui/react-icons'
+import { MoviesAndTvRegular, SaveRegular } from '@fluentui/react-icons'
 import { useState } from 'react'
 import { IProcess } from '../../../../common/Process'
 import { TrackType } from '../../../../common/@types/Track'
@@ -30,7 +30,32 @@ type Props = {
   disabled?: boolean
 }
 
-declare type Hour = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24;
+declare type Hour =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
 
 export const Processing = ({ video, disabled }: Props) => {
   const [processes, setProcesses] = useState<IProcess[]>([
@@ -70,7 +95,22 @@ export const Processing = ({ video, disabled }: Props) => {
         </div>
       </div>
       <Divider style={{ flexGrow: '0' }} />
-      <div className="encoding-buttons">
+      <div className="preview-buttons">
+        <div className="button">
+          <Button
+            size={'medium'}
+            appearance="secondary"
+            icon={<MoviesAndTvRegular />}
+            disabled={disabled}
+            onClick={() => {
+              const videoPartProcess: IProcess = window.api.video.addPart(video.uuid)
+              setProcesses((prevProcesses) => [...prevProcesses, videoPartProcess])
+            }
+            }
+          >
+            Add Video Part
+          </Button>
+        </div>
         <div className="button">
           <Button
             size={'medium'}

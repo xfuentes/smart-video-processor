@@ -190,7 +190,7 @@ export class Video implements IVideo {
     return job
   }
 
-  async load() {
+  async load(searchEnabled: boolean = true) {
     const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
     const { tracks, container } = await fij.queue()
     this.tracks = tracks
@@ -199,7 +199,9 @@ export class Video implements IVideo {
     this.generateEncoderSettings(true)
     this.loading = false
     this.fireChangeEvent()
-    await this.search()
+    if (searchEnabled) {
+      await this.search()
+    }
   }
 
   generateEncoderSettings(init = true) {
@@ -390,33 +392,6 @@ export class Video implements IVideo {
 
   getFinalEncoderSettings() {
     return this.encoderSettings.filter((s) => this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId))
-  }
-
-  private async merge(outputDirectory: string, extraDuration?: number) {
-    const subDirs: string[] = []
-    if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
-      subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
-      if (this.tvShow.order === 'official' && this.tvShow.season !== undefined) {
-        subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
-      }
-    }
-
-    this.job = this.attachJob(
-      new ProcessingJob(
-        path.basename(this.sourcePath),
-        this.encodedPath !== undefined ? this.encodedPath : this.sourcePath,
-        this.changes,
-        this.tracks,
-        outputDirectory,
-        subDirs,
-        extraDuration
-      )
-    )
-    await this.job.queue()
-    if (this.encodedPath) {
-      Files.cleanupFiles(this.encodedPath)
-    }
-    this.encodedPath = undefined
   }
 
   getOutputDirectory() {
@@ -612,6 +587,33 @@ export class Video implements IVideo {
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled
     }
+  }
+
+  private async merge(outputDirectory: string, extraDuration?: number) {
+    const subDirs: string[] = []
+    if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
+      subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
+      if (this.tvShow.order === 'official' && this.tvShow.season !== undefined) {
+        subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
+      }
+    }
+
+    this.job = this.attachJob(
+      new ProcessingJob(
+        path.basename(this.sourcePath),
+        this.encodedPath !== undefined ? this.encodedPath : this.sourcePath,
+        this.changes,
+        this.tracks,
+        outputDirectory,
+        subDirs,
+        extraDuration
+      )
+    )
+    await this.job.queue()
+    if (this.encodedPath) {
+      Files.cleanupFiles(this.encodedPath)
+    }
+    this.encodedPath = undefined
   }
 
   private extractInfosFromFilename() {

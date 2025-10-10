@@ -86,6 +86,15 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:setTrackEncodingEnabled', (_event, uuid: string, source: string, value: boolean) => {
     VideoController.getInstance().setTrackEncodingEnabled(uuid, source, value)
   })
+  ipcMain.handle('video:addPart', async (_event, uuid: string) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select additional video part',
+      properties: ['openFile', 'dontAddToRecent']
+    })
+    if (!result.canceled && result.filePaths.length >= 1) {
+      VideoController.getInstance().addPart(uuid, result.filePaths[0])
+    }
+  })
   ipcMain.handle('video:process', (_event, uuid: string) => {
     return VideoController.getInstance().process(uuid)
   })
