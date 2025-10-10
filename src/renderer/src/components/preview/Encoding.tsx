@@ -154,7 +154,7 @@ export const Encoding = ({ video, disabled }: Props) => {
           </>
         )}
         <Divider style={{ flexGrow: '0' }} />
-        <div className="encoding-buttons">
+        <div className="preview-buttons">
           <div className="button">
             <Button
               size={'medium'}
