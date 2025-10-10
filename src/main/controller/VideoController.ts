@@ -179,4 +179,11 @@ export class VideoController {
   getOther(uuid: string) {
     return this.getVideoByUuid(uuid).other
   }
+
+  addPart(uuid: string, partPath: string) {
+    const video = this.getVideoByUuid(uuid)
+    const videoPart = new Video(partPath)
+    await videoPart.load(false)
+
+  }
 }

@@ -8,6 +8,7 @@ import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Chang
 import { FormValidation } from '../common/FormValidation'
 import { ListChangedListener, InvalidSettingsListener, VideoChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
+import { IProcess } from '../common/Process'
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -71,6 +72,7 @@ const api = {
       ipcRenderer.invoke('video:deleteChange', uuid, changeUuid),
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
+    addPart: (uuid: string): Promise<IProcess> => ipcRenderer.invoke('video:addPart', uuid),
     process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
