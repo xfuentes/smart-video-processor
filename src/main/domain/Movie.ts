@@ -173,23 +173,19 @@ export default class Movie implements IMovie {
 
   setTitle(newTitle: string) {
     this.title = newTitle
-    this.video.fireChangeEvent()
   }
 
   setYear(newYear: string) {
     this.year = Numbers.toNumber(newYear)
-    this.video.fireChangeEvent()
   }
 
   setIMDB(newIMDB: string) {
     this.imdb = newIMDB
-    this.video.fireChangeEvent()
   }
 
   setTMDB(tmdbId: number | string | undefined) {
     this.tmdb = tmdbId !== undefined ? Numbers.toNumber('' + tmdbId) : undefined
     this.video.selectedSearchResultID = this.tmdb
-    this.video.fireChangeEvent()
   }
 
   async selectSearchResultID(id: number | string | undefined) {
@@ -213,7 +209,6 @@ export default class Movie implements IMovie {
 
   setEdition(edition: EditionType) {
     this.edition = edition
-    this.video.fireChangeEvent()
   }
 
   toJSON(): IMovie {

@@ -56,6 +56,7 @@ export const PreviewTabs = ({ video }: Props) => {
   const encodingCount = Object.values(video.trackEncodingEnabled).filter((v) => v).length
   const hintCount = video.hints.length
   const hintMissing = video.hints.find((h) => !h.value) !== undefined
+  const disabled = video.queued || video.processing
 
   return (
     <div
@@ -96,11 +97,11 @@ export const PreviewTabs = ({ video }: Props) => {
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>
-        {selectedTab === 'matching' && <Matching video={video} />}
-        {selectedTab === 'tracks' && <TrackList video={video} />}
-        {selectedTab === 'hints' && <Hints video={video} />}
-        {selectedTab === 'processing' && <ChangeList video={video} />}
-        {selectedTab === 'encoding' && <Encoding video={video} />}
+        {selectedTab === 'matching' && <Matching disabled={disabled} video={video} />}
+        {selectedTab === 'tracks' && <TrackList disabled={disabled} video={video} />}
+        {selectedTab === 'hints' && <Hints disabled={disabled} video={video} />}
+        {selectedTab === 'processing' && <ChangeList disabled={disabled} video={video} />}
+        {selectedTab === 'encoding' && <Encoding disabled={disabled} video={video} />}
       </div>
     </div>
   )

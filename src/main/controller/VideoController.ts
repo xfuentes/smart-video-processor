@@ -17,16 +17,18 @@
  */
 
 import { Video } from '../domain/Video'
-import { SearchBy, VideoType } from '../../common/@types/Video'
+import { SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
-type VideosChangeListener = (videos: Video[]) => void
+type VideoListChangeListener = (videos: Video[]) => void
+type VideoChangeListener = (video: Video) => void
 
 export class VideoController {
   private static instance: VideoController
   private videos: Video[] = []
-  private changeListeners: VideosChangeListener[] = []
+  private listChangeListeners: VideoListChangeListener[] = []
+  private videoChangeListeners: VideoChangeListener[] = []
 
   static getInstance() {
     if (!VideoController.instance) {
@@ -35,26 +37,25 @@ export class VideoController {
     return VideoController.instance
   }
 
-  handleVideoChange = (_video: Video) => {
-    this.fireChangeEvent()
+  handleVideoChange = (video: Video) => {
+    this.fireListChangeEvent()
+    this.fireVideoChangeEvent(video)
   }
 
-  addChangeListener(listener: VideosChangeListener) {
-    this.changeListeners.push(listener)
+  addVideoChangeListener(listener: VideoChangeListener) {
+    this.videoChangeListeners.push(listener)
   }
 
-  removeChangeListener(listener: VideosChangeListener) {
-    const listeners: VideosChangeListener[] = []
-    for (const l of this.changeListeners) {
-      if (l !== listener) {
-        listeners.push(l)
-      }
-    }
-    this.changeListeners = listeners
+  fireVideoChangeEvent(video: Video) {
+    this.videoChangeListeners.forEach((listener) => listener(video))
   }
 
-  fireChangeEvent() {
-    this.changeListeners.forEach((listener) => listener(this.videos))
+  addListChangeListener(listener: VideoListChangeListener) {
+    this.listChangeListeners.push(listener)
+  }
+
+  fireListChangeEvent() {
+    this.listChangeListeners.forEach((listener) => listener(this.videos))
   }
 
   openFiles(filePaths: string[]) {
@@ -69,6 +70,7 @@ export class VideoController {
         }
       }
       this.videos = this.videos.concat(newVideos)
+      this.fireListChangeEvent()
       for (const newVideo of newVideos) {
         void newVideo.load()
       }
@@ -101,8 +103,8 @@ export class VideoController {
     return this.getVideoByUuid(uuid).selectSearchResultID(searchResultID)
   }
 
-  search(uuid: string) {
-    return this.getVideoByUuid(uuid).search()
+  search(uuid: string, data?: SearchInputData) {
+    return this.getVideoByUuid(uuid).search(data)
   }
 
   switchTrackSelection(uuid: string, changedItems: number[]) {
@@ -158,12 +160,12 @@ export class VideoController {
       }
       return true
     })
-    this.fireChangeEvent()
+    this.fireListChangeEvent()
   }
 
   clearCompleted() {
     this.videos = this.videos.filter((v) => !v.isProcessed())
-    this.fireChangeEvent()
+    this.fireListChangeEvent()
   }
 
   getMovie(uuid: string) {

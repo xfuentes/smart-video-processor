@@ -18,8 +18,8 @@
 
 import { Button, Field, Image, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
-import { useState } from 'react'
-import { IVideo, SearchBy, VideoType } from '../../../../common/@types/Video'
+import { useEffect, useState } from 'react'
+import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EditionType } from '../../../../common/@types/Movie'
@@ -30,21 +30,114 @@ import { LanguageSelector } from '@renderer/components/LanguageSelector'
 
 type Props = {
   video: IVideo
+  disabled?: boolean
 }
 
-export const Matching = ({ video }: Props) => {
+export const Matching = ({ video, disabled }: Props) => {
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
+  const [type, setType] = useState<VideoType>(video.type)
+  const [searchBy, setSearchBy] = useState<SearchBy>(video.searchBy)
+
+  const [movieTitle, setMovieTitle] = useState<string>(video.movie?.title ?? '')
+  const [movieYear, setMovieYear] = useState<string>(video.movie?.year ? '' + video.movie.year : '')
+  const [movieIMDB, setMovieIMDB] = useState<string>(video.movie?.imdb ? video.movie.imdb : '')
+  const [movieTMDB, setMovieTMDB] = useState<string>(video.movie?.tmdb ? '' + video.movie.tmdb : '')
+  const [movieEdition, setMovieEdition] = useState<EditionType>(video.movie?.edition ?? EditionType.THEATRICAL)
+
+  const [tvShowTitle, setTvShowTitle] = useState<string>(video.tvShow?.title ?? '')
+  const [tvShowYear, setTvShowYear] = useState<string>(video.tvShow?.year ? '' + video.tvShow.year : '')
+  const [tvShowTVDB, setTvShowTVDB] = useState<string>(video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '')
+  const [tvShowOrder, setTvShowOrder] = useState<EpisodeOrder>(video.tvShow?.order ?? 'official')
+  const [tvShowSeason, setTvShowSeason] = useState<string>(!video.tvShow?.season ? '' : '' + video.tvShow.season)
+  const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
+  const [tvShowAbsoluteEpisode, setTvShowAbsoluteEpisode] = useState<string>(
+    !video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode
+  )
+
+  const [otherTitle, setOtherTitle] = useState<string>(video.other?.title ?? '')
+  const [otherYear, setOtherYear] = useState<string>(video.other?.year ? '' + video.other.year : '')
+  const [otherMonth, setOtherMonth] = useState<string>(video.other?.month ? '' + video.other.month : '')
+  const [otherDay, setOtherDay] = useState<string>(video.other?.day ? '' + video.other.day : '')
+  const [otherOriginalLanguage, setOtherOriginalLanguage] = useState<string>(video.other?.originalLanguage?.code || '')
+  const [otherPosterPath, setOtherPosterPath] = useState<string>(video.other?.poster || '')
+
+  useEffect(() => {
+    console.log('movie ' + video.filename.substring(video.filename.lastIndexOf('/')) + ' updated!')
+    type !== video.type && setType(video.type)
+    searchBy !== video.searchBy && setSearchBy(video.searchBy)
+    movieTitle !== (video.movie?.title ?? '') && setMovieTitle(video.movie?.title ?? '')
+    movieYear !== (video.movie?.year ? '' + video.movie.year : '') &&
+      setMovieYear(video.movie?.year ? '' + video.movie.year : '')
+    movieIMDB !== (video.movie?.imdb ? video.movie.imdb : '') && setMovieIMDB(video.movie?.imdb ? video.movie.imdb : '')
+    movieTMDB !== (video.movie?.tmdb ? '' + video.movie.tmdb : '') &&
+      setMovieTMDB(video.movie?.tmdb ? '' + video.movie.tmdb : '')
+    movieEdition !== (video.movie?.edition ?? EditionType.THEATRICAL) &&
+      setMovieEdition(video.movie?.edition ?? EditionType.THEATRICAL)
+    tvShowTitle !== (video.tvShow?.title ?? '') && setTvShowTitle(video.tvShow?.title ?? '')
+    tvShowYear !== (video.tvShow?.year ? '' + video.tvShow.year : '') &&
+      setTvShowYear(video.tvShow?.year ? '' + video.tvShow.year : '')
+    tvShowTVDB !== (video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '') &&
+      setTvShowTVDB(video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '')
+    tvShowOrder !== (video.tvShow?.order ?? 'official') && setTvShowOrder(video.tvShow?.order ?? 'official')
+    tvShowSeason !== (!video.tvShow?.season ? '' : '' + video.tvShow.season) &&
+      setTvShowSeason(!video.tvShow?.season ? '' : '' + video.tvShow.season)
+    tvShowEpisode !== (!video.tvShow?.episode ? '' : '' + video.tvShow.episode) &&
+      setTvShowEpisode(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
+    tvShowAbsoluteEpisode !== (!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode) &&
+      setTvShowAbsoluteEpisode(!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode)
+    otherTitle !== (video.other?.title ?? '') && setOtherTitle(video.other?.title ?? '')
+    otherYear !== (video.other?.year ? '' + video.other.year : '') &&
+      setOtherYear(video.other?.year ? '' + video.other.year : '')
+    otherMonth !== (video.other?.month ? '' + video.other.month : '') &&
+      setOtherMonth(video.other?.month ? '' + video.other.month : '')
+    otherDay !== (video.other?.day ? '' + video.other.day : '') &&
+      setOtherDay(video.other?.day ? '' + video.other.day : '')
+    otherOriginalLanguage !== (video.other?.originalLanguage?.code || '') &&
+      setOtherOriginalLanguage(video.other?.originalLanguage?.code || '')
+    otherPosterPath !== (video.other?.poster || '') && setOtherPosterPath(video.other?.poster || '')
+  }, [video]) // eslint-disable-line
+
+  const search = async () => {
+    await window.api.video
+      .search(video.uuid, {
+        type,
+        searchBy,
+        movieTitle,
+        movieYear,
+        movieIMDB,
+        movieTMDB,
+        movieEdition,
+        tvShowTitle,
+        tvShowYear,
+        tvShowTVDB,
+        tvShowOrder,
+        tvShowSeason,
+        tvShowEpisode,
+        tvShowAbsoluteEpisode,
+        otherTitle,
+        otherYear,
+        otherMonth,
+        otherDay,
+        otherOriginalLanguage,
+        otherPosterPath
+      } as SearchInputData)
+      .then(() => {
+        setSearchError(undefined)
+      })
+      .catch((error) => setSearchError((error as Error).message))
+  }
 
   return (
     <>
       <div className="matching-form">
         <div>
-          <Field size="small" label="Type">
+          <Field size="small" label="Type" required className={disabled ? 'disabled' : ''}>
             <Select
-              value={video.type}
-              onChange={async (_ev, data) => {
-                await window.api.video.setType(video.uuid, data.value as VideoType)
-                await window.api.video.setSearchBy(video.uuid, SearchBy.TITLE)
+              disabled={disabled}
+              value={type}
+              onChange={(_ev, data) => {
+                setType(data.value as VideoType)
+                setSearchBy(SearchBy.TITLE)
               }}
             >
               {Object.values(VideoType).map((key) => (
@@ -53,15 +146,14 @@ export const Matching = ({ video }: Props) => {
             </Select>
           </Field>
         </div>
-        {video.movie !== undefined && (
+        {type === VideoType.MOVIE && (
           <>
             <div>
-              <Field size="small" label="Search By">
+              <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
                 <Select
-                  value={video.searchBy}
-                  onChange={async (_ev, data) => {
-                    await window.api.video.setSearchBy(video.uuid, data.value as SearchBy)
-                  }}
+                  value={searchBy}
+                  disabled={disabled}
+                  onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
                 >
                   <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
                   <option key={SearchBy.IMDB}>{SearchBy.IMDB}</option>
@@ -69,55 +161,50 @@ export const Matching = ({ video }: Props) => {
                 </Select>
               </Field>
             </div>
-            {video.searchBy === SearchBy.TITLE && (
+            {searchBy === SearchBy.TITLE && (
               <>
                 <div className="growing-form-field">
-                  <Field size="small" label="Title" required>
-                    <Input
-                      value={video.movie.title || ''}
-                      onChange={async (_ev, data) => await window.api.video.movie.setTitle(video.uuid, data.value)}
-                    />
+                  <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+                    <Input disabled={disabled} value={movieTitle} onChange={(_ev, data) => setMovieTitle(data.value)} />
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Year">
+                  <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      value={video.movie.year ? '' + video.movie.year : ''}
+                      value={movieYear}
+                      disabled={disabled}
                       style={{ minWidth: 1, maxWidth: 72 }}
-                      onChange={async (_ev, data) => await window.api.video.movie.setYear(video.uuid, data.value)}
+                      onChange={(_ev, data) => setMovieYear(data.value)}
                     />
                   </Field>
                 </div>
               </>
             )}
-            {video.searchBy === SearchBy.IMDB && (
+            {searchBy === SearchBy.IMDB && (
               <div>
-                <Field size="small" label="IMDB ID" required>
-                  <Input
-                    value={video.movie.imdb || ''}
-                    onChange={async (_ev, data) => await window.api.video.movie.setIMDB(video.uuid, data.value)}
-                  />
+                <Field size="small" label="IMDB ID" required className={disabled ? 'disabled' : ''}>
+                  <Input disabled={disabled} value={movieIMDB} onChange={(_ev, data) => setMovieIMDB(data.value)} />
                 </Field>
               </div>
             )}
-            {video.searchBy === SearchBy.TMDB && (
+            {searchBy === SearchBy.TMDB && (
               <div>
-                <Field size="small" label="TMDB ID" required>
+                <Field size="small" label="TMDB ID" required className={disabled ? 'disabled' : ''}>
                   <Input
-                    value={video.movie.tmdb ? '' + video.movie.tmdb : ''}
+                    disabled={disabled}
+                    value={movieTMDB}
                     type="number"
-                    onChange={async (_ev, data) => await window.api.video.movie.setTMDB(video.uuid, data.value)}
+                    onChange={(_ev, data) => setMovieTMDB(data.value)}
                   />
                 </Field>
               </div>
             )}
-            <Field size="small" label="Edition">
+            <Field size="small" label="Edition" className={disabled ? 'disabled' : ''}>
               <Select
-                value={video.movie.edition}
-                onChange={async (_ev, data) =>
-                  await window.api.video.movie.setEdition(video.uuid, data.value as EditionType)
-                }
+                disabled={disabled}
+                value={movieEdition}
+                onChange={(_ev, data) => setMovieEdition(data.value as EditionType)}
               >
                 {Object.values(EditionType).map((key) => (
                   <option key={key} value={key}>
@@ -128,60 +215,59 @@ export const Matching = ({ video }: Props) => {
             </Field>
           </>
         )}
-        {video.tvShow !== undefined && (
+        {type === VideoType.TV_SHOW && (
           <>
             <div>
-              <Field size="small" label="Search By">
+              <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
                 <Select
-                  value={video.searchBy}
-                  onChange={async (_ev, data) => await window.api.video.setSearchBy(video.uuid, data.value as SearchBy)}
+                  disabled={disabled}
+                  value={searchBy}
+                  onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
                 >
                   <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
                   <option key={SearchBy.TVDB}>{SearchBy.TVDB}</option>
                 </Select>
               </Field>
             </div>
-            {video.searchBy === SearchBy.TITLE && (
+            {searchBy === SearchBy.TITLE && (
               <>
                 <div>
-                  <Field size="small" label="Title" required>
+                  <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
                     <Input
-                      value={video.tvShow.title || ''}
-                      onChange={async (_ev, data) => await window.api.video.tvShow.setTitle(video.uuid, data.value)}
+                      disabled={disabled}
+                      value={tvShowTitle}
+                      onChange={(_ev, data) => setTvShowTitle(data.value)}
                     />
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Year">
+                  <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      value={video.tvShow.year ? '' + video.tvShow.year : ''}
+                      disabled={disabled}
+                      value={tvShowYear}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.tvShow.setYear(video.uuid, data.value)}
+                      onChange={(_ev, data) => setTvShowYear(data.value)}
                     />
                   </Field>
                 </div>
               </>
             )}
-            {video.searchBy === SearchBy.TVDB && (
+            {searchBy === SearchBy.TVDB && (
               <>
                 <div>
-                  <Field size="small" label="TVDB ID" required>
-                    <Input
-                      value={video.tvShow.theTVDB ? '' + video.tvShow.theTVDB : ''}
-                      onChange={async (_ev, data) => await window.api.video.tvShow.setTheTVDB(video.uuid, data.value)}
-                    />
+                  <Field size="small" label="TVDB ID" required className={disabled ? 'disabled' : ''}>
+                    <Input disabled={disabled} value={tvShowTVDB} onChange={(_ev, data) => setTvShowTVDB(data.value)} />
                   </Field>
                 </div>
               </>
             )}
             <div>
-              <Field size="small" label="Order">
+              <Field size="small" label="Order" className={disabled ? 'disabled' : ''}>
                 <Select
-                  value={video.tvShow.order}
-                  onChange={async (_ev, data) =>
-                    await window.api.video.tvShow.setOrder(video.uuid, data.value as EpisodeOrder)
-                  }
+                  disabled={disabled}
+                  value={tvShowOrder}
+                  onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
                 >
                   <option value="official">Official</option>
                   <option value="dvd">DVD</option>
@@ -189,87 +275,74 @@ export const Matching = ({ video }: Props) => {
                 </Select>
               </Field>
             </div>
-            {video.tvShow.order !== 'absolute' ? (
+            {tvShowOrder !== 'absolute' ? (
               <>
                 <div>
-                  <Field size="small" label="Season" required>
+                  <Field size="small" label="Season" required className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      value={!video.tvShow.season ? '' : '' + video.tvShow.season}
+                      disabled={disabled}
+                      value={tvShowSeason}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.tvShow.setSeason(video.uuid, data.value)}
+                      onChange={(_ev, data) => setTvShowSeason(data.value)}
                     />
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Episode" required>
+                  <Field size="small" label="Episode" required className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      value={!video.tvShow.episode ? '' : '' + video.tvShow.episode}
+                      disabled={disabled}
+                      value={tvShowEpisode}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.tvShow.setEpisode(video.uuid, data.value)}
+                      onChange={(_ev, data) => setTvShowEpisode(data.value)}
                     />
                   </Field>
                 </div>
               </>
             ) : (
               <div>
-                <Field size="small" label="Episode" required>
+                <Field size="small" label="Episode" required className={disabled ? 'disabled' : ''}>
                   <Input
                     type="number"
-                    value={!video.tvShow.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode}
+                    disabled={disabled}
+                    value={tvShowAbsoluteEpisode}
                     style={{ minWidth: 1 }}
-                    onChange={async (_ev, data) =>
-                      await window.api.video.tvShow.setAbsoluteEpisode(video.uuid, data.value)
-                    }
+                    onChange={(_ev, data) => setTvShowAbsoluteEpisode(data.value)}
                   />
                 </Field>
               </div>
             )}
           </>
         )}
-        {video.other !== undefined && (
+        {type === VideoType.OTHER && (
           <>
             <div className="growing-form-field">
-              <Field size="small" label="Title" required>
-                <Input
-                  value={video.other.title || ''}
-                  onChange={async (_ev, data) => await window.api.video.other.setTitle(video.uuid, data.value)}
-                />
+              <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+                <Input disabled={disabled} value={otherTitle} onChange={(_ev, data) => setOtherTitle(data.value)} />
               </Field>
             </div>
           </>
         )}
         <div className="buttons">
-          {video.type === VideoType.OTHER ? (
+          {type === VideoType.OTHER ? (
             <Button
               disabled={
-                !video.other?.title ||
-                (!video.other.year && (!!video.other.day || !!video.other.month)) ||
-                (!video.other.month && !!video.other.day)
+                disabled || !otherTitle || (!otherYear && (!!otherDay || !!otherMonth)) || (!otherMonth && !!otherDay)
               }
               size={'small'}
               appearance={'primary'}
-              onClick={async () =>
-                await window.api.video
-                  .search(video.uuid)
-                  .then(() => setSearchError(undefined))
-                  .catch((error) => setSearchError((error as Error).message))
-              }
+              onClick={async () => search()}
             >
               Analyse
             </Button>
           ) : (
             <Button
+              disabled={disabled}
               size={'small'}
               appearance={'primary'}
               icon={<Search16Regular />}
-              onClick={async () =>
-                await window.api.video
-                  .search(video.uuid)
-                  .then(() => setSearchError(undefined))
-                  .catch((error) => setSearchError((error as Error).message))
-              }
+              onClick={async () => search()}
             >
               Search
             </Button>
@@ -284,75 +357,79 @@ export const Matching = ({ video }: Props) => {
         </MessageBarGroup>
       ) : (
         <>
-          {video.other && (
+          {type === VideoType.OTHER && (
             <div style={{ display: 'flex' }}>
               <div style={{ display: 'flex', flexFlow: 'column', flexGrow: 1 }}>
                 <div className="matching-form">
-                  <Field size="small" label="Year">
+                  <Field size="small" label="Year" required={!!otherDay || !!otherMonth} className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      required={!!video.other.day || !!video.other.month}
-                      value={video.other.year ? '' + video.other.year : ''}
+                      disabled={disabled}
+                      required={!!otherDay || !!otherMonth}
+                      value={otherYear ? '' + otherYear : ''}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.other.setYear(video.uuid, data.value)}
+                      onChange={(_ev, data) => setOtherYear(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Month">
+                  <Field size="small" label="Month" required={!!otherDay} className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      required={!!video.other.day}
-                      value={video.other.month ? '' + video.other.month : ''}
+                      disabled={disabled}
+                      required={!!otherDay}
+                      value={otherMonth}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.other.setMonth(video.uuid, data.value)}
+                      onChange={(_ev, data) => setOtherMonth(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Day">
+                  <Field size="small" label="Day" className={disabled ? 'disabled' : ''}>
                     <Input
                       type="number"
-                      value={video.other.day ? '' + video.other.day : ''}
+                      disabled={disabled}
+                      value={otherDay}
                       style={{ minWidth: 1 }}
-                      onChange={async (_ev, data) => await window.api.video.other.setDay(video.uuid, data.value)}
+                      onChange={(_ev, data) => setOtherDay(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Original Language">
+                  <Field size="small" label="Original Language" className={disabled ? 'disabled' : ''}>
                     <LanguageSelector
                       size={'small'}
+                      disabled={disabled}
                       id="customOriginalLanguage"
                       multiselect={false}
-                      value={video.other.originalLanguage?.code || ''}
-                      onChange={async (value: string) =>
-                        await window.api.video.other.setOriginalLanguage(video.uuid, value)
-                      }
+                      value={otherOriginalLanguage}
+                      onChange={(value: string) => setOtherOriginalLanguage(value)}
                     />
                   </Field>
                 </div>
                 <div className="matching-form">
                   <FileSelectorField
                     clearable
+                    disabled={disabled}
                     label="JPG Poster Path"
                     size={'small'}
-                    value={video.other.poster || ''}
-                    onChange={async (newFile) => await window.api.video.other.setPosterPath(video.uuid, newFile)}
+                    value={otherPosterPath}
+                    onChange={(newFile) => setOtherPosterPath(newFile)}
                   />
                 </div>
               </div>
               <Image
                 style={{
                   border: '1px solid #7f7f7f',
-                  minWidth: !video.other.poster ? '173px' : '0',
+                  minWidth: !otherPosterPath ? '173px' : '0',
                   width: 'auto',
                   height: '173px'
                 }}
                 alt="No Poster"
                 bordered
-                src={video.other.poster ? 'svp:///' + video.other.poster : ''}
+                src={otherPosterPath ? 'svp:///' + otherPosterPath : ''}
                 className="poster"
               />
             </div>
           )}
-          {video.other === undefined && (
+          {type !== VideoType.OTHER && (
             <div className={'matching-results'}>
               <SearchResultList
+                disabled={disabled}
                 results={video.searchResults}
                 onSelectionChange={async (selection: ISearchResult | undefined) =>
                   await window.api.video
@@ -364,26 +441,26 @@ export const Matching = ({ video }: Props) => {
               />
 
               <div className="preview-space">
-                {video.movie !== undefined && (
+                {type === VideoType.MOVIE && (
                   <VideoPreview
-                    title={video.movie.title}
-                    poster={video.movie.poster}
-                    overview={video.movie.overview}
-                    countries={video.movie.originalCountries}
-                    year={video.movie.year}
-                    rating={video.movie.rating}
+                    title={video.movie?.title}
+                    poster={video.movie?.poster}
+                    overview={video.movie?.overview}
+                    countries={video.movie?.originalCountries}
+                    year={video.movie?.year}
+                    rating={video.movie?.rating}
                   />
                 )}
-                {video.tvShow !== undefined && (
+                {type === VideoType.TV_SHOW && (
                   <VideoPreview
-                    title={video.tvShow.title}
-                    subTitle={video.tvShow.episodeTitle}
-                    poster={video.tvShow.poster}
-                    overview={video.tvShow.episodeOverview ?? video.tvShow.overview}
-                    altOverview={video.tvShow.episodeOverview !== undefined ? video.tvShow.overview : undefined}
-                    year={video.tvShow.year}
-                    countries={video.tvShow.originalCountries}
-                    secondaryPoster={video.tvShow.episodePoster}
+                    title={video.tvShow?.title}
+                    subTitle={video.tvShow?.episodeTitle}
+                    poster={video.tvShow?.poster}
+                    overview={video.tvShow?.episodeOverview ?? video.tvShow?.overview}
+                    altOverview={video.tvShow?.episodeOverview !== undefined ? video.tvShow.overview : undefined}
+                    year={video.tvShow?.year}
+                    countries={video.tvShow?.originalCountries}
+                    secondaryPoster={video.tvShow?.episodePoster}
                   />
                 )}
               </div>

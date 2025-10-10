@@ -150,6 +150,9 @@ export class Files {
       filename = filename.substring(0, pos)
     }
 
+    filename = filename.replace(/\{\w+-\d+\}/giu, '')
+    filename = filename.replace(/[\s.-]+\b(1080p|720p|FR|French|hdlight|EN|x264|x265|AC3|AAC)\b/gi, '')
+
     if (filename.split(' ').length < 3) {
       filename = filename.replace(/[.\-_]/gu, ' ')
     }

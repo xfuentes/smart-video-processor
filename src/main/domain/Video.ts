@@ -46,6 +46,7 @@ import {
   IVideo,
   retrieveChangePropertyValue,
   SearchBy,
+  SearchInputData,
   sourceToSourceTypeTrackID,
   VideoTune,
   VideoType
@@ -83,6 +84,7 @@ export class Video implements IVideo {
    * This flag is set to false once video file has been loaded.
    */
   public loading: boolean = true
+  public processing: boolean = false
   public matched: boolean = false
   public brainCalled: boolean = false
   public autoModePossible: boolean = true
@@ -211,7 +213,31 @@ export class Video implements IVideo {
     this.fireChangeEvent()
   }
 
-  async search() {
+  async search(data?: SearchInputData) {
+    if (data) {
+      this.setType(data.type)
+      this.setSearchBy(data.searchBy)
+      this.movie.setTitle(data.movieTitle)
+      this.movie.setYear(data.movieYear)
+      this.movie.setIMDB(data.movieIMDB)
+      this.movie.setTMDB(data.movieTMDB)
+      this.movie.setEdition(data.movieEdition)
+      this.tvShow.setTitle(data.tvShowTitle)
+      this.tvShow.setYear(data.tvShowYear)
+      this.tvShow.setTheTVDB(data.tvShowTVDB)
+      this.tvShow.setOrder(data.tvShowOrder)
+      this.tvShow.setSeason(data.tvShowSeason)
+      this.tvShow.setEpisode(data.tvShowEpisode)
+      this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
+      this.other.setTitle(data.otherTitle)
+      this.other.setYear(data.otherYear)
+      this.other.setMonth(data.otherMonth)
+      this.other.setDay(data.otherDay)
+      this.other.setOriginalLanguage(data.otherOriginalLanguage)
+      this.other.setPosterPath(data.otherPosterPath)
+      this.fireChangeEvent()
+    }
+
     this.matched = false
     this.brainCalled = false
     this.hints = []
@@ -404,17 +430,14 @@ export class Video implements IVideo {
   setType(type: VideoType) {
     this.type = type
     this.matched = false
-    this.fireChangeEvent()
   }
 
   setTune(tune: VideoTune) {
     this.tune = tune
-    this.fireChangeEvent()
   }
 
   setSearchBy(searchBy: SearchBy) {
     this.searchBy = searchBy
-    this.fireChangeEvent()
   }
 
   public async setHint(hint: IHint, value?: string) {
@@ -568,11 +591,11 @@ export class Video implements IVideo {
       tracks: this.tracks.map((t) => t.toJSON()),
       changes: this.changes.map((c) => c.toJSON()),
       hints: this.hints.map((h) => h.toJSON()),
-      job: this.job,
       status: this.status,
       message: this.message,
       progression: this.progression,
       loading: this.loading,
+      processing: (this.job && this.job.processingOrPaused) ?? false,
       matched: this.matched,
       queued: this.queued,
       processed: this.processed,
@@ -596,7 +619,7 @@ export class Video implements IVideo {
     } catch (e) {
       // TODO: Log
     }
-    const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]/i
+    const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]?/i
     const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+).*[e\s](?<absoluteEpisode>\d\d\d?\d?)\p{L}/iu
 
     this.type = VideoType.OTHER
@@ -656,33 +679,6 @@ export class Video implements IVideo {
       this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
       this.tvShow.order = 'absolute'
       this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title)
-    } else {
-      const patterns = [
-        /1080p/i,
-        /720p/i,
-        /\s+FR\s+/,
-        /\s+French\s+/,
-        /\s+hdlight\s+/,
-        /\s+EN\s+/,
-        /\s+x264\s+/i,
-        /\s+AC3\s+/i
-      ]
-      let pos = 0
-      patterns.forEach((pattern) => {
-        const res = pattern.exec(filename)
-        if (res !== null) {
-          const pos2 = res.index
-          if (pos2 > 0 && (pos === 0 || pos2 < pos)) {
-            pos = pos2
-          }
-        }
-      })
-      if (pos > 0) {
-        this.type = VideoType.MOVIE
-        this.movie.title = filename.substring(0, pos)
-        this.movie.title = Files.megaTrim(this.movie.title)
-        this.movie.year = undefined
-      }
     }
 
     this.audioVersions = AudioVersions.extractVersions(filename)
