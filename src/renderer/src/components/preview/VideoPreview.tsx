@@ -51,7 +51,7 @@ export const VideoPreview = ({
       ) : (
         <Image alt="No Poster" bordered src={poster ? 'svp:///' + poster : ''} className="poster" />
       )}
-      <div className="vertical-stack" style={{ height: '173px', justifyContent: 'space-between' }}>
+      <div className="vertical-stack" style={{ height: '173px', justifyContent: 'space-between', flexGrow: 1 }}>
         <div>
           <div
             style={{
