@@ -6,9 +6,8 @@ import { SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
-import { ListChangedListener, InvalidSettingsListener, VideoChangedListener } from './@types'
+import { InvalidSettingsListener, ListChangedListener, VideoChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
-import { IProcess } from '../common/Process'
 
 const version = await ipcRenderer.invoke('main:getVersion')
 
@@ -72,11 +71,14 @@ const api = {
       ipcRenderer.invoke('video:deleteChange', uuid, changeUuid),
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
-    addPart: (uuid: string): Promise<IProcess> => ipcRenderer.invoke('video:addPart', uuid),
+    addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
+    setStartFrom: (uuid: string, value?: string): Promise<void> =>
+      ipcRenderer.invoke('video:setStartFrom', uuid, value),
+    setEndAt: (uuid: string, value?: string): Promise<void> => ipcRenderer.invoke('video:setEndAt', uuid, value),
     process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
-    clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
+    clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted')
   }
 }
 

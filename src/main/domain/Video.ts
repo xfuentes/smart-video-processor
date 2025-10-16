@@ -56,7 +56,6 @@ import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
-import { IProcess } from '../../common/Process'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -64,6 +63,7 @@ export class Video implements IVideo {
   public readonly uuid: string = UUIDv4()
   public filename: string
   public size: number = 0
+  public duration: number = 0
   public sourcePath: string
   public type: VideoType = VideoType.OTHER
   public changeListeners: VideoChangeListener[] = []
@@ -71,11 +71,14 @@ export class Video implements IVideo {
   public tracks: Track[] = []
   public pixels?: string
   public changes: Change[] = []
-  public processes: IProcess[] = []
   public hints: Hint[] = []
   public movie: Movie = new Movie(this)
   public tvShow: TVShow = new TVShow(this)
   public other: Other = new Other(this)
+  public videoParts: Video[] = []
+  public startFrom?: string
+  public endAt?: string
+
   public status: JobStatus
   public message: string | undefined
   public progression: Progression
@@ -194,6 +197,10 @@ export class Video implements IVideo {
     const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
     const { tracks, container } = await fij.queue()
     this.tracks = tracks
+    this.duration =
+      tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
+      tracks.find((t) => t.type === TrackType.AUDIO)?.duration ??
+      0
     this.pixels = this.computePixels()
     this.container = container
     this.generateEncoderSettings(true)
@@ -562,13 +569,16 @@ export class Video implements IVideo {
       uuid: this.uuid,
       filename: this.filename,
       size: this.size,
+      duration: this.duration,
       pixels: this.pixels,
       type: this.type,
       container: this.container,
       tracks: this.tracks.map((t) => t.toJSON()),
       changes: this.changes.map((c) => c.toJSON()),
-      processes: this.processes,
       hints: this.hints.map((h) => h.toJSON()),
+      videoParts: this.videoParts.map((v) => v.toJSON()),
+      startFrom: this.startFrom,
+      endAt: this.endAt,
       status: this.status,
       message: this.message,
       progression: this.progression,
@@ -587,6 +597,31 @@ export class Video implements IVideo {
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled
     }
+  }
+
+  videoPartListener = (_video: Video) => {
+    this.fireChangeEvent()
+  }
+
+  async addPart(partPath: string) {
+    if (this.sourcePath !== partPath && !this.videoParts.find((video) => video.sourcePath === partPath)) {
+      // Avoid inserting part which were already added or if same as main video.
+      const videoPart = new Video(partPath)
+      videoPart.addChangeListener(this.videoPartListener)
+      await videoPart.load(false)
+      this.videoParts.push(videoPart)
+      this.fireChangeEvent()
+    }
+  }
+
+  setStartFrom(value?: string) {
+    this.startFrom = value
+    this.fireChangeEvent()
+  }
+
+  setEndAt(value?: string) {
+    this.endAt = value
+    this.fireChangeEvent()
   }
 
   private async merge(outputDirectory: string, extraDuration?: number) {

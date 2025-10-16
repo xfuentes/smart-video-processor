@@ -17,82 +17,27 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import { Button, Divider, Field } from '@fluentui/react-components'
-import { TimePicker } from '@fluentui/react-timepicker-compat'
+import { Button, Divider } from '@fluentui/react-components'
 import { MoviesAndTvRegular, SaveRegular } from '@fluentui/react-icons'
-import { useState } from 'react'
-import { IProcess } from '../../../../common/Process'
-import { TrackType } from '../../../../common/@types/Track'
-import { Strings } from '../../../../common/Strings'
+import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 
 type Props = {
   video: IVideo
   disabled?: boolean
 }
 
-declare type Hour =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20
-  | 21
-  | 22
-  | 23
-  | 24
-
 export const Processing = ({ video, disabled }: Props) => {
-  const [processes, setProcesses] = useState<IProcess[]>([
-    {
-      inputID: 0,
-      startFrom: '00:00:00',
-      endAt: Strings.humanDuration(video.tracks.find((t) => t.type === TrackType.VIDEO)?.duration ?? 0)
-    }
-  ])
-  const endHour = Number.parseInt(processes[0].endAt.split(':')[0] ?? 0) + 1
-  console.log('End Hour: ' + endHour)
   return (
     <>
-      <div style={{ height: '100%', width: '100%', backgroundColor: '#fff', flexGrow: 1, overflow: 'auto' }}>
-        <Divider style={{ flexGrow: '0' }}>Input File 0</Divider>
-        <div className="encoding-form">
-          <Field label="Start From">
-            <TimePicker
-              size={'small'}
-              disabled={disabled}
-              value={processes[0].startFrom}
-              showSeconds
-              dateAnchor={new Date(1000)}
-              endHour={endHour as Hour}
-            />
-          </Field>
-          <Field label="End At">
-            <TimePicker
-              size={'small'}
-              disabled={disabled}
-              value={processes[0].endAt}
-              showSeconds
-              dateAnchor={new Date(1000)}
-              endHour={endHour as Hour}
-            />
-          </Field>
-        </div>
+      <div className="processing-body">
+        <Divider style={{ flexGrow: '0' }}>Main Video File</Divider>
+        <VideoSectionSelectorField video={video} disabled={disabled} />
+        {video.videoParts.map((part, i) => (
+          <>
+            <Divider style={{ flexGrow: '0' }}>Part {i + 1}</Divider>
+            <VideoSectionSelectorField key={part.uuid} video={part} disabled={disabled} />
+          </>
+        ))}
       </div>
       <Divider style={{ flexGrow: '0' }} />
       <div className="preview-buttons">
@@ -102,11 +47,7 @@ export const Processing = ({ video, disabled }: Props) => {
             appearance="secondary"
             icon={<MoviesAndTvRegular />}
             disabled={disabled}
-            onClick={() => {
-              const videoPartProcess: IProcess = window.api.video.addPart(video.uuid)
-              setProcesses((prevProcesses) => [...prevProcesses, videoPartProcess])
-            }
-            }
+            onClick={() => void window.api.video.addPart(video.uuid)}
           >
             Add Video Part
           </Button>

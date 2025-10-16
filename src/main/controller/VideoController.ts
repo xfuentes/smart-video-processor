@@ -83,14 +83,6 @@ export class VideoController {
     }
   }
 
-  private getVideoByUuid(uuid: string) {
-    const video = this.videos.find((video) => video.uuid === uuid)
-    if (video == undefined) {
-      throw new Error("Video with uuid '" + uuid + "' not found")
-    }
-    return video
-  }
-
   setType(uuid: string, videoType: VideoType) {
     this.getVideoByUuid(uuid).setType(videoType)
   }
@@ -181,9 +173,42 @@ export class VideoController {
   }
 
   addPart(uuid: string, partPath: string) {
-    const video = this.getVideoByUuid(uuid)
-    const videoPart = new Video(partPath)
-    await videoPart.load(false)
+    return this.getVideoByUuid(uuid).addPart(partPath)
+  }
 
+  setStartFrom(uuid: string, value?: string) {
+    return this.findVideoByUuidIncludingParts(uuid).setStartFrom(value)
+  }
+
+  setEndAt(uuid: string, value?: string) {
+    return this.findVideoByUuidIncludingParts(uuid).setEndAt(value)
+  }
+
+  private getVideoByUuid(uuid: string) {
+    const video = this.videos.find((video) => video.uuid === uuid)
+    if (video == undefined) {
+      throw new Error("Video with uuid '" + uuid + "' not found")
+    }
+    return video
+  }
+
+  private findVideoByUuidIncludingParts(uuid: string) {
+    let foundVideo: Video | undefined = undefined
+
+    for (const video of this.videos) {
+      if (video.uuid === uuid) {
+        foundVideo = video
+        break
+      }
+      const foundPart = video.videoParts.find((part) => part.uuid === uuid)
+      if (foundPart) {
+        foundVideo = foundPart
+        break
+      }
+    }
+    if (!foundVideo) {
+      throw new Error("Video with uuid '" + uuid + "' not found")
+    }
+    return foundVideo
   }
 }

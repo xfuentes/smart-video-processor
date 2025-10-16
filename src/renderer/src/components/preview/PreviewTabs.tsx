@@ -55,7 +55,7 @@ export const PreviewTabs = ({ video }: Props) => {
   const tracksCount = video.tracks.length
   const matchingCount = video.searchResults?.length ?? 0
   const changesCount = video.changes.length
-  const processesCount: number = video.processes.length
+  const partsCount: number = video.videoParts.length
   const encodingCount = Object.values(video.trackEncodingEnabled).filter((v) => v).length
   const hintCount = video.hints.length
   const hintMissing = video.hints.find((h) => !h.value) !== undefined
@@ -96,7 +96,7 @@ export const PreviewTabs = ({ video }: Props) => {
           Properties <CounterBadge color="informative" size={'small'} showZero count={changesCount} />
         </Tab>
         <Tab value="processing" icon={<DataUsageSettings20Regular />} disabled={!video.matched || hintMissing}>
-          Processing <CounterBadge color="informative" size={'small'} showZero count={processesCount} />
+          Processing <CounterBadge color="informative" size={'small'} showZero count={partsCount} />
         </Tab>
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!video.matched || hintMissing}>
           Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />

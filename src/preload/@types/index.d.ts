@@ -69,11 +69,13 @@ interface SvpAPI {
     ) => Promise<void>
     deleteChange: (uuid: string, changeUuid: string) => Promise<void>
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
-    addPart: (uuid: string) => Promise<IProcess>
+    addPart: (uuid: string) => Promise<void>
     process: (uuid: string) => Promise<void>
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>
     clearCompleted: () => Promise<void>
+    setStartFrom: (uuid: string, value: string) => Promise<void>
+    setEndAt: (uuid: string, value: string) => Promise<void>
   }
 }
 

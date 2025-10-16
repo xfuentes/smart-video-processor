@@ -92,8 +92,14 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       properties: ['openFile', 'dontAddToRecent']
     })
     if (!result.canceled && result.filePaths.length >= 1) {
-      VideoController.getInstance().addPart(uuid, result.filePaths[0])
+      void VideoController.getInstance().addPart(uuid, result.filePaths[0])
     }
+  })
+  ipcMain.handle('video:setStartFrom', (_event, uuid: string, value?: string) => {
+    VideoController.getInstance().setStartFrom(uuid, value)
+  })
+  ipcMain.handle('video:setEndAt', (_event, uuid: string, value?: string) => {
+    VideoController.getInstance().setEndAt(uuid, value)
   })
   ipcMain.handle('video:process', (_event, uuid: string) => {
     return VideoController.getInstance().process(uuid)
