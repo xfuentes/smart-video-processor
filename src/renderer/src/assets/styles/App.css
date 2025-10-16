@@ -83,13 +83,13 @@
   min-width: 40vw;
 }
 
-.search-results>div {
+.search-results > div {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-.search-results>.mask {
+.search-results > .mask {
   position: absolute;
   background-color: whitesmoke;
   opacity: 50%;
@@ -105,13 +105,13 @@
   flex-grow: 1;
 }
 
-.mask-parent>div {
+.mask-parent > div {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-.mask-parent>.mask {
+.mask-parent > .mask {
   position: absolute;
   background-color: whitesmoke;
   opacity: 50%;
@@ -282,6 +282,9 @@ button:disabled.is-disabled.ms-Pivot-link {
 .preview-buttons {
   padding: 5px;
   text-align: right;
+  display: flex;
+  justify-content: end;
+  column-gap: 5px;
 }
 
 .settings-main {
@@ -359,15 +362,15 @@ button:disabled.is-disabled.ms-Pivot-link {
 }
 
 .quality-icon.bronze {
-  background: linear-gradient(45deg,rgba(254, 189, 159, 1) 0%, rgba(167, 106, 87, 1) 50%, rgba(76, 19, 8, 1) 100%);
+  background: linear-gradient(45deg, rgba(254, 189, 159, 1) 0%, rgba(167, 106, 87, 1) 50%, rgba(76, 19, 8, 1) 100%);
 }
 
 .quality-icon.silver {
-  background: linear-gradient(90deg,rgba(250, 250, 252, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(114, 115, 119, 1) 100%);
+  background: linear-gradient(90deg, rgba(250, 250, 252, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(114, 115, 119, 1) 100%);
 }
 
 .quality-icon.gold {
-  background: linear-gradient(90deg,rgba(255, 239, 160, 1) 0%, rgba(223, 186, 82, 1) 50%, rgba(184, 131, 21, 1) 100%);
+  background: linear-gradient(90deg, rgba(255, 239, 160, 1) 0%, rgba(223, 186, 82, 1) 50%, rgba(184, 131, 21, 1) 100%);
 }
 
 .quality-icon .short {
@@ -384,7 +387,7 @@ button:disabled.is-disabled.ms-Pivot-link {
 .quality-icon .long {
   margin: 1px;
   background: #A68A40;
-  background: linear-gradient(45deg,rgba(166, 138, 64, 1) 0%, rgba(198, 170, 88, 1) 50%, rgba(220, 205, 119, 1) 100%);
+  background: linear-gradient(45deg, rgba(166, 138, 64, 1) 0%, rgba(198, 170, 88, 1) 50%, rgba(220, 205, 119, 1) 100%);
   color: black;
   text-align: center;
   font-size: 10px;
@@ -392,15 +395,15 @@ button:disabled.is-disabled.ms-Pivot-link {
 }
 
 .quality-icon.bronze .long {
-  background: linear-gradient(45deg,rgba(76, 19, 8, 1) 0%, rgba(167, 106, 87, 1) 50%, rgba(254, 189, 159, 1) 100%);
+  background: linear-gradient(45deg, rgba(76, 19, 8, 1) 0%, rgba(167, 106, 87, 1) 50%, rgba(254, 189, 159, 1) 100%);
 }
 
 .quality-icon.silver .long {
-  background: linear-gradient(90deg,rgba(114, 115, 119, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(250, 250, 252, 1) 100%);
+  background: linear-gradient(90deg, rgba(114, 115, 119, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(250, 250, 252, 1) 100%);
 }
 
 .quality-icon.gold .long {
-  background: linear-gradient(90deg,rgba(184, 131, 21, 1) 0%, rgba(223, 186, 82, 1) 50%, rgba(255, 239, 160, 1) 100%);
+  background: linear-gradient(90deg, rgba(184, 131, 21, 1) 0%, rgba(223, 186, 82, 1) 50%, rgba(255, 239, 160, 1) 100%);
 }
 
 .drop-zone {
@@ -419,15 +422,15 @@ button:disabled.is-disabled.ms-Pivot-link {
 .powered-by-list {
 }
 
-.powered-by-list>tr:nth-child(odd) {
+.powered-by-list > tr:nth-child(odd) {
   background-color: white;
 }
 
-.powered-by-list>tr>td:first-child {
+.powered-by-list > tr > td:first-child {
   text-align: center;
 }
 
-table>tbody>tr>td {
+table > tbody > tr > td {
   padding: 2px 5px;
 }
 
@@ -437,4 +440,76 @@ td.version {
 
 .disabled label {
   opacity: 0.5;
+}
+
+.video-section-selector-field {
+  width: 100%;
+}
+
+.video-section-selector-field>.ruler {
+  height: 15px;
+  color: #777777;
+  font-size: 11px;
+  line-height: 12px;
+}
+
+.video-section-selector-field>.ruler>.labels {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.video-section-selector-field>.ruler>.labels>.tick-mark {
+  width: 2px;
+  height: 4px;
+  background-color: #777777;
+  display: inline-block;
+}
+
+.video-section-selector-field>.ruler>.labels>.label {
+  display: inline-block;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.video-section-selector-field .ruler .tick-marks {
+  vertical-align: bottom;
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.video-section-selector-field .ruler .tick-marks .tick-mark {
+  width: 2px;
+  height: 4px;
+  background-color: #777777;
+  color: white;
+  flex-shrink: 0;
+}
+
+.video-section-selector-field .ruler .tick-marks .space {
+  /* min-width: 20px; */
+  width: 20px;
+  height: 4px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.video-section-selector-field .preview {
+  height: 56px;
+  border: 1px solid #666666;
+  background-color: #f7f8fa;
+  flex-shrink: 0;
+}
+
+.processing-body {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  flex-grow: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
