@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IVideo } from "../../../../common/@types/Video";
-import React, { ReactElement } from "react";
-import { Strings } from "../../../../common/Strings";
+import { IVideo } from '../../../../common/@types/Video'
+import React, { ReactElement } from 'react'
+import { Strings } from '../../../../common/Strings'
 
 declare type Hour =
   | 0
@@ -49,12 +49,13 @@ declare type Hour =
 
 type Props = {
   video: IVideo
-  step: number
-  disabled: boolean
+  step?: number
+  disabled?: boolean
 }
 
 export const VideoSectionSelectorField = React.memo(function ({ video, step = 60, disabled = false }: Props) {
   const duration = video.duration
+  const previewHeight = 58
   const labels: ReactElement[] = []
   const tickMarks: ReactElement[] = []
   for (let i = 0; i <= duration; i += step) {
@@ -64,51 +65,74 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
         <div
           key={`label-tick-${i}`}
           className="tick-mark"
-          style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: 0 }}
+          style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight + 4}px` }}
         />,
         <div
           key={`label-${i}`}
           className="label"
-          style={{ position: 'absolute', left: `${currentStep * 22 + 2}px`, bottom: 0 }}
+          style={{ position: 'absolute', left: `${currentStep * 22 + 2}px`, bottom: `${previewHeight + 4}px` }}
         >
           {Strings.humanDuration(i)}
         </div>
       )
     }
-    if (tickMarks.length > 0) {
-      tickMarks.push(<div key={`space-${i}`} className="space" />)
-    }
-    tickMarks.push(<div key={`tick-${i}`} className="tick-mark" />)
+    tickMarks.push(
+      <div
+        key={`tick-${i}`}
+        className="tick-mark"
+        style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight}px` }}
+      />
+    )
   }
   const durationLeft = duration % step
+  let endPos = Math.floor(duration / step) * 22
   if (durationLeft > 0) {
-    const restSize = Math.round((durationLeft * 22) / step)
-    const endPos = Math.floor(duration / step) * 22 + restSize
+    endPos += Math.round((durationLeft * 22) / step)
     labels.push(
       <div
         key={`label-tick-${duration}`}
         className="tick-mark"
-        style={{ position: 'absolute', left: `${endPos + 2}px`, bottom: 0 }}
+        style={{ position: 'absolute', left: `${endPos}px`, bottom: `${previewHeight + 4}px` }}
       />,
       <div
         key={`label-${duration}`}
         className="label"
-        style={{ position: 'absolute', left: `${endPos - 44 + 2}px`, bottom: 0 }}
+        style={{ position: 'absolute', left: `${endPos - 44}px`, bottom: `${previewHeight + 4}px` }}
       >
         {Strings.humanDuration(duration)}
       </div>
     )
-    if (tickMarks.length > 0) {
-      tickMarks.push(<div key={`space-${duration}`} className="space" style={{ width: `${restSize}px` }} />)
-    }
-    tickMarks.push(<div key={`tick-${duration}`} className="tick-mark" />)
+    tickMarks.push(
+      <div
+        key={`tick-${duration}`}
+        className="tick-mark"
+        style={{ position: 'absolute', left: `${endPos}px`, bottom: `${previewHeight}px` }}
+      />
+    )
   }
+  const imageHeight = previewHeight - 2;
+  //const imageWidth = video.aspectRatio
+
+  /*
+  ffmpeg -ss 00:01:19 -i input.mp4 -vframes 1 output_01.png
+ffmpeg -ss 00:01:36 -i input.mp4 -vframes 1 output_02.png
+ffmpeg -ss 00:03:05 -i input.mp4 -vframes 1 output_03.png
+ffmpeg -ss 00:05:51 -i input.mp4 -vframes 1 output_04.png
+
+ffmpeg -ss 00:01:30 -i input.mp4 -ss 00:02:45 -i input.mp4 \
+-map 0:v -vframes 1 snapshot1.png \
+-map 1:v -vframes 1 snapshot2.png
+
+   */
+
   return (
     <div className="video-section-selector-field">
       <div className="ruler">
-        <div className="labels">{labels}</div>
-        <div className="tick-marks">{tickMarks}</div>
-        <div className="preview"></div>
+        {labels}
+        {tickMarks}
+        <div className="preview" style={{ width: `${endPos}px` }}>
+
+        </div>
       </div>
     </div>
   )
