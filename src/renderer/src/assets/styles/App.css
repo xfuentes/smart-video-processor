@@ -444,60 +444,36 @@ td.version {
 
 .video-section-selector-field {
   width: 100%;
+  overflow: auto;
 }
 
 .video-section-selector-field>.ruler {
-  height: 15px;
+  width: fit-content;
+  height: 76px;
   color: #777777;
   font-size: 11px;
   line-height: 12px;
-}
-
-.video-section-selector-field>.ruler>.labels {
-  display: flex;
-  align-items: flex-end;
   position: relative;
-  height: 12px;
-  flex-shrink: 0;
 }
 
-.video-section-selector-field>.ruler>.labels>.tick-mark {
+.video-section-selector-field>.ruler>.tick-mark {
   width: 2px;
   height: 4px;
   background-color: #777777;
   display: inline-block;
 }
 
-.video-section-selector-field>.ruler>.labels>.label {
+.video-section-selector-field>.ruler>.label {
   display: inline-block;
   padding-left: 2px;
   padding-right: 2px;
 }
 
-.video-section-selector-field .ruler .tick-marks {
-  vertical-align: bottom;
-  display: flex;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-
-.video-section-selector-field .ruler .tick-marks .tick-mark {
-  width: 2px;
-  height: 4px;
-  background-color: #777777;
-  color: white;
-  flex-shrink: 0;
-}
-
-.video-section-selector-field .ruler .tick-marks .space {
-  /* min-width: 20px; */
-  width: 20px;
-  height: 4px;
-  color: white;
-  flex-shrink: 0;
-}
-
-.video-section-selector-field .preview {
+.video-section-selector-field>.ruler>.preview {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: inherit;
   height: 56px;
   border: 1px solid #666666;
   background-color: #f7f8fa;

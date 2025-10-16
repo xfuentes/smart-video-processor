@@ -23,10 +23,10 @@ import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSect
 
 type Props = {
   video: IVideo
-  disabled?: boolean
+  disabled: boolean
 }
 
-export const Processing = ({ video, disabled }: Props) => {
+export const Processing = ({ video, disabled = false }: Props) => {
   return (
     <>
       <div className="processing-body">
