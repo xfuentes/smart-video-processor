@@ -184,6 +184,15 @@ export class VideoController {
     return this.findVideoByUuidIncludingParts(uuid).setEndAt(value)
   }
 
+  async takeSnapshots(
+    uuid: string,
+    snapshotHeight: number,
+    snapshotWidth: number,
+    totalWidth: number
+  ): Promise<string> {
+    return await this.findVideoByUuidIncludingParts(uuid).takeSnapshots(snapshotHeight, snapshotWidth, totalWidth)
+  }
+
   private getVideoByUuid(uuid: string) {
     const video = this.videos.find((video) => video.uuid === uuid)
     if (video == undefined) {

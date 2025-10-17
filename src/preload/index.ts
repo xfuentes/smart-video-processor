@@ -78,7 +78,9 @@ const api = {
     process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
-    clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted')
+    clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
+    takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> =>
+      ipcRenderer.invoke('video:takeSnapshots', uuid, snapshotHeight, snapshotWidth, totalWidth)
   }
 }
 

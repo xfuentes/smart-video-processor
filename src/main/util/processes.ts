@@ -38,7 +38,7 @@ export class Processes {
     args: readonly string[],
     options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
   ): ChildProcessWithoutNullStreams {
-    debug('Spawning ' + command + ' ' + args.join(' '))
+    debug('Spawning ' + command + ' ' + args.map((arg) => (arg.indexOf(' ') != -1 ? '"' + arg + '"' : arg)).join(' '))
     return child_process.spawn(command, args, options)
   }
 
@@ -131,6 +131,41 @@ export class Processes {
   static isWindowsPlatform() {
     const name = os.platform()
     return name !== 'darwin' && name !== 'linux'
+  }
+
+  public static normalise(input: string) {
+    return input.replace(/_/, '-')
+  }
+
+  /**
+   * Retrieve Current Locale (copied from os-locale package because modern import failed with nw.js)
+   * @param options
+   */
+  public static osLocaleSync(options = defaultOptions): string {
+    if (cache.has(options.spawn)) {
+      return cache.get(options.spawn)
+    }
+
+    let locale: string | undefined
+    try {
+      const envLocale = this.getEnvLocale()
+
+      if (envLocale || !options.spawn) {
+        locale = this.getLocale(envLocale)
+      } else if (process.platform === 'win32') {
+        locale = this.getWinLocaleSync()
+      } else if (process.platform === 'darwin') {
+        locale = this.getAppleLocaleSync()
+      } else {
+        locale = this.getUnixLocaleSync()
+      }
+    } catch {
+      /* empty */
+    }
+
+    const normalised = this.normalise(locale || defaultLocale)
+    cache.set(options.spawn, normalised)
+    return normalised
   }
 
   private static cleanInput(s: string) {
@@ -234,46 +269,12 @@ export class Processes {
       this.getLocalesSync()
     )
   }
+
   private static getLocale(string: string | undefined) {
     return string?.replace(/[.:].*/, '')
   }
 
   private static getEnvLocale(env: ProcessEnv = process.env) {
     return env.LC_ALL || env.LC_MESSAGES || env.LANG || env.LANGUAGE
-  }
-
-  public static normalise(input: string) {
-    return input.replace(/_/, '-')
-  }
-
-  /**
-   * Retrieve Current Locale (copied from os-locale package because modern import failed with nw.js)
-   * @param options
-   */
-  public static osLocaleSync(options = defaultOptions): string {
-    if (cache.has(options.spawn)) {
-      return cache.get(options.spawn)
-    }
-
-    let locale: string | undefined
-    try {
-      const envLocale = this.getEnvLocale()
-
-      if (envLocale || !options.spawn) {
-        locale = this.getLocale(envLocale)
-      } else if (process.platform === 'win32') {
-        locale = this.getWinLocaleSync()
-      } else if (process.platform === 'darwin') {
-        locale = this.getAppleLocaleSync()
-      } else {
-        locale = this.getUnixLocaleSync()
-      }
-    } catch {
-      /* empty */
-    }
-
-    const normalised = this.normalise(locale || defaultLocale)
-    cache.set(options.spawn, normalised)
-    return normalised
   }
 }
