@@ -114,6 +114,7 @@ export class Video implements IVideo {
   public trackEncodingEnabled: { [key: string]: boolean } = {}
   // Currently running job
   public job?: Job<unknown>
+  public lastPromise?: Promise<void>
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)

@@ -16,31 +16,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import yargs, {Arguments} from "yargs"
-import {hideBin} from "yargs/helpers"
-import {processFile} from "./processing.ts"
-import {currentSettings, loadSettings} from "../common/Settings.ts";
-import {debug} from "../util/log.ts";
+import yargs, { Arguments } from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { processFile } from './processing'
+import { currentSettings, loadSettings } from '../main/domain/Settings'
+import { debug } from '../main/util/log'
 
 export interface SvpArgs {
-    languageHint?: string[],
-    auto?: boolean
+  languageHint?: string[]
+  auto?: boolean
 }
 
 const argv: Arguments<SvpArgs> = yargs(hideBin(process.argv))
-    .demandCommand(1, "At least one video file should be provided.")
-    .option("auto", {
-        type: "boolean",
-        description: "Enables auto mode, which will answer all questions with default values."
-    })
-    .option("language-hint", {
-        alias: "lh",
-        type: "string",
-        description: "Set IETF language to use for hints: [<track-number>:]<fr-FR|es|it|en-GB|jp|etc...>"
-    })
-    .array("language-hint")
-    .parseSync()
+  .demandCommand(1, 'At least one video file should be provided.')
+  .option('auto', {
+    type: 'boolean',
+    description: 'Enables auto mode, which will answer all questions with default values.'
+  })
+  .option('language-hint', {
+    alias: 'lh',
+    type: 'string',
+    description: 'Set IETF language to use for hints: [<track-number>:]<fr-FR|es|it|en-GB|jp|etc...>'
+  })
+  .array('language-hint')
+  .parseSync()
 
-loadSettings();
-debug(currentSettings);
-void processFile(argv);
+loadSettings()
+debug(currentSettings)
+void processFile(argv)
