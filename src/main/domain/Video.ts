@@ -114,6 +114,7 @@ export class Video implements IVideo {
   public trackEncodingEnabled: { [key: string]: boolean } = {}
   // Currently running job
   public job?: Job<unknown>
+  public lastPromise?: Promise<void>
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
@@ -197,7 +198,10 @@ export class Video implements IVideo {
     this.generateEncoderSettings(true)
     this.loading = false
     this.fireChangeEvent()
-    await this.search()
+    if (this.type !== VideoType.OTHER) {
+      // Only manual mode enabled for custom videos
+      await this.search()
+    }
   }
 
   generateEncoderSettings(init = true) {
@@ -631,18 +635,8 @@ export class Video implements IVideo {
 
     const tvdbPattern = /\{tvdb-(?<tvdb>\d+)}/i
     const tvdbMatches = tvdbPattern.exec(this.sourcePath)
-    if (tvdbMatches?.groups) {
-      this.tvShow.theTVDB = Number.parseInt(tvdbMatches.groups.tvdb)
-      this.selectedSearchResultID = this.tvShow.theTVDB
-      this.searchBy = SearchBy.TVDB
-    }
     const tmdbPattern = /\{tmdb-(?<tmdb>\d+)}/i
     const tmdbMatches = tmdbPattern.exec(this.filename)
-    if (tmdbMatches?.groups) {
-      this.movie.tmdb = Number.parseInt(tmdbMatches.groups.tmdb)
-      this.selectedSearchResultID = this.movie.tmdb
-      this.searchBy = SearchBy.TMDB
-    }
     const editionPattern = /\{edition-(?<edition>[^}]+)}/i
     const editionMatches = editionPattern.exec(this.filename)
     if (editionMatches?.groups) {
@@ -659,6 +653,19 @@ export class Video implements IVideo {
     }
     const imdbPattern = /\{tt(?<imdb>\d+)}/i
     const imdbMatches = imdbPattern.exec(this.filename)
+
+    if (tvdbMatches?.groups) {
+      this.searchBy = SearchBy.TVDB
+      this.type = VideoType.TV_SHOW
+      this.tvShow.setTheTVDB(tvdbMatches.groups.tvdb)
+    }
+
+    if (tmdbMatches?.groups) {
+      this.searchBy = SearchBy.TMDB
+      this.type = VideoType.MOVIE
+      this.movie.setTMDB(tmdbMatches.groups.tmdb)
+    }
+
     if (imdbMatches?.groups) {
       this.tvShow.imdb = this.movie.imdb = 'tt' + imdbMatches.groups.imdb
       this.searchBy = SearchBy.IMDB
@@ -681,6 +688,10 @@ export class Video implements IVideo {
       this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title)
     }
 
+    if (this.type === VideoType.OTHER) {
+      const extPos = this.filename.lastIndexOf('.')
+      this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
+    }
     this.audioVersions = AudioVersions.extractVersions(filename)
   }
 }

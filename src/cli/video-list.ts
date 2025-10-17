@@ -16,23 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Video from "../common/Video.ts";
-import CLI from "clui";
-import chalk from "chalk";
-import {qualityRenderer, sizeRenderer} from "./renderers.ts";
+import { Video } from '../main/domain/Video'
+import * as CLI from 'clui'
+import * as chalk from 'chalk'
+import { qualityRenderer, sizeRenderer } from './renderers'
 
 export const renderVideoList = (outputBuffer: CLI.LineBuffer, video: Video) => {
-    const fitWidth = outputBuffer.width() - 22;
-    const rLine = new CLI.Line(outputBuffer)
-        .column(chalk.blueBright("Processing File"), fitWidth)
-        .column(chalk.blueBright("Size"), 10)
-        .column(chalk.blueBright("Quality"), 12);
-    rLine.fill().output();
+  const fitWidth = outputBuffer.width() - 22
+  const rLine = new CLI.Line(outputBuffer)
+    .column(chalk.blueBright('Processing File'), fitWidth)
+    .column(chalk.blueBright('Size'), 10)
+    .column(chalk.blueBright('Quality'), 12)
+  rLine.fill().output()
 
-    const dataLine = new CLI.Line(outputBuffer)
-        .column(video.filename, fitWidth)
-        .column(sizeRenderer(video.size), 10)
-        .column(qualityRenderer(video.getPixels()), 12);
-    dataLine.fill().output();
-    console.log();
-};
+  const dataLine = new CLI.Line(outputBuffer)
+    .column(video.filename, fitWidth)
+    .column(sizeRenderer(video.size), 10)
+    .column(qualityRenderer(video.pixels), 12)
+  dataLine.fill().output()
+  console.log()
+}

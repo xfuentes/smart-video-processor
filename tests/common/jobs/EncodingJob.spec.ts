@@ -30,6 +30,7 @@ import { currentSettings } from '../../../src/main/domain/Settings'
 import { EncodingJob } from '../../../src/main/domain/jobs/EncodingJob'
 import { Files } from '../../../src/main/util/files'
 import * as path from 'node:path'
+import { Track } from '../../../src/main/domain/Track'
 
 const encoderSettings = [
   {
@@ -61,6 +62,121 @@ const encoderSettings = [
   }
 ] as EncoderSettings[]
 
+const guadalupeTracks = [
+  {
+    id: 0,
+    type: 'Video',
+    codec: 'AVC/H.264/MPEG-4p10',
+    language: 'es-ES',
+    properties: {
+      videoDimensions: '720x576',
+      frames: 154375,
+      bitRate: 880642
+    },
+    default: false,
+    forced: false,
+    duration: 6175.021,
+    size: 679748531
+  },
+  {
+    id: 1,
+    name: 'VFF 5.1',
+    type: 'Audio',
+    codec: 'AC-3',
+    language: 'fr-FR',
+    properties: {
+      audioChannels: 6,
+      audioSamplingFrequency: 48000,
+      frames: 192968,
+      bitRate: 384000
+    },
+    default: false,
+    forced: false,
+    duration: 6174.976,
+    size: 296398848
+  },
+  {
+    id: 2,
+    name: 'VFF 2.0',
+    type: 'Audio',
+    codec: 'AAC',
+    language: 'fr-FR',
+    properties: {
+      audioChannels: 2,
+      audioSamplingFrequency: 48000,
+      frames: 289453,
+      bitRate: 130128
+    },
+    default: false,
+    forced: false,
+    duration: 6174.997,
+    size: 100442733
+  },
+  {
+    id: 3,
+    name: 'VO 5.1',
+    type: 'Audio',
+    codec: 'AC-3',
+    language: 'es-ES',
+    properties: {
+      audioChannels: 6,
+      audioSamplingFrequency: 48000,
+      frames: 192968,
+      bitRate: 384000
+    },
+    default: false,
+    forced: false,
+    duration: 6174.976,
+    size: 296398848
+  },
+  {
+    id: 4,
+    name: 'VO 2.0',
+    type: 'Audio',
+    codec: 'AAC',
+    language: 'es-ES',
+    properties: {
+      audioChannels: 2,
+      audioSamplingFrequency: 48000,
+      frames: 289453,
+      bitRate: 130041
+    },
+    default: false,
+    forced: false,
+    duration: 6174.997,
+    size: 100375431
+  },
+  {
+    id: 5,
+    name: 'Full',
+    type: 'Subtitles',
+    codec: 'VobSub',
+    language: 'fr',
+    properties: {
+      frames: 1250,
+      bitRate: 8372
+    },
+    default: false,
+    forced: false,
+    duration: 5737.83,
+    size: 6005350
+  },
+  {
+    id: 6,
+    name: 'Forced',
+    type: 'Subtitles',
+    codec: 'VobSub',
+    language: 'fr',
+    properties: {
+      frames: 1,
+      bitRate: 1913
+    },
+    default: false,
+    forced: true,
+    duration: 4.949,
+    size: 1184
+  }
+] as Track[]
 test('Encoding Progression data', async () => {
   const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
@@ -68,7 +184,7 @@ test('Encoding Progression data', async () => {
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
   const fullPath = 'C:\\Download\\something.mkv'
   currentSettings.isTestEncodingEnabled = true
-  const job: EncodingJob = new EncodingJob(fullPath, '/tmp', 6120, [], encoderSettings)
+  const job: EncodingJob = new EncodingJob(fullPath, '/tmp', 6120, guadalupeTracks, encoderSettings)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.finished).toBe(false)
@@ -90,7 +206,7 @@ test('Encoding Progression data', async () => {
 
   let mapIdx = spawnArgs.indexOf('-map')
   expect(mapIdx, 'should map all streams by default').toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[mapIdx + 1], 'should map all streams by default').toBe('0')
+  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:V')
 
   // ### PASS 2
   spawnArgs = spawnSpy.mock.calls[1][1]
@@ -104,7 +220,7 @@ test('Encoding Progression data', async () => {
 
   mapIdx = spawnArgs.indexOf('-map')
   expect(mapIdx, 'should map all streams by default').toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[mapIdx + 1], 'should map all streams by default').toBe('0')
+  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:V')
 
   const progresses: number[] = stateChanges.map((c) => c.progression.progress)
   let lastProgress = -1
