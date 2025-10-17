@@ -56,6 +56,7 @@ import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
+import { SnapshottingJob } from './jobs/SnapshottingJob'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -374,12 +375,7 @@ export class Video implements IVideo {
       encodingRequired = true
     }
     this.queued = true
-    let outputDirectory = this.getOutputDirectory()
-    if (!path.isAbsolute(outputDirectory)) {
-      // Output path is relative to the original filename dirname.
-      outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
-    }
-    fs.mkdirSync(outputDirectory, { recursive: true })
+    const outputDirectory = this.getOutputDirectory()
 
     if (encodingRequired && this.container !== undefined) {
       encodingJob = this.job = this.attachJob(
@@ -404,13 +400,20 @@ export class Video implements IVideo {
   }
 
   getOutputDirectory() {
+    let outputDirectory: fs.PathLike
     if (this.type === VideoType.MOVIE) {
-      return currentSettings.moviesOutputPath
+      outputDirectory = currentSettings.moviesOutputPath
     } else if (this.type === VideoType.TV_SHOW) {
-      return currentSettings.tvShowsOutputPath
+      outputDirectory = currentSettings.tvShowsOutputPath
     } else {
-      return currentSettings.othersOutputPath
+      outputDirectory = currentSettings.othersOutputPath
     }
+    if (!path.isAbsolute(outputDirectory)) {
+      // Output path is relative to the original filename dirname.
+      outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
+    }
+    fs.mkdirSync(outputDirectory, { recursive: true })
+    return outputDirectory
   }
 
   setType(type: VideoType) {
@@ -624,6 +627,18 @@ export class Video implements IVideo {
   setEndAt(value?: string) {
     this.endAt = value
     this.fireChangeEvent()
+  }
+
+  async takeSnapshots(snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> {
+    const job = new SnapshottingJob(
+      this.sourcePath,
+      this.getOutputDirectory(),
+      snapshotHeight,
+      snapshotWidth,
+      totalWidth,
+      this.duration
+    )
+    return await job.queue()
   }
 
   private async merge(outputDirectory: string, extraDuration?: number) {

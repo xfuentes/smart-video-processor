@@ -38,14 +38,7 @@ export class Strings {
       value /= thresh
       ++u
     } while (Math.abs(value) >= thresh && u < units.length - 1)
-    return (
-      value.toFixed(1) +
-      ' ' +
-      units[u] +
-      (binary ? 'i' : '') +
-      (isBytes ? 'B' : 'b') +
-      (isRate ? '/s' : '')
-    )
+    return value.toFixed(1) + ' ' + units[u] + (binary ? 'i' : '') + (isBytes ? 'B' : 'b') + (isRate ? '/s' : '')
   }
 
   static humanFileSize(value: number, binary: boolean = false) {
@@ -267,11 +260,7 @@ export class Strings {
     return false
   }
 
-  static getWordsFromNeedleAndHaystack(
-    haystack: string,
-    needle: string,
-    ignoreCase: boolean = false
-  ) {
+  static getWordsFromNeedleAndHaystack(haystack: string, needle: string, ignoreCase: boolean = false) {
     needle = needle.replace("'", '')
     haystack = haystack.replace("'", '')
     const needleWords = this.extractWords(ignoreCase ? needle.toLocaleLowerCase() : needle)
@@ -279,11 +268,7 @@ export class Strings {
     return { needleWords, haystackWords }
   }
 
-  static getMatchScoreByKeywords(
-    haystack: string,
-    needle: string,
-    ignoreCase: boolean = false
-  ): number {
+  static getMatchScoreByKeywords(haystack: string, needle: string, ignoreCase: boolean = false): number {
     let matching = 0
     let unMatching = 0
 
@@ -292,11 +277,7 @@ export class Strings {
       return 100
     }
 
-    const { needleWords, haystackWords } = this.getWordsFromNeedleAndHaystack(
-      haystack,
-      needle,
-      ignoreCase
-    )
+    const { needleWords, haystackWords } = this.getWordsFromNeedleAndHaystack(haystack, needle, ignoreCase)
 
     if (needleWords.length === 0) {
       return -10
@@ -319,5 +300,15 @@ export class Strings {
     }
 
     return unMatching <= 1 ? matching / (unMatching === 0 ? 0.5 : unMatching) : -10
+  }
+
+  static pixelsToAspectRatio(pixels: string | undefined) {
+    if (pixels) {
+      const dims = pixels.split('x')
+      if (dims.length > 1) {
+        return Number.parseInt(dims[0], 10) / Number.parseInt(dims[1], 10)
+      }
+    }
+    return 1
   }
 }
