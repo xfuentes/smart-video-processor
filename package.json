@@ -1,7 +1,7 @@
 {
   "name": "smart-video-processor",
   "private": true,
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
   "author": "Xavier Fuentes",
