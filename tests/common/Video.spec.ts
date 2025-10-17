@@ -16,10 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { afterEach, expect, test } from 'vitest'
+import { afterEach, beforeAll, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
 import { cleanTmpFiles, getFakeAbsolutePath, registerTmpFiles } from './testUtils'
+import { currentSettings } from '../../src/main/domain/Settings'
+
+beforeAll(() => {
+  currentSettings.favoriteLanguages = ['en']
+})
 
 afterEach(() => {
   cleanTmpFiles()
@@ -148,4 +153,19 @@ test('Movie House 1000 corpse', () => {
   expect(video.type).toBe(VideoType.MOVIE)
   expect(video.movie.title).toBe('House of 1000 Corpses')
   expect(video.movie.year).toBe(2003)
+})
+
+test('video with TMDB', async () => {
+  const video = new Video('something{tmdb-122977}.mkv')
+  expect(video.type).toBe(VideoType.MOVIE)
+  expect(video.movie.tmdb).toBe(122977)
+  expect(video.searchBy).toBe(SearchBy.TMDB)
+
+  await video.search()
+  expect(video.getOriginalLanguageIETF().code).toBe('it-IT')
+  expect(video.searchResults.length).toBe(1)
+  expect(video.searchResults[0].id).toBe(122977)
+  expect(video.searchResults[0].title).toBe('Saint John Bosco Mission to Love')
+  expect(video.searchResults[0].year).toBe(2004)
+  expect(video.selectedSearchResultID).toBe(122977)
 })

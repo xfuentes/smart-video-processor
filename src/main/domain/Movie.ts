@@ -141,6 +141,7 @@ export default class Movie implements IMovie {
             this.rating
           )
         )
+        this.setTMDB(this.tmdb)
       }
 
       const fullPath = Files.makeTempFile('TMDB-' + this.tmdb + '.jpg')
