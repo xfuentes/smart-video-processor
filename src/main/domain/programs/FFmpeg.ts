@@ -242,7 +242,16 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push('-y') // Overwrite output file without asking
     //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
     ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-    ffOptions.push('-map', '0') // Copy all streams by default
+
+    if (tracks.find((t) => t.type === TrackType.VIDEO)) {
+      ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
+    }
+    if (tracks.find((t) => t.type === TrackType.AUDIO)) {
+      ffOptions.push('-map', '0:a') // Copy audios
+    }
+    if (tracks.find((t) => t.type === TrackType.SUBTITLES)) {
+      ffOptions.push('-map', '0:s') // Copy subs
+    }
 
     if (currentSettings.isTestEncodingEnabled) {
       ffOptions.push('-ss', '00:01:00', '-t', '30') // Output only a 30 seconds extract to judge quality.
