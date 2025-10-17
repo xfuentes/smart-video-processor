@@ -27,6 +27,7 @@ import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
 import path from 'node:path'
+import { Strings } from '../../../common/Strings'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
@@ -160,8 +161,83 @@ export class FFmpeg extends CommandProgress {
     const encodedPath =
       pass === 1 ? undefined : path.join(destinationPath, path.basename(Files.makeTempFile('encoding-temp.mkv', true)))
     const args = this.generateEncodingArguments(sourcePath, encodedPath, tracks, settings, pass, statFile)
-    const versionOutputInterpreter = (stdout?: string, stderr?: string, process?: ChildProcess) => {
-      const response = encodedPath ?? statFile ?? ''
+
+    const versionOutputInterpreter = this.ffmpegProgressInterpreterBuild(
+      encodedPath ?? statFile ?? '',
+      durationSeconds,
+      progressNotifier
+    )
+
+    // const errorPattern: RegExp = /Error: (?<message>.*)/i;
+    try {
+      return await super.execute(args, versionOutputInterpreter)
+    } catch (error) {
+      if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
+        const workaroundArgs = this.generateEncodingArguments(
+          sourcePath,
+          encodedPath,
+          tracks,
+          settings,
+          pass,
+          statFile,
+          true
+        )
+        return await super.execute(workaroundArgs, versionOutputInterpreter)
+      }
+      throw error
+    }
+  }
+
+  public async generateSnapshots(
+    sourcePath: string,
+    destinationPath: string,
+    snapshotHeight: number,
+    snapshotWidth: number,
+    totalWidth: number,
+    durationSeconds: number,
+    progressNotifier?: ProgressNotifier
+  ): Promise<string> {
+    const filters: string[] = []
+    const snapshotRefs: string[] = []
+    const ffOptions: string[] = []
+    const snapshotPath = path.join(destinationPath, path.basename(Files.makeTempFile('snapshots.png', true)))
+
+    let snapshotCount = 0
+
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    for (let posX = 0; posX < totalWidth; posX += snapshotWidth) {
+      const posSeconds = Math.round((posX / totalWidth) * durationSeconds)
+      ffOptions.push('-ss', Strings.humanDuration(posSeconds))
+      ffOptions.push('-i', sourcePath)
+      filters.push(`[${snapshotCount}:v]scale=${snapshotWidth}:${snapshotHeight},trim=duration=1[v${snapshotCount}]`)
+      snapshotRefs.push(`[v${snapshotCount}]`)
+      snapshotCount++
+    }
+
+    filters.push(snapshotRefs.join('') + 'hstack=inputs=' + snapshotCount)
+    ffOptions.push('-filter_complex', `${filters.join(';')}`)
+    ffOptions.push('-vframes', '1')
+    ffOptions.push(snapshotPath)
+
+    const versionOutputInterpreter = this.ffmpegProgressInterpreterBuild(
+      snapshotPath,
+      durationSeconds,
+      progressNotifier
+    )
+
+    return await super.execute(ffOptions, versionOutputInterpreter)
+  }
+
+  private ffmpegProgressInterpreterBuild(
+    outputFilePath: string,
+    durationSeconds: number,
+    progressNotifier?: ProgressNotifier
+  ) {
+    return (stdout?: string, stderr?: string, process?: ChildProcess) => {
+      const response = outputFilePath
       let error: string | undefined = undefined
       if (progressNotifier != undefined) {
         if (stdout != undefined) {
@@ -198,24 +274,6 @@ export class FFmpeg extends CommandProgress {
       }
 
       return { response, error }
-    }
-    // const errorPattern: RegExp = /Error: (?<message>.*)/i;
-    try {
-      return await super.execute(args, versionOutputInterpreter)
-    } catch (error) {
-      if ((error as Error).message.indexOf('Too many packets buffered') != -1) {
-        const workaroundArgs = this.generateEncodingArguments(
-          sourcePath,
-          encodedPath,
-          tracks,
-          settings,
-          pass,
-          statFile,
-          true
-        )
-        return await super.execute(workaroundArgs, versionOutputInterpreter)
-      }
-      throw error
     }
   }
 

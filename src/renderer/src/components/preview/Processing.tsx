@@ -30,6 +30,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
   return (
     <>
       <div className="processing-body">
+        <div className="ruler">
         <Divider style={{ flexGrow: '0' }}>Main Video File</Divider>
         <VideoSectionSelectorField video={video} disabled={disabled} />
         {video.videoParts.map((part, i) => (
@@ -38,6 +39,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
             <VideoSectionSelectorField key={part.uuid} video={part} disabled={disabled} />
           </>
         ))}
+        </div>
       </div>
       <Divider style={{ flexGrow: '0' }} />
       <div className="preview-buttons">

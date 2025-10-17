@@ -487,3 +487,71 @@ test('FFmpeg Marcelino audio progression', async () => {
   ])
   expect(result).toContain(path.basename(encodedFile))
 })
+
+const recordedMarcelinoSnapshotProgresses = [
+  'frame=1\n' +
+    'fps=0.00\n' +
+    'stream_0_0_q=-0.0\n' +
+    'bitrate=N/A\n' +
+    'total_size=N/A\n' +
+    'out_time_us=40000\n' +
+    'out_time_ms=40000\n' +
+    'out_time=00:00:00.040000\n' +
+    'dup_frames=0\n' +
+    'drop_frames=0\n' +
+    'speed=0.0529x\n' +
+    'progress=end'
+]
+
+export const simulateFFmpegSnapshotProgressionMarcelino = (): ChildProcessWithoutNullStreams => {
+  let dataListener = undefined
+  let closeListener = undefined
+
+  for (const rp of recordedMarcelinoSnapshotProgresses) {
+    setImmediate(() => {
+      dataListener(rp)
+    })
+  }
+  setImmediate(() => {
+    closeListener(0)
+  })
+
+  return {
+    pid: 1234,
+    on: (event, listener) => {
+      if (event === 'close') {
+        closeListener = listener
+      }
+    },
+    stdout: {
+      on: (event, listener) => {
+        if (event === 'data') {
+          dataListener = listener
+        }
+      }
+    }
+  } as unknown as ChildProcessWithoutNullStreams
+}
+
+test('FFmpeg Snapshot Marcelino', async () => {
+  const snapshotsFile = '/tmp/12345-snapshots.png'
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => snapshotsFile)
+  vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegSnapshotProgressionMarcelino)
+  const sourceFullPath = '/home/xfuentes/Vidéos/Marcellino (1991).1080p.h264 {tmdb-103715}.mkv'
+  const progresses: number[] = []
+  currentSettings.isTestEncodingEnabled = true
+  const result = await FFmpeg.getInstance().generateSnapshots(
+    sourceFullPath,
+    '/tmp',
+    64,
+    114,
+    2000,
+    5400,
+    ({ progress }) => {
+      progresses.push(progress)
+    }
+  )
+  expect(progresses).toStrictEqual([undefined, 1])
+  expect(result).toContain(path.basename(snapshotsFile))
+})

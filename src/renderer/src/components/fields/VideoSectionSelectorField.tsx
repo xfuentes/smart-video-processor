@@ -17,8 +17,9 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { Strings } from '../../../../common/Strings'
+import { Image } from '@fluentui/react-components'
 
 declare type Hour =
   | 0
@@ -54,6 +55,10 @@ type Props = {
 }
 
 export const VideoSectionSelectorField = React.memo(function ({ video, step = 60, disabled = false }: Props) {
+  const [snapshotsStep, setSnapshotsStep] = React.useState(0)
+  const [snapshotsVideoUuid, setSnapshotsVideoUuid] = React.useState('')
+
+  const [snapshotsFilePath, setSnapshotsFilePath] = React.useState('')
   const duration = video.duration
   const previewHeight = 58
   const labels: ReactElement[] = []
@@ -110,28 +115,34 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
       />
     )
   }
-  const imageHeight = previewHeight - 2;
-  //const imageWidth = video.aspectRatio
-
-  /*
-  ffmpeg -ss 00:01:19 -i input.mp4 -vframes 1 output_01.png
-ffmpeg -ss 00:01:36 -i input.mp4 -vframes 1 output_02.png
-ffmpeg -ss 00:03:05 -i input.mp4 -vframes 1 output_03.png
-ffmpeg -ss 00:05:51 -i input.mp4 -vframes 1 output_04.png
-
-ffmpeg -ss 00:01:30 -i input.mp4 -ss 00:02:45 -i input.mp4 \
--map 0:v -vframes 1 snapshot1.png \
--map 1:v -vframes 1 snapshot2.png
-
-   */
+  useEffect(() => {
+    if (video.uuid != snapshotsVideoUuid || snapshotsStep != step) {
+      console.log('taking snapshots!')
+      const durationLeft = video.duration % step
+      let endPos = Math.floor(video.duration / step) * 22
+      if (durationLeft > 0) {
+        endPos += Math.round((durationLeft * 22) / step)
+      }
+      const totalWidth = endPos
+      const snapshotHeight = previewHeight - 2
+      const snapshotWidth = Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight
+      window.api.video
+        .takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
+        .then((snapshotsFilePath: string) => {
+          setSnapshotsStep(step)
+          setSnapshotsVideoUuid(video.uuid)
+          setSnapshotsFilePath(snapshotsFilePath)
+        })
+    }
+  }, [video, step, snapshotsVideoUuid, snapshotsStep])
 
   return (
     <div className="video-section-selector-field">
       <div className="ruler">
         {labels}
         {tickMarks}
-        <div className="preview" style={{ width: `${endPos}px` }}>
-
+        <div className="preview" style={{ width: `${endPos}px`, overflow: 'hidden' }}>
+          {snapshotsFilePath && <Image src={'svp:///' + snapshotsFilePath} className="poster" />}
         </div>
       </div>
     </div>

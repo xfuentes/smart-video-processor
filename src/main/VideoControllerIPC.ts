@@ -113,4 +113,10 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:clearCompleted', (_event) => {
     VideoController.getInstance().clearCompleted()
   })
+  ipcMain.handle(
+    'video:takeSnapshots',
+    (_event, uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> => {
+      return VideoController.getInstance().takeSnapshots(uuid, snapshotHeight, snapshotWidth, totalWidth)
+    }
+  )
 }
