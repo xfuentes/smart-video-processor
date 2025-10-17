@@ -23,6 +23,7 @@ import { Files } from '../util/files'
 import { debug } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { Numbers } from '../util/numbers'
+import Chalk from 'chalk'
 
 export default class Other implements IOther {
   public year?: number
@@ -40,7 +41,15 @@ export default class Other implements IOther {
 
   async search() {
     this.video.searchResults = []
-    return this.load()
+    if (!this.title.trim()) {
+      this.video.autoModePossible = false
+      this.video.status = JobStatus.WARNING
+      this.video.message = 'Please provide a title for your custom video file.'
+      debug(Chalk.red(this.video.message))
+      this.video.fireChangeEvent()
+    } else {
+      await this.load()
+    }
   }
 
   async load() {

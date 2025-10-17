@@ -208,7 +208,6 @@ export class Brain {
     }
 
     if (poster) {
-      let posterNeeded = true
       if (containerAttachments && containerAttachments.length > 0) {
         if (containerAttachments.length > 1) {
           changes.push(
@@ -222,30 +221,11 @@ export class Brain {
             )
           )
         }
-        for (const attach of containerAttachments) {
-          if (poster?.filename === attach.filename) {
-            posterNeeded = false
-            if (poster?.description !== attach.description) {
-              changes.push(
-                new Change(
-                  ChangeSourceType.CONTAINER,
-                  ChangeType.UPDATE,
-                  undefined,
-                  ChangeProperty.POSTER,
-                  attach,
-                  poster
-                )
-              )
-            }
-          }
-        }
       }
 
-      if (!containerAttachments || posterNeeded) {
-        changes.push(
-          new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.POSTER, undefined, poster)
-        )
-      }
+      changes.push(
+        new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.POSTER, undefined, poster)
+      )
     }
 
     return { changes }
@@ -645,6 +625,9 @@ export class Brain {
       }
     }
     const changes: Change[] = []
+    const videosToDelete = tracks
+      .filter((t) => t.type === TrackType.VIDEO && !selectedTrackIds.has(t.id) && t.codec === 'V_MJPEG')
+      .map((t) => t.id)
     const totalAudios = tracks.filter((t) => t.type === TrackType.AUDIO).length
     const audiosToDelete = tracks
       .filter((t) => t.type === TrackType.AUDIO && !selectedTrackIds.has(t.id) && t.language !== undefined)
@@ -653,6 +636,9 @@ export class Brain {
     const subsToDelete = tracks
       .filter((t) => t.type === TrackType.SUBTITLES && !selectedTrackIds.has(t.id) && t.language !== undefined)
       .map((t) => t.id)
+    for (const id of videosToDelete) {
+      changes.push(new Change(ChangeSourceType.VIDEO, ChangeType.DELETE, id, undefined, undefined, undefined))
+    }
     if (totalAudios > audiosToDelete.length) {
       for (const id of audiosToDelete) {
         changes.push(new Change(ChangeSourceType.AUDIO, ChangeType.DELETE, id, undefined, undefined, undefined))
