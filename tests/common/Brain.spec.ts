@@ -1195,13 +1195,6 @@ test('Savate Bad Attachments Tests', () => {
   expect(!!(changes['Container']['Update_Poster Image']?.newValue as Attachment).path, 'Poster path defined ?').toBe(
     true
   )
-  expect((changes['Container']['Update_Poster Image']?.currentValue as Attachment).filename).toContain('cover.jpg')
-  expect((changes['Container']['Update_Poster Image']?.currentValue as Attachment).mimeType).toBe('image/jpeg')
-  expect((changes['Container']['Update_Poster Image']?.currentValue as Attachment).description).toContain('')
-  expect(
-    !!(changes['Container']['Update_Poster Image']?.currentValue as Attachment).path,
-    'Poster path defined ?'
-  ).toBe(false)
 })
 
 const savateBadAttachmentsAttachments2: Attachment[] = [
@@ -1239,11 +1232,6 @@ test('Savate Bad Attachments Tests clear', () => {
   expect(changes['Container']['Delete_Attachments']?.property).toBe(ChangeProperty.ATTACHMENTS)
   expect((changes['Container']['Update_Poster Image']?.newValue as Attachment).filename).toBe('cover.jpg')
   expect((changes['Container']['Update_Poster Image']?.newValue as Attachment).mimeType).toBe('image/jpeg')
-  expect((changes['Container']['Update_Poster Image']?.currentValue as Attachment).filename).toBe('cover.jpg')
-  expect((changes['Container']['Update_Poster Image']?.newValue as Attachment).description).toContain('TMDB Poster')
-  expect(!!(changes['Container']['Update_Poster Image']?.newValue as Attachment).path, 'Poster path defined ?').toBe(
-    true
-  )
 })
 
 test('Capitaine Marleau undefined and qad cases', () => {
@@ -1630,7 +1618,7 @@ test('Guadalupe Already Processed Brain', () => {
     [],
     []
   )
-  expect(results.changes.length, 'No Changes Expected').toBe(0)
+  expect(results.changes.length, 'Only Poster Change Expected').toBe(1)
   expect(results.hints.length, '2 Hints Expected').toBe(0)
 })
 

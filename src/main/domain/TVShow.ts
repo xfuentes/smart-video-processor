@@ -60,7 +60,7 @@ export class TVShow implements ITVShow {
       if (!this.theTVDB) {
         throw new Error('TVDB ID is mandatory')
       }
-      await this.loadSeries()
+      await this.selectSearchResultID(this.theTVDB)
     } else {
       if (!this.title) {
         throw new Error('Series name is mandatory')
