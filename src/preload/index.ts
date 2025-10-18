@@ -80,7 +80,8 @@ const api = {
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
     clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
     takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> =>
-      ipcRenderer.invoke('video:takeSnapshots', uuid, snapshotHeight, snapshotWidth, totalWidth)
+      ipcRenderer.invoke('video:takeSnapshots', uuid, snapshotHeight, snapshotWidth, totalWidth),
+    preparePreview: (uuid: string): Promise<string> => ipcRenderer.invoke('video:preparePreview', uuid)
   }
 }
 

@@ -119,4 +119,7 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       return VideoController.getInstance().takeSnapshots(uuid, snapshotHeight, snapshotWidth, totalWidth)
     }
   )
+  ipcMain.handle('video:preparePreview', (_event, uuid: string): Promise<string> => {
+    return VideoController.getInstance().preparePreview(uuid)
+  })
 }

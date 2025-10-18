@@ -57,6 +57,7 @@ import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
 import { SnapshottingJob } from './jobs/SnapshottingJob'
+import { PreviewingJob } from './jobs/PreviewingJob'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -77,12 +78,14 @@ export class Video implements IVideo {
   public tvShow: TVShow = new TVShow(this)
   public other: Other = new Other(this)
   public videoParts: Video[] = []
-  public startFrom?: string
-  public endAt?: string
+  public startFrom?: number
+  public endAt?: number
 
   public status: JobStatus
   public message: string | undefined
   public progression: Progression
+  // Eventual preview progression
+  public previewProgression?: Progression
   public searchResults: SearchResult[] = []
   public selectedSearchResultID?: number
 
@@ -121,6 +124,8 @@ export class Video implements IVideo {
   // Currently running job
   public job?: Job<unknown>
   public lastPromise?: Promise<void>
+  public previewJob?: Job<string>
+  public previewPath?: string
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
@@ -191,6 +196,26 @@ export class Video implements IVideo {
       job.addChangeListener(listener)
     } else {
       throw new Error('A job is already running, please wait.')
+    }
+    return job
+  }
+
+  attachPreviewJob(job: Job<string>): Job<string> {
+    if (this.previewJob === undefined || this.previewJob.finished) {
+      this.previewJob = job
+      const listener = () => {
+        this.previewProgression = job.getProgression()
+        if (job.finished) {
+          if (this.previewJob === job) {
+            this.previewJob = undefined
+          }
+          job.removeChangeListener(listener)
+        }
+        this.fireChangeEvent()
+      }
+      job.addChangeListener(listener)
+    } else {
+      throw new Error('A preview job is already running, please wait.')
     }
     return job
   }
@@ -416,6 +441,13 @@ export class Video implements IVideo {
     return outputDirectory
   }
 
+  getPreviewDirectory() {
+    let previewDirectory = this.getOutputDirectory()
+    previewDirectory = path.join(previewDirectory, this.uuid + '-preview')
+    fs.mkdirSync(previewDirectory, { recursive: true })
+    return previewDirectory
+  }
+
   setType(type: VideoType) {
     this.type = type
     this.matched = false
@@ -600,7 +632,9 @@ export class Video implements IVideo {
       ...(this.type === VideoType.OTHER ? { other: this.other.toJSON() } : {}),
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
-      trackEncodingEnabled: this.trackEncodingEnabled
+      trackEncodingEnabled: this.trackEncodingEnabled,
+      previewProgression: this.previewProgression,
+      previewPath: this.previewPath
     }
   }
 
@@ -619,12 +653,12 @@ export class Video implements IVideo {
     }
   }
 
-  setStartFrom(value?: string) {
+  setStartFrom(value?: number) {
     this.startFrom = value
     this.fireChangeEvent()
   }
 
-  setEndAt(value?: string) {
+  setEndAt(value?: number) {
     this.endAt = value
     this.fireChangeEvent()
   }
@@ -632,13 +666,22 @@ export class Video implements IVideo {
   async takeSnapshots(snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> {
     const job = new SnapshottingJob(
       this.sourcePath,
-      this.getOutputDirectory(),
+      this.getPreviewDirectory(),
       snapshotHeight,
       snapshotWidth,
       totalWidth,
       this.duration
     )
     return await job.queue()
+  }
+
+  async preparePreview(): Promise<string> {
+    this.previewJob = this.attachPreviewJob(
+      new PreviewingJob(this.sourcePath, this.getPreviewDirectory(), this.duration)
+    )
+    this.previewPath = await this.previewJob.queue()
+    this.fireChangeEvent()
+    return this.previewPath
   }
 
   private async merge(outputDirectory: string, extraDuration?: number) {

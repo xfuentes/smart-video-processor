@@ -220,4 +220,8 @@ export class VideoController {
     }
     return foundVideo
   }
+
+  preparePreview(uuid: string) {
+    return this.findVideoByUuidIncludingParts(uuid).preparePreview()
+  }
 }

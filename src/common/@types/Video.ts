@@ -70,8 +70,8 @@ export interface IVideo {
   changes: IChange[]
   hints: IHint[]
   videoParts: IVideo[]
-  startFrom?: string
-  endAt?: string
+  startFrom?: number
+  endAt?: number
   downscale?: string
   loading: boolean
   processing: boolean
@@ -90,6 +90,8 @@ export interface IVideo {
   encoderSettings: EncoderSettings[]
   trackEncodingEnabled: { [key: string]: boolean }
   hintMissing: boolean
+  previewProgression?: Progression
+  previewPath?: string
 }
 
 export type SearchInputData = {

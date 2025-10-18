@@ -231,6 +231,38 @@ export class FFmpeg extends CommandProgress {
     return await super.execute(ffOptions, versionOutputInterpreter)
   }
 
+  public async generateVideoPreview(
+    sourcePath: string,
+    destinationPath: string,
+    durationSeconds: number,
+    progressNotifier?: ProgressNotifier
+  ): Promise<string> {
+    const ffOptions: string[] = []
+    const videoPreviewPath = path.join(destinationPath, 'stream.m3u8')
+
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    ffOptions.push('-i', sourcePath)
+    ffOptions.push('-c:v', 'copy')
+    ffOptions.push('-c:a', 'copy')
+    // ffOptions.push('-c:s', 'webvtt')
+    ffOptions.push('-f', 'hls')
+    ffOptions.push('-hls_time', '4')
+    ffOptions.push('-hls_list_size', '0')
+    ffOptions.push('-hls_flags', 'independent_segments')
+    ffOptions.push('-hls_playlist_type', 'vod')
+    ffOptions.push(videoPreviewPath)
+
+    const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(
+      videoPreviewPath,
+      durationSeconds,
+      progressNotifier
+    )
+    return await super.execute(ffOptions, ffmpegOutputInterpreter)
+  }
+
   private ffmpegProgressInterpreterBuild(
     outputFilePath: string,
     durationSeconds: number,

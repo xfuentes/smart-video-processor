@@ -16,8 +16,8 @@ type Props = {
   clearable?: boolean
 }
 
-export const FileSelectorField = (props : Props) => {
-  const {clearable = false} = props;
+export const FileSelectorField = (props: Props) => {
+  const { clearable = false } = props
   const title = typeof props.label === 'string' || props.label instanceof String ? '' + props.label : 'Select a file'
   const isClearable = !!props.value
   return (
