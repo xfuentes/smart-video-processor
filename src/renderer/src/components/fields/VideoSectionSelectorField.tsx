@@ -17,9 +17,24 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useId } from 'react'
 import { Strings } from '../../../../common/Strings'
-import { Image } from '@fluentui/react-components'
+import { Button, Image, Label } from '@fluentui/react-components'
+import {
+  ArrowCircleLeft12Filled,
+  ArrowCircleLeft16Regular,
+  ArrowCircleLeftRegular,
+  ArrowCircleRight12Regular,
+  ArrowCircleRight16Regular,
+  ArrowCircleRightRegular,
+  ArrowExport16Regular,
+  ArrowImport16Regular,
+  ArrowNext20Regular,
+  ArrowPrevious20Regular,
+  Pause16Regular,
+  Play16Regular,
+  Stop16Regular
+} from '@fluentui/react-icons'
 
 declare type Hour =
   | 0
@@ -57,8 +72,13 @@ type Props = {
 export const VideoSectionSelectorField = React.memo(function ({ video, step = 60, disabled = false }: Props) {
   const [snapshotsStep, setSnapshotsStep] = React.useState(0)
   const [snapshotsVideoUuid, setSnapshotsVideoUuid] = React.useState('')
-
   const [snapshotsFilePath, setSnapshotsFilePath] = React.useState('')
+  const [playHeadPosition, setPlayHeadPosition] = React.useState(0)
+  const [startFrom, setStartFrom] = React.useState(video.startFrom ?? 0)
+  const [endAt, setEndAt] = React.useState(video.endAt ?? video.duration)
+  const startFromInputId = useId()
+  const endAtInputId = useId()
+
   const duration = video.duration
   const previewHeight = 58
   const labels: ReactElement[] = []
@@ -117,7 +137,6 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
   }
   useEffect(() => {
     if (video.uuid != snapshotsVideoUuid || snapshotsStep != step) {
-      console.log('taking snapshots!')
       const durationLeft = video.duration % step
       let endPos = Math.floor(video.duration / step) * 22
       if (durationLeft > 0) {
@@ -125,7 +144,7 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
       }
       const totalWidth = endPos
       const snapshotHeight = previewHeight - 2
-      const snapshotWidth = Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight
+      const snapshotWidth = Math.round(Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight)
       window.api.video
         .takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
         .then((snapshotsFilePath: string) => {
@@ -134,15 +153,76 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
           setSnapshotsFilePath(snapshotsFilePath)
         })
     }
-  }, [video, step, snapshotsVideoUuid, snapshotsStep])
+  }, [video.uuid, step, snapshotsVideoUuid, snapshotsStep, video.duration, video.pixels])
 
+  const handlePrevious = () => {
+    setPlayHeadPosition((currentPlayHeadPosition) => {
+      if (currentPlayHeadPosition > endAt) {
+        return endAt
+      } else if (currentPlayHeadPosition > startFrom) {
+        return startFrom
+      } else {
+        return 0
+      }
+    })
+  }
+
+  const handleNext = () => {
+    setPlayHeadPosition((currentPlayHeadPosition) => {
+      if (currentPlayHeadPosition < startFrom) {
+        return startFrom
+      } else if (currentPlayHeadPosition < endAt) {
+        return endAt
+      } else {
+        return video.duration
+      }
+    })
+  }
+
+  const handlePlay = () => {
+    console.log('playing video')
+  }
+
+  const handlePause = () => {
+    console.log('pausing video')
+  }
+
+  const handleStop = () => {
+    console.log('stopping video')
+  }
   return (
     <div className="video-section-selector-field">
-      <div className="ruler">
-        {labels}
-        {tickMarks}
-        <div className="preview" style={{ width: `${endPos}px`, overflow: 'hidden' }}>
-          {snapshotsFilePath && <Image src={'svp:///' + snapshotsFilePath} className="poster" />}
+      <div className="controller">
+        <div className="current-position">00:00:00,00</div>
+        <div className="video-controls">
+          <Button size="small" appearance="subtle" onClick={handlePrevious} icon={<ArrowPrevious20Regular />} />
+          <Button size="small" appearance="subtle" onClick={handlePlay} icon={<Play16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handlePause} icon={<Pause16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handleStop} icon={<Stop16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowNext20Regular />} />
+        </div>
+        <div className="form">
+          <Label size={'small'} htmlFor={startFromInputId}>
+            Start
+          </Label>
+          <input id={startFromInputId} type="text" maxLength={11} className="time-input" defaultValue={'00:00:00,00'} />
+          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowCircleRight16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowCircleLeft16Regular />} />
+        </div>
+        <div className="form">
+          <Label size={'small'} htmlFor={endAtInputId}>
+            End
+          </Label>
+          <input id={endAtInputId} type="text" maxLength={11} className="time-input" defaultValue={'00:00:00,00'} />
+        </div>
+      </div>
+      <div className="scrollable">
+        <div className="ruler">
+          {labels}
+          {tickMarks}
+          <div className="preview" style={{ width: `${endPos}px`, overflow: 'hidden' }}>
+            {snapshotsFilePath && <Image src={'svp:///' + snapshotsFilePath} className="poster" />}
+          </div>
         </div>
       </div>
     </div>

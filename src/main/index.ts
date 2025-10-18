@@ -81,6 +81,15 @@ protocol.registerSchemesAsPrivileged([
       supportFetchAPI: true,
       bypassCSP: true
     }
+  },
+  {
+    scheme: 'svp-stream',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      bypassCSP: true
+    }
   }
 ])
 
@@ -111,6 +120,15 @@ app.whenReady().then(async () => {
   mainWindow.removeMenu()
 
   protocol.handle('svp', async (req) => {
+    const filePath = new URL(req.url).pathname
+    try {
+      return await net.fetch(`file://${filePath}`)
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  })
+  protocol.handle('svp-stream', async (req) => {
     const filePath = new URL(req.url).pathname
     try {
       return await net.fetch(`file://${filePath}`)
