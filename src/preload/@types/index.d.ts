@@ -37,6 +37,7 @@ interface SvpAPI {
     mkvmergeVersion: string
     fluentUIVersion: string
     viteVersion: string
+    isLimitedPermissions: boolean
     getCurrentSettings: () => Promise<FormValidation<Settings>>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
@@ -74,8 +75,8 @@ interface SvpAPI {
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>
     clearCompleted: () => Promise<void>
-    setStartFrom: (uuid: string, value: string) => Promise<void>
-    setEndAt: (uuid: string, value: string) => Promise<void>
+    setStartFrom: (uuid: string, value: number) => Promise<void>
+    setEndAt: (uuid: string, value: number) => Promise<void>
     takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number) => Promise<string>
     preparePreview: (uuid: string) => Promise<string>
   }

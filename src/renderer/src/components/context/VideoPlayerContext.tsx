@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createContext } from 'react'
-import { SettingsContextType } from '@renderer/@types/SettingsContext'
+import { createContext, useContext } from 'react'
+import { VideoPlayerContextType } from '@renderer/components/context/VideoPlayerProvider'
 
-export const SettingsContext = createContext<SettingsContextType | null>(null)
+export const VideoPlayerContext = createContext<VideoPlayerContextType | null>(null)
+
+export const useVideoPlayer = () => useContext(VideoPlayerContext) as VideoPlayerContextType

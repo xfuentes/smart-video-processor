@@ -17,24 +17,18 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import React, { ReactElement, useEffect, useId } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { Strings } from '../../../../common/Strings'
-import { Button, Image, Label } from '@fluentui/react-components'
+import { Button, Image } from '@fluentui/react-components'
 import {
-  ArrowCircleLeft12Filled,
-  ArrowCircleLeft16Regular,
-  ArrowCircleLeftRegular,
-  ArrowCircleRight12Regular,
-  ArrowCircleRight16Regular,
-  ArrowCircleRightRegular,
-  ArrowExport16Regular,
-  ArrowImport16Regular,
   ArrowNext20Regular,
   ArrowPrevious20Regular,
+  FilmstripSplitRegular,
   Pause16Regular,
   Play16Regular,
   Stop16Regular
 } from '@fluentui/react-icons'
+import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 
 declare type Hour =
   | 0
@@ -69,37 +63,46 @@ type Props = {
   disabled?: boolean
 }
 
-export const VideoSectionSelectorField = React.memo(function ({ video, step = 60, disabled = false }: Props) {
+export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) {
+  const { videoPlayed, setVideoPlayed, videoPlayerOpened, setVideoPlayerOpened, seekTo, pause, play } = useVideoPlayer()
   const [snapshotsStep, setSnapshotsStep] = React.useState(0)
   const [snapshotsVideoUuid, setSnapshotsVideoUuid] = React.useState('')
   const [snapshotsFilePath, setSnapshotsFilePath] = React.useState('')
   const [playHeadPosition, setPlayHeadPosition] = React.useState(0)
   const [startFrom, setStartFrom] = React.useState(video.startFrom ?? 0)
   const [endAt, setEndAt] = React.useState(video.endAt ?? video.duration)
-  const startFromInputId = useId()
-  const endAtInputId = useId()
 
   const duration = video.duration
+  const durationLeft = duration % step
   const previewHeight = 58
   const labels: ReactElement[] = []
   const tickMarks: ReactElement[] = []
   for (let i = 0; i <= duration; i += step) {
     const currentStep = i / step
     if (currentStep % 10 === 0) {
-      labels.push(
-        <div
-          key={`label-tick-${i}`}
-          className="tick-mark"
-          style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight + 4}px` }}
-        />,
-        <div
-          key={`label-${i}`}
-          className="label"
-          style={{ position: 'absolute', left: `${currentStep * 22 + 2}px`, bottom: `${previewHeight + 4}px` }}
-        >
-          {Strings.humanDuration(i)}
-        </div>
-      )
+      const lastSection = i + step * 10 > duration
+      const lastSectionStepCount = (duration - i) / step
+      if (!lastSection || lastSectionStepCount >= 2.5) {
+        labels.push(
+          <div
+            key={`label-tick-${i}`}
+            className="tick-mark"
+            style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight + 4}px` }}
+          />
+        )
+      }
+      if (!lastSection || lastSectionStepCount >= 4) {
+        console.log(durationLeft / step)
+        labels.push(
+          <div
+            key={`label-${i}`}
+            className="label"
+            style={{ position: 'absolute', left: `${currentStep * 22 + 2}px`, bottom: `${previewHeight + 4}px` }}
+          >
+            {Strings.humanDuration(i)}
+          </div>
+        )
+      }
     }
     tickMarks.push(
       <div
@@ -109,7 +112,6 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
       />
     )
   }
-  const durationLeft = duration % step
   let endPos = Math.floor(duration / step) * 22
   if (durationLeft > 0) {
     endPos += Math.round((durationLeft * 22) / step)
@@ -180,40 +182,58 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
   }
 
   const handlePlay = () => {
-    console.log('playing video')
+    if(videoPlayed !== video || videoPlayerOpened == false) {
+      setVideoPlayed(video)
+      setVideoPlayerOpened(true)
+    } else {
+      void play()
+    }
   }
 
   const handlePause = () => {
-    console.log('pausing video')
+    pause && pause()
   }
 
   const handleStop = () => {
-    console.log('stopping video')
+    setVideoPlayed(undefined)
+    setVideoPlayerOpened(false)
   }
+
+  const isPlaying = videoPlayerOpened && videoPlayed?.uuid === video.uuid
+  const isStopped = !videoPlayerOpened
+  
   return (
     <div className="video-section-selector-field">
       <div className="controller">
         <div className="current-position">00:00:00,00</div>
         <div className="video-controls">
           <Button size="small" appearance="subtle" onClick={handlePrevious} icon={<ArrowPrevious20Regular />} />
-          <Button size="small" appearance="subtle" onClick={handlePlay} icon={<Play16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handlePlay} icon={<Play16Regular />} disabled={isPlaying} />
           <Button size="small" appearance="subtle" onClick={handlePause} icon={<Pause16Regular />} />
-          <Button size="small" appearance="subtle" onClick={handleStop} icon={<Stop16Regular />} />
+          <Button size="small" appearance="subtle" onClick={handleStop} icon={<Stop16Regular />} disabled={isStopped} />
           <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowNext20Regular />} />
         </div>
-        <div className="form">
-          <Label size={'small'} htmlFor={startFromInputId}>
-            Start
-          </Label>
-          <input id={startFromInputId} type="text" maxLength={11} className="time-input" defaultValue={'00:00:00,00'} />
-          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowCircleRight16Regular />} />
-          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowCircleLeft16Regular />} />
-        </div>
-        <div className="form">
-          <Label size={'small'} htmlFor={endAtInputId}>
-            End
-          </Label>
-          <input id={endAtInputId} type="text" maxLength={11} className="time-input" defaultValue={'00:00:00,00'} />
+        <div className="video-controls">
+          <Button
+            size="small"
+            appearance="subtle"
+            onClick={handleNext}
+            icon={
+              <div className="hide-first-half">
+                <FilmstripSplitRegular />
+              </div>
+            }
+          />
+          <Button
+            size="small"
+            appearance="subtle"
+            onClick={handleNext}
+            icon={
+              <div className="hide-second-half">
+                <FilmstripSplitRegular />
+              </div>
+            }
+          />
         </div>
       </div>
       <div className="scrollable">
@@ -227,6 +247,6 @@ export const VideoSectionSelectorField = React.memo(function ({ video, step = 60
       </div>
     </div>
   )
-})
+}
 
 VideoSectionSelectorField.displayName = 'VideoSectionSelectorField'

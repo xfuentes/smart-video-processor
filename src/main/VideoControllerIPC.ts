@@ -63,7 +63,7 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       property?: ChangeProperty,
       newValue?: ChangePropertyValue
     ) => {
-      VideoController.getInstance().addChange(uuid, source, changeType, property, newValue)
+      return VideoController.getInstance().addChange(uuid, source, changeType, property, newValue)
     }
   )
   ipcMain.handle(
@@ -95,10 +95,10 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       void VideoController.getInstance().addPart(uuid, result.filePaths[0])
     }
   })
-  ipcMain.handle('video:setStartFrom', (_event, uuid: string, value?: string) => {
+  ipcMain.handle('video:setStartFrom', (_event, uuid: string, value?: number) => {
     VideoController.getInstance().setStartFrom(uuid, value)
   })
-  ipcMain.handle('video:setEndAt', (_event, uuid: string, value?: string) => {
+  ipcMain.handle('video:setEndAt', (_event, uuid: string, value?: number) => {
     VideoController.getInstance().setEndAt(uuid, value)
   })
   ipcMain.handle('video:process', (_event, uuid: string) => {

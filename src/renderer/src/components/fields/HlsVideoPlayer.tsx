@@ -18,6 +18,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import Hls, { HlsConfig } from 'hls.js'
+import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 
 interface ElectronHlsPlayerProps {
   src: string
@@ -27,15 +28,22 @@ interface ElectronHlsPlayerProps {
   className?: string
 }
 
-const VideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
+const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
   src,
   autoPlay = true,
   width = '100%',
-  height = '500px',
+  height = '100%',
   className = ''
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const { setVideoRef } = useVideoPlayer()
+
   const hlsRef = useRef<Hls | null>(null)
+
+  useEffect(() => {
+    console.log('setting videoRef to ' + videoRef)
+    setVideoRef(videoRef)
+  }, [setVideoRef, videoRef])
 
   useEffect(() => {
     let hls: Hls | null = null
@@ -100,6 +108,7 @@ const VideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
           })
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           // Fallback for Electron's Chromium-based player
+          console.log('using fallback')
           video.src = src
           if (autoPlay) {
             video.play().catch((e) => console.error('Autoplay failed:', e))
@@ -126,12 +135,11 @@ const VideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
       className={className}
       controls
       style={{
-        maxWidth: '100%',
-        backgroundColor: '#000',
-        borderRadius: '8px'
+        objectFit: 'scale-down',
+        backgroundColor: '#000'
       }}
     />
   )
 }
 
-export default VideoPlayer
+export default HlsVideoPlayer

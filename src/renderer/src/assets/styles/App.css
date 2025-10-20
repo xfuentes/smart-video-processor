@@ -133,7 +133,7 @@
   row-gap: 5px;
 }
 
-.video-preview .poster {
+.video-preview .poster > img {
   min-width: 117px;
   max-width: 117px;
   border: 1px solid #7f7f7f;
@@ -176,8 +176,6 @@
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;
-  min-width: 145px;
-  max-height: none;
   background-color: #FFFFFF;
   border: 1px solid #EBEBEB;
   grid-row: 1 / 3;
@@ -446,80 +444,80 @@ td.version {
 .video-section-selector-field {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
+  border: 1px solid #EBEBEB;
 }
 
-.video-section-selector-field>.controller {
+.video-section-selector-field > .controller {
   display: flex;
   flex-direction: column;
   background-color: #f7f8fa;
-  border: solid 1px #777777;
-  border-bottom: none;
+  flex-grow: 1;
 }
 
-.video-section-selector-field>.controller>.current-position {
+.video-section-selector-field > .controller > .current-position {
   text-align: center;
-  border-bottom: 1px solid #777777;
+  border-bottom: 1px solid #EBEBEB;
   padding-right: 4px;
 }
 
-.video-section-selector-field>.controller>.video-controls {
+.video-section-selector-field > .controller > .video-controls {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  border-bottom: 1px solid #777777;
+  border-bottom: 1px solid #EBEBEB;
 }
 
-.video-section-selector-field>.controller>.form {
+.video-section-selector-field > .controller > .form {
   display: flex;
   flex-direction: row;
   gap: 4px;
   align-items: baseline;
   padding: 4px;
-  border-bottom: 1px solid #777777;
+  border-bottom: 1px solid #EBEBEB;
 }
 
-.video-section-selector-field>.controller>.form Button {
+.video-section-selector-field > .controller > .form Button {
   align-self: center;
 }
 
-.video-section-selector-field>.controller>.form Label {
+.video-section-selector-field > .controller > .form Label {
   min-width: 25px;
 }
 
-.video-section-selector-field>.controller>.form>.time-input {
+.video-section-selector-field > .controller > .form > .time-input {
   max-width: 70px;
 }
 
-.video-section-selector-field>.scrollable {
+.video-section-selector-field > .scrollable {
   flex-grow: 1;
   width: 100%;
   overflow: auto;
 }
 
-.video-section-selector-field>.scrollable>.ruler {
+.video-section-selector-field > .scrollable > .ruler {
   width: fit-content;
-  height: 72px;
+  height: 74px;
   color: #777777;
   font-size: 11px;
   line-height: 12px;
   position: relative;
 }
 
-.video-section-selector-field>.scrollable>.ruler>.tick-mark {
+.video-section-selector-field > .scrollable > .ruler > .tick-mark {
   width: 2px;
   height: 4px;
   background-color: #777777;
   display: inline-block;
 }
 
-.video-section-selector-field>.scrollable>.ruler>.label {
+.video-section-selector-field > .scrollable > .ruler > .label {
   display: inline-block;
   padding-left: 2px;
   padding-right: 2px;
 }
 
-.video-section-selector-field>.scrollable>.ruler>.preview {
+.video-section-selector-field > .scrollable > .ruler > .preview {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -538,4 +536,37 @@ td.version {
   overflow: auto;
   display: flex;
   flex-direction: column;
+}
+
+.hide-first-half {
+  max-width: 11px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hide-second-half {
+  max-width: 11px;
+  overflow: hidden;
+  position: relative;
+  width: 11px;
+  height: 20px;
+}
+
+.hide-second-half > svg {
+  position: absolute;
+  left: -9px
+}
+
+.player-loading {
+  background-color: black;
+  color: white;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.player-loading > div > label {
+  color: white;
 }

@@ -16,9 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FormValidation } from '../../../common/FormValidation'
+import React, { Dispatch, useState } from 'react'
+import { FormValidation } from '../../../../common/FormValidation'
+import { Settings } from '../../../../common/@types/Settings'
+import { SettingsContext } from '@renderer/components/context/SettingsContext'
 
 export type SettingsContextType = {
   settingsValidation: FormValidation<Settings>
-  setSettingsValidation: Dispatch<never>
+  setSettingsValidation: Dispatch<FormValidation<Settings>>
+}
+
+type props = {
+  children: React.ReactNode
+}
+
+const validation = await window.api.main.getCurrentSettings()
+
+export function SettingsProvider({ children }: props) {
+  const [settingsValidation, setSettingsValidation] = useState(validation)
+
+  return (
+    <SettingsContext.Provider value={{ settingsValidation, setSettingsValidation }}>
+      {children}
+    </SettingsContext.Provider>
+  )
 }
