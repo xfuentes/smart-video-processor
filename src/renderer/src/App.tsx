@@ -1,14 +1,12 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Divider } from '@fluentui/react-components'
-import { MainToolbar } from '@renderer/components/MainToolbar'
-import { SettingsContext } from '@renderer/components/SettingsContext'
 import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
 import { ListChangedListener, VideoChangedListener } from '../../preload/@types'
-import { VideoList } from '@renderer/components/VideoList'
 import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
-
-const validation = await window.api.main.getCurrentSettings()
+import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerProvider'
+import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
+import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
 
 export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
@@ -23,7 +21,6 @@ export const App = (): React.JSX.Element => {
     }
   }
 
-  const [settingsValidation, setSettingsValidation] = useState(validation)
   const [videos, setVideos] = useState<IVideo[]>([])
   const [selectedVideos, setSelectedVideos] = useState<IVideo[]>([])
   const selectedVideosRef = useRef(selectedVideos)
@@ -80,42 +77,33 @@ export const App = (): React.JSX.Element => {
   }, [])
 
   return (
-    <SettingsContext.Provider value={{ settingsValidation, setSettingsValidation }}>
-      <div
-        onDrop={preventDefault}
-        onDragOver={preventDefault}
-        onDragLeave={preventDefault}
-        role="application"
-        style={{ overflow: 'hidden' }}
-      >
-        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-          <div className="vertical-stack">
-            <div style={{ backgroundColor: '#f7f8fa' }}>
-              <MainToolbar
-                onOpen={() => window.api.video.openFileExplorer()}
+    <SettingsProvider>
+      <VideoPlayerProvider>
+        <div
+          onDrop={preventDefault}
+          onDragOver={preventDefault}
+          onDragLeave={preventDefault}
+          role="application"
+          style={{ overflow: 'hidden' }}
+        >
+          <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+            <div className="vertical-stack">
+              <ListOrVideoContainer
                 videos={videos}
                 selectedVideos={selectedVideos}
-              />
+                onImportVideos={handleImportVideos}
+                onSelectionChange={handleSelectionChange}
+              ></ListOrVideoContainer>
+              {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
+                <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
+                  <Divider />
+                  <PreviewTabs video={selectedVideos[0]} />
+                </div>
+              )}
             </div>
-            <Divider />
-            <div className="stack-item-grow">
-              <div style={{ height: '100%' }}>
-                <VideoList
-                  videos={videos}
-                  onSelectionChange={handleSelectionChange}
-                  onImportVideos={handleImportVideos}
-                />
-              </div>
-            </div>
-            {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
-              <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
-                <Divider />
-                <PreviewTabs video={selectedVideos[0]} />
-              </div>
-            )}
           </div>
         </div>
-      </div>
-    </SettingsContext.Provider>
+      </VideoPlayerProvider>
+    </SettingsProvider>
   )
 }

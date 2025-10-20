@@ -6,15 +6,17 @@ import { SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
-import { InvalidSettingsListener, ListChangedListener, VideoChangedListener } from './@types'
+import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
+const isLimitedPermissions: boolean = await ipcRenderer.invoke('main:isLimitedPermissions')
 
 // Custom APIs for renderer
-const api = {
+const api: SvpAPI = {
   main: {
     ...version,
+    isLimitedPermissions,
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
@@ -57,7 +59,7 @@ const api = {
       changeType: ChangeType,
       property?: ChangeProperty,
       newValue?: ChangePropertyValue
-    ): Promise<void> => ipcRenderer.invoke('video:addChange', uuid, source, changeType, property, newValue),
+    ): Promise<string> => ipcRenderer.invoke('video:addChange', uuid, source, changeType, property, newValue),
     saveChange: (
       uuid: string,
       changeUuid: string,
@@ -72,9 +74,9 @@ const api = {
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
     addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
-    setStartFrom: (uuid: string, value?: string): Promise<void> =>
+    setStartFrom: (uuid: string, value?: number): Promise<void> =>
       ipcRenderer.invoke('video:setStartFrom', uuid, value),
-    setEndAt: (uuid: string, value?: string): Promise<void> => ipcRenderer.invoke('video:setEndAt', uuid, value),
+    setEndAt: (uuid: string, value?: number): Promise<void> => ipcRenderer.invoke('video:setEndAt', uuid, value),
     process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),

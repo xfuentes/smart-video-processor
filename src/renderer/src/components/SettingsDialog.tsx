@@ -39,7 +39,7 @@ import {
   TabList,
   ToolbarButton
 } from '@fluentui/react-components'
-import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from 'react'
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { LanguageSelector } from './LanguageSelector'
 import {
   ArchiveSettings20Regular,
@@ -48,16 +48,15 @@ import {
   Settings24Regular,
   VideoSettings20Regular
 } from '@fluentui/react-icons'
-import { SettingsContext } from '@renderer/components/SettingsContext'
-import { SettingsContextType } from '@renderer/@types/SettingsContext'
 import { Settings } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { ProgressButton } from '@renderer/components/ProgressButton'
+import { useSettings } from '@renderer/components/context/SettingsContext'
 
 export const SettingsDialog = () => {
-  const { settingsValidation, setSettingsValidation } = useContext(SettingsContext) as SettingsContextType
+  const { settingsValidation, setSettingsValidation } = useSettings()
   const [selectedTab, setSelectedTab] = useState('general')
   const [opened, setOpened] = useState(settingsValidation.status !== 'success')
 
@@ -103,24 +102,26 @@ export const SettingsDialog = () => {
   }
 
   const handleCancel = (_ev: React.FormEvent) => {
-    setLanguage(settingsValidation?.result?.language)
-    setMoviesOutputPath(settingsValidation?.result?.moviesOutputPath)
-    setTVShowsOutputPath(settingsValidation?.result?.tvShowsOutputPath)
-    setOthersOutputPath(settingsValidation?.result?.othersOutputPath)
-    setAutoStartEnabled(settingsValidation?.result?.isAutoStartEnabled)
-    setPriority(settingsValidation?.result?.priority)
-    setDebugEnabled(settingsValidation?.result?.isDebugEnabled)
-    setTrackFilteringEnabled(settingsValidation?.result?.isTrackFilteringEnabled)
-    setFavoriteLanguages(settingsValidation?.result?.favoriteLanguages)
-    setKeepVOEnabled(settingsValidation?.result?.isKeepVOEnabled)
-    setTrackEncodingEnabled(settingsValidation?.result?.isTrackEncodingEnabled)
-    setTestEncodingEnabled(settingsValidation?.result?.isTestEncodingEnabled)
-    setVideoCodec(settingsValidation?.result?.videoCodec)
-    setVideoSizeReduction(settingsValidation?.result?.videoSizeReduction)
-    setAudioSizeReduction(settingsValidation?.result?.audioSizeReduction)
-    setMkvMergePath(settingsValidation?.result?.mkvMergePath)
-    setFfmpegPath(settingsValidation?.result?.ffmpegPath)
-    setFfprobePath(settingsValidation?.result?.ffprobePath)
+    if (settingsValidation.result) {
+      setLanguage(settingsValidation.result.language)
+      setMoviesOutputPath(settingsValidation.result.moviesOutputPath)
+      setTVShowsOutputPath(settingsValidation.result.tvShowsOutputPath)
+      setOthersOutputPath(settingsValidation.result.othersOutputPath)
+      setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
+      setPriority(settingsValidation.result.priority)
+      setDebugEnabled(settingsValidation.result.isDebugEnabled)
+      setTrackFilteringEnabled(settingsValidation.result.isTrackFilteringEnabled)
+      setFavoriteLanguages(settingsValidation.result.favoriteLanguages)
+      setKeepVOEnabled(settingsValidation.result.isKeepVOEnabled)
+      setTrackEncodingEnabled(settingsValidation.result.isTrackEncodingEnabled)
+      setTestEncodingEnabled(settingsValidation.result.isTestEncodingEnabled)
+      setVideoCodec(settingsValidation.result.videoCodec)
+      setVideoSizeReduction(settingsValidation.result.videoSizeReduction)
+      setAudioSizeReduction(settingsValidation.result.audioSizeReduction)
+      setMkvMergePath(settingsValidation.result.mkvMergePath)
+      setFfmpegPath(settingsValidation.result.ffmpegPath)
+      setFfprobePath(settingsValidation.result.ffprobePath)
+    }
     setOpened(false)
   }
 
@@ -236,7 +237,7 @@ export const SettingsDialog = () => {
                         onChange={(data) => setLanguage(data)}
                       />
                     </div>
-                    {!settingsValidation?.result.isLimitedPermissions && (
+                    {!window.api.main.isLimitedPermissions && (
                       <>
                         <FileSelectorField
                           label={
@@ -315,7 +316,7 @@ export const SettingsDialog = () => {
                         onChange={(ev: ChangeEvent<HTMLInputElement>) => setAutoStartEnabled(ev.currentTarget.checked)}
                       />
                     </div>
-                    {!settingsValidation?.result.isLimitedPermissions && (
+                    {!window.api.main.isLimitedPermissions && (
                       <div className="field">
                         <Label htmlFor="prioritySlider">Processes Priority</Label>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
