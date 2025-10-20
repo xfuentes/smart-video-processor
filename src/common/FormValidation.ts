@@ -25,7 +25,7 @@ export interface FieldValidation {
 export interface FormValidation<T> {
   fields: { [id: string]: FieldValidation }
   status: 'success' | 'error' | 'warning'
-  result?: T
+  result: T
 }
 
 export class FormValidationBuilder<T> {

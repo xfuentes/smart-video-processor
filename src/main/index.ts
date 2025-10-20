@@ -33,6 +33,7 @@ import { FFmpeg } from './domain/programs/FFmpeg'
 import { MKVMerge } from './domain/programs/MKVMerge'
 import packageJSON from '../../package.json' with { type: 'json' }
 import * as os from 'node:os'
+import { Processes } from './util/processes'
 
 if (electron_squirrel_startup) app.quit()
 
@@ -145,6 +146,9 @@ app.whenReady().then(async () => {
       fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
       viteVersion: packageJSON.devDependencies['vite'].replace(/^\^/, '')
     }
+  })
+  ipcMain.handle('main:isLimitedPermissions', async () => {
+    return Processes.isLimitedPermissions()
   })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {

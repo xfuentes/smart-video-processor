@@ -64,8 +64,8 @@ export const PreviewTabs = ({ video }: Props) => {
   return (
     <div
       style={{
-        minHeight: '285px',
-        maxHeight: '285px',
+        minHeight: '295px',
+        maxHeight: '295px',
         overflow: 'hidden',
         padding: '2px',
         display: 'flex',

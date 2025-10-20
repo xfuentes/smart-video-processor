@@ -25,7 +25,6 @@ import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
-import { omit } from '@fluentui/react'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -60,8 +59,7 @@ export const defaultSettings: Settings = {
   audioSizeReduction: 70,
   mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
   ffmpegPath: Processes.findCommandSync('ffmpeg', getDefaultFFmpegToolPath('ffmpeg')),
-  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe')),
-  isLimitedPermissions: Processes.isLimitedPermissions()
+  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe'))
 }
 export let currentSettings: Settings = defaultSettings
 
@@ -83,18 +81,13 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  currentSettings.isLimitedPermissions = defaultSettings.isLimitedPermissions
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
   if (validation.status === 'success') {
     currentSettings = { ...settings }
-    Files.writeFileSync(
-      getConfigPath(),
-      'settings.json',
-      JSON.stringify(omit(currentSettings, ['isLimitedPermissions']), null, 2)
-    )
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
   }
   return validation
 }
