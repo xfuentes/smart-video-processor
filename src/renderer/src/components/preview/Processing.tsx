@@ -27,6 +27,15 @@ type Props = {
 }
 
 export const Processing = ({ video, disabled = false }: Props) => {
+  const handleSave = async () => {
+    await window.api.video.setStartFrom(video.uuid, video.startFrom)
+    await window.api.video.setEndAt(video.uuid, video.endAt)
+    for (const part of video.videoParts) {
+      await window.api.video.setStartFrom(part.uuid, part.startFrom)
+      await window.api.video.setEndAt(part.uuid, part.endAt)
+    }
+  }
+
   return (
     <>
       <div className="processing-body">
@@ -60,7 +69,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
             appearance="primary"
             icon={<SaveRegular />}
             disabled={disabled}
-            onClick={() => void window.api.video.process(video.uuid)}
+            onClick={handleSave}
           >
             Apply
           </Button>

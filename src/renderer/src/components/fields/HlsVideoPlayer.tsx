@@ -23,6 +23,7 @@ import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 interface ElectronHlsPlayerProps {
   src: string
   autoPlay?: boolean
+  startAt?: number
   width?: string
   height?: string
   className?: string
@@ -31,6 +32,7 @@ interface ElectronHlsPlayerProps {
 const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
   src,
   autoPlay = true,
+  startAt = 0,
   width = '100%',
   height = '100%',
   className = ''
@@ -80,6 +82,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
 
           hls.on(Hls.Events.MANIFEST_PARSED, () => {
             if (autoPlay) {
+              video.currentTime = startAt
               video.play().catch((e) => {
                 console.error('Autoplay failed:', e)
                 // Electron apps often need user interaction first
