@@ -75,8 +75,8 @@ interface SvpAPI {
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>
     clearCompleted: () => Promise<void>
-    setStartFrom: (uuid: string, value: number) => Promise<void>
-    setEndAt: (uuid: string, value: number) => Promise<void>
+    setStartFrom: (uuid: string, value?: number) => Promise<void>
+    setEndAt: (uuid: string, value?: number) => Promise<void>
     takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number) => Promise<string>
     preparePreview: (uuid: string) => Promise<string>
   }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Dispatch, useCallback, useState } from 'react'
+import React, { Dispatch, useCallback, useEffect, useState } from 'react'
 import { IVideo } from '../../../../common/@types/Video'
 import { VideoPlayerContext } from '@renderer/components/context/VideoPlayerContext'
 
@@ -29,6 +29,9 @@ export type VideoPlayerContextType = {
   seekTo: (position: number) => void
   pause: () => void
   play: () => Promise<void>
+  videoPlayerPaused: boolean
+  videoPlayerCurrentTime: number
+  setVideoPlayerCurrentTime: Dispatch<number>
 }
 
 type props = {
@@ -37,6 +40,8 @@ type props = {
 
 export function VideoPlayerProvider({ children }: props) {
   const [videoPlayerOpened, setVideoPlayerOpened] = useState(false)
+  const [videoPlayerPaused, setVideoPlayerPaused] = useState(false)
+  const [videoPlayerCurrentTime, setVideoPlayerCurrentTime] = useState(0)
   const [videoPlayed, setVideoPlayed] = useState<IVideo | undefined>(undefined)
   const [videoRef, setVideoRefState] = useState<React.RefObject<HTMLVideoElement> | null>(null)
 
@@ -44,10 +49,52 @@ export function VideoPlayerProvider({ children }: props) {
     setVideoRefState(ref)
   }, [])
 
+  const videoEventHandler = useCallback(
+    (_event: Event) => {
+      if (videoRef !== null && videoRef.current !== null) {
+        console.log('event', _event.type)
+        setVideoPlayerPaused((prevPaused) => {
+          if (videoRef.current != undefined && prevPaused !== videoRef.current?.paused) {
+            return videoRef.current.paused
+          }
+          return prevPaused
+        })
+        setVideoPlayerCurrentTime((prevTime) => {
+          if (videoRef.current != undefined && prevTime !== videoRef.current?.currentTime) {
+            return videoRef.current.currentTime
+          }
+          return prevTime
+        })
+      }
+    },
+    [videoRef]
+  )
+
+  useEffect(() => {
+    let htmlVideo: HTMLVideoElement | null = null
+    if (videoRef !== null && videoRef.current !== null) {
+      htmlVideo = videoRef.current
+      htmlVideo.addEventListener('playing', videoEventHandler)
+      htmlVideo.addEventListener('pause', videoEventHandler)
+      htmlVideo.addEventListener('ended', videoEventHandler)
+      htmlVideo.addEventListener('timeupdate', videoEventHandler)
+    }
+    return () => {
+      if (htmlVideo !== null) {
+        htmlVideo.removeEventListener('playing', videoEventHandler)
+        htmlVideo.removeEventListener('pause', videoEventHandler)
+        htmlVideo.removeEventListener('ended', videoEventHandler)
+        htmlVideo.removeEventListener('timeupdate', videoEventHandler)
+      }
+    }
+  }, [videoEventHandler, videoRef])
+
   const seekTo = useCallback(
     (time: number) => {
       if (videoRef?.current) {
         videoRef.current.currentTime = time
+      } else {
+        setVideoPlayerCurrentTime(time)
       }
     },
     [videoRef]
@@ -68,7 +115,19 @@ export function VideoPlayerProvider({ children }: props) {
 
   return (
     <VideoPlayerContext.Provider
-      value={{ videoPlayerOpened, setVideoPlayerOpened, videoPlayed, setVideoPlayed, setVideoRef, seekTo, pause, play }}
+      value={{
+        videoPlayerOpened,
+        setVideoPlayerOpened,
+        videoPlayed,
+        setVideoPlayed,
+        setVideoRef,
+        seekTo,
+        pause,
+        play,
+        videoPlayerPaused,
+        videoPlayerCurrentTime,
+        setVideoPlayerCurrentTime
+      }}
     >
       {children}
     </VideoPlayerContext.Provider>
