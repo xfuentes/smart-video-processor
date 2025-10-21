@@ -55,17 +55,6 @@ export abstract class Job<T> implements IJob {
     this.setStatus(JobStatus.WAITING)
   }
 
-  private setStatus(status: JobStatus): void {
-    this.status = status
-    this.processingOrPaused =
-      this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
-    this.started = this.status !== JobStatus.WAITING
-    this.finished =
-      this.status === JobStatus.ABORTED || this.status === JobStatus.ERROR || this.status === JobStatus.SUCCESS
-    this.success = this.status === JobStatus.SUCCESS
-    this.failed = this.status === JobStatus.ERROR
-  }
-
   addChangeListener(listener: JobChangeListener) {
     this.changeListeners.push(listener)
   }
@@ -87,6 +76,7 @@ export abstract class Job<T> implements IJob {
   }
 
   async execute(): Promise<T> {
+    this.started = true
     this.startedAt = Date.now()
     let promise: Promise<T>
     try {
@@ -116,8 +106,10 @@ export abstract class Job<T> implements IJob {
   }
 
   queue(): Promise<T> {
-    this.setStatus(JobStatus.QUEUED)
-    this.emitChangeEvent()
+    if (this.status === JobStatus.WAITING) {
+      this.setStatus(JobStatus.QUEUED)
+      this.emitChangeEvent()
+    }
     return JobManager.getInstance().queue(this)
   }
 
@@ -227,4 +219,14 @@ export abstract class Job<T> implements IJob {
   }
 
   protected abstract executeInternal(): Promise<T>
+
+  private setStatus(status: JobStatus): void {
+    this.status = status
+    this.processingOrPaused =
+      this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
+    this.finished =
+      this.status === JobStatus.ABORTED || this.status === JobStatus.ERROR || this.status === JobStatus.SUCCESS
+    this.success = this.status === JobStatus.SUCCESS
+    this.failed = this.status === JobStatus.ERROR
+  }
 }

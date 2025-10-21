@@ -92,6 +92,7 @@ export interface IVideo {
   hintMissing: boolean
   previewProgression?: Progression
   previewPath?: string
+  snapshotsPath?: string
 }
 
 export type SearchInputData = {

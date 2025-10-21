@@ -22,27 +22,28 @@ import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { Spinner } from '@fluentui/react-components'
 
 export const VideoPlayer = () => {
-  const { videoPlayed } = useVideoPlayer()
+  const { videoPlayed, videoPlayerCurrentTime } = useVideoPlayer()
   const [previewPath, setPreviewPath] = useState<string | undefined>(videoPlayed?.previewPath)
 
   useEffect(() => {
     if (videoPlayed && videoPlayed.previewPath === undefined && videoPlayed.previewProgression === undefined) {
       console.log('preparing preview')
-      void window.api.video.preparePreview(videoPlayed.uuid).then((previewPath) => {
-        setPreviewPath(previewPath)
-      })
+      void window.api.video.preparePreview(videoPlayed.uuid)
     }
   }, [videoPlayed])
 
+  useEffect(() => {
+    setPreviewPath(videoPlayed?.previewPath)
+  }, [videoPlayed?.previewPath])
+
+  console.log(`Playing : svp-stream://${previewPath}`)
   return (
     <>
       <div className="player-loading">
         {previewPath ? (
-          <HlsVideoPlayer src={`svp-stream://${previewPath}`} autoPlay={true} />
+          <HlsVideoPlayer src={`svp-stream://${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
         ) : (
-          <div className="player-loading">
-            <Spinner label="Loading..." size="medium" />
-          </div>
+          <Spinner label="Loading..." size="medium" />
         )}
       </div>
     </>

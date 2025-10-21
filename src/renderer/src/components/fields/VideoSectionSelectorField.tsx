@@ -17,9 +17,9 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useCallback, useEffect, useRef } from 'react'
 import { Strings } from '../../../../common/Strings'
-import { Button, Image } from '@fluentui/react-components'
+import { Button } from '@fluentui/react-components'
 import {
   ArrowNext20Regular,
   ArrowPrevious20Regular,
@@ -29,6 +29,8 @@ import {
   Stop16Regular
 } from '@fluentui/react-icons'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
+import { PlayHead } from '@renderer/components/context/PlayHead'
+import { Delimitation } from '@renderer/components/context/Delimitation'
 
 declare type Hour =
   | 0
@@ -64,13 +66,24 @@ type Props = {
 }
 
 export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) {
-  const { videoPlayed, setVideoPlayed, videoPlayerOpened, setVideoPlayerOpened, seekTo, pause, play } = useVideoPlayer()
-  const [snapshotsStep, setSnapshotsStep] = React.useState(0)
-  const [snapshotsVideoUuid, setSnapshotsVideoUuid] = React.useState('')
-  const [snapshotsFilePath, setSnapshotsFilePath] = React.useState('')
-  const [playHeadPosition, setPlayHeadPosition] = React.useState(0)
+  const {
+    videoPlayed,
+    setVideoPlayed,
+    videoPlayerOpened,
+    setVideoPlayerOpened,
+    seekTo,
+    pause,
+    play,
+    videoPlayerPaused,
+    videoPlayerCurrentTime,
+    setVideoPlayerCurrentTime
+  } = useVideoPlayer()
+  const scrollableRef = useRef<HTMLDivElement | null>(null)
+  const rulerRef = useRef<HTMLDivElement | null>(null)
   const [startFrom, setStartFrom] = React.useState(video.startFrom ?? 0)
   const [endAt, setEndAt] = React.useState(video.endAt ?? video.duration)
+  const [selPosX, setSelPosX] = React.useState<number | undefined>(undefined)
+  const [currentTime, setCurrentTime] = React.useState<number>(0)
 
   const duration = video.duration
   const durationLeft = duration % step
@@ -92,7 +105,6 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
         )
       }
       if (!lastSection || lastSectionStepCount >= 4) {
-        console.log(durationLeft / step)
         labels.push(
           <div
             key={`label-${i}`}
@@ -138,7 +150,19 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     )
   }
   useEffect(() => {
-    if (video.uuid != snapshotsVideoUuid || snapshotsStep != step) {
+    if (videoPlayed?.uuid === video.uuid) {
+      setCurrentTime(videoPlayerCurrentTime)
+    }
+  }, [videoPlayerCurrentTime, videoPlayed?.uuid, video.uuid])
+
+  useEffect(() => {
+    if (video.uuid === videoPlayed?.uuid && videoPlayed !== video) {
+      setVideoPlayed(video)
+    }
+  }, [setVideoPlayed, video, videoPlayed])
+
+  useEffect(() => {
+    if (!video.snapshotsPath) {
       const durationLeft = video.duration % step
       let endPos = Math.floor(video.duration / step) * 22
       if (durationLeft > 0) {
@@ -147,46 +171,20 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
       const totalWidth = endPos
       const snapshotHeight = previewHeight - 2
       const snapshotWidth = Math.round(Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight)
-      window.api.video
-        .takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
-        .then((snapshotsFilePath: string) => {
-          setSnapshotsStep(step)
-          setSnapshotsVideoUuid(video.uuid)
-          setSnapshotsFilePath(snapshotsFilePath)
-        })
+      void window.api.video.takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
     }
-  }, [video.uuid, step, snapshotsVideoUuid, snapshotsStep, video.duration, video.pixels])
+  }, [video.uuid, step, video.duration, video.pixels, video.snapshotsPath])
 
-  const handlePrevious = () => {
-    setPlayHeadPosition((currentPlayHeadPosition) => {
-      if (currentPlayHeadPosition > endAt) {
-        return endAt
-      } else if (currentPlayHeadPosition > startFrom) {
-        return startFrom
-      } else {
-        return 0
-      }
-    })
-  }
-
-  const handleNext = () => {
-    setPlayHeadPosition((currentPlayHeadPosition) => {
-      if (currentPlayHeadPosition < startFrom) {
-        return startFrom
-      } else if (currentPlayHeadPosition < endAt) {
-        return endAt
-      } else {
-        return video.duration
-      }
-    })
-  }
-
-  const handlePlay = () => {
-    if(videoPlayed !== video || videoPlayerOpened == false) {
-      setVideoPlayed(video)
+  const handlePlay = async () => {
+    if (!videoPlayerOpened) {
       setVideoPlayerOpened(true)
-    } else {
-      void play()
+    }
+    if (videoPlayed !== video) {
+      setVideoPlayed(video)
+      setVideoPlayerCurrentTime(currentTime)
+    }
+    if (videoPlayerOpened) {
+      await play()
     }
   }
 
@@ -199,54 +197,177 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     setVideoPlayerOpened(false)
   }
 
-  const isPlaying = videoPlayerOpened && videoPlayed?.uuid === video.uuid
-  const isStopped = !videoPlayerOpened
-  
+  const isPlaying = videoPlayerOpened && videoPlayed?.uuid === video.uuid && !videoPlayerPaused
+  const isStopped = !videoPlayerOpened || videoPlayed?.uuid !== video.uuid
+  const isPaused = !videoPlayerOpened || videoPlayerPaused || videoPlayed?.uuid !== video.uuid
+  let previousTime: number | undefined = undefined
+  if (currentTime > endAt) {
+    previousTime = endAt
+  } else if (currentTime > startFrom) {
+    previousTime = startFrom
+  } else if (currentTime !== 0) {
+    previousTime = 0
+  }
+  let nextTime: number | undefined = undefined
+  if (currentTime < startFrom) {
+    nextTime = startFrom
+  } else if (currentTime < endAt) {
+    nextTime = endAt
+  }
+  const canStartHere = endAt > currentTime && startFrom !== currentTime
+  const canEndHere = startFrom < currentTime && endAt !== currentTime
+
+  const handlePrevious = () => {
+    if (previousTime !== undefined) {
+      localSeekTo(previousTime)
+    }
+  }
+
+  const handleNext = () => {
+    if (nextTime !== undefined) {
+      localSeekTo(nextTime)
+    }
+  }
+
+  const handleSetStartFrom = () => {
+    setStartFrom(currentTime)
+  }
+
+  const handleSetEndTo = () => {
+    setEndAt(currentTime)
+  }
+
+  const handleMouseMoveOverScrollable = useCallback(
+    (event: MouseEvent) => {
+      if (rulerRef.current != null) {
+        setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
+      }
+    },
+    [setSelPosX]
+  )
+  const handleMouseOutScrollable = useCallback(
+    (_event: MouseEvent) => {
+      setSelPosX(undefined)
+    },
+    [setSelPosX]
+  )
+
+  const localSeekTo = useCallback(
+    (position: number) => {
+      if (videoPlayed?.uuid === video.uuid) {
+        seekTo(position)
+      } else {
+        setCurrentTime(position)
+      }
+    },
+    [seekTo, video.uuid, videoPlayed?.uuid]
+  )
+
+  useEffect(() => {
+    let ruler: HTMLDivElement | null = null
+    if (rulerRef && rulerRef.current) {
+      ruler = rulerRef.current
+      ruler.addEventListener('mouseover', handleMouseMoveOverScrollable)
+      ruler.addEventListener('mousemove', handleMouseMoveOverScrollable)
+      ruler.addEventListener('mouseout', handleMouseOutScrollable)
+    }
+    return () => {
+      if (ruler) {
+        ruler.removeEventListener('mouseover', handleMouseMoveOverScrollable)
+        ruler.removeEventListener('mousemove', handleMouseMoveOverScrollable)
+        ruler.removeEventListener('mouseout', handleMouseOutScrollable)
+      }
+    }
+  }, [handleMouseOutScrollable, handleMouseMoveOverScrollable, rulerRef])
+
+  const posX = (currentTime * 22) / step
+  const startVideoPercent = (startFrom * 100) / duration
+  const endVideoPercent = (endAt * 100) / duration
+
   return (
     <div className="video-section-selector-field">
       <div className="controller">
-        <div className="current-position">00:00:00,00</div>
+        <div className="current-position">{Strings.humanDuration(currentTime)}</div>
         <div className="video-controls">
-          <Button size="small" appearance="subtle" onClick={handlePrevious} icon={<ArrowPrevious20Regular />} />
+          <Button
+            size="small"
+            appearance="subtle"
+            onClick={handlePrevious}
+            icon={<ArrowPrevious20Regular />}
+            disabled={previousTime === undefined}
+          />
           <Button size="small" appearance="subtle" onClick={handlePlay} icon={<Play16Regular />} disabled={isPlaying} />
-          <Button size="small" appearance="subtle" onClick={handlePause} icon={<Pause16Regular />} />
+          <Button
+            size="small"
+            appearance="subtle"
+            onClick={handlePause}
+            icon={<Pause16Regular />}
+            disabled={isPaused}
+          />
           <Button size="small" appearance="subtle" onClick={handleStop} icon={<Stop16Regular />} disabled={isStopped} />
-          <Button size="small" appearance="subtle" onClick={handleNext} icon={<ArrowNext20Regular />} />
+          <Button
+            size="small"
+            appearance="subtle"
+            onClick={handleNext}
+            icon={<ArrowNext20Regular />}
+            disabled={nextTime === undefined}
+          />
         </div>
         <div className="video-controls">
           <Button
             size="small"
             appearance="subtle"
-            onClick={handleNext}
+            onClick={handleSetStartFrom}
             icon={
               <div className="hide-first-half">
                 <FilmstripSplitRegular />
               </div>
             }
+            disabled={!canStartHere}
           />
           <Button
             size="small"
             appearance="subtle"
-            onClick={handleNext}
+            onClick={handleSetEndTo}
             icon={
               <div className="hide-second-half">
                 <FilmstripSplitRegular />
               </div>
             }
+            disabled={!canEndHere}
           />
         </div>
       </div>
-      <div className="scrollable">
-        <div className="ruler">
+      <div className="scrollable" ref={scrollableRef}>
+        <div
+          className="ruler"
+          ref={rulerRef}
+          onClick={() => selPosX !== undefined && localSeekTo((selPosX * step) / 22)}
+        >
           {labels}
           {tickMarks}
-          <div className="preview" style={{ width: `${endPos}px`, overflow: 'hidden' }}>
-            {snapshotsFilePath && <Image src={'svp:///' + snapshotsFilePath} className="poster" />}
+          <div
+            className="preview"
+            style={{
+              width: `${endPos}px`,
+              background: video.snapshotsPath ? `url('${'svp:///' + video.snapshotsPath}')` : 'black',
+              backgroundSize: 'auto 100%'
+            }}
+          >
+            <div
+              className="mask"
+              style={{
+                maskImage: `linear-gradient(to right, black ${startVideoPercent}%, transparent ${startVideoPercent + 0.001}%, transparent ${endVideoPercent - 0.001}%, black ${endVideoPercent}%)`
+              }}
+            />
           </div>
+          <Delimitation time={startFrom} posX={(startFrom * 22) / step} />
+          <Delimitation time={endAt} posX={(endAt * 22) / step} end />
+          <PlayHead currentTime={currentTime} posX={posX} />
+          <PlayHead selection posX={selPosX} />
         </div>
       </div>
     </div>
   )
 }
-
 VideoSectionSelectorField.displayName = 'VideoSectionSelectorField'

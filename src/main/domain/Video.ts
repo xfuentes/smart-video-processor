@@ -126,6 +126,8 @@ export class Video implements IVideo {
   public lastPromise?: Promise<void>
   public previewJob?: Job<string>
   public previewPath?: string
+  public snapshotsJob?: Job<string>
+  public snapshotsPath?: string
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
@@ -214,10 +216,29 @@ export class Video implements IVideo {
         this.fireChangeEvent()
       }
       job.addChangeListener(listener)
+      return job
     } else {
-      throw new Error('A preview job is already running, please wait.')
+      return this.previewJob
     }
-    return job
+  }
+
+  attachSnapshotJob(job: Job<string>): Job<string> {
+    if (this.snapshotsJob === undefined || this.snapshotsJob.finished) {
+      this.snapshotsJob = job
+      const listener = () => {
+        if (job.finished) {
+          if (this.previewJob === job) {
+            this.previewJob = undefined
+          }
+          job.removeChangeListener(listener)
+        }
+        this.fireChangeEvent()
+      }
+      job.addChangeListener(listener)
+      return job
+    } else {
+      return this.snapshotsJob
+    }
   }
 
   async load(searchEnabled: boolean = true) {
@@ -403,7 +424,7 @@ export class Video implements IVideo {
     const outputDirectory = this.getOutputDirectory()
 
     if (encodingRequired && this.container !== undefined) {
-      encodingJob = this.job = this.attachJob(
+      encodingJob = this.attachJob(
         new EncodingJob(
           this.sourcePath,
           outputDirectory,
@@ -412,7 +433,7 @@ export class Video implements IVideo {
           finalEncoderSettings
         )
       )
-      this.encodedPath = (await this.job.queue()) as string
+      this.encodedPath = (await encodingJob.queue()) as string
     }
     await this.merge(outputDirectory, encodingJob?.getDuration())
     this.queued = false
@@ -634,7 +655,8 @@ export class Video implements IVideo {
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
       previewProgression: this.previewProgression,
-      previewPath: this.previewPath
+      previewPath: this.previewPath,
+      snapshotsPath: this.snapshotsPath
     }
   }
 
@@ -664,15 +686,23 @@ export class Video implements IVideo {
   }
 
   async takeSnapshots(snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> {
-    const job = new SnapshottingJob(
-      this.sourcePath,
-      this.getPreviewDirectory(),
-      snapshotHeight,
-      snapshotWidth,
-      totalWidth,
-      this.duration
-    )
-    return await job.queue()
+    if (this.snapshotsPath) {
+      return Promise.resolve(this.snapshotsPath)
+    } else {
+      const snapshotJob = this.attachSnapshotJob(
+        new SnapshottingJob(
+          this.sourcePath,
+          this.getPreviewDirectory(),
+          snapshotHeight,
+          snapshotWidth,
+          totalWidth,
+          this.duration
+        )
+      )
+      this.snapshotsPath = await snapshotJob.queue()
+      this.fireChangeEvent()
+      return this.snapshotsPath
+    }
   }
 
   async preparePreview(): Promise<string> {
@@ -693,7 +723,7 @@ export class Video implements IVideo {
       }
     }
 
-    this.job = this.attachJob(
+    const mergeJob = this.attachJob(
       new ProcessingJob(
         path.basename(this.sourcePath),
         this.encodedPath !== undefined ? this.encodedPath : this.sourcePath,
@@ -704,7 +734,7 @@ export class Video implements IVideo {
         extraDuration
       )
     )
-    await this.job.queue()
+    await mergeJob.queue()
     if (this.encodedPath) {
       Files.cleanupFiles(this.encodedPath)
     }

@@ -44,24 +44,56 @@ export class JobManager {
     return JobManager.instance
   }
 
+  isQueued<T>(job: Job<T>): boolean {
+    return this.queues[job.type].find((cj) => cj.uuid === job.uuid) !== undefined
+  }
+
   queue<T>(job: Job<T>) {
-    return new Promise<T>((resolve, reject) => {
-      this.queues[job.type].push(job)
-      job.addChangeListener(() => {
-        if (job.finished) {
-          if (this.runningJobs[job.type] === job) {
-            this.runningJobs[job.type] = undefined
-            this.handleQueueUpdated(job.type)
-          }
-          if (job.success) {
-            resolve(job.getResult() as T)
-          } else {
-            reject(new Error(job.getError()))
+    if (job.finished) {
+      console.log('Job already Ran ' + job.uuid)
+      if (job.success) {
+        return Promise.resolve(job.getResult() as T)
+      } else {
+        return Promise.reject(new Error(job.getError()))
+      }
+    } else if (this.isQueued(job) || job.started) {
+      // Listening mode only
+      return new Promise<T>((resolve, reject) => {
+        const listener = () => {
+          if (job.finished) {
+            if (job.success) {
+              job.removeChangeListener(listener)
+              resolve(job.getResult() as T)
+            } else {
+              job.removeChangeListener(listener)
+              reject(new Error(job.getError()))
+            }
           }
         }
+        job.addChangeListener(listener)
       })
-      this.handleQueueUpdated(job.type)
-    })
+    } else {
+      this.queues[job.type].push(job)
+      return new Promise<T>((resolve, reject) => {
+        const listener = () => {
+          if (job.finished) {
+            if (this.runningJobs[job.type] === job) {
+              this.runningJobs[job.type] = undefined
+              this.handleQueueUpdated(job.type)
+            }
+            if (job.success) {
+              job.removeChangeListener(listener)
+              resolve(job.getResult() as T)
+            } else {
+              job.removeChangeListener(listener)
+              reject(new Error(job.getError()))
+            }
+          }
+        }
+        job.addChangeListener(listener)
+        this.handleQueueUpdated(job.type)
+      })
+    }
   }
 
   handleQueueUpdated(jobType: JobType) {
