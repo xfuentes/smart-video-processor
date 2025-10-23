@@ -386,7 +386,7 @@ export class FFmpeg extends CommandProgress {
       type === TrackType.VIDEO ? 'v' : type === TrackType.AUDIO ? 'a' : type === TrackType.SUBTITLES ? 's' : undefined
     const name = `${t}${inputIndex}_${typeIndex}`
 
-    let filter = `[${inputIndex}:${t}:${typeIndex}]trim=`
+    let filter = `[${inputIndex}:${t}:${typeIndex}]${type === TrackType.AUDIO ? 'a' : ''}trim=`
     if (startFrom !== undefined) {
       filter += 'start=' + startFrom
     }
@@ -396,20 +396,20 @@ export class FFmpeg extends CommandProgress {
       }
       filter += 'end=' + endAt
     }
-    filter += `,setpts=PTS-STARTPTS[${name}]`
+    filter += `,${type === TrackType.AUDIO ? 'a' : ''}setpts=PTS-STARTPTS[${name}]`
     return { name, filter }
   }
 
-  private generateProcessingArguments(video: IVideo) {
+  generateProcessingArguments(video: IVideo) {
     const ffOptions: string[] = []
     const complexFilter: string[] = []
-    let finalToMap: string[] = []
+    const finalToMap: string[] = []
     const toMap: string[][] = []
     const typeIndex: Map<TrackType, number>[] = []
     let needConcat = false
     let nbInputs: number = 0
 
-    if(video.startFrom === undefined && video.endAt === undefined && video.videoParts.length === 0) {
+    if (video.startFrom === undefined && video.endAt === undefined && video.videoParts.length === 0) {
       return undefined
     }
 
@@ -421,7 +421,11 @@ export class FFmpeg extends CommandProgress {
       if (typeIndex.length <= 0) {
         typeIndex[0] = new Map()
       }
-      typeIndex[0].set(track.type, typeIndex[0].get(track.type) ?? 0)
+      if (!typeIndex[0].has(track.type)) {
+        typeIndex[0].set(track.type, typeIndex[0].get(track.type) ?? 0)
+      } else {
+        typeIndex[0].set(track.type, (typeIndex[0].get(track.type) ?? 0) + 1)
+      }
       const { name, filter } = this.generateTrimFilter(
         0,
         track.type,
@@ -450,7 +454,15 @@ export class FFmpeg extends CommandProgress {
           if (typeIndex.length <= partCount) {
             typeIndex[partCount] = new Map()
           }
-          typeIndex[partCount].set(matchingPartTrack.type, typeIndex[partCount].get(matchingPartTrack.type) ?? 0)
+          if (!typeIndex[partCount].has(matchingPartTrack.type)) {
+            typeIndex[partCount].set(matchingPartTrack.type, typeIndex[partCount].get(matchingPartTrack.type) ?? 0)
+          } else {
+            typeIndex[partCount].set(
+              matchingPartTrack.type,
+              (typeIndex[partCount].get(matchingPartTrack.type) ?? 0) + 1
+            )
+          }
+
           const { name, filter } = this.generateTrimFilter(
             partCount,
             matchingPartTrack.type,
@@ -468,29 +480,45 @@ export class FFmpeg extends CommandProgress {
       nbInputs = partCount + 1
     }
     if (needConcat) {
+      const outTypeIndex: Map<TrackType, number> = new Map()
       let mapping = ''
       for (const map of toMap) {
-        mapping += map.join('')
+        mapping += map.map((s) => `[${s}]`).join('')
       }
       let concat = `concat=n=${nbInputs}`
-      let name = 'out'
-      if (typeIndex[0][TrackType.VIDEO]) {
-        concat += `:v=${typeIndex[0][TrackType.VIDEO]}`
-        name += `v_${typeIndex}`
+      const names: string[] = []
+      if (typeIndex[0].has(TrackType.VIDEO)) {
+        if (!outTypeIndex.has(TrackType.VIDEO)) {
+          outTypeIndex.set(TrackType.VIDEO, 0)
+        } else {
+          outTypeIndex.set(TrackType.VIDEO, (outTypeIndex.get(TrackType.VIDEO) ?? 0) + 1)
+        }
+        concat += `:v=${(typeIndex[0].get(TrackType.VIDEO) ?? 0) + 1}`
+        for (let i = 0; i <= (typeIndex[0].get(TrackType.VIDEO) ?? 0); i++) {
+          names.push(`[outv_${i}]`)
+        }
       }
-      if (typeIndex[0][TrackType.AUDIO]) {
-        concat += `:a=${typeIndex[0][TrackType.AUDIO]}`
-        name += `a_${typeIndex}`
+      if (typeIndex[0].has(TrackType.AUDIO)) {
+        if (!outTypeIndex.has(TrackType.AUDIO)) {
+          outTypeIndex.set(TrackType.AUDIO, 0)
+        } else {
+          outTypeIndex.set(TrackType.AUDIO, (outTypeIndex.get(TrackType.AUDIO) ?? 0) + 1)
+        }
+        concat += `:a=${(typeIndex[0].get(TrackType.AUDIO) ?? 0) + 1}`
+        for (let i = 0; i <= (typeIndex[0].get(TrackType.AUDIO) ?? 0); i++) {
+          names.push(`[outa_${i}]`)
+        }
       }
-      if (typeIndex[0][TrackType.SUBTITLES]) {
-        concat += `:s=${typeIndex[0][TrackType.SUBTITLES]}`
-        name += `s_${typeIndex}`
+      if (typeIndex[0].has(TrackType.SUBTITLES)) {
+        concat += `:s=${(typeIndex[0].get(TrackType.SUBTITLES) ?? 0) + 1}`
+        for (let i = 0; i <= (typeIndex[0].get(TrackType.SUBTITLES) ?? 0); i++) {
+          names.push(`[outs_${i}]`)
+        }
       }
-      name = `[${name}]`
-      finalToMap.push(name)
+      finalToMap.push(...names)
       complexFilter.push(mapping + concat + finalToMap.join(''))
     } else {
-      finalToMap = toMap[0]
+      finalToMap.push(...toMap[0])
     }
 
     ffOptions.push('-filter_complex', complexFilter.join(';'))
