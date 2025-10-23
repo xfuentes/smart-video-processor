@@ -36,26 +36,23 @@ export class Encoding {
     return Encoding.instance
   }
 
-  public analyse(tracks: Track[], trackEncodingEnabled: { [key: string]: boolean }): EncoderSettings[] {
+  public analyse(tracks: Track[]): EncoderSettings[] {
     let settings: EncoderSettings[] = []
 
     for (const track of tracks) {
       switch (track.type) {
         case TrackType.VIDEO:
-          settings = settings.concat(this.analyseVideoTrack(track, trackEncodingEnabled))
+          settings = settings.concat(this.analyseVideoTrack(track))
           break
         case TrackType.AUDIO:
-          settings = settings.concat(this.analyseAudioTrack(track, trackEncodingEnabled))
+          settings = settings.concat(this.analyseAudioTrack(track))
           break
       }
     }
     return settings
   }
 
-  public analyseVideoTrack(
-    videoTrack: Track,
-    trackEncodingEnabled: { [key: string]: boolean } = {}
-  ): EncoderSettings[] {
+  public analyseVideoTrack(videoTrack: Track): EncoderSettings[] {
     const settings: EncoderSettings[] = []
 
     if (
@@ -64,7 +61,7 @@ export class Encoding {
       videoTrack.properties.frames !== undefined &&
       videoTrack.duration !== undefined
     ) {
-      const duration = currentSettings.isTestEncodingEnabled ? 30 : videoTrack.duration
+      const duration = videoTrack.duration
       const pixelsArr = videoTrack.properties.videoDimensions.split('x')
       const width = Number.parseInt(pixelsArr[0], 10)
       const height = Number.parseInt(pixelsArr[1], 10)
@@ -74,21 +71,19 @@ export class Encoding {
       const bitrate = Math.round(bpf * width * height * fps)
       const proposedCompression = Math.round((1 - bitrate / videoTrack.properties.bitRate) * 100)
 
-      if (
-        trackEncodingEnabled[videoTrack.type + ' ' + videoTrack.id] ||
-        (currentSettings.isTrackEncodingEnabled && currentSettings.videoSizeReduction <= proposedCompression)
-      ) {
-        const setting: EncoderSettings = {
-          trackId: videoTrack.id,
-          trackType: videoTrack.type,
-          fps,
-          bitrate,
-          codec,
-          ...this.computeCompression(videoTrack.properties.bitRate, bitrate, duration)
-        }
-
-        settings.push(setting)
+      const encodingEnabled =
+        currentSettings.isTrackEncodingEnabled && currentSettings.videoSizeReduction <= proposedCompression
+      const setting: EncoderSettings = {
+        trackId: videoTrack.id,
+        trackType: videoTrack.type,
+        fps,
+        bitrate,
+        codec,
+        ...this.computeCompression(videoTrack.properties.bitRate, bitrate, duration),
+        encodingEnabled
       }
+
+      settings.push(setting)
     }
     return settings
   }
@@ -137,10 +132,7 @@ export class Encoding {
     return { bpf, codec }
   }
 
-  public analyseAudioTrack(
-    audioTrack: Track,
-    trackEncodingEnabled: { [key: string]: boolean } = {}
-  ): EncoderSettings[] {
+  public analyseAudioTrack(audioTrack: Track): EncoderSettings[] {
     const settings: EncoderSettings[] = []
 
     if (
@@ -148,25 +140,23 @@ export class Encoding {
       audioTrack.properties.audioChannels !== undefined &&
       audioTrack.duration !== undefined
     ) {
-      const duration = currentSettings.isTestEncodingEnabled ? 30 : audioTrack.duration
+      const duration = audioTrack.duration
       const bitrate = this.getBpsForAudioChannels(audioTrack.properties.audioChannels)
       const proposedCompression = Math.round((1 - bitrate / audioTrack.properties.bitRate) * 100)
 
-      if (
-        trackEncodingEnabled[audioTrack.type + ' ' + audioTrack.id] ||
+      const encodingEnabled =
         (currentSettings.isTrackEncodingEnabled && currentSettings.audioSizeReduction <= proposedCompression) ||
         audioTrack.unsupported
-      ) {
-        const setting: EncoderSettings = {
-          trackId: audioTrack.id,
-          trackType: audioTrack.type,
-          codec: AudioCodec.AAC_LC,
-          audioChannels: audioTrack.properties.audioChannels,
-          bitrate,
-          ...this.computeCompression(audioTrack.properties.bitRate, bitrate, duration)
-        }
-        settings.push(setting)
+      const setting: EncoderSettings = {
+        trackId: audioTrack.id,
+        trackType: audioTrack.type,
+        codec: AudioCodec.AAC_LC,
+        audioChannels: audioTrack.properties.audioChannels,
+        bitrate,
+        ...this.computeCompression(audioTrack.properties.bitRate, bitrate, duration),
+        encodingEnabled
       }
+      settings.push(setting)
     }
 
     return settings

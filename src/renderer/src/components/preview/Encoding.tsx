@@ -29,12 +29,7 @@ type Props = {
   disabled: boolean
 }
 
-const trackTypeEncodingSection = (
-  video: IVideo,
-  type: TrackType,
-  disabled: boolean,
-  expand: boolean = false
-) => {
+const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: boolean, expand: boolean = false) => {
   const selectedTrackIds = video.tracks.filter((t) => t.copy).map((t) => t.id)
   const filteredTracks = video.tracks.filter((t) => t.type === type).filter((s) => selectedTrackIds.includes(s.id))
   return (
@@ -51,10 +46,17 @@ const trackTypeEncodingSection = (
               infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
               forceDisabled = true
             } else if (es && es.targetSize) {
+              forceDisabled = video.encodingForced
               infoLabel = (
                 <InfoLabel
                   info={
                     <div style={{ whiteSpace: 'nowrap' }}>
+                      {video.encodingForced && (
+                        <>
+                          <b>Fine trimming requires re-encoding</b>
+                          <br />
+                        </>
+                      )}
                       {es.codec && (
                         <>
                           Codec: {es.codec}
@@ -86,7 +88,7 @@ const trackTypeEncodingSection = (
             return (
               <Checkbox
                 key={key}
-                checked={video.trackEncodingEnabled[key] ?? false}
+                checked={video.encodingForced || (video.trackEncodingEnabled[key] ?? false)}
                 onChange={async (_ev, data) => {
                   if (data.checked !== 'mixed') {
                     await window.api.video.setTrackEncodingEnabled(video.uuid, key, data.checked)

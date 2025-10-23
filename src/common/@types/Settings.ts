@@ -65,9 +65,9 @@ export type Settings = {
    */
   isTrackEncodingEnabled: boolean
   /**
-   * When enabled only encode a 30s section of the video to verify quality.
+   * When enabled always force re-encoding all streams to enable precise trimming.
    */
-  isTestEncodingEnabled: boolean
+  isFineTrimEnabled: boolean
   /**
    * Video Codec to use to re-encode video tracks.
    */

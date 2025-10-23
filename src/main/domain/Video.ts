@@ -128,6 +128,7 @@ export class Video implements IVideo {
   public previewPath?: string
   public snapshotsJob?: Job<string>
   public snapshotsPath?: string
+  public encodingForced: boolean = false
 
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
@@ -264,9 +265,12 @@ export class Video implements IVideo {
     if (init) {
       this.trackEncodingEnabled = {}
     }
-    this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.trackEncodingEnabled)
+    this.encodingForced = this.videoParts.length > 0 || this.startFrom !== undefined || this.endAt !== undefined
+    this.encoderSettings = Encoding.getInstance().analyse(this.tracks)
     if (init) {
-      this.encoderSettings.forEach((s) => this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, true))
+      this.encoderSettings.forEach((s) =>
+        this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled)
+      )
     }
     debug('### ENCODER SETTINGS ###')
     debug(this.encoderSettings)
@@ -424,15 +428,7 @@ export class Video implements IVideo {
     const outputDirectory = this.getOutputDirectory()
 
     if (encodingRequired && this.container !== undefined) {
-      encodingJob = this.attachJob(
-        new EncodingJob(
-          this.sourcePath,
-          outputDirectory,
-          this.container.durationSeconds,
-          this.tracks,
-          finalEncoderSettings
-        )
-      )
+      encodingJob = this.attachJob(new EncodingJob(this.toJSON(), outputDirectory, finalEncoderSettings))
       this.encodedPath = (await encodingJob.queue()) as string
     }
     await this.merge(outputDirectory, encodingJob?.getDuration())
@@ -442,7 +438,9 @@ export class Video implements IVideo {
   }
 
   getFinalEncoderSettings() {
-    return this.encoderSettings.filter((s) => this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId))
+    return this.encoderSettings.filter(
+      (s) => this.encodingForced || this.isTrackEncodingEnabled(s.trackType + ' ' + s.trackId)
+    )
   }
 
   getOutputDirectory() {
@@ -626,6 +624,7 @@ export class Video implements IVideo {
     return {
       uuid: this.uuid,
       filename: this.filename,
+      sourcePath: this.sourcePath,
       size: this.size,
       duration: this.duration,
       pixels: this.pixels,
@@ -654,6 +653,7 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
+      encodingForced: this.encodingForced,
       previewProgression: this.previewProgression,
       previewPath: this.previewPath,
       snapshotsPath: this.snapshotsPath
@@ -671,17 +671,20 @@ export class Video implements IVideo {
       videoPart.addChangeListener(this.videoPartListener)
       await videoPart.load(false)
       this.videoParts.push(videoPart)
+      this.generateEncoderSettings()
       this.fireChangeEvent()
     }
   }
 
   setStartFrom(value?: number) {
-    this.startFrom = value
+    this.startFrom = value !== undefined ? Math.round(value) : undefined
+    this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
   setEndAt(value?: number) {
-    this.endAt = value
+    this.endAt = value !== undefined ? Math.round(value) : undefined
+    this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 

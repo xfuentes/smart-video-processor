@@ -19,30 +19,20 @@
 import { Job } from './Job'
 import { FFmpeg } from '../programs/FFmpeg'
 import { Strings } from '../../../common/Strings'
-import { Track } from '../Track'
 import { EncoderSettings } from '../../../common/@types/Encoding'
 import { JobStatus } from '../../../common/@types/Job'
+import { IVideo } from '../../../common/@types/Video'
 
 export class EncodingJob extends Job<string> {
-  private readonly sourcePath: string
+  private readonly video: IVideo
   private readonly destinationPath: string
-  private readonly durationSeconds: number
   private readonly settings: EncoderSettings[]
-  private readonly tracks: Track[]
 
-  constructor(
-    sourcePath: string,
-    destinationPath: string,
-    durationSeconds: number,
-    tracks: Track[],
-    settings: EncoderSettings[]
-  ) {
-    super(JobStatus.ENCODING, 'Encoding, please wait.')
-    this.sourcePath = sourcePath
+  constructor(video: IVideo, destinationPath: string, settings: EncoderSettings[]) {
+    super(JobStatus.ENCODING, settings.length === 0 ? 'Processing, please wait.' : 'Encoding, please wait.')
+    this.video = video
     this.destinationPath = destinationPath
-    this.durationSeconds = durationSeconds
     this.settings = settings
-    this.tracks = tracks
   }
 
   getTitle() {
@@ -63,10 +53,8 @@ export class EncodingJob extends Job<string> {
 
   protected executeInternal(): Promise<string> {
     return FFmpeg.getInstance().encodeFile(
-      this.sourcePath,
+      this.video,
       this.destinationPath,
-      this.durationSeconds,
-      this.tracks,
       this.settings,
       this.setProgression.bind(this)
     )
