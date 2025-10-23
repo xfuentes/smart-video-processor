@@ -18,7 +18,7 @@
 
 import { IVideo } from '../../../../common/@types/Video'
 import { Button, Divider } from '@fluentui/react-components'
-import { MoviesAndTvRegular, SaveRegular } from '@fluentui/react-icons'
+import { MoviesAndTvRegular } from '@fluentui/react-icons'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 
 type Props = {
@@ -27,15 +27,6 @@ type Props = {
 }
 
 export const Processing = ({ video, disabled = false }: Props) => {
-  const handleSave = async () => {
-    await window.api.video.setStartFrom(video.uuid, video.startFrom)
-    await window.api.video.setEndAt(video.uuid, video.endAt)
-    for (const part of video.videoParts) {
-      await window.api.video.setStartFrom(part.uuid, part.startFrom)
-      await window.api.video.setEndAt(part.uuid, part.endAt)
-    }
-  }
-
   return (
     <>
       <div className="processing-body">
@@ -61,17 +52,6 @@ export const Processing = ({ video, disabled = false }: Props) => {
             onClick={() => void window.api.video.addPart(video.uuid)}
           >
             Add Video Part
-          </Button>
-        </div>
-        <div className="button">
-          <Button
-            size={'medium'}
-            appearance="primary"
-            icon={<SaveRegular />}
-            disabled={disabled}
-            onClick={handleSave}
-          >
-            Apply
           </Button>
         </div>
       </div>

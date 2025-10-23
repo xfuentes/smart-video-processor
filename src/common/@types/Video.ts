@@ -61,6 +61,7 @@ export interface TrackChanges {
 export interface IVideo {
   uuid: string
   filename: string
+  sourcePath: string
   size: number
   duration: number
   pixels?: string
@@ -89,6 +90,7 @@ export interface IVideo {
   other?: IOther
   encoderSettings: EncoderSettings[]
   trackEncodingEnabled: { [key: string]: boolean }
+  encodingForced: boolean
   hintMissing: boolean
   previewProgression?: Progression
   previewPath?: string
