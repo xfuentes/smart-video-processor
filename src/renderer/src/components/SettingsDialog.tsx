@@ -79,7 +79,7 @@ export const SettingsDialog = () => {
       isKeepVOEnabled,
       isTrackEncodingEnabled,
       videoCodec,
-      isTestEncodingEnabled,
+      isFineTrimEnabled,
       videoSizeReduction,
       audioSizeReduction,
       mkvMergePath,
@@ -114,7 +114,7 @@ export const SettingsDialog = () => {
       setFavoriteLanguages(settingsValidation.result.favoriteLanguages)
       setKeepVOEnabled(settingsValidation.result.isKeepVOEnabled)
       setTrackEncodingEnabled(settingsValidation.result.isTrackEncodingEnabled)
-      setTestEncodingEnabled(settingsValidation.result.isTestEncodingEnabled)
+      setIsFineTrimEnabled(settingsValidation.result.isFineTrimEnabled)
       setVideoCodec(settingsValidation.result.videoCodec)
       setVideoSizeReduction(settingsValidation.result.videoSizeReduction)
       setAudioSizeReduction(settingsValidation.result.audioSizeReduction)
@@ -173,7 +173,7 @@ export const SettingsDialog = () => {
   const [favoriteLanguages, setFavoriteLanguages] = useState(settingsValidation?.result?.favoriteLanguages)
   const [isKeepVOEnabled, setKeepVOEnabled] = useState(settingsValidation?.result?.isKeepVOEnabled)
   const [isTrackEncodingEnabled, setTrackEncodingEnabled] = useState(settingsValidation?.result?.isTrackEncodingEnabled)
-  const [isTestEncodingEnabled, setTestEncodingEnabled] = useState(settingsValidation?.result?.isTestEncodingEnabled)
+  const [isFineTrimEnabled, setIsFineTrimEnabled] = useState(settingsValidation?.result?.isFineTrimEnabled)
   const [videoSizeReduction, setVideoSizeReduction] = useState(settingsValidation?.result?.videoSizeReduction)
   const [videoCodec, setVideoCodec] = useState(settingsValidation?.result?.videoCodec)
   const [audioSizeReduction, setAudioSizeReduction] = useState(settingsValidation?.result?.audioSizeReduction)
@@ -459,16 +459,19 @@ export const SettingsDialog = () => {
                         disabled={!isTrackEncodingEnabled}
                         label={
                           <div>
-                            Test Encoding
+                            Fine trimming
                             <InfoLabel
-                              info={<div>If enabled will encode only a 30s chunk of video for testing quality.</div>}
+                              info={
+                                <div>
+                                  If enabled, re-encodes all streams for frame-accurate trimming instead of cutting at
+                                  keyframes.
+                                </div>
+                              }
                             />
                           </div>
                         }
-                        checked={isTestEncodingEnabled}
-                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                          setTestEncodingEnabled(ev.currentTarget.checked)
-                        }
+                        checked={isFineTrimEnabled}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setIsFineTrimEnabled(ev.currentTarget.checked)}
                       />
                     </div>
                     <>

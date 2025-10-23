@@ -80,8 +80,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   } = useVideoPlayer()
   const scrollableRef = useRef<HTMLDivElement | null>(null)
   const rulerRef = useRef<HTMLDivElement | null>(null)
-  const [startFrom, setStartFrom] = React.useState(video.startFrom ?? 0)
-  const [endAt, setEndAt] = React.useState(video.endAt ?? video.duration)
+  const startFrom = video.startFrom ?? 0
+  const endAt = video.endAt ?? video.duration
   const [selPosX, setSelPosX] = React.useState<number | undefined>(undefined)
   const [currentTime, setCurrentTime] = React.useState<number>(0)
 
@@ -229,12 +229,15 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     }
   }
 
-  const handleSetStartFrom = () => {
-    setStartFrom(currentTime)
+  const handleSetStartFrom = async () => {
+    await window.api.video.setStartFrom(video.uuid, currentTime)
+
+    // setStartFrom(currentTime)
   }
 
-  const handleSetEndTo = () => {
-    setEndAt(currentTime)
+  const handleSetEndTo = async () => {
+    await window.api.video.setEndAt(video.uuid, currentTime)
+    // setEndAt(currentTime)
   }
 
   const handleMouseMoveOverScrollable = useCallback(
