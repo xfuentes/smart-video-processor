@@ -230,137 +230,6 @@ export class FFmpeg extends CommandProgress {
     return await super.execute(ffOptions, ffmpegOutputInterpreter)
   }
 
-  generateProcessingArguments(video: IVideo, pass: number | undefined) {
-    const ffOptions: string[] = []
-    const complexFilter: string[] = []
-    const finalToMap: string[] = []
-    const toMap: string[][] = []
-    const typeIndex: Map<TrackType, number>[] = []
-    let needConcat = false
-    let nbInputs: number = 0
-
-    if (video.startFrom === undefined && video.endAt === undefined && video.videoParts.length === 0) {
-      return undefined
-    }
-
-    for (const part of video.videoParts) {
-      ffOptions.push('-i', part.sourcePath)
-    }
-
-    for (const track of video.tracks) {
-      if (pass === 1) {
-        if (track.type !== TrackType.VIDEO) {
-          continue
-        }
-      }
-      if (typeIndex.length <= 0) {
-        typeIndex[0] = new Map()
-      }
-      if (!typeIndex[0].has(track.type)) {
-        typeIndex[0].set(track.type, typeIndex[0].get(track.type) ?? 0)
-      } else {
-        typeIndex[0].set(track.type, (typeIndex[0].get(track.type) ?? 0) + 1)
-      }
-      const { name, filter } = this.generateTrimFilter(
-        0,
-        track.type,
-        typeIndex[0].get(track.type) ?? 0,
-        video.startFrom,
-        video.endAt
-      )
-      complexFilter.push(filter)
-      if (toMap[0] === undefined) {
-        toMap[0] = []
-      }
-      toMap[0].push(name)
-      let partCount = 0
-      for (const part of video.videoParts) {
-        partCount++
-        needConcat = true
-        const nbOfType = part.tracks.filter((pt) => pt.type === track.type).length
-        const matchingPartTrack = part.tracks.find(
-          (pt) => pt.type === track.type && (nbOfType === 1 || pt.language === track.language)
-        )
-        if (matchingPartTrack === undefined) {
-          throw new Error(
-            `Part ${partCount} has no track matching ${track.type.toLowerCase()} track ${track.id} from main video.`
-          )
-        } else {
-          if (typeIndex.length <= partCount) {
-            typeIndex[partCount] = new Map()
-          }
-          if (!typeIndex[partCount].has(matchingPartTrack.type)) {
-            typeIndex[partCount].set(matchingPartTrack.type, typeIndex[partCount].get(matchingPartTrack.type) ?? 0)
-          } else {
-            typeIndex[partCount].set(
-              matchingPartTrack.type,
-              (typeIndex[partCount].get(matchingPartTrack.type) ?? 0) + 1
-            )
-          }
-
-          const { name, filter } = this.generateTrimFilter(
-            partCount,
-            matchingPartTrack.type,
-            typeIndex[partCount].get(matchingPartTrack.type) ?? 0,
-            part.startFrom,
-            part.endAt
-          )
-          complexFilter.push(filter)
-          if (toMap[partCount] === undefined) {
-            toMap[partCount] = []
-          }
-          toMap[partCount].push(name)
-        }
-      }
-      nbInputs = partCount + 1
-    }
-    if (needConcat) {
-      const outTypeIndex: Map<TrackType, number> = new Map()
-      let mapping = ''
-      for (const map of toMap) {
-        mapping += map.map((s) => `[${s}]`).join('')
-      }
-      let concat = `concat=n=${nbInputs}`
-      const names: string[] = []
-      if (typeIndex[0].has(TrackType.VIDEO)) {
-        if (!outTypeIndex.has(TrackType.VIDEO)) {
-          outTypeIndex.set(TrackType.VIDEO, 0)
-        } else {
-          outTypeIndex.set(TrackType.VIDEO, (outTypeIndex.get(TrackType.VIDEO) ?? 0) + 1)
-        }
-        concat += `:v=${(typeIndex[0].get(TrackType.VIDEO) ?? 0) + 1}`
-        for (let i = 0; i <= (typeIndex[0].get(TrackType.VIDEO) ?? 0); i++) {
-          names.push(`[outv_${i}]`)
-        }
-      }
-      if (typeIndex[0].has(TrackType.AUDIO)) {
-        if (!outTypeIndex.has(TrackType.AUDIO)) {
-          outTypeIndex.set(TrackType.AUDIO, 0)
-        } else {
-          outTypeIndex.set(TrackType.AUDIO, (outTypeIndex.get(TrackType.AUDIO) ?? 0) + 1)
-        }
-        concat += `:a=${(typeIndex[0].get(TrackType.AUDIO) ?? 0) + 1}`
-        for (let i = 0; i <= (typeIndex[0].get(TrackType.AUDIO) ?? 0); i++) {
-          names.push(`[outa_${i}]`)
-        }
-      }
-      if (typeIndex[0].has(TrackType.SUBTITLES)) {
-        concat += `:s=${(typeIndex[0].get(TrackType.SUBTITLES) ?? 0) + 1}`
-        for (let i = 0; i <= (typeIndex[0].get(TrackType.SUBTITLES) ?? 0); i++) {
-          names.push(`[outs_${i}]`)
-        }
-      }
-      finalToMap.push(...names)
-      complexFilter.push(mapping + concat + finalToMap.join(''))
-    } else {
-      finalToMap.push(...toMap[0])
-    }
-
-    ffOptions.push('-filter_complex', complexFilter.join(';'))
-    finalToMap.forEach((name) => ffOptions.push('-map', `[${name}]`))
-    return ffOptions
-  }
-
   private ffmpegProgressInterpreterBuild(
     outputFilePath: string,
     durationSeconds: number,
@@ -416,7 +285,7 @@ export class FFmpeg extends CommandProgress {
     maxMuxingQueueSizeWorkaround: boolean = false
   ): string[] {
     const ffOptions: string[] = []
-    const videoTrackCount = video.tracks.filter((t) => t.type === TrackType.VIDEO).length
+    const hasVideoTracks = video.tracks.find((t) => t.type === TrackType.VIDEO)
     const hasAudioTrack = video.tracks.find((t) => t.type === TrackType.AUDIO)
     const hasSubtitlesTrack = video.tracks.find((t) => t.type === TrackType.SUBTITLES)
 
@@ -431,28 +300,22 @@ export class FFmpeg extends CommandProgress {
     // TODO: ffOptions.push('-i', sourcePath)
     ffOptions.push('-y') // Overwrite output file without asking
 
-    ffOptions.push('-i', video.sourcePath)
-    const processingArgs = this.generateProcessingArguments(video, pass)
-
-    if (processingArgs === undefined) {
-      //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
-      ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-
-      if (videoTrackCount > 0) {
-        ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
-      }
-      if (hasAudioTrack) {
-        ffOptions.push('-map', '0:a') // Copy audios
-      }
-      if (hasSubtitlesTrack) {
-        ffOptions.push('-map', '0:s') // Copy subs
-      }
+    if (video.preProcessPath) {
+      ffOptions.push('-i', video.sourcePath)
     } else {
-      ffOptions.push(...processingArgs)
+      ffOptions.push('-i', video.sourcePath)
     }
+    //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
+    ffOptions.push('-c', 'copy') // Just copy by default (no encode)
 
-    if (videoTrackCount > 0) {
-      ffOptions.push('-pix_fmt', 'yuv420p')
+    if (hasVideoTracks) {
+      ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
+    }
+    if (hasAudioTrack) {
+      ffOptions.push('-map', '0:a') // Copy audios
+    }
+    if (hasSubtitlesTrack) {
+      ffOptions.push('-map', '0:s') // Copy subs
     }
 
     let videoIndex = 0
@@ -462,11 +325,7 @@ export class FFmpeg extends CommandProgress {
       if (setting != undefined) {
         if (setting.trackType === TrackType.VIDEO) {
           if (setting.codec === VideoCodec.H265) {
-            if (videoTrackCount > 1) {
-              ffOptions.push('-c:v:' + videoIndex, 'libx265')
-            } else {
-              ffOptions.push('-c:v', 'libx265')
-            }
+            ffOptions.push('-c:v:' + videoIndex, 'libx265')
             if (pass !== undefined && statFile !== undefined) {
               const statFileEscaped = statFile.replaceAll('\\', '/').replaceAll(':', '\\:')
               ffOptions.push(
@@ -475,26 +334,16 @@ export class FFmpeg extends CommandProgress {
               )
             }
           } else {
-            if (videoTrackCount > 1) {
-              ffOptions.push('-c:v:' + videoIndex, 'libx264')
-              ffOptions.push('-profile:v:' + videoIndex, 'high')
-              ffOptions.push('-preset:v:' + videoIndex, 'slow')
-            } else {
-              ffOptions.push('-c:v', 'libx264')
-              ffOptions.push('-profile:v', 'high')
-              ffOptions.push('-preset:v', 'slow')
-            }
+            ffOptions.push('-c:v:' + videoIndex, 'libx264')
+            ffOptions.push('-profile:v:' + videoIndex, 'high')
+            ffOptions.push('-preset:v:' + videoIndex, 'slow')
             if (pass !== undefined && statFile !== undefined) {
               ffOptions.push('-pass', `${pass}`)
               ffOptions.push('-passlogfile', statFile)
             }
           }
           if (setting.bitrate) {
-            if (videoTrackCount > 1) {
-              ffOptions.push('-b:v:' + videoIndex, setting.bitrate / 1000 + 'k')
-            } else {
-              ffOptions.push('-b:v', setting.bitrate / 1000 + 'k')
-            }
+            ffOptions.push('-b:v:' + videoIndex, setting.bitrate / 1000 + 'k')
           }
         } else if (setting.trackType === TrackType.AUDIO && setting.bitrate !== undefined && pass !== 1) {
           ffOptions.push('-c:a:' + audioIndex, 'aac')
@@ -524,28 +373,86 @@ export class FFmpeg extends CommandProgress {
     return ffOptions
   }
 
-  private generateTrimFilter(
-    inputIndex: number,
-    type: TrackType,
-    typeIndex: number,
-    startFrom: number | undefined,
-    endAt: number | undefined
-  ) {
-    const t =
-      type === TrackType.VIDEO ? 'v' : type === TrackType.AUDIO ? 'a' : type === TrackType.SUBTITLES ? 's' : undefined
-    const name = `${t}${inputIndex}_${typeIndex}`
+  public async preProcessVideoPart(
+    number: number,
+    video: IVideo,
+    destinationPath: string
+  ): Promise<{ videoPath: string; targetDuration: number }> {
+    const ffOptions: string[] = []
+    const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
+    const durationSeconds = (video.endAt ?? video.duration) - (video.startFrom ?? 0)
 
-    let filter = `[${inputIndex}:${t}:${typeIndex}]${type === TrackType.AUDIO ? 'a' : ''}trim=`
-    if (startFrom !== undefined) {
-      filter += 'start=' + startFrom
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    ffOptions.push('-i', video.sourcePath)
+    ffOptions.push('-c', 'copy')
+
+    let needProcessing = false
+    if (video.startFrom) {
+      ffOptions.push('-ss', '' + video.startFrom)
+      needProcessing = true
     }
-    if (endAt !== undefined) {
-      if (!filter.endsWith('=')) {
-        filter += ':'
-      }
-      filter += 'end=' + endAt
+    if (video.endAt && video.endAt < video.duration) {
+      ffOptions.push('-t', '' + durationSeconds)
+      needProcessing = true
     }
-    filter += `,${type === TrackType.AUDIO ? 'a' : ''}setpts=PTS-STARTPTS[${name}]`
-    return { name, filter }
+
+    ffOptions.push(preProcessPath)
+
+    if (needProcessing) {
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, durationSeconds)
+      return { videoPath: await super.execute(ffOptions, ffmpegOutputInterpreter), targetDuration: durationSeconds }
+    } else {
+      return { videoPath: video.sourcePath, targetDuration: durationSeconds }
+    }
+  }
+
+  public async preProcessVideo(
+    video: IVideo,
+    destinationPath: string
+  ): Promise<{ preProcessPath: string; targetDuration: number }> {
+    const ffOptions: string[] = []
+    const splitPaths: string[] = []
+    let targetDuration = 0
+
+    const { videoPath, targetDuration: mainDuration } = await this.preProcessVideoPart(0, video, destinationPath)
+    targetDuration += mainDuration
+
+    splitPaths.push(videoPath)
+    let num = 1
+    for (const part of video.videoParts) {
+      const { videoPath: partPath, targetDuration: partDuration } = await this.preProcessVideoPart(
+        num++,
+        part,
+        destinationPath
+      )
+      targetDuration += partDuration
+      splitPaths.push(partPath)
+    }
+
+    const concatFilePath = Files.writeFileSync(
+      destinationPath,
+      'concat.txt',
+      splitPaths.map((p) => `file '${p}'`).join('\n'),
+      'utf8'
+    )
+
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    ffOptions.push('-f', 'concat')
+    ffOptions.push('-safe', '0')
+    ffOptions.push('-i', concatFilePath)
+    ffOptions.push('-c', 'copy')
+
+    const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
+    ffOptions.push(preProcessPath)
+
+    const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, targetDuration)
+    await super.execute(ffOptions, ffmpegOutputInterpreter)
+    return { preProcessPath, targetDuration }
   }
 }
