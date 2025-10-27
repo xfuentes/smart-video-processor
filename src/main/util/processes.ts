@@ -38,7 +38,12 @@ export class Processes {
     args: readonly string[],
     options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
   ): ChildProcessWithoutNullStreams {
-    debug('Spawning ' + command + ' ' + args.map((arg) => (arg.indexOf(' ') != -1 ? '"' + arg + '"' : arg)).join(' '))
+    debug(
+      'Spawning ' +
+        command +
+        ' ' +
+        args.map((arg) => (arg.indexOf(' ') != -1 || arg.indexOf('[') != -1 ? '"' + arg + '"' : arg)).join(' ')
+    )
     return child_process.spawn(command, args, options)
   }
 

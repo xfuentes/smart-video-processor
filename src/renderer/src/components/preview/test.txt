@@ -16,3 +16,15 @@ ffmpeg \
 -map "[outv]" -map "[outa_fr]" -map "[outa_en]" -map "[outs]" \
 -c:v libx264 -c:a:0 aac -c:a:1 mp3 -c:s srt output.mp4
 
+
+/usr/bin/ffmpeg -fflags +genpts -progress pipe:1 -loglevel 16 -y -i "/home/xfuentes/Vidéos/Downloads/testing/Augustine։ The Decline of the Roman Empire (2010) - part1.mkv" \
+ -filter_complex [0:v:0]trim=start=207:end=415,setpts=PTS-STARTPTS[v0_0] \
+  -map [v0_0] \
+  -c:v:0 libx264 -pass 1 -passlogfile /tmp/svp-slIWiu-2pass \
+  -profile:v:0 high -preset:v:0 slow -b:v:0 933.12k -f null /dev/null
+
+/usr/bin/ffmpeg -fflags +genpts -progress pipe:1 -loglevel 16 -y -i "/home/xfuentes/Vidéos/Downloads/testing/Augustine։ The Decline of the Roman Empire (2010) - part1.mkv" \
+ -filter_complex [0:v:0]trim=start=207:end=415,setpts=PTS-STARTPTS[v0_0];[0:a:0]atrim=start=207:end=415,asetpts=PTS-STARTPTS[a0_0];[0:a:1]atrim=start=207:end=415,asetpts=PTS-STARTPTS[a0_1];[0:s:0]trim=start=207:end=415,setpts=PTS-STARTPTS[s0_0] \
+  -map [v0_0] -map [a0_0] -map [a0_1] -map [s0_0] \
+  -c:v:0 libx264 -pass 2 -passlogfile /tmp/svp-slIWiu-2pass \
+  -profile:v:0 high -preset:v:0 slow -b:v:0 933.12k -c:a:0 aac -b:a:0 128k -c:a:1 aac -b:a:1 128k /home/xfuentes/Vidéos/Downloads/testing/Reworked/svp-m2amlJ-encoding-temp.mkv

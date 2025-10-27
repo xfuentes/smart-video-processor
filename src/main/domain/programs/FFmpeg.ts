@@ -230,177 +230,7 @@ export class FFmpeg extends CommandProgress {
     return await super.execute(ffOptions, ffmpegOutputInterpreter)
   }
 
-  private ffmpegProgressInterpreterBuild(
-    outputFilePath: string,
-    durationSeconds: number,
-    progressNotifier?: ProgressNotifier
-  ) {
-    return (stdout?: string, stderr?: string, process?: ChildProcess) => {
-      const response = outputFilePath
-      let error: string | undefined = undefined
-      if (progressNotifier != undefined) {
-        if (stdout != undefined) {
-          const timeMatches = this.timePattern.exec(stdout)
-          const speedMatches = this.speedPattern.exec(stdout)
-          const endMatches = this.endPattern.exec(stdout)
-          let xSpeed = 0
-          if (speedMatches?.groups) {
-            xSpeed = Number.parseFloat(speedMatches.groups.speed)
-          }
-
-          if (endMatches) {
-            progressNotifier({ progress: 1, xSpeed, countdown: 0, process })
-          } else if (timeMatches?.groups) {
-            const currentTimeSeconds = Number(timeMatches.groups.time) / 1000000
-            let progress: number | undefined = 0
-            if (!durationSeconds) {
-              progress = undefined
-              progressNotifier({ progress, xSpeed, process })
-            } else if (currentTimeSeconds > 0) {
-              progress = currentTimeSeconds / durationSeconds
-              const secondsLeft = (1 - progress) * durationSeconds
-              const countdown = xSpeed !== undefined && xSpeed != 0 ? secondsLeft / xSpeed : undefined
-              progressNotifier({ progress, xSpeed, countdown, process })
-            }
-          }
-        } else if (stderr !== undefined) {
-          // get first line;
-          const end = stderr.indexOf('\n')
-          error = stderr.substring(0, end !== -1 ? end : undefined)
-        } else {
-          progressNotifier({ process })
-        }
-      }
-
-      return { response, error }
-    }
-  }
-
-  private generateEncodingArguments(
-    video: IVideo,
-    encodedPath: string | undefined,
-    settings: EncoderSettings[],
-    pass: number | undefined = undefined,
-    statFile: string | undefined = undefined,
-    maxMuxingQueueSizeWorkaround: boolean = false
-  ): string[] {
-    const ffOptions: string[] = []
-    const hasVideoTrack = video.tracks.find((t) => t.type === TrackType.VIDEO)
-    const hasAudioTrack = video.tracks.find((t) => t.type === TrackType.AUDIO)
-    const hasSubtitlesTrack = video.tracks.find((t) => t.type === TrackType.SUBTITLES)
-
-    /**
-     * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
-     */
-    ffOptions.push('-fflags')
-    ffOptions.push('+genpts')
-
-    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
-    ffOptions.push('-loglevel', '16') // Only show errors
-    // TODO: ffOptions.push('-i', sourcePath)
-    ffOptions.push('-y') // Overwrite output file without asking
-
-    ffOptions.push('-i', video.sourcePath)
-    const processingArgs = this.generateProcessingArguments(video)
-
-    if (processingArgs === undefined) {
-      //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
-      ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-
-      if (hasVideoTrack) {
-        ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
-      }
-      if (hasAudioTrack) {
-        ffOptions.push('-map', '0:a') // Copy audios
-      }
-      if (hasSubtitlesTrack) {
-        ffOptions.push('-map', '0:s') // Copy subs
-      }
-    } else {
-      ffOptions.push(...processingArgs)
-    }
-
-    let videoIndex = 0
-    let audioIndex = 0
-    for (const track of video.tracks) {
-      const setting = settings.find((s) => s.trackId === track.id)
-      if (setting != undefined) {
-        if (setting.trackType === TrackType.VIDEO) {
-          if (setting.codec === VideoCodec.H265) {
-            ffOptions.push('-c:v:' + videoIndex, 'libx265')
-            if (pass !== undefined && statFile !== undefined) {
-              const statFileEscaped = statFile.replaceAll('\\', '/').replaceAll(':', '\\:')
-              ffOptions.push(
-                '-x265-params',
-                `log-level=error:pass=${pass}:stats=${statFileEscaped}${pass == 1 ? ':no-slow-firstpass=1' : ''}`
-              )
-            }
-          } else {
-            ffOptions.push('-c:v:' + videoIndex, 'libx264')
-            if (pass !== undefined && statFile !== undefined) {
-              ffOptions.push('-pass', `${pass}`)
-              ffOptions.push('-passlogfile', statFile)
-            }
-            ffOptions.push('-profile:v:' + videoIndex, 'high')
-            ffOptions.push('-preset:v:' + videoIndex, 'slow')
-          }
-          if (setting.bitrate) {
-            ffOptions.push('-b:v:' + videoIndex, setting.bitrate / 1000 + 'k')
-          }
-        } else if (setting.trackType === TrackType.AUDIO && setting.bitrate !== undefined && pass !== 1) {
-          ffOptions.push('-c:a:' + audioIndex, 'aac')
-          ffOptions.push('-b:a:' + audioIndex, setting.bitrate / 1000 + 'k')
-        }
-      }
-      if (track.type === TrackType.VIDEO) {
-        videoIndex++
-      }
-      if (track.type === TrackType.AUDIO) {
-        audioIndex++
-      }
-    }
-
-    if (maxMuxingQueueSizeWorkaround) {
-      ffOptions.push('-max_muxing_queue_size', '9999')
-    }
-    if (pass !== undefined && pass === 1) {
-      if (Processes.isWindowsPlatform()) {
-        ffOptions.push('-f', 'null', 'NUL')
-      } else {
-        ffOptions.push('-f', 'null', '/dev/null')
-      }
-    } else if (encodedPath) {
-      ffOptions.push(encodedPath)
-    }
-    return ffOptions
-  }
-
-  private generateTrimFilter(
-    inputIndex: number,
-    type: TrackType,
-    typeIndex: number,
-    startFrom: number | undefined,
-    endAt: number | undefined
-  ) {
-    const t =
-      type === TrackType.VIDEO ? 'v' : type === TrackType.AUDIO ? 'a' : type === TrackType.SUBTITLES ? 's' : undefined
-    const name = `${t}${inputIndex}_${typeIndex}`
-
-    let filter = `[${inputIndex}:${t}:${typeIndex}]${type === TrackType.AUDIO ? 'a' : ''}trim=`
-    if (startFrom !== undefined) {
-      filter += 'start=' + startFrom
-    }
-    if (endAt !== undefined) {
-      if (!filter.endsWith('=')) {
-        filter += ':'
-      }
-      filter += 'end=' + endAt
-    }
-    filter += `,${type === TrackType.AUDIO ? 'a' : ''}setpts=PTS-STARTPTS[${name}]`
-    return { name, filter }
-  }
-
-  generateProcessingArguments(video: IVideo) {
+  generateProcessingArguments(video: IVideo, pass: number | undefined) {
     const ffOptions: string[] = []
     const complexFilter: string[] = []
     const finalToMap: string[] = []
@@ -418,6 +248,11 @@ export class FFmpeg extends CommandProgress {
     }
 
     for (const track of video.tracks) {
+      if (pass === 1) {
+        if (track.type !== TrackType.VIDEO) {
+          continue
+        }
+      }
       if (typeIndex.length <= 0) {
         typeIndex[0] = new Map()
       }
@@ -522,7 +357,195 @@ export class FFmpeg extends CommandProgress {
     }
 
     ffOptions.push('-filter_complex', complexFilter.join(';'))
-    finalToMap.forEach((name) => ffOptions.push('-map', name))
+    finalToMap.forEach((name) => ffOptions.push('-map', `[${name}]`))
     return ffOptions
+  }
+
+  private ffmpegProgressInterpreterBuild(
+    outputFilePath: string,
+    durationSeconds: number,
+    progressNotifier?: ProgressNotifier
+  ) {
+    return (stdout?: string, stderr?: string, process?: ChildProcess) => {
+      const response = outputFilePath
+      let error: string | undefined = undefined
+      if (progressNotifier != undefined) {
+        if (stdout != undefined) {
+          const timeMatches = this.timePattern.exec(stdout)
+          const speedMatches = this.speedPattern.exec(stdout)
+          const endMatches = this.endPattern.exec(stdout)
+          let xSpeed = 0
+          if (speedMatches?.groups) {
+            xSpeed = Number.parseFloat(speedMatches.groups.speed)
+          }
+
+          if (endMatches) {
+            progressNotifier({ progress: 1, xSpeed, countdown: 0, process })
+          } else if (timeMatches?.groups) {
+            const currentTimeSeconds = Number(timeMatches.groups.time) / 1000000
+            let progress: number | undefined = 0
+            if (!durationSeconds) {
+              progress = undefined
+              progressNotifier({ progress, xSpeed, process })
+            } else if (currentTimeSeconds > 0) {
+              progress = currentTimeSeconds / durationSeconds
+              const secondsLeft = (1 - progress) * durationSeconds
+              const countdown = xSpeed !== undefined && xSpeed != 0 ? secondsLeft / xSpeed : undefined
+              progressNotifier({ progress, xSpeed, countdown, process })
+            }
+          }
+        } else if (stderr !== undefined) {
+          // get first line;
+          const end = stderr.indexOf('\n')
+          error = stderr.substring(0, end !== -1 ? end : undefined)
+        } else {
+          progressNotifier({ process })
+        }
+      }
+
+      return { response, error }
+    }
+  }
+
+  private generateEncodingArguments(
+    video: IVideo,
+    encodedPath: string | undefined,
+    settings: EncoderSettings[],
+    pass: number | undefined = undefined,
+    statFile: string | undefined = undefined,
+    maxMuxingQueueSizeWorkaround: boolean = false
+  ): string[] {
+    const ffOptions: string[] = []
+    const videoTrackCount = video.tracks.filter((t) => t.type === TrackType.VIDEO).length
+    const hasAudioTrack = video.tracks.find((t) => t.type === TrackType.AUDIO)
+    const hasSubtitlesTrack = video.tracks.find((t) => t.type === TrackType.SUBTITLES)
+
+    /**
+     * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
+     */
+    ffOptions.push('-fflags')
+    ffOptions.push('+genpts')
+
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    // TODO: ffOptions.push('-i', sourcePath)
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    ffOptions.push('-i', video.sourcePath)
+    const processingArgs = this.generateProcessingArguments(video, pass)
+
+    if (processingArgs === undefined) {
+      //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
+      ffOptions.push('-c', 'copy') // Just copy by default (no encode)
+
+      if (videoTrackCount > 0) {
+        ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
+      }
+      if (hasAudioTrack) {
+        ffOptions.push('-map', '0:a') // Copy audios
+      }
+      if (hasSubtitlesTrack) {
+        ffOptions.push('-map', '0:s') // Copy subs
+      }
+    } else {
+      ffOptions.push(...processingArgs)
+    }
+
+    if (videoTrackCount > 0) {
+      ffOptions.push('-pix_fmt', 'yuv420p')
+    }
+
+    let videoIndex = 0
+    let audioIndex = 0
+    for (const track of video.tracks) {
+      const setting = settings.find((s) => s.trackId === track.id)
+      if (setting != undefined) {
+        if (setting.trackType === TrackType.VIDEO) {
+          if (setting.codec === VideoCodec.H265) {
+            if (videoTrackCount > 1) {
+              ffOptions.push('-c:v:' + videoIndex, 'libx265')
+            } else {
+              ffOptions.push('-c:v', 'libx265')
+            }
+            if (pass !== undefined && statFile !== undefined) {
+              const statFileEscaped = statFile.replaceAll('\\', '/').replaceAll(':', '\\:')
+              ffOptions.push(
+                '-x265-params',
+                `log-level=error:pass=${pass}:stats=${statFileEscaped}${pass == 1 ? ':no-slow-firstpass=1' : ''}`
+              )
+            }
+          } else {
+            if (videoTrackCount > 1) {
+              ffOptions.push('-c:v:' + videoIndex, 'libx264')
+              ffOptions.push('-profile:v:' + videoIndex, 'high')
+              ffOptions.push('-preset:v:' + videoIndex, 'slow')
+            } else {
+              ffOptions.push('-c:v', 'libx264')
+              ffOptions.push('-profile:v', 'high')
+              ffOptions.push('-preset:v', 'slow')
+            }
+            if (pass !== undefined && statFile !== undefined) {
+              ffOptions.push('-pass', `${pass}`)
+              ffOptions.push('-passlogfile', statFile)
+            }
+          }
+          if (setting.bitrate) {
+            if (videoTrackCount > 1) {
+              ffOptions.push('-b:v:' + videoIndex, setting.bitrate / 1000 + 'k')
+            } else {
+              ffOptions.push('-b:v', setting.bitrate / 1000 + 'k')
+            }
+          }
+        } else if (setting.trackType === TrackType.AUDIO && setting.bitrate !== undefined && pass !== 1) {
+          ffOptions.push('-c:a:' + audioIndex, 'aac')
+          ffOptions.push('-b:a:' + audioIndex, setting.bitrate / 1000 + 'k')
+        }
+      }
+      if (track.type === TrackType.VIDEO) {
+        videoIndex++
+      }
+      if (track.type === TrackType.AUDIO) {
+        audioIndex++
+      }
+    }
+
+    if (maxMuxingQueueSizeWorkaround) {
+      ffOptions.push('-max_muxing_queue_size', '9999')
+    }
+    if (pass !== undefined && pass === 1) {
+      if (Processes.isWindowsPlatform()) {
+        ffOptions.push('-f', 'null', 'NUL')
+      } else {
+        ffOptions.push('-f', 'null', '/dev/null')
+      }
+    } else if (encodedPath) {
+      ffOptions.push(encodedPath)
+    }
+    return ffOptions
+  }
+
+  private generateTrimFilter(
+    inputIndex: number,
+    type: TrackType,
+    typeIndex: number,
+    startFrom: number | undefined,
+    endAt: number | undefined
+  ) {
+    const t =
+      type === TrackType.VIDEO ? 'v' : type === TrackType.AUDIO ? 'a' : type === TrackType.SUBTITLES ? 's' : undefined
+    const name = `${t}${inputIndex}_${typeIndex}`
+
+    let filter = `[${inputIndex}:${t}:${typeIndex}]${type === TrackType.AUDIO ? 'a' : ''}trim=`
+    if (startFrom !== undefined) {
+      filter += 'start=' + startFrom
+    }
+    if (endAt !== undefined) {
+      if (!filter.endsWith('=')) {
+        filter += ':'
+      }
+      filter += 'end=' + endAt
+    }
+    filter += `,${type === TrackType.AUDIO ? 'a' : ''}setpts=PTS-STARTPTS[${name}]`
+    return { name, filter }
   }
 }
