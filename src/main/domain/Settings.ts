@@ -84,17 +84,22 @@ export function loadSettings() {
     currentSettings = defaultSettings
   }
   currentSettings.isLimitedPermissions = defaultSettings.isLimitedPermissions
+  if (currentSettings.isLimitedPermissions) {
+    currentSettings.mkvMergePath = defaultSettings.mkvMergePath
+    currentSettings.ffmpegPath = defaultSettings.ffmpegPath
+    currentSettings.ffprobePath = defaultSettings.ffprobePath
+  }
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
+  const toOmit: (keyof Settings)[] = ['isLimitedPermissions']
+  if (currentSettings.isLimitedPermissions) {
+    toOmit.push('mkvMergePath', 'ffmpegPath', 'ffprobePath')
+  }
   if (validation.status === 'success') {
     currentSettings = { ...settings }
-    Files.writeFileSync(
-      getConfigPath(),
-      'settings.json',
-      JSON.stringify(omit(currentSettings, ['isLimitedPermissions']), null, 2)
-    )
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(omit(currentSettings, toOmit), null, 2))
   }
   return validation
 }
