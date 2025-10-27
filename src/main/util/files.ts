@@ -65,6 +65,7 @@ export class Files {
     const filename = path.join(dir, name)
     debug('Writing file ' + filename)
     fs.writeFileSync(filename, data, encoding)
+    return filename
   }
 
   static makeTempFile(template: string, noCreate: boolean = false): string {

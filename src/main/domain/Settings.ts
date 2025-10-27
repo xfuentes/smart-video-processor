@@ -87,11 +87,13 @@ export function loadSettings() {
     currentSettings.ffmpegPath = defaultSettings.ffmpegPath
     currentSettings.ffprobePath = defaultSettings.ffprobePath
   }
+  currentSettings.isFineTrimEnabled = false
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
   const toOmit: (keyof Settings)[] = []
+  currentSettings.isFineTrimEnabled = false
   if (Processes.isLimitedPermissions()) {
     toOmit.push('mkvMergePath', 'ffmpegPath', 'ffprobePath')
   }

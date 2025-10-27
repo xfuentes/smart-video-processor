@@ -156,7 +156,7 @@ app.whenReady().then(async () => {
     const encoderSettingsUpdated =
       currentSettings.isTrackEncodingEnabled !== settings.isTrackEncodingEnabled ||
       currentSettings.videoCodec !== settings.videoCodec ||
-      currentSettings.isTestEncodingEnabled !== settings.isTestEncodingEnabled
+      currentSettings.isFineTrimEnabled !== settings.isFineTrimEnabled
 
     const validation = saveSettings(settings)
     if (validation.status === 'success') {
