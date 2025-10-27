@@ -44,7 +44,6 @@ export const App = (): React.JSX.Element => {
             }
           })
         }
-        selectionChanged && console.log('Selection changed!')
         return selectionChanged ? newSelection : prevSelection
       })
     }
@@ -57,11 +56,11 @@ export const App = (): React.JSX.Element => {
         const newSelection = prevSelection.map((prevVideo) => {
           if (prevVideo.uuid === video.uuid) {
             selectionChanged = true
+            console.log(video)
             return video
           }
           return prevVideo
         })
-        selectionChanged && console.log('Selection changed!')
         return selectionChanged ? newSelection : prevSelection
       })
     }

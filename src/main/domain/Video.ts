@@ -58,6 +58,7 @@ import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
 import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
+import { FFmpeg } from './programs/FFmpeg'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -78,6 +79,7 @@ export class Video implements IVideo {
   public tvShow: TVShow = new TVShow(this)
   public other: Other = new Other(this)
   public videoParts: Video[] = []
+  public keyFrames: number[] = []
   public startFrom?: number
   public endAt?: number
 
@@ -128,6 +130,8 @@ export class Video implements IVideo {
   public previewPath?: string
   public snapshotsJob?: Job<string>
   public snapshotsPath?: string
+  public preProcessPath?: string
+  public targetDuration?: number
   public encodingForced: boolean = false
 
   constructor(sourcePath: string) {
@@ -244,7 +248,7 @@ export class Video implements IVideo {
 
   async load(searchEnabled: boolean = true) {
     const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
-    const { tracks, container } = await fij.queue()
+    const { tracks, container, keyFrames } = await fij.queue()
     this.tracks = tracks
     this.duration =
       tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
@@ -252,6 +256,7 @@ export class Video implements IVideo {
       0
     this.pixels = this.computePixels()
     this.container = container
+    this.keyFrames = keyFrames
     this.generateEncoderSettings(true)
     this.loading = false
     this.fireChangeEvent()
@@ -418,6 +423,12 @@ export class Video implements IVideo {
   }
 
   async process() {
+    if(this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
+      // Need to launch preprocessing
+      const {preProcessPath, targetDuration } = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
+      this.preProcessPath = preProcessPath
+      this.targetDuration = targetDuration
+    }
     let encodingRequired = false
     let encodingJob: Job<string> | undefined = undefined
     const finalEncoderSettings = this.getFinalEncoderSettings()
@@ -633,6 +644,7 @@ export class Video implements IVideo {
       tracks: this.tracks.map((t) => t.toJSON()),
       changes: this.changes.map((c) => c.toJSON()),
       hints: this.hints.map((h) => h.toJSON()),
+      keyFrames: this.keyFrames,
       videoParts: this.videoParts.map((v) => v.toJSON()),
       startFrom: this.startFrom,
       endAt: this.endAt,
@@ -656,7 +668,8 @@ export class Video implements IVideo {
       encodingForced: this.encodingForced,
       previewProgression: this.previewProgression,
       previewPath: this.previewPath,
-      snapshotsPath: this.snapshotsPath
+      snapshotsPath: this.snapshotsPath,
+      preProcessPath: this.preProcessPath
     }
   }
 

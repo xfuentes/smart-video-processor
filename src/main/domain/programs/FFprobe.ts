@@ -45,11 +45,7 @@ export class FFprobe extends CommandProgress {
     return FFprobe.instance
   }
 
-  public async completeFileInformation(
-    path: string,
-    tracks: Track[],
-    container: Container
-  ): Promise<void> {
+  public async completeFileInformation(path: string, tracks: Track[], container: Container): Promise<void> {
     const ffprobeOutput = await Processes.spawnReadStdout(this.command, [
       '-v',
       'quiet',
@@ -64,9 +60,7 @@ export class FFprobe extends CommandProgress {
       tracks.length = 0
       return
     }
-    const durationSeconds = probeInfo?.format?.duration
-      ? parseFloat(probeInfo.format.duration)
-      : undefined
+    const durationSeconds = probeInfo?.format?.duration ? parseFloat(probeInfo.format.duration) : undefined
     probeInfo?.streams?.forEach((stream) => {
       const track = tracks.find((t) => t.id === stream.index)
       if (track) {
@@ -83,10 +77,7 @@ export class FFprobe extends CommandProgress {
         if (track.properties.audioChannels === undefined && stream.channels !== undefined) {
           track.properties.audioChannels = stream.channels
         }
-        if (
-          track.properties.audioSamplingFrequency === undefined &&
-          stream.sample_rate !== undefined
-        ) {
+        if (track.properties.audioSamplingFrequency === undefined && stream.sample_rate !== undefined) {
           track.properties.audioSamplingFrequency = parseInt(stream.sample_rate)
         }
         if (track.properties.frames === undefined && stream.nb_frames !== undefined) {
@@ -96,10 +87,7 @@ export class FFprobe extends CommandProgress {
           track.properties.bitRate = parseInt(stream.bit_rate)
         }
         if (stream.tags) {
-          if (
-            track.properties.frames === undefined &&
-            stream.tags['NUMBER_OF_FRAMES-eng'] !== undefined
-          ) {
+          if (track.properties.frames === undefined && stream.tags['NUMBER_OF_FRAMES-eng'] !== undefined) {
             track.properties.frames = parseInt(stream.tags['NUMBER_OF_FRAMES-eng'])
           }
           if (track.properties.bitRate === undefined && stream.tags['BPS-eng'] !== undefined) {
@@ -138,5 +126,28 @@ export class FFprobe extends CommandProgress {
     if (!container.durationSeconds && durationSeconds !== undefined) {
       container.durationSeconds = durationSeconds
     }
+  }
+
+  public async retrieveKeyFramesInformation(path: string): Promise<number[]> {
+    const ffprobeOutput = await Processes.spawnReadStdout(this.command, [
+      '-v',
+      'quiet',
+      '-skip_frame',
+      'nokey',
+      '-select_streams',
+      'v',
+      '-show_entries',
+      'frame=pts_time',
+      '-of',
+      'csv=print_section=0',
+      path
+    ])
+    if (ffprobeOutput === undefined) {
+      return []
+    }
+    return ffprobeOutput
+      .split('\r\n')
+      .map((str) => Numbers.toNumber(str))
+      .filter((n) => n !== undefined)
   }
 }

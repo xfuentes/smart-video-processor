@@ -31,6 +31,7 @@ import {
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { PlayHead } from '@renderer/components/context/PlayHead'
 import { Delimitation } from '@renderer/components/context/Delimitation'
+import { useSettings } from '@renderer/components/context/SettingsContext'
 
 declare type Hour =
   | 0
@@ -66,6 +67,8 @@ type Props = {
 }
 
 export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) {
+  // step ===> 22 px
+  const { settingsValidation } = useSettings()
   const {
     videoPlayed,
     setVideoPlayed,
@@ -240,14 +243,62 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     // setEndAt(currentTime)
   }
 
+  function findClosest(arr: number[], target: number) {
+    let left = 0
+    let right = arr.length - 1
+
+    // Binary search to find insertion point
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2)
+      if (arr[mid] < target) {
+        left = mid + 1
+      } else {
+        right = mid
+      }
+    }
+
+    // Check neighbors around the insertion point
+    const closest = left
+    const before = left > 0 ? arr[left - 1] : arr[closest]
+    const after = arr[closest]
+
+    // Return the closest value
+    return target - before <= after - target ? before : after
+  }
+
+  const toNearestKeyFrameTime = (selTime: number) => {
+    if (video.keyFrames.length === 0) {
+      return selTime
+    }
+    if (video.keyFrames[0] > selTime) {
+      return video.keyFrames[0]
+    }
+    if (video.keyFrames[video.keyFrames.length - 1] < selTime) {
+      return video.keyFrames[video.keyFrames.length - 1]
+    }
+
+    return findClosest(video.keyFrames, selTime)
+  }
+
+  const toNearestKeyframeX = (posX: number) => {
+    const selTime = (posX * step) / 22
+    const kfTime = toNearestKeyFrameTime(selTime)
+    return Math.round((kfTime * 22) / step)
+  }
+
   const handleMouseMoveOverScrollable = useCallback(
     (event: MouseEvent) => {
       if (rulerRef.current != null) {
-        setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
+        if (settingsValidation.result.isFineTrimEnabled) {
+          setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
+        } else {
+          setSelPosX(toNearestKeyframeX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4))
+        }
       }
     },
     [setSelPosX]
   )
+
   const handleMouseOutScrollable = useCallback(
     (_event: MouseEvent) => {
       setSelPosX(undefined)
@@ -353,7 +404,9 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
             className="preview"
             style={{
               width: `${endPos}px`,
-              background: video.snapshotsPath ? `url('${'svp:///' + video.snapshotsPath}')` : 'black',
+              background: video.snapshotsPath
+                ? `url('${'svp:///' + video.snapshotsPath.replaceAll('\\', '/')}')`
+                : 'black',
               backgroundSize: 'auto 100%'
             }}
           >

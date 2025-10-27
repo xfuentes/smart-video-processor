@@ -71,6 +71,7 @@ export interface IVideo {
   changes: IChange[]
   hints: IHint[]
   videoParts: IVideo[]
+  keyFrames: number[]
   startFrom?: number
   endAt?: number
   downscale?: string
@@ -95,6 +96,8 @@ export interface IVideo {
   previewProgression?: Progression
   previewPath?: string
   snapshotsPath?: string
+  preProcessPath?: string
+  targetDuration?: number
 }
 
 export type SearchInputData = {

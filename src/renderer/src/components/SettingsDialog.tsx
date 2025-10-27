@@ -456,7 +456,7 @@ export const SettingsDialog = () => {
                     </div>
                     <div className="field">
                       <Switch
-                        disabled={!isTrackEncodingEnabled}
+                        disabled={!isTrackEncodingEnabled || true}
                         label={
                           <div>
                             Fine trimming
@@ -471,7 +471,9 @@ export const SettingsDialog = () => {
                           </div>
                         }
                         checked={isFineTrimEnabled}
-                        onChange={(ev: ChangeEvent<HTMLInputElement>) => setIsFineTrimEnabled(ev.currentTarget.checked)}
+                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                          setIsFineTrimEnabled(ev.currentTarget.checked && false)
+                        }
                       />
                     </div>
                     <>
