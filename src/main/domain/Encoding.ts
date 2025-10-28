@@ -36,32 +36,32 @@ export class Encoding {
     return Encoding.instance
   }
 
-  public analyse(tracks: Track[]): EncoderSettings[] {
+  public analyse(tracks: Track[], targetDuration?: number): EncoderSettings[] {
     let settings: EncoderSettings[] = []
 
     for (const track of tracks) {
       switch (track.type) {
         case TrackType.VIDEO:
-          settings = settings.concat(this.analyseVideoTrack(track))
+          settings = settings.concat(this.analyseVideoTrack(track, targetDuration))
           break
         case TrackType.AUDIO:
-          settings = settings.concat(this.analyseAudioTrack(track))
+          settings = settings.concat(this.analyseAudioTrack(track, targetDuration))
           break
       }
     }
     return settings
   }
 
-  public analyseVideoTrack(videoTrack: Track): EncoderSettings[] {
+  public analyseVideoTrack(videoTrack: Track, targetDuration?: number): EncoderSettings[] {
     const settings: EncoderSettings[] = []
+    const duration = targetDuration ?? videoTrack.duration
 
     if (
       videoTrack.properties.bitRate !== undefined &&
       videoTrack.properties.videoDimensions !== undefined &&
       videoTrack.properties.frames !== undefined &&
-      videoTrack.duration !== undefined
+      duration !== undefined
     ) {
-      const duration = videoTrack.duration
       const pixelsArr = videoTrack.properties.videoDimensions.split('x')
       const width = Number.parseInt(pixelsArr[0], 10)
       const height = Number.parseInt(pixelsArr[1], 10)
@@ -132,15 +132,15 @@ export class Encoding {
     return { bpf, codec }
   }
 
-  public analyseAudioTrack(audioTrack: Track): EncoderSettings[] {
+  public analyseAudioTrack(audioTrack: Track, targetDuration?: number): EncoderSettings[] {
     const settings: EncoderSettings[] = []
+    const duration = targetDuration ?? audioTrack.duration
 
     if (
       audioTrack.properties.bitRate !== undefined &&
       audioTrack.properties.audioChannels !== undefined &&
-      audioTrack.duration !== undefined
+      duration !== undefined
     ) {
-      const duration = audioTrack.duration
       const bitrate = this.getBpsForAudioChannels(audioTrack.properties.audioChannels)
       const proposedCompression = Math.round((1 - bitrate / audioTrack.properties.bitRate) * 100)
 

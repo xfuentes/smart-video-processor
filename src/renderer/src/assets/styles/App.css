@@ -126,16 +126,15 @@
 }
 
 .video-preview {
-  min-height: 173px;
-  max-height: 173px;
+  height: 100%;
   display: flex;
   column-gap: 5px;
   row-gap: 5px;
 }
 
-.video-preview .poster > img {
-  min-width: 117px;
-  max-width: 117px;
+.video-preview .poster {
+  height: 100%;
+  aspect-ratio: 2 / 3;
   border: 1px solid #7f7f7f;
 }
 
@@ -492,7 +491,8 @@ td.version {
 .video-section-selector-field > .scrollable {
   flex-grow: 1;
   width: 100%;
-  overflow: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .video-section-selector-field > .scrollable > .ruler {

@@ -45,8 +45,8 @@ export class SnapshottingJob extends Job<string> {
     this.durationSeconds = durationSeconds
   }
 
-  protected executeInternal(): Promise<string> {
-    return FFmpeg.getInstance().generateSnapshots(
+  protected async executeInternal(): Promise<string> {
+    return await FFmpeg.getInstance().generateSnapshots(
       this.sourcePath,
       this.destinationPath,
       this.snapshotHeight,

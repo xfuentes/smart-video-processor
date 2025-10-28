@@ -97,7 +97,7 @@ export interface IVideo {
   previewPath?: string
   snapshotsPath?: string
   preProcessPath?: string
-  targetDuration?: number
+  targetDuration: number
 }
 
 export type SearchInputData = {

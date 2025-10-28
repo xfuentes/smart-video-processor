@@ -59,6 +59,7 @@ import Other from './Other'
 import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
+import { FFprobe } from './programs/FFprobe'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -131,7 +132,7 @@ export class Video implements IVideo {
   public snapshotsJob?: Job<string>
   public snapshotsPath?: string
   public preProcessPath?: string
-  public targetDuration?: number
+  public targetDuration: number = 0
   public encodingForced: boolean = false
 
   constructor(sourcePath: string) {
@@ -232,8 +233,8 @@ export class Video implements IVideo {
       this.snapshotsJob = job
       const listener = () => {
         if (job.finished) {
-          if (this.previewJob === job) {
-            this.previewJob = undefined
+          if (this.snapshotsJob === job) {
+            this.snapshotsJob = undefined
           }
           job.removeChangeListener(listener)
         }
@@ -248,15 +249,16 @@ export class Video implements IVideo {
 
   async load(searchEnabled: boolean = true) {
     const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
-    const { tracks, container, keyFrames } = await fij.queue()
+    const { tracks, container } = await fij.queue()
     this.tracks = tracks
     this.duration =
       tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
       tracks.find((t) => t.type === TrackType.AUDIO)?.duration ??
       0
+    this.targetDuration = this.duration
     this.pixels = this.computePixels()
     this.container = container
-    this.keyFrames = keyFrames
+    this.keyFrames = []
     this.generateEncoderSettings(true)
     this.loading = false
     this.fireChangeEvent()
@@ -270,8 +272,10 @@ export class Video implements IVideo {
     if (init) {
       this.trackEncodingEnabled = {}
     }
-    this.encodingForced = this.videoParts.length > 0 || this.startFrom !== undefined || this.endAt !== undefined
-    this.encoderSettings = Encoding.getInstance().analyse(this.tracks)
+    this.encodingForced =
+      currentSettings.isFineTrimEnabled &&
+      (this.videoParts.length > 0 || this.startFrom !== undefined || this.endAt !== undefined)
+    this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
     if (init) {
       this.encoderSettings.forEach((s) =>
         this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled)
@@ -423,11 +427,18 @@ export class Video implements IVideo {
   }
 
   async process() {
-    if(this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
+    if (this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
       // Need to launch preprocessing
-      const {preProcessPath, targetDuration } = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
-      this.preProcessPath = preProcessPath
-      this.targetDuration = targetDuration
+      debug('Pre-processing video parts')
+      this.progression.progress = undefined
+      this.status = JobStatus.ENCODING
+      if (this.videoParts.length > 0) {
+        this.message = 'Processing video parts...'
+      } else {
+        this.message = 'Trimming video...'
+      }
+      this.fireChangeEvent()
+      this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
     }
     let encodingRequired = false
     let encodingJob: Job<string> | undefined = undefined
@@ -669,11 +680,13 @@ export class Video implements IVideo {
       previewProgression: this.previewProgression,
       previewPath: this.previewPath,
       snapshotsPath: this.snapshotsPath,
-      preProcessPath: this.preProcessPath
+      preProcessPath: this.preProcessPath,
+      targetDuration: this.targetDuration
     }
   }
 
   videoPartListener = (_video: Video) => {
+    this.computeTargetDuration()
     this.fireChangeEvent()
   }
 
@@ -682,21 +695,33 @@ export class Video implements IVideo {
       // Avoid inserting part which were already added or if same as main video.
       const videoPart = new Video(partPath)
       videoPart.addChangeListener(this.videoPartListener)
-      await videoPart.load(false)
       this.videoParts.push(videoPart)
+      await videoPart.load(false)
+      this.computeTargetDuration()
       this.generateEncoderSettings()
       this.fireChangeEvent()
     }
   }
 
+  computeTargetDuration() {
+    let targetDuration = 0
+    targetDuration += (this.endAt ?? this.duration) - (this.startFrom ?? 0)
+    for (const videoPart of this.videoParts) {
+      targetDuration += videoPart.targetDuration
+    }
+    this.targetDuration = targetDuration
+  }
+
   setStartFrom(value?: number) {
     this.startFrom = value !== undefined ? Math.round(value) : undefined
+    this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
   setEndAt(value?: number) {
     this.endAt = value !== undefined ? Math.round(value) : undefined
+    this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
@@ -705,6 +730,10 @@ export class Video implements IVideo {
     if (this.snapshotsPath) {
       return Promise.resolve(this.snapshotsPath)
     } else {
+      this.progression.progress = undefined
+      this.status = JobStatus.LOADING
+      this.message = 'Taking video snapshots...'
+      this.fireChangeEvent()
       const snapshotJob = this.attachSnapshotJob(
         new SnapshottingJob(
           this.sourcePath,
@@ -715,7 +744,18 @@ export class Video implements IVideo {
           this.duration
         )
       )
+
       this.snapshotsPath = await snapshotJob.queue()
+      if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
+        this.message = 'Extracting key frames...'
+        this.keyFrames = [0]
+        this.fireChangeEvent()
+        this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
+      }
+
+      this.status = JobStatus.WAITING
+      this.message = 'Ready to process.'
+      this.progression.progress = -1
       this.fireChangeEvent()
       return this.snapshotsPath
     }
@@ -739,10 +779,17 @@ export class Video implements IVideo {
       }
     }
 
+    let sourcePath = this.sourcePath
+    if (this.preProcessPath) {
+      sourcePath = this.preProcessPath
+    }
+    if (this.encodedPath) {
+      sourcePath = this.encodedPath
+    }
     const mergeJob = this.attachJob(
       new ProcessingJob(
         path.basename(this.sourcePath),
-        this.encodedPath !== undefined ? this.encodedPath : this.sourcePath,
+        sourcePath,
         this.changes,
         this.tracks,
         outputDirectory,

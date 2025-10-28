@@ -81,8 +81,8 @@ export abstract class Job<T> implements IJob {
     let promise: Promise<T>
     try {
       this.setStatus(this.type)
-      this.emitChangeEvent()
       this.progression.progress = undefined
+      this.emitChangeEvent()
       this.result = await this.executeInternal()
       this.setStatus(JobStatus.SUCCESS)
       this.progression = { progress: -1 }

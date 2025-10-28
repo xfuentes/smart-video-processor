@@ -43,7 +43,6 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
   const hlsRef = useRef<Hls | null>(null)
 
   useEffect(() => {
-    console.log('setting videoRef to ' + videoRef)
     setVideoRef(videoRef)
   }, [setVideoRef, videoRef])
 
@@ -128,7 +127,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
         hlsRef.current = null
       }
     }
-  }, [src, autoPlay])
+  }, [src, autoPlay, startAt])
 
   return (
     <video
@@ -138,7 +137,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
       className={className}
       controls
       style={{
-        objectFit: 'scale-down',
+        objectFit: 'contain',
         backgroundColor: '#000'
       }}
     />

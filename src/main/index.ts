@@ -125,7 +125,7 @@ app.whenReady().then(async () => {
     try {
       return await net.fetch(`file://${filePath}`)
     } catch (error) {
-      console.error(error)
+      console.error(`Unable to fetch '${filePath}':${error}`)
       throw error
     }
   })
@@ -134,7 +134,7 @@ app.whenReady().then(async () => {
     try {
       return await net.fetch(`file://${filePath}`)
     } catch (error) {
-      console.error(error)
+      console.error(`Unable to fetch '${filePath}':${error}`)
       throw error
     }
   })

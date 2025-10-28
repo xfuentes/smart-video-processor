@@ -139,7 +139,7 @@ export class FFmpeg extends CommandProgress {
 
     const versionOutputInterpreter = this.ffmpegProgressInterpreterBuild(
       encodedPath ?? statFile ?? '',
-      video.duration,
+      video.targetDuration,
       progressNotifier
     )
 
@@ -214,7 +214,7 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push('-i', sourcePath)
     ffOptions.push('-c:v', 'copy')
     ffOptions.push('-c:a', 'copy')
-    // ffOptions.push('-c:s', 'webvtt')
+
     ffOptions.push('-f', 'hls')
     ffOptions.push('-hls_time', '4')
     ffOptions.push('-hls_list_size', '0')
@@ -301,7 +301,7 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push('-y') // Overwrite output file without asking
 
     if (video.preProcessPath) {
-      ffOptions.push('-i', video.sourcePath)
+      ffOptions.push('-i', video.preProcessPath)
     } else {
       ffOptions.push('-i', video.sourcePath)
     }
@@ -373,11 +373,7 @@ export class FFmpeg extends CommandProgress {
     return ffOptions
   }
 
-  public async preProcessVideoPart(
-    number: number,
-    video: IVideo,
-    destinationPath: string
-  ): Promise<{ videoPath: string; targetDuration: number }> {
+  public async preProcessVideoPart(number: number, video: IVideo, destinationPath: string): Promise<string> {
     const ffOptions: string[] = []
     const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
     const durationSeconds = (video.endAt ?? video.duration) - (video.startFrom ?? 0)
@@ -403,56 +399,53 @@ export class FFmpeg extends CommandProgress {
 
     if (needProcessing) {
       const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, durationSeconds)
-      return { videoPath: await super.execute(ffOptions, ffmpegOutputInterpreter), targetDuration: durationSeconds }
+      return await super.execute(ffOptions, ffmpegOutputInterpreter)
     } else {
-      return { videoPath: video.sourcePath, targetDuration: durationSeconds }
+      return video.sourcePath
     }
   }
 
-  public async preProcessVideo(
-    video: IVideo,
-    destinationPath: string
-  ): Promise<{ preProcessPath: string; targetDuration: number }> {
+  public async preProcessVideo(video: IVideo, destinationPath: string): Promise<string> {
     const ffOptions: string[] = []
-    const splitPaths: string[] = []
-    let targetDuration = 0
 
-    const { videoPath, targetDuration: mainDuration } = await this.preProcessVideoPart(0, video, destinationPath)
-    targetDuration += mainDuration
+    const videoPath = await this.preProcessVideoPart(0, video, destinationPath)
 
-    splitPaths.push(videoPath)
-    let num = 1
-    for (const part of video.videoParts) {
-      const { videoPath: partPath, targetDuration: partDuration } = await this.preProcessVideoPart(
-        num++,
-        part,
-        destinationPath
+    if (video.videoParts.length === 0) {
+      return videoPath
+    } else {
+      const splitPaths: string[] = []
+      splitPaths.push(videoPath)
+      let num = 1
+      for (const part of video.videoParts) {
+        const partPath = await this.preProcessVideoPart(num++, part, destinationPath)
+        splitPaths.push(partPath)
+      }
+
+      const concatFilePath = Files.writeFileSync(
+        destinationPath,
+        'concat.txt',
+        splitPaths.map((p) => `file '${p}'`).join('\n'),
+        'utf8'
       )
-      targetDuration += partDuration
-      splitPaths.push(partPath)
+
+      ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+      ffOptions.push('-loglevel', '16') // Only show errors
+      ffOptions.push('-y') // Overwrite output file without asking
+
+      ffOptions.push('-f', 'concat')
+      ffOptions.push('-safe', '0')
+      ffOptions.push('-i', concatFilePath)
+      ffOptions.push('-c', 'copy')
+      ffOptions.push('-map', '0')
+      ffOptions.push('-map', '-0:v')
+      ffOptions.push('-map', '0:V')
+
+      const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
+      ffOptions.push(preProcessPath)
+
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, video.targetDuration)
+      await super.execute(ffOptions, ffmpegOutputInterpreter)
+      return preProcessPath
     }
-
-    const concatFilePath = Files.writeFileSync(
-      destinationPath,
-      'concat.txt',
-      splitPaths.map((p) => `file '${p}'`).join('\n'),
-      'utf8'
-    )
-
-    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
-    ffOptions.push('-loglevel', '16') // Only show errors
-    ffOptions.push('-y') // Overwrite output file without asking
-
-    ffOptions.push('-f', 'concat')
-    ffOptions.push('-safe', '0')
-    ffOptions.push('-i', concatFilePath)
-    ffOptions.push('-c', 'copy')
-
-    const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
-    ffOptions.push(preProcessPath)
-
-    const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, targetDuration)
-    await super.execute(ffOptions, ffmpegOutputInterpreter)
-    return { preProcessPath, targetDuration }
   }
 }

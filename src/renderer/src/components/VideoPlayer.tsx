@@ -27,21 +27,19 @@ export const VideoPlayer = () => {
 
   useEffect(() => {
     if (videoPlayed && videoPlayed.previewPath === undefined && videoPlayed.previewProgression === undefined) {
-      console.log('preparing preview')
       void window.api.video.preparePreview(videoPlayed.uuid)
     }
   }, [videoPlayed])
 
   useEffect(() => {
-    setPreviewPath(videoPlayed?.previewPath)
+    setPreviewPath(videoPlayed?.previewPath?.replaceAll('\\', '/'))
   }, [videoPlayed?.previewPath])
 
-  console.log(`Playing : svp-stream://${previewPath}`)
   return (
     <>
       <div className="player-loading">
         {previewPath ? (
-          <HlsVideoPlayer src={`svp-stream://${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
+          <HlsVideoPlayer src={`svp-stream:///${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
         ) : (
           <Spinner label="Loading..." size="medium" />
         )}

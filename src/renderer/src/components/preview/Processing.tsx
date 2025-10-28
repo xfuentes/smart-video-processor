@@ -18,8 +18,8 @@
 
 import { IVideo } from '../../../../common/@types/Video'
 import { Button, Divider } from '@fluentui/react-components'
-import { MoviesAndTvRegular } from '@fluentui/react-icons'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
+import { MoviesAndTvRegular } from '@fluentui/react-icons'
 
 type Props = {
   video: IVideo
