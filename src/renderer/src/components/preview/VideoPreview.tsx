@@ -44,15 +44,27 @@ export const VideoPreview = ({
 }: Props) => {
   return (
     <div className="video-preview">
-      <div className="poster">
-        {altOverview ? (
-          <Tooltip content={altOverview} relationship="description">
-            <Image alt="No Poster" bordered src={poster ? 'svp:///' + poster : ''} />
-          </Tooltip>
-        ) : (
-          <Image alt="No Poster" bordered src={poster ? 'svp:///' + poster : ''} />
-        )}
-      </div>
+      {altOverview ? (
+        <Tooltip content={altOverview} relationship="description">
+          <div
+            className="poster"
+            style={{
+              backgroundSize: 'auto 100%',
+              backgroundRepeat: 'no-repeat',
+              ...(poster ? { backgroundImage: `url(${'svp:///' + poster.replaceAll('\\', '/')})` } : {})
+            }}
+          />
+        </Tooltip>
+      ) : (
+        <div
+          className="poster"
+          style={{
+            backgroundSize: 'auto 100%',
+            backgroundRepeat: 'no-repeat',
+            ...(poster ? { backgroundImage: `url(${'svp:///' + poster.replaceAll('\\', '/')})` } : {})
+          }}
+        />
+      )}
       <div className="vertical-stack" style={{ justifyContent: 'space-between', flexGrow: 1, flex: '3' }}>
         <div>
           <div

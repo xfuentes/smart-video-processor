@@ -63,23 +63,21 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
                           <br />
                         </>
                       )}
-                      {es.compressionPercent && (
+                      {es.compressionPercent !== undefined && (
                         <>
                           Compression: {es.compressionPercent}%<br />
                         </>
                       )}
-                      {es.originalSize && (
+                      {es.originalSize !== undefined && (
                         <>
                           Original: {Strings.humanFileSize(es.originalSize, false)}
                           <br />
                         </>
                       )}
-                      {es.targetSize && (
-                        <>
-                          Target: {Strings.humanFileSize(es.targetSize, false)}
-                          <br />
-                        </>
-                      )}
+                      <>
+                        Target: {Strings.humanFileSize(es.targetSize, false)}
+                        <br />
+                      </>
                     </div>
                   }
                 />
