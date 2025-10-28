@@ -2,6 +2,8 @@ import React, { MouseEventHandler } from 'react'
 import { Button, Spinner } from '@fluentui/react-components'
 import type { Slot } from '@fluentui/react-utilities'
 
+declare type ButtonSize = 'small' | 'medium' | 'large'
+
 type Props = {
   onStarted?: () => void
   onSuccess?: () => void
@@ -11,6 +13,8 @@ type Props = {
   children?: React.ReactNode
   execute: () => Promise<void>
   onClick?: MouseEventHandler<HTMLButtonElement>
+  size?: ButtonSize
+  disabled?: boolean
 }
 
 export const ProgressButton = (props: Props) => {
@@ -35,7 +39,13 @@ export const ProgressButton = (props: Props) => {
   }
 
   return (
-    <Button icon={icon} disabled={icon !== undefined} onClick={handleClick} appearance={props.appearance}>
+    <Button
+      size={props.size}
+      icon={icon}
+      disabled={icon !== undefined || props.disabled}
+      onClick={handleClick}
+      appearance={props.appearance}
+    >
       {props.children}
     </Button>
   )

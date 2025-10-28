@@ -40,16 +40,22 @@ import { Hints } from '@renderer/components/preview/Hints'
 import { Processing } from '@renderer/components/preview/Processing'
 import { Encoding } from '@renderer/components/preview/Encoding'
 import { Properties } from '@renderer/components/preview/Properties'
+import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 
 type Props = {
   video: IVideo
 }
 
 export const PreviewTabs = ({ video }: Props) => {
+  const { videoPlayerOpened, setVideoPlayerOpened } = useVideoPlayer()
   const [selectedTab, setSelectedTab] = useState('matching')
 
   const handleTabSelect: SelectTabEventHandler = (_event: SelectTabEvent, data: SelectTabData) => {
-    setSelectedTab(data.value as string)
+    const tabToSelect = data.value as string
+    if (tabToSelect !== 'processing' && videoPlayerOpened) {
+      setVideoPlayerOpened(false)
+    }
+    setSelectedTab(tabToSelect)
   }
 
   const tracksCount = video.tracks.length

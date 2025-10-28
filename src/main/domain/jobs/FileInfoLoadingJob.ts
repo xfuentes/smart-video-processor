@@ -26,7 +26,7 @@ import { JobStatus } from '../../../common/@types/Job'
 import { TrackType } from '../../../common/@types/Track'
 import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
 
-export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container; keyFrames: number[] }> {
+export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string
 
   constructor(path: string) {
@@ -34,7 +34,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
     this.sourcePath = path
   }
 
-  protected async executeInternal(): Promise<{ tracks: Track[]; container: Container; keyFrames: number[] }> {
+  protected async executeInternal(): Promise<{ tracks: Track[]; container: Container }> {
     let mkvMergeOut: {
       tracks: Track[]
       container: Container
@@ -70,11 +70,9 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
         Files.unlinkSync(outputPath)
       }
     }
-    const keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
     return {
       tracks: mkvMergeOut.tracks,
-      container: mkvMergeOut.container,
-      keyFrames
+      container: mkvMergeOut.container
     }
   }
 }
