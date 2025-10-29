@@ -26,11 +26,12 @@ import {
 } from '../testUtils'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { Processes } from '../../../src/main/util/processes'
-import { currentSettings } from '../../../src/main/domain/Settings'
 import { EncodingJob } from '../../../src/main/domain/jobs/EncodingJob'
 import { Files } from '../../../src/main/util/files'
 import * as path from 'node:path'
 import { Track } from '../../../src/main/domain/Track'
+import { IVideo } from '../../../src/common/@types/Video'
+import { ITrack } from '../../../src/common/@types/Track'
 
 const encoderSettings = [
   {
@@ -182,9 +183,13 @@ test('Encoding Progression data', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
-  const fullPath = 'C:\\Download\\something.mkv'
-  currentSettings.isTestEncodingEnabled = true
-  const job: EncodingJob = new EncodingJob(fullPath, '/tmp', 6120, guadalupeTracks, encoderSettings)
+  const video: IVideo = {
+    sourcePath: 'C:\\Download\\something.mkv',
+    duration: 6120,
+    targetDuration: 30,
+    tracks: guadalupeTracks as ITrack[]
+  } as IVideo
+  const job: EncodingJob = new EncodingJob(video, '/tmp', encoderSettings)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.finished).toBe(false)
@@ -206,7 +211,7 @@ test('Encoding Progression data', async () => {
 
   let mapIdx = spawnArgs.indexOf('-map')
   expect(mapIdx, 'should map all streams by default').toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:V')
+  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:v:0')
 
   // ### PASS 2
   spawnArgs = spawnSpy.mock.calls[1][1]
@@ -220,7 +225,7 @@ test('Encoding Progression data', async () => {
 
   mapIdx = spawnArgs.indexOf('-map')
   expect(mapIdx, 'should map all streams by default').toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:V')
+  expect(spawnArgs[mapIdx + 1], 'should map video streams and no attachments by default').toBe('0:v:0')
 
   const progresses: number[] = stateChanges.map((c) => c.progression.progress)
   let lastProgress = -1
@@ -254,8 +259,13 @@ test('Encoding Progression data', async () => {
 test('Failing Processing Job', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegFailure)
-  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
-  const job: EncodingJob = new EncodingJob(fullPath, '/tmp', 30, [], encoderSettings)
+  const video: IVideo = {
+    sourcePath: getFakeAbsolutePath('Download', 'something.mkv'),
+    duration: 30,
+    targetDuration: 30,
+    tracks: []
+  } as IVideo
+  const job: EncodingJob = new EncodingJob(video, '/tmp', encoderSettings)
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.started).toBe(false)
