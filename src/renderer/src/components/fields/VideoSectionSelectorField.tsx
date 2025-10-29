@@ -111,15 +111,6 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     [video.keyFrames]
   )
 
-  const toNearestKeyframeX = React.useCallback(
-    (posX: number) => {
-      const selTime = (posX * step) / 22
-      const kfTime = toNearestKeyFrameTime(selTime)
-      return Math.round((kfTime * 22) / step)
-    },
-    [step, toNearestKeyFrameTime]
-  )
-
   for (let i = 0; i <= duration; i += step) {
     const currentStep = i / step
     if (currentStep % 10 === 0) {
@@ -181,19 +172,9 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   }
   useEffect(() => {
     if (videoPlayed?.uuid === video.uuid) {
-      if (settingsValidation.result.isFineTrimEnabled) {
-        setCurrentTime(videoPlayerCurrentTime)
-      } else {
-        setCurrentTime(toNearestKeyFrameTime(videoPlayerCurrentTime))
-      }
+      setCurrentTime(videoPlayerCurrentTime)
     }
-  }, [
-    videoPlayerCurrentTime,
-    videoPlayed?.uuid,
-    video.uuid,
-    settingsValidation.result.isFineTrimEnabled,
-    toNearestKeyFrameTime
-  ])
+  }, [videoPlayerCurrentTime, videoPlayed?.uuid, video.uuid])
 
   useEffect(() => {
     if (video.uuid === videoPlayed?.uuid && videoPlayed !== video) {
@@ -222,6 +203,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     if (videoPlayed !== video) {
       setVideoPlayed(video)
       setVideoPlayerCurrentTime(currentTime)
+      seekTo(currentTime)
     }
     if (videoPlayerOpened) {
       await play()
@@ -270,14 +252,15 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   }
 
   const handleSetStartFrom = async () => {
-    await window.api.video.setStartFrom(video.uuid, currentTime)
-
-    // setStartFrom(currentTime)
+    if (settingsValidation.result.isFineTrimEnabled) {
+      await window.api.video.setStartFrom(video.uuid, toNearestKeyFrameTime(currentTime))
+    }
   }
 
   const handleSetEndTo = async () => {
-    await window.api.video.setEndAt(video.uuid, currentTime)
-    // setEndAt(currentTime)
+    if (settingsValidation.result.isFineTrimEnabled) {
+      await window.api.video.setEndAt(video.uuid, toNearestKeyFrameTime(currentTime))
+    }
   }
 
   function findClosest(arr: number[], target: number) {
@@ -303,18 +286,11 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
     return target - before <= after - target ? before : after
   }
 
-  const handleMouseMoveOverScrollable = useCallback(
-    (event: MouseEvent) => {
-      if (rulerRef.current != null) {
-        if (settingsValidation.result.isFineTrimEnabled) {
-          setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
-        } else {
-          setSelPosX(toNearestKeyframeX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4))
-        }
-      }
-    },
-    [settingsValidation.result.isFineTrimEnabled, toNearestKeyframeX]
-  )
+  const handleMouseMoveOverScrollable = useCallback((event: MouseEvent) => {
+    if (rulerRef.current != null) {
+      setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
+    }
+  }, [])
 
   const handleMouseOutScrollable = useCallback(
     (_event: MouseEvent) => {
@@ -328,14 +304,10 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
       if (videoPlayed?.uuid === video.uuid) {
         seekTo(position)
       } else {
-        if (settingsValidation.result.isFineTrimEnabled) {
-          setCurrentTime(position)
-        } else {
-          setCurrentTime(toNearestKeyFrameTime(position))
-        }
+        setCurrentTime(position)
       }
     },
-    [seekTo, settingsValidation.result.isFineTrimEnabled, toNearestKeyFrameTime, video.uuid, videoPlayed?.uuid]
+    [seekTo, video.uuid, videoPlayed?.uuid]
   )
 
   useEffect(() => {
