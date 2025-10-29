@@ -438,7 +438,15 @@ export class Video implements IVideo {
         this.message = 'Trimming video...'
       }
       this.fireChangeEvent()
-      this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
+      try {
+        this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
+      } catch (e) {
+        this.message = (e as Error).message
+        this.status = JobStatus.ERROR
+        this.progression.progress = -1
+        this.fireChangeEvent()
+        return
+      }
     }
     let encodingRequired = false
     let encodingJob: Job<string> | undefined = undefined
@@ -762,9 +770,7 @@ export class Video implements IVideo {
   }
 
   async preparePreview(): Promise<string> {
-    this.previewJob = this.attachPreviewJob(
-      new PreviewingJob(this.sourcePath, this.getPreviewDirectory(), this.duration)
-    )
+    this.previewJob = this.attachPreviewJob(new PreviewingJob(this.toJSON(), this.getPreviewDirectory(), this.duration))
     this.previewPath = await this.previewJob.queue()
     this.fireChangeEvent()
     return this.previewPath
@@ -882,5 +888,14 @@ export class Video implements IVideo {
       this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
     }
     this.audioVersions = AudioVersions.extractVersions(filename)
+  }
+
+  destroy() {
+    this.abortJob()
+    debug('Cleaning preview files for video [' + this.filename + ']...')
+    for (const part of this.videoParts) {
+      part.destroy()
+    }
+    Files.deleteFolderRecursive(this.getPreviewDirectory())
   }
 }

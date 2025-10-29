@@ -199,3 +199,7 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+app.on('before-quit', (_event) => {
+  VideoController.getInstance().destroy()
+})

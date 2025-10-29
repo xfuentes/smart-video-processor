@@ -22,7 +22,7 @@ import { ChildProcess } from 'node:child_process'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
 import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
-import { TrackType } from '../../../common/@types/Track'
+import { ITrack, TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
 import path from 'node:path'
@@ -199,7 +199,7 @@ export class FFmpeg extends CommandProgress {
   }
 
   public async generateVideoPreview(
-    sourcePath: string,
+    video: IVideo,
     destinationPath: string,
     durationSeconds: number,
     progressNotifier?: ProgressNotifier
@@ -211,9 +211,18 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push('-loglevel', '16') // Only show errors
     ffOptions.push('-y') // Overwrite output file without asking
 
-    ffOptions.push('-i', sourcePath)
-    ffOptions.push('-c:v', 'copy')
-    ffOptions.push('-c:a', 'copy')
+    ffOptions.push('-i', video.sourcePath)
+    ffOptions.push('-c', 'copy')
+
+    let videoIndex = 0
+    let audioIndex = 0
+    for (const track of video.tracks) {
+      if (audioIndex === 0 && track.type === TrackType.AUDIO && track.codec.indexOf('AAC') !== -1) {
+        ffOptions.push('-map', '0:a:' + audioIndex++)
+      } else if (videoIndex === 0 && track.type === TrackType.VIDEO) {
+        ffOptions.push('-map', '0:v:' + videoIndex++)
+      }
+    }
 
     ffOptions.push('-f', 'hls')
     ffOptions.push('-hls_time', '4')
@@ -285,9 +294,6 @@ export class FFmpeg extends CommandProgress {
     maxMuxingQueueSizeWorkaround: boolean = false
   ): string[] {
     const ffOptions: string[] = []
-    const hasVideoTracks = video.tracks.find((t) => t.type === TrackType.VIDEO)
-    const hasAudioTrack = video.tracks.find((t) => t.type === TrackType.AUDIO)
-    const hasSubtitlesTrack = video.tracks.find((t) => t.type === TrackType.SUBTITLES)
 
     /**
      * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
@@ -307,16 +313,7 @@ export class FFmpeg extends CommandProgress {
     }
     //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
     ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-
-    if (hasVideoTracks) {
-      ffOptions.push('-map', '0:V') // Copy video but not Video attachments to workaround ffmpeg bug
-    }
-    if (hasAudioTrack) {
-      ffOptions.push('-map', '0:a') // Copy audios
-    }
-    if (hasSubtitlesTrack) {
-      ffOptions.push('-map', '0:s') // Copy subs
-    }
+    ffOptions.push(...this.generateKeepAllMapping(video.tracks))
 
     let videoIndex = 0
     let audioIndex = 0
@@ -394,7 +391,7 @@ export class FFmpeg extends CommandProgress {
       ffOptions.push('-t', '' + durationSeconds)
       needProcessing = true
     }
-
+    ffOptions.push(...this.generateKeepAllMapping(video.tracks))
     ffOptions.push(preProcessPath)
 
     if (needProcessing) {
@@ -403,6 +400,23 @@ export class FFmpeg extends CommandProgress {
     } else {
       return video.sourcePath
     }
+  }
+
+  generateKeepAllMapping = (tracks: ITrack[])=> {
+    const ffOptions: string[] = []
+    let videoIndex = 0
+    let audioIndex = 0
+    let subtitlesIndex = 0
+    for (const track of tracks) {
+      if (track.type === TrackType.AUDIO) {
+        ffOptions.push('-map', '0:a:' + audioIndex++)
+      } else if (track.type === TrackType.VIDEO) {
+        ffOptions.push('-map', '0:v:' + videoIndex++)
+      } else if (track.type === TrackType.SUBTITLES) {
+        ffOptions.push('-map', '0:s:' + subtitlesIndex++)
+      }
+    }
+    return ffOptions
   }
 
   public async preProcessVideo(video: IVideo, destinationPath: string): Promise<string> {
@@ -436,9 +450,8 @@ export class FFmpeg extends CommandProgress {
       ffOptions.push('-safe', '0')
       ffOptions.push('-i', concatFilePath)
       ffOptions.push('-c', 'copy')
-      ffOptions.push('-map', '0')
-      ffOptions.push('-map', '-0:v')
-      ffOptions.push('-map', '0:V')
+
+      ffOptions.push(...this.generateKeepAllMapping(video.tracks))
 
       const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
       ffOptions.push(preProcessPath)

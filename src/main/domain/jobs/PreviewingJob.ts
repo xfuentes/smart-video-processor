@@ -19,22 +19,23 @@
 import { Job } from './Job'
 import { JobStatus } from '../../../common/@types/Job'
 import { FFmpeg } from '../programs/FFmpeg'
+import { IVideo } from '../../../common/@types/Video'
 
 export class PreviewingJob extends Job<string> {
-  private readonly sourcePath: string
+  private readonly video: IVideo
   private readonly destinationPath: string
   private readonly durationSeconds: number
 
-  constructor(sourcePath: string, destinationPath: string, durationSeconds: number) {
+  constructor(video: IVideo, destinationPath: string, durationSeconds: number) {
     super(JobStatus.LOADING, 'Preparing video preview.')
-    this.sourcePath = sourcePath
+    this.video = video
     this.destinationPath = destinationPath
     this.durationSeconds = durationSeconds
   }
 
   protected executeInternal(): Promise<string> {
     return FFmpeg.getInstance().generateVideoPreview(
-      this.sourcePath,
+      this.video,
       this.destinationPath,
       this.durationSeconds,
       this.setProgression.bind(this)

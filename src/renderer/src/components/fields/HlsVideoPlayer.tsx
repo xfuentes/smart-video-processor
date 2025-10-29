@@ -127,7 +127,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
         hlsRef.current = null
       }
     }
-  }, [src, autoPlay, startAt])
+  }, [src, autoPlay])
 
   return (
     <video
