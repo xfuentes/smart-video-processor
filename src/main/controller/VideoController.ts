@@ -176,6 +176,10 @@ export class VideoController {
     return this.getVideoByUuid(uuid).addPart(partPath)
   }
 
+  removePart(uuid: string, partUuid: string) {
+    return this.getVideoByUuid(uuid).removePart(partUuid)
+  }
+
   setStartFrom(uuid: string, value?: number) {
     return this.findVideoByUuidIncludingParts(uuid).setStartFrom(value)
   }

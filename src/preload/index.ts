@@ -74,6 +74,8 @@ const api: SvpAPI = {
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
     addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
+    removePart: (uuid: string, partUuid: string): Promise<void> =>
+      ipcRenderer.invoke('video:removePart', uuid, partUuid),
     setStartFrom: (uuid: string, value?: number): Promise<void> =>
       ipcRenderer.invoke('video:setStartFrom', uuid, value),
     setEndAt: (uuid: string, value?: number): Promise<void> => ipcRenderer.invoke('video:setEndAt', uuid, value),

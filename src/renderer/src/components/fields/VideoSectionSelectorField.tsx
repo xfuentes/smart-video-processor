@@ -19,56 +19,30 @@
 import { IVideo } from '../../../../common/@types/Video'
 import React, { ReactElement, useCallback, useEffect, useRef } from 'react'
 import { Strings } from '../../../../common/Strings'
-import { Button, ProgressBar } from '@fluentui/react-components'
+import { Button, ProgressBar, ToggleButton, Tooltip } from '@fluentui/react-components'
 import {
   ArrowNext20Regular,
   ArrowPrevious20Regular,
+  FilmstripSplitFilled,
   FilmstripSplitRegular,
   Pause16Regular,
   Play16Regular,
-  Stop16Regular
+  Stop16Regular,
+  SubtractSquareRegular
 } from '@fluentui/react-icons'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { PlayHead } from '@renderer/components/context/PlayHead'
 import { Delimitation } from '@renderer/components/context/Delimitation'
-import { useSettings } from '@renderer/components/context/SettingsContext'
-
-declare type Hour =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20
-  | 21
-  | 22
-  | 23
-  | 24
 
 type Props = {
   video: IVideo
   step?: number
   disabled?: boolean
+  mainVideoUuid?: string
 }
 
-export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) {
+export const VideoSectionSelectorField = function ({ video, step = 60, mainVideoUuid = undefined }: Props) {
   // step ===> 22 px
-  const { settingsValidation } = useSettings()
   const {
     videoPlayed,
     setVideoPlayed,
@@ -83,33 +57,18 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   } = useVideoPlayer()
   const scrollableRef = useRef<HTMLDivElement | null>(null)
   const rulerRef = useRef<HTMLDivElement | null>(null)
-  const startFrom = video.startFrom ?? 0
-  const endAt = video.endAt ?? video.duration
+  const startFrom = video.startFrom
+  const endAt = video.endAt
   const [selPosX, setSelPosX] = React.useState<number | undefined>(undefined)
   const [currentTime, setCurrentTime] = React.useState<number>(0)
+  const startFromChecked = startFrom !== undefined
+  const endAtChecked = endAt !== undefined
 
   const duration = video.duration
   const durationLeft = duration % step
   const previewHeight = 58
   const labels: ReactElement[] = []
   const tickMarks: ReactElement[] = []
-
-  const toNearestKeyFrameTime = React.useCallback(
-    (selTime: number) => {
-      if (video.keyFrames.length === 0) {
-        return selTime
-      }
-      if (video.keyFrames[0] > selTime) {
-        return video.keyFrames[0]
-      }
-      if (video.keyFrames[video.keyFrames.length - 1] < selTime) {
-        return video.keyFrames[video.keyFrames.length - 1]
-      }
-
-      return findClosest(video.keyFrames, selTime)
-    },
-    [video.keyFrames]
-  )
 
   for (let i = 0; i <= duration; i += step) {
     const currentStep = i / step
@@ -223,21 +182,21 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   const isStopped = !videoPlayerOpened || videoPlayed?.uuid !== video.uuid
   const isPaused = !videoPlayerOpened || videoPlayerPaused || videoPlayed?.uuid !== video.uuid
   let previousTime: number | undefined = undefined
-  if (currentTime > endAt) {
+  if (endAt !== undefined && currentTime > endAt) {
     previousTime = endAt
-  } else if (currentTime > startFrom) {
+  } else if (startFrom !== undefined && currentTime > startFrom) {
     previousTime = startFrom
   } else if (currentTime !== 0) {
     previousTime = 0
   }
   let nextTime: number | undefined = undefined
-  if (currentTime < startFrom) {
+  if (startFrom !== undefined && currentTime < startFrom) {
     nextTime = startFrom
-  } else if (currentTime < endAt) {
+  } else if (endAt !== undefined && currentTime < endAt) {
     nextTime = endAt
   }
-  const canStartHere = endAt > currentTime && startFrom !== currentTime
-  const canEndHere = startFrom < currentTime && endAt !== currentTime
+  const canStartHere = (endAt === undefined || endAt > currentTime) && startFrom !== currentTime
+  const canEndHere = (startFrom === undefined || startFrom < currentTime) && endAt !== currentTime
 
   const handlePrevious = () => {
     if (previousTime !== undefined) {
@@ -252,38 +211,25 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   }
 
   const handleSetStartFrom = async () => {
-    if (settingsValidation.result.isFineTrimEnabled) {
-      await window.api.video.setStartFrom(video.uuid, toNearestKeyFrameTime(currentTime))
+    if (startFromChecked) {
+      await window.api.video.setStartFrom(video.uuid, undefined)
+    } else {
+      await window.api.video.setStartFrom(video.uuid, currentTime)
     }
   }
 
-  const handleSetEndTo = async () => {
-    if (settingsValidation.result.isFineTrimEnabled) {
-      await window.api.video.setEndAt(video.uuid, toNearestKeyFrameTime(currentTime))
+  const handleSetEndAt = async () => {
+    if (endAtChecked) {
+      await window.api.video.setEndAt(video.uuid, undefined)
+    } else {
+      await window.api.video.setEndAt(video.uuid, currentTime)
     }
   }
 
-  function findClosest(arr: number[], target: number) {
-    let left = 0
-    let right = arr.length - 1
-
-    // Binary search to find insertion point
-    while (left < right) {
-      const mid = Math.floor((left + right) / 2)
-      if (arr[mid] < target) {
-        left = mid + 1
-      } else {
-        right = mid
-      }
+  const handleRemovePart = async () => {
+    if (mainVideoUuid !== undefined) {
+      await window.api.video.removePart(mainVideoUuid, video.uuid)
     }
-
-    // Check neighbors around the insertion point
-    const closest = left
-    const before = left > 0 ? arr[left - 1] : arr[closest]
-    const after = arr[closest]
-
-    // Return the closest value
-    return target - before <= after - target ? before : after
   }
 
   const handleMouseMoveOverScrollable = useCallback((event: MouseEvent) => {
@@ -328,8 +274,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
   }, [handleMouseOutScrollable, handleMouseMoveOverScrollable, rulerRef])
 
   const posX = (currentTime * 22) / step
-  const startVideoPercent = (startFrom * 100) / duration
-  const endVideoPercent = (endAt * 100) / duration
+  const startVideoPercent = ((startFrom === undefined ? 0 : startFrom) * 100) / duration
+  const endVideoPercent = ((endAt === undefined ? duration : endAt) * 100) / duration
 
   return (
     <div className="video-section-selector-field">
@@ -361,28 +307,64 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
           />
         </div>
         <div className="video-controls">
-          <Button
-            size="small"
-            appearance="subtle"
-            onClick={handleSetStartFrom}
-            icon={
-              <div className="hide-first-half">
-                <FilmstripSplitRegular />
-              </div>
-            }
-            disabled={!canStartHere}
-          />
-          <Button
-            size="small"
-            appearance="subtle"
-            onClick={handleSetEndTo}
-            icon={
-              <div className="hide-second-half">
-                <FilmstripSplitRegular />
-              </div>
-            }
-            disabled={!canEndHere}
-          />
+          <Tooltip
+            content={mainVideoUuid === undefined ? "Main video can't be removed here" : 'Remove this video part'}
+            relationship="description"
+          >
+            <Button
+              size="small"
+              appearance="subtle"
+              onClick={handleRemovePart}
+              icon={<SubtractSquareRegular />}
+              disabled={mainVideoUuid === undefined}
+            />
+          </Tooltip>
+          <Tooltip
+            content={startFromChecked ? 'Unset video start time' : 'Set video start time to current position'}
+            relationship="description"
+          >
+            <ToggleButton
+              size="small"
+              checked={startFromChecked}
+              appearance="subtle"
+              onClick={handleSetStartFrom}
+              icon={
+                startFromChecked ? (
+                  <div className="hide-first-half">
+                    <FilmstripSplitFilled />
+                  </div>
+                ) : (
+                  <div className="hide-first-half">
+                    <FilmstripSplitRegular />
+                  </div>
+                )
+              }
+              disabled={!startFromChecked && !canStartHere}
+            />
+          </Tooltip>
+          <Tooltip
+            content={endAtChecked ? 'Unset video end time' : 'Set video end time to current position'}
+            relationship="description"
+          >
+            <ToggleButton
+              size="small"
+              checked={endAtChecked}
+              appearance="subtle"
+              onClick={handleSetEndAt}
+              icon={
+                endAtChecked ? (
+                  <div className="hide-second-half">
+                    <FilmstripSplitFilled />
+                  </div>
+                ) : (
+                  <div className="hide-second-half">
+                    <FilmstripSplitRegular />
+                  </div>
+                )
+              }
+              disabled={!endAtChecked && !canEndHere}
+            />
+          </Tooltip>
         </div>
         <div style={{ verticalAlign: 'center', padding: '4px', height: '100%', display: 'flex', alignItems: 'center' }}>
           {video.progression?.progress !== -1 ? (
@@ -416,8 +398,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60 }: Props) 
               }}
             />
           </div>
-          <Delimitation time={startFrom} posX={(startFrom * 22) / step} />
-          <Delimitation time={endAt} posX={(endAt * 22) / step} end />
+          {startFrom !== undefined && <Delimitation time={startFrom} posX={(startFrom * 22) / step} />}
+          {endAt !== undefined && <Delimitation time={endAt} posX={(endAt * 22) / step} end />}
           <PlayHead currentTime={currentTime} posX={posX} />
           <PlayHead selection posX={selPosX} />
         </div>
