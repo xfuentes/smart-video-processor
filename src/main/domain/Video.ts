@@ -711,6 +711,15 @@ export class Video implements IVideo {
     }
   }
 
+  removePart(partUuid: string) {
+    const part = this.videoParts.find((p) => p.uuid === partUuid)
+    if (part !== undefined) {
+      this.videoParts = this.videoParts.filter((p) => p.uuid !== partUuid)
+      this.fireChangeEvent()
+      part.destroy()
+    }
+  }
+
   computeTargetDuration() {
     let targetDuration = 0
     targetDuration += (this.endAt ?? this.duration) - (this.startFrom ?? 0)
@@ -720,15 +729,60 @@ export class Video implements IVideo {
     this.targetDuration = targetDuration
   }
 
+  findClosest(arr: number[], target: number) {
+    let left = 0
+    let right = arr.length - 1
+
+    // Binary search to find insertion point
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2)
+      if (arr[mid] < target) {
+        left = mid + 1
+      } else {
+        right = mid
+      }
+    }
+
+    // Check neighbors around the insertion point
+    const closest = left
+    const before = left > 0 ? arr[left - 1] : arr[closest]
+    const after = arr[closest]
+
+    // Return the closest value
+    return target - before <= after - target ? before : after
+  }
+
+  toNearestKeyFrameTime(selTime: number) {
+    if (this.keyFrames.length === 0) {
+      return selTime
+    }
+    if (this.keyFrames[0] > selTime) {
+      return this.keyFrames[0]
+    }
+    if (this.keyFrames[this.keyFrames.length - 1] < selTime) {
+      return this.keyFrames[this.keyFrames.length - 1]
+    }
+
+    return this.findClosest(this.keyFrames, selTime)
+  }
+
   setStartFrom(value?: number) {
-    this.startFrom = value !== undefined ? Math.round(value) : undefined
+    if (currentSettings.isFineTrimEnabled) {
+      this.startFrom = value !== undefined ? Math.round(value) : undefined
+    } else {
+      this.startFrom = value !== undefined ? Math.round(this.toNearestKeyFrameTime(value)) : undefined
+    }
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
   setEndAt(value?: number) {
-    this.endAt = value !== undefined ? Math.round(value) : undefined
+    if (currentSettings.isFineTrimEnabled) {
+      this.endAt = value !== undefined ? Math.round(value) : undefined
+    } else {
+      this.endAt = value !== undefined ? Math.round(this.toNearestKeyFrameTime(value)) : undefined
+    }
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()

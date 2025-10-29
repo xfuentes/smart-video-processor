@@ -18,6 +18,7 @@
 
 import { Tooltip } from '@fluentui/react-components'
 import React, { useEffect } from 'react'
+import { Strings } from '../../../../common/Strings'
 
 type props = {
   selection?: boolean
@@ -38,7 +39,7 @@ export const PlayHead = ({ currentTime, posX, scrollableRef, selection = false }
   }
 
   return currentTime ? (
-    <Tooltip content={`Play Head at ${currentTime}`} relationship={'label'}>
+    <Tooltip content={`Play Head at ${Strings.humanDuration(currentTime)}`} relationship={'label'}>
       <div className={`play-head${selection ? ' selection' : ''}`} style={{ left: posX }}>
         <div className="inside" />
       </div>
