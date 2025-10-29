@@ -147,7 +147,7 @@ export class VideoController {
   remove(videoUuidList: string[]) {
     this.videos = this.videos.filter((v) => {
       if (videoUuidList.includes(v.uuid)) {
-        v.abortJob()
+        v.destroy()
         return false
       }
       return true
@@ -156,8 +156,8 @@ export class VideoController {
   }
 
   clearCompleted() {
-    this.videos = this.videos.filter((v) => !v.isProcessed())
-    this.fireListChangeEvent()
+    const toRemoveUuid = this.videos.filter((v) => v.isProcessed()).map((v) => v.uuid)
+    this.remove(toRemoveUuid)
   }
 
   getMovie(uuid: string) {
@@ -223,5 +223,14 @@ export class VideoController {
 
   preparePreview(uuid: string) {
     return this.findVideoByUuidIncludingParts(uuid).preparePreview()
+  }
+
+  /**
+   * Called before quit to clean temp files
+   */
+  destroy() {
+    for (const video of this.videos) {
+      video.destroy()
+    }
   }
 }

@@ -136,6 +136,7 @@
   height: 100%;
   aspect-ratio: 2 / 3;
   border: 1px solid #7f7f7f;
+  box-sizing: border-box;
 }
 
 .video-preview .title {
