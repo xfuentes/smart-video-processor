@@ -18,13 +18,9 @@
 
 import { Settings } from '../../common/@types/Settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { IVideo, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
-import { EditionType } from '../../common/@types/Movie'
-import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { IVideo, SearchInputData } from '../../common/@types/Video'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
-import { IProcess } from '../../common/Process'
-import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
@@ -71,6 +67,7 @@ interface SvpAPI {
     deleteChange: (uuid: string, changeUuid: string) => Promise<void>
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
     addPart: (uuid: string) => Promise<void>
+    removePart: (uuid: string, partUuid: string) => Promise<void>
     process: (uuid: string) => Promise<void>
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>

@@ -95,6 +95,9 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       void VideoController.getInstance().addPart(uuid, result.filePaths[0])
     }
   })
+  ipcMain.handle('video:removePart', async (_event, uuid: string, partUuid: string) => {
+    void VideoController.getInstance().removePart(uuid, partUuid)
+  })
   ipcMain.handle('video:setStartFrom', (_event, uuid: string, value?: number) => {
     VideoController.getInstance().setStartFrom(uuid, value)
   })
