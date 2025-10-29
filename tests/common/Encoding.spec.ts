@@ -76,7 +76,7 @@ const queLaFeteCommenceTracks = [
 ] as Track[]
 
 test('Analysis of Que La Fete Commence - 1', () => {
-  const results = Encoding.getInstance().analyse(queLaFeteCommenceTracks, {})
+  const results = Encoding.getInstance().analyse(queLaFeteCommenceTracks)
   const settings = encoderSettingsListToMap(results)
   expect(settings['Video 0']?.fps).toBe(24)
   expect(settings['Video 0']?.bitrate).toBe(1857946)
@@ -164,7 +164,7 @@ const workingMan23_976FPSTracks = [
   }
 ] as Track[]
 test('Working Man NTSC 23.976 FPS', () => {
-  const results = Encoding.getInstance().analyse(workingMan23_976FPSTracks, {})
+  const results = Encoding.getInstance().analyse(workingMan23_976FPSTracks)
   const settings = encoderSettingsListToMap(results)
   expect(settings['Video 0']?.fps).toBe(23.976)
   expect(settings['Video 0']?.bitrate).toBe(1473085)
@@ -203,7 +203,7 @@ const marcelinoProbeTracks = [
 ] as Track[]
 
 test('Marcelino, unsupported audio', () => {
-  const results = Encoding.getInstance().analyse(marcelinoProbeTracks, {})
+  const results = Encoding.getInstance().analyse(marcelinoProbeTracks)
   const settings = encoderSettingsListToMap(results)
   expect(settings['Audio 1']?.audioChannels).toBe(2)
   expect(settings['Audio 1']?.bitrate).toBe(128000)
@@ -274,12 +274,19 @@ const violentNightTracks = [
 test('Violent Night encoding video and no audio', () => {
   currentSettings.videoSizeReduction = 59
   currentSettings.audioSizeReduction = 51
-  const results = Encoding.getInstance().analyse(violentNightTracks, {})
+  const results = Encoding.getInstance().analyse(violentNightTracks)
   const settings = encoderSettingsListToMap(results)
   expect(settings['Video 0']?.bitrate).toBe(1988665)
   expect(settings['Video 0']?.codec).toBe('H.265')
   expect(settings['Video 0']?.originalSize).toBe(6638529286)
   expect(settings['Video 0']?.targetSize).toBe(1663460850)
   expect(settings['Video 0']?.compressionPercent).toBe(75)
-  expect(settings['Audio 1']).toBeUndefined()
+  expect(settings['Video 0']?.encodingEnabled).toBe(true)
+  expect(settings['Audio 1']?.bitrate).toBe(384000)
+  expect(settings['Audio 1']?.codec).toBe('AAC LC')
+  expect(settings['Audio 1']?.originalSize).toBe(643037184)
+  expect(settings['Audio 1']?.targetSize).toBe(321518592)
+  expect(settings['Audio 1']?.compressionPercent).toBe(50)
+  expect(settings['Audio 1']?.audioChannels).toBe(6)
+  expect(settings['Audio 1']?.encodingEnabled).toBe(false)
 })

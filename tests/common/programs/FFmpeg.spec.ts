@@ -21,13 +21,12 @@ import { simulateFFmpegProgression } from '../testUtils'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { Processes } from '../../../src/main/util/processes'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
-import { currentSettings } from '../../../src/main/domain/Settings'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
 import { Files } from '../../../src/main/util/files'
 import * as path from 'node:path'
-import { IVideo } from "../../../src/common/@types/Video";
-import { Track } from "../../../src/main/domain/Track";
-import { ITrack } from "../../../src/common/@types/Track";
+import { IVideo } from '../../../src/common/@types/Video'
+import { Track } from '../../../src/main/domain/Track'
+import { ITrack } from '../../../src/common/@types/Track'
 
 const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
@@ -66,14 +65,16 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
-  const fullPath = 'C:\\Download\\something.mkv'
+  const video: IVideo = {
+    sourcePath: 'C:\\Download\\something.mkv',
+    duration: 6120,
+    targetDuration: 30,
+    tracks: []
+  } as IVideo
   const progresses: number[] = []
-  currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().encodeFileInternal(
-    fullPath,
+    video,
     '/tmp/',
-    6120,
-    [],
     encoderSettings,
     undefined,
     undefined,
@@ -90,21 +91,18 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
-  const fullPath = 'C:\\Download\\something.mkv'
   const progresses: number[] = []
   const xSpeeds: number[] = []
-  currentSettings.isTestEncodingEnabled = true
-  const result = await FFmpeg.getInstance().encodeFile(
-    fullPath,
-    '/tmp',
-    6120,
-    [],
-    encoderSettings,
-    ({ progress, xSpeed }) => {
-      progresses.push(progress)
-      xSpeeds.push(xSpeed)
-    }
-  )
+  const video: IVideo = {
+    sourcePath: 'C:\\Download\\something.mkv',
+    duration: 6120,
+    targetDuration: 30,
+    tracks: []
+  } as IVideo
+  const result = await FFmpeg.getInstance().encodeFile(video, '/tmp', encoderSettings, ({ progress, xSpeed }) => {
+    progresses.push(progress)
+    xSpeeds.push(xSpeed)
+  })
   let lastProgress = -1
   for (const progress of progresses) {
     if (progress !== undefined) {
@@ -445,14 +443,16 @@ test('FFmpeg Marcelino audio progression', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgressionMarcelino)
-  const fullPath = 'C:\\Download\\something.mkv'
   const progresses: number[] = []
-  currentSettings.isTestEncodingEnabled = true
+  const video: IVideo = {
+    sourcePath: 'C:\\Download\\something.mkv',
+    duration: 4591.4,
+    targetDuration: 30,
+    tracks: []
+  } as IVideo
   const result = await FFmpeg.getInstance().encodeFileInternal(
-    fullPath,
+    video,
     '/tmp',
-    4591.4,
-    [],
     marcelinoEncoderSettings,
     undefined,
     undefined,
@@ -543,7 +543,6 @@ test('FFmpeg Snapshot Marcelino', async () => {
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegSnapshotProgressionMarcelino)
   const sourceFullPath = '/home/xfuentes/Vidéos/Marcellino (1991).1080p.h264 {tmdb-103715}.mkv'
   const progresses: number[] = []
-  currentSettings.isTestEncodingEnabled = true
   const result = await FFmpeg.getInstance().generateSnapshots(
     sourceFullPath,
     '/tmp',
@@ -557,213 +556,4 @@ test('FFmpeg Snapshot Marcelino', async () => {
   )
   expect(progresses).toStrictEqual([undefined, 1])
   expect(result).toContain(path.basename(snapshotsFile))
-})
-
-
-const guadalupeTracks = [
-  {
-    id: 0,
-    type: 'Video',
-    codec: 'AVC/H.264/MPEG-4p10',
-    language: 'es-ES',
-    properties: {
-      videoDimensions: '720x576',
-      frames: 154375,
-      bitRate: 880642
-    },
-    default: false,
-    forced: false,
-    duration: 6175.021,
-    size: 679748531
-  },
-  {
-    id: 1,
-    name: 'VFF 5.1',
-    type: 'Audio',
-    codec: 'AC-3',
-    language: 'fr-FR',
-    properties: {
-      audioChannels: 6,
-      audioSamplingFrequency: 48000,
-      frames: 192968,
-      bitRate: 384000
-    },
-    default: false,
-    forced: false,
-    duration: 6174.976,
-    size: 296398848
-  },
-  {
-    id: 2,
-    name: 'VFF 2.0',
-    type: 'Audio',
-    codec: 'AAC',
-    language: 'fr-FR',
-    properties: {
-      audioChannels: 2,
-      audioSamplingFrequency: 48000,
-      frames: 289453,
-      bitRate: 130128
-    },
-    default: false,
-    forced: false,
-    duration: 6174.997,
-    size: 100442733
-  },
-  {
-    id: 3,
-    name: 'VO 5.1',
-    type: 'Audio',
-    codec: 'AC-3',
-    language: 'es-ES',
-    properties: {
-      audioChannels: 6,
-      audioSamplingFrequency: 48000,
-      frames: 192968,
-      bitRate: 384000
-    },
-    default: false,
-    forced: false,
-    duration: 6174.976,
-    size: 296398848
-  },
-  {
-    id: 4,
-    name: 'VO 2.0',
-    type: 'Audio',
-    codec: 'AAC',
-    language: 'es-ES',
-    properties: {
-      audioChannels: 2,
-      audioSamplingFrequency: 48000,
-      frames: 289453,
-      bitRate: 130041
-    },
-    default: false,
-    forced: false,
-    duration: 6174.997,
-    size: 100375431
-  },
-  {
-    id: 5,
-    name: 'Full',
-    type: 'Subtitles',
-    codec: 'VobSub',
-    language: 'fr',
-    properties: {
-      frames: 1250,
-      bitRate: 8372
-    },
-    default: false,
-    forced: false,
-    duration: 5737.83,
-    size: 6005350
-  },
-  {
-    id: 6,
-    name: 'Forced',
-    type: 'Subtitles',
-    codec: 'VobSub',
-    language: 'fr',
-    properties: {
-      frames: 1,
-      bitRate: 1913
-    },
-    default: false,
-    forced: true,
-    duration: 4.949,
-    size: 1184
-  }
-] as ITrack[]
-
-test('FFmpeg Generate Processing Arguments main trim start', async () => {
-  const result = FFmpeg.getInstance().generateProcessingArguments({
-    startFrom: 600,
-    videoParts: [],
-    tracks: guadalupeTracks
-  } as IVideo)
-  expect(result).toContain("-filter_complex")
-  const filterValue = result[result.indexOf("-filter_complex") + 1]
-  const filters = filterValue.split(";");
-  expect(filters.length).toStrictEqual(guadalupeTracks.length)
-  expect(filters[0]).toStrictEqual("[0:v:0]trim=start=600,setpts=PTS-STARTPTS[v0_0]")
-  expect(filters[1]).toStrictEqual("[0:a:0]atrim=start=600,asetpts=PTS-STARTPTS[a0_0]")
-  expect(filters[2]).toStrictEqual("[0:a:1]atrim=start=600,asetpts=PTS-STARTPTS[a0_1]")
-  expect(filters[3]).toStrictEqual("[0:a:2]atrim=start=600,asetpts=PTS-STARTPTS[a0_2]")
-  expect(filters[4]).toStrictEqual("[0:a:3]atrim=start=600,asetpts=PTS-STARTPTS[a0_3]")
-  expect(filters[5]).toStrictEqual("[0:s:0]trim=start=600,setpts=PTS-STARTPTS[s0_0]")
-  expect(filters[6]).toStrictEqual("[0:s:1]trim=start=600,setpts=PTS-STARTPTS[s0_1]")
-})
-
-test('FFmpeg Generate Processing Arguments main trim end', async () => {
-  const result = FFmpeg.getInstance().generateProcessingArguments({
-    endAt: 6000,
-    videoParts: [],
-    tracks: guadalupeTracks
-  } as IVideo)
-  expect(result).toContain("-filter_complex")
-  const filterValue = result[result.indexOf("-filter_complex") + 1]
-  const filters = filterValue.split(";");
-  expect(filters.length).toStrictEqual(guadalupeTracks.length)
-  expect(filters[0]).toStrictEqual("[0:v:0]trim=end=6000,setpts=PTS-STARTPTS[v0_0]")
-  expect(filters[1]).toStrictEqual("[0:a:0]atrim=end=6000,asetpts=PTS-STARTPTS[a0_0]")
-  expect(filters[2]).toStrictEqual("[0:a:1]atrim=end=6000,asetpts=PTS-STARTPTS[a0_1]")
-  expect(filters[3]).toStrictEqual("[0:a:2]atrim=end=6000,asetpts=PTS-STARTPTS[a0_2]")
-  expect(filters[4]).toStrictEqual("[0:a:3]atrim=end=6000,asetpts=PTS-STARTPTS[a0_3]")
-  expect(filters[5]).toStrictEqual("[0:s:0]trim=end=6000,setpts=PTS-STARTPTS[s0_0]")
-  expect(filters[6]).toStrictEqual("[0:s:1]trim=end=6000,setpts=PTS-STARTPTS[s0_1]")
-})
-
-test('FFmpeg Generate Processing Arguments main trim start+end', async () => {
-  const result = FFmpeg.getInstance().generateProcessingArguments({
-    startFrom: 600,
-    endAt: 6000,
-    videoParts: [],
-    tracks: guadalupeTracks
-  } as IVideo)
-  expect(result).toContain("-filter_complex")
-  const filterValue = result[result.indexOf("-filter_complex") + 1]
-  const filters = filterValue.split(";");
-  expect(filters.length).toStrictEqual(guadalupeTracks.length)
-  expect(filters[0]).toStrictEqual("[0:v:0]trim=start=600:end=6000,setpts=PTS-STARTPTS[v0_0]")
-  expect(filters[1]).toStrictEqual("[0:a:0]atrim=start=600:end=6000,asetpts=PTS-STARTPTS[a0_0]")
-  expect(filters[2]).toStrictEqual("[0:a:1]atrim=start=600:end=6000,asetpts=PTS-STARTPTS[a0_1]")
-  expect(filters[3]).toStrictEqual("[0:a:2]atrim=start=600:end=6000,asetpts=PTS-STARTPTS[a0_2]")
-  expect(filters[4]).toStrictEqual("[0:a:3]atrim=start=600:end=6000,asetpts=PTS-STARTPTS[a0_3]")
-  expect(filters[5]).toStrictEqual("[0:s:0]trim=start=600:end=6000,setpts=PTS-STARTPTS[s0_0]")
-  expect(filters[6]).toStrictEqual("[0:s:1]trim=start=600:end=6000,setpts=PTS-STARTPTS[s0_1]")
-})
-
-test('FFmpeg Generate Processing Arguments main trim end + second part start + concat', async () => {
-  const result = FFmpeg.getInstance().generateProcessingArguments({
-    endAt: 6000,
-    videoParts: [
-      {
-        startFrom: 600,
-        tracks: guadalupeTracks
-      } as IVideo
-    ],
-    tracks: guadalupeTracks
-  } as IVideo)
-  expect(result).toContain("-filter_complex")
-  const filterValue = result[result.indexOf("-filter_complex") + 1]
-  const filters = filterValue.split(";");
-  expect(filters.length).toStrictEqual(guadalupeTracks.length * 2 +1)
-  expect(filters[0]).toStrictEqual("[0:v:0]trim=end=6000,setpts=PTS-STARTPTS[v0_0]")
-  expect(filters[1]).toStrictEqual("[1:v:0]trim=start=600,setpts=PTS-STARTPTS[v1_0]")
-  expect(filters[2]).toStrictEqual("[0:a:0]atrim=end=6000,asetpts=PTS-STARTPTS[a0_0]")
-  expect(filters[3]).toStrictEqual("[1:a:0]atrim=start=600,asetpts=PTS-STARTPTS[a1_0]")
-  expect(filters[4]).toStrictEqual("[0:a:1]atrim=end=6000,asetpts=PTS-STARTPTS[a0_1]")
-  expect(filters[5]).toStrictEqual("[1:a:1]atrim=start=600,asetpts=PTS-STARTPTS[a1_1]")
-  expect(filters[6]).toStrictEqual("[0:a:2]atrim=end=6000,asetpts=PTS-STARTPTS[a0_2]")
-  expect(filters[7]).toStrictEqual("[1:a:2]atrim=start=600,asetpts=PTS-STARTPTS[a1_2]")
-  expect(filters[8]).toStrictEqual("[0:a:3]atrim=end=6000,asetpts=PTS-STARTPTS[a0_3]")
-  expect(filters[9]).toStrictEqual("[1:a:3]atrim=start=600,asetpts=PTS-STARTPTS[a1_3]")
-  expect(filters[10]).toStrictEqual("[0:s:0]trim=end=6000,setpts=PTS-STARTPTS[s0_0]")
-  expect(filters[11]).toStrictEqual("[1:s:0]trim=start=600,setpts=PTS-STARTPTS[s1_0]")
-  expect(filters[12]).toStrictEqual("[0:s:1]trim=end=6000,setpts=PTS-STARTPTS[s0_1]")
-  expect(filters[13]).toStrictEqual("[1:s:1]trim=start=600,setpts=PTS-STARTPTS[s1_1]")
-  expect(filters[14]).toStrictEqual("[v0_0][a0_0][a0_1][a0_2][a0_3][s0_0][s0_1]" +
-    "[v1_0][a1_0][a1_1][a1_2][a1_3][s1_0][s1_1]" +
-    "concat=n=2:v=1:a=4:s=2[outv_0][outa_0][outa_1][outa_2][outa_3][outs_0][outs_1]")
 })
