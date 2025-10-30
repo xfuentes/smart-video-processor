@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell, screen } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, screen, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -42,27 +42,59 @@ if (os.platform() !== 'linux') {
 }
 
 function createWindow(): BrowserWindow {
-  const primaryDisplay = screen.getPrimaryDisplay()
-  const scaleFactor = primaryDisplay.scaleFactor
-  const widthLogical = 900
-  const heightLogical = 670
+  const mousePos = screen.getCursorScreenPoint()
+  const display = screen.getDisplayNearestPoint(mousePos)
+  let originalScaleFactor = display.scaleFactor
+  let scaleFactor = display.scaleFactor
+  const minWidthLogical = 925
+  const minHeightLogical = 600
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: widthLogical / scaleFactor,
-    height: heightLogical / scaleFactor,
+    x: display.bounds.x + 50,
+    y: display.bounds.y + 50,
+    width: minWidthLogical * scaleFactor,
+    height: minHeightLogical * scaleFactor,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform !== 'darwin' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false,
-      zoomFactor: 1.0 / scaleFactor
+      zoomFactor: scaleFactor
     }
   })
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setMinimumSize(925, 568)
+    mainWindow.setMinimumSize(Math.round(minWidthLogical * scaleFactor), Math.round(minHeightLogical * scaleFactor))
     mainWindow.show()
+  })
+
+  mainWindow.on('moved', () => {
+    const rect = mainWindow.getBounds()
+    const display = screen.getDisplayMatching(rect)
+    const newScaleFactor = display.scaleFactor
+    if (newScaleFactor !== originalScaleFactor) {
+      console.log(`original: ${originalScaleFactor} new: ${newScaleFactor}`)
+      mainWindow.setMinimumSize(
+        Math.round(minWidthLogical * newScaleFactor),
+        Math.round(minHeightLogical * newScaleFactor)
+      )
+      mainWindow.setSize(
+        Math.round((rect.width * newScaleFactor) / originalScaleFactor),
+        Math.round((rect.height * newScaleFactor) / originalScaleFactor)
+      )
+      originalScaleFactor = newScaleFactor
+    }
+  })
+  mainWindow.on('move', () => {
+    const rect = mainWindow.getBounds()
+    const display = screen.getDisplayMatching(rect)
+    const newScaleFactor = display.scaleFactor
+    if (newScaleFactor !== scaleFactor) {
+      console.log(`actual: ${originalScaleFactor} new: ${newScaleFactor}`)
+      scaleFactor = newScaleFactor
+      mainWindow.webContents.setZoomFactor(newScaleFactor)
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
