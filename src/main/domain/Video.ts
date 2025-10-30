@@ -313,6 +313,7 @@ export class Video implements IVideo {
 
     this.matched = false
     this.brainCalled = false
+    this.selectAllTracks()
     this.hints = []
     if (this.type === VideoType.MOVIE) {
       await this.movie.search(this.searchBy)
@@ -350,14 +351,7 @@ export class Video implements IVideo {
         this.type === VideoType.MOVIE ? this.movie.edition : undefined,
         this.computeVersions()
       )
-      if (this.brainCalled) {
-        // remove deletion request if not on first call to keep user selection.
-        this.changes = processingResults.changes.filter(
-          (c) => c.changeType !== ChangeType.DELETE || c.trackId === undefined
-        )
-      } else {
-        this.changes = processingResults.changes
-      }
+      this.changes = processingResults.changes
       this.hints = processingResults.hints
       this.hintMissing = this.hints.find((h) => !h.value) !== undefined
 
