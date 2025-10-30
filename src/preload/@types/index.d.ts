@@ -25,6 +25,7 @@ import { FormValidation } from '../../common/FormValidation'
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
 export type VideoChangedListener = (value: IVideo) => void
+export type ScaleFactorChangedListener = (value: number) => void
 
 interface SvpAPI {
   main: {
@@ -39,6 +40,8 @@ interface SvpAPI {
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
     switchPaused: () => Promise<boolean>
     openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
+    getScaleFactor: () => Promise<number>
+    addScaleFactorChangedListener: (callback: ScaleFactorChangedListener) => () => void
   }
   video: {
     openFileExplorer: () => Promise<void>

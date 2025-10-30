@@ -6,7 +6,13 @@ import { SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
-import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListener } from './@types'
+import {
+  InvalidSettingsListener,
+  ListChangedListener,
+  ScaleFactorChangedListener,
+  SvpAPI,
+  VideoChangedListener
+} from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
@@ -24,7 +30,15 @@ const api: SvpAPI = {
       ipcRenderer.on('main:invalidSettings', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
     switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused'),
     openSingleFileExplorer: (title: string, defaultPath?: string): Promise<string> =>
-      ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath)
+      ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath),
+    getScaleFactor: (): Promise<number> => ipcRenderer.invoke('main:getScaleFactor'),
+    addScaleFactorChangedListener: (callback: ScaleFactorChangedListener) => {
+      const subscriber = (_event: IpcRendererEvent, scaleFactor: number) => callback(scaleFactor)
+      ipcRenderer.on('main:scaleFactorChanged', subscriber)
+      return () => {
+        ipcRenderer.off('main:scaleFactorChanged', subscriber)
+      }
+    }
   },
   video: {
     openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),

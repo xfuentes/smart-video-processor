@@ -41,34 +41,47 @@ if (os.platform() !== 'linux') {
   updateElectronApp()
 }
 
+const getMinWidth = (workAreaSize: Electron.Size, scaleFactor: number) => {
+  return Math.min(Math.round(925 * scaleFactor), workAreaSize.width)
+}
+const getMinHeight = (workAreaSize: Electron.Size, scaleFactor: number) => {
+  return Math.min(Math.round(600 * scaleFactor), workAreaSize.height)
+}
+
 function createWindow(): BrowserWindow {
   const mousePos = screen.getCursorScreenPoint()
   const display = screen.getDisplayNearestPoint(mousePos)
   let originalScaleFactor = display.scaleFactor
   let scaleFactor = display.scaleFactor
-  const minWidthLogical = 925
-  const minHeightLogical = 600
+  const minWidth = getMinWidth(display.workAreaSize, scaleFactor)
+  const minHeight = getMinHeight(display.workAreaSize, scaleFactor)
+  console.log('initial scale: ', scaleFactor)
+
+  const fireScaleFactorChanged = (newScaleFactor: number) =>
+    mainWindow.webContents.send('main:scaleFactorChanged', newScaleFactor)
+
+  ipcMain.handle('main:getScaleFactor', async () => {
+    return scaleFactor
+  })
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     x: display.bounds.x + 50,
     y: display.bounds.y + 50,
-    width: minWidthLogical * scaleFactor,
-    height: minHeightLogical * scaleFactor,
+    width: minWidth,
+    height: minHeight,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform !== 'darwin' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false,
-      zoomFactor: scaleFactor
     }
   })
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setMinimumSize(Math.round(minWidthLogical * scaleFactor), Math.round(minHeightLogical * scaleFactor))
+    mainWindow.setMinimumSize(Math.round(minWidth), Math.round(minHeight))
     mainWindow.show()
   })
-
   mainWindow.on('moved', () => {
     const rect = mainWindow.getBounds()
     const display = screen.getDisplayMatching(rect)
@@ -76,12 +89,12 @@ function createWindow(): BrowserWindow {
     if (newScaleFactor !== originalScaleFactor) {
       console.log(`original: ${originalScaleFactor} new: ${newScaleFactor}`)
       mainWindow.setMinimumSize(
-        Math.round(minWidthLogical * newScaleFactor),
-        Math.round(minHeightLogical * newScaleFactor)
+        getMinWidth(display.workAreaSize, newScaleFactor),
+        getMinHeight(display.workAreaSize, newScaleFactor)
       )
       mainWindow.setSize(
-        Math.round((rect.width * newScaleFactor) / originalScaleFactor),
-        Math.round((rect.height * newScaleFactor) / originalScaleFactor)
+        Math.min(Math.round((rect.width * newScaleFactor) / originalScaleFactor), display.workAreaSize.width),
+        Math.min(Math.round((rect.height * newScaleFactor) / originalScaleFactor), display.workAreaSize.height)
       )
       originalScaleFactor = newScaleFactor
     }
@@ -93,10 +106,9 @@ function createWindow(): BrowserWindow {
     if (newScaleFactor !== scaleFactor) {
       console.log(`actual: ${originalScaleFactor} new: ${newScaleFactor}`)
       scaleFactor = newScaleFactor
-      mainWindow.webContents.setZoomFactor(newScaleFactor)
+      fireScaleFactorChanged(newScaleFactor)
     }
   })
-
   mainWindow.webContents.setWindowOpenHandler((details) => {
     void shell.openExternal(details.url)
     return { action: 'deny' }
