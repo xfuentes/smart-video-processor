@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -42,16 +42,22 @@ if (os.platform() !== 'linux') {
 }
 
 function createWindow(): BrowserWindow {
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const scaleFactor = primaryDisplay.scaleFactor
+  const widthLogical = 900
+  const heightLogical = 670
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: widthLogical / scaleFactor,
+    height: heightLogical / scaleFactor,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform !== 'darwin' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
-      sandbox: false
+      sandbox: false,
+      zoomFactor: 1.0 / scaleFactor
     }
   })
   mainWindow.on('ready-to-show', () => {
