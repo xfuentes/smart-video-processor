@@ -313,6 +313,7 @@ export class Video implements IVideo {
 
     this.matched = false
     this.brainCalled = false
+    this.selectAllTracks()
     this.hints = []
     if (this.type === VideoType.MOVIE) {
       await this.movie.search(this.searchBy)
@@ -350,14 +351,7 @@ export class Video implements IVideo {
         this.type === VideoType.MOVIE ? this.movie.edition : undefined,
         this.computeVersions()
       )
-      if (this.brainCalled) {
-        // remove deletion request if not on first call to keep user selection.
-        this.changes = processingResults.changes.filter(
-          (c) => c.changeType !== ChangeType.DELETE || c.trackId === undefined
-        )
-      } else {
-        this.changes = processingResults.changes
-      }
+      this.changes = processingResults.changes
       this.hints = processingResults.hints
       this.hintMissing = this.hints.find((h) => !h.value) !== undefined
 
@@ -586,6 +580,7 @@ export class Video implements IVideo {
 
   async selectSearchResultID(id?: number) {
     this.brainCalled = false
+    this.selectAllTracks()
     this.autoModePossible = false
     this.hints = []
     this.selectedSearchResultID = id
@@ -806,20 +801,26 @@ export class Video implements IVideo {
           this.duration
         )
       )
-
-      this.snapshotsPath = await snapshotJob.queue()
-      if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
-        this.message = 'Extracting key frames...'
-        this.keyFrames = [0]
+      try {
+        this.snapshotsPath = await snapshotJob.queue()
+        if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
+          this.message = 'Extracting key frames...'
+          this.keyFrames = [0]
+          this.fireChangeEvent()
+          this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
+        }
+        this.status = JobStatus.WAITING
+        this.message = 'Ready to process.'
+        this.progression.progress = -1
         this.fireChangeEvent()
-        this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
+        return this.snapshotsPath
+      } catch (e) {
+        this.message = (e as Error).message
+        this.status = JobStatus.ERROR
+        this.progression.progress = -1
+        this.fireChangeEvent()
+        throw e
       }
-
-      this.status = JobStatus.WAITING
-      this.message = 'Ready to process.'
-      this.progression.progress = -1
-      this.fireChangeEvent()
-      return this.snapshotsPath
     }
   }
 
