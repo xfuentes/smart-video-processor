@@ -7,6 +7,7 @@ import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerProvider'
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
+import { ResponsiveProvider } from '@renderer/components/context/ResponsiveProvider'
 
 export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
@@ -76,33 +77,35 @@ export const App = (): React.JSX.Element => {
   }, [])
 
   return (
-    <SettingsProvider>
-      <VideoPlayerProvider>
-        <div
-          onDrop={preventDefault}
-          onDragOver={preventDefault}
-          onDragLeave={preventDefault}
-          role="application"
-          style={{ overflow: 'hidden' }}
-        >
-          <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            <div className="vertical-stack">
-              <ListOrVideoContainer
-                videos={videos}
-                selectedVideos={selectedVideos}
-                onImportVideos={handleImportVideos}
-                onSelectionChange={handleSelectionChange}
-              ></ListOrVideoContainer>
-              {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
-                <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
-                  <Divider />
-                  <PreviewTabs video={selectedVideos[0]} />
-                </div>
-              )}
+    <ResponsiveProvider>
+      <SettingsProvider>
+        <VideoPlayerProvider>
+          <div
+            onDrop={preventDefault}
+            onDragOver={preventDefault}
+            onDragLeave={preventDefault}
+            role="application"
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+              <div className="vertical-stack">
+                <ListOrVideoContainer
+                  videos={videos}
+                  selectedVideos={selectedVideos}
+                  onImportVideos={handleImportVideos}
+                  onSelectionChange={handleSelectionChange}
+                ></ListOrVideoContainer>
+                {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
+                  <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
+                    <Divider />
+                    <PreviewTabs video={selectedVideos[0]} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </VideoPlayerProvider>
-    </SettingsProvider>
+        </VideoPlayerProvider>
+      </SettingsProvider>
+    </ResponsiveProvider>
   )
 }
