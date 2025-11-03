@@ -361,7 +361,12 @@ export const Matching = ({ video, disabled }: Props) => {
             <div style={{ display: 'flex' }}>
               <div style={{ display: 'flex', flexFlow: 'column', flexGrow: 1 }}>
                 <div className="matching-form">
-                  <Field size="small" label="Year" required={!!otherDay || !!otherMonth} className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label="Year"
+                    required={!!otherDay || !!otherMonth}
+                    className={disabled ? 'disabled' : ''}
+                  >
                     <Input
                       type="number"
                       disabled={disabled}

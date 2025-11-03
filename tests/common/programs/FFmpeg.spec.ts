@@ -61,9 +61,7 @@ const encoderSettings = [
 ] as EncoderSettings[]
 
 test('FFmpeg Guadalupe mother of humanity progression', async () => {
-  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
   const video: IVideo = {
     sourcePath: 'C:\\Download\\something.mkv',
@@ -83,13 +81,11 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
     }
   )
   expect(progresses).toStrictEqual([undefined, undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
-  expect(result).toContain(path.basename(encodedFile))
+  expect(result).toContain('encoding-temp.mkv')
 })
 
 test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
-  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   genSpawnSpyProgress()
   const progresses: number[] = []
   const xSpeeds: number[] = []
@@ -127,7 +123,7 @@ test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
     2.49,
     2.56
   ])
-  expect(result).toContain(path.basename(encodedFile))
+  expect(result).toContain('encoding-temp.mkv')
 })
 
 const recordedMarcelinoProgresses = [
@@ -439,9 +435,7 @@ const marcelinoEncoderSettings = [
   }
 ] as EncoderSettings[]
 test('FFmpeg Marcelino audio progression', async () => {
-  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgressionMarcelino)
   const progresses: number[] = []
   const video: IVideo = {
@@ -488,7 +482,7 @@ test('FFmpeg Marcelino audio progression', async () => {
     29.252033333333333,
     1
   ])
-  expect(result).toContain(path.basename(encodedFile))
+  expect(result).toContain('encoding-temp.mkv')
 })
 
 const recordedMarcelinoSnapshotProgresses = [
@@ -539,7 +533,6 @@ export const simulateFFmpegSnapshotProgressionMarcelino = (): ChildProcessWithou
 test('FFmpeg Snapshot Marcelino', async () => {
   const snapshotsFile = '/tmp/12345-snapshots.png'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => snapshotsFile)
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegSnapshotProgressionMarcelino)
   const sourceFullPath = '/home/xfuentes/Vidéos/Marcellino (1991).1080p.h264 {tmdb-103715}.mkv'
   const progresses: number[] = []
@@ -555,5 +548,5 @@ test('FFmpeg Snapshot Marcelino', async () => {
     }
   )
   expect(progresses).toStrictEqual([undefined, 1])
-  expect(result).toContain(path.basename(snapshotsFile))
+  expect(result).toContain('snapshots2000x64.png')
 })

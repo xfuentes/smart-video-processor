@@ -179,9 +179,7 @@ const guadalupeTracks = [
   }
 ] as Track[]
 test('Encoding Progression data', async () => {
-  const encodedFile = '/tmp/encoded.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
-  vi.spyOn(Files, 'makeTempFile').mockImplementation(() => encodedFile)
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
   const video: IVideo = {
     sourcePath: 'C:\\Download\\something.mkv',
@@ -253,7 +251,7 @@ test('Encoding Progression data', async () => {
     2.56,
     undefined
   ])
-  expect(result).toContain(path.basename(encodedFile))
+  expect(result).toContain('encoding-temp.mkv')
 })
 
 test('Failing Processing Job', async () => {
