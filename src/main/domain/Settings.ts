@@ -26,6 +26,7 @@ import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
 import { omit } from '@fluentui/react'
+import * as Path from 'node:path'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -45,9 +46,10 @@ const getDefaultFFmpegToolPath = (tool: 'ffmpeg' | 'ffprobe') => {
 export const defaultSettings: Settings = {
   isDebugEnabled: false,
   language: systemLocale,
-  moviesOutputPath: './Reworked',
-  tvShowsOutputPath: './Reworked',
-  othersOutputPath: './Reworked',
+  tmpFilesPath: Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp'),
+  moviesOutputPath: Path.join('.', 'Reworked'),
+  tvShowsOutputPath: Path.join('.', 'Reworked'),
+  othersOutputPath: Path.join('.', 'Reworked'),
   isAutoStartEnabled: false,
   priority: 'BELOW_NORMAL',
   isTrackFilteringEnabled: false,

@@ -19,10 +19,8 @@
 import { afterEach, expect, test, vi } from 'vitest'
 import { ChildProcessWithoutNullStreams, SpawnOptionsWithStdioTuple, StdioPipe } from 'node:child_process'
 import {
-  cleanTmpFiles,
   JobStateChange,
   recordJobStates,
-  registerTmpFiles,
   simulateFileInfoResponse,
   simulateMKVMergeProgression
 } from '../testUtils'
@@ -54,12 +52,7 @@ const genSpawnSpyFileInfo = (origPath: string, origJsonFileName: string, process
       }
     )
 
-afterEach(() => {
-  cleanTmpFiles()
-})
-
 test('Job Fermer Gueule Info', async () => {
-  registerTmpFiles()
   const origPath = 'C:\\Download\\original.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spy = genSpawnSpyFileInfo(origPath, 'mkvMergeInfoFermerGueule.json', 'mkvMergeInfoFermerGueuleProcessed.json')

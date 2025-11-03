@@ -29,6 +29,7 @@ import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
 import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
+import * as Path from 'node:path'
 
 export class TVShow implements ITVShow {
   public video: Video
@@ -132,7 +133,7 @@ export class TVShow implements ITVShow {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image from TheTVDB.'
       this.video.fireChangeEvent()
-      const fullPath = Files.makeTempFile('TVDB-' + this.theTVDB + '-cover.jpg')
+      const fullPath = Path.join(this.video.getTempDirectory(), 'TVDB-' + this.theTVDB + '-poster.jpg')
       this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug(`Wrote poster file://${this.poster}`)
     }
@@ -148,7 +149,7 @@ export class TVShow implements ITVShow {
         this.video.message = 'Downloading episode image from TheTVDB.'
         this.video.fireChangeEvent()
         const filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode) : this.absoluteEpisode}`
-        const fullPath = Files.makeTempFile('TVDB-' + this.theTVDB + '-' + filename + '.jpg')
+        const fullPath = Path.join(this.video.getTempDirectory(), 'TVDB-' + this.theTVDB + '-' + filename + '.jpg')
         this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
         debug(`wrote episode image file://${this.episodePoster}`)
         this.video.poster = {

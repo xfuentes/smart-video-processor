@@ -16,17 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { afterEach, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { VideoType } from '../../src/common/@types/Video'
-import { cleanTmpFiles, registerTmpFiles } from './testUtils'
-
-afterEach(() => {
-  cleanTmpFiles()
-})
 
 test('TV-Show search with single match', async () => {
-  registerTmpFiles()
   const video = new Video('c:\\The.Walking.Dead.Dead.City.S02E03.MULTi.1080p.WEB.H264-SUPPLY.mkv')
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.season).toBe(2)

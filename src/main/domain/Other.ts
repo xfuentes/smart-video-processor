@@ -24,6 +24,7 @@ import { debug } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { Numbers } from '../util/numbers'
 import Chalk from 'chalk'
+import Path from 'node:path'
 
 export default class Other implements IOther {
   public year?: number
@@ -56,7 +57,7 @@ export default class Other implements IOther {
     if (this.poster && Files.fileExistsAndIsReadable(this.poster)) {
       debug(`Using poster file://${this.poster}`)
     } else if (this.posterURL) {
-      const fullPath = Files.makeTempFile('Other-poster.jpg')
+      const fullPath = Path.join(this.video.getTempDirectory(), 'poster.jpg')
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image.'
       this.video.fireChangeEvent()

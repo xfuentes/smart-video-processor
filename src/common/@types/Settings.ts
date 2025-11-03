@@ -29,6 +29,10 @@ export type Settings = {
    */
   language: string
   /**
+   * Output path where temporary files will be written (can be relative to the original file or absolute)
+   */
+  tmpFilesPath: string
+  /**
    * Output path where processed movies will be saved (can be relative to the original file or absolute)
    */
   moviesOutputPath: string

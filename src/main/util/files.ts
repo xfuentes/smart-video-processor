@@ -22,7 +22,6 @@ import http from 'node:http'
 import { debug } from './log'
 import path from 'node:path'
 import * as https from 'node:https'
-import * as tmp from 'tmp'
 import { globSync } from 'glob'
 
 export class Files {
@@ -66,15 +65,6 @@ export class Files {
     debug('Writing file ' + filename)
     fs.writeFileSync(filename, data, encoding)
     return filename
-  }
-
-  static makeTempFile(template: string, noCreate: boolean = false): string {
-    tmp.setGracefulCleanup()
-    const out = tmp.fileSync({ template: 'svp-XXXXXX-' + template, discardDescriptor: true })
-    if (noCreate) {
-      out.removeCallback()
-    }
-    return out.name
   }
 
   /**

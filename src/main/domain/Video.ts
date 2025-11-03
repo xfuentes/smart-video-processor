@@ -37,6 +37,7 @@ import { Track } from './Track'
 import { JobManager } from './jobs/JobManager'
 import { debug } from '../util/log'
 import path from 'node:path'
+import Path from 'node:path'
 import * as fs from 'node:fs'
 import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
@@ -449,13 +450,12 @@ export class Video implements IVideo {
       encodingRequired = true
     }
     this.queued = true
-    const outputDirectory = this.getOutputDirectory()
 
     if (encodingRequired && this.container !== undefined) {
-      encodingJob = this.attachJob(new EncodingJob(this.toJSON(), outputDirectory, finalEncoderSettings))
+      encodingJob = this.attachJob(new EncodingJob(this.toJSON(), this.getTempDirectory(), finalEncoderSettings))
       this.encodedPath = (await encodingJob.queue()) as string
     }
-    await this.merge(outputDirectory, encodingJob?.getDuration())
+    await this.merge(this.getOutputDirectory(), encodingJob?.getDuration())
     this.queued = false
     this.processed = true
     this.fireChangeEvent()
@@ -484,9 +484,26 @@ export class Video implements IVideo {
     return outputDirectory
   }
 
+  getTempRootDirectory() {
+    let tempDirectory: fs.PathLike
+    tempDirectory = currentSettings.tmpFilesPath
+    if (!path.isAbsolute(tempDirectory)) {
+      // Output path is relative to the original filename dirname.
+      tempDirectory = path.join(path.dirname(this.sourcePath), tempDirectory)
+    }
+    fs.mkdirSync(tempDirectory, { recursive: true })
+    return tempDirectory
+  }
+
+  getTempDirectory() {
+    const tempDirectory = path.join(this.getTempRootDirectory(), this.uuid)
+    fs.mkdirSync(tempDirectory, { recursive: true })
+    return tempDirectory
+  }
+
   getPreviewDirectory() {
-    let previewDirectory = this.getOutputDirectory()
-    previewDirectory = path.join(previewDirectory, this.uuid + '-preview')
+    let previewDirectory = this.getTempDirectory()
+    previewDirectory = path.join(previewDirectory, 'preview')
     fs.mkdirSync(previewDirectory, { recursive: true })
     return previewDirectory
   }
@@ -940,10 +957,17 @@ export class Video implements IVideo {
 
   destroy() {
     this.abortJob()
-    debug('Cleaning preview files for video [' + this.filename + ']...')
+    debug('Cleaning temporary files for video [' + this.filename + ']...')
     for (const part of this.videoParts) {
       part.destroy()
     }
-    Files.deleteFolderRecursive(this.getPreviewDirectory())
+    Files.deleteFolderRecursive(this.getTempDirectory())
+    if (!Path.isAbsolute(currentSettings.tmpFilesPath)) {
+      try {
+        fs.rmdirSync(this.getTempRootDirectory())
+      } catch (e) {
+        /* ignored */
+      }
+    }
   }
 }

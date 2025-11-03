@@ -25,7 +25,7 @@ import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
 import { ITrack, TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
-import path from 'node:path'
+import path, * as Path from 'node:path'
 import { Strings } from '../../../common/Strings'
 import { IVideo } from '../../../common/@types/Video'
 
@@ -68,7 +68,7 @@ export class FFmpeg extends CommandProgress {
       return this.encodeFileInternal(video, destinationPath, settings, undefined, undefined, progressNotifier)
     }
 
-    const statFile = Files.makeTempFile('2pass', true)
+    const statFile = Path.join(destinationPath, 'secondPassSettings')
     let currentPass = 1
 
     const progressNotifierAggregator: ProgressNotifier = ({ progress, xSpeed, countdown, process }) => {
@@ -117,7 +117,7 @@ export class FFmpeg extends CommandProgress {
     await prom.finally(() => {
       const secondPassEnd = Date.now()
       debug('Second pass completed in ' + (secondPassEnd - secondPassAt) / 1000 + ' seconds.')
-      Files.cleanupFiles(statFile + '*')
+      // Files.cleanupFiles(statFile + '*')
     })
     return prom
   }
@@ -133,8 +133,7 @@ export class FFmpeg extends CommandProgress {
     if (progressNotifier) {
       progressNotifier({ progress: undefined, pass })
     }
-    const encodedPath =
-      pass === 1 ? undefined : path.join(destinationPath, path.basename(Files.makeTempFile('encoding-temp.mkv', true)))
+    const encodedPath = pass === 1 ? undefined : path.join(destinationPath, 'encoding-temp.mkv')
     const args = this.generateEncodingArguments(video, encodedPath, settings, pass, statFile)
 
     const versionOutputInterpreter = this.ffmpegProgressInterpreterBuild(
@@ -167,7 +166,7 @@ export class FFmpeg extends CommandProgress {
     const filters: string[] = []
     const snapshotRefs: string[] = []
     const ffOptions: string[] = []
-    const snapshotPath = path.join(destinationPath, path.basename(Files.makeTempFile('snapshots.png', true)))
+    const snapshotPath = path.join(destinationPath, `snapshots${totalWidth + 'x' + snapshotHeight}.png`)
 
     let snapshotCount = 0
 
@@ -402,7 +401,7 @@ export class FFmpeg extends CommandProgress {
     }
   }
 
-  generateKeepAllMapping = (tracks: ITrack[])=> {
+  generateKeepAllMapping = (tracks: ITrack[]) => {
     const ffOptions: string[] = []
     let videoIndex = 0
     let audioIndex = 0

@@ -68,6 +68,7 @@ export const SettingsDialog = () => {
     const newSettings: Settings = {
       ...settingsValidation.result,
       language,
+      tmpFilesPath,
       moviesOutputPath,
       tvShowsOutputPath,
       othersOutputPath,
@@ -104,6 +105,7 @@ export const SettingsDialog = () => {
   const handleCancel = (_ev: React.FormEvent) => {
     if (settingsValidation.result) {
       setLanguage(settingsValidation.result.language)
+      setTmpFilesPath(settingsValidation.result.tmpFilesPath)
       setMoviesOutputPath(settingsValidation.result.moviesOutputPath)
       setTVShowsOutputPath(settingsValidation.result.tvShowsOutputPath)
       setOthersOutputPath(settingsValidation.result.othersOutputPath)
@@ -160,6 +162,7 @@ export const SettingsDialog = () => {
   }
 
   const [language, setLanguage] = useState(settingsValidation?.result?.language)
+  const [tmpFilesPath, setTmpFilesPath] = useState(settingsValidation?.result?.tmpFilesPath)
   const [moviesOutputPath, setMoviesOutputPath] = useState(settingsValidation?.result?.moviesOutputPath)
   const [tvShowsOutputPath, setTVShowsOutputPath] = useState(settingsValidation?.result?.tvShowsOutputPath)
   const [othersOutputPath, setOthersOutputPath] = useState(settingsValidation?.result?.othersOutputPath)
@@ -349,6 +352,19 @@ export const SettingsDialog = () => {
                 )}
                 {selectedTab === 'output' && (
                   <div className="settings-form">
+                    <div className="field">
+                      <Label size={'small'} required htmlFor="tmpFilesPathInput">
+                        Temporary Files Path (Can be relative to source file path)
+                      </Label>
+                      <Input
+                        required
+                        size={'small'}
+                        type="text"
+                        id="tmpFilesPathInput"
+                        value={tmpFilesPath}
+                        onChange={handleFormInputChange.bind(null, setTmpFilesPath)}
+                      />
+                    </div>
                     <div className="field">
                       <Label size={'small'} required htmlFor="moviesOutputPathInput">
                         Movies Output Path (Can be relative to source file path)
