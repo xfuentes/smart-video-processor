@@ -27,26 +27,6 @@ import { Job } from '../../src/main/domain/jobs/Job'
 import { Files } from '../../src/main/util/files'
 import * as os from 'node:os'
 import * as path from 'node:path'
-import { expect, vi } from 'vitest'
-import * as tmp from 'tmp'
-import { Video } from '../../src/main/domain/Video'
-import { VideoType } from '../../src/common/@types/Video'
-
-const removeCallbacks: (() => void)[] = []
-
-export const registerTmpFiles = () => {
-  vi.spyOn(Files, 'makeTempFile').mockImplementation((template: string): string => {
-    const out = tmp.fileSync({ template: 'svp-XXXXXX-' + template, discardDescriptor: true })
-    removeCallbacks.push(out.removeCallback)
-    return out.name
-  })
-}
-
-export const cleanTmpFiles = () => {
-  while (removeCallbacks.length) {
-    removeCallbacks.shift()()
-  }
-}
 
 export const changeListToMap = (changes: Change[]) => {
   return changes.reduce((previousValue, currentValue) => {
