@@ -180,7 +180,7 @@ export class TVShow implements ITVShow {
   }
 
   setSeason(newSeason: string) {
-    this.season = Numbers.toNumber(newSeason)
+    this.season = this.order === 'absolute' ? 1 : Numbers.toNumber(newSeason)
   }
 
   setEpisode(newEpisode: string) {
@@ -188,8 +188,10 @@ export class TVShow implements ITVShow {
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
-    this.season = 1
-    this.absoluteEpisode = Numbers.toNumber(newAbsoluteEpisode)
+    if (this.order === 'absolute') {
+      this.season = 1
+      this.absoluteEpisode = Numbers.toNumber(newAbsoluteEpisode)
+    }
   }
 
   setTheTVDB(id: number | string | undefined) {
