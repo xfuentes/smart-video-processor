@@ -17,14 +17,14 @@
  */
 
 import { Button, Combobox, ComboboxProps, Option, Tooltip } from '@fluentui/react-components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Dismiss12Regular } from '@fluentui/react-icons'
-import { searchAncestorsMatching } from '../utils'
-import { Languages } from '../../../common/LanguageIETF'
+import { searchAncestorsMatching } from '../../utils'
+import { Languages } from '../../../../common/LanguageIETF'
 
 type MultipleProps = {
   multiselect: true
-  values: string[]
+  value: string[]
   onChanges: (values: string[]) => void
 }
 
@@ -46,6 +46,10 @@ export const LanguageSelector = (props: Props) => {
   const [value, setValue] = React.useState(
     !props.multiselect ? (Languages.getLanguageByCode(props.value)?.label ?? '') : ''
   )
+
+  useEffect(() => {
+    setValue(!props.multiselect ? (Languages.getLanguageByCode(props.value)?.label ?? '') : '')
+  }, [props.multiselect, props.value])
 
   const handleSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
     // update selectedOptions
@@ -72,7 +76,7 @@ export const LanguageSelector = (props: Props) => {
       } else {
         comboboxInputRef.current?.focus()
       }
-      props.onChanges(props.values.filter((o) => o !== option))
+      props.onChanges(props.value.filter((o) => o !== option))
     }
   }
 
@@ -80,7 +84,7 @@ export const LanguageSelector = (props: Props) => {
     <>
       {props.multiselect ? (
         <>
-          {props.values.length ? (
+          {props.value.length ? (
             <ul
               id={props.id + 'Selection'}
               className={'tags-list'}
@@ -90,7 +94,7 @@ export const LanguageSelector = (props: Props) => {
               <span id={`${props.id}-remove`} hidden>
                 Remove
               </span>
-              {props.values.map((code, i) => {
+              {props.value.map((code, i) => {
                 const desc = Languages.getLanguageByCode(code)?.label
                 return (
                   <Button
@@ -121,7 +125,7 @@ export const LanguageSelector = (props: Props) => {
           <Combobox
             multiselect={props.multiselect}
             placeholder="Select one or more languages"
-            selectedOptions={props.values}
+            selectedOptions={props.value}
             onOptionSelect={handleSelect}
             size={props.size}
             ref={comboboxInputRef}

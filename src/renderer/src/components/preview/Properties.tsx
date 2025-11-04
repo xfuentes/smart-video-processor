@@ -53,7 +53,7 @@ import {
   retrieveChangePropertyValue,
   retrievePossibleSources
 } from '../../../../common/@types/Video'
-import { LanguageSelector } from '@renderer/components/LanguageSelector'
+import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 
 const valueRenderer = (item: IChange, value: ChangePropertyValue | undefined) => {
   let res = <div className="overflow-safe">{(value as string) ?? ''}</div>

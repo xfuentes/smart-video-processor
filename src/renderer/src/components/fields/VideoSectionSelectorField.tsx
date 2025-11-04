@@ -65,7 +65,25 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
   const endAtChecked = endAt !== undefined
 
   const duration = video.duration
-  const durationLeft = duration % step
+
+  let durationLeft = duration % step
+  let endPos = Math.floor(duration / step) * 22
+  if (durationLeft > 0) {
+    endPos += Math.round((durationLeft * 22) / step)
+  }
+  if (endPos < 1920) {
+    step = Math.round(Math.round((duration * 22) / 1920) / 60) * 60
+    if (step < 6) {
+      step = 6
+    }
+    durationLeft = duration % step
+    endPos = Math.floor(duration / step) * 22
+    if (durationLeft > 0) {
+      endPos += Math.round((durationLeft * 22) / step)
+    }
+  }
+  const totalWidth = endPos
+
   const previewHeight = 58
   const labels: ReactElement[] = []
   const tickMarks: ReactElement[] = []
@@ -104,7 +122,6 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
       />
     )
   }
-  let endPos = Math.floor(duration / step) * 22
   if (durationLeft > 0) {
     endPos += Math.round((durationLeft * 22) / step)
     labels.push(
@@ -143,12 +160,6 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
 
   useEffect(() => {
     if (!video.snapshotsPath && video.duration && video.pixels) {
-      const durationLeft = video.duration % step
-      let endPos = Math.floor(video.duration / step) * 22
-      if (durationLeft > 0) {
-        endPos += Math.round((durationLeft * 22) / step)
-      }
-      const totalWidth = endPos
       const snapshotHeight = previewHeight - 2
       const snapshotWidth = Math.round(Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight)
       void window.api.video.takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
