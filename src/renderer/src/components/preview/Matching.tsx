@@ -26,7 +26,7 @@ import { EditionType } from '../../../../common/@types/Movie'
 import { EpisodeOrder } from '../../../../main/domain/clients/TVDBClient'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
-import { LanguageSelector } from '@renderer/components/LanguageSelector'
+import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 
 type Props = {
   video: IVideo

@@ -20,10 +20,11 @@ import { beforeAll, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
 import { getFakeAbsolutePath } from './testUtils'
-import { currentSettings } from '../../src/main/domain/Settings'
+import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 
 beforeAll(() => {
   currentSettings.favoriteLanguages = ['en']
+  currentSettings.tmpFilesPath = defaultSettings.tmpFilesPath
 })
 
 test('TV-Show extracts season and episode number', () => {
@@ -97,6 +98,7 @@ test('TV-Show Retrieve Language IETF', async () => {
   expect(video.searchBy).toBe(SearchBy.TVDB)
   await video.search()
   expect(video.getOriginalLanguageIETF().code).toBe('en-US')
+  video.destroy()
 })
 
 test('Movie Retrieve Language IETF', async () => {
@@ -109,6 +111,7 @@ test('Movie Retrieve Language IETF', async () => {
 
   await video.search()
   expect(video.getOriginalLanguageIETF().code).toBe('fr-FR')
+  video.destroy()
 })
 
 test('Movie Search by TMDB', async () => {
@@ -123,6 +126,7 @@ test('Movie Search by TMDB', async () => {
   expect(video.searchResults[0].id).toBe(81022)
   expect(video.searchResults[0].title).toBe('Widows')
   expect(video.searchResults[0].year).toBe(2011)
+  video.destroy()
 })
 
 test('TV-Show fils cordonnier extracts season and episode number', () => {
@@ -163,4 +167,5 @@ test('video with TMDB', async () => {
   expect(video.searchResults[0].title).toBe('Saint John Bosco Mission to Love')
   expect(video.searchResults[0].year).toBe(2004)
   expect(video.selectedSearchResultID).toBe(122977)
+  video.destroy()
 })

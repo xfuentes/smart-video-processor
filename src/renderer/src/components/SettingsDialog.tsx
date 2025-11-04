@@ -40,7 +40,7 @@ import {
   ToolbarButton
 } from '@fluentui/react-components'
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import { LanguageSelector } from './LanguageSelector'
+import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
   DocumentSettings20Regular,
