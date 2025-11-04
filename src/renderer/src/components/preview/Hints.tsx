@@ -19,7 +19,7 @@
 import { Divider, Field, Select } from '@fluentui/react-components'
 import { IVideo } from '../../../../common/@types/Video'
 import { HintType } from '../../../../common/@types/Hint'
-import { LanguageSelector } from '@renderer/components/LanguageSelector'
+import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
