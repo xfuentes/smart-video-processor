@@ -433,7 +433,7 @@ export const SettingsDialog = () => {
                           size={'small'}
                           id="favoriteLanguagesInput"
                           required
-                          values={favoriteLanguages}
+                          value={favoriteLanguages}
                           onChanges={(data) => setFavoriteLanguages(data)}
                         />
                       </div>
