@@ -94,13 +94,20 @@ If some information from the original file is missing or is incomplete hints wil
 
 ![Providing Hints](docs/img/06-hints.png)
 
-## 9) Add/Review processing changes
+## 9) Add/Review matroska properties changes
 
 Check the changes that will be done. You can also add some custom changes.
 
 ![Review Processing](docs/img/07-processing.png)
 
-## 10) Choose tracks to encode and start processing
+## 10) Trim/Concat video in Processing tab (optional)
+
+This optional step can be used to trim start or end of a video file.
+For videos in multiple parts or multiple DVD you can combine them in one video file.
+
+![Processing](docs/img/10-processing.png)
+
+## 11) Choose tracks to encode and start processing
 
 Select the video or audio tracks to encode. Depending on settings the program will auto-select the tracks
 that needs encoding. Under the information icon you will see the selected codec and the expected size reduction.
