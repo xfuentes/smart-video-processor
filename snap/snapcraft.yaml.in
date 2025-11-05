@@ -26,6 +26,7 @@ apps:
     plugs:
       - network
       - removable-media
+      - audio-playback: null
     environment:
       TMPDIR: $XDG_RUNTIME_DIR
 
