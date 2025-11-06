@@ -1,7 +1,7 @@
 {
   "name": "smart-video-processor",
   "private": true,
-  "version": "1.4.10",
+  "version": "1.5.2",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
   "author": "Xavier Fuentes",
@@ -57,7 +57,7 @@
     "@fluentui/react": "^8.123.4",
     "@fluentui/react-components": "^9.69.0",
     "@fluentui/react-icons": "^2.0.308",
-    "@fluentui/react-timepicker-compat":  "^0.4.20",
+    "@fluentui/react-timepicker-compat": "^0.4.20",
     "@inquirer/prompts": "^7.7.1",
     "@reforged/maker-appimage": "^5.0.0",
     "@reforged/maker-types": "^1.0.1",

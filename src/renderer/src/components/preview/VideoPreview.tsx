@@ -51,7 +51,7 @@ export const VideoPreview = ({
             style={{
               backgroundSize: 'auto 100%',
               backgroundRepeat: 'no-repeat',
-              ...(poster ? { backgroundImage: `url(${'svp:///' + poster.replaceAll('\\', '/')})` } : {})
+              ...(poster ? { backgroundImage: `url('${'svp:///' + poster.replaceAll('\\', '/')}')` } : {})
             }}
           />
         </Tooltip>
@@ -61,7 +61,7 @@ export const VideoPreview = ({
           style={{
             backgroundSize: 'auto 100%',
             backgroundRepeat: 'no-repeat',
-            ...(poster ? { backgroundImage: `url(${'svp:///' + poster.replaceAll('\\', '/')})` } : {})
+            ...(poster ? { backgroundImage: `url('${'svp:///' + poster.replaceAll('\\', '/')}')` } : {})
           }}
         />
       )}
