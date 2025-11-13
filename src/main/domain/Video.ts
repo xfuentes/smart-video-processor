@@ -44,6 +44,7 @@ import { TrackType } from '../../common/@types/Track'
 import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
 import {
+  ISnapshots,
   IVideo,
   retrieveChangePropertyValue,
   SearchBy,
@@ -80,6 +81,7 @@ export class Video implements IVideo {
   public movie: Movie = new Movie(this)
   public tvShow: TVShow = new TVShow(this)
   public other: Other = new Other(this)
+  public snapshots?: ISnapshots
   public videoParts: Video[] = []
   public keyFrames: number[] = []
   public startFrom?: number
@@ -131,7 +133,6 @@ export class Video implements IVideo {
   public previewJob?: Job<string>
   public previewPath?: string
   public snapshotsJob?: Job<string>
-  public snapshotsPath?: string
   public preProcessPath?: string
   public targetDuration: number = 0
   public encodingForced: boolean = false
@@ -251,6 +252,9 @@ export class Video implements IVideo {
   async load(searchEnabled: boolean = true) {
     const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
     const { tracks, container } = await fij.queue()
+    this.progression.progress = undefined
+    this.status = JobStatus.LOADING
+    this.fireChangeEvent()
     this.tracks = tracks
     this.duration =
       tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
@@ -266,6 +270,12 @@ export class Video implements IVideo {
     if (this.type !== VideoType.OTHER && searchEnabled) {
       // Only manual mode enabled for custom videos
       await this.search()
+    } else {
+      await this.takeSnapshots()
+      this.status = JobStatus.WAITING
+      this.message = 'Ready to process.'
+      this.progression.progress = -1
+      this.fireChangeEvent()
     }
   }
 
@@ -323,6 +333,7 @@ export class Video implements IVideo {
     } else if (this.type === VideoType.OTHER) {
       await this.other.search()
     }
+    await this.takeSnapshots()
     await this.analyse()
   }
 
@@ -698,7 +709,7 @@ export class Video implements IVideo {
       encodingForced: this.encodingForced,
       previewProgression: this.previewProgression,
       previewPath: this.previewPath,
-      snapshotsPath: this.snapshotsPath,
+      snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,
       targetDuration: this.targetDuration
     }
@@ -763,7 +774,22 @@ export class Video implements IVideo {
     return target - before <= after - target ? before : after
   }
 
-  toNearestKeyFrameTime(selTime: number) {
+  async toNearestKeyFrameTime(selTime: number) {
+    if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
+      const prevMessage = this.message
+      const prevStatus = this.status
+      this.message = 'Extracting key frames...'
+      this.progression.progress = undefined
+      this.status = JobStatus.LOADING
+      this.keyFrames = []
+      this.fireChangeEvent()
+      this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
+      this.message = prevMessage
+      this.progression.progress = -1
+      this.status = prevStatus
+      this.fireChangeEvent()
+    }
+
     if (this.keyFrames.length === 0) {
       return selTime
     }
@@ -777,60 +803,78 @@ export class Video implements IVideo {
     return this.findClosest(this.keyFrames, selTime)
   }
 
-  setStartFrom(value?: number) {
+  async setStartFrom(value?: number) {
     if (currentSettings.isFineTrimEnabled) {
       this.startFrom = value !== undefined ? Math.round(value) : undefined
     } else {
-      this.startFrom = value !== undefined ? Math.round(this.toNearestKeyFrameTime(value)) : undefined
+      this.startFrom = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     }
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
-  setEndAt(value?: number) {
+  async setEndAt(value?: number) {
     if (currentSettings.isFineTrimEnabled) {
       this.endAt = value !== undefined ? Math.round(value) : undefined
     } else {
-      this.endAt = value !== undefined ? Math.round(this.toNearestKeyFrameTime(value)) : undefined
+      this.endAt = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     }
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
-  async takeSnapshots(snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> {
-    if (this.snapshotsPath) {
-      return Promise.resolve(this.snapshotsPath)
+  generateSnapshotConfigurationFromZoom(zoom?: number): ISnapshots {
+    const height: number = 56
+    const width = Math.round(Strings.pixelsToAspectRatio(this.pixels) * 56)
+    let step: number = (60 * 10) / 12
+    let stepSize: number = 20
+    let totalWidth: number = Math.round((this.duration * stepSize) / step)
+
+    let favoriteZoom = 1
+    while (favoriteZoom <= 5) {
+      step = (5 * 10) / favoriteZoom
+      stepSize = 20
+      totalWidth = Math.round((this.duration * stepSize) / step)
+      if ((!zoom && totalWidth >= 1920) || zoom === favoriteZoom) {
+        break
+      }
+      favoriteZoom++
+    }
+
+    return {
+      width,
+      height,
+      step,
+      stepSize,
+      zoom: favoriteZoom,
+      totalWidth
+    }
+  }
+
+  async takeSnapshots(): Promise<string> {
+    if (!this.snapshots) {
+      this.snapshots = this.generateSnapshotConfigurationFromZoom()
+    }
+    if (this.snapshots.snapshotsPath) {
+      return Promise.resolve(this.snapshots?.snapshotsPath)
     } else {
-      this.progression.progress = undefined
-      this.status = JobStatus.LOADING
       this.message = 'Taking video snapshots...'
       this.fireChangeEvent()
       const snapshotJob = this.attachSnapshotJob(
         new SnapshottingJob(
           this.sourcePath,
           this.getPreviewDirectory(),
-          snapshotHeight,
-          snapshotWidth,
-          totalWidth,
+          this.snapshots.height,
+          this.snapshots.width,
+          this.snapshots.totalWidth,
           this.duration
         )
       )
 
-      this.snapshotsPath = await snapshotJob.queue()
-      if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
-        this.message = 'Extracting key frames...'
-        this.keyFrames = [0]
-        this.fireChangeEvent()
-        this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
-      }
-
-      this.status = JobStatus.WAITING
-      this.message = 'Ready to process.'
-      this.progression.progress = -1
-      this.fireChangeEvent()
-      return this.snapshotsPath
+      this.snapshots.snapshotsPath = await snapshotJob.queue()
+      return this.snapshots.snapshotsPath
     }
   }
 

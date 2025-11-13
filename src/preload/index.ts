@@ -83,8 +83,7 @@ const api: SvpAPI = {
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
     clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),
-    takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> =>
-      ipcRenderer.invoke('video:takeSnapshots', uuid, snapshotHeight, snapshotWidth, totalWidth),
+    takeSnapshots: (uuid: string): Promise<string> => ipcRenderer.invoke('video:takeSnapshots', uuid),
     preparePreview: (uuid: string): Promise<string> => ipcRenderer.invoke('video:preparePreview', uuid)
   }
 }

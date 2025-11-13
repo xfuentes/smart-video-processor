@@ -83,9 +83,9 @@ export const App = (): React.JSX.Element => {
           onDragOver={preventDefault}
           onDragLeave={preventDefault}
           role="application"
-          style={{ overflow: 'hidden' }}
+          style={{ width: '100%', height: '100%', overflow: 'hidden' }}
         >
-          <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <div className="vertical-stack">
               <ListOrVideoContainer
                 videos={videos}
@@ -94,7 +94,7 @@ export const App = (): React.JSX.Element => {
                 onSelectionChange={handleSelectionChange}
               ></ListOrVideoContainer>
               {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
-                <div className="stack-item-scrollable" style={{ backgroundColor: '#f7f8fa' }}>
+                <div className="controls-area" style={{ minHeight: '40%', maxHeight: '40%' }}>
                   <Divider />
                   <PreviewTabs video={selectedVideos[0]} />
                 </div>
