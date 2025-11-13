@@ -74,7 +74,7 @@ interface SvpAPI {
     clearCompleted: () => Promise<void>
     setStartFrom: (uuid: string, value?: number) => Promise<void>
     setEndAt: (uuid: string, value?: number) => Promise<void>
-    takeSnapshots: (uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number) => Promise<string>
+    takeSnapshots: (uuid: string) => Promise<string>
     preparePreview: (uuid: string) => Promise<string>
   }
 }

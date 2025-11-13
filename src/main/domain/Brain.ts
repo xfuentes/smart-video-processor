@@ -393,7 +393,7 @@ export class Brain {
     }
 
     const nameBuilder: string[] = []
-    if (originalLanguage === trackLanguage || (trackRegion !== undefined && originalRegion === trackRegion)) {
+    if (originalLanguage === trackLanguage && (trackRegion === undefined || originalRegion === trackRegion)) {
       const versions = AudioVersions.extractVersionsIncluding(track.name, ['VO'])
       if (versions.length > 0) {
         nameBuilder.push(versions[0].key)
