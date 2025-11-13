@@ -99,10 +99,10 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
     void VideoController.getInstance().removePart(uuid, partUuid)
   })
   ipcMain.handle('video:setStartFrom', (_event, uuid: string, value?: number) => {
-    VideoController.getInstance().setStartFrom(uuid, value)
+    void VideoController.getInstance().setStartFrom(uuid, value)
   })
   ipcMain.handle('video:setEndAt', (_event, uuid: string, value?: number) => {
-    VideoController.getInstance().setEndAt(uuid, value)
+    void VideoController.getInstance().setEndAt(uuid, value)
   })
   ipcMain.handle('video:process', (_event, uuid: string) => {
     return VideoController.getInstance().process(uuid)
@@ -116,12 +116,9 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:clearCompleted', (_event) => {
     VideoController.getInstance().clearCompleted()
   })
-  ipcMain.handle(
-    'video:takeSnapshots',
-    (_event, uuid: string, snapshotHeight: number, snapshotWidth: number, totalWidth: number): Promise<string> => {
-      return VideoController.getInstance().takeSnapshots(uuid, snapshotHeight, snapshotWidth, totalWidth)
-    }
-  )
+  ipcMain.handle('video:takeSnapshots', (_event, uuid: string): Promise<string> => {
+    return VideoController.getInstance().takeSnapshots(uuid)
+  })
   ipcMain.handle('video:preparePreview', (_event, uuid: string): Promise<string> => {
     return VideoController.getInstance().preparePreview(uuid)
   })
