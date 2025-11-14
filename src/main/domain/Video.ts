@@ -333,8 +333,12 @@ export class Video implements IVideo {
     } else if (this.type === VideoType.OTHER) {
       await this.other.search()
     }
-    await this.takeSnapshots()
-    await this.analyse()
+    if (this.status !== JobStatus.WARNING) {
+      if (this.duration > 0) {
+        await this.takeSnapshots()
+      }
+      await this.analyse()
+    }
   }
 
   async analyse() {
@@ -885,6 +889,22 @@ export class Video implements IVideo {
     return this.previewPath
   }
 
+  destroy() {
+    this.abortJob()
+    debug('Cleaning temporary files for video [' + this.filename + ']...')
+    for (const part of this.videoParts) {
+      part.destroy()
+    }
+    Files.deleteFolderRecursive(this.getTempDirectory())
+    if (!Path.isAbsolute(currentSettings.tmpFilesPath)) {
+      try {
+        fs.rmdirSync(this.getTempRootDirectory())
+      } catch (e) {
+        /* ignored */
+      }
+    }
+  }
+
   private async merge(outputDirectory: string, extraDuration?: number) {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
@@ -997,21 +1017,5 @@ export class Video implements IVideo {
       this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
     }
     this.audioVersions = AudioVersions.extractVersions(filename)
-  }
-
-  destroy() {
-    this.abortJob()
-    debug('Cleaning temporary files for video [' + this.filename + ']...')
-    for (const part of this.videoParts) {
-      part.destroy()
-    }
-    Files.deleteFolderRecursive(this.getTempDirectory())
-    if (!Path.isAbsolute(currentSettings.tmpFilesPath)) {
-      try {
-        fs.rmdirSync(this.getTempRootDirectory())
-      } catch (e) {
-        /* ignored */
-      }
-    }
   }
 }
