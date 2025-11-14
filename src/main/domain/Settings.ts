@@ -110,9 +110,6 @@ function isValidExecutable(path: string) {
   if (!fs.existsSync(path)) {
     return false
   }
-  if (!fs.lstatSync(path).isFile()) {
-    return false
-  }
   try {
     fs.accessSync(path, fs.constants.X_OK)
     return true
