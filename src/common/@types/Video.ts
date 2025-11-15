@@ -58,6 +58,16 @@ export interface TrackChanges {
   forced?: boolean
 }
 
+export interface ISnapshots {
+  snapshotsPath?: string
+  zoom: number
+  step: number
+  stepSize: number
+  height: number
+  width: number
+  totalWidth: number
+}
+
 export interface IVideo {
   uuid: string
   filename: string
@@ -95,7 +105,7 @@ export interface IVideo {
   hintMissing: boolean
   previewProgression?: Progression
   previewPath?: string
-  snapshotsPath?: string
+  snapshots?: ISnapshots
   preProcessPath?: string
   targetDuration: number
 }

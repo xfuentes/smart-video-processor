@@ -36,13 +36,11 @@ import { Delimitation } from '@renderer/components/context/Delimitation'
 
 type Props = {
   video: IVideo
-  step?: number
   disabled?: boolean
   mainVideoUuid?: string
 }
 
-export const VideoSectionSelectorField = function ({ video, step = 60, mainVideoUuid = undefined }: Props) {
-  // step ===> 22 px
+export const VideoSectionSelectorField = function ({ video, mainVideoUuid = undefined }: Props) {
   const {
     videoPlayed,
     setVideoPlayed,
@@ -64,25 +62,18 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
   const startFromChecked = startFrom !== undefined
   const endAtChecked = endAt !== undefined
 
+  const { step, stepSize } = video.snapshots ?? {
+    step: 5,
+    stepSize: 10
+  }
+
   const duration = video.duration
 
-  let durationLeft = duration % step
-  let endPos = Math.floor(duration / step) * 22
+  const durationLeft = duration % step
+  let endPos = Math.floor(duration / step) * stepSize
   if (durationLeft > 0) {
-    endPos += Math.round((durationLeft * 22) / step)
+    endPos += Math.round((durationLeft * stepSize) / step)
   }
-  if (endPos < 1920) {
-    step = Math.round(Math.round((duration * 22) / 1920) / 60) * 60
-    if (step < 6) {
-      step = 6
-    }
-    durationLeft = duration % step
-    endPos = Math.floor(duration / step) * 22
-    if (durationLeft > 0) {
-      endPos += Math.round((durationLeft * 22) / step)
-    }
-  }
-  const totalWidth = endPos
 
   const previewHeight = 58
   const labels: ReactElement[] = []
@@ -90,24 +81,24 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
 
   for (let i = 0; i <= duration; i += step) {
     const currentStep = i / step
-    if (currentStep % 10 === 0) {
-      const lastSection = i + step * 10 > duration
+    if (currentStep % 12 === 0) {
+      const lastSection = i + step * 12 > duration
       const lastSectionStepCount = (duration - i) / step
-      if (!lastSection || lastSectionStepCount >= 2.5) {
+      if (!lastSection || lastSectionStepCount >= 3) {
         labels.push(
           <div
             key={`label-tick-${i}`}
             className="tick-mark"
-            style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight + 4}px` }}
+            style={{ position: 'absolute', left: `${currentStep * stepSize}px`, bottom: `${previewHeight + 4}px` }}
           />
         )
       }
-      if (!lastSection || lastSectionStepCount >= 4) {
+      if (!lastSection || lastSectionStepCount >= 6) {
         labels.push(
           <div
             key={`label-${i}`}
             className="label"
-            style={{ position: 'absolute', left: `${currentStep * 22 + 2}px`, bottom: `${previewHeight + 4}px` }}
+            style={{ position: 'absolute', left: `${currentStep * stepSize + 2}px`, bottom: `${previewHeight + 4}px` }}
           >
             {Strings.humanDuration(i)}
           </div>
@@ -118,12 +109,11 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
       <div
         key={`tick-${i}`}
         className="tick-mark"
-        style={{ position: 'absolute', left: `${currentStep * 22}px`, bottom: `${previewHeight}px` }}
+        style={{ position: 'absolute', left: `${currentStep * stepSize}px`, bottom: `${previewHeight}px` }}
       />
     )
   }
   if (durationLeft > 0) {
-    endPos += Math.round((durationLeft * 22) / step)
     labels.push(
       <div
         key={`label-tick-${duration}`}
@@ -133,7 +123,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
       <div
         key={`label-${duration}`}
         className="label"
-        style={{ position: 'absolute', left: `${endPos - 44}px`, bottom: `${previewHeight + 4}px` }}
+        style={{ position: 'absolute', left: `${endPos - stepSize * 2}px`, bottom: `${previewHeight + 4}px` }}
       >
         {Strings.humanDuration(duration)}
       </div>
@@ -158,13 +148,15 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
     }
   }, [setVideoPlayed, video, videoPlayed])
 
+  /*
   useEffect(() => {
-    if (!video.snapshotsPath && video.duration && video.pixels) {
+    if (!video.snapshots?.snapshotsPath && video.duration && video.pixels) {
       const snapshotHeight = previewHeight - 2
       const snapshotWidth = Math.round(Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight)
       void window.api.video.takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
     }
-  }, [video.uuid, step, video.duration, video.pixels, video.snapshotsPath])
+  }, [video.uuid, step, video.duration, video.pixels, video.snapshots?.snapshotsPath])
+  */
 
   const handlePlay = async () => {
     if (!videoPlayerOpened) {
@@ -225,6 +217,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
     if (startFromChecked) {
       await window.api.video.setStartFrom(video.uuid, undefined)
     } else {
+      console.log('current time: ' + Strings.humanDuration(currentTime))
       await window.api.video.setStartFrom(video.uuid, currentTime)
     }
   }
@@ -245,7 +238,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
 
   const handleMouseMoveOverScrollable = useCallback((event: MouseEvent) => {
     if (rulerRef.current != null) {
-      setSelPosX(event.clientX - rulerRef.current.getBoundingClientRect().left - 4)
+      const sp = event.clientX - rulerRef.current.getBoundingClientRect().left
+      setSelPosX(sp < 0 ? 0 : sp > endPos ? endPos : sp)
     }
   }, [])
 
@@ -284,7 +278,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
     }
   }, [handleMouseOutScrollable, handleMouseMoveOverScrollable, rulerRef])
 
-  const posX = (currentTime * 22) / step
+  const posX = (currentTime * stepSize) / step
   const startVideoPercent = ((startFrom === undefined ? 0 : startFrom) * 100) / duration
   const endVideoPercent = ((endAt === undefined ? duration : endAt) * 100) / duration
 
@@ -350,7 +344,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
                   </div>
                 )
               }
-              disabled={!startFromChecked && !canStartHere}
+              disabled={(!startFromChecked && !canStartHere) || video.status === 'Loading'}
             />
           </Tooltip>
           <Tooltip
@@ -373,7 +367,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
                   </div>
                 )
               }
-              disabled={!endAtChecked && !canEndHere}
+              disabled={(!endAtChecked && !canEndHere) || video.status === 'Loading'}
             />
           </Tooltip>
         </div>
@@ -389,7 +383,7 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
         <div
           className="ruler"
           ref={rulerRef}
-          onClick={() => selPosX !== undefined && localSeekTo((selPosX * step) / 22)}
+          onClick={() => selPosX !== undefined && localSeekTo((selPosX * step) / stepSize)}
         >
           {labels}
           {tickMarks}
@@ -397,8 +391,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
             className="preview"
             style={{
               width: `${endPos}px`,
-              background: video.snapshotsPath
-                ? `url('${'svp:///' + video.snapshotsPath.replaceAll('\\', '/')}') 0% 0% / auto 100%`
+              background: video.snapshots?.snapshotsPath
+                ? `url('${'svp:///' + video.snapshots.snapshotsPath.replaceAll('\\', '/')}') 0% 0% / auto 100%`
                 : 'black'
             }}
           >
@@ -409,8 +403,8 @@ export const VideoSectionSelectorField = function ({ video, step = 60, mainVideo
               }}
             />
           </div>
-          {startFrom !== undefined && <Delimitation time={startFrom} posX={(startFrom * 22) / step} />}
-          {endAt !== undefined && <Delimitation time={endAt} posX={(endAt * 22) / step} end />}
+          {startFrom !== undefined && <Delimitation time={startFrom} posX={(startFrom * stepSize) / step} />}
+          {endAt !== undefined && <Delimitation time={endAt} posX={(endAt * stepSize) / step} end />}
           <PlayHead currentTime={currentTime} posX={posX} />
           <PlayHead selection posX={selPosX} />
         </div>

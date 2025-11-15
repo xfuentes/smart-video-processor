@@ -80,6 +80,7 @@ export default class Movie implements IMovie {
       if (!movieMatched) {
         this.video.autoModePossible = false
         this.video.status = JobStatus.WARNING
+        this.video.progression.progress = -1
         if (by === SearchBy.TITLE) {
           this.video.message =
             'Unable to find an exact match on TMDB. Please check the information provided and try again.'
@@ -196,7 +197,9 @@ export default class Movie implements IMovie {
     const matchedSearchResult = this.video.searchResults.find((r) => r.id === idNum)
     if (matchedSearchResult) {
       this.title = matchedSearchResult.title
-      this.year = matchedSearchResult.year
+      if (matchedSearchResult.year) {
+        this.year = matchedSearchResult.year
+      }
     }
     await this.load()
   }

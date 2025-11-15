@@ -19,14 +19,13 @@
 import { Processes } from '../util/processes'
 import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
-import path from 'node:path'
+import path, * as Path from 'node:path'
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
 import { omit } from '@fluentui/react'
-import * as Path from 'node:path'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -84,9 +83,13 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  if (Processes.isLimitedPermissions()) {
+  if (!isValidExecutable(currentSettings.mkvMergePath) && isValidExecutable(defaultSettings.mkvMergePath)) {
     currentSettings.mkvMergePath = defaultSettings.mkvMergePath
+  }
+  if (!isValidExecutable(currentSettings.ffmpegPath) && isValidExecutable(defaultSettings.ffmpegPath)) {
     currentSettings.ffmpegPath = defaultSettings.ffmpegPath
+  }
+  if (!isValidExecutable(currentSettings.ffprobePath) && isValidExecutable(defaultSettings.ffprobePath)) {
     currentSettings.ffprobePath = defaultSettings.ffprobePath
   }
   currentSettings.isFineTrimEnabled = false
@@ -110,7 +113,7 @@ function isValidExecutable(path: string) {
   if (!fs.existsSync(path)) {
     return false
   }
-  if (!fs.lstatSync(path).isFile()) {
+  if (fs.lstatSync(path).isDirectory()) {
     return false
   }
   try {
