@@ -197,7 +197,9 @@ export default class Movie implements IMovie {
     const matchedSearchResult = this.video.searchResults.find((r) => r.id === idNum)
     if (matchedSearchResult) {
       this.title = matchedSearchResult.title
-      this.year = matchedSearchResult.year
+      if (matchedSearchResult.year) {
+        this.year = matchedSearchResult.year
+      }
     }
     await this.load()
   }
