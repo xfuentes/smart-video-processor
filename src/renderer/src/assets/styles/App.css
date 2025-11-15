@@ -42,6 +42,10 @@
   overflow-y: auto;
 }
 
+.controls-area {
+  background-color: #f7f8fa
+}
+
 .main {
   text-align: center;
 }
