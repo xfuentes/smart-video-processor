@@ -146,8 +146,14 @@ export class FFprobe extends CommandProgress {
       return []
     }
     return ffprobeOutput
-      .split('\r\n')
-      .map((str) => Numbers.toNumber(str))
+      .split('\n')
+      .map((str) => {
+        try {
+          return Numbers.toNumber(str)
+        } catch (_e) {
+          return undefined
+        }
+      })
       .filter((n) => n !== undefined)
   }
 }

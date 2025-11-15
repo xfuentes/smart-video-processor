@@ -74,6 +74,7 @@ export class TVShow implements ITVShow {
 
       if (!seriesMatched) {
         this.video.status = JobStatus.WARNING
+        this.video.progression.progress = -1
         this.video.message =
           'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
         console.log(Chalk.red(this.video.message))
