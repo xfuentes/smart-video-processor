@@ -104,7 +104,7 @@ export class VideoController {
   }
 
   setHint(uuid: string, hint: IHint, value?: string) {
-    this.getVideoByUuid(uuid).setHint(hint, value)
+    void this.getVideoByUuid(uuid).setHint(hint, value)
   }
 
   addChange(
@@ -188,13 +188,8 @@ export class VideoController {
     return this.findVideoByUuidIncludingParts(uuid).setEndAt(value)
   }
 
-  async takeSnapshots(
-    uuid: string,
-    snapshotHeight: number,
-    snapshotWidth: number,
-    totalWidth: number
-  ): Promise<string> {
-    return await this.findVideoByUuidIncludingParts(uuid).takeSnapshots(snapshotHeight, snapshotWidth, totalWidth)
+  async takeSnapshots(uuid: string): Promise<string> {
+    return await this.findVideoByUuidIncludingParts(uuid).takeSnapshots()
   }
 
   private getVideoByUuid(uuid: string) {

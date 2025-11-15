@@ -26,6 +26,7 @@ import { Languages } from '../../src/common/LanguageIETF'
 import { currentSettings } from '../../src/main/domain/Settings'
 import { Countries } from '../../src/common/Countries'
 import { HintType } from '../../src/common/@types/Hint'
+import { Hint } from '../../src/main/domain/Hint'
 
 const defaultPoster1: Attachment = {
   filename: 'cover.jpg',
