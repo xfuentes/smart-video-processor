@@ -37,9 +37,9 @@ export type EpisodeOrder = 'official' | 'dvd' | 'absolute'
 
 export class TVDBClient {
   private static instance: TVDBClient
+  rateLimiter = new RateLimiter(10)
   private readonly tvdb: AxiosInstance | undefined
   private retrieveTokenPromise: Promise<AxiosResponse<TVDBLoginResponse>> | undefined
-  rateLimiter = new RateLimiter(10)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
@@ -49,10 +49,6 @@ export class TVDBClient {
       TVDBClient.instance = new TVDBClient()
     }
     return TVDBClient.instance
-  }
-
-  private cleanupSeriesTitle(title: string): string {
-    return title.replace(/\s*\((\d+|\w+)\)$/gi, '')
   }
 
   public async searchSeries(name: string, year: number | undefined = undefined): Promise<SearchResult[]> {
@@ -102,13 +98,15 @@ export class TVDBClient {
             }
           }
         }
-        if (r.overviews[favoriteLanguage.code] !== undefined) {
-          overview = r.overviews[favoriteLanguage.code]
-        } else {
-          for (const code of favoriteLanguage?.altCodes ?? []) {
-            if (r.overviews[code] !== undefined) {
-              overview = r.overviews[code]
-              break
+        if (r.overviews) {
+          if(r.overviews[favoriteLanguage.code] !== undefined) {
+            overview = r.overviews[favoriteLanguage.code]
+          } else {
+            for (const code of favoriteLanguage?.altCodes ?? []) {
+              if (r.overviews[code] !== undefined) {
+                overview = r.overviews[code]
+                break
+              }
             }
           }
         }
@@ -233,6 +231,10 @@ export class TVDBClient {
       }
     }
     return result
+  }
+
+  private cleanupSeriesTitle(title: string): string {
+    return title.replace(/\s*\((\d+|\w+)\)$/gi, '')
   }
 
   private async getTVDBSession(): Promise<AxiosInstance> {
