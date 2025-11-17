@@ -36,7 +36,7 @@ export class SnapshottingJob extends Job<string> {
     totalWidth: number,
     durationSeconds: number
   ) {
-    super(JobStatus.LOADING, 'Snapshotting video.')
+    super(JobStatus.GRABBING, 'Snapshotting video.')
     this.sourcePath = sourcePath
     this.destinationPath = destinationPath
     this.snapshotHeight = snapshotHeight

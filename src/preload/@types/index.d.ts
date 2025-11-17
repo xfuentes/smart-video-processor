@@ -18,9 +18,10 @@
 
 import { Settings } from '../../common/@types/Settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { IVideo, SearchInputData } from '../../common/@types/Video'
+import { IVideo, MultiSearchInputData, SearchInputData } from '../../common/@types/Video'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
+import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
@@ -47,6 +48,8 @@ interface SvpAPI {
     addVideoChangedListener: (callback: VideoChangedListener) => () => void
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
     search: (uuid: string, data: SearchInputData) => Promise<void>
+    multiSelectSearchResultID: (uuids: string[], searchResultID?: number) => Promise<void>
+    multiSearch: (uuids: string[], data: MultiSearchInputData) => Promise<void>
     switchTrackSelection: (uuid: string, changedItems: number[]) => Promise<void>
     setHint: (uuid: string, hint: IHint, value?: string) => Promise<void>
     addChange: (

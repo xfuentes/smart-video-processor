@@ -18,7 +18,7 @@
 
 import { BrowserWindow, dialog, ipcMain } from 'electron'
 import { VideoController } from './controller/VideoController'
-import { SearchInputData } from '../common/@types/Video'
+import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 
@@ -46,6 +46,12 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   })
   ipcMain.handle('video:search', (_event, uuid: string, data?: SearchInputData) => {
     return VideoController.getInstance().search(uuid, data)
+  })
+  ipcMain.handle('video:multiSelectSearchResultID', (_event, uuids: string[], searchResultID?: number) => {
+    return VideoController.getInstance().multiSelectSearchResultID(uuids, searchResultID)
+  })
+  ipcMain.handle('video:multiSearch', (_event, uuids: string[], data?: MultiSearchInputData) => {
+    return VideoController.getInstance().multiSearch(uuids, data)
   })
   ipcMain.handle('video:switchTrackSelection', (_event, uuid: string, changedItems: number[]) => {
     VideoController.getInstance().switchTrackSelection(uuid, changedItems)

@@ -28,3 +28,7 @@ export const searchAncestorsMatching = (
   }
   return searchAncestorsMatching(element.parentElement, matches)
 }
+
+export function keepIfSameReducer<T>(prev: T, curr: T): T | undefined {
+  return prev === curr ? curr : undefined
+}
