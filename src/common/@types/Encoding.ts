@@ -28,7 +28,7 @@ export type EncoderSettings = {
   originalSize?: number
   targetSize?: number
   audioChannels?: number
-  encodingEnabled: boolean
+  encodingEnabled?: boolean
 }
 
 export enum VideoCodec {

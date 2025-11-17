@@ -46,6 +46,7 @@ import { EncoderSettings } from '../../common/@types/Encoding'
 import {
   ISnapshots,
   IVideo,
+  MultiSearchInputData,
   retrieveChangePropertyValue,
   SearchBy,
   SearchInputData,
@@ -271,7 +272,7 @@ export class Video implements IVideo {
       // Only manual mode enabled for custom videos
       await this.search()
     } else {
-      await this.takeSnapshots()
+      void this.takeSnapshots()
       this.status = JobStatus.WAITING
       this.message = 'Ready to process.'
       this.progression.progress = -1
@@ -289,7 +290,7 @@ export class Video implements IVideo {
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
     if (init) {
       this.encoderSettings.forEach((s) =>
-        this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled)
+        this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled ?? false)
       )
     }
     debug('### ENCODER SETTINGS ###')
@@ -333,12 +334,26 @@ export class Video implements IVideo {
     } else if (this.type === VideoType.OTHER) {
       await this.other.search()
     }
+    if (this.duration > 0) {
+      void this.takeSnapshots()
+    }
     if (this.status !== JobStatus.WARNING) {
-      if (this.duration > 0) {
-        await this.takeSnapshots()
-      }
       await this.analyse()
     }
+  }
+
+  async multiSearch(data?: MultiSearchInputData) {
+    if (data && data.type === VideoType.TV_SHOW) {
+      this.setType(data.type)
+      this.setSearchBy(data.searchBy)
+      this.tvShow.setTitle(data.tvShowTitle)
+      this.tvShow.setYear(data.tvShowYear)
+      this.tvShow.setTheTVDB(data.tvShowTVDB)
+      this.tvShow.setOrder(data.tvShowOrder)
+      this.fireChangeEvent()
+    }
+
+    await this.search()
   }
 
   async analyse() {
@@ -864,20 +879,18 @@ export class Video implements IVideo {
     if (this.snapshots.snapshotsPath) {
       return Promise.resolve(this.snapshots?.snapshotsPath)
     } else {
-      this.message = 'Taking video snapshots...'
       this.fireChangeEvent()
-      const snapshotJob = this.attachSnapshotJob(
-        new SnapshottingJob(
-          this.sourcePath,
-          this.getPreviewDirectory(),
-          this.snapshots.height,
-          this.snapshots.width,
-          this.snapshots.totalWidth,
-          this.duration
-        )
+      const snapshotJob = new SnapshottingJob(
+        this.sourcePath,
+        this.getPreviewDirectory(),
+        this.snapshots.height,
+        this.snapshots.width,
+        this.snapshots.totalWidth,
+        this.duration
       )
 
       this.snapshots.snapshotsPath = await snapshotJob.queue()
+      this.fireChangeEvent()
       return this.snapshots.snapshotsPath
     }
   }

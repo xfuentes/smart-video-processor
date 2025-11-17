@@ -2,7 +2,7 @@ import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
-import { SearchInputData } from '../common/@types/Video'
+import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
@@ -49,6 +49,10 @@ const api: SvpAPI = {
     selectSearchResultID: (uuid: string, searchResultID?: number): Promise<void> =>
       ipcRenderer.invoke('video:selectSearchResultID', uuid, searchResultID),
     search: (uuid: string, data: SearchInputData): Promise<void> => ipcRenderer.invoke('video:search', uuid, data),
+    multiSelectSearchResultID: (uuids: string[], searchResultID?: number): Promise<void> =>
+      ipcRenderer.invoke('video:multiSelectSearchResultID', uuids, searchResultID),
+    multiSearch: (uuids: string[], data: MultiSearchInputData): Promise<void> =>
+      ipcRenderer.invoke('video:multiSearch', uuids, data),
     switchTrackSelection: (uuid: string, changedItems: number[]): Promise<void> =>
       ipcRenderer.invoke('video:switchTrackSelection', uuid, changedItems),
     setHint: (uuid: string, hint: IHint, value?: string): Promise<void> =>
