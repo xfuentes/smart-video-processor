@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+         xmlns:desktop7="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7"
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+         IgnorableNamespaces="uap uap10 desktop7 rescap">
+  <Identity Name="${identityName}" Publisher="${publisher}" Version="${version}" ProcessorArchitecture="${arch}"/>
+  <Properties>
+    <DisplayName>${displayName}</DisplayName>
+    <PublisherDisplayName>${publisherDisplayName}</PublisherDisplayName>
+    <Description>${description}</Description>
+    <Logo>${logo}</Logo>
+    <uap10:PackageIntegrity>
+      <uap10:Content Enforcement="on"/>
+    </uap10:PackageIntegrity>
+  </Properties>
+  <Resources>
+    ${resourceLanguages}
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="${minVersion}" MaxVersionTested="${maxVersionTested}"/>
+    <PackageDependency Name="Microsoft.WindowsAppRuntime.1.4" MinVersion="4000.1010.1349.0"
+                       Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"/>
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+    <rescap:Capability Name="broadFileSystemAccess"/>
+  </Capabilities>
+  <Applications>
+    <Application Id="${applicationId}" Executable="${executable}" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="${displayName}"
+                          Square150x150Logo="${square150x150Logo}"
+                          Square44x44Logo="${square44x44Logo}"
+                          Description="${description}">
+        ${defaultTile}
+      </uap:VisualElements>
+      <Extensions>
+        <desktop7:Extension Category="windows.shortcut">
+          <desktop7:Shortcut File="[{Programs}]\Xavier Fuentes\Smart Video Processor.lnk"
+                             Icon="[{Package}]\Smart Video Processor.exe"
+                             Description="${description}"/>
+        </desktop7:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>

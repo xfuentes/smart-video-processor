@@ -62,7 +62,7 @@ fs.readdir(resolvedDir, (err, files) => {
         return;
       }
 
-      let modifiedData = data.toString('utf8').replace(/__NAME__/g, packageJSON.name);
+      let modifiedData = data.toString().replace(/__NAME__/g, packageJSON.name);
       modifiedData = modifiedData.replace(/__VERSION__/g, packageJSON.version);
       modifiedData = modifiedData.replace(/__DESCRIPTION__/g, packageJSON.description);
 

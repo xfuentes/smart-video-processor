@@ -15,11 +15,15 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-2025, ubuntu-24.04, ubuntu-24.04-arm ] # windows-11-arm removed because conflicting with x64
+        os: [ windows-2025 ] # Linux disabled temporarily:  ubuntu-24.04, ubuntu-24.04-arm ]
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install Windows SDK
+        if: runner.os == 'Windows'
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -63,17 +67,14 @@ jobs:
         with:
           draft: true
           files: |
-            out/make/**/RELEASES
-            out/make/**/*.exe
-            out/make/**/*.nupkg
-            out/make/**/*.zip
-            out/make/**/*.dmg
-            out/make/**/*.AppImage
-            **/*.snap
-            out/make/**/*.deb
-            out/make/**/*.rpm
-            out/make/**/*.tar.gz
-            out/make/**/*.yml
-            out/make/**/*.blockmap
+            dist/**/RELEASES
+            dist/**/*.exe
+            dist/**/*.nupkg
+            dist/**/*.zip
+            dist/**/*.dmg
+            dist/**/*.AppImage
+            dist/**/*.deb
+            dist/**/*.rpm
+            dist/**/*.tar.gz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

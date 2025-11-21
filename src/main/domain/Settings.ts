@@ -19,7 +19,7 @@
 import { Processes } from '../util/processes'
 import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
-import path, * as Path from 'node:path'
+import * as Path from 'node:path'
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
@@ -29,16 +29,16 @@ import { omit } from '@fluentui/react'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
-const getDefaultFFmpegToolPath = (tool: 'ffmpeg' | 'ffprobe') => {
-  if (os.platform() === 'linux') {
-    if (process.env.SNAP) {
+const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
+  if (os.platform() === 'win32') {
+    return process.resourcesPath
+      ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+      : Path.join('bin', 'win', `${tool}.exe`)
+  } else {
+    if (process.env.SNAP && tool !== 'mkvmerge') {
       return `${process.env.SNAP}/ffmpeg/${tool}`
     }
-    return `/usr/bin/${tool}`
-  } else if (os.platform() === 'win32') {
-    return `c:\\Program Files\\ffmpeg\\bin\\${tool}.exe`
-  } else {
-    return `/usr/local/bin/${tool}`
+    return Processes.findCommandSync(tool, tool)
   }
 }
 
@@ -59,14 +59,14 @@ export const defaultSettings: Settings = {
   videoCodec: VideoCodec.AUTO,
   videoSizeReduction: 50,
   audioSizeReduction: 70,
-  mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
-  ffmpegPath: Processes.findCommandSync('ffmpeg', getDefaultFFmpegToolPath('ffmpeg')),
-  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe'))
+  mkvMergePath: getDefaultToolPath('mkvmerge'),
+  ffmpegPath: getDefaultToolPath('ffmpeg'),
+  ffprobePath: getDefaultToolPath('ffprobe')
 }
 export let currentSettings: Settings = defaultSettings
 
 export function loadSettings() {
-  if (Files.fileExistsAndIsReadable(path.join(getConfigPath(), 'settings.json'))) {
+  if (Files.fileExistsAndIsReadable(Path.join(getConfigPath(), 'settings.json'))) {
     const data = Files.loadTextFileSync(getConfigPath(), 'settings.json')
     if (data !== undefined) {
       currentSettings = JSON.parse(data) as Settings

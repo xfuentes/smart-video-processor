@@ -4,6 +4,7 @@
       <w>appimage</w>
       <w>craftctl</w>
       <w>davidwinter</w>
+      <w>falourd</w>
       <w>ffprobe</w>
       <w>firstpass</w>
       <w>fluentui</w>
@@ -14,12 +15,15 @@
       <w>libx</w>
       <w>mkvmerge</w>
       <w>mkvtoolnix</w>
+      <w>msix</w>
       <w>msvideo</w>
       <w>muxing</w>
       <w>nokey</w>
       <w>ntsuspend</w>
       <w>passlogfile</w>
+      <w>signtool</w>
       <w>snapcore</w>
+      <w>snapstore</w>
       <w>softprops</w>
       <w>tmdb</w>
       <w>tseslint</w>
