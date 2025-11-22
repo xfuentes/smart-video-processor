@@ -25,7 +25,6 @@ import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
-import { omit } from '@fluentui/react'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
@@ -97,14 +96,10 @@ export function loadSettings() {
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
-  const toOmit: (keyof Settings)[] = []
   currentSettings.isFineTrimEnabled = false
-  if (Processes.isLimitedPermissions()) {
-    toOmit.push('mkvMergePath', 'ffmpegPath', 'ffprobePath')
-  }
   if (validation.status === 'success') {
     currentSettings = { ...settings }
-    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(omit(currentSettings, toOmit), null, 2))
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
   }
   return validation
 }

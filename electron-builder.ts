@@ -34,9 +34,10 @@ const cfg: Configuration = {
     }
   ],
   win: {
+    appId: 'smart-video-processor',
     // cscLink: 'CodingCertificate.pfx',
     // cscKeyPassword: 'svp',
-    target: ['appx'], // , 'squirrel', 'zip'
+    target: ['appx', 'squirrel', 'zip'],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor'
   },
