@@ -63,17 +63,14 @@ jobs:
         with:
           draft: true
           files: |
-            out/make/**/RELEASES
-            out/make/**/*.exe
-            out/make/**/*.nupkg
-            out/make/**/*.zip
-            out/make/**/*.dmg
-            out/make/**/*.AppImage
-            **/*.snap
-            out/make/**/*.deb
-            out/make/**/*.rpm
-            out/make/**/*.tar.gz
-            out/make/**/*.yml
-            out/make/**/*.blockmap
+            dist/**/RELEASES
+            dist/**/*.exe
+            dist/**/*.nupkg
+            dist/**/*.zip
+            dist/**/*.dmg
+            dist/**/*.AppImage
+            dist/**/*.deb
+            dist/**/*.rpm
+            dist/**/*.tar.gz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

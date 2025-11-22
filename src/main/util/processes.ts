@@ -104,6 +104,15 @@ export class Processes {
     })
   }
 
+  static isWindowsStore = (): boolean => {
+    const appPath = app.getAppPath()
+    return appPath.includes('WindowsApps') || appPath.includes('Program Files')
+  }
+
+  static isSnapStore = (): boolean => {
+    return app?.getPath('exe').includes('/snap/') || false
+  }
+
   static isLimitedPermissions = (): boolean => {
     return app?.getPath('exe').includes('/snap/') || false
   }

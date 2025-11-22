@@ -37,12 +37,7 @@ import { Processes } from './util/processes'
 
 if (electron_squirrel_startup) app.quit()
 
-const isRunningFromMSIX = () => {
-  const appPath = app.getAppPath()
-  return appPath.includes('WindowsApps') || appPath.includes('Program Files')
-}
-
-if (os.platform() !== 'linux' && !isRunningFromMSIX()) {
+if (os.platform() !== 'linux' && !Processes.isWindowsStore()) {
   updateElectronApp()
 }
 
