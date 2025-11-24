@@ -1,6 +1,6 @@
 import { Configuration } from 'electron-builder'
 
-const cfg: Configuration = {
+export default {
   appId: 'XavierFuentes.SmartVideoProcessor',
   productName: 'Smart Video Processor',
   copyright: 'Copyright (c) 2025. Xavier Fuentes',
@@ -11,13 +11,22 @@ const cfg: Configuration = {
     output: 'dist',
     buildResources: 'assets'
   },
-  files: ['build/**/*', 'resources/flags'],
+  files: ['build/**/*', 'resources/flags', 'node_modules/@electron-toolkit/**/*'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   extraResources: [
     ...(process.platform === 'win32'
       ? [
           {
             from: 'bin/win',
+            to: 'bin',
+            filter: ['*']
+          }
+        ]
+      : []),
+    ...(process.platform === 'linux'
+      ? [
+          {
+            from: 'bin/linux',
             to: 'bin',
             filter: ['*']
           }
@@ -37,12 +46,12 @@ const cfg: Configuration = {
     appId: 'smart-video-processor',
     // cscLink: 'CodingCertificate.pfx',
     // cscKeyPassword: 'svp',
-    target: ['appx', 'squirrel', 'zip'],
+    target: ['appx', 'squirrel'],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor'
   },
   linux: {
-    target: ['AppImage', 'deb', 'tar.gz'],
+    target: ['dir', 'AppImage'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@hotmail.com>',
     vendor: 'Xavier Fuentes',
@@ -56,13 +65,10 @@ const cfg: Configuration = {
     minVersion: '10.0.17763.0',
     maxVersionTested: '10.0.22000.1',
     languages: ['en-US'],
-    customManifestPath: 'AppxManifest.xml',
     backgroundColor: 'transparent'
   },
   squirrelWindows: {
     useAppIdAsId: true,
     iconUrl: 'https://raw.githubusercontent.com/xfuentes/smart-video-processor/refs/heads/main/resources/icon.ico'
   }
-}
-// @ts-ignore should not cry here
-export default cfg
+} as Configuration

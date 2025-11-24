@@ -33,59 +33,15 @@ apps:
 parts:
   mkvmerge:
     plugin: nil
-    source: https://codeberg.org/mbunkus/mkvtoolnix.git
-    source-type: git
-    source-tag: release-95.0
-    override-build: |
-      git submodule update --init --recursive
-      ./autogen.sh
-      ./configure --prefix=$SNAPCRAFT_PART_INSTALL/usr --disable-gui
-      rake
-      install -D src/mkvmerge $SNAPCRAFT_PART_INSTALL/usr/bin
-    build-packages:
-      - git
-      - build-essential
-      - autoconf
-      - automake
-      - libtool
-      - libbz2-dev
-      - libcurl4-openssl-dev
-      - libexpat1-dev
-      - libflac-dev
-      - liblzma-dev
-      - libmagic-dev
-      - libmatroska-dev
-      - libpcre3-dev
-      - libprotobuf-dev
-      - protobuf-compiler
-      - zlib1g-dev
-      - pkg-config
-      - libvorbis-dev
-      - debhelper
-      - docbook-xsl
-      - fakeroot
-      - libboost-date-time-dev
-      - libboost-dev
-      - libboost-filesystem-dev
-      - libboost-math-dev
-      - libboost-regex-dev
-      - libboost-system-dev
-      - libcmark-dev
-      - libdvdread-dev
-      - libfmt-dev
-      - libgmp-dev
-      - libgtest-dev
-      - liblzo2-dev
-      - libogg-dev
-      - libqt6svg6-dev
-      - nlohmann-json3-dev
-      - po4a
-      - qt6-base-dev
-      - qt6-base-dev-tools
-      - qt6-multimedia-dev
-      - rake
-      - ruby
-      - xsltproc
+    override-pull: |
+      # Add GPG key
+      mkdir -p /tmp/keyrings
+      curl -fsSL https://mkvtoolnix.download/gpg-pub-moritzbunkus.gpg | gpg --dearmor > /tmp/keyrings/gpg-pub-moritzbunkus.gpg
+      # Add repository
+      echo "deb [arch=amd64 signed-by=/tmp/keyrings/gpg-pub-moritzbunkus.gpg] https://mkvtoolnix.download/ubuntu noble main" > /etc/apt/sources.list.d/mkvtoolnix.list
+      apt update
+      apt install -y mkvtoolnix
+      install -D /usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/usr/bin/mkvmerge
     stage-packages:
       - libbz2-1.0
       - liblzo2-2
@@ -110,20 +66,22 @@ parts:
     plugin: nil
     source: .
     override-build: |
-      npm install electron electron-builder
-      npx electron-builder --dir --linux --x64
+      npm install
+      npm run build
+      npm run package
       mkdir $SNAPCRAFT_PART_INSTALL/opt
       cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
       cp ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/
+      install -D bin/linux/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
+      install -D bin/linux/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
     build-snaps:
       - node/22/stable
     build-packages:
       - git
       - unzip
     stage-packages:
-      - ffmpeg
       - libproxy1v5
       - glib-networking
       - libblas3

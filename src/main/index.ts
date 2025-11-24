@@ -37,7 +37,7 @@ import { Processes } from './util/processes'
 
 if (electron_squirrel_startup) app.quit()
 
-if (os.platform() !== 'linux' && !Processes.isWindowsStore()) {
+if (os.platform() === 'win32' && !process.windowsStore) {
   updateElectronApp()
 }
 
@@ -95,8 +95,11 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 app.whenReady().then(async () => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
+  if (process.platform === 'win32' && !process.windowsStore) {
+    // Set app user model id for windows squirrel mode
+    electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
+  }
+
   loadSettings()
 
   let ffmpegVersion = '-'
