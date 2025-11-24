@@ -65,6 +65,7 @@ fs.readdir(resolvedDir, (err, files) => {
       let modifiedData = data.toString().replace(/__NAME__/g, packageJSON.name);
       modifiedData = modifiedData.replace(/__VERSION__/g, packageJSON.version);
       modifiedData = modifiedData.replace(/__DESCRIPTION__/g, packageJSON.description);
+      modifiedData = modifiedData.replace(/__ARCH__/g, process.arch);
 
       // Write output file
       fs.writeFile(dest, modifiedData, 'utf8', (err) => {

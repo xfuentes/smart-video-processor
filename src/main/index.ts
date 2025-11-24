@@ -95,10 +95,7 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 app.whenReady().then(async () => {
-  if (process.platform === 'win32' && !process.windowsStore) {
-    // Set app user model id for windows squirrel mode
-    electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
-  }
+  electronApp.setAppUserModelId('XavierFuentes.SmartVideoProcessor')
 
   loadSettings()
 

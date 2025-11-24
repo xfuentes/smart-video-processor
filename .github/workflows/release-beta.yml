@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: package
-        run: npm run make
+        run: npm run package
 
       - name: prepare-snap
         if: runner.os == 'Linux'

@@ -26,6 +26,7 @@
   <Capabilities>
     <rescap:Capability Name="runFullTrust"/>
     <rescap:Capability Name="broadFileSystemAccess"/>
+    <Capability Name="internetClient" />
   </Capabilities>
   <Applications>
     <Application Id="${applicationId}" Executable="${executable}" EntryPoint="Windows.FullTrustApplication">
@@ -38,7 +39,7 @@
       <Extensions>
         <desktop7:Extension Category="windows.shortcut">
           <desktop7:Shortcut File="[{Programs}]\Xavier Fuentes\Smart Video Processor.lnk"
-                             Icon="[{Package}]\Smart Video Processor.exe"
+                             Icon="[{Package}]\${executable}"
                              Description="${description}"/>
         </desktop7:Extension>
       </Extensions>

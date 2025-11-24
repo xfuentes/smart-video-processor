@@ -11,7 +11,7 @@ export default {
     output: 'dist',
     buildResources: 'assets'
   },
-  files: ['build/**/*', 'resources/flags', 'node_modules/@electron-toolkit/**/*'],
+  files: ['build/**/*', 'resources/flags'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   extraResources: [
     ...(process.platform === 'win32'
@@ -44,8 +44,11 @@ export default {
   ],
   win: {
     appId: 'smart-video-processor',
-    // cscLink: 'CodingCertificate.pfx',
-    // cscKeyPassword: 'svp',
+    /* signtoolOptions: {
+      certificateFile: 'CodingCertificate.pfx',
+      certificatePassword: 'svp',
+      publisherName: 'CN=F8CDDB61-F860-4CB9-B176-609E178A4DA9'
+    }, */
     target: ['appx', 'squirrel'],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor'
@@ -65,7 +68,8 @@ export default {
     minVersion: '10.0.17763.0',
     maxVersionTested: '10.0.22000.1',
     languages: ['en-US'],
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    customManifestPath: 'AppxManifestTemplate.xml'
   },
   squirrelWindows: {
     useAppIdAsId: true,
