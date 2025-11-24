@@ -16,22 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MakerMSIX } from '@electron-forge/maker-msix'
 
-export default {
-  packagerConfig: {
-    executableName: 'SmartVideoProcessor'
-  },
-  makers: [
-    new MakerMSIX({
-      logLevel: 'debug',
-      packageAssets: 'assets/appx',
-      appManifest: 'assets/appx/AppxManifest.xml',
-      windowsSignOptions: {
-        files: [],
-        certificateFile: 'CodingCertificate.pfx',
-        certificatePassword: 'svp'
-      }
-    })
-  ]
+import * as os from 'node:os'
+import { execSync } from 'node:child_process'
+
+const isWindows = os.platform() === 'win32';
+const version = isWindows ? '26' : '25';
+
+console.log(`Installing electron-builder@${version} ...`);
+
+try {
+  execSync(`npm install --no-save electron-builder@${version}`, { stdio: 'inherit' });
+  console.log('Installation successful.');
+} catch (error) {
+  console.error('Installation failed:', error.message);
+  process.exit(1);
 }

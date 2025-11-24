@@ -29,11 +29,11 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
-    "make": "electron-forge make",
     "package": "electron-builder",
     "prepare-snap": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
     "test": "vitest run",
-    "coverage": "vitest --coverage.enabled"
+    "coverage": "vitest --coverage.enabled",
+    "postinstall": "node ./tools/post-install.js"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -42,6 +42,9 @@
     "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.10.2",
+    "@electron-forge/maker-msix": "^7.10.2",
+    "@electron-forge/shared-types": "^7.10.2",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
@@ -67,11 +70,7 @@
     "cli-progress": "^3.12.0",
     "clui": "^0.3.6",
     "electron": "^37.10.0",
-    "electron-builder": "^25.1.8",
     "electron-builder-squirrel-windows": "^25.1.8",
-    "@electron-forge/core": "^7.10.2",
-    "@electron-forge/maker-msix": "^7.10.2",
-    "@electron-forge/shared-types": "^7.10.2",
     "electron-squirrel-startup": "^1.0.1",
     "electron-vite": "^4.0.0",
     "eslint": "^9.31.0",
