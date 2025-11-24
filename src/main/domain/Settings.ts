@@ -33,10 +33,16 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
     return process.resourcesPath
       ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
       : Path.join('bin', 'win', `${tool}.exe`)
-  } else {
-    if (process.env.SNAP && tool !== 'mkvmerge') {
-      return `${process.env.SNAP}/ffmpeg/${tool}`
+  } else if (os.platform() === 'linux') {
+    if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
+      return `${process.env.SNAP}/usr/bin/${tool}`
     }
+    const toolPathFromSources = Path.join(__dirname, '../', '../', 'bin', process.platform, tool)
+    if (isValidExecutable(toolPathFromSources)) {
+      return toolPathFromSources
+    }
+    return Processes.findCommandSync(tool, tool)
+  } else {
     return Processes.findCommandSync(tool, tool)
   }
 }

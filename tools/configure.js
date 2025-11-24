@@ -44,16 +44,16 @@ fs.readdir(resolvedDir, (err, files) => {
   }
 
   // Filter files ending with .in
-  const inFiles = files.filter(file => path.extname(file) === '.in');
+  const inFiles = files.filter(file => path.basename(file).indexOf('.in.') !== -1);
 
   if (inFiles.length === 0) {
-    console.log('No files ending with ".in" found in:', resolvedDir);
+    console.log('No files containing ".in" found in:', resolvedDir);
     return;
   }
 
   inFiles.forEach(file => {
     const source = path.join(resolvedDir, file);
-    const dest = path.join(resolvedDir, path.basename(file, '.in')); // Remove .in
+    const dest = path.join(resolvedDir, path.basename(file).replace('.in', ''));
 
     // Read .in file
     fs.readFile(source, 'utf8', (err, data) => {
