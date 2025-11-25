@@ -495,7 +495,6 @@ export class Video implements IVideo {
       // Output path is relative to the original filename dirname.
       outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
     }
-    fs.mkdirSync(outputDirectory, { recursive: true })
     return outputDirectory
   }
 
@@ -506,20 +505,16 @@ export class Video implements IVideo {
       // Output path is relative to the original filename dirname.
       tempDirectory = path.join(path.dirname(this.sourcePath), tempDirectory)
     }
-    fs.mkdirSync(tempDirectory, { recursive: true })
     return tempDirectory
   }
 
   getTempDirectory() {
-    const tempDirectory = path.join(this.getTempRootDirectory(), this.uuid)
-    fs.mkdirSync(tempDirectory, { recursive: true })
-    return tempDirectory
+    return path.join(this.getTempRootDirectory(), this.uuid)
   }
 
   getPreviewDirectory() {
     let previewDirectory = this.getTempDirectory()
     previewDirectory = path.join(previewDirectory, 'preview')
-    fs.mkdirSync(previewDirectory, { recursive: true })
     return previewDirectory
   }
 

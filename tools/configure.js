@@ -66,6 +66,7 @@ fs.readdir(resolvedDir, (err, files) => {
       modifiedData = modifiedData.replace(/__VERSION__/g, packageJSON.version);
       modifiedData = modifiedData.replace(/__DESCRIPTION__/g, packageJSON.description);
       modifiedData = modifiedData.replace(/__ARCH__/g, process.arch);
+      modifiedData = modifiedData.replace(/__DEB_ARCH__/g, process.arch === 'arm64' ? 'arm64' : "amd64");
 
       // Write output file
       fs.writeFile(dest, modifiedData, 'utf8', (err) => {

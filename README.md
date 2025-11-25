@@ -7,15 +7,13 @@
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xfuentes/smart-video-processor/total)
 
-This small application in JavaScript is a frontend for various great free command line tools.
-It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and
-Vite (https://vite.dev/) frameworks.
-Its purpose is to help process and encode your DVD or Blu-ray backups.
-These can eventually be made with the excellent MakeMKV (https://www.makemkv.com/).
+This tool automatically identifies your movies and TV shows using popular databases,
+then streamlines the entire process: rename files using Plex-friendly conventions,
+attach artwork, correct metadata (including track language and type), split or join media files
+and encode to H.264 or H.265—all in one place.
 
 ## 1) Installation
-
-This application depends on FFmpeg and MKVToolNix (version >= 90.0).
+All dependencies are packaged with it, just install and you will be ready to go.
 
 ### a) Ubuntu Linux
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
@@ -33,9 +31,9 @@ Alternatively as debian package:
 
 ### b) Windows 10 or later
 
-Install MKVToolNix (https://www.matroska.org/downloads/mkvtoolnix.html)
-and FFmpeg (https://ffmpeg.org/) you can get the binaries from: https://www.gyan.dev/ffmpeg/builds/
-Run the Smart.Video.Processor-1.3.3.Setup.exe it will install and add a desktop shortcut.
+Install it from the Microsoft Store
+
+Run the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
 
 ## 2) Set your preferences
 

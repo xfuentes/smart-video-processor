@@ -25,15 +25,15 @@
     "lint": "eslint --cache .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
-    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "typecheck": "yarn run typecheck:node && yarn run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "npm run typecheck && electron-vite build",
+    "build": "yarn run typecheck && electron-vite build",
     "package": "electron-builder",
     "prepare-snap": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled",
-    "postinstall": "node ./tools/post-install.js"
+    "preinstall": "node -e \"if (process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('Use Yarn to install dependencies: yarn install')\""
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -42,9 +42,6 @@
     "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.10.2",
-    "@electron-forge/maker-msix": "^7.10.2",
-    "@electron-forge/shared-types": "^7.10.2",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
@@ -70,6 +67,7 @@
     "cli-progress": "^3.12.0",
     "clui": "^0.3.6",
     "electron": "^37.10.0",
+    "electron-builder": "^26.0.12",
     "electron-builder-squirrel-windows": "^25.1.8",
     "electron-squirrel-startup": "^1.0.1",
     "electron-vite": "^4.0.0",
@@ -92,8 +90,5 @@
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
-  },
-  "config": {
-    "forge": "./forge.config.ts"
   }
 }

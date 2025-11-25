@@ -26,7 +26,7 @@ export default {
     ...(process.platform === 'linux'
       ? [
           {
-            from: 'bin/linux',
+            from: `bin/linux/${process.arch}`,
             to: 'bin',
             filter: ['*']
           }
