@@ -68,7 +68,7 @@
     "clui": "^0.3.6",
     "electron": "^37.10.0",
     "electron-builder": "^26.0.12",
-    "electron-builder-squirrel-windows": "^25.1.8",
+    "electron-builder-squirrel-windows": "^26.0.12",
     "electron-squirrel-startup": "^1.0.1",
     "electron-vite": "^4.0.0",
     "eslint": "^9.31.0",

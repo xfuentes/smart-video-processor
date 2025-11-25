@@ -9,10 +9,7 @@
   <Properties>
     <DisplayName>${displayName}</DisplayName>
     <PublisherDisplayName>${publisherDisplayName}</PublisherDisplayName>
-    <Description>This tool automatically identifies your movies and TV shows using popular databases,
-      then streamlines the entire process: rename files using Plex-friendly conventions,
-      attach artwork, correct metadata (including track language and type), split or join media files
-      and encode to H.264 or H.265—all in one place.</Description>
+    <Description>This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata, split or join media files and encode to H.264 or H.265—all in one place.</Description>
     <Logo>${logo}</Logo>
     <uap10:PackageIntegrity>
       <uap10:Content Enforcement="on"/>
