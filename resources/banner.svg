@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
    sodipodi:docname="banner.svg"
-   inkscape:export-filename="../b74b3bad/banner.png"
+   inkscape:export-filename="../a4b031b/banner.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -28,15 +28,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="1.4142136"
-     inkscape:cx="315.01607"
-     inkscape:cy="79.549513"
+     inkscape:cx="314.66251"
+     inkscape:cy="79.549511"
      inkscape:window-width="1870"
      inkscape:window-height="1011"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="50"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1"
-     inkscape:export-bgcolor="#ffffffff" />
+     inkscape:export-bgcolor="#ffffffff"
+     showgrid="false" />
   <defs
      id="defs1">
     <linearGradient
@@ -451,23 +452,23 @@
        style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);display:inline;fill:#000000" />
     <text
        xml:space="preserve"
-       transform="matrix(0.37371677,0,0,0.37371677,-2.4259358,-0.21822783)"
+       transform="matrix(0.46955094,0,0,0.46955094,-19.846269,4.2706428)"
        id="text2"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:32px;font-family:FreeSerif;-inkscape-font-specification:'FreeSerif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect2);display:inline;fill:#000000;fill-opacity:1;stroke:url(#radialGradient41);stroke-width:1.00157;stroke-dasharray:none;stroke-opacity:1"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.6553px;font-family:FreeSerif;-inkscape-font-specification:'FreeSerif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect2);display:inline;fill:#000000;fill-opacity:1;stroke:url(#radialGradient41);stroke-width:1.00157;stroke-dasharray:none;stroke-opacity:1"><tspan
          x="151.5"
-         y="55.6"
-         id="tspan3">Smart Video Processor</tspan></text>
+         y="46.044631"
+         id="tspan1">Smart Video Processor</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(0.37371677,0,0,0.37371677,-2.4259358,-2.0868117)"
+       transform="matrix(0.38488286,0,0,0.38488286,-6.7305794,4.8826705)"
        id="text3"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:26.6667px;font-family:FreeSerif;-inkscape-font-specification:'FreeSerif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect3);display:inline;fill:#29abe2;fill-opacity:1;stroke:#000000;stroke-width:0.623622;stroke-dasharray:none;stroke-opacity:1"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.8794px;font-family:FreeSerif;-inkscape-font-specification:'FreeSerif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect3);display:inline;fill:#29abe2;fill-opacity:1;stroke:#000000;stroke-width:0.623622;stroke-dasharray:none;stroke-opacity:1"><tspan
          x="151.5"
-         y="102.1667"
-         id="tspan5">Reorganize, correct and encode </tspan><tspan
+         y="94.203844"
+         id="tspan2">Smart, seamless organization for </tspan><tspan
          x="151.5"
-         y="135.50007"
-         id="tspan6">your videos and series</tspan></text>
+         y="117.8031"
+         id="tspan3">your DVD and Blu-ray backups.</tspan></text>
   </g>
   <script
      id="mesh_polyfill"

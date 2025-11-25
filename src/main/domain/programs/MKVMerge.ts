@@ -29,6 +29,7 @@ import { ProgressNotifier } from '../../../common/@types/processes'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
 import { currentSettings } from '../Settings'
 import * as os from 'node:os'
+import * as fs from 'node:fs'
 
 export const MKVMERGE_ENGLISH = os.platform() === 'win32' ? 'en' : 'en_US'
 
@@ -137,6 +138,7 @@ export class MKVMerge extends CommandProgress {
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     const args = this.generateProcessingArguments(originalFilename, path, outputDirectory, changes, tracks)
+    fs.mkdirSync(outputDirectory, { recursive: true })
     const progressionPattern: RegExp = /Progress: (?<progress>\d+)%/i
     const errorPattern: RegExp = /Error: (?<message>.*)/i
 
