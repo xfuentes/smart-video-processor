@@ -37,8 +37,10 @@ jobs:
       - name: test
         run: yarn run test
 
-      - name: package
+      - name: packaging
         run: yarn run package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare-snap
         run: yarn run prepare-snap
