@@ -31,9 +31,11 @@ Alternatively as debian package:
 
 ### b) Windows 10 or later
 
-Install it from the Microsoft Store
+<a href="https://apps.microsoft.com/detail/9pg7l9jr8k6m?referrer=appbadge&mode=direct">
+<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/>
+</a>
 
-Run the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
+Alternatively you can install the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
 
 ## 2) Set your preferences
 
