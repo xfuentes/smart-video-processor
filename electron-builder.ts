@@ -69,7 +69,8 @@ export default {
     maxVersionTested: '10.0.22000.1',
     languages: ['en-US'],
     backgroundColor: 'transparent',
-    customManifestPath: 'AppxManifestTemplate.xml'
+    customManifestPath: 'AppxManifestTemplate.xml',
+    artifactName: 'smart-video-processor.appx'
   },
   squirrelWindows: {
     useAppIdAsId: true,
