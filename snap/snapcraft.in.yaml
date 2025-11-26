@@ -51,6 +51,8 @@ parts:
     plugin: nil
     source: .
     override-build: |
+      yarn install electron electron-builder
+      yarn run package --dir --linux --__ARCH__
       mkdir $SNAPCRAFT_PART_INSTALL/opt
       cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
