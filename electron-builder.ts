@@ -44,14 +44,15 @@ export default {
   ],
   win: {
     appId: 'smart-video-processor',
-    /* signtoolOptions: {
-      certificateFile: 'CodingCertificate.pfx',
-      certificatePassword: 'svp',
+    signtoolOptions: {
+      /* certificateFile: 'CodingCertificate.pfx',
+      certificatePassword: 'svp', */
       publisherName: 'CN=F8CDDB61-F860-4CB9-B176-609E178A4DA9'
-    }, */
+    },
     target: ['appx', 'squirrel'],
     icon: 'icons/icon.ico',
-    executableName: 'SmartVideoProcessor'
+    executableName: 'SmartVideoProcessor',
+    artifactName: '${productName}-${arch}.${ext}'
   },
   linux: {
     target: ['dir', 'AppImage'],
@@ -69,8 +70,7 @@ export default {
     maxVersionTested: '10.0.22000.1',
     languages: ['en-US'],
     backgroundColor: 'transparent',
-    customManifestPath: 'AppxManifestTemplate.xml',
-    artifactName: 'smart-video-processor.appx'
+    customManifestPath: 'AppxManifestTemplate.xml'
   },
   squirrelWindows: {
     useAppIdAsId: true,
