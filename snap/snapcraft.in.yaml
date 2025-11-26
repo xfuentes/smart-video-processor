@@ -24,7 +24,7 @@ compression: lzo
 apps:
   smart-video-processor:
     command: opt/smart-video-processor/smart-video-processor-launcher --no-sandbox
-    desktop: smart-video-processor.desktop
+    desktop: opt/smart-video-processor/smart-video-processor.desktop
     extensions:
       - gnome
     plugs:
@@ -51,10 +51,12 @@ parts:
     plugin: nil
     source: .
     override-build: |
-      mkdir $SNAPCRAFT_PART_INSTALL/opt
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt
       cp -rv ./dist/linux*unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
-      cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
+      install -D ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
+      install -D ./snap/gui/smart-video-processor.png $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.png
+      install -D ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.desktop
       install -D bin/linux/__ARCH__/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
       install -D bin/linux/__ARCH__/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
     build-snaps:
@@ -65,8 +67,6 @@ parts:
     stage-packages:
       - libproxy1v5
       - glib-networking
-      - libblas3
-      - liblapack3
     organize:
       usr/lib/*-linux-gnu/blas/*: usr/lib/
       usr/lib/*-linux-gnu/lapack/*.so*: usr/lib/
