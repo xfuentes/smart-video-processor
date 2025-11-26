@@ -24,7 +24,7 @@ compression: lzo
 apps:
   smart-video-processor:
     command: opt/smart-video-processor/smart-video-processor-launcher --no-sandbox
-    desktop: opt/smart-video-processor/smart-video-processor.desktop
+    desktop: smart-video-processor.desktop
     extensions:
       - gnome
     plugs:
@@ -55,7 +55,6 @@ parts:
       cp -rv ./dist/linux*unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
-      cp ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/
       install -D bin/linux/__ARCH__/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
       install -D bin/linux/__ARCH__/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
     build-snaps:
