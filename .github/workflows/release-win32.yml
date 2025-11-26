@@ -43,15 +43,6 @@ jobs:
 
       - name: package
         run: yarn run package
-
-      - name: release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          files: |
-            dist/**/RELEASES
-            dist/**/*.exe
-            dist/**/*.nupkg
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

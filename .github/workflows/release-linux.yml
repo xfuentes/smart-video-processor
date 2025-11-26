@@ -37,7 +37,7 @@ jobs:
       - name: test
         run: yarn run test
 
-      - name: packaging
+      - name: package
         run: yarn run package
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,13 +58,3 @@ jobs:
         with:
           snap: ${{ steps.build.outputs.snap }}
           release: stable
-
-      - name: release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          files: |
-            dist/**/*.deb
-            dist/**/*.AppImage
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
