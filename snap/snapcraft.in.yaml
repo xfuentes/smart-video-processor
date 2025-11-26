@@ -51,10 +51,8 @@ parts:
     plugin: nil
     source: .
     override-build: |
-      yarn install
-      yarn run package --dir --linux --__ARCH__
       mkdir $SNAPCRAFT_PART_INSTALL/opt
-      cp -rv ./dist/linux-unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
+      cp -rv ./dist/linux*unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
       cp ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
       cp ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/
