@@ -14,7 +14,7 @@ issues: https://github.com/xfuentes/smart-video-processor/issues
 source-code: https://github.com/xfuentes/smart-video-processor
 website: https://github.com/xfuentes/smart-video-processor
 donation: https://paypal.me/xfuentesdev
-icon: gui/smart-video-processor.png
+icon: snap/gui/smart-video-processor.png
 
 base: core24
 grade: stable
