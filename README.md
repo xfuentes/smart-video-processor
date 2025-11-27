@@ -1,7 +1,7 @@
 # Smart Video Processor
 
-[![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
-[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-win32.yml?label=win%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-win32.yml)
+[![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&label=build&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
+[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-win32.yml?label=m$%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-win32.yml)
 [![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total)
