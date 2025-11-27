@@ -6,8 +6,14 @@ name: win32 beta build
 on:
   push:
     branches: [ "beta" ]
+    paths:
+      - 'src/**'
+      - 'test/**'
   pull_request:
     branches: [ "beta" ]
+    paths:
+      - 'src/**'
+      - 'test/**'
 
 jobs:
   build:

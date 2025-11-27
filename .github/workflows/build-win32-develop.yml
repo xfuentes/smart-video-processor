@@ -6,6 +6,9 @@ name: win32 develop build
 on:
   push:
     branches: [ "develop" ]
+    paths:
+      - 'src/**'
+      - 'test/**'
 
 jobs:
   build:
