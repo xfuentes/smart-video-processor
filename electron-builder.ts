@@ -52,9 +52,10 @@ export default {
     target: ['appx', 'squirrel'],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor',
-    artifactName: '${productName}-${arch}.${ext}'
+    artifactName: '${name}-${arch}.${ext}'
   },
   linux: {
+    artifactName: '${name}-${version}-${arch}.${ext}',
     target: ['dir', 'AppImage'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@hotmail.com>',

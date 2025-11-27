@@ -24,9 +24,6 @@ jobs:
         with:
           lfs: true
 
-      - name: Check out LFS files
-        run: git lfs checkout
-
       - name: Install Windows SDK
         if: runner.os == 'Windows'
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
@@ -62,4 +59,4 @@ jobs:
           --clientSecret ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
 
       - name: Publish to Microsoft Store
-        run: msstore publish '${{ github.workspace }}/dist/Smart Video Processor-x64.appx' -id 9PG7L9JR8K6M
+        run: msstore publish '${{ github.workspace }}/dist/smart-video-processor-x64.appx' -id 9PG7L9JR8K6M

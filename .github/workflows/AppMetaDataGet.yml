@@ -1,4 +1,4 @@
-name: GetBaseMetadata
+name: AppMetaDataGet
 
 on:
   workflow_dispatch:
