@@ -55,8 +55,8 @@ jobs:
         run: msstore reconfigure `
           --tenantId ${{ secrets.AZURE_AD_TENANT_ID }} `
           --sellerId ${{ secrets.SELLER_ID }} `
-          --clientId ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }} `
-          --clientSecret ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          --clientId ${{ secrets.AZURE_AD_GH_CLIENT_ID }} `
+          --clientSecret ${{ secrets.AZURE_AD_GH_SECRET }}
 
       - name: Publish to Microsoft Store
         run: msstore publish '${{ github.workspace }}/dist/smart-video-processor-x64.appx' -id 9PG7L9JR8K6M
