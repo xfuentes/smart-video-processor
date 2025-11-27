@@ -22,7 +22,7 @@
           "encoding",
           "organizing"
         ],
-        "Description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.",
+        "Description": "This tool automatically identifies your movies and TV shows using popular databases,\nthen streamlines the entire process: rename files using Plex-friendly conventions,\nattach artwork, correct metadata (including track language and type),\nsplit or join media files and encode to H.264 or H.265—all in one place.",
         "Features": [
           "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
           "Smart File Renaming: Renames files using Plex/Kodi-friendly naming conventions",
