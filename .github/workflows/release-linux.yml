@@ -21,6 +21,11 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Check out LFS files
+        run: git lfs checkout
 
       - name: Install Node.js
         uses: actions/setup-node@v3
