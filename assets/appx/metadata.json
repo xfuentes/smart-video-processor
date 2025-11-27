@@ -1,5 +1,5 @@
 {
-  "Id": "1152921505700190410",
+  "Id": "1152921505700200945",
   "ApplicationCategory": "PhotoAndVideo",
   "Pricing": {
     "TrialPeriod": "NoFreeTrial",
@@ -22,14 +22,14 @@
           "encoding",
           "organizing"
         ],
-        "Description": "This tool automatically identifies your movies and TV shows using popular databases,\nthen streamlines the entire process: rename files using Plex-friendly conventions,\nattach artwork, correct metadata (including track language and type),\nsplit or join media files and encode to H.264 or H.265—all in one place.",
+        "Description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265\u2014all in one place.",
         "Features": [
           "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
           "Smart File Renaming: Renames files using Plex/Kodi-friendly naming conventions",
           "Metadata Correction: Fetches and corrects title, year, episode name...",
-          "Audio & Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
-          "Poster & Thumbnail Download: Automatically downloads posters and thumbnails.",
-          "Media File Splitting & Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
+          "Audio \u0026 Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
+          "Poster \u0026 Thumbnail Download: Automatically downloads posters and thumbnails.",
+          "Media File Splitting \u0026 Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
           "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
           "Batch Processing: Handles multiple files simultaneously with queue management."
         ],
@@ -131,7 +131,7 @@
   "HasExternalInAppProducts": false,
   "MeetAccessibilityGuidelines": false,
   "NotesForCertification": "",
-  "Status": "Published",
+  "Status": "PendingCommit",
   "StatusDetails": {
     "Errors": [],
     "Warnings": [
@@ -142,7 +142,8 @@
     ],
     "CertificationReports": []
   },
-  "FileUploadUrl": null,
+  "FileUploadUrl":
+  "https://ingestionpackagesprod1.blob.core.windows.net/ingestion/b856c62e-5b6d-493f-85e4-3178714ce7a5?skoid=6a05eb41-c97a-4f14-a5ce-d392056c0e00\u0026sktid=975f013f-7f24-47e8-a7d3-abc4752bf346\u0026skt=2025-11-27T15%3A41%3A42Z\u0026ske=2025-12-04T15%3A41%3A42Z\u0026sks=b\u0026skv=2024-05-04\u0026sv=2024-05-04\u0026se=2025-11-28T16%3A05%3A55Z\u0026sr=b\u0026sp=rwl\u0026sig=lNHILa9ZwBdi2gBKxP1qNPmErzKjzkahOn29NLX1iGU%3D",
   "ApplicationPackages": [
     {
       "FileName": "smart-video-processor.appx",
@@ -180,9 +181,8 @@
     "Mobile": false,
     "Xbox": false,
     "Team": false,
-    "Holographic": false,
-    "7": false
+    "Holographic": false
   },
-  "FriendlyName": "Submission 2",
+  "FriendlyName": "Submission 4",
   "Trailers": []
 }
