@@ -1,7 +1,7 @@
 # Smart Video Processor
 
 [![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
-[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-windows.yml?label=win%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-windows.yml)
+[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-win32.yml?label=win%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-win32.yml)
 [![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total)
@@ -15,7 +15,7 @@ and encode to H.264 or H.265—all in one place.
 ## 1) Installation
 All dependencies are packaged with it, just install and you will be ready to go.
 
-### a) Ubuntu Linux
+### a) Linux
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
 
 After installation from the Snap Store, you can optionally enable removable media write access with this command :
@@ -23,11 +23,7 @@ After installation from the Snap Store, you can optionally enable removable medi
     sudo snap connect smart-video-processor:removable-media
   ```
 
-Alternatively as debian package:
-  ```shell
-    sudo apt-get install mkvtoolnix ffmpeg
-    sudo dpkg -i ./smart-video-processor_0.2.0_amd64.deb
-  ```
+Alternatively there is an APPIMAGE file available.
 
 ### b) Windows 10 or later
 
