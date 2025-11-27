@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>appimage</w>
+      <w>bbwe</w>
       <w>craftctl</w>
       <w>davidwinter</w>
       <w>falourd</w>
@@ -16,11 +17,13 @@
       <w>mkvmerge</w>
       <w>mkvtoolnix</w>
       <w>msix</w>
+      <w>msstore</w>
       <w>msvideo</w>
       <w>muxing</w>
       <w>nokey</w>
       <w>ntsuspend</w>
       <w>passlogfile</w>
+      <w>pricings</w>
       <w>signtool</w>
       <w>snapcore</w>
       <w>snapstore</w>
@@ -30,6 +33,7 @@
       <w>tvdb</w>
       <w>videojs</w>
       <w>vitejs</w>
+      <w>wekyb</w>
       <w>xfuentes</w>
       <w>zstd</w>
     </words>

@@ -3,7 +3,7 @@ name: AppMetadataAutoUpdate
 on:
   push:
     paths:
-      - 'metadata/metadata.json'
+      - 'assets/appx/metadata.json'
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Update metadata
         run: |
-          $metadata = Get-Content -Raw "${{ github.workspace }}/metadata/metadata.json"
+          $metadata = Get-Content -Raw "${{ github.workspace }}/assets/appx/metadata.json"
           msstore submission updateMetadata 9PG7L9JR8K6M $metadata
       - name: Publish to Store
         run: msstore submission publish 9PG7L9JR8K6M
