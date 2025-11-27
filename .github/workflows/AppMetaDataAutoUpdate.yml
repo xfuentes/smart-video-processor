@@ -1,9 +1,7 @@
 name: AppMetadataAutoUpdate
 
 on:
-  push:
-    paths:
-      - 'assets/appx/metadata.json'
+  workflow_dispatch:
 
 jobs:
   build:
