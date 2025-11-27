@@ -5,12 +5,12 @@ name: win32 build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
     paths:
       - 'src/**'
       - 'test/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "beta" ]
     paths:
       - 'src/**'
       - 'test/**'
