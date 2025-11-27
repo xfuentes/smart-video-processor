@@ -6,6 +6,9 @@ name: linux develop build
 on:
   push:
     branches: [ "develop" ]
+    paths:
+      - 'src/**'
+      - 'test/**'
 
 jobs:
   build:
