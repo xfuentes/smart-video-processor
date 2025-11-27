@@ -24,9 +24,6 @@ jobs:
         with:
           lfs: true
 
-      - name: Check out LFS files
-        run: git lfs checkout
-
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
