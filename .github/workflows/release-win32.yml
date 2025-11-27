@@ -59,4 +59,4 @@ jobs:
           --clientSecret ${{ secrets.AZURE_AD_GH_SECRET }}
 
       - name: Publish to Microsoft Store
-        run: msstore publish '${{ github.workspace }}/dist/smart-video-processor-x64.appx' -id 9PG7L9JR8K6M
+        run: msstore publish -i '${{ github.workspace }}/dist/win-unpacked/' -id 9PG7L9JR8K6M

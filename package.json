@@ -1,7 +1,8 @@
 {
+  "version": "1.5.7",
+  "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "private": true,
-  "version": "1.5.7",
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
   "author": "Xavier Fuentes",

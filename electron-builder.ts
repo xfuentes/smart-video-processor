@@ -45,11 +45,17 @@ export default {
   win: {
     appId: 'smart-video-processor',
     signtoolOptions: {
-      /* certificateFile: 'CodingCertificate.pfx',
-      certificatePassword: 'svp', */
+      certificateFile: 'CodingCertificate.pfx',
+      certificatePassword: 'svp',
       publisherName: 'CN=F8CDDB61-F860-4CB9-B176-609E178A4DA9'
     },
-    target: ['appx', 'squirrel'],
+    target: [
+      'appx',
+      {
+        target: 'squirrel',
+        arch: 'x64'
+      }
+    ],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor',
     artifactName: '${name}-${arch}.${ext}'
