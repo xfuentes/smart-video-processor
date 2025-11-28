@@ -1,0 +1,56 @@
+name: Publish Microsoft Store
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ windows-2025 ] # windows-11-arm
+        node-version: [22.x]
+
+    steps:
+      - name: Set Package URL
+        run: |
+          if ("${{ matrix.os }}" -eq "windows-11-arm") {
+            echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $env:GITHUB_ENV
+            echo "PACKAGE_ARCH=arm64" >> $env:GITHUB_ENV
+          } else {
+            echo "PACKAGE_NAME=smart-video-processor-x64.appx" >> $env:GITHUB_ENV
+            echo "PACKAGE_ARCH=X64" >> $env:GITHUB_ENV
+          }
+
+      - name: Get asset URL with PowerShell
+        shell: pwsh
+        run: |
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/xfuentes/smart-video-processor/releases/latest"
+          $asset = $release.assets | Where-Object { $_.name -eq "${{ env.PACKAGE_NAME }}" }
+          Write-Output "URL: $($asset.browser_download_url)"
+          echo "PACKAGE_URL=$($asset.browser_download_url)" >> $env:GITHUB_ENV
+
+      - name: Configure Store Credentials
+        uses: microsoft/store-submission@v1
+        with:
+          command: configure
+          type: win32
+          seller-id: ${{ secrets.SELLER_ID }}
+          product-id: '9PG7L9JR8K6M'
+          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_AD_GH_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_AD_GH_SECRET }}
+
+      - name: Update Draft Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: update
+          product-update: '{"packages":[{"packageUrl":"${{ env.PACKAGE_URL }}","architectures":["${{ env.PACKAGE_ARCH }}"],"isSilentInstall":true}]}'
+
+      - name: Publish Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: publish

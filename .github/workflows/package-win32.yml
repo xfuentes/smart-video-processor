@@ -1,0 +1,53 @@
+name: package win32
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      discussions: write
+      deployments: write
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ windows-2025 ] # windows-11-arm
+        node-version: [22.x]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Windows SDK
+        if: runner.os == 'Windows'
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: build
+        run: yarn run build
+
+      - name: test
+        run: yarn run test
+
+      - name: prepare-package
+        run: yarn run prepare-package
+        env:
+          MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
+
+      - name: package
+        run: yarn run package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
