@@ -62,6 +62,15 @@ jobs:
             echo "PACKAGE_ARCH=X64" >> $env:GITHUB_ENV
           }
 
+      - name: Check if APPX exists
+        run: |
+          if (Test-Path "./dist/${{ env.PACKAGE_NAME }}") {
+            Write-Host "Package exists!"
+          } else {
+            Write-Host "Package does not exist!"
+            exit 1
+          }
+
       - name: Configure Store Credentials
         uses: microsoft/store-submission@v1
         with:
@@ -77,7 +86,7 @@ jobs:
         uses: microsoft/store-submission@v1
         with:
           command: update
-          product-update: '{"packages":[{"packageUrl":"${{ github.workspace }}/dist/${{ env.PACKAGE_NAME }}","architectures":["${{ env.PACKAGE_ARCH }}"],"isSilentInstall":true}]}'
+          product-update: '{"packages":[{"packageUrl":"./dist/${{ env.PACKAGE_NAME }}","architectures":["${{ env.PACKAGE_ARCH }}"],"isSilentInstall":true}]}'
 
       - name: Publish Submission
         uses: microsoft/store-submission@v1
