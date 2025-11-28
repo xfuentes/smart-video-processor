@@ -54,13 +54,13 @@ jobs:
 
       - name: Set Package Name
         run: |
-          if [ "${{ matrix.os }}" == "windows-11-arm" ]; then
-            echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $GITHUB_ENV
-            echo "PACKAGE_ARCH=arm64" >> $GITHUB_ENV
-          else
-            echo "PACKAGE_NAME=smart-video-processor-x64.appx" >> $GITHUB_ENV
-            echo "PACKAGE_ARCH=X64" >> $GITHUB_ENV
-          fi
+          if (${{ matrix.os }} -eq "windows-11-arm") {
+            echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $env:GITHUB_ENV
+            echo "PACKAGE_ARCH=arm64" >> $env:GITHUB_ENV
+          } else {
+            echo "PACKAGE_NAME=smart-video-processor-x64.appx" >> $env:GITHUB_ENV
+            echo "PACKAGE_ARCH=X64" >> $env:GITHUB_ENV
+          }
 
       - name: Configure Store Credentials
         uses: microsoft/store-submission@v1
