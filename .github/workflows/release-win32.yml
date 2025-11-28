@@ -54,7 +54,7 @@ jobs:
 
       - name: Set Package Name
         run: |
-          if (${{ matrix.os }} -eq "windows-11-arm") {
+          if ("${{ matrix.os }}" -eq "windows-11-arm") {
             echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $env:GITHUB_ENV
             echo "PACKAGE_ARCH=arm64" >> $env:GITHUB_ENV
           } else {
