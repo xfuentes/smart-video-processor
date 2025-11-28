@@ -31,10 +31,9 @@
     "dev": "electron-vite dev",
     "build": "yarn run typecheck && electron-vite build",
     "package": "electron-builder",
-    "prepare-snap": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
+    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
     "test": "vitest run",
-    "coverage": "vitest --coverage.enabled",
-    "preinstall": "node -e \"if (process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('Use Yarn to install dependencies: yarn install')\""
+    "coverage": "vitest --coverage.enabled"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -87,7 +86,8 @@
     "uuid": "^11.1.0",
     "vite": "^7.1.12",
     "vitest": "^3.0.9",
-    "yargs": "^18.0.0"
+    "yargs": "^18.0.0",
+    "node-fetch": "^3.3.2"
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"

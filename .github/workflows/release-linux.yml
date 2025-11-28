@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -39,6 +37,11 @@ jobs:
 
       - name: test
         run: yarn run test
+
+      - name: prepare-package
+        run: yarn run prepare-package
+        env:
+          MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
 
       - name: package
         run: yarn run package

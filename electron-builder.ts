@@ -14,24 +14,11 @@ export default {
   files: ['build/**/*', 'resources/flags'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   extraResources: [
-    ...(process.platform === 'win32'
-      ? [
-          {
-            from: 'bin/win',
-            to: 'bin',
-            filter: ['*']
-          }
-        ]
-      : []),
-    ...(process.platform === 'linux'
-      ? [
-          {
-            from: `bin/linux/${process.arch}`,
-            to: 'bin',
-            filter: ['*']
-          }
-        ]
-      : [])
+    {
+      from: 'dist/bin',
+      to: 'bin',
+      filter: ['*']
+    }
   ],
   asar: true,
   fileAssociations: [

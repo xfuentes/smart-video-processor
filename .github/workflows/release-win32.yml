@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
 
       - name: Install Windows SDK
         if: runner.os == 'Windows'
@@ -44,6 +42,11 @@ jobs:
       - name: test
         run: yarn run test
 
+      - name: prepare-package
+        run: yarn run prepare-package
+        env:
+          MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
+
       - name: package
         run: yarn run package
         env:
@@ -53,8 +56,10 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "windows-11-arm" ]; then
             echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $GITHUB_ENV
+            echo "PACKAGE_ARCH=arm64" >> $GITHUB_ENV
           else
             echo "PACKAGE_NAME=smart-video-processor-x64.appx" >> $GITHUB_ENV
+            echo "PACKAGE_ARCH=X64" >> $GITHUB_ENV
           fi
 
       - name: Configure Store Credentials
@@ -72,7 +77,7 @@ jobs:
         uses: microsoft/store-submission@v1
         with:
           command: update
-          product-update: '{"packages":[{"packageUrl":"${{ github.workspace }}/dist/${{ env.PACKAGE_NAME }}","architectures":["X64"],"isSilentInstall":true}]}'
+          product-update: '{"packages":[{"packageUrl":"${{ github.workspace }}/dist/${{ env.PACKAGE_NAME }}","architectures":["${{ env.PACKAGE_ARCH }}"],"isSilentInstall":true}]}'
 
       - name: Publish Submission
         uses: microsoft/store-submission@v1
