@@ -1,0 +1,17 @@
+name: publish to snapstore
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Afficher les infos
+        run: |
+          echo "Version publiée : ${{ github.event.release.tag_name }}"
+          echo "Titre : ${{ github.event.release.name }}"
