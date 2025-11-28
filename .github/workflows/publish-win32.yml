@@ -1,8 +1,9 @@
-name: Publish Microsoft Store
+name: publish to M$ Store
 
 on:
   release:
     types: [published]
+
   workflow_dispatch:
 
 jobs:
