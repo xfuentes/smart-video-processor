@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-2025 ]
+        os: [ windows-2025, windows-11-arm ]
         node-version: [22.x]
 
     steps:
@@ -48,15 +48,32 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configure Microsoft Store CLI
-        uses: microsoft/microsoft-store-apppublisher@v1.1
+      - name: Set Package Name
+        run: |
+          if [ "${{ matrix.os }}" == "windows-11-arm" ]; then
+            echo "PACKAGE_NAME=smart-video-processor-arm64.appx" >> $GITHUB_ENV
+          else
+            echo "PACKAGE_NAME=smart-video-processor-x64.appx" >> $GITHUB_ENV
+          fi
 
-      - name: Reconfigure Store Credentials
-        run: msstore reconfigure `
-          --tenantId ${{ secrets.AZURE_AD_TENANT_ID }} `
-          --sellerId ${{ secrets.SELLER_ID }} `
-          --clientId ${{ secrets.AZURE_AD_GH_CLIENT_ID }} `
-          --clientSecret ${{ secrets.AZURE_AD_GH_SECRET }}
+      - name: Configure Store Credentials
+        uses: microsoft/store-submission@v1
+        with:
+          command: configure
+          type: win32
+          seller-id: ${{ secrets.SELLER_ID }}
+          product-id: '9PG7L9JR8K6M'
+          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_AD_GH_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_AD_GH_SECRET }}
 
-      - name: Publish to Microsoft Store
-        run: msstore publish -i '${{ github.workspace }}/dist/win-unpacked/' -id 9PG7L9JR8K6M
+      - name: Update Draft Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: update
+          product-update: '{"packages":[{"packageUrl":"${{ github.workspace }}/dist/${{ env.PACKAGE_NAME }}","architectures":["X64"],"isSilentInstall":true}]}'
+
+      - name: Publish Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: publish
