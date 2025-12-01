@@ -250,7 +250,7 @@ export class Video implements IVideo {
   }
 
   async load(searchEnabled: boolean = true) {
-    const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath))
+    const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory()))
     const { tracks, container } = await fij.queue()
     this.progression.progress = undefined
     this.status = JobStatus.LOADING
