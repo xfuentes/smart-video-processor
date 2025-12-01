@@ -30,14 +30,16 @@ const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
 const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
   if (os.platform() === 'win32') {
-    return process.resourcesPath
-      ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
-      : Path.join('bin', 'win', `${tool}.exe`)
+    const path =
+      process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1
+        ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+        : Path.join(__dirname, '..', '..', 'dist', 'bin', `${tool}.exe`)
+    return path
   } else if (os.platform() === 'linux') {
     if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
       return `${process.env.SNAP}/usr/bin/${tool}`
     }
-    const toolPathFromSources = Path.join(__dirname, '../', '../', 'bin', process.platform, process.arch, tool)
+    const toolPathFromSources = Path.join(__dirname, '..', '..', 'dist', 'bin', tool)
     if (isValidExecutable(toolPathFromSources)) {
       return toolPathFromSources
     }
@@ -88,15 +90,9 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  if (!isValidExecutable(currentSettings.mkvMergePath) && isValidExecutable(defaultSettings.mkvMergePath)) {
-    currentSettings.mkvMergePath = defaultSettings.mkvMergePath
-  }
-  if (!isValidExecutable(currentSettings.ffmpegPath) && isValidExecutable(defaultSettings.ffmpegPath)) {
-    currentSettings.ffmpegPath = defaultSettings.ffmpegPath
-  }
-  if (!isValidExecutable(currentSettings.ffprobePath) && isValidExecutable(defaultSettings.ffprobePath)) {
-    currentSettings.ffprobePath = defaultSettings.ffprobePath
-  }
+  currentSettings.mkvMergePath = defaultSettings.mkvMergePath
+  currentSettings.ffmpegPath = defaultSettings.ffmpegPath
+  currentSettings.ffprobePath = defaultSettings.ffprobePath
   currentSettings.isFineTrimEnabled = false
 }
 
@@ -126,27 +122,5 @@ function isValidExecutable(path: string) {
 }
 
 export function validateSettings(settings: Settings) {
-  const validationBuilder = new FormValidationBuilder<Settings>(settings)
-  if (!isValidExecutable(settings.mkvMergePath)) {
-    if (isValidExecutable(defaultSettings.mkvMergePath)) {
-      settings.mkvMergePath = defaultSettings.mkvMergePath
-    } else {
-      validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
-    }
-  }
-  if (!isValidExecutable(settings.ffmpegPath)) {
-    if (isValidExecutable(defaultSettings.ffmpegPath)) {
-      settings.ffmpegPath = defaultSettings.ffmpegPath
-    } else {
-      validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
-    }
-  }
-  if (!isValidExecutable(settings.ffprobePath)) {
-    if (isValidExecutable(defaultSettings.ffprobePath)) {
-      settings.ffprobePath = defaultSettings.ffprobePath
-    } else {
-      validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
-    }
-  }
-  return validationBuilder.build()
+  return new FormValidationBuilder<Settings>(settings).build()
 }
