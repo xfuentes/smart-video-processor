@@ -65,7 +65,7 @@ test('Job Fermer Gueule Info', async () => {
     }
     lastFileDeleted = path.toString()
   })
-  const job: FileInfoLoadingJob = new FileInfoLoadingJob(origPath)
+  const job: FileInfoLoadingJob = new FileInfoLoadingJob(origPath, '/tmp')
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.finished).toBe(false)
