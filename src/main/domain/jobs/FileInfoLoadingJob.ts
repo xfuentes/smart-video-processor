@@ -28,10 +28,12 @@ import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../c
 
 export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string
+  private readonly destinationPath: string
 
-  constructor(path: string) {
+  constructor(path: string, destinationPath: string) {
     super(JobStatus.LOADING, 'Loading file information.')
     this.sourcePath = path
+    this.destinationPath = destinationPath
   }
 
   protected async executeInternal(): Promise<{ tracks: Track[]; container: Container }> {
@@ -47,7 +49,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
     if (!unsupported) {
       const videoTrack = mkvMergeOut.tracks.find((t) => t.type === TrackType.VIDEO)
       if (videoTrack !== undefined && videoTrack.properties.bitRate === undefined) {
-        const outputPath = this.sourcePath + '.pre-process'
+        const outputPath = path.join(this.destinationPath, path.basename(this.sourcePath) + '.pre-process')
         const changes = [
           new Change(
             ChangeSourceType.CONTAINER,
@@ -59,9 +61,9 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
           )
         ]
         await MKVMerge.getInstance().processFile(
-          path.basename(this.sourcePath),
+          path.basename(outputPath),
           this.sourcePath,
-          '/',
+          this.destinationPath,
           changes,
           [],
           this.setProgression.bind(this)
