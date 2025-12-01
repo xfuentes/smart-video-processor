@@ -57,8 +57,8 @@ parts:
       install -D ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
       install -D ./snap/gui/smart-video-processor.png $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.png
       install -D ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.desktop
-      install -D bin/linux/__ARCH__/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
-      install -D bin/linux/__ARCH__/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
+      install -D dist/bin/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
+      install -D dist/bin/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
     build-snaps:
       - node/22/stable
     build-packages:

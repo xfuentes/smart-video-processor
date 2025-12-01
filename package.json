@@ -31,7 +31,7 @@
     "dev": "electron-vite dev",
     "build": "yarn run typecheck && electron-vite build",
     "package": "electron-builder",
-    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
+    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled"
   },
