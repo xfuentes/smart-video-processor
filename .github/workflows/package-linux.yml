@@ -1,4 +1,4 @@
-name: release linux
+name: package linux
 
 on:
   push:
@@ -47,9 +47,6 @@ jobs:
         run: yarn run package
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: prepare-snap
-        run: yarn run prepare-snap
 
       - name: build linux snap
         uses: snapcore/action-build@v1
