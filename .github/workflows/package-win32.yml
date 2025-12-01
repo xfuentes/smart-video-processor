@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-2025 windows-11-arm ]
+        os: [ windows-2025, windows-11-arm ]
         node-version: [22.x]
 
     steps:
