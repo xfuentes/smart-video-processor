@@ -1,5 +1,5 @@
 {
-  "version": "1.5.7",
+  "version": "1.5.8",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "private": true,
@@ -79,6 +79,7 @@
     "hls.js": "^1.6.13",
     "lcid": "^5.0.0",
     "lodash": "^4.17.21",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -86,8 +87,7 @@
     "uuid": "^11.1.0",
     "vite": "^7.1.12",
     "vitest": "^3.0.9",
-    "yargs": "^18.0.0",
-    "node-fetch": "^3.3.2"
+    "yargs": "^18.0.0"
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
