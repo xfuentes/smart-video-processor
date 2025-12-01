@@ -1,8 +1,8 @@
 name: publish to M$ Store
 
 on:
-  release:
-    types: [published]
+  # release:
+  #    types: [published]
 
   workflow_dispatch:
 
