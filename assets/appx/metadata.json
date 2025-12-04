@@ -1,5 +1,5 @@
 {
-  "Id": "1152921505700200945",
+  "Id": "1152921505700211104",
   "ApplicationCategory": "PhotoAndVideo",
   "Pricing": {
     "TrialPeriod": "NoFreeTrial",
@@ -33,7 +33,7 @@
           "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
           "Batch Processing: Handles multiple files simultaneously with queue management."
         ],
-        "ReleaseNotes": "Improved packaging.\nPublication to Microsoft Store.",
+        "ReleaseNotes": "Fixes packaging.",
         "Images": [
           {
             "FileName": "08-Processing.png",
@@ -101,7 +101,7 @@
         "Title": "Smart Video Processor",
         "LicenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "CopyrightAndTrademarkInfo": "Copyright (c) 2025. Xavier Fuentes \u003Cxfuentes-dev@hotmail.com\u003E",
-        "ShortDescription": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
+        "ShortDescription": "Organize, Enhance and Encode Your Media Library Effortlessly",
         "ShortTitle": null,
         "VoiceTitle": null,
         "DevStudio": "Xavier Fuentes"
