@@ -68,6 +68,7 @@ export default {
   },
   squirrelWindows: {
     useAppIdAsId: true,
-    iconUrl: 'https://raw.githubusercontent.com/xfuentes/smart-video-processor/refs/heads/main/resources/icon.ico'
+    iconUrl: 'https://raw.githubusercontent.com/xfuentes/smart-video-processor/refs/heads/main/resources/icon.ico',
+    artifactName: '${name}-${version}.Setup.${ext}'
   }
 } as Configuration
