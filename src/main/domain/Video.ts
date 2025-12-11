@@ -22,7 +22,14 @@ import { TVShow } from './TVShow'
 import { Files } from '../util/files'
 import { v4 as UUIDv4 } from 'uuid'
 import { Container } from './programs/MKVMerge'
-import { Attachment, Change, ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
+import {
+  Attachment,
+  Change,
+  ChangeProperty,
+  ChangePropertyValue,
+  ChangeSourceType,
+  ChangeType
+} from '../../common/Change'
 import { Brain } from './Brain'
 import { Hint } from './Hint'
 import { Job } from './jobs/Job'
@@ -149,19 +156,37 @@ export class Video implements IVideo {
   public computeVersions() {
     const versions: string[] = []
     if (this.type !== VideoType.TV_SHOW) {
+      let videoCodec: string | undefined = undefined
+      let dimensions: string | undefined = undefined
+
       const videoTrack = this.tracks.find((t) => t.type === TrackType.VIDEO)
       if (videoTrack?.properties.videoDimensions) {
-        versions.push(Strings.pixelsToVideoFormat(videoTrack.properties.videoDimensions))
+        dimensions = Strings.pixelsToVideoFormat(videoTrack.properties.videoDimensions)
       }
       if (videoTrack?.codec) {
-        const codec = videoTrack?.codec.toLowerCase()
-        if (codec.indexOf('H.264')) {
-          versions.push('h264')
-        } else if (codec.indexOf('H.265')) {
-          versions.push('h265')
+        videoCodec = videoTrack?.codec.toLowerCase()
+      }
+      const videoSettings = this.encoderSettings.find((s) => s.trackType === TrackType.VIDEO)
+      if (videoSettings && this.isTrackEncodingEnabled(videoSettings.trackType + ' ' + videoSettings.trackId)) {
+        videoCodec = videoSettings.codec.toLowerCase()
+      }
+
+      if (dimensions) {
+        versions.push(dimensions)
+      }
+      if (videoCodec) {
+        let codec: string | undefined = undefined
+        if (videoCodec.indexOf('h.264') !== -1) {
+          codec = 'h264'
+        } else if (videoCodec.indexOf('h.265') !== -1) {
+          codec = 'h265'
+        }
+        if (codec) {
+          versions.push(codec)
         }
       }
     }
+
     return versions
   }
 
@@ -294,6 +319,31 @@ export class Video implements IVideo {
     }
     debug('### ENCODER SETTINGS ###')
     debug(this.encoderSettings)
+
+    const filenameChange = Brain.getInstance().generateFilenameChange(
+      this.sourcePath,
+      this.title,
+      this.type === VideoType.MOVIE ? this.movie.tmdb : undefined,
+      this.type === VideoType.MOVIE ? this.movie.edition : undefined,
+      this.computeVersions()
+    )
+
+    const oldFilenameChange = this.changes.find(
+      (c) => c.sourceType === ChangeSourceType.CONTAINER && c.property === ChangeProperty.FILENAME
+    )
+    if (filenameChange === undefined) {
+      if (oldFilenameChange !== undefined) {
+        // Remove filename change if not needed anymore
+        this.changes = this.changes.filter((c) => c === oldFilenameChange)
+      }
+    } else {
+      if (oldFilenameChange !== undefined) {
+        this.changes = this.changes.map((c) => (c === oldFilenameChange ? filenameChange : c))
+      } else {
+        this.changes.push(filenameChange)
+      }
+    }
+
     this.fireChangeEvent()
   }
 
