@@ -43,8 +43,15 @@ jobs:
         env:
           MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
 
-      - name: package
-        run: yarn run package
+      - name: package arm64
+        if: runner.arch == 'ARM64'
+        run: yarn run package --arm64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: package x64
+        if: runner.arch == 'X64'
+        run: yarn run package --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
