@@ -1,6 +1,5 @@
 {
-  "version": "1.5.10",
-  "msstoreCliAppId": "9PG7L9JR8K6M",
+  "version": "1.5.4",
   "name": "smart-video-processor",
   "private": true,
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
@@ -16,30 +15,20 @@
     "type": "git",
     "url": "git+https://github.com/xfuentes/smart-video-processor.git"
   },
-  "keywords": [
-    "video",
-    "processing",
-    "encode"
-  ],
+  "keywords": ["video", "processing", "encode"],
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
-    "typecheck": "yarn run typecheck:node && yarn run typecheck:web",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "yarn run typecheck && electron-vite build",
+    "build": "npm run typecheck && electron-vite build",
     "package": "electron-builder",
-    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
+    "prepare-snap": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./snap/gui",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled"
-  },
-  "dependencies": {
-    "@electron-toolkit/preload": "^3.0.2",
-    "@electron-toolkit/utils": "^4.0.0",
-    "electron-updater": "^6.3.9",
-    "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
@@ -66,9 +55,9 @@
     "cli-color": "0.3.2",
     "cli-progress": "^3.12.0",
     "clui": "^0.3.6",
-    "electron": "^39.2.6",
+    "electron": "^39.2.3",
     "electron-builder": "^26.0.12",
-    "electron-builder-squirrel-windows": "^26.0.12",
+    "electron-builder-squirrel-windows": "^26.3.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-vite": "^4.0.0",
     "eslint": "^9.31.0",
@@ -79,7 +68,6 @@
     "hls.js": "^1.6.13",
     "lcid": "^5.0.0",
     "lodash": "^4.17.21",
-    "node-fetch": "^3.3.2",
     "prettier": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -91,5 +79,19 @@
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
-  }
+  },
+  "config": {
+    "forge": "./forge.config.ts"
+  },
+  "_id": "smart-video-processor@1.5.4",
+  "extraneous": false,
+  "path": "/home/xfuentes/Documents/Projects/smart-video-processor",
+  "_dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "electron-updater": "^6.3.9",
+    "update-electron-app": "^3.1.1",
+    "ntsuspend": "^1.0.2"
+  },
+  "peerDependencies": {}
 }

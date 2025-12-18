@@ -30,9 +30,11 @@ import { Processes } from '../../../src/main/util/processes'
 import { ProcessingJob } from '../../../src/main/domain/jobs/ProcessingJob'
 import * as path from 'node:path'
 import { MKVMERGE_ENGLISH } from '../../../src/main/domain/programs/MKVMerge'
+import { Files } from '../../../src/main/util/files'
 
 test('Processing Progression data', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
   const spawnSpy = vi.spyOn(Processes, 'spawn').mockImplementation(simulateMKVMergeProgression)
   const changes = [
     {
@@ -79,6 +81,7 @@ test('Processing Progression data', async () => {
 test('Failing Processing Job', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateMKVmergeFailure)
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
   const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
   const outputPath = getFakeAbsolutePath('Download', 'Reworked')
   const changes = [

@@ -55,6 +55,7 @@ const genSpawnSpyFileInfo = (origPath: string, origJsonFileName: string, process
 test('Job Fermer Gueule Info', async () => {
   const origPath = 'C:\\Download\\original.mkv'
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
   const spy = genSpawnSpyFileInfo(origPath, 'mkvMergeInfoFermerGueule.json', 'mkvMergeInfoFermerGueuleProcessed.json')
   let lastFileDeleted: string = undefined
   vi.spyOn(FFprobe.getInstance(), 'completeFileInformation').mockImplementation(() => Promise.resolve())
@@ -64,7 +65,7 @@ test('Job Fermer Gueule Info', async () => {
     }
     lastFileDeleted = path.toString()
   })
-  const job: FileInfoLoadingJob = new FileInfoLoadingJob(origPath)
+  const job: FileInfoLoadingJob = new FileInfoLoadingJob(origPath, '/tmp')
   const stateChanges: JobStateChange[] = []
   recordJobStates(job, stateChanges)
   expect(job.finished).toBe(false)

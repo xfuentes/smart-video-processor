@@ -29,7 +29,6 @@ import {
   Input,
   InputOnChangeData,
   Label,
-  Link,
   Select,
   SelectTabData,
   SelectTabEvent,
@@ -51,7 +50,6 @@ import {
 import { Settings } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
-import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { ProgressButton } from '@renderer/components/ProgressButton'
 import { useSettings } from '@renderer/components/context/SettingsContext'
 
@@ -240,78 +238,6 @@ export const SettingsDialog = () => {
                         onChange={(data) => setLanguage(data)}
                       />
                     </div>
-                    {!window.api.main.isLimitedPermissions && (
-                      <>
-                        <FileSelectorField
-                          label={
-                            <>
-                              MKVMerge Path
-                              <InfoLabel
-                                info={
-                                  <div>
-                                    MKVMerge is a command line program which is part of the&nbsp;
-                                    <Link onClick={() => window.open('https://mkvtoolnix.org/', '_blank')}>
-                                      MKVToolNix suite
-                                    </Link>
-                                    . MKVToolNix is a powerful tool for editing, merging, and splitting MKV files.
-                                  </div>
-                                }
-                              />
-                            </>
-                          }
-                          required
-                          size={'small'}
-                          value={mkvMergePath}
-                          onChange={(newFile) => setMkvMergePath(newFile)}
-                          validationState={settingsValidation?.fields['mkvMergePath']?.status}
-                          validationMessage={settingsValidation?.fields['mkvMergePath']?.message}
-                        ></FileSelectorField>
-                        <FileSelectorField
-                          label={
-                            <>
-                              FFmpeg Path
-                              <InfoLabel
-                                info={
-                                  <div>
-                                    <Link onClick={() => window.open('https://www.ffmpeg.org/', '_blank')}>FFmpeg</Link>{' '}
-                                    is a complete, cross-platform solution to record, convert and stream audio and
-                                    video. make sure to have it installed with x264 and x265 codecs.
-                                  </div>
-                                }
-                              />
-                            </>
-                          }
-                          required
-                          size={'small'}
-                          value={ffmpegPath}
-                          onChange={(newFile) => setFfmpegPath(newFile)}
-                          validationState={settingsValidation?.fields['ffmpegPath']?.status}
-                          validationMessage={settingsValidation?.fields['ffmpegPath']?.message}
-                        />
-                        <FileSelectorField
-                          label={
-                            <>
-                              FFprobe Path
-                              <InfoLabel
-                                info={
-                                  <div>
-                                    FFprobe is a command line program which is distributed with&nbsp;
-                                    <Link onClick={() => window.open('https://www.ffmpeg.org/', '_blank')}>FFmpeg</Link>
-                                    .
-                                  </div>
-                                }
-                              />
-                            </>
-                          }
-                          required
-                          size={'small'}
-                          value={ffprobePath}
-                          onChange={(newFile) => setFfprobePath(newFile)}
-                          validationState={settingsValidation?.fields['ffmpegPath']?.status}
-                          validationMessage={settingsValidation?.fields['ffmpegPath']?.message}
-                        />
-                      </>
-                    )}
                     <div className="field">
                       <Switch
                         label="Auto Start"
