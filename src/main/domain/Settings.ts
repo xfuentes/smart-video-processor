@@ -19,26 +19,33 @@
 import { Processes } from '../util/processes'
 import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
-import path, * as Path from 'node:path'
+import * as Path from 'node:path'
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
-import { omit } from '@fluentui/react'
 
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
-const getDefaultFFmpegToolPath = (tool: 'ffmpeg' | 'ffprobe') => {
-  if (os.platform() === 'linux') {
-    if (process.env.SNAP) {
-      return `${process.env.SNAP}/ffmpeg/${tool}`
+const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
+  if (os.platform() === 'win32') {
+    const path =
+      process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1
+        ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+        : Path.join(__dirname, '..', '..', 'dist', 'bin', `${tool}.exe`)
+    return path
+  } else if (os.platform() === 'linux') {
+    if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
+      return `${process.env.SNAP}/usr/bin/${tool}`
     }
-    return `/usr/bin/${tool}`
-  } else if (os.platform() === 'win32') {
-    return `c:\\Program Files\\ffmpeg\\bin\\${tool}.exe`
+    const toolPathFromSources = Path.join(__dirname, '..', '..', 'dist', 'bin', tool)
+    if (isValidExecutable(toolPathFromSources)) {
+      return toolPathFromSources
+    }
+    return Processes.findCommandSync(tool, tool)
   } else {
-    return `/usr/local/bin/${tool}`
+    return Processes.findCommandSync(tool, tool)
   }
 }
 
@@ -59,14 +66,14 @@ export const defaultSettings: Settings = {
   videoCodec: VideoCodec.AUTO,
   videoSizeReduction: 50,
   audioSizeReduction: 70,
-  mkvMergePath: Processes.findCommandSync('mkvmerge', 'c:\\Program Files\\MKVToolNix\\mkvmerge.exe'),
-  ffmpegPath: Processes.findCommandSync('ffmpeg', getDefaultFFmpegToolPath('ffmpeg')),
-  ffprobePath: Processes.findCommandSync('ffprobe', getDefaultFFmpegToolPath('ffprobe'))
+  mkvMergePath: getDefaultToolPath('mkvmerge'),
+  ffmpegPath: getDefaultToolPath('ffmpeg'),
+  ffprobePath: getDefaultToolPath('ffprobe')
 }
 export let currentSettings: Settings = defaultSettings
 
 export function loadSettings() {
-  if (Files.fileExistsAndIsReadable(path.join(getConfigPath(), 'settings.json'))) {
+  if (Files.fileExistsAndIsReadable(Path.join(getConfigPath(), 'settings.json'))) {
     const data = Files.loadTextFileSync(getConfigPath(), 'settings.json')
     if (data !== undefined) {
       currentSettings = JSON.parse(data) as Settings
@@ -83,28 +90,18 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  if (!isValidExecutable(currentSettings.mkvMergePath) && isValidExecutable(defaultSettings.mkvMergePath)) {
-    currentSettings.mkvMergePath = defaultSettings.mkvMergePath
-  }
-  if (!isValidExecutable(currentSettings.ffmpegPath) && isValidExecutable(defaultSettings.ffmpegPath)) {
-    currentSettings.ffmpegPath = defaultSettings.ffmpegPath
-  }
-  if (!isValidExecutable(currentSettings.ffprobePath) && isValidExecutable(defaultSettings.ffprobePath)) {
-    currentSettings.ffprobePath = defaultSettings.ffprobePath
-  }
+  currentSettings.mkvMergePath = defaultSettings.mkvMergePath
+  currentSettings.ffmpegPath = defaultSettings.ffmpegPath
+  currentSettings.ffprobePath = defaultSettings.ffprobePath
   currentSettings.isFineTrimEnabled = false
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
-  const toOmit: (keyof Settings)[] = []
   currentSettings.isFineTrimEnabled = false
-  if (Processes.isLimitedPermissions()) {
-    toOmit.push('mkvMergePath', 'ffmpegPath', 'ffprobePath')
-  }
   if (validation.status === 'success') {
     currentSettings = { ...settings }
-    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(omit(currentSettings, toOmit), null, 2))
+    Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
   }
   return validation
 }
@@ -125,27 +122,5 @@ function isValidExecutable(path: string) {
 }
 
 export function validateSettings(settings: Settings) {
-  const validationBuilder = new FormValidationBuilder<Settings>(settings)
-  if (!isValidExecutable(settings.mkvMergePath)) {
-    if (isValidExecutable(defaultSettings.mkvMergePath)) {
-      settings.mkvMergePath = defaultSettings.mkvMergePath
-    } else {
-      validationBuilder.fieldValidation('mkvMergePath', 'error', 'Invalid executable path')
-    }
-  }
-  if (!isValidExecutable(settings.ffmpegPath)) {
-    if (isValidExecutable(defaultSettings.ffmpegPath)) {
-      settings.ffmpegPath = defaultSettings.ffmpegPath
-    } else {
-      validationBuilder.fieldValidation('ffmpegPath', 'error', 'Invalid executable path')
-    }
-  }
-  if (!isValidExecutable(settings.ffprobePath)) {
-    if (isValidExecutable(defaultSettings.ffprobePath)) {
-      settings.ffprobePath = defaultSettings.ffprobePath
-    } else {
-      validationBuilder.fieldValidation('ffprobePath', 'error', 'Invalid executable path')
-    }
-  }
-  return validationBuilder.build()
+  return new FormValidationBuilder<Settings>(settings).build()
 }

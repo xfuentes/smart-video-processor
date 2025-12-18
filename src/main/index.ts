@@ -19,7 +19,7 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import icon from '../../resources/icon.ico?asset'
 import { currentSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
@@ -37,7 +37,7 @@ import { Processes } from './util/processes'
 
 if (electron_squirrel_startup) app.quit()
 
-if (os.platform() !== 'linux') {
+if (os.platform() === 'win32' && !process.windowsStore) {
   updateElectronApp()
 }
 
@@ -95,8 +95,8 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 app.whenReady().then(async () => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.squirrel.SmartVideoProcessor.SmartVideoProcessor')
+  electronApp.setAppUserModelId('XavierFuentes.SmartVideoProcessor')
+
   loadSettings()
 
   let ffmpegVersion = '-'

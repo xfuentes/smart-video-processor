@@ -1,12 +1,11 @@
 [Desktop Entry]
-Exec=__NAME__
-Icon=${SNAP}/meta/gui/__NAME__.png
-Version=__VERSION__
+Exec=smart-video-processor
+Icon=${SNAP}/opt/smart-video-processor/smart-video-processor.png
+Version=1.5.6
 Type=Application
 Terminal=false
 Name=Smart Video Processor
-Comment=__DESCRIPTION__
+Comment=Automated video processing. Re-Organize, Re-encode, adds metadata and image.
 Categories=AudioVideo
 MimeType=video/x-matroska;video/x-msvideo;video/mp4
 Keywords=encode;organize;video;movie;show
-

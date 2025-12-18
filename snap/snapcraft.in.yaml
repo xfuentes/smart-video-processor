@@ -1,0 +1,78 @@
+name: __NAME__
+title: Smart Video Processor
+version: __VERSION__
+summary: '__DESCRIPTION__'
+description: |
+  This tool automatically identifies your movies and TV shows using popular databases,
+  then streamlines the entire process: rename files using Plex-friendly conventions,
+  attach artwork, correct metadata (including track language and type), split or join media files
+  and encode to H.264 or H.265—all in one place.
+
+license: GPL-3.0+
+contact: xfuentes-dev@hotmail.com
+issues: https://github.com/xfuentes/smart-video-processor/issues
+source-code: https://github.com/xfuentes/smart-video-processor
+website: https://github.com/xfuentes/smart-video-processor
+donation: https://paypal.me/xfuentesdev
+icon: snap/gui/smart-video-processor.png
+
+base: core24
+grade: stable
+confinement: strict
+compression: lzo
+
+apps:
+  smart-video-processor:
+    command: opt/smart-video-processor/smart-video-processor-launcher --no-sandbox
+    desktop: opt/smart-video-processor/smart-video-processor.desktop
+    extensions:
+      - gnome
+    plugs:
+      - network
+      - removable-media
+      - audio-playback
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+
+parts:
+  mkvmerge:
+    plugin: nil
+    override-pull: |
+      mkdir -p /tmp/keyrings
+      curl -fsSL https://mkvtoolnix.download/gpg-pub-moritzbunkus.gpg | gpg --dearmor > /tmp/keyrings/gpg-pub-moritzbunkus.gpg
+      echo "deb [arch=__DEB_ARCH__ signed-by=/tmp/keyrings/gpg-pub-moritzbunkus.gpg] https://mkvtoolnix.download/ubuntu noble main" > /etc/apt/sources.list.d/mkvtoolnix.list
+      apt-get update
+      apt-get install -y mkvtoolnix
+      install -D /usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/usr/bin/mkvmerge
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/lib
+      cp -v $(ldd /usr/bin/mkvmerge | grep '=> /' | awk '{print $3}' | grep '^/') $SNAPCRAFT_PART_INSTALL/usr/lib/
+
+  smart-video-processor:
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt
+      cp -rv ./dist/linux*unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
+      chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
+      install -D ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
+      install -D ./snap/gui/smart-video-processor.png $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.png
+      install -D ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.desktop
+      install -D dist/bin/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
+      install -D dist/bin/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
+    build-snaps:
+      - node/22/stable
+    build-packages:
+      - git
+      - unzip
+    stage-packages:
+      - libproxy1v5
+      - glib-networking
+    organize:
+      usr/lib/*-linux-gnu/blas/*: usr/lib/
+      usr/lib/*-linux-gnu/lapack/*.so*: usr/lib/
+
+plugs:
+  shared-memory:
+    private: true
+  home:
+    interface: home
