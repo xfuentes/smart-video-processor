@@ -1,0 +1,29 @@
+name: AppMetadataAutoUpdate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Microsoft Store CLI
+        uses: microsoft/microsoft-store-apppublisher@v1.1
+
+      - name: Reconfigure store credentials
+        run: msstore reconfigure `
+          --tenantId ${{ secrets.AZURE_AD_TENANT_ID }} `
+          --sellerId ${{ secrets.SELLER_ID }} `
+          --clientId ${{ secrets.AZURE_AD_GH_CLIENT_ID }} `
+          --clientSecret ${{ secrets.AZURE_AD_GH_SECRET }}
+
+      - name: Update metadata
+        run: |
+          $metadata = Get-Content -Raw "${{ github.workspace }}/assets/appx/metadata.json"
+          msstore submission updateMetadata 9PG7L9JR8K6M $metadata
+      - name: Publish to Store
+        run: msstore submission publish 9PG7L9JR8K6M

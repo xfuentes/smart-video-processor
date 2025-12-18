@@ -150,6 +150,40 @@ export class Brain {
     }
   }
 
+  public generateFilenameChange(
+    sourcePath: string,
+    title: string,
+    tmdb: number | undefined,
+    edition: EditionType | undefined,
+    versions: string[] | undefined
+  ): Change | undefined {
+    const currentFilename = path.basename(sourcePath)
+
+    let newFilename = title
+    if (versions && versions.length > 0) {
+      newFilename += `.${versions.join('.')}`
+    }
+    if (edition !== undefined && edition !== EditionType.THEATRICAL) {
+      newFilename += ` {edition-${edition}}`
+    }
+    if (tmdb !== undefined) {
+      newFilename += ` {tmdb-${tmdb}}`
+    }
+    newFilename = Files.removeSpecialCharsFromFilename(newFilename + '.mkv')
+    if (newFilename !== currentFilename) {
+      return new Change(
+        ChangeSourceType.CONTAINER,
+        ChangeType.UPDATE,
+        undefined,
+        ChangeProperty.FILENAME,
+        currentFilename,
+        newFilename
+      )
+    } else {
+      return undefined
+    }
+  }
+
   private analyseContainer(
     sourcePath: string,
     title: string,
@@ -162,30 +196,10 @@ export class Brain {
     tagCount: number
   ) {
     const changes: Change[] = []
-    const currentFilename = path.basename(sourcePath)
-    let newFilename = title
-    if (versions && versions.length > 0) {
-      newFilename += `.${versions.join('.')}`
-    }
-    if (edition !== undefined && edition !== EditionType.THEATRICAL) {
-      newFilename += ` {edition-${edition}}`
-    }
-    if (tmdb !== undefined) {
-      newFilename += ` {tmdb-${tmdb}}`
-    }
-    newFilename = Files.removeSpecialCharsFromFilename(newFilename + '.mkv')
 
-    if (newFilename !== currentFilename) {
-      changes.push(
-        new Change(
-          ChangeSourceType.CONTAINER,
-          ChangeType.UPDATE,
-          undefined,
-          ChangeProperty.FILENAME,
-          currentFilename,
-          newFilename
-        )
-      )
+    const filenameChange = this.generateFilenameChange(sourcePath, title, tmdb, edition, versions)
+    if (filenameChange) {
+      changes.push(filenameChange)
     }
 
     if (containerTitle !== title) {

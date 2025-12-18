@@ -23,6 +23,7 @@ import { debug } from './log'
 import path from 'node:path'
 import * as https from 'node:https'
 import { globSync } from 'glob'
+import { MakeDirectoryOptions } from 'fs'
 
 export class Files {
   static loadTextFileSync(dir: string, name: string, encoding: BufferEncoding = 'utf8'): string | undefined {
@@ -224,5 +225,9 @@ export class Files {
     } catch (err) {
       return false
     }
+  }
+
+  static mkdirSync(path: PathLike, options: MakeDirectoryOptions & { recursive: true }): string | undefined {
+    return fs.mkdirSync(path, options)
   }
 }

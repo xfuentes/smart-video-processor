@@ -28,6 +28,7 @@ import { Files } from '../../util/files'
 import path, * as Path from 'node:path'
 import { Strings } from '../../../common/Strings'
 import { IVideo } from '../../../common/@types/Video'
+import fs from 'node:fs'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
@@ -64,6 +65,8 @@ export class FFmpeg extends CommandProgress {
     settings: EncoderSettings[],
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
+    fs.mkdirSync(destinationPath, { recursive: true })
+
     if (!this.isTwoPassesRequired(settings)) {
       return this.encodeFileInternal(video, destinationPath, settings, undefined, undefined, progressNotifier)
     }
@@ -166,6 +169,7 @@ export class FFmpeg extends CommandProgress {
     const filters: string[] = []
     const snapshotRefs: string[] = []
     const ffOptions: string[] = []
+    fs.mkdirSync(destinationPath, { recursive: true })
     const snapshotPath = path.join(destinationPath, `snapshots${totalWidth + 'x' + snapshotHeight}.png`)
 
     let snapshotCount = 0
@@ -204,6 +208,7 @@ export class FFmpeg extends CommandProgress {
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     const ffOptions: string[] = []
+    fs.mkdirSync(destinationPath, { recursive: true })
     const videoPreviewPath = path.join(destinationPath, 'stream.m3u8')
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
@@ -371,6 +376,7 @@ export class FFmpeg extends CommandProgress {
 
   public async preProcessVideoPart(number: number, video: IVideo, destinationPath: string): Promise<string> {
     const ffOptions: string[] = []
+    fs.mkdirSync(destinationPath, { recursive: true })
     const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
     const durationSeconds = (video.endAt ?? video.duration) - (video.startFrom ?? 0)
 

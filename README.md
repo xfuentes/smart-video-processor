@@ -1,23 +1,21 @@
 # Smart Video Processor
 
-[![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
-[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-windows.yml?label=win%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-windows.yml)
+[![Linux Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-linux.yml?logo=linux&label=build&logoColor=white)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-linux.yml)
+[![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-win32.yml?label=m$%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-win32.yml)
 [![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
-![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total)
+![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total.svg)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xfuentes/smart-video-processor/total)
 
-This small application in JavaScript is a frontend for various great free command line tools.
-It uses Electron (https://www.electronjs.org/fr/), Fluent UI React (https://github.com/microsoft/fluentui) and
-Vite (https://vite.dev/) frameworks.
-Its purpose is to help process and encode your DVD or Blu-ray backups.
-These can eventually be made with the excellent MakeMKV (https://www.makemkv.com/).
+This tool automatically identifies your movies and TV shows using popular databases,
+then streamlines the entire process: rename files using Plex-friendly conventions,
+attach artwork, correct metadata (including track language and type), split or join media files
+and encode to H.264 or H.265—all in one place.
 
 ## 1) Installation
+All dependencies are packaged with it, just install and you will be ready to go.
 
-This application depends on FFmpeg and MKVToolNix (version >= 90.0).
-
-### a) Ubuntu Linux
+### a) Linux
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
 
 After installation from the Snap Store, you can optionally enable removable media write access with this command :
@@ -25,17 +23,15 @@ After installation from the Snap Store, you can optionally enable removable medi
     sudo snap connect smart-video-processor:removable-media
   ```
 
-Alternatively as debian package:
-  ```shell
-    sudo apt-get install mkvtoolnix ffmpeg
-    sudo dpkg -i ./smart-video-processor_0.2.0_amd64.deb
-  ```
+Alternatively there is an APPIMAGE file available.
 
 ### b) Windows 10 or later
 
-Install MKVToolNix (https://www.matroska.org/downloads/mkvtoolnix.html)
-and FFmpeg (https://ffmpeg.org/) you can get the binaries from: https://www.gyan.dev/ffmpeg/builds/
-Run the Smart.Video.Processor-1.3.3.Setup.exe it will install and add a desktop shortcut.
+<a href="https://apps.microsoft.com/detail/9pg7l9jr8k6m?referrer=appbadge&mode=direct">
+<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/>
+</a>
+
+Alternatively you can install the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
 
 ## 2) Set your preferences
 

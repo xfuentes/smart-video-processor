@@ -33,6 +33,8 @@ import { Track } from '../../../src/main/domain/Track'
 import { TrackType } from '../../../src/common/@types/Track'
 import * as path from 'node:path'
 import * as os from 'node:os'
+import * as fs from 'node:fs'
+import { Files } from '../../../src/main/util/files'
 
 const genSpawnSpyFileInfo = (jsonFileName: string) =>
   vi
@@ -383,6 +385,7 @@ function isWindows() {
 
 test('MKVMerge Input&Output&Language Arguments', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
   const spy = genSpawnSpy()
   const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
   const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')

@@ -1,0 +1,188 @@
+{
+  "Id": "1152921505700211104",
+  "ApplicationCategory": "PhotoAndVideo",
+  "Pricing": {
+    "TrialPeriod": "NoFreeTrial",
+    "MarketSpecificPricings": {
+      "LB": "NotAvailable",
+      "EH": "NotAvailable"
+    },
+    "PriceId": "Free",
+    "IsAdvancedPricingModel": true
+  },
+  "Visibility": "Public",
+  "TargetPublishMode": "Immediate",
+  "TargetPublishDate": "1601-01-01T00:00:00Z",
+  "Listings": {
+    "en-us": {
+      "BaseListing": {
+        "Keywords": [
+          "video",
+          "processing",
+          "encoding",
+          "organizing"
+        ],
+        "Description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265\u2014all in one place.",
+        "Features": [
+          "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
+          "Smart File Renaming: Renames files using Plex/Kodi-friendly naming conventions",
+          "Metadata Correction: Fetches and corrects title, year, episode name...",
+          "Audio \u0026 Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
+          "Poster \u0026 Thumbnail Download: Automatically downloads posters and thumbnails.",
+          "Media File Splitting \u0026 Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
+          "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
+          "Batch Processing: Handles multiple files simultaneously with queue management."
+        ],
+        "ReleaseNotes": "Fixes packaging.",
+        "Images": [
+          {
+            "FileName": "08-Processing.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022977859",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "03-Movie.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022977773",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "04-TVShow.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022977774",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "05-Tracks.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978171",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "06-Hints.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978172",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "07-Properties.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978173",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "09-Encoding.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978174",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "10-Waiting.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022977775",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "01-Settings.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978176",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileName": "AppTileIcon-300x300.png",
+            "FileStatus": "Uploaded",
+            "Id": "1152922700022978177",
+            "ImageType": "Icon"
+          }
+        ],
+        "RecommendedHardware": [],
+        "MinimumHardware": [],
+        "Title": "Smart Video Processor",
+        "LicenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "CopyrightAndTrademarkInfo": "Copyright (c) 2025. Xavier Fuentes \u003Cxfuentes-dev@hotmail.com\u003E",
+        "ShortDescription": "Organize, Enhance and Encode Your Media Library Effortlessly",
+        "ShortTitle": null,
+        "VoiceTitle": null,
+        "DevStudio": "Xavier Fuentes"
+      },
+      "PlatformOverrides": {}
+    }
+  },
+  "HardwarePreferences": [
+    "Keyboard",
+    "Mouse"
+  ],
+  "AutomaticBackupEnabled": true,
+  "CanInstallOnRemovableMedia": true,
+  "IsGameDvrEnabled": false,
+  "GamingOptions": [
+    {
+      "Genres": [],
+      "IsLocalMultiplayer": false,
+      "IsLocalCooperative": false,
+      "IsOnlineMultiplayer": false,
+      "IsOnlineCooperative": false,
+      "IsBroadcastingPrivilegeGranted": true,
+      "IsCrossPlayEnabled": false,
+      "KinectDataForExternal": "Disabled"
+    }
+  ],
+  "HasExternalInAppProducts": false,
+  "MeetAccessibilityGuidelines": false,
+  "NotesForCertification": "",
+  "Status": "PendingCommit",
+  "StatusDetails": {
+    "Errors": [],
+    "Warnings": [
+      {
+        "Code": "SalesUnsupportedWarning",
+        "Details": "The sales resource is no longer supported. To view or edit the sales data for this submission, use the Dev Center dashboard."
+      }
+    ],
+    "CertificationReports": []
+  },
+  "FileUploadUrl":
+  "https://ingestionpackagesprod1.blob.core.windows.net/ingestion/b856c62e-5b6d-493f-85e4-3178714ce7a5?skoid=6a05eb41-c97a-4f14-a5ce-d392056c0e00\u0026sktid=975f013f-7f24-47e8-a7d3-abc4752bf346\u0026skt=2025-11-27T15%3A41%3A42Z\u0026ske=2025-12-04T15%3A41%3A42Z\u0026sks=b\u0026skv=2024-05-04\u0026sv=2024-05-04\u0026se=2025-11-28T16%3A05%3A55Z\u0026sr=b\u0026sp=rwl\u0026sig=lNHILa9ZwBdi2gBKxP1qNPmErzKjzkahOn29NLX1iGU%3D",
+  "ApplicationPackages": [
+    {
+      "FileName": "smart-video-processor.appx",
+      "FileStatus": "Uploaded",
+      "Id": "2000000000091679417",
+      "Version": "1.5.6.0",
+      "Architecture": "x64",
+      "Languages": [
+        "en-US"
+      ],
+      "Capabilities": [
+        "broadFileSystemAccess",
+        "internetClient",
+        "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe",
+        "runFullTrust"
+      ],
+      "MinimumDirectXVersion": "None",
+      "MinimumSystemRam": "None"
+    }
+  ],
+  "PackageDeliveryOptions": {
+    "PackageRollout": {
+      "IsPackageRollout": false,
+      "PackageRolloutPercentage": 0,
+      "PackageRolloutStatus": "PackageRolloutNotStarted",
+      "FallbackSubmissionId": "0"
+    },
+    "IsMandatoryUpdate": false,
+    "MandatoryUpdateEffectiveDate": "1601-01-01T00:00:00Z"
+  },
+  "EnterpriseLicensing": "None",
+  "AllowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": true,
+  "AllowTargetFutureDeviceFamilies": {
+    "Desktop": true,
+    "Mobile": false,
+    "Xbox": false,
+    "Team": false,
+    "Holographic": false
+  },
+  "FriendlyName": "Submission 4",
+  "Trailers": []
+}

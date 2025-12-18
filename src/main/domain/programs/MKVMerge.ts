@@ -137,6 +137,7 @@ export class MKVMerge extends CommandProgress {
     progressNotifier?: ProgressNotifier
   ): Promise<string> {
     const args = this.generateProcessingArguments(originalFilename, path, outputDirectory, changes, tracks)
+    Files.mkdirSync(outputDirectory, { recursive: true })
     const progressionPattern: RegExp = /Progress: (?<progress>\d+)%/i
     const errorPattern: RegExp = /Error: (?<message>.*)/i
 

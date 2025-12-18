@@ -1,0 +1,70 @@
+name: package linux
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      discussions: write
+      deployments: write
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-24.04, ubuntu-24.04-arm ]
+        node-version: [22.x]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: build
+        run: yarn run build
+
+      - name: test
+        run: yarn run test
+
+      - name: prepare-package
+        run: yarn run prepare-package
+        env:
+          MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
+
+      - name: package arm64
+        if: runner.arch == 'ARM64'
+        run: yarn run package --arm64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: package x64
+        if: runner.arch == 'X64'
+        run: yarn run package --x64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build linux snap
+        uses: snapcore/action-build@v1
+        id: build
+        with:
+          snapcraft-channel: '8.x'
+
+      - name: publish to snap store
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: stable
