@@ -104,6 +104,10 @@ export class Processes {
     })
   }
 
+  static isSnapStore = (): boolean => {
+    return app?.getPath('exe').includes('/snap/') || false
+  }
+
   static isLimitedPermissions = (): boolean => {
     return app?.getPath('exe').includes('/snap/') || false
   }

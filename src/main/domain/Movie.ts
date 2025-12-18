@@ -29,6 +29,7 @@ import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
 import Path from 'node:path'
+import fs from 'node:fs'
 
 export default class Movie implements IMovie {
   public title: string = ''
@@ -146,7 +147,10 @@ export default class Movie implements IMovie {
         this.setTMDB(this.tmdb)
       }
 
-      const fullPath = Path.join(this.video.getTempDirectory(), 'TMDB-' + this.tmdb + '-poster.jpg')
+      const tempDirectory = this.video.getTempDirectory()
+      fs.mkdirSync(tempDirectory, { recursive: true })
+
+      const fullPath = Path.join(tempDirectory, 'TMDB-' + this.tmdb + '-poster.jpg')
       if (this.posterURL) {
         this.video.status = JobStatus.LOADING
         this.video.message = 'Downloading poster image from TMDB.'
