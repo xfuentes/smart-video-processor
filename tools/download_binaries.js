@@ -85,10 +85,16 @@ async function downloadFromMyFiles(urlToFile) {
     fileStream.on('error', () => reject())
   })
 
+  if (process.platform !== 'win32') {
+    fs.chmod(filePath, '755', (err) => {
+      if (err) throw err;
+    });
+  }
+
   return filePath
 }
 
-;(async () => {
+(async () => {
   try {
     const urlToFileList = getDownloadUrls()
     const results = await Promise.all(urlToFileList.map(downloadFromMyFiles))

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { isEqual } from 'lodash'
+
 export const searchAncestorsMatching = (
   element: Element | null,
   matches: (e: Element) => boolean
@@ -30,5 +32,12 @@ export const searchAncestorsMatching = (
 }
 
 export function keepIfSameReducer<T>(prev: T, curr: T): T | undefined {
-  return prev === curr ? curr : undefined
+  return isEqual(prev, curr) ? curr : undefined
+}
+
+export function keepIfSameFilenameReducer(prev: string | undefined, curr: string | undefined): string | undefined {
+  if (prev === undefined || curr === undefined) {
+    return isEqual(prev, curr) ? curr : undefined
+  }
+  return isEqual(prev.split('/').pop(), curr.split('/').pop()) ? curr : undefined
 }

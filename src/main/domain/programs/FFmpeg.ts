@@ -243,6 +243,99 @@ export class FFmpeg extends CommandProgress {
     return await super.execute(ffOptions, ffmpegOutputInterpreter)
   }
 
+  public async preProcessVideoPart(number: number, video: IVideo, destinationPath: string): Promise<string> {
+    const ffOptions: string[] = []
+    fs.mkdirSync(destinationPath, { recursive: true })
+    const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
+    const durationSeconds = (video.endAt ?? video.duration) - (video.startFrom ?? 0)
+
+    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+    ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-y') // Overwrite output file without asking
+
+    ffOptions.push('-i', video.sourcePath)
+    ffOptions.push('-c', 'copy')
+
+    let needProcessing = false
+    if (video.startFrom) {
+      ffOptions.push('-ss', '' + video.startFrom)
+      needProcessing = true
+    }
+    if (video.endAt && video.endAt < video.duration) {
+      ffOptions.push('-t', '' + durationSeconds)
+      needProcessing = true
+    }
+    ffOptions.push(...this.generateKeepAllMapping(video.tracks))
+    ffOptions.push(preProcessPath)
+
+    if (needProcessing) {
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, durationSeconds)
+      return await super.execute(ffOptions, ffmpegOutputInterpreter)
+    } else {
+      return video.sourcePath
+    }
+  }
+
+  generateKeepAllMapping = (tracks: ITrack[]) => {
+    const ffOptions: string[] = []
+    let videoIndex = 0
+    let audioIndex = 0
+    let subtitlesIndex = 0
+    for (const track of tracks) {
+      if (track.type === TrackType.AUDIO) {
+        ffOptions.push('-map', '0:a:' + audioIndex++)
+      } else if (track.type === TrackType.VIDEO) {
+        ffOptions.push('-map', '0:v:' + videoIndex++)
+      } else if (track.type === TrackType.SUBTITLES) {
+        ffOptions.push('-map', '0:s:' + subtitlesIndex++)
+      }
+    }
+    return ffOptions
+  }
+
+  public async preProcessVideo(video: IVideo, destinationPath: string): Promise<string> {
+    const ffOptions: string[] = []
+
+    const videoPath = await this.preProcessVideoPart(0, video, destinationPath)
+
+    if (video.videoParts.length === 0) {
+      return videoPath
+    } else {
+      const splitPaths: string[] = []
+      splitPaths.push(videoPath)
+      let num = 1
+      for (const part of video.videoParts) {
+        const partPath = await this.preProcessVideoPart(num++, part, destinationPath)
+        splitPaths.push(partPath)
+      }
+
+      const concatFilePath = Files.writeFileSync(
+        destinationPath,
+        'concat.txt',
+        splitPaths.map((p) => `file '${p}'`).join('\n'),
+        'utf8'
+      )
+
+      ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
+      ffOptions.push('-loglevel', '16') // Only show errors
+      ffOptions.push('-y') // Overwrite output file without asking
+
+      ffOptions.push('-f', 'concat')
+      ffOptions.push('-safe', '0')
+      ffOptions.push('-i', concatFilePath)
+      ffOptions.push('-c', 'copy')
+
+      ffOptions.push(...this.generateKeepAllMapping(video.tracks))
+
+      const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
+      ffOptions.push(preProcessPath)
+
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, video.targetDuration)
+      await super.execute(ffOptions, ffmpegOutputInterpreter)
+      return preProcessPath
+    }
+  }
+
   private ffmpegProgressInterpreterBuild(
     outputFilePath: string,
     durationSeconds: number,
@@ -336,6 +429,8 @@ export class FFmpeg extends CommandProgress {
             }
           } else {
             ffOptions.push('-c:v:' + videoIndex, 'libx264')
+            // Force 8 bit to workaround issue with 10 bit depth
+            ffOptions.push('-pix_fmt', 'yuv420p')
             ffOptions.push('-profile:v:' + videoIndex, 'high')
             ffOptions.push('-preset:v:' + videoIndex, 'slow')
             if (pass !== undefined && statFile !== undefined) {
@@ -372,98 +467,5 @@ export class FFmpeg extends CommandProgress {
       ffOptions.push(encodedPath)
     }
     return ffOptions
-  }
-
-  public async preProcessVideoPart(number: number, video: IVideo, destinationPath: string): Promise<string> {
-    const ffOptions: string[] = []
-    fs.mkdirSync(destinationPath, { recursive: true })
-    const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
-    const durationSeconds = (video.endAt ?? video.duration) - (video.startFrom ?? 0)
-
-    ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
-    ffOptions.push('-loglevel', '16') // Only show errors
-    ffOptions.push('-y') // Overwrite output file without asking
-
-    ffOptions.push('-i', video.sourcePath)
-    ffOptions.push('-c', 'copy')
-
-    let needProcessing = false
-    if (video.startFrom) {
-      ffOptions.push('-ss', '' + video.startFrom)
-      needProcessing = true
-    }
-    if (video.endAt && video.endAt < video.duration) {
-      ffOptions.push('-t', '' + durationSeconds)
-      needProcessing = true
-    }
-    ffOptions.push(...this.generateKeepAllMapping(video.tracks))
-    ffOptions.push(preProcessPath)
-
-    if (needProcessing) {
-      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, durationSeconds)
-      return await super.execute(ffOptions, ffmpegOutputInterpreter)
-    } else {
-      return video.sourcePath
-    }
-  }
-
-  generateKeepAllMapping = (tracks: ITrack[]) => {
-    const ffOptions: string[] = []
-    let videoIndex = 0
-    let audioIndex = 0
-    let subtitlesIndex = 0
-    for (const track of tracks) {
-      if (track.type === TrackType.AUDIO) {
-        ffOptions.push('-map', '0:a:' + audioIndex++)
-      } else if (track.type === TrackType.VIDEO) {
-        ffOptions.push('-map', '0:v:' + videoIndex++)
-      } else if (track.type === TrackType.SUBTITLES) {
-        ffOptions.push('-map', '0:s:' + subtitlesIndex++)
-      }
-    }
-    return ffOptions
-  }
-
-  public async preProcessVideo(video: IVideo, destinationPath: string): Promise<string> {
-    const ffOptions: string[] = []
-
-    const videoPath = await this.preProcessVideoPart(0, video, destinationPath)
-
-    if (video.videoParts.length === 0) {
-      return videoPath
-    } else {
-      const splitPaths: string[] = []
-      splitPaths.push(videoPath)
-      let num = 1
-      for (const part of video.videoParts) {
-        const partPath = await this.preProcessVideoPart(num++, part, destinationPath)
-        splitPaths.push(partPath)
-      }
-
-      const concatFilePath = Files.writeFileSync(
-        destinationPath,
-        'concat.txt',
-        splitPaths.map((p) => `file '${p}'`).join('\n'),
-        'utf8'
-      )
-
-      ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
-      ffOptions.push('-loglevel', '16') // Only show errors
-      ffOptions.push('-y') // Overwrite output file without asking
-
-      ffOptions.push('-f', 'concat')
-      ffOptions.push('-safe', '0')
-      ffOptions.push('-i', concatFilePath)
-      ffOptions.push('-c', 'copy')
-
-      ffOptions.push(...this.generateKeepAllMapping(video.tracks))
-
-      const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
-      ffOptions.push(preProcessPath)
-
-      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, video.targetDuration)
-      await super.execute(ffOptions, ffmpegOutputInterpreter)
-      return preProcessPath
-    }
   }
 }

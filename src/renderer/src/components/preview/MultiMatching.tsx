@@ -24,7 +24,8 @@ import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EpisodeOrder } from '../../../../main/domain/clients/TVDBClient'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
-import { keepIfSameReducer } from '@renderer/utils'
+import { keepIfSameFilenameReducer, keepIfSameReducer } from '@renderer/utils'
+import { Country } from '../../../../common/Countries'
 
 type Props = {
   videos: IVideo[]
@@ -38,6 +39,20 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const initialTvShowYear = videos.map((v): number | undefined => v.tvShow?.year).reduce(keepIfSameReducer)
   const initialTvShowTVDB = videos.map((v): number | undefined => v.tvShow?.theTVDB).reduce(keepIfSameReducer)
   const initialTvShowOrder = videos.map((v): EpisodeOrder | undefined => v.tvShow?.order).reduce(keepIfSameReducer)
+  const initialSearchResults = videos.map((v): ISearchResult[] | undefined => v.searchResults).reduce(keepIfSameReducer)
+  const initialTvShowPoster = videos
+    .map((v): string | undefined => (v.tvShow?.poster === undefined ? undefined : v.tvShow?.poster))
+    .reduce(keepIfSameFilenameReducer)
+  const initialTvShowEpisodeOverview = videos
+    .map((v): string | undefined => v.tvShow?.episodeOverview)
+    .reduce(keepIfSameReducer)
+  const initialTvShowOverview = videos.map((v): string | undefined => v.tvShow?.overview).reduce(keepIfSameReducer)
+  const initialTvShowOriginalCountries = videos
+    .map((v): Country[] | undefined => v.tvShow?.originalCountries)
+    .reduce(keepIfSameReducer)
+  const initialTvShowSeason = videos
+    .map((v): string | undefined => (!v.tvShow?.season ? '' : '' + v.tvShow.season))
+    .reduce(keepIfSameReducer)
 
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
   const [type, setType] = useState<VideoType | undefined>(initialType)
@@ -50,9 +65,16 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     initialTvShowTVDB !== undefined ? '' + initialTvShowTVDB : undefined
   )
   const [tvShowOrder, setTvShowOrder] = useState<EpisodeOrder | undefined>(initialTvShowOrder)
+  const [searchResults, setSearchResults] = useState<ISearchResult[] | undefined>(initialSearchResults)
+  const [tvShowPoster, setTvShowPoster] = useState<string | undefined>(initialTvShowPoster)
+  const [tvShowEpisodeOverview, setTvShowEpisodeOverview] = useState<string | undefined>(initialTvShowEpisodeOverview)
+  const [tvShowOverview, setTvShowOverview] = useState<string | undefined>(initialTvShowOverview)
+  const [tvShowOriginalCountries, setTvShowOriginalCountries] = useState<Country[] | undefined>(
+    initialTvShowOriginalCountries
+  )
+  const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
 
   useEffect(() => {
-    console.log('selected movies updated!')
     type !== initialType && setType(initialType)
     searchBy !== initialSearchBy && setSearchBy(initialSearchBy)
     tvShowTitle !== initialTvShowTitle && setTvShowTitle(initialTvShowTitle)
@@ -61,6 +83,14 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     tvShowTVDB !== initialTvShowTVDB &&
       setTvShowTVDB(initialTvShowTVDB !== undefined ? '' + initialTvShowTVDB : undefined)
     tvShowOrder !== initialTvShowOrder && setTvShowOrder(initialTvShowOrder)
+
+    searchResults !== initialSearchResults && setSearchResults(initialSearchResults)
+    tvShowPoster !== initialTvShowPoster && setTvShowPoster(initialTvShowPoster)
+    tvShowEpisodeOverview !== initialTvShowEpisodeOverview && setTvShowEpisodeOverview(initialTvShowEpisodeOverview)
+    tvShowOverview !== initialTvShowOverview && setTvShowOverview(initialTvShowOverview)
+    tvShowOriginalCountries !== initialTvShowOriginalCountries &&
+      setTvShowOriginalCountries(initialTvShowOriginalCountries)
+    tvShowSeason !== initialTvShowSeason && setTvShowSeason(initialTvShowSeason)
   }, [videos]) // eslint-disable-line
 
   const search = async () => {
@@ -73,7 +103,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
           tvShowTitle,
           tvShowYear,
           tvShowTVDB,
-          tvShowOrder
+          tvShowOrder,
+          tvShowSeason
         } as MultiSearchInputData
       )
       .then(() => {
@@ -95,6 +126,11 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 setSearchBy(SearchBy.TITLE)
               }}
             >
+              {initialType === undefined && (
+                <option key={undefined} value={undefined}>
+                  Multiple values
+                </option>
+              )}
               {Object.values(VideoType).map((key) => (
                 <option key={key}>{key}</option>
               ))}
@@ -110,6 +146,11 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   value={searchBy}
                   onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
                 >
+                  {initialSearchBy === undefined && (
+                    <option key={undefined} value={undefined}>
+                      Multiple values
+                    </option>
+                  )}
                   <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
                   <option key={SearchBy.TVDB}>{SearchBy.TVDB}</option>
                 </Select>
@@ -121,7 +162,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
                     <Input
                       disabled={disabled}
-                      value={tvShowTitle}
+                      value={tvShowTitle ?? ''}
                       onChange={(_ev, data) => setTvShowTitle(data.value)}
                     />
                   </Field>
@@ -131,7 +172,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                     <Input
                       type="number"
                       disabled={disabled}
-                      value={tvShowYear}
+                      value={tvShowYear ?? ''}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowYear(data.value)}
                     />
@@ -155,12 +196,32 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   value={tvShowOrder}
                   onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
                 >
+                  {initialTvShowOrder === undefined && (
+                    <option key={undefined} value={undefined}>
+                      Multiple values
+                    </option>
+                  )}
                   <option value="official">Official</option>
                   <option value="dvd">DVD</option>
                   <option value="absolute">Absolute</option>
                 </Select>
               </Field>
             </div>
+            {tvShowOrder !== 'absolute' && (
+              <>
+                <div>
+                  <Field size="small" label="Season" required className={disabled ? 'disabled' : ''}>
+                    <Input
+                      type="number"
+                      disabled={disabled}
+                      value={tvShowSeason ?? ''}
+                      style={{ minWidth: 1 }}
+                      onChange={(_ev, data) => setTvShowSeason(data.value)}
+                    />
+                  </Field>
+                </div>
+              </>
+            )}
           </>
         )}
         <div className="buttons">
@@ -189,7 +250,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             <div className={'matching-results'}>
               <SearchResultList
                 disabled={disabled}
-                results={videos[0].searchResults}
+                results={searchResults ?? []}
                 onSelectionChange={async (selection: ISearchResult | undefined) =>
                   await window.api.video
                     .multiSelectSearchResultID(
@@ -205,14 +266,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
               <div className="preview-space">
                 {type === VideoType.TV_SHOW && (
                   <VideoPreview
-                    title={videos[0].tvShow?.title}
-                    poster={videos[0].tvShow?.poster}
-                    overview={videos[0].tvShow?.episodeOverview ?? videos[0].tvShow?.overview}
-                    altOverview={
-                      videos[0].tvShow?.episodeOverview !== undefined ? videos[0].tvShow.overview : undefined
-                    }
-                    year={videos[0].tvShow?.year}
-                    countries={videos[0].tvShow?.originalCountries}
+                    title={tvShowTitle}
+                    poster={tvShowPoster}
+                    overview={tvShowEpisodeOverview ?? tvShowOverview}
+                    altOverview={tvShowEpisodeOverview !== undefined ? tvShowOverview : undefined}
+                    year={tvShowYear}
+                    countries={tvShowOriginalCountries}
                   />
                 )}
               </div>

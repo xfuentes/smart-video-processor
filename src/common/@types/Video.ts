@@ -140,6 +140,7 @@ export type MultiSearchInputData = {
   tvShowYear: string
   tvShowTVDB: string
   tvShowOrder: EpisodeOrder
+  tvShowSeason: string
 }
 
 export const retrieveChangePropertyValue = (

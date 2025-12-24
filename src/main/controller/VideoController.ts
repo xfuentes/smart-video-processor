@@ -111,6 +111,24 @@ export class VideoController {
     }
   }
 
+  setMultiHint(uuids: string[], hint: IHint, value: string | undefined) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).setHint(hint, value)
+    }
+  }
+
+  setMultiTrackEncodingEnabled(uuids: string[], source: string, value: boolean) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
+    }
+  }
+
+  multiProcess(uuids: string[]) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).process()
+    }
+  }
+
   switchTrackSelection(uuid: string, changedItems: number[]) {
     this.getVideoByUuid(uuid).switchTrackSelection(changedItems)
   }
@@ -204,6 +222,19 @@ export class VideoController {
     return await this.findVideoByUuidIncludingParts(uuid).takeSnapshots()
   }
 
+  preparePreview(uuid: string) {
+    return this.findVideoByUuidIncludingParts(uuid).preparePreview()
+  }
+
+  /**
+   * Called before quit to clean temp files
+   */
+  destroy() {
+    for (const video of this.videos) {
+      video.destroy()
+    }
+  }
+
   private getVideoByUuid(uuid: string) {
     const video = this.videos.find((video) => video.uuid === uuid)
     if (video == undefined) {
@@ -230,18 +261,5 @@ export class VideoController {
       throw new Error("Video with uuid '" + uuid + "' not found")
     }
     return foundVideo
-  }
-
-  preparePreview(uuid: string) {
-    return this.findVideoByUuidIncludingParts(uuid).preparePreview()
-  }
-
-  /**
-   * Called before quit to clean temp files
-   */
-  destroy() {
-    for (const video of this.videos) {
-      video.destroy()
-    }
   }
 }

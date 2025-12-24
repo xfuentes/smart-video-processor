@@ -169,7 +169,7 @@ export class Video implements IVideo {
       }
       const videoSettings = this.encoderSettings.find((s) => s.trackType === TrackType.VIDEO)
       if (videoSettings && this.isTrackEncodingEnabled(videoSettings.trackType + ' ' + videoSettings.trackId)) {
-        videoCodec = videoSettings.codec.toLowerCase()
+        videoCodec = videoSettings.codec === undefined ? undefined : videoSettings.codec.toLowerCase()
       }
 
       if (dimensions) {
@@ -291,18 +291,17 @@ export class Video implements IVideo {
     this.container = container
     this.keyFrames = []
     this.generateEncoderSettings(true)
-    this.loading = false
-    this.fireChangeEvent()
+
     if (this.type !== VideoType.OTHER && searchEnabled) {
       // Only manual mode enabled for custom videos
       await this.search()
     } else {
-      void this.takeSnapshots()
       this.status = JobStatus.WAITING
       this.message = 'Ready to process.'
       this.progression.progress = -1
-      this.fireChangeEvent()
     }
+    this.loading = false
+    this.fireChangeEvent()
   }
 
   generateEncoderSettings(init = true) {
@@ -384,9 +383,6 @@ export class Video implements IVideo {
     } else if (this.type === VideoType.OTHER) {
       await this.other.search()
     }
-    if (this.duration > 0) {
-      void this.takeSnapshots()
-    }
     if (this.status !== JobStatus.WARNING) {
       await this.analyse()
     }
@@ -394,12 +390,13 @@ export class Video implements IVideo {
 
   async multiSearch(data?: MultiSearchInputData) {
     if (data && data.type === VideoType.TV_SHOW) {
-      this.setType(data.type)
-      this.setSearchBy(data.searchBy)
-      this.tvShow.setTitle(data.tvShowTitle)
-      this.tvShow.setYear(data.tvShowYear)
-      this.tvShow.setTheTVDB(data.tvShowTVDB)
-      this.tvShow.setOrder(data.tvShowOrder)
+      if (data.type !== undefined) this.setType(data.type)
+      if (data.searchBy !== undefined) this.setSearchBy(data.searchBy)
+      if (data.tvShowTitle !== undefined) this.tvShow.setTitle(data.tvShowTitle)
+      if (data.tvShowYear !== undefined) this.tvShow.setYear(data.tvShowYear)
+      if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
+      if (data.tvShowOrder !== undefined) this.tvShow.setOrder(data.tvShowOrder)
+      if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
       this.fireChangeEvent()
     }
 
@@ -793,6 +790,7 @@ export class Video implements IVideo {
       await videoPart.load(false)
       this.computeTargetDuration()
       this.generateEncoderSettings()
+      await videoPart.takeSnapshots()
       this.fireChangeEvent()
     }
   }
@@ -924,7 +922,6 @@ export class Video implements IVideo {
     if (this.snapshots.snapshotsPath) {
       return Promise.resolve(this.snapshots?.snapshotsPath)
     } else {
-      this.fireChangeEvent()
       const snapshotJob = new SnapshottingJob(
         this.sourcePath,
         this.getPreviewDirectory(),
@@ -933,8 +930,8 @@ export class Video implements IVideo {
         this.snapshots.totalWidth,
         this.duration
       )
-
-      this.snapshots.snapshotsPath = await snapshotJob.queue()
+      const job = this.attachSnapshotJob(snapshotJob)
+      this.snapshots.snapshotsPath = await job.queue()
       this.fireChangeEvent()
       return this.snapshots.snapshotsPath
     }

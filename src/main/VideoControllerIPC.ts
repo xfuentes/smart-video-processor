@@ -53,12 +53,19 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:multiSearch', (_event, uuids: string[], data?: MultiSearchInputData) => {
     return VideoController.getInstance().multiSearch(uuids, data)
   })
+  ipcMain.handle('video:setMultiHint', (_event, uuids: string[], hint: IHint, value?: string) => {
+    VideoController.getInstance().setMultiHint(uuids, hint, value)
+  })
+  ipcMain.handle('video:setMultiTrackEncodingEnabled', (_event, uuids: string[], source: string, value: boolean) => {
+    VideoController.getInstance().setMultiTrackEncodingEnabled(uuids, source, value)
+  })
   ipcMain.handle('video:switchTrackSelection', (_event, uuid: string, changedItems: number[]) => {
     VideoController.getInstance().switchTrackSelection(uuid, changedItems)
   })
   ipcMain.handle('video:setHint', (_event, uuid: string, hint: IHint, value?: string) => {
     VideoController.getInstance().setHint(uuid, hint, value)
   })
+
   ipcMain.handle(
     'video:addChange',
     (
@@ -109,6 +116,9 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   })
   ipcMain.handle('video:setEndAt', (_event, uuid: string, value?: number) => {
     void VideoController.getInstance().setEndAt(uuid, value)
+  })
+  ipcMain.handle('video:multiProcess', (_event, uuids: string[]) => {
+    return VideoController.getInstance().multiProcess(uuids)
   })
   ipcMain.handle('video:process', (_event, uuid: string) => {
     return VideoController.getInstance().process(uuid)

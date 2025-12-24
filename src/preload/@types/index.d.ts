@@ -21,6 +21,7 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../../common/@types/Video'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
+import { IHint } from '../../common/@types/Hint'
 import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
@@ -50,6 +51,9 @@ interface SvpAPI {
     search: (uuid: string, data: SearchInputData) => Promise<void>
     multiSelectSearchResultID: (uuids: string[], searchResultID?: number) => Promise<void>
     multiSearch: (uuids: string[], data: MultiSearchInputData) => Promise<void>
+    setMultiHint: (uuids: string[], hint: IHint, value?: string) => Promise<void>
+    setMultiTrackEncodingEnabled: (uuids: string[], source: string, value: boolean) => Promise<void>
+    multiProcess: (uuids: string[]) => Promise<void>
     switchTrackSelection: (uuid: string, changedItems: number[]) => Promise<void>
     setHint: (uuid: string, hint: IHint, value?: string) => Promise<void>
     addChange: (
