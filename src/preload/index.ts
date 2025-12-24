@@ -53,10 +53,15 @@ const api: SvpAPI = {
       ipcRenderer.invoke('video:multiSelectSearchResultID', uuids, searchResultID),
     multiSearch: (uuids: string[], data: MultiSearchInputData): Promise<void> =>
       ipcRenderer.invoke('video:multiSearch', uuids, data),
+    setMultiHint: (uuids: string[], hint: IHint, value?: string): Promise<void> =>
+      ipcRenderer.invoke('video:setMultiHint', uuids, hint, value),
     switchTrackSelection: (uuid: string, changedItems: number[]): Promise<void> =>
       ipcRenderer.invoke('video:switchTrackSelection', uuid, changedItems),
     setHint: (uuid: string, hint: IHint, value?: string): Promise<void> =>
       ipcRenderer.invoke('video:setHint', uuid, hint, value),
+    setMultiTrackEncodingEnabled: (uuids: string[], source: string, value: boolean): Promise<void> =>
+      ipcRenderer.invoke('video:setMultiTrackEncodingEnabled', uuids, source, value),
+    multiProcess: (uuids: string[]): Promise<void> => ipcRenderer.invoke('video:multiProcess', uuids),
     addChange: (
       uuid: string,
       source: string,

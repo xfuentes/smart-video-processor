@@ -21,7 +21,7 @@ import { TrackType } from './Track'
 export type EncoderSettings = {
   trackId: number
   trackType: TrackType
-  codec: VideoCodec | AudioCodec
+  codec?: VideoCodec | AudioCodec
   bitrate?: number
   fps?: number
   compressionPercent?: number

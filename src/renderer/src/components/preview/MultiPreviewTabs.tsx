@@ -25,12 +25,14 @@ import {
   Tab,
   TabList
 } from '@fluentui/react-components'
-import { Search20Regular } from '@fluentui/react-icons'
+import { ResizeVideo20Regular, Search20Regular, SquareHintArrowBack20Regular } from '@fluentui/react-icons'
 import { IVideo } from '../../../../common/@types/Video'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { IHint } from '../../../../common/@types/Hint'
 import { EncoderSettings } from '../../../../common/@types/Encoding'
 import { MultiMatching } from '@renderer/components/preview/MultiMatching'
+import { MultiHints } from '@renderer/components/preview/MultiHints'
+import { MultiEncoding } from '@renderer/components/preview/MultiEncoding'
 
 type Props = {
   videos: IVideo[]
@@ -47,14 +49,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
     }
     setSelectedTab(tabToSelect)
   }
-  /*
-  const tracksCount = videos.tracks.length
-  const changesCount = videos.changes.length
-  const partsCount: number = videos.videoParts.length
-  const encodingCount = Object.values(videos.trackEncodingEnabled).filter((v) => v).length
 
-
- */
   const allEnabled = videos.find((video) => video.queued || video.processing) === undefined
   const allMatched = videos.find((video) => !video.matched) === undefined
   let firstSet = true
@@ -74,16 +69,23 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
       commonHints = newCommonHints
     }
   })
-  // const hintCount = commonHints !== undefined ? commonHints.length : 0
-  // const hintMissing = commonHints.find((h) => !h.value) !== undefined
+
+  const hintCount = commonHints.length
+  const hintMissing = commonHints.find((h) => !h.value) !== undefined
 
   firstSet = true
   let commonEncoderSettings: EncoderSettings[] = []
   videos.forEach((v) => {
     if (firstSet) {
-      commonEncoderSettings = v.encoderSettings
-      commonEncoderSettings.forEach((s) => {
-        s.encodingEnabled = v.trackEncodingEnabled[s.trackType + ' ' + s.trackId]
+      commonEncoderSettings = v.encoderSettings.map((es) => {
+        return {
+          trackId: es.trackId,
+          trackType: es.trackType,
+          targetSize: es.targetSize,
+          originalSize: es.originalSize,
+          compressionPercent: es.compressionPercent,
+          encodingEnabled: v.trackEncodingEnabled[es.trackType + ' ' + es.trackId]
+        }
       })
       firstSet = false
     } else {
@@ -97,13 +99,29 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
           if (commonEncoderSetting.encodingEnabled !== encoderSetting.encodingEnabled) {
             commonEncoderSetting.encodingEnabled = undefined
           }
+          if (commonEncoderSetting.originalSize !== undefined && encoderSetting.originalSize !== undefined) {
+            commonEncoderSetting.originalSize += encoderSetting.originalSize
+          }
+          if (commonEncoderSetting.targetSize !== undefined && encoderSetting.targetSize !== undefined) {
+            commonEncoderSetting.targetSize += encoderSetting.targetSize
+          }
           newCommonEncoderSettings.push(commonEncoderSetting)
         }
       }
       commonEncoderSettings = newCommonEncoderSettings
     }
   })
-  // const encodingCount = Object.values(commonEncoderSettings).filter((v) => v.encodingEnabled).length
+  for (const commonEncoderSetting of commonEncoderSettings) {
+    if (commonEncoderSetting.originalSize !== undefined && commonEncoderSetting.targetSize !== undefined) {
+      commonEncoderSetting.compressionPercent = Math.round(
+        (1 - commonEncoderSetting.targetSize / commonEncoderSetting.originalSize) * 100
+      )
+    } else {
+      commonEncoderSetting.compressionPercent = undefined
+    }
+  }
+
+  const encodingCount = Object.values(commonEncoderSettings).filter((v) => v.encodingEnabled).length
   const matchingCount = videos[0].searchResults?.length ?? 0
 
   return (
@@ -122,25 +140,23 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
           Matching{' '}
           <CounterBadge color={allMatched ? 'informative' : 'danger'} size={'small'} showZero count={matchingCount} />
         </Tab>
+        {hintCount > 0 && (
+          <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
+            Hints{' '}
+            <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
+          </Tab>
+        )}
+        <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
+          Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />
+        </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>
         {selectedTab === 'matching' && <MultiMatching disabled={!allEnabled} videos={videos} />}
+        {selectedTab === 'hints' && <MultiHints disabled={!allEnabled} videos={videos} commonHints={commonHints} />}
+        {selectedTab === 'encoding' && (
+          <MultiEncoding disabled={!allEnabled} videos={videos} commonEncoderSettings={commonEncoderSettings} />
+        )}
       </div>
     </div>
   )
-
-  /**
-   *         {hintCount > 0 && (
-   *           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
-   *             Hints{' '}
-   *             <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
-   *           </Tab>
-   *         )}
-   *         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
-   *           Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />
-   *         </Tab>
-   *
-   *         {selectedTab === 'hints' && <MultiHints disabled={!allEnabled} videos={videos} />}
-   *         {selectedTab === 'encoding' && <MultiEncoding disabled={!allEnabled} video={videos} />}
-   */
 }
