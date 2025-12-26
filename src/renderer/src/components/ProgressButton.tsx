@@ -11,7 +11,7 @@ type Props = {
   appearance?: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
   type?: string | undefined
   children?: React.ReactNode
-  execute: () => Promise<void>
+  execute: () => Promise<unknown>
   onClick?: MouseEventHandler<HTMLButtonElement>
   size?: ButtonSize
   disabled?: boolean

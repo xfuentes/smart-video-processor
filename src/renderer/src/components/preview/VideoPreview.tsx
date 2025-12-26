@@ -23,7 +23,7 @@ type Props = {
   poster: string | undefined
   secondaryPoster?: string
   title: string | undefined
-  year: number | undefined
+  year: string | number | undefined
   subTitle?: string
   overview?: string | undefined
   altOverview?: string

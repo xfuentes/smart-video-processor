@@ -30,11 +30,9 @@ const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
 const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
   if (os.platform() === 'win32') {
-    const path =
-      process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1
-        ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
-        : Path.join(__dirname, '..', '..', 'dist', 'bin', `${tool}.exe`)
-    return path
+    return process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1
+      ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+      : Path.join(__dirname, '..', '..', 'dist', 'bin', `${tool}.exe`)
   } else if (os.platform() === 'linux') {
     if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
       return `${process.env.SNAP}/usr/bin/${tool}`

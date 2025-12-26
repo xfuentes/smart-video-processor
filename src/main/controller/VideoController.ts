@@ -17,7 +17,7 @@
  */
 
 import { Video } from '../domain/Video'
-import { SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
+import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
@@ -97,6 +97,36 @@ export class VideoController {
 
   search(uuid: string, data?: SearchInputData) {
     return this.getVideoByUuid(uuid).search(data)
+  }
+
+  async multiSelectSearchResultID(uuids: string[], searchResultID: number | undefined) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).selectSearchResultID(searchResultID)
+    }
+  }
+
+  async multiSearch(uuids: string[], data: MultiSearchInputData | undefined) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).multiSearch(data)
+    }
+  }
+
+  setMultiHint(uuids: string[], hint: IHint, value: string | undefined) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).setHint(hint, value)
+    }
+  }
+
+  setMultiTrackEncodingEnabled(uuids: string[], source: string, value: boolean) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
+    }
+  }
+
+  multiProcess(uuids: string[]) {
+    for (const uuid of uuids) {
+      void this.getVideoByUuid(uuid).process()
+    }
   }
 
   switchTrackSelection(uuid: string, changedItems: number[]) {
@@ -192,6 +222,19 @@ export class VideoController {
     return await this.findVideoByUuidIncludingParts(uuid).takeSnapshots()
   }
 
+  preparePreview(uuid: string) {
+    return this.findVideoByUuidIncludingParts(uuid).preparePreview()
+  }
+
+  /**
+   * Called before quit to clean temp files
+   */
+  destroy() {
+    for (const video of this.videos) {
+      video.destroy()
+    }
+  }
+
   private getVideoByUuid(uuid: string) {
     const video = this.videos.find((video) => video.uuid === uuid)
     if (video == undefined) {
@@ -218,18 +261,5 @@ export class VideoController {
       throw new Error("Video with uuid '" + uuid + "' not found")
     }
     return foundVideo
-  }
-
-  preparePreview(uuid: string) {
-    return this.findVideoByUuidIncludingParts(uuid).preparePreview()
-  }
-
-  /**
-   * Called before quit to clean temp files
-   */
-  destroy() {
-    for (const video of this.videos) {
-      video.destroy()
-    }
   }
 }
