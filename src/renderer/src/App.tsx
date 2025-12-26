@@ -7,6 +7,7 @@ import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerProvider'
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
+import { MultiPreviewTabs } from '@renderer/components/preview/MultiPreviewTabs'
 
 export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
@@ -93,12 +94,19 @@ export const App = (): React.JSX.Element => {
                 onImportVideos={handleImportVideos}
                 onSelectionChange={handleSelectionChange}
               ></ListOrVideoContainer>
-              {selectedVideos?.length === 1 && !selectedVideos[0].loading && (
-                <div className="controls-area" style={{ minHeight: '40%', maxHeight: '40%' }}>
-                  <Divider />
-                  <PreviewTabs video={selectedVideos[0]} />
-                </div>
-              )}
+              {selectedVideos?.length > 0 &&
+                selectedVideos.find((sv) => sv.loading) === undefined &&
+                (selectedVideos?.length > 1 ? (
+                  <div className="controls-area" style={{ minHeight: '40%', maxHeight: '40%' }}>
+                    <Divider />
+                    <MultiPreviewTabs videos={selectedVideos} />
+                  </div>
+                ) : (
+                  <div className="controls-area" style={{ minHeight: '40%', maxHeight: '40%' }}>
+                    <Divider />
+                    <PreviewTabs video={selectedVideos[0]} />
+                  </div>
+                ))}
             </div>
           </div>
         </div>

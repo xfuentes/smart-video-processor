@@ -20,6 +20,7 @@ export enum JobStatus {
   WAITING = 'Waiting',
   QUEUED = 'Queued',
   LOADING = 'Loading',
+  GRABBING = 'Grabbing',
   ENCODING = 'Encoding',
   MERGING = 'Merging',
   SUCCESS = 'Success',
@@ -29,7 +30,7 @@ export enum JobStatus {
   PAUSED = 'Paused'
 }
 
-export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING
+export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING | JobStatus.GRABBING
 
 export interface IJob {
   readonly uuid: string

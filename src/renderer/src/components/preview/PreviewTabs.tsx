@@ -67,6 +67,13 @@ export const PreviewTabs = ({ video }: Props) => {
   const hintMissing = video.hints.find((h) => !h.value) !== undefined
   const disabled = video.queued || video.processing
 
+  if (selectedTab === 'encoding' || selectedTab === 'processing' || selectedTab === 'properties') {
+    if (!video.matched) {
+      setSelectedTab('matching')
+    } else if (hintMissing) {
+      setSelectedTab('hints')
+    }
+  }
   return (
     <div
       style={{
