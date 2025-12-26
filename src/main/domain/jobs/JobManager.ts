@@ -26,11 +26,13 @@ export class JobManager {
   private runningJobs: { [K in JobType]: Job<object | unknown> | undefined } = {
     [JobStatus.LOADING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.ENCODING]: undefined as Job<object | unknown> | undefined,
+    [JobStatus.GRABBING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.MERGING]: undefined as Job<object | unknown> | undefined
   }
   private queues: { [K in JobType]: Job<object | unknown>[] } = {
     [JobStatus.LOADING]: [] as Job<object | unknown>[],
     [JobStatus.ENCODING]: [] as Job<object | unknown>[],
+    [JobStatus.GRABBING]: [] as Job<object | unknown>[],
     [JobStatus.MERGING]: [] as Job<object | unknown>[]
   }
 

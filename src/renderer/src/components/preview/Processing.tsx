@@ -20,6 +20,7 @@ import { IVideo } from '../../../../common/@types/Video'
 import { Button, Divider } from '@fluentui/react-components'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 import { MoviesAndTvRegular } from '@fluentui/react-icons'
+import { ProgressButton } from '@renderer/components/ProgressButton'
 
 type Props = {
   video: IVideo
@@ -27,7 +28,19 @@ type Props = {
 }
 
 export const Processing = ({ video, disabled = false }: Props) => {
-  return (
+  return video.snapshots?.snapshotsPath === undefined ? (
+    <>
+      <div className="centered-contents">
+        <ProgressButton
+          appearance="primary"
+          execute={() => window.api.video.takeSnapshots(video.uuid)}
+          disabled={disabled || video.snapshots !== undefined}
+        >
+          Prepare for Processing
+        </ProgressButton>
+      </div>
+    </>
+  ) : (
     <>
       <div className="processing-body">
         <div className="ruler">
