@@ -4,8 +4,6 @@
 [![Windows Build](https://img.shields.io/github/actions/workflow/status/xfuentes/smart-video-processor/build-win32.yml?label=m$%20build)](https://github.com/xfuentes/smart-video-processor/actions/workflows/build-win32.yml)
 [![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
-![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads-pre/xfuentes/smart-video-processor/latest/total.svg)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xfuentes/smart-video-processor/total)
 
 This tool automatically identifies your movies and TV shows using popular databases,
 then streamlines the entire process: rename files using Plex-friendly conventions,
