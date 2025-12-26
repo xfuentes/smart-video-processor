@@ -133,6 +133,16 @@ export type SearchInputData = {
   otherPosterPath: string
 }
 
+export type MultiSearchInputData = {
+  type: VideoType
+  searchBy: SearchBy
+  tvShowTitle: string
+  tvShowYear: string
+  tvShowTVDB: string
+  tvShowOrder: EpisodeOrder
+  tvShowSeason: string
+}
+
 export const retrieveChangePropertyValue = (
   video: IVideo,
   source: string,

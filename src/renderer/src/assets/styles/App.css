@@ -553,6 +553,14 @@ td.version {
   flex-direction: column;
 }
 
+.centered-contents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 .hide-first-half {
   max-width: 11px;
   overflow: hidden;
