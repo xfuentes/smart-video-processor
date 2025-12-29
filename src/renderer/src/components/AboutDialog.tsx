@@ -32,7 +32,13 @@ import {
   ToolbarButton
 } from '@fluentui/react-components'
 import React, { useState } from 'react'
-import { ArchiveSettings20Regular, CalendarInfoRegular, DocumentSettings20Regular } from '@fluentui/react-icons'
+import {
+  ArchiveSettings20Regular,
+  CalendarInfoRegular,
+  ClipboardBulletList20Regular,
+  DocumentSettings20Regular,
+  News20Regular
+} from '@fluentui/react-icons'
 import { LicenseText } from '@renderer/components/LicenseTest'
 import ElectronLogo from '../assets/electron.svg'
 import FluentLogo from '../assets/fluent.svg'
@@ -47,7 +53,7 @@ const version = window.api.main.version
 const otherVersions = window.electron.process.versions
 
 export const AboutDialog = () => {
-  const [selectedTab, setSelectedTab] = useState('powered')
+  const [selectedTab, setSelectedTab] = useState('news')
   const [opened, setOpened] = useState(false)
 
   const handleOpenChange = (_event, data) => {
@@ -66,13 +72,19 @@ export const AboutDialog = () => {
         </ToolbarButton>
       </DialogTrigger>
       <DialogSurface aria-label="About" style={{ padding: '5px', display: 'flex', flexFlow: 'column' }}>
-        <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '600px', maxHeight: '500px' }}>
+        <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '600px', maxHeight: '700px' }}>
           <DialogContent className="settings-dialog">
             <div className="vertical-stack">
-              <h3 style={{ textAlign: 'center' }}>Smart Video Processor v{version}</h3>
+              <h3 style={{ textAlign: 'center', marginBlockStart: 0, marginBlockEnd: 0 }}>
+                Smart Video Processor v{version}
+              </h3>
               <p style={{ fontSize: 'small' }}>
-                This small application in JavaScript is a frontend for various great free command line tools. Its
-                purpose is to help process and encode your DVD or Blu-ray backups. Please visit this project{' '}
+                This tool automatically identifies your movies and TV shows using popular databases, then streamlines
+                the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata
+                (including track language and type), split or join media files and encode to H.264 or H.265—all in one
+                place.
+                <br />
+                Please visit the project{' '}
                 <Link onClick={() => window.open('https://github.com/xfuentes/smart-video-processor', '_blank')}>
                   homepage
                 </Link>
@@ -93,6 +105,12 @@ export const AboutDialog = () => {
                 size="small"
                 onTabSelect={(_event: SelectTabEvent, data: SelectTabData) => setSelectedTab(data.value as string)}
               >
+                <Tab value="news" icon={<News20Regular />}>
+                  What&#39;s new
+                </Tab>
+                <Tab value="features" icon={<ClipboardBulletList20Regular />}>
+                  Features
+                </Tab>
                 <Tab value="powered" icon={<ArchiveSettings20Regular />}>
                   Powered by
                 </Tab>
@@ -101,6 +119,69 @@ export const AboutDialog = () => {
                 </Tab>
               </TabList>
               <div>
+                {selectedTab === 'news' && (
+                  <div
+                    style={{
+                      height: '360px',
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                      padding: '5px',
+                      border: '1px solid #EBEBEB'
+                    }}
+                  >
+                    <h4>Version 1.6.1</h4>
+                    <ul>
+                      <li>Display a warning message if application can&#39;t access removable medias (snap)</li>
+                      <li>Added What&#39;s new section in about dialog</li>
+                      <li>Added Features section in about dialog</li>
+                    </ul>
+                  </div>
+                )}
+                {selectedTab === 'features' && (
+                  <div
+                    style={{
+                      height: '360px',
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                      padding: '5px',
+                      border: '1px solid #EBEBEB'
+                    }}
+                  >
+                    <ul>
+                      <li>
+                        <b>Automatic Media Recognition:</b>{' '}
+                        <small>Identifies movies and TV shows using TheMovieDB or TVDB</small>
+                      </li>
+                      <li>
+                        <b>Smart File Renaming:</b>{' '}
+                        <small>Renames files using Plex/Kodi-friendly naming conventions</small>
+                      </li>
+                      <li>
+                        <b>Metadata Correction:</b> <small>Fetches and corrects title, year, episode name...</small>
+                      </li>
+                      <li>
+                        <b>Audio & Subtitle Track Management:</b>{' '}
+                        <small>Detects and labels audio/subtitle languages; renames and reorders tracks.</small>
+                      </li>
+                      <li>
+                        <b>Poster & Thumbnail Download:</b>{' '}
+                        <small>Automatically downloads posters and thumbnails.</small>
+                      </li>
+                      <li>
+                        <b>Media File Splitting & Joining:</b>{' '}
+                        <small>Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.</small>
+                      </li>
+                      <li>
+                        <b>Video Encoding (H.264 / H.265):</b>{' '}
+                        <small>Converts media to efficient formats with predefined presets.</small>
+                      </li>
+                      <li>
+                        <b>Batch Processing:</b>{' '}
+                        <small>Handles multiple files simultaneously with queue management.</small>
+                      </li>
+                    </ul>
+                  </div>
+                )}
                 {selectedTab === 'license' && (
                   <div
                     style={{
