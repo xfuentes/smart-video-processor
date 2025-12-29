@@ -50,7 +50,7 @@ export class Processes {
   static async pause(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        // @ts-ignore ntsuspend only available on windows
+        // @ts-ignore ntsuspend only available on Windows
         const ntsuspend = await import('ntsuspend')
         ntsuspend && ntsuspend.suspend(proc.pid)
       } else {
@@ -62,7 +62,7 @@ export class Processes {
   static async resume(proc: ChildProcess) {
     if (proc.pid != undefined) {
       if (process.platform === 'win32') {
-        // @ts-ignore ntsuspend only available on windows
+        // @ts-ignore ntsuspend only available on Windows
         const ntsuspend = await import('ntsuspend')
         ntsuspend && ntsuspend.resume(proc.pid)
       } else {
@@ -175,6 +175,17 @@ export class Processes {
     const normalised = this.normalise(locale || defaultLocale)
     cache.set(options.spawn, normalised)
     return normalised
+  }
+
+  static hasRemovableMediaAccess() {
+    if (os.platform() === 'linux' && this.isLimitedPermissions()) {
+      try {
+        fs.readdirSync('/mnt')
+      } catch (err) {
+        return false
+      }
+    }
+    return true
   }
 
   private static cleanInput(s: string) {

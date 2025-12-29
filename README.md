@@ -26,7 +26,7 @@ Alternatively there is an APPIMAGE file available.
 ### b) Windows 10 or later
 
 <a href="https://apps.microsoft.com/detail/9pg7l9jr8k6m?referrer=appbadge&mode=direct">
-<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/>
+<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200" alt="Microsoft Store"/>
 </a>
 
 Alternatively you can install the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
@@ -88,7 +88,7 @@ If some information from the original file is missing or is incomplete hints wil
 
 ![Providing Hints](docs/img/06-Hints.png)
 
-## 9) Add/Review matroska properties changes
+## 9) Add/Review Matroska properties changes
 
 Check the changes that will be done. You can also add some custom changes.
 

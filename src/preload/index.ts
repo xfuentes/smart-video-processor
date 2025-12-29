@@ -10,13 +10,13 @@ import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListe
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
-const isLimitedPermissions: boolean = await ipcRenderer.invoke('main:isLimitedPermissions')
+const installationStatus = await ipcRenderer.invoke('main:getInstallationStatus')
 
 // Custom APIs for renderer
 const api: SvpAPI = {
   main: {
     ...version,
-    isLimitedPermissions,
+    ...installationStatus,
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),

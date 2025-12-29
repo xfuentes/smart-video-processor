@@ -147,8 +147,11 @@ app.whenReady().then(async () => {
       viteVersion: packageJSON.devDependencies['vite'].replace(/^\^/, '')
     }
   })
-  ipcMain.handle('main:isLimitedPermissions', async () => {
-    return Processes.isLimitedPermissions()
+  ipcMain.handle('main:getInstallationStatus', async () => {
+    return {
+      isLimitedPermissions: Processes.isLimitedPermissions(),
+      hasRemovableMediaAccess: Processes.hasRemovableMediaAccess()
+    }
   })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {

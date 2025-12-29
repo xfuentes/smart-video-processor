@@ -36,6 +36,7 @@ interface SvpAPI {
     fluentUIVersion: string
     viteVersion: string
     isLimitedPermissions: boolean
+    hasRemovableMediaAccess: boolean
     getCurrentSettings: () => Promise<FormValidation<Settings>>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
