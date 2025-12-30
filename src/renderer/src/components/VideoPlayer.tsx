@@ -42,7 +42,12 @@ export const VideoPlayer = () => {
         {previewPath ? (
           <HlsVideoPlayer src={`svp-stream:///${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
         ) : (
-          <Field validationMessage="Generating preview..." validationState="none" style={{ width: '50%' }}>
+          <Field
+            validationState="none"
+            validationMessage={{ children: 'Generating preview...', style: { color: 'white' } }}
+            style={{ width: '50%' }}
+            color="white"
+          >
             <ProgressBar thickness="large" value={progression} />
           </Field>
         )}

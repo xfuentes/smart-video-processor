@@ -308,9 +308,6 @@ export class Video implements IVideo {
     if (init) {
       this.trackEncodingEnabled = {}
     }
-    this.encodingForced =
-      currentSettings.isFineTrimEnabled &&
-      (this.videoParts.length > 0 || this.startFrom !== undefined || this.endAt !== undefined)
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
     if (init) {
       this.encoderSettings.forEach((s) =>
@@ -709,11 +706,6 @@ export class Video implements IVideo {
       t.copy = true
     })
   }
-
-  getTrackEncodingEnabledCount() {
-    return Object.values(this.trackEncodingEnabled).filter((enabled) => enabled).length
-  }
-
   getTracksDuration() {
     let duration = 0
     for (const t of this.tracks) {
@@ -837,7 +829,7 @@ export class Video implements IVideo {
   }
 
   async toNearestKeyFrameTime(selTime: number) {
-    if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
+    if (this.keyFrames.length === 0) {
       const prevMessage = this.message
       const prevStatus = this.status
       this.message = 'Extracting key frames...'
@@ -866,22 +858,14 @@ export class Video implements IVideo {
   }
 
   async setStartFrom(value?: number) {
-    if (currentSettings.isFineTrimEnabled) {
-      this.startFrom = value !== undefined ? Math.round(value) : undefined
-    } else {
-      this.startFrom = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
-    }
+    this.startFrom = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
   async setEndAt(value?: number) {
-    if (currentSettings.isFineTrimEnabled) {
-      this.endAt = value !== undefined ? Math.round(value) : undefined
-    } else {
-      this.endAt = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
-    }
+    this.endAt = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()

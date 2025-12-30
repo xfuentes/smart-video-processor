@@ -71,7 +71,10 @@ export const AboutDialog = () => {
           About
         </ToolbarButton>
       </DialogTrigger>
-      <DialogSurface aria-label="About" style={{ padding: '5px', display: 'flex', flexFlow: 'column' }}>
+      <DialogSurface
+        aria-label="About"
+        style={{ padding: '5px', display: 'flex', flexFlow: 'column', minWidth: '650px' }}
+      >
         <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '600px', maxHeight: '700px' }}>
           <DialogContent className="settings-dialog">
             <div className="vertical-stack">
@@ -129,6 +132,10 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.6.3</h4>
+                    <ul>
+                      <li>Re-encode on Codec Mismatch Setting</li>
+                    </ul>
                     <h4>Version 1.6.2</h4>
                     <ul>
                       <li>Support drag and drop movie parts</li>
