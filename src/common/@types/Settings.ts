@@ -69,10 +69,6 @@ export type Settings = {
    */
   isTrackEncodingEnabled: boolean
   /**
-   * When enabled always force re-encoding all streams to enable precise trimming.
-   */
-  isFineTrimEnabled: boolean
-  /**
    * Video Codec to use to re-encode video tracks.
    */
   videoCodec: VideoCodec
@@ -81,9 +77,17 @@ export type Settings = {
    */
   videoSizeReduction: number
   /**
+   * If video codec is not H.264 or H.265, force re-encode
+   */
+  videoEnforceCodec: boolean
+  /**
    * Audio size reduction needed to allow re-encoding.
    */
   audioSizeReduction: number
+  /**
+   * If audio codec is not AAC force re-encode
+   */
+  audioEnforceCodec: boolean
   /**
    * MKVMerge command full path.
    */

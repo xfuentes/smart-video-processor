@@ -60,10 +60,11 @@ export const defaultSettings: Settings = {
   favoriteLanguages: [systemLocale],
   isKeepVOEnabled: true,
   isTrackEncodingEnabled: true,
-  isFineTrimEnabled: false,
   videoCodec: VideoCodec.AUTO,
   videoSizeReduction: 50,
+  videoEnforceCodec: false,
   audioSizeReduction: 70,
+  audioEnforceCodec: false,
   mkvMergePath: getDefaultToolPath('mkvmerge'),
   ffmpegPath: getDefaultToolPath('ffmpeg'),
   ffprobePath: getDefaultToolPath('ffprobe')
@@ -91,12 +92,10 @@ export function loadSettings() {
   currentSettings.mkvMergePath = defaultSettings.mkvMergePath
   currentSettings.ffmpegPath = defaultSettings.ffmpegPath
   currentSettings.ffprobePath = defaultSettings.ffprobePath
-  currentSettings.isFineTrimEnabled = false
 }
 
 export function saveSettings(settings: Settings) {
   const validation = validateSettings(settings)
-  currentSettings.isFineTrimEnabled = false
   if (validation.status === 'success') {
     currentSettings = { ...settings }
     Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))

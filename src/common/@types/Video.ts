@@ -101,7 +101,6 @@ export interface IVideo {
   other?: IOther
   encoderSettings: EncoderSettings[]
   trackEncodingEnabled: { [key: string]: boolean }
-  encodingForced: boolean
   hintMissing: boolean
   previewProgression?: Progression
   previewPath?: string

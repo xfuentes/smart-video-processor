@@ -68,11 +68,29 @@ export class Encoding {
       const format = Strings.pixelsToVideoFormat(videoTrack.properties.videoDimensions)
       const fps = videoTrack.properties.fps ?? 25
       const { bpf, codec } = this.getVideoBPFByFormat(format)
-      const bitrate = Math.round(bpf * width * height * fps)
+      let bitrate = Math.round(bpf * width * height * fps)
       const proposedCompression = Math.round((1 - bitrate / videoTrack.properties.bitRate) * 100)
 
-      const encodingEnabled =
+      let encodingEnabled =
         currentSettings.isTrackEncodingEnabled && currentSettings.videoSizeReduction <= proposedCompression
+      let enforcingCodec = false
+
+      if (
+        currentSettings.videoEnforceCodec &&
+        videoTrack.codec.indexOf('264') === -1 &&
+        videoTrack.codec.indexOf('265') === -1
+      ) {
+        encodingEnabled = true
+        enforcingCodec = true
+      }
+
+      if (
+        bitrate > videoTrack.properties.bitRate &&
+        !(codec === VideoCodec.H264 && videoTrack.codec.indexOf('265') !== -1)
+      ) {
+        bitrate = videoTrack.properties.bitRate
+      }
+
       const setting: EncoderSettings = {
         trackId: videoTrack.id,
         trackType: videoTrack.type,
@@ -80,7 +98,8 @@ export class Encoding {
         bitrate,
         codec,
         ...this.computeCompression(videoTrack.properties.bitRate, bitrate, duration),
-        encodingEnabled
+        encodingEnabled,
+        enforcingCodec
       }
 
       settings.push(setting)
@@ -141,12 +160,23 @@ export class Encoding {
       audioTrack.properties.audioChannels !== undefined &&
       duration !== undefined
     ) {
-      const bitrate = this.getBpsForAudioChannels(audioTrack.properties.audioChannels)
+      let bitrate = this.getBpsForAudioChannels(audioTrack.properties.audioChannels)
       const proposedCompression = Math.round((1 - bitrate / audioTrack.properties.bitRate) * 100)
 
-      const encodingEnabled =
+      let encodingEnabled =
         (currentSettings.isTrackEncodingEnabled && currentSettings.audioSizeReduction <= proposedCompression) ||
         audioTrack.unsupported
+
+      let enforcingCodec = false
+      if (currentSettings.audioEnforceCodec && audioTrack.codec.indexOf('AAC') === -1) {
+        encodingEnabled = true
+        enforcingCodec = true
+      }
+
+      if (bitrate > audioTrack.properties.bitRate) {
+        bitrate = audioTrack.properties.bitRate
+      }
+
       const setting: EncoderSettings = {
         trackId: audioTrack.id,
         trackType: audioTrack.type,
@@ -154,7 +184,8 @@ export class Encoding {
         audioChannels: audioTrack.properties.audioChannels,
         bitrate,
         ...this.computeCompression(audioTrack.properties.bitRate, bitrate, duration),
-        encodingEnabled
+        encodingEnabled,
+        enforcingCodec
       }
       settings.push(setting)
     }

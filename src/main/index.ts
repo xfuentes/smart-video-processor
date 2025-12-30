@@ -65,7 +65,7 @@ function createWindow(): BrowserWindow {
   })
 
   // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Load the remote URL for development or the local HTML file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     void mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
@@ -159,7 +159,10 @@ app.whenReady().then(async () => {
     const encoderSettingsUpdated =
       currentSettings.isTrackEncodingEnabled !== settings.isTrackEncodingEnabled ||
       currentSettings.videoCodec !== settings.videoCodec ||
-      currentSettings.isFineTrimEnabled !== settings.isFineTrimEnabled
+      currentSettings.videoSizeReduction !== settings.videoSizeReduction ||
+      currentSettings.videoEnforceCodec !== settings.videoEnforceCodec ||
+      currentSettings.audioSizeReduction !== settings.audioSizeReduction ||
+      currentSettings.audioEnforceCodec !== settings.audioEnforceCodec
 
     const validation = saveSettings(settings)
     if (validation.status === 'success') {

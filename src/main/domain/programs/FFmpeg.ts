@@ -213,11 +213,11 @@ export class FFmpeg extends CommandProgress {
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
     ffOptions.push('-loglevel', '16') // Only show errors
-    ffOptions.push('-y') // Overwrite output file without asking
     /**
      * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
      */
     ffOptions.push('-fflags', '+genpts')
+    ffOptions.push('-y') // Overwrite output file without asking
     ffOptions.push('-i', video.sourcePath)
 
     let videoIndex = 0
@@ -274,6 +274,7 @@ export class FFmpeg extends CommandProgress {
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
     ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-fflags', '+genpts')
     ffOptions.push('-y') // Overwrite output file without asking
 
     ffOptions.push('-i', video.sourcePath)
@@ -341,6 +342,7 @@ export class FFmpeg extends CommandProgress {
 
       ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
       ffOptions.push('-loglevel', '16') // Only show errors
+      ffOptions.push('-fflags', '+genpts')
       ffOptions.push('-y') // Overwrite output file without asking
 
       ffOptions.push('-f', 'concat')
