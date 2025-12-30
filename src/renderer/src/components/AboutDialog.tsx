@@ -129,6 +129,13 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.6.2</h4>
+                    <ul>
+                      <li>Support drag and drop movie parts</li>
+                      <li>Display progression while generating preview</li>
+                      <li>High speed conversion of files if format is not supported for preview</li>
+                      <li>Fixed issue with second part joining and trimming</li>
+                    </ul>
                     <h4>Version 1.6.1</h4>
                     <ul>
                       <li>Display a warning message if application can&#39;t access removable medias (snap)</li>

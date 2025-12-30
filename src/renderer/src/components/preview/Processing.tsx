@@ -21,6 +21,7 @@ import { Button, Divider } from '@fluentui/react-components'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 import { MoviesAndTvRegular } from '@fluentui/react-icons'
 import { ProgressButton } from '@renderer/components/ProgressButton'
+import { DropZone } from '@renderer/components/DropZone'
 
 type Props = {
   video: IVideo
@@ -28,6 +29,12 @@ type Props = {
 }
 
 export const Processing = ({ video, disabled = false }: Props) => {
+  const handleDropPart = (files: File[]) => {
+    if (files.length > 0) {
+      void window.api.video.addParts(video.uuid, files)
+    }
+  }
+
   return video.snapshots?.snapshotsPath === undefined ? (
     <>
       <div className="centered-contents">
@@ -42,18 +49,25 @@ export const Processing = ({ video, disabled = false }: Props) => {
     </>
   ) : (
     <>
-      <div className="processing-body">
-        <div className="ruler">
-          <Divider style={{ flexGrow: '0' }}>Main Video File</Divider>
-          <VideoSectionSelectorField video={video} disabled={disabled} />
-          {video.videoParts.map((part, i) => (
-            <>
-              <Divider style={{ flexGrow: '0' }}>Part {i + 1}</Divider>
-              <VideoSectionSelectorField key={part.uuid} mainVideoUuid={video.uuid} video={part} disabled={disabled} />
-            </>
-          ))}
+      <DropZone onDropFiles={handleDropPart} style={{ padding: '5px', boxSizing: 'border-box', height: '100%' }}>
+        <div className="processing-body">
+          <div className="ruler">
+            <Divider style={{ flexGrow: '0' }}>Main Video File</Divider>
+            <VideoSectionSelectorField key={video.uuid} video={video} disabled={disabled} />
+            {video.videoParts.map((part, i) => (
+              <>
+                <Divider style={{ flexGrow: '0' }}>Part {i + 1}</Divider>
+                <VideoSectionSelectorField
+                  key={part.uuid}
+                  mainVideoUuid={video.uuid}
+                  video={part}
+                  disabled={disabled}
+                />
+              </>
+            ))}
+          </div>
         </div>
-      </div>
+      </DropZone>
       <Divider style={{ flexGrow: '0' }} />
       <div className="preview-buttons">
         <div className="button">
