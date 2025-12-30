@@ -262,4 +262,10 @@ export class VideoController {
     }
     return foundVideo
   }
+
+  addParts(uuid: string, filePaths: string[]) {
+    for(const partPath of filePaths) {
+      void this.getVideoByUuid(uuid).addPart(partPath)
+    }
+  }
 }

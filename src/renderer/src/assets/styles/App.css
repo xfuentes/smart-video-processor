@@ -413,6 +413,7 @@ button:disabled.is-disabled.ms-Pivot-link {
   position: relative;
   overflow: hidden;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .drop-zone.is-dragover {
@@ -546,7 +547,6 @@ td.version {
 .processing-body {
   height: 100%;
   width: 100%;
-  background-color: #fff;
   flex-grow: 1;
   overflow: auto;
   display: flex;

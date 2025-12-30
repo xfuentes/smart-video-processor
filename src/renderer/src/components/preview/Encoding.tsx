@@ -145,7 +145,7 @@ export const Encoding = ({ video, disabled }: Props) => {
             <div style={{ paddingTop: '5px', paddingBottom: '5px' }}>
               <Field validationMessage={video.message} validationState={validation}>
                 {progression !== -1 ? (
-                  <ProgressBar color={progressColor} value={progression} max={1} />
+                  <ProgressBar color={progressColor} value={progression} />
                 ) : (
                   <div style={{ minHeight: '2px' }} />
                 )}

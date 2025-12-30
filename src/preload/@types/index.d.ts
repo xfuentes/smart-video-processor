@@ -74,6 +74,7 @@ interface SvpAPI {
     ) => Promise<void>
     deleteChange: (uuid: string, changeUuid: string) => Promise<void>
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
+    addParts: (uuid: string, files: File[]) => Promise<void>
     addPart: (uuid: string) => Promise<void>
     removePart: (uuid: string, partUuid: string) => Promise<void>
     process: (uuid: string) => Promise<void>

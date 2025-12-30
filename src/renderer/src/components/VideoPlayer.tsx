@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react'
 import HlsVideoPlayer from '@renderer/components/fields/HlsVideoPlayer'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
-import { Spinner } from '@fluentui/react-components'
+import { Field, ProgressBar } from '@fluentui/react-components'
 
 export const VideoPlayer = () => {
   const { videoPlayed, videoPlayerCurrentTime } = useVideoPlayer()
@@ -35,13 +35,16 @@ export const VideoPlayer = () => {
     setPreviewPath(videoPlayed?.previewPath?.replaceAll('\\', '/'))
   }, [videoPlayed?.previewPath])
 
+  const progression = videoPlayed?.previewProgression?.progress
   return (
     <>
       <div className="player-loading">
         {previewPath ? (
           <HlsVideoPlayer src={`svp-stream:///${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
         ) : (
-          <Spinner label="Loading..." size="medium" />
+          <Field validationMessage="Generating preview..." validationState="none" style={{ width: '50%' }}>
+            <ProgressBar thickness="large" value={progression} />
+          </Field>
         )}
       </div>
     </>

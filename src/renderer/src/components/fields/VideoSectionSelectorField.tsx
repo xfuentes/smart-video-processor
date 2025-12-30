@@ -148,16 +148,6 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
     }
   }, [setVideoPlayed, video, videoPlayed])
 
-  /*
-  useEffect(() => {
-    if (!video.snapshots?.snapshotsPath && video.duration && video.pixels) {
-      const snapshotHeight = previewHeight - 2
-      const snapshotWidth = Math.round(Strings.pixelsToAspectRatio(video.pixels) * snapshotHeight)
-      void window.api.video.takeSnapshots(video.uuid, snapshotHeight, snapshotWidth, totalWidth)
-    }
-  }, [video.uuid, step, video.duration, video.pixels, video.snapshots?.snapshotsPath])
-  */
-
   const handlePlay = async () => {
     if (!videoPlayerOpened) {
       setVideoPlayerOpened(true)
@@ -236,12 +226,15 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
     }
   }
 
-  const handleMouseMoveOverScrollable = useCallback((event: MouseEvent) => {
-    if (rulerRef.current != null) {
-      const sp = event.clientX - rulerRef.current.getBoundingClientRect().left
-      setSelPosX(sp < 0 ? 0 : sp > endPos ? endPos : sp)
-    }
-  }, [])
+  const handleMouseMoveOverScrollable = useCallback(
+    (event: MouseEvent) => {
+      if (rulerRef.current != null) {
+        const sp = event.clientX - rulerRef.current.getBoundingClientRect().left
+        setSelPosX(sp < 0 ? 0 : sp > endPos ? endPos : sp)
+      }
+    },
+    [endPos]
+  )
 
   const handleMouseOutScrollable = useCallback(
     (_event: MouseEvent) => {

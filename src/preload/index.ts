@@ -82,6 +82,10 @@ const api: SvpAPI = {
       ipcRenderer.invoke('video:deleteChange', uuid, changeUuid),
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
+    addParts: (uuid: string, files: File[]): Promise<void> => {
+      const filePaths = files.map((f) => webUtils.getPathForFile(f))
+      return ipcRenderer.invoke('video:addParts', uuid, filePaths)
+    },
     addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
     removePart: (uuid: string, partUuid: string): Promise<void> =>
       ipcRenderer.invoke('video:removePart', uuid, partUuid),

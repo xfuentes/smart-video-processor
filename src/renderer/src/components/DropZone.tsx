@@ -20,7 +20,7 @@ import React from 'react'
 
 interface MyComponentProps {
   onDropFiles: (files: File[]) => void
-  style?: { minHeight: string }
+  style?: { [key: string]: unknown }
   onKeyUp?: (event: React.KeyboardEvent) => void
 }
 
