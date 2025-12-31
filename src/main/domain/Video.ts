@@ -759,7 +759,6 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
-      encodingForced: this.encodingForced,
       previewProgression: this.previewProgression,
       previewPath: this.previewPath,
       snapshots: this.snapshots,

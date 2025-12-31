@@ -23,7 +23,6 @@ import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
 import { EncoderSettings } from '../../../../common/@types/Encoding'
-import { keepIfSameReducer } from '@renderer/utils'
 
 type Props = {
   videos: IVideo[]
@@ -59,10 +58,6 @@ const trackTypeEncodingSection = (
         <div className="encoding-form" style={expand ? { flexGrow: 1 } : {}}>
           {commonFilteredTracks.map((track: ITrack) => {
             const key = track.type + ' ' + track.id
-            const encodingForced = videos.map((v): boolean | undefined => v.encodingForced).reduce(keepIfSameReducer)
-            const trackEncodingEnabled = videos
-              .map((v): boolean | undefined => v.trackEncodingEnabled[key] ?? false)
-              .reduce(keepIfSameReducer)
             const es = commonEncoderSettings.find((s) => s.trackId === track.id)
             let infoLabel: ReactElement | undefined = undefined
             let forceDisabled = false
@@ -70,21 +65,20 @@ const trackTypeEncodingSection = (
               infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
               forceDisabled = true
             } else if (es && es.targetSize) {
-              forceDisabled = encodingForced !== false
               infoLabel = (
                 <InfoLabel
                   info={
                     <div style={{ whiteSpace: 'nowrap' }}>
-                      {encodingForced !== false && (
-                        <>
-                          <b>Fine trimming requires re-encoding</b>
-                          <br />
-                        </>
-                      )}
                       <>
                         Selected file{videos.length > 1 ? 's' : ''}: {videos.length}
                         <br />
                       </>
+                      {es.codec !== undefined && (
+                        <>
+                          {es.enforcingCodec ? 'Enforcing ' : ''}Codec: {es.codec}
+                          <br />
+                        </>
+                      )}
                       {es.compressionPercent !== undefined && (
                         <>
                           Compression: {es.compressionPercent}%<br />
@@ -108,7 +102,7 @@ const trackTypeEncodingSection = (
             return (
               <Checkbox
                 key={key}
-                checked={videos[0].encodingForced || trackEncodingEnabled}
+                checked={es?.encodingEnabled}
                 onChange={async (_ev, data) => {
                   if (data.checked !== 'mixed') {
                     await window.api.video.setMultiTrackEncodingEnabled(
