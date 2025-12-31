@@ -140,7 +140,7 @@ app.whenReady().then(async () => {
   })
   ipcMain.handle('main:getVersion', async () => {
     return {
-      version: app.getVersion(),
+      version: `${app.getVersion()}${!app.isPackaged ? '-dev' : ''}`,
       ffmpegVersion: ffmpegVersion,
       mkvmergeVersion: mkvmergeVersion,
       fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
