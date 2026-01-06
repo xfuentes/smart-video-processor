@@ -143,7 +143,7 @@ export class TVDBClient {
       response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
         params: {
           ...(season !== undefined ? { season } : { season: 1 }),
-          episodeNumber: episodeNumber || absoluteEpisodeNumber
+          episodeNumber: episodeNumber || absoluteEpisodeNumber || 1
         }
       })
     } catch (error) {
