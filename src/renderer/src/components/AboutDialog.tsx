@@ -135,6 +135,8 @@ export const AboutDialog = () => {
                     <h4>Version 1.6.3</h4>
                     <ul>
                       <li>Re-encode on Codec Mismatch Setting</li>
+                      <li>Fix issue with multi encode</li>
+                      <li>Fix matching of series even if no episode number specified</li>
                     </ul>
                     <h4>Version 1.6.2</h4>
                     <ul>
