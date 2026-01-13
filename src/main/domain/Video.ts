@@ -70,6 +70,7 @@ import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
+import Chalk from 'chalk'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -373,12 +374,20 @@ export class Video implements IVideo {
     this.brainCalled = false
     this.selectAllTracks()
     this.hints = []
-    if (this.type === VideoType.MOVIE) {
-      await this.movie.search(this.searchBy)
-    } else if (this.type === VideoType.TV_SHOW) {
-      await this.tvShow.search(this.searchBy)
-    } else if (this.type === VideoType.OTHER) {
-      await this.other.search()
+    try {
+      if (this.type === VideoType.MOVIE) {
+        await this.movie.search(this.searchBy)
+      } else if (this.type === VideoType.TV_SHOW) {
+        await this.tvShow.search(this.searchBy)
+      } else if (this.type === VideoType.OTHER) {
+        await this.other.search()
+      }
+    } catch (error) {
+      this.status = JobStatus.WARNING
+      this.progression.progress = -1
+      this.message = (error as Error).message + '. Please check the information provided and try again.'
+      console.log(Chalk.red(this.message))
+      this.fireChangeEvent()
     }
     if (this.status !== JobStatus.WARNING) {
       await this.analyse()
@@ -947,7 +956,7 @@ export class Video implements IVideo {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
-      if (this.tvShow.order === 'official' && this.tvShow.season !== undefined) {
+      if (this.tvShow.season !== undefined) {
         subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
       }
     }
@@ -986,7 +995,7 @@ export class Video implements IVideo {
       // TODO: Log
     }
     const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]?/i
-    const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+).*[e\s](?<absoluteEpisode>\d\d\d?\d?)\p{L}/iu
+    const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+)?.*?(?<absoluteEpisode>E?\d\d\d?\d?)/iu
 
     this.type = VideoType.OTHER
     const tvShowSeasonEpisodePattern =
@@ -1038,7 +1047,7 @@ export class Video implements IVideo {
       this.tvShow.season = Number.parseInt(tvShowSeasonEpisodeMatches.groups.season, 10)
       this.tvShow.episode = Number.parseInt(tvShowSeasonEpisodeMatches.groups.episode, 10)
       this.tvShow.order = 'official'
-      this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title)
+      this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title ?? '')
     } else if (movieMatches?.groups) {
       this.type = VideoType.MOVIE
       this.movie.title = Files.megaTrim(movieMatches.groups.title)
@@ -1047,7 +1056,7 @@ export class Video implements IVideo {
       this.type = VideoType.TV_SHOW
       this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
       this.tvShow.order = 'absolute'
-      this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title)
+      this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title ?? '')
     }
 
     if (this.type === VideoType.OTHER) {

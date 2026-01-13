@@ -132,6 +132,10 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.6.4</h4>
+                    <ul>
+                      <li>Improve absolute episode number matching (good for mangas)</li>
+                    </ul>
                     <h4>Version 1.6.3</h4>
                     <ul>
                       <li>Re-encode on Codec Mismatch Setting</li>
