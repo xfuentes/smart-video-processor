@@ -99,7 +99,7 @@ export class TVDBClient {
           }
         }
         if (r.overviews) {
-          if(r.overviews[favoriteLanguage.code] !== undefined) {
+          if (r.overviews[favoriteLanguage.code] !== undefined) {
             overview = r.overviews[favoriteLanguage.code]
           } else {
             for (const code of favoriteLanguage?.altCodes ?? []) {
@@ -139,12 +139,14 @@ export class TVDBClient {
     const tvdb = await this.getTVDBSession()
     let response: AxiosResponse<TVDBSeriesResponse> | undefined = undefined
 
+    const params = {
+      ...(order === 'absolute' || season === undefined ? { season: 1 } : { season }),
+      episodeNumber: order === 'absolute' ? (absoluteEpisodeNumber ?? 1) : (episodeNumber ?? 1)
+    }
     try {
+      debug(`Calling /series/${tvdbId}/episodes/${order} with params: ${params}`)
       response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
-        params: {
-          ...(season !== undefined ? { season } : { season: 1 }),
-          episodeNumber: episodeNumber || absoluteEpisodeNumber || 1
-        }
+        params
       })
     } catch (error) {
       debug(error)
@@ -157,6 +159,24 @@ export class TVDBClient {
     if (episodeData === undefined) {
       throw new Error('TVDB: Episode Data Not Found')
     }
+
+    if (order === 'absolute') {
+      // Retrieve episode by its ID to get corresponding season and episode number when in absolute mode.
+      const episodeId = episodeData.id
+      let epResponse: AxiosResponse<TVDBEpisodeResponse> | undefined = undefined
+      try {
+        epResponse = await tvdb.get<TVDBEpisodeResponse>(`/episodes/${episodeId}`)
+      } catch (error) {
+        debug(error)
+        const response = error as AxiosError<TVDBSeriesResponse>
+        throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+      }
+      const episodeDataExt = epResponse?.data.data
+      episodeData.number = episodeDataExt?.number
+      episodeData.seasonNumber = episodeDataExt?.seasonNumber
+      episodeData.absoluteNumber = episodeDataExt?.absoluteNumber
+    }
+
     const country = Countries.getCountryByCode(seriesData.originalCountry)
     const language = Languages.guessLanguageIETFFromCountries(seriesData.originalLanguage, country ? [country] : [])
     const name = this.cleanupSeriesTitle(seriesData.name)
