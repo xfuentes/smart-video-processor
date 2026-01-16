@@ -88,7 +88,7 @@ export class VideoController {
       this.videos = this.videos.concat(newVideos)
       this.fireListChangeEvent()
       for (const newVideo of newVideos) {
-        await newVideo.load()
+        void newVideo.load()
       }
     }
   }
