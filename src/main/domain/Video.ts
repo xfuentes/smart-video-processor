@@ -309,6 +309,7 @@ export class Video implements IVideo {
     this.pixels = this.computePixels()
     this.container = container
     this.keyFrames = []
+    this.fireChangeEvent()
     this.generateEncoderSettings(true)
 
     if (this.type !== VideoType.OTHER && searchEnabled) {
