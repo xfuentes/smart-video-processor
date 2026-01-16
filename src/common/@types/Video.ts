@@ -86,6 +86,7 @@ export interface IVideo {
   endAt?: number
   downscale?: string
   loading: boolean
+  searching: boolean
   processing: boolean
   matched: boolean
   queued: boolean
@@ -108,6 +109,37 @@ export interface IVideo {
   preProcessPath?: string
   targetDuration: number
 }
+
+export interface IVideoListItem {
+  uuid: string
+  filename: string
+  size: number
+  pixels?: string
+  status: JobStatus
+  message?: string
+  progression: Progression
+  queued: boolean
+  loading: boolean
+  matched: boolean
+  hintMissing: boolean
+  processing: boolean
+  searching: boolean
+}
+export const videoListItemKeys = [
+  'uuid',
+  'filename',
+  'size',
+  'pixels',
+  'status',
+  'message',
+  'progression',
+  'queued',
+  'loading',
+  'matched',
+  'hintMissing',
+  'processing',
+  'searching'
+]
 
 export type SearchInputData = {
   type: VideoType

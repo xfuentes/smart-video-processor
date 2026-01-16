@@ -79,7 +79,6 @@ export class TVShow implements ITVShow {
         this.video.message =
           'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
         console.log(Chalk.red(this.video.message))
-        this.video.fireChangeEvent()
       } else {
         await this.selectSearchResultID(seriesMatched.id)
       }

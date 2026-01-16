@@ -29,17 +29,20 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       properties: ['openFile', 'multiSelections', 'dontAddToRecent']
     })
     if (!result.canceled) {
-      VideoController.getInstance().openFiles(result.filePaths)
+      void VideoController.getInstance().openFiles(result.filePaths)
     }
   })
   ipcMain.handle('video:openFiles', (_event, filePaths: string[]) => {
-    VideoController.getInstance().openFiles(filePaths)
+    void VideoController.getInstance().openFiles(filePaths)
   })
   VideoController.getInstance().addListChangeListener((videos) => {
-    mainWindow.webContents.send('video:listChanged', JSON.stringify(videos))
+    mainWindow.webContents.send(
+      'video:listChanged',
+      videos.map((video) => video.toJSON())
+    )
   })
   VideoController.getInstance().addVideoChangeListener((video) => {
-    mainWindow.webContents.send('video:changed', JSON.stringify(video))
+    mainWindow.webContents.send('video:changed', video.toJSON())
   })
   ipcMain.handle('video:selectSearchResultID', (_event, uuid: string, searchResultID?: number) => {
     return VideoController.getInstance().selectSearchResultID(uuid, searchResultID)
