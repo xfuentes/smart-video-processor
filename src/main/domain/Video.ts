@@ -71,6 +71,7 @@ import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
 import Chalk from 'chalk'
+import _ from 'lodash'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -108,6 +109,7 @@ export class Video implements IVideo {
    * This flag is set to false once video file has been loaded.
    */
   public loading: boolean = true
+  public searching: boolean = false
   public processing: boolean = false
   public matched: boolean = false
   public brainCalled: boolean = false
@@ -149,9 +151,8 @@ export class Video implements IVideo {
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
     this.sourcePath = sourcePath
-    this.status = JobStatus.LOADING
-    this.message = 'Analysing file name.'
-    this.progression = { progress: undefined }
+    this.status = JobStatus.QUEUED
+    this.progression = { progress: -1 }
     this.extractInfosFromFilename()
   }
 
@@ -216,19 +217,36 @@ export class Video implements IVideo {
     if (this.job === undefined || this.job.finished) {
       this.job = job
       const listener = () => {
-        this.status = job.getStatus()
-        this.message = job.getStatusMessage()
-        this.progression = job.getProgression()
+        const newStatus = job.getStatus()
+        const newMessage = job.getStatusMessage()
+        const newProgression = job.getProgression()
+        let newIndicator = false
         if (job.finished) {
           if (this.job === job) {
             this.job = undefined
           }
-          this.queued = false
+          if (this.queued) {
+            newIndicator = true
+            this.queued = false
+          }
           job.removeChangeListener(listener)
         } else {
-          this.processed = false
+          if (this.processed) {
+            newIndicator = true
+            this.processed = false
+          }
         }
-        this.fireChangeEvent()
+        if (
+          !_.isEqual(this.status, newStatus) ||
+          !_.isEqual(this.message, newMessage) ||
+          !_.isEqual(this.progression, newProgression) ||
+          newIndicator
+        ) {
+          this.status = newStatus
+          this.message = newMessage
+          this.progression = newProgression
+          this.fireChangeEvent()
+        }
       }
       job.addChangeListener(listener)
     } else {
@@ -277,11 +295,11 @@ export class Video implements IVideo {
   }
 
   async load(searchEnabled: boolean = true) {
-    const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory()))
-    const { tracks, container } = await fij.queue()
     this.progression.progress = undefined
     this.status = JobStatus.LOADING
     this.fireChangeEvent()
+    const fij = new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory())
+    const { tracks, container } = await fij.queue()
     this.tracks = tracks
     this.duration =
       tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
@@ -311,8 +329,8 @@ export class Video implements IVideo {
     }
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
     if (init) {
-      this.encoderSettings.forEach((s) =>
-        this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled ?? false)
+      this.encoderSettings.forEach(
+        (s) => (this.trackEncodingEnabled[s.trackType + ' ' + s.trackId] = s.encodingEnabled ?? false)
       )
     }
     debug('### ENCODER SETTINGS ###')
@@ -371,6 +389,7 @@ export class Video implements IVideo {
     }
 
     this.matched = false
+    this.searching = true
     this.brainCalled = false
     this.selectAllTracks()
     this.hints = []
@@ -382,11 +401,14 @@ export class Video implements IVideo {
       } else if (this.type === VideoType.OTHER) {
         await this.other.search()
       }
+      this.searching = false
+      this.fireChangeEvent()
     } catch (error) {
       this.status = JobStatus.WARNING
       this.progression.progress = -1
       this.message = (error as Error).message + '. Please check the information provided and try again.'
       console.log(Chalk.red(this.message))
+      this.searching = false
       this.fireChangeEvent()
     }
     if (this.status !== JobStatus.WARNING) {
@@ -394,7 +416,8 @@ export class Video implements IVideo {
     }
   }
 
-  async multiSearch(data?: MultiSearchInputData) {
+  prepareMultiSearch(data?: MultiSearchInputData) {
+    this.searching = true
     if (data && data.type === VideoType.TV_SHOW) {
       if (data.type !== undefined) this.setType(data.type)
       if (data.searchBy !== undefined) this.setSearchBy(data.searchBy)
@@ -403,10 +426,7 @@ export class Video implements IVideo {
       if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
       if (data.tvShowOrder !== undefined) this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
-      this.fireChangeEvent()
     }
-
-    await this.search()
   }
 
   async analyse() {
@@ -753,8 +773,9 @@ export class Video implements IVideo {
       endAt: this.endAt,
       status: this.status,
       message: this.message,
-      progression: this.progression,
+      progression: _.omit(this.progression, 'process'),
       loading: this.loading,
+      searching: this.searching,
       processing: (this.job && this.job.processingOrPaused) ?? false,
       matched: this.matched,
       queued: this.queued,
@@ -768,7 +789,7 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
-      previewProgression: this.previewProgression,
+      previewProgression: _.omit(this.previewProgression, 'process'),
       previewPath: this.previewPath,
       snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,

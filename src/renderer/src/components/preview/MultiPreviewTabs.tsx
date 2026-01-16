@@ -50,7 +50,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
     setSelectedTab(tabToSelect)
   }
 
-  const allEnabled = videos.find((video) => video.queued || video.processing) === undefined
+  const allEnabled = videos.find((video) => video.searching || video.queued || video.processing) === undefined
   const allMatched = videos.find((video) => !video.matched) === undefined
   let firstSet = true
   let commonHints: IHint[] = []

@@ -47,7 +47,6 @@ export default class Other implements IOther {
       this.video.status = JobStatus.WARNING
       this.video.message = 'Please provide a title for your custom video file.'
       debug(Chalk.red(this.video.message))
-      this.video.fireChangeEvent()
     } else {
       await this.load()
     }

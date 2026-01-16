@@ -89,7 +89,6 @@ export default class Movie implements IMovie {
           this.video.message = 'Unable to find the movie on TMDB.'
         }
         debug(Chalk.red(this.video.message))
-        this.video.fireChangeEvent()
       } else {
         await this.selectSearchResultID(movieMatched.id)
       }

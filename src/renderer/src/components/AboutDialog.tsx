@@ -135,6 +135,7 @@ export const AboutDialog = () => {
                     <h4>Version 1.6.4</h4>
                     <ul>
                       <li>Improve absolute episode number matching (good for mangas)</li>
+                      <li>Improve UI performance</li>
                     </ul>
                     <h4>Version 1.6.3</h4>
                     <ul>

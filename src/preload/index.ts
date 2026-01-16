@@ -2,7 +2,7 @@ import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
-import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
+import { IVideo, MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
@@ -33,14 +33,14 @@ const api: SvpAPI = {
       return ipcRenderer.invoke('video:openFiles', filePaths)
     },
     addListChangedListener: (callback: ListChangedListener) => {
-      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      const subscriber = (_event: IpcRendererEvent, videos: IVideo[]) => callback(videos)
       ipcRenderer.on('video:listChanged', subscriber)
       return () => {
         ipcRenderer.off('video:listChanged', subscriber)
       }
     },
     addVideoChangedListener: (callback: VideoChangedListener) => {
-      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      const subscriber = (_event: IpcRendererEvent, video: IVideo) => callback(video)
       ipcRenderer.on('video:changed', subscriber)
       return () => {
         ipcRenderer.off('video:changed', subscriber)

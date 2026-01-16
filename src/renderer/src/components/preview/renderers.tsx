@@ -27,10 +27,10 @@ import {
 } from '@fluentui/react-icons'
 import { Strings } from '../../../../common/Strings'
 import { TrackProperties, TrackType } from '../../../../common/@types/Track'
-import { IVideo } from '../../../../common/@types/Video'
 import { JobStatus } from '../../../../common/@types/Job'
 import { Attachment } from '../../../../common/Change'
 import React from 'react'
+import { Progression } from '../../../../common/@types/processes'
 
 export function bitrateRenderer(bitrate?: number) {
   return bitrate ? <span>{Strings.humanBitrate(bitrate)} </span> : <span>-</span>
@@ -40,9 +40,9 @@ export function sizeRenderer(size?: number) {
   return size ? <span>{Strings.humanFileSize(size)} </span> : <span>-</span>
 }
 
-export function progressRenderer(video: IVideo) {
+export function progressRenderer(status: JobStatus, progression: Progression) {
   let progressColor: 'brand' | 'success' | 'warning' | 'error' = 'brand'
-  switch (video.status) {
+  switch (status) {
     case JobStatus.PAUSED:
     case JobStatus.WARNING:
       progressColor = 'warning'
@@ -56,7 +56,7 @@ export function progressRenderer(video: IVideo) {
       break
   }
 
-  const percentComplete = video.progression.progress
+  const percentComplete = progression.progress
   return percentComplete !== -1 ? (
     <ProgressBar color={progressColor} value={percentComplete} max={1} />
   ) : (

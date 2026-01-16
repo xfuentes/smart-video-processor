@@ -58,7 +58,6 @@ export const App = (): React.JSX.Element => {
         const newSelection = prevSelection.map((prevVideo) => {
           if (prevVideo.uuid === video.uuid) {
             selectionChanged = true
-            console.log(video)
             return video
           }
           return prevVideo
