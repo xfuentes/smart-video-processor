@@ -154,7 +154,7 @@ export class TVDBClient {
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
 
-    const episodeData = response.data.data.episodes.pop()
+    const episodeData = response.data.data.episodes[0]
     const seriesData = response.data.data.series
     if (episodeData === undefined) {
       throw new Error('TVDB: Episode Data Not Found')
