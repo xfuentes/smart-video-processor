@@ -23,6 +23,7 @@ import { RateLimiter } from './RateLimiter'
 import { currentSettings } from '../Settings'
 import { Languages } from '../../../common/LanguageIETF'
 import { debug } from '../../util/log'
+import { simpleCachingAdapter } from './SimpleCachingAdapter'
 
 const TMDB_TOKEN =
   'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMmVmODJlOTcwNmE4NjVjN2IzYmJjMTlkMzczNWUxYSIsIm5iZiI6MTU3NjA1MDI1MC41NTAwMDAyLCJzdWIiOiI1ZGYwOWU0YWVkYTRiNzAwMTUwNDMyM2YiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.dtLAYJZYn_skkO7fbp_fMF61QbbAlihCAJAkVR8BOVo'
@@ -78,7 +79,6 @@ export class TMDBClient {
 
   public async searchMovieByNameYear(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tmdb = await this.getTMDBSession()
-    // TODO: Handle pagination
     let response: AxiosResponse<TMDBSearchResults>
     try {
       response = await tmdb.get<TMDBSearchResults>('/search/movie', {
@@ -171,7 +171,7 @@ export class TMDBClient {
       tmdb = this.tmdb
       return tmdb
     } else {
-      tmdb = axios.create({ baseURL: TMDB_API_URL })
+      tmdb = axios.create({ baseURL: TMDB_API_URL, adapter: simpleCachingAdapter })
       tmdb.defaults.headers.common['Authorization'] = `Bearer ${TMDB_TOKEN}`
       return tmdb
     }
