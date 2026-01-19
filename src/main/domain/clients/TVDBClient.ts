@@ -24,6 +24,7 @@ import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
+import { simpleCachingAdapter } from './SimpleCachingAdapter'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
 const THE_TVDB_API_URL = 'https://api4.thetvdb.com/v4'
@@ -53,7 +54,6 @@ export class TVDBClient {
 
   public async searchSeries(name: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tvdb = await this.getTVDBSession()
-    // TODO: Handle pagination
     let response
     try {
       response = await tvdb.get<TVDBSearchResponses>('/search', {
@@ -62,7 +62,7 @@ export class TVDBClient {
           ...(year ? { year } : {}),
           type: 'series',
           offset: 0,
-          limit: 10
+          limit: 20
         }
       })
     } catch (error) {
@@ -283,7 +283,7 @@ export class TVDBClient {
         this.retrieveTokenPromise = undefined
       }
       if (response) {
-        tvdb = axios.create({ baseURL: THE_TVDB_API_URL })
+        tvdb = axios.create({ baseURL: THE_TVDB_API_URL, adapter: simpleCachingAdapter })
         tvdb.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`
         return tvdb
       } else {

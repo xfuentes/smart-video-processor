@@ -136,6 +136,7 @@ export const AboutDialog = () => {
                     <ul>
                       <li>Improve absolute episode number matching (good for mangas)</li>
                       <li>Improve UI performance</li>
+                      <li>Response caching for TVDB and TMDB</li>
                     </ul>
                     <h4>Version 1.6.3</h4>
                     <ul>
