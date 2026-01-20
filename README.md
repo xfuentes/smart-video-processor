@@ -10,6 +10,17 @@ then streamlines the entire process: rename files using Plex-friendly convention
 attach artwork, correct metadata (including track language and type), split or join media files
 and encode to H.264 or H.265—all in one place.
 
+#### Core Features
+
+* __Automatic Media Recognition:__ Identifies movies and TV shows using TheMovieDB or TVDB
+* __Smart File Renaming:__ Renames files using Plex/Kodi-friendly naming conventions
+* __Metadata Correction:__ Fetches and corrects title, year, episode name...
+* __Audio & Subtitle Track Management:__ Detects and labels audio/subtitle languages; renames and reorders tracks.
+* __Poster & Thumbnail Download:__ Automatically downloads posters and thumbnails.
+* __Media File Splitting & Joining:__ Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
+* __Video Encoding (H.264 / H.265):__ Converts media to efficient formats with predefined presets.
+* __Batch Processing:__ Handles multiple files simultaneously with queue management.
+
 ## 1) Installation
 All dependencies are packaged with it, just install and you will be ready to go.
 
@@ -26,7 +37,7 @@ Alternatively there is an APPIMAGE file available.
 ### b) Windows 10 or later
 
 <a href="https://apps.microsoft.com/detail/9pg7l9jr8k6m?referrer=appbadge&mode=direct">
-<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/>
+<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200" alt="Microsoft Store"/>
 </a>
 
 Alternatively you can install the Smart.Video.Processor-*.Setup.exe it will install the required dependencies and add a desktop shortcut.
@@ -88,7 +99,7 @@ If some information from the original file is missing or is incomplete hints wil
 
 ![Providing Hints](docs/img/06-Hints.png)
 
-## 9) Add/Review matroska properties changes
+## 9) Add/Review Matroska properties changes
 
 Check the changes that will be done. You can also add some custom changes.
 

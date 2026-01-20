@@ -65,7 +65,7 @@ function createWindow(): BrowserWindow {
   })
 
   // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Load the remote URL for development or the local HTML file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     void mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
@@ -140,15 +140,18 @@ app.whenReady().then(async () => {
   })
   ipcMain.handle('main:getVersion', async () => {
     return {
-      version: app.getVersion(),
+      version: `${app.getVersion()}${!app.isPackaged ? ' - Development' : ''}`,
       ffmpegVersion: ffmpegVersion,
       mkvmergeVersion: mkvmergeVersion,
       fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
       viteVersion: packageJSON.devDependencies['vite'].replace(/^\^/, '')
     }
   })
-  ipcMain.handle('main:isLimitedPermissions', async () => {
-    return Processes.isLimitedPermissions()
+  ipcMain.handle('main:getInstallationStatus', async () => {
+    return {
+      isLimitedPermissions: Processes.isLimitedPermissions(),
+      hasRemovableMediaAccess: Processes.hasRemovableMediaAccess()
+    }
   })
   ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
@@ -156,7 +159,10 @@ app.whenReady().then(async () => {
     const encoderSettingsUpdated =
       currentSettings.isTrackEncodingEnabled !== settings.isTrackEncodingEnabled ||
       currentSettings.videoCodec !== settings.videoCodec ||
-      currentSettings.isFineTrimEnabled !== settings.isFineTrimEnabled
+      currentSettings.videoSizeReduction !== settings.videoSizeReduction ||
+      currentSettings.videoEnforceCodec !== settings.videoEnforceCodec ||
+      currentSettings.audioSizeReduction !== settings.audioSizeReduction ||
+      currentSettings.audioEnforceCodec !== settings.audioEnforceCodec
 
     const validation = saveSettings(settings)
     if (validation.status === 'success') {

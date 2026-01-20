@@ -17,9 +17,17 @@
  */
 
 import { Video } from '../domain/Video'
-import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
+import {
+  IVideoListItem,
+  MultiSearchInputData,
+  SearchBy,
+  SearchInputData,
+  videoListItemKeys,
+  VideoType
+} from '../../common/@types/Video'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
+import _ from 'lodash'
 
 type VideoListChangeListener = (videos: Video[]) => void
 type VideoChangeListener = (video: Video) => void
@@ -27,6 +35,7 @@ type VideoChangeListener = (video: Video) => void
 export class VideoController {
   private static instance: VideoController
   private videos: Video[] = []
+  private lastVideosSnapshot: IVideoListItem[] = []
   private listChangeListeners: VideoListChangeListener[] = []
   private videoChangeListeners: VideoChangeListener[] = []
 
@@ -38,7 +47,13 @@ export class VideoController {
   }
 
   handleVideoChange = (video: Video) => {
-    this.fireListChangeEvent()
+    const lastVideoSnapshot = this.lastVideosSnapshot.find((v) => v.uuid === video.uuid)
+    if (lastVideoSnapshot !== undefined) {
+      const newVideoSnapshot = _.pick(video, videoListItemKeys) as IVideoListItem
+      if (!_.isEqual(lastVideoSnapshot, newVideoSnapshot)) {
+        this.fireListChangeEvent()
+      }
+    }
     this.fireVideoChangeEvent(video)
   }
 
@@ -55,10 +70,11 @@ export class VideoController {
   }
 
   fireListChangeEvent() {
+    this.lastVideosSnapshot = this.videos.map((v) => _.pick(v, videoListItemKeys) as IVideoListItem)
     this.listChangeListeners.forEach((listener) => listener(this.videos))
   }
 
-  openFiles(filePaths: string[]) {
+  async openFiles(filePaths: string[]) {
     if (filePaths.length > 0) {
       const newVideos = [] as Video[]
       for (const filePath of filePaths) {
@@ -106,8 +122,13 @@ export class VideoController {
   }
 
   async multiSearch(uuids: string[], data: MultiSearchInputData | undefined) {
-    for (const uuid of uuids) {
-      void this.getVideoByUuid(uuid).multiSearch(data)
+    const videos = uuids.map((uuid: string) => this.getVideoByUuid(uuid))
+    for (const video of videos) {
+      video.prepareMultiSearch(data)
+    }
+    this.fireListChangeEvent()
+    for (const video of videos) {
+      await video.search()
     }
   }
 
@@ -232,6 +253,12 @@ export class VideoController {
   destroy() {
     for (const video of this.videos) {
       video.destroy()
+    }
+  }
+
+  addParts(uuid: string, filePaths: string[]) {
+    for (const partPath of filePaths) {
+      void this.getVideoByUuid(uuid).addPart(partPath)
     }
   }
 

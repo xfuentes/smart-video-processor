@@ -24,6 +24,7 @@ import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
+import { simpleCachingAdapter } from './SimpleCachingAdapter'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
 const THE_TVDB_API_URL = 'https://api4.thetvdb.com/v4'
@@ -53,7 +54,6 @@ export class TVDBClient {
 
   public async searchSeries(name: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tvdb = await this.getTVDBSession()
-    // TODO: Handle pagination
     let response
     try {
       response = await tvdb.get<TVDBSearchResponses>('/search', {
@@ -62,7 +62,7 @@ export class TVDBClient {
           ...(year ? { year } : {}),
           type: 'series',
           offset: 0,
-          limit: 10
+          limit: 20
         }
       })
     } catch (error) {
@@ -99,7 +99,7 @@ export class TVDBClient {
           }
         }
         if (r.overviews) {
-          if(r.overviews[favoriteLanguage.code] !== undefined) {
+          if (r.overviews[favoriteLanguage.code] !== undefined) {
             overview = r.overviews[favoriteLanguage.code]
           } else {
             for (const code of favoriteLanguage?.altCodes ?? []) {
@@ -139,12 +139,14 @@ export class TVDBClient {
     const tvdb = await this.getTVDBSession()
     let response: AxiosResponse<TVDBSeriesResponse> | undefined = undefined
 
+    const params = {
+      ...(order === 'absolute' || season === undefined ? { season: 1 } : { season }),
+      episodeNumber: order === 'absolute' ? (absoluteEpisodeNumber ?? 1) : (episodeNumber ?? 1)
+    }
     try {
+      debug(`Calling /series/${tvdbId}/episodes/${order} with params: ${params}`)
       response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
-        params: {
-          ...(season !== undefined ? { season } : { season: 1 }),
-          episodeNumber: episodeNumber || absoluteEpisodeNumber
-        }
+        params
       })
     } catch (error) {
       debug(error)
@@ -152,11 +154,29 @@ export class TVDBClient {
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
 
-    const episodeData = response.data.data.episodes.pop()
+    const episodeData = response.data.data.episodes[0]
     const seriesData = response.data.data.series
     if (episodeData === undefined) {
       throw new Error('TVDB: Episode Data Not Found')
     }
+
+    if (order === 'absolute') {
+      // Retrieve episode by its ID to get corresponding season and episode number when in absolute mode.
+      const episodeId = episodeData.id
+      let epResponse: AxiosResponse<TVDBEpisodeResponse> | undefined = undefined
+      try {
+        epResponse = await tvdb.get<TVDBEpisodeResponse>(`/episodes/${episodeId}`)
+      } catch (error) {
+        debug(error)
+        const response = error as AxiosError<TVDBSeriesResponse>
+        throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+      }
+      const episodeDataExt = epResponse?.data.data
+      episodeData.number = episodeDataExt?.number
+      episodeData.seasonNumber = episodeDataExt?.seasonNumber
+      episodeData.absoluteNumber = episodeDataExt?.absoluteNumber
+    }
+
     const country = Countries.getCountryByCode(seriesData.originalCountry)
     const language = Languages.guessLanguageIETFFromCountries(seriesData.originalLanguage, country ? [country] : [])
     const name = this.cleanupSeriesTitle(seriesData.name)
@@ -263,7 +283,7 @@ export class TVDBClient {
         this.retrieveTokenPromise = undefined
       }
       if (response) {
-        tvdb = axios.create({ baseURL: THE_TVDB_API_URL })
+        tvdb = axios.create({ baseURL: THE_TVDB_API_URL, adapter: simpleCachingAdapter })
         tvdb.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`
         return tvdb
       } else {

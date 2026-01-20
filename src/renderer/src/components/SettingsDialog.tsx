@@ -78,9 +78,10 @@ export const SettingsDialog = () => {
       isKeepVOEnabled,
       isTrackEncodingEnabled,
       videoCodec,
-      isFineTrimEnabled,
       videoSizeReduction,
+      videoEnforceCodec: videoEnforceCodec,
       audioSizeReduction,
+      audioEnforceCodec: audioEnforceCodec,
       mkvMergePath,
       ffmpegPath,
       ffprobePath
@@ -114,10 +115,11 @@ export const SettingsDialog = () => {
       setFavoriteLanguages(settingsValidation.result.favoriteLanguages)
       setKeepVOEnabled(settingsValidation.result.isKeepVOEnabled)
       setTrackEncodingEnabled(settingsValidation.result.isTrackEncodingEnabled)
-      setIsFineTrimEnabled(settingsValidation.result.isFineTrimEnabled)
       setVideoCodec(settingsValidation.result.videoCodec)
       setVideoSizeReduction(settingsValidation.result.videoSizeReduction)
+      setVideoEnforceCodec(settingsValidation.result.videoEnforceCodec)
       setAudioSizeReduction(settingsValidation.result.audioSizeReduction)
+      setAudioEnforceCodec(settingsValidation.result.audioEnforceCodec)
       setMkvMergePath(settingsValidation.result.mkvMergePath)
       setFfmpegPath(settingsValidation.result.ffmpegPath)
       setFfprobePath(settingsValidation.result.ffprobePath)
@@ -174,10 +176,11 @@ export const SettingsDialog = () => {
   const [favoriteLanguages, setFavoriteLanguages] = useState(settingsValidation?.result?.favoriteLanguages)
   const [isKeepVOEnabled, setKeepVOEnabled] = useState(settingsValidation?.result?.isKeepVOEnabled)
   const [isTrackEncodingEnabled, setTrackEncodingEnabled] = useState(settingsValidation?.result?.isTrackEncodingEnabled)
-  const [isFineTrimEnabled, setIsFineTrimEnabled] = useState(settingsValidation?.result?.isFineTrimEnabled)
   const [videoSizeReduction, setVideoSizeReduction] = useState(settingsValidation?.result?.videoSizeReduction)
+  const [videoEnforceCodec, setVideoEnforceCodec] = useState(settingsValidation?.result?.videoEnforceCodec)
   const [videoCodec, setVideoCodec] = useState(settingsValidation?.result?.videoCodec)
   const [audioSizeReduction, setAudioSizeReduction] = useState(settingsValidation?.result?.audioSizeReduction)
+  const [audioEnforceCodec, setAudioEnforceCodec] = useState(settingsValidation?.result?.audioEnforceCodec)
   const [mkvMergePath, setMkvMergePath] = useState(settingsValidation?.result?.mkvMergePath)
   const [ffmpegPath, setFfmpegPath] = useState(settingsValidation?.result?.ffmpegPath)
   const [ffprobePath, setFfprobePath] = useState(settingsValidation?.result?.ffprobePath)
@@ -396,28 +399,6 @@ export const SettingsDialog = () => {
                         }
                       />
                     </div>
-                    <div className="field">
-                      <Switch
-                        disabled={!isTrackEncodingEnabled || true}
-                        label={
-                          <div>
-                            Fine trimming
-                            <InfoLabel
-                              info={
-                                <div>
-                                  If enabled, re-encodes all streams for frame-accurate trimming instead of cutting at
-                                  keyframes.
-                                </div>
-                              }
-                            />
-                          </div>
-                        }
-                        checked={isFineTrimEnabled}
-                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                          setIsFineTrimEnabled(ev.currentTarget.checked && false)
-                        }
-                      />
-                    </div>
                     <>
                       <Divider style={{ flexGrow: '0' }}>Video</Divider>
                       <div className="field">
@@ -477,6 +458,25 @@ export const SettingsDialog = () => {
                           </div>
                         </div>
                       </div>
+                      <div className="field">
+                        <Switch
+                          disabled={!isTrackEncodingEnabled}
+                          label={
+                            <div>
+                              Re-encode on Codec Mismatch
+                              <InfoLabel
+                                info={
+                                  <div>If enabled, re-encodes video stream when the codec is not H.264 or H.265.</div>
+                                }
+                              />
+                            </div>
+                          }
+                          checked={videoEnforceCodec}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                            setVideoEnforceCodec(ev.currentTarget.checked ?? false)
+                          }
+                        />
+                      </div>
                       <Divider style={{ flexGrow: '0' }}>Audio</Divider>
                       <div className="field">
                         <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
@@ -504,6 +504,23 @@ export const SettingsDialog = () => {
                             <Label htmlFor="audioSizeReductionSlider">{audioSizeReduction + ' %'}</Label>
                           </div>
                         </div>
+                      </div>
+                      <div className="field">
+                        <Switch
+                          disabled={!isTrackEncodingEnabled}
+                          label={
+                            <div>
+                              Re-encode on Codec Mismatch
+                              <InfoLabel
+                                info={<div>If enabled, re-encodes audio stream when the codec is not AAC.</div>}
+                              />
+                            </div>
+                          }
+                          checked={audioEnforceCodec}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                            setAudioEnforceCodec(ev.currentTarget.checked ?? false)
+                          }
+                        />
                       </div>
                     </>
                   </div>

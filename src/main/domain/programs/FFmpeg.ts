@@ -213,19 +213,42 @@ export class FFmpeg extends CommandProgress {
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
     ffOptions.push('-loglevel', '16') // Only show errors
+    /**
+     * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
+     */
+    ffOptions.push('-fflags', '+genpts')
     ffOptions.push('-y') // Overwrite output file without asking
-
     ffOptions.push('-i', video.sourcePath)
-    ffOptions.push('-c', 'copy')
 
     let videoIndex = 0
     let audioIndex = 0
+    let firstAudioTrack: ITrack | undefined = undefined
     for (const track of video.tracks) {
-      if (audioIndex === 0 && track.type === TrackType.AUDIO && track.codec.indexOf('AAC') !== -1) {
-        ffOptions.push('-map', '0:a:' + audioIndex++)
-      } else if (videoIndex === 0 && track.type === TrackType.VIDEO) {
-        ffOptions.push('-map', '0:v:' + videoIndex++)
+      if (track.copy) {
+        if (audioIndex === 0 && track.type === TrackType.AUDIO) {
+          if (track.codec.indexOf('AAC') !== -1) {
+            ffOptions.push('-c:a', 'copy')
+            ffOptions.push('-map', '0:a:' + audioIndex++)
+          } else {
+            firstAudioTrack = track
+          }
+        } else if (videoIndex === 0 && track.type === TrackType.VIDEO) {
+          if (track.codec.indexOf('264') !== -1) {
+            ffOptions.push('-c:v', 'copy')
+          } else {
+            ffOptions.push('-c:v', 'libx264')
+            ffOptions.push('-preset', 'ultrafast')
+            ffOptions.push('-crf', '35')
+          }
+          ffOptions.push('-map', '0:v:' + videoIndex++)
+        }
       }
+    }
+
+    if (audioIndex === 0 && firstAudioTrack !== undefined) {
+      ffOptions.push('-c:a', 'aac')
+      ffOptions.push('-b:a', '64k')
+      ffOptions.push('-map', '0:a:' + audioIndex++)
     }
 
     ffOptions.push('-f', 'hls')
@@ -251,6 +274,7 @@ export class FFmpeg extends CommandProgress {
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
     ffOptions.push('-loglevel', '16') // Only show errors
+    ffOptions.push('-fflags', '+genpts')
     ffOptions.push('-y') // Overwrite output file without asking
 
     ffOptions.push('-i', video.sourcePath)
@@ -318,6 +342,7 @@ export class FFmpeg extends CommandProgress {
 
       ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
       ffOptions.push('-loglevel', '16') // Only show errors
+      ffOptions.push('-fflags', '+genpts')
       ffOptions.push('-y') // Overwrite output file without asking
 
       ffOptions.push('-f', 'concat')
@@ -395,8 +420,7 @@ export class FFmpeg extends CommandProgress {
     /**
      * Theses two options (-fflags, +genpts) are needed to work around a bug if no timestamps found in media.
      */
-    ffOptions.push('-fflags')
-    ffOptions.push('+genpts')
+    ffOptions.push('-fflags', '+genpts')
 
     ffOptions.push('-progress', 'pipe:1') // Show progress in parsable mode
     ffOptions.push('-loglevel', '16') // Only show errors
