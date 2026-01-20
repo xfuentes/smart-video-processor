@@ -8,6 +8,7 @@ import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerPro
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
 import { MultiPreviewTabs } from '@renderer/components/preview/MultiPreviewTabs'
+import { AlertDialog } from '@renderer/components/AlertDialog'
 
 export const App = (): React.JSX.Element => {
   const preventDefault = (e: SyntheticEvent) => {
@@ -57,7 +58,6 @@ export const App = (): React.JSX.Element => {
         const newSelection = prevSelection.map((prevVideo) => {
           if (prevVideo.uuid === video.uuid) {
             selectionChanged = true
-            console.log(video)
             return video
           }
           return prevVideo
@@ -88,6 +88,12 @@ export const App = (): React.JSX.Element => {
         >
           <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <div className="vertical-stack">
+              {!window.api.main.hasRemovableMediaAccess && (
+                <AlertDialog title="Permission Warning">
+                  To be able to process files from outside of your home directory, enable removable media access with
+                  this command :<pre>snap connect smart-video-processor:removable-media</pre>
+                </AlertDialog>
+              )}
               <ListOrVideoContainer
                 videos={videos}
                 selectedVideos={selectedVideos}

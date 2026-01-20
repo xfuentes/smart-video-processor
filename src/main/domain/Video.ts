@@ -70,6 +70,8 @@ import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
+import Chalk from 'chalk'
+import _ from 'lodash'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -107,6 +109,7 @@ export class Video implements IVideo {
    * This flag is set to false once video file has been loaded.
    */
   public loading: boolean = true
+  public searching: boolean = false
   public processing: boolean = false
   public matched: boolean = false
   public brainCalled: boolean = false
@@ -148,9 +151,8 @@ export class Video implements IVideo {
   constructor(sourcePath: string) {
     this.filename = path.basename(sourcePath)
     this.sourcePath = sourcePath
-    this.status = JobStatus.LOADING
-    this.message = 'Analysing file name.'
-    this.progression = { progress: undefined }
+    this.status = JobStatus.QUEUED
+    this.progression = { progress: -1 }
     this.extractInfosFromFilename()
   }
 
@@ -215,19 +217,36 @@ export class Video implements IVideo {
     if (this.job === undefined || this.job.finished) {
       this.job = job
       const listener = () => {
-        this.status = job.getStatus()
-        this.message = job.getStatusMessage()
-        this.progression = job.getProgression()
+        const newStatus = job.getStatus()
+        const newMessage = job.getStatusMessage()
+        const newProgression = job.getProgression()
+        let newIndicator = false
         if (job.finished) {
           if (this.job === job) {
             this.job = undefined
           }
-          this.queued = false
+          if (this.queued) {
+            newIndicator = true
+            this.queued = false
+          }
           job.removeChangeListener(listener)
         } else {
-          this.processed = false
+          if (this.processed) {
+            newIndicator = true
+            this.processed = false
+          }
         }
-        this.fireChangeEvent()
+        if (
+          !_.isEqual(this.status, newStatus) ||
+          !_.isEqual(this.message, newMessage) ||
+          !_.isEqual(this.progression, newProgression) ||
+          newIndicator
+        ) {
+          this.status = newStatus
+          this.message = newMessage
+          this.progression = newProgression
+          this.fireChangeEvent()
+        }
       }
       job.addChangeListener(listener)
     } else {
@@ -276,11 +295,11 @@ export class Video implements IVideo {
   }
 
   async load(searchEnabled: boolean = true) {
-    const fij = this.attachJob(new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory()))
-    const { tracks, container } = await fij.queue()
     this.progression.progress = undefined
     this.status = JobStatus.LOADING
     this.fireChangeEvent()
+    const fij = new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory())
+    const { tracks, container } = await fij.queue()
     this.tracks = tracks
     this.duration =
       tracks.find((t) => t.type === TrackType.VIDEO)?.duration ??
@@ -290,6 +309,7 @@ export class Video implements IVideo {
     this.pixels = this.computePixels()
     this.container = container
     this.keyFrames = []
+    this.fireChangeEvent()
     this.generateEncoderSettings(true)
 
     if (this.type !== VideoType.OTHER && searchEnabled) {
@@ -308,13 +328,10 @@ export class Video implements IVideo {
     if (init) {
       this.trackEncodingEnabled = {}
     }
-    this.encodingForced =
-      currentSettings.isFineTrimEnabled &&
-      (this.videoParts.length > 0 || this.startFrom !== undefined || this.endAt !== undefined)
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
     if (init) {
-      this.encoderSettings.forEach((s) =>
-        this.setTrackEncodingEnabled(s.trackType + ' ' + s.trackId, s.encodingEnabled ?? false)
+      this.encoderSettings.forEach(
+        (s) => (this.trackEncodingEnabled[s.trackType + ' ' + s.trackId] = s.encodingEnabled ?? false)
       )
     }
     debug('### ENCODER SETTINGS ###')
@@ -373,22 +390,35 @@ export class Video implements IVideo {
     }
 
     this.matched = false
+    this.searching = true
     this.brainCalled = false
     this.selectAllTracks()
     this.hints = []
-    if (this.type === VideoType.MOVIE) {
-      await this.movie.search(this.searchBy)
-    } else if (this.type === VideoType.TV_SHOW) {
-      await this.tvShow.search(this.searchBy)
-    } else if (this.type === VideoType.OTHER) {
-      await this.other.search()
+    try {
+      if (this.type === VideoType.MOVIE) {
+        await this.movie.search(this.searchBy)
+      } else if (this.type === VideoType.TV_SHOW) {
+        await this.tvShow.search(this.searchBy)
+      } else if (this.type === VideoType.OTHER) {
+        await this.other.search()
+      }
+      this.searching = false
+      this.fireChangeEvent()
+    } catch (error) {
+      this.status = JobStatus.WARNING
+      this.progression.progress = -1
+      this.message = (error as Error).message + '. Please check the information provided and try again.'
+      console.log(Chalk.red(this.message))
+      this.searching = false
+      this.fireChangeEvent()
     }
     if (this.status !== JobStatus.WARNING) {
       await this.analyse()
     }
   }
 
-  async multiSearch(data?: MultiSearchInputData) {
+  prepareMultiSearch(data?: MultiSearchInputData) {
+    this.searching = true
     if (data && data.type === VideoType.TV_SHOW) {
       if (data.type !== undefined) this.setType(data.type)
       if (data.searchBy !== undefined) this.setSearchBy(data.searchBy)
@@ -397,10 +427,7 @@ export class Video implements IVideo {
       if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
       if (data.tvShowOrder !== undefined) this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
-      this.fireChangeEvent()
     }
-
-    await this.search()
   }
 
   async analyse() {
@@ -709,11 +736,6 @@ export class Video implements IVideo {
       t.copy = true
     })
   }
-
-  getTrackEncodingEnabledCount() {
-    return Object.values(this.trackEncodingEnabled).filter((enabled) => enabled).length
-  }
-
   getTracksDuration() {
     let duration = 0
     for (const t of this.tracks) {
@@ -752,8 +774,9 @@ export class Video implements IVideo {
       endAt: this.endAt,
       status: this.status,
       message: this.message,
-      progression: this.progression,
+      progression: _.omit(this.progression, 'process'),
       loading: this.loading,
+      searching: this.searching,
       processing: (this.job && this.job.processingOrPaused) ?? false,
       matched: this.matched,
       queued: this.queued,
@@ -767,8 +790,7 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
-      encodingForced: this.encodingForced,
-      previewProgression: this.previewProgression,
+      previewProgression: _.omit(this.previewProgression, 'process'),
       previewPath: this.previewPath,
       snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,
@@ -837,7 +859,7 @@ export class Video implements IVideo {
   }
 
   async toNearestKeyFrameTime(selTime: number) {
-    if (this.keyFrames.length === 0 && !currentSettings.isFineTrimEnabled) {
+    if (this.keyFrames.length === 0) {
       const prevMessage = this.message
       const prevStatus = this.status
       this.message = 'Extracting key frames...'
@@ -866,22 +888,14 @@ export class Video implements IVideo {
   }
 
   async setStartFrom(value?: number) {
-    if (currentSettings.isFineTrimEnabled) {
-      this.startFrom = value !== undefined ? Math.round(value) : undefined
-    } else {
-      this.startFrom = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
-    }
+    this.startFrom = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
   }
 
   async setEndAt(value?: number) {
-    if (currentSettings.isFineTrimEnabled) {
-      this.endAt = value !== undefined ? Math.round(value) : undefined
-    } else {
-      this.endAt = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
-    }
+    this.endAt = value !== undefined ? Math.round(await this.toNearestKeyFrameTime(value)) : undefined
     this.computeTargetDuration()
     this.generateEncoderSettings()
     this.fireChangeEvent()
@@ -964,7 +978,7 @@ export class Video implements IVideo {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
-      if (this.tvShow.order === 'official' && this.tvShow.season !== undefined) {
+      if (this.tvShow.season !== undefined) {
         subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
       }
     }
@@ -1003,7 +1017,7 @@ export class Video implements IVideo {
       // TODO: Log
     }
     const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]?/i
-    const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+).*[e\s](?<absoluteEpisode>\d\d\d?\d?)\p{L}/iu
+    const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+)?.*?(?<absoluteEpisode>E?\d\d\d?\d?)/iu
 
     this.type = VideoType.OTHER
     const tvShowSeasonEpisodePattern =
@@ -1055,7 +1069,7 @@ export class Video implements IVideo {
       this.tvShow.season = Number.parseInt(tvShowSeasonEpisodeMatches.groups.season, 10)
       this.tvShow.episode = Number.parseInt(tvShowSeasonEpisodeMatches.groups.episode, 10)
       this.tvShow.order = 'official'
-      this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title)
+      this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title ?? '')
     } else if (movieMatches?.groups) {
       this.type = VideoType.MOVIE
       this.movie.title = Files.megaTrim(movieMatches.groups.title)
@@ -1064,7 +1078,7 @@ export class Video implements IVideo {
       this.type = VideoType.TV_SHOW
       this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
       this.tvShow.order = 'absolute'
-      this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title)
+      this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title ?? '')
     }
 
     if (this.type === VideoType.OTHER) {

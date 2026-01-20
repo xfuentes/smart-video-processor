@@ -46,20 +46,13 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
               infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
               forceDisabled = true
             } else if (es && es.targetSize) {
-              forceDisabled = video.encodingForced
               infoLabel = (
                 <InfoLabel
                   info={
                     <div style={{ whiteSpace: 'nowrap' }}>
-                      {video.encodingForced && (
-                        <>
-                          <b>Fine trimming requires re-encoding</b>
-                          <br />
-                        </>
-                      )}
                       {es.codec && (
                         <>
-                          Codec: {es.codec}
+                          {es.enforcingCodec ? 'Enforcing ' : ''}Codec: {es.codec}
                           <br />
                         </>
                       )}
@@ -86,7 +79,7 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
             return (
               <Checkbox
                 key={key}
-                checked={video.encodingForced || (video.trackEncodingEnabled[key] ?? false)}
+                checked={video.trackEncodingEnabled[key] ?? false}
                 onChange={async (_ev, data) => {
                   if (data.checked !== 'mixed') {
                     await window.api.video.setTrackEncodingEnabled(video.uuid, key, data.checked)
@@ -145,7 +138,7 @@ export const Encoding = ({ video, disabled }: Props) => {
             <div style={{ paddingTop: '5px', paddingBottom: '5px' }}>
               <Field validationMessage={video.message} validationState={validation}>
                 {progression !== -1 ? (
-                  <ProgressBar color={progressColor} value={progression} max={1} />
+                  <ProgressBar color={progressColor} value={progression} />
                 ) : (
                   <div style={{ minHeight: '2px' }} />
                 )}

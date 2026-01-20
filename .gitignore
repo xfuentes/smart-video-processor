@@ -11,3 +11,5 @@ build/
 
 *.snap
 /snap/snapcraft.yaml
+
+bruno/

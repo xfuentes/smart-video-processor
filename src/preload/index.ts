@@ -2,7 +2,7 @@ import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
-import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
+import { IVideo, MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
@@ -10,13 +10,13 @@ import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListe
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
-const isLimitedPermissions: boolean = await ipcRenderer.invoke('main:isLimitedPermissions')
+const installationStatus = await ipcRenderer.invoke('main:getInstallationStatus')
 
 // Custom APIs for renderer
 const api: SvpAPI = {
   main: {
     ...version,
-    isLimitedPermissions,
+    ...installationStatus,
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
@@ -33,14 +33,14 @@ const api: SvpAPI = {
       return ipcRenderer.invoke('video:openFiles', filePaths)
     },
     addListChangedListener: (callback: ListChangedListener) => {
-      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      const subscriber = (_event: IpcRendererEvent, videos: IVideo[]) => callback(videos)
       ipcRenderer.on('video:listChanged', subscriber)
       return () => {
         ipcRenderer.off('video:listChanged', subscriber)
       }
     },
     addVideoChangedListener: (callback: VideoChangedListener) => {
-      const subscriber = (_event: IpcRendererEvent, jsonValue: string) => callback(JSON.parse(jsonValue))
+      const subscriber = (_event: IpcRendererEvent, video: IVideo) => callback(video)
       ipcRenderer.on('video:changed', subscriber)
       return () => {
         ipcRenderer.off('video:changed', subscriber)
@@ -82,6 +82,10 @@ const api: SvpAPI = {
       ipcRenderer.invoke('video:deleteChange', uuid, changeUuid),
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setTrackEncodingEnabled', uuid, source, value),
+    addParts: (uuid: string, files: File[]): Promise<void> => {
+      const filePaths = files.map((f) => webUtils.getPathForFile(f))
+      return ipcRenderer.invoke('video:addParts', uuid, filePaths)
+    },
     addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
     removePart: (uuid: string, partUuid: string): Promise<void> =>
       ipcRenderer.invoke('video:removePart', uuid, partUuid),

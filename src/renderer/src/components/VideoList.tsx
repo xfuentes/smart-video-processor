@@ -34,28 +34,30 @@ import { progressRenderer, qualityRenderer, sizeRenderer, statusRenderer } from 
 import React, { useEffect, useState } from 'react'
 import xor from 'lodash/xor'
 import { Strings } from '../../../common/Strings'
-import { IVideo } from '../../../common/@types/Video'
 import { DropZone } from '@renderer/components/DropZone'
+import _ from 'lodash'
+import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@types/Video'
 
-const columns: TableColumnDefinition<IVideo>[] = [
-  createTableColumn<IVideo>({
+
+const columns: TableColumnDefinition<IVideoListItem>[] = [
+  createTableColumn<IVideoListItem>({
     columnId: 'filename',
     compare: (a, b) => a.filename.localeCompare(b.filename),
     renderHeaderCell: () => 'File',
     renderCell: (item) => (
       <div style={{ width: '100%' }}>
         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{item.filename}</div>
-        {progressRenderer(item)}
+        {progressRenderer(item.status, item.progression)}
       </div>
     )
   }),
-  createTableColumn<IVideo>({
+  createTableColumn<IVideoListItem>({
     columnId: 'size',
     compare: (a, b) => a.size - b.size,
     renderHeaderCell: () => 'Size',
     renderCell: (item) => sizeRenderer(item.size)
   }),
-  createTableColumn<IVideo>({
+  createTableColumn<IVideoListItem>({
     columnId: 'quality',
     compare: (a, b) => {
       const aPixels = a.pixels
@@ -67,7 +69,7 @@ const columns: TableColumnDefinition<IVideo>[] = [
     renderHeaderCell: () => 'Quality',
     renderCell: (item) => qualityRenderer(item.pixels)
   }),
-  createTableColumn<IVideo>({
+  createTableColumn<IVideoListItem>({
     columnId: 'status',
     compare: (a, b) => a.status.localeCompare(b.status),
     renderHeaderCell: () => 'Status',
@@ -90,6 +92,14 @@ const columnSizingOptions: TableColumnSizingOptions = {
 
 export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideos }: Props) => {
   const [selectedItems, setSelectedItems] = useState(new Set<SelectionItemId>([]))
+  const [videoListItems, setVideoListItems] = useState<IVideoListItem[]>([])
+
+  useEffect(() => {
+    const newVideoListItems = videos.map((video) => _.pick(video, videoListItemKeys) as IVideoListItem)
+    setVideoListItems((prevVideoListItems) => {
+      return _.isEqual(newVideoListItems, prevVideoListItems) ? prevVideoListItems : newVideoListItems
+    })
+  }, [videos])
 
   const handleSelectionChange: DataGridProps['onSelectionChange'] = (
     e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,
@@ -133,13 +143,13 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
   return (
     <DropZone onDropFiles={onImportVideos} style={{ minHeight: '100%' }} onKeyUp={handleShortcuts}>
       <DataGrid
-        items={videos}
+        items={videoListItems}
         columns={columns}
         sortable
         selectedItems={selectedItems}
         onSelectionChange={handleSelectionChange}
         selectionMode="multiselect"
-        getRowId={(item: IVideo) => item.uuid}
+        getRowId={(item: IVideoListItem) => item.uuid}
         focusMode="composite"
         resizableColumns
         columnSizingOptions={columnSizingOptions}
@@ -154,9 +164,9 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
             {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
           </DataGridRow>
         </DataGridHeader>
-        <DataGridBody<IVideo>>
+        <DataGridBody<IVideoListItem>>
           {({ item, rowId }) => (
-            <DataGridRow<IVideo>
+            <DataGridRow<IVideoListItem>
               key={rowId}
               selectionCell={{
                 checkboxIndicator: { 'aria-label': 'Select row' }

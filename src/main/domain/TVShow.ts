@@ -79,7 +79,6 @@ export class TVShow implements ITVShow {
         this.video.message =
           'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
         console.log(Chalk.red(this.video.message))
-        this.video.fireChangeEvent()
       } else {
         await this.selectSearchResultID(seriesMatched.id)
       }
@@ -90,9 +89,6 @@ export class TVShow implements ITVShow {
     if (!this.theTVDB) {
       throw new Error('TVDB ID is mandatory.')
     }
-    if (!this.episode && !this.absoluteEpisode) {
-      throw new Error('EpisodeData number is mandatory.')
-    }
 
     this.video.message = 'Retrieving episode details'
     const { episodeData, seriesData } = await TVDBClient.getInstance().retrieveSeriesDetails(
@@ -102,12 +98,9 @@ export class TVShow implements ITVShow {
       this.absoluteEpisode,
       this.season
     )
-    if (!episodeData) {
-      this.video.status = JobStatus.WARNING
-      this.video.message = 'EpisodeData not found. Please check the information provided and try again.'
-      console.log(Chalk.red(this.video.message))
-      this.video.fireChangeEvent()
-    }
+
+    this.video.matched = (!!this.episode || !!this.absoluteEpisode) && !!episodeData
+
     this.imdb = seriesData.imdb
     this.title = seriesData.title
     this.poster = ''
@@ -118,15 +111,17 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
-    this.episode = episodeData.episodeNumber
+    if (this.episode || this.absoluteEpisode) {
+      this.episode = episodeData.episodeNumber
+      this.absoluteEpisode = episodeData.absoluteNumber
+      this.episodePosterURL = episodeData.posterURL
+    }
     this.season = episodeData.seasonNumber
-    this.absoluteEpisode = episodeData.absoluteNumber
     this.episodeTitle = episodeData.title
     this.episodePoster = ''
-    this.episodePosterURL = episodeData.posterURL
     this.overview = seriesData.overview
     this.episodeOverview = episodeData.overview
-    this.video.matched = true
+
     if (!this.video.searchResults || this.video.searchResults.length === 0) {
       this.video.searchResults = [seriesData]
     }
@@ -141,36 +136,48 @@ export class TVShow implements ITVShow {
       this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug(`Wrote poster file://${this.poster}`)
     }
-    if (this.episodePosterURL || this.poster) {
-      if (!this.episodePosterURL && this.poster) {
-        this.video.poster = {
-          path: this.poster,
-          filename: 'cover.jpg',
-          description: `TVDB Image ${this.posterURL}`,
-          mimeType: 'image/jpeg'
-        }
-      } else if (this.episodePosterURL) {
-        this.video.message = 'Downloading episode image from TheTVDB.'
-        this.video.fireChangeEvent()
-        const filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode) : this.absoluteEpisode}`
-        fs.mkdirSync(tempDirectory, { recursive: true })
-        const fullPath = Path.join(tempDirectory, 'TVDB-' + this.theTVDB + '-' + filename + '.jpg')
-        this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
-        debug(`wrote episode image file://${this.episodePoster}`)
-        this.video.poster = {
-          path: this.episodePoster,
-          filename: 'cover.jpg',
-          description: `TVDB Image ${this.episodePosterURL}`,
-          mimeType: 'image/jpeg'
+    if (!this.episode && !this.absoluteEpisode) {
+      this.video.status = JobStatus.WARNING
+      this.video.message = 'Episode number not specified. Please provide a valid episode number and try again.'
+      console.log(Chalk.red(this.video.message))
+      this.video.fireChangeEvent()
+    } else if (!episodeData) {
+      this.video.status = JobStatus.WARNING
+      this.video.message = 'Episode not found. Please check the information provided and try again.'
+      console.log(Chalk.red(this.video.message))
+      this.video.fireChangeEvent()
+    } else {
+      if (this.episodePosterURL || this.poster) {
+        if (!this.episodePosterURL && this.poster) {
+          this.video.poster = {
+            path: this.poster,
+            filename: 'cover.jpg',
+            description: `TVDB Image ${this.posterURL}`,
+            mimeType: 'image/jpeg'
+          }
+        } else if (this.episodePosterURL) {
+          this.video.message = 'Downloading episode image from TheTVDB.'
+          this.video.fireChangeEvent()
+          const filename = `episode-${this.season !== undefined ? 'S' + Strings.toLeadingZeroNumber(this.season) + 'E' + Strings.toLeadingZeroNumber(this.episode ?? 0) : this.absoluteEpisode}`
+          fs.mkdirSync(tempDirectory, { recursive: true })
+          const fullPath = Path.join(tempDirectory, 'TVDB-' + this.theTVDB + '-' + filename + '.jpg')
+          this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
+          debug(`wrote episode image file://${this.episodePoster}`)
+          this.video.poster = {
+            path: this.episodePoster,
+            filename: 'cover.jpg',
+            description: `TVDB Image ${this.episodePosterURL}`,
+            mimeType: 'image/jpeg'
+          }
         }
       }
+      if (this.season !== undefined && this.episode !== undefined) {
+        this.video.title = `${this.title} - S${Strings.toLeadingZeroNumber(this.season)}E${Strings.toLeadingZeroNumber(this.episode)}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
+      } else {
+        this.video.title = `${this.title}${this.absoluteEpisode ? ' - E' + Strings.toLeadingZeroNumber(this.absoluteEpisode) : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
+      }
+      this.video.fireChangeEvent()
     }
-    if (this.season !== undefined && this.episode !== undefined) {
-      this.video.title = `${this.title} - S${Strings.toLeadingZeroNumber(this.season)}E${Strings.toLeadingZeroNumber(this.episode)}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
-    } else {
-      this.video.title = `${this.title}${this.absoluteEpisode ? ' - E' + Strings.toLeadingZeroNumber(this.absoluteEpisode) : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
-    }
-    this.video.fireChangeEvent()
   }
 
   setTitle(newTitle: string) {
