@@ -45,9 +45,9 @@ const trackTypeEncodingSection = (
       commonFilteredTracks = filteredTracks
       first = false
     } else {
-      commonFilteredTracks = commonFilteredTracks.filter((t, index) => {
-        const u = filteredTracks[index]
-        return t.id === u.id && t.type === u.type
+      commonFilteredTracks = commonFilteredTracks.filter((t) => {
+        const u = filteredTracks.find((u) => t.id === u.id && t.type === u.type)
+        return u !== undefined
       })
     }
   }
@@ -102,7 +102,7 @@ const trackTypeEncodingSection = (
             return (
               <Checkbox
                 key={key}
-                checked={es?.encodingEnabled}
+                checked={es?.encodingEnabled ?? 'mixed'}
                 onChange={async (_ev, data) => {
                   if (data.checked !== 'mixed') {
                     await window.api.video.setMultiTrackEncodingEnabled(

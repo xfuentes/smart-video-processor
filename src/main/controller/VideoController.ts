@@ -17,17 +17,9 @@
  */
 
 import { Video } from '../domain/Video'
-import {
-  IVideoListItem,
-  MultiSearchInputData,
-  SearchBy,
-  SearchInputData,
-  videoListItemKeys,
-  VideoType
-} from '../../common/@types/Video'
+import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
-import _ from 'lodash'
 
 type VideoListChangeListener = (videos: Video[]) => void
 type VideoChangeListener = (video: Video) => void
@@ -35,7 +27,6 @@ type VideoChangeListener = (video: Video) => void
 export class VideoController {
   private static instance: VideoController
   private videos: Video[] = []
-  private lastVideosSnapshot: IVideoListItem[] = []
   private listChangeListeners: VideoListChangeListener[] = []
   private videoChangeListeners: VideoChangeListener[] = []
 
@@ -47,13 +38,7 @@ export class VideoController {
   }
 
   handleVideoChange = (video: Video) => {
-    const lastVideoSnapshot = this.lastVideosSnapshot.find((v) => v.uuid === video.uuid)
-    if (lastVideoSnapshot !== undefined) {
-      const newVideoSnapshot = _.pick(video, videoListItemKeys) as IVideoListItem
-      if (!_.isEqual(lastVideoSnapshot, newVideoSnapshot)) {
-        this.fireListChangeEvent()
-      }
-    }
+    this.fireListChangeEvent()
     this.fireVideoChangeEvent(video)
   }
 
@@ -70,7 +55,6 @@ export class VideoController {
   }
 
   fireListChangeEvent() {
-    this.lastVideosSnapshot = this.videos.map((v) => _.pick(v, videoListItemKeys) as IVideoListItem)
     this.listChangeListeners.forEach((listener) => listener(this.videos))
   }
 

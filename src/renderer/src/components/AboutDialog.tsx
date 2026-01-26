@@ -132,6 +132,11 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.6.5</h4>
+                    <ul>
+                      <li>Fix issues with track encoding selection</li>
+                      <li>Show mixed selection if different data on multi select</li>
+                    </ul>
                     <h4>Version 1.6.4</h4>
                     <ul>
                       <li>Improve absolute episode number matching (good for mangas)</li>
