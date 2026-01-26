@@ -85,7 +85,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
           codec: es.codec,
           originalSize: es.originalSize,
           compressionPercent: es.compressionPercent,
-          encodingEnabled: v.trackEncodingEnabled[es.trackType + ' ' + es.trackId],
+          encodingEnabled: v.trackEncodingEnabled[es.trackType + ' ' + es.trackId] ?? es.encodingEnabled,
           enforcingCodec: es.enforcingCodec
         }
       })
@@ -98,7 +98,10 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
             s.trackId === commonEncoderSetting.trackId && s.trackType === commonEncoderSetting?.trackType
         )
         if (encoderSetting !== undefined) {
-          if (commonEncoderSetting.encodingEnabled !== encoderSetting.encodingEnabled) {
+          const currentEncodingEnabled =
+            v.trackEncodingEnabled[encoderSetting.trackType + ' ' + encoderSetting.trackId] ??
+            encoderSetting.encodingEnabled
+          if (commonEncoderSetting.encodingEnabled !== currentEncodingEnabled) {
             commonEncoderSetting.encodingEnabled = undefined
           }
           if (commonEncoderSetting.codec !== encoderSetting.codec) {
