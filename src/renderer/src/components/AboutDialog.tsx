@@ -132,9 +132,10 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
-                    <h4>Version 1.6.6</h4>
+                    <h4>Version 1.6.7</h4>
                     <ul>
                       <li>Fix preview not showing regression</li>
+                      <li>New packaging to fix security issues</li>
                     </ul>
                     <h4>Version 1.6.5</h4>
                     <ul>
