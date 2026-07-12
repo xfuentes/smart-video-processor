@@ -17,18 +17,20 @@ jobs:
     strategy:
       matrix:
         os: [ windows-2025, windows-11-arm ]
-        node-version: [22.x]
+        node-version: [24.x]
+    env:  # Force Node.js 24 for all actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Windows SDK
         if: runner.os == 'Windows'
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
