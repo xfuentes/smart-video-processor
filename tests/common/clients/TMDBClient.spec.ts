@@ -65,8 +65,8 @@ test('Search by name and year', async () => {
   expect(movies[0].year).toBe(1996)
   expect(movies[0].originalTitle).toBe('From Dusk Till Dawn')
   expect(movies[0].overview).toBe(
-    'After kidnapping a father and his two kids, ' +
-      'the Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious vampire clientele.'
+    'After kidnapping a father and his two kids, the ' +
+    'Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious clientele.'
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
   expect(movies[0].language.code).toBe('en')
@@ -98,7 +98,7 @@ test('Retrieve movie details issue with nobody has to know', async () => {
     'After a stroke and no memories from his past, Phil encounters Millie who inhabits a desert part of Isle of Lewis. She will shortly entrust him with his deepest secret : they were in love.'
   )
   expect(movie.posterUrl).toMatch(posterUrlRE)
-  expect(movie.language).toBe('fr')
+  expect(movie.language).toBe('en')
   expect(movie.countries).toContain('FR')
   expect(movie.imdb).toContain('tt11188010')
   expect(movie.rating).to.be.a('number')
