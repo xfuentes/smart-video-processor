@@ -91,5 +91,6 @@
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
-  }
+  },
+  "packageManager": "yarn@4.17.1"
 }
