@@ -18,31 +18,32 @@ description: Create a new release
    - Add a new `Version X.Y.Z` entry under the **What's new** tab.
    - Keep entries concise and user-focused (only what matters to the end user).
 
-4. **Commit**
-   - Stage `package.json` and `AboutDialog.tsx` (plus any other modified files if needed):
+4. **Run tests**
+   - Run the test suite locally:
      ```powershell
-     git add package.json src/renderer/src/components/AboutDialog.tsx
+     npm run test
+     ```
+   - Continue the workflow only if all tests pass.
+   - If any test fails, fix the issues and restart from this step.
+
+5. **Commit**
+   - Stage any modified files if needed:
+     ```powershell
+     git add <list of changed files to stage>
      ```
    - Commit with a descriptive message:
      ```powershell
      git commit -m "Release vX.Y.Z: <short summary of changes>"
      ```
 
-5. **Push**
+6. **Push**
    - Push the release commit to the remote repository:
      ```powershell
      git push
      ```
 
-6. **Wait for GitHub build**
-   - Open the repository on GitHub and go to the **Actions** tab.
-   - Locate the workflow run triggered by the pushed commit.
-   - Wait for the build to complete:
-     - If the build succeeds, continue to the next step.
-     - If the build fails, stop and alert the user with the failure details.
-
 7. **Tag the release**
-   - If the build passed for all OS targets, create a version tag starting with `v`:
+   - Create a version tag starting with `v`:
      ```powershell
      git tag vX.Y.Z
      ```
