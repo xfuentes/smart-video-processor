@@ -33,3 +33,20 @@ description: Create a new release
      ```powershell
      git push
      ```
+
+6. **Wait for GitHub build**
+   - Open the repository on GitHub and go to the **Actions** tab.
+   - Locate the workflow run triggered by the pushed commit.
+   - Wait for the build to complete:
+     - If the build succeeds, continue to the next step.
+     - If the build fails, stop and alert the user with the failure details.
+
+7. **Tag the release**
+   - If the build passed for all OS targets, create a version tag starting with `v`:
+     ```powershell
+     git tag vX.Y.Z
+     ```
+   - Push the tag to the remote repository:
+     ```powershell
+     git push origin vX.Y.Z
+     ```
