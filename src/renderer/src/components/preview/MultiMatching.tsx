@@ -152,7 +152,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                     </option>
                   )}
                   <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
-                  <option key={SearchBy.TVDB}>{SearchBy.TVDB}</option>
+                  <option key={SearchBy.TVDB_POSITION}>{SearchBy.TVDB_POSITION}</option>
                 </Select>
               </Field>
             </div>
@@ -180,7 +180,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </div>
               </>
             )}
-            {searchBy === SearchBy.TVDB && (
+            {searchBy === SearchBy.TVDB_POSITION && (
               <>
                 <div>
                   <Field size="small" label="TVDB ID" required className={disabled ? 'disabled' : ''}>

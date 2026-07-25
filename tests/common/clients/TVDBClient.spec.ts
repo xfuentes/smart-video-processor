@@ -24,7 +24,7 @@ import { Languages } from '../../../src/common/LanguageIETF'
 
 test('Search Series', async () => {
   currentSettings.favoriteLanguages = ['en']
-  const series = await TVDBClient.getInstance().searchSeries('Friends', 1994)
+  const series = await TVDBClient.getInstance().searchSeriesByTitle('Friends', 1994)
   expect(series.length).toBeGreaterThan(0)
   expect(series[0].id).toBe(79168)
   expect(series[0].title).toBe('Friends')
@@ -154,7 +154,7 @@ test('check TVDB country id mappable to Language IETF', async () => {
 })
 
 test('Search Street Hawk', async () => {
-  const series = await TVDBClient.getInstance().searchSeries('Street Hawk')
+  const series = await TVDBClient.getInstance().searchSeriesByTitle('Street Hawk')
   expect(series.length).toBeGreaterThan(0)
   expect(series[0].id).toBe(73877)
   expect(series[0].title).toBe('Tonnerre mécanique')
@@ -258,4 +258,61 @@ test('Shameless US Cleanup', async () => {
   expect(episode.seriesData.language.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('Shameless')
   expect(episode.seriesData.note).toBe(undefined)
+})
+
+test('Search Episode by Title - One Piece - Absolute', async () => {
+  currentSettings.favoriteLanguages = ['en-US', 'fr-FR']
+  const episode = await TVDBClient.getInstance().searchEpisodeByTitle(
+    81797,
+    'absolute',
+    "Au signal, à l'explosion ! Le CP9 passe à l'action !"
+  )
+  expect(episode.season).toBeUndefined()
+  expect(episode.episodeNumber).toBeUndefined()
+  expect(episode.absoluteEpisodeNumber).toBe(242)
+})
+
+test('Search Episode by Title - One Piece - Official', async () => {
+  currentSettings.favoriteLanguages = ['en-US', 'fr-FR']
+  const episode = await TVDBClient.getInstance().searchEpisodeByTitle(
+    81797,
+    'official',
+    "Au signal, à l'explosion ! Le CP9 passe à l'action !"
+  )
+  expect(episode.season).toBe(11)
+  expect(episode.episodeNumber).toBe(16)
+  expect(episode.absoluteEpisodeNumber).toBeUndefined()
+})
+
+test('Search Episode by Title - One Piece - Official en', async () => {
+  currentSettings.favoriteLanguages = ['fr-FR', 'en']
+  const episode = await TVDBClient.getInstance().searchEpisodeByTitle(
+    81797,
+    'official',
+    'Au signal a l explosion Le CP9 passe a l action'
+  )
+  expect(episode.season).toBe(11)
+  expect(episode.episodeNumber).toBe(16)
+  expect(episode.absoluteEpisodeNumber).toBeUndefined()
+})
+
+test('Retrieve Series Details - One Piece - Absolute Order E242', async () => {
+  currentSettings.favoriteLanguages = ['es']
+  const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'absolute', undefined, 242, undefined)
+  expect(result.episodeData.absoluteNumber).toBe(242)
+  expect(result.episodeData.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
+  expect(result.seriesData.title).toBe('One Piece')
+  expect(result.seriesData.id).toBe(81797)
+  expect(result.episodeCount).toBeDefined()
+  expect(result.episodeCount).toBeGreaterThan(1000)
+})
+
+test('Retrieve Series Details - One Piece - Official Order E242', async () => {
+  currentSettings.favoriteLanguages = ['es']
+  const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'official', 16, undefined, 11)
+  expect(result.episodeData.absoluteNumber).toBe(242)
+  expect(result.episodeData.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
+  expect(result.seriesData.title).toBe('One Piece')
+  expect(result.seriesData.id).toBe(81797)
+  expect(result.episodeCount).toBe(99)
 })

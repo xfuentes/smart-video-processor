@@ -80,7 +80,7 @@ export const promptNumber = async (message: string, v: string, required = false)
 }
 
 export const promptTVShowSearchBy = async (v: SearchBy) => {
-  return promptStringArray('Search By:', [SearchBy.TITLE, SearchBy.TVDB], v)
+  return promptStringArray('Search By:', [SearchBy.TITLE_POSITION, SearchBy.TVDB_POSITION], v)
 }
 
 export const promptTVShowOrder = async (v: EpisodeOrder | undefined) => {
@@ -125,7 +125,7 @@ export const matchVideo = async (outputBuffer: CLI.LineBuffer, video: Video, aut
           video.tvShow.setTitle(await input({ message: ' Title:', default: video.tvShow.title, required: true }))
           video.tvShow.setYear(await promptNumber('Year:', video.tvShow.year ? '' + video.tvShow.year : ''))
         }
-        if (video.searchBy === SearchBy.TVDB) {
+        if (video.searchBy === SearchBy.TVDB_POSITION || video.searchBy === SearchBy.TVDB_EP_NAME) {
           video.tvShow.setTheTVDB(
             await promptNumber('TVDB ID:', video.tvShow.theTVDB ? '' + video.tvShow.theTVDB : '', true)
           )

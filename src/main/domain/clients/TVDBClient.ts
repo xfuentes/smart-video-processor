@@ -25,13 +25,15 @@ import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
 import { simpleCachingAdapter } from './SimpleCachingAdapter'
+import { Strings } from '../../../common/Strings'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
 const THE_TVDB_API_URL = 'https://api4.thetvdb.com/v4'
 
 type SeriesEpisode = {
-  episodeData: EpisodeData
+  episodeData: EpisodeData | undefined
   seriesData: SearchResult
+  episodeCount: number
 }
 
 export type EpisodeOrder = 'official' | 'dvd' | 'absolute'
@@ -52,13 +54,13 @@ export class TVDBClient {
     return TVDBClient.instance
   }
 
-  public async searchSeries(name: string, year: number | undefined = undefined): Promise<SearchResult[]> {
+  public async searchSeriesByTitle(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
     const tvdb = await this.getTVDBSession()
     let response
     try {
       response = await tvdb.get<TVDBSearchResponses>('/search', {
         params: {
-          query: name,
+          query: title,
           ...(year ? { year } : {}),
           type: 'series',
           offset: 0,
@@ -129,6 +131,115 @@ export class TVDBClient {
     return results
   }
 
+  public async searchEpisodeByTitle(
+    tvdbId: number,
+    order: EpisodeOrder,
+    title: string
+  ): Promise<{ episodeNumber?: number; absoluteEpisodeNumber?: number; season?: number }> {
+    const tvdb = await this.getTVDBSession()
+    let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
+    if (langCode.indexOf('-') != -1) {
+      langCode = langCode.substring(0, langCode.indexOf('-'))
+    }
+
+    let response: AxiosResponse<TVDBSeriesResponse> | undefined = undefined
+    try {
+      response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
+        headers: {
+          'Accept-Language': langCode
+        }
+      })
+    } catch (error) {
+      debug(error)
+      const response = error as AxiosError<TVDBSeriesResponse>
+      throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+    }
+
+    const episodes = response.data.data.episodes
+    const threshold = 85
+    let bestMatch: EpisodeBaseRecord | null = null
+    let bestScore = 0
+
+    // First pass: check with original names
+    for (const episode of episodes) {
+      if (!episode.name) continue
+      const score = Strings.getSimilarity(
+        Strings.normalizeForComparison(episode.name),
+        Strings.normalizeForComparison(title)
+      )
+      if (score > bestScore) {
+        bestScore = score
+        bestMatch = episode
+      }
+    }
+
+    // If no good match, try translations in favorite languages
+    if (bestScore < threshold) {
+      for (const favLang of currentSettings.favoriteLanguages) {
+        let baseLang = favLang
+        if (baseLang.indexOf('-') != -1) {
+          baseLang = baseLang.substring(0, baseLang.indexOf('-'))
+        }
+        const favoriteLanguage = Languages.getLanguageByCode(baseLang)
+        if (!favoriteLanguage) continue
+
+        // Get matching translation code from available translations
+        const trCode = Languages.getMatchingCodeFromCodeList(
+          favoriteLanguage,
+          response.data.data.series.nameTranslations
+        )
+
+        if (!trCode) continue
+
+        try {
+          const langResponse = await tvdb.get<TVDBEpisodesTranslationResponse>(
+            `/series/${tvdbId}/episodes/${order}/${trCode}`
+          )
+
+          for (const episode of langResponse.data.data.episodes) {
+            if (episode.name) {
+              const score = Strings.getSimilarity(
+                Strings.normalizeForComparison(episode.name),
+                Strings.normalizeForComparison(title)
+              )
+              if (score > bestScore) {
+                bestScore = score
+                // Find the corresponding episode in the original list to get the correct IDs
+                const originalEpisode = episodes.find((ep) => ep.id === episode.id)
+                if (originalEpisode) {
+                  bestMatch = originalEpisode
+                }
+              }
+            }
+          }
+
+          if (bestScore >= threshold) break // Stop if we found a good match
+        } catch (error) {
+          debug(error)
+          // Continue with next language
+        }
+      }
+    }
+
+    if (!bestMatch || bestScore < threshold) {
+      throw new Error('TVDB: No episode found matching the title')
+    }
+
+    if (order === 'absolute') {
+      return {
+        episodeNumber: undefined,
+        absoluteEpisodeNumber: bestMatch.absoluteNumber,
+        season: undefined
+      }
+    } else {
+      return {
+        episodeNumber: bestMatch.number,
+        absoluteEpisodeNumber: undefined,
+        season: bestMatch.seasonNumber
+      }
+    }
+  }
+
   public async retrieveSeriesDetails(
     tvdbId: number,
     order: EpisodeOrder,
@@ -156,25 +267,63 @@ export class TVDBClient {
 
     const episodeData = response.data.data.episodes[0]
     const seriesData = response.data.data.series
-    if (episodeData === undefined) {
-      throw new Error('TVDB: Episode Data Not Found')
+
+    // Get total episode count by calling without episodeNumber filter
+    let episodeCount = 1
+    try {
+      const countParams = {
+        ...(order === 'absolute' || season === undefined ? { season: 1 } : { season })
+      }
+      const countResponse = await tvdb.get<TVDBEpisodesListResponse>(`/series/${tvdbId}/episodes/${order}`, {
+        params: countParams
+      })
+      episodeCount = countResponse.data.links.total_items
+    } catch (error) {
+      debug('Failed to get episode count, defaulting to 1')
     }
 
-    if (order === 'absolute') {
-      // Retrieve episode by its ID to get corresponding season and episode number when in absolute mode.
-      const episodeId = episodeData.id
-      let epResponse: AxiosResponse<TVDBEpisodeResponse> | undefined = undefined
-      try {
-        epResponse = await tvdb.get<TVDBEpisodeResponse>(`/episodes/${episodeId}`)
-      } catch (error) {
-        debug(error)
-        const response = error as AxiosError<TVDBSeriesResponse>
-        throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+    if (episodeData === undefined) {
+      // Return undefined episode data instead of throwing error
+      const country = Countries.getCountryByCode(seriesData.originalCountry)
+      const language = Languages.guessLanguageIETFFromCountries(seriesData.originalLanguage, country ? [country] : [])
+      let name = this.cleanupSeriesTitle(seriesData.name)
+      const overview = seriesData.overview
+
+      // Apply translation logic for favorite languages
+      let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
+      if (langCode.indexOf('-') != -1) {
+        langCode = langCode.substring(0, langCode.indexOf('-'))
       }
-      const episodeDataExt = epResponse?.data.data
-      episodeData.number = episodeDataExt?.number
-      episodeData.seasonNumber = episodeDataExt?.seasonNumber
-      episodeData.absoluteNumber = episodeDataExt?.absoluteNumber
+      const favoriteLanguage = Languages.getLanguageByCode(langCode)
+      let trCode: string | undefined = undefined
+      if (favoriteLanguage != undefined && favoriteLanguage.code !== language?.code) {
+        trCode = Languages.getMatchingCodeFromCodeList(favoriteLanguage, response.data.data.series.nameTranslations)
+      }
+      if (trCode != undefined) {
+        try {
+          const seriesTranslation = await tvdb.get<TVDBTranslation>(`/series/${tvdbId}/translations/${trCode}`)
+          if (seriesTranslation.data.data.name) {
+            name = this.cleanupSeriesTitle(seriesTranslation.data.data.name)
+          }
+        } catch (e) {
+          debug('Failed to fetch translation, using original name')
+        }
+      }
+
+      return {
+        episodeData: undefined,
+        seriesData: new SearchResult(
+          seriesData.id,
+          name,
+          Number.parseInt(seriesData.year),
+          name,
+          overview,
+          seriesData.image,
+          language,
+          country ? [country] : []
+        ),
+        episodeCount
+      }
     }
 
     const country = Countries.getCountryByCode(seriesData.originalCountry)
@@ -198,7 +347,8 @@ export class TVDBClient {
         seriesData.image,
         language,
         country ? [country] : []
-      )
+      ),
+      episodeCount
     }
     let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
     if (langCode.indexOf('-') != -1) {

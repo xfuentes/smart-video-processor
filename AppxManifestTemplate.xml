@@ -40,6 +40,7 @@
         <desktop7:Extension Category="windows.shortcut">
           <desktop7:Shortcut File="[{Programs}]\Xavier Fuentes\Smart Video Processor.lnk"
                              Icon="[{Package}]\${executable}"
+                             ExcludeFromShowInNewInstall="true"
                              Description="${description}"/>
         </desktop7:Extension>
       </Extensions>

@@ -43,9 +43,12 @@ export enum VideoTune {
 
 export enum SearchBy {
   TITLE = 'Title',
+  TITLE_POSITION = 'Title & Position',
+  TITLE_EP_NAME = 'Title & EP Name',
   IMDB = 'IMDB ID',
   TMDB = 'TMDB ID',
-  TVDB = 'TVDB ID'
+  TVDB_POSITION = 'TVDB ID & Position',
+  TVDB_EP_NAME = 'TVDB ID & EP Name'
 }
 
 export interface TrackChanges {
@@ -156,6 +159,7 @@ export type SearchInputData = {
   tvShowSeason: string
   tvShowEpisode: string
   tvShowAbsoluteEpisode: string
+  tvShowEpisodeTitle: string
   otherTitle: string
   otherYear: string
   otherMonth: string
