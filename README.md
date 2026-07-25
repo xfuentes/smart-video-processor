@@ -87,6 +87,17 @@ The series and episode images and description are displayed you can now proceed 
 
 ![Matching a Series Episode](docs/img/04-TVShow.png)
 
+### Search episodes by name
+
+If you don't know the episode number, you can also search by episode name.
+Choose the search mode **Title & EP Name** or **TVDB ID & EP Name** and enter the episode title.
+The tool will find the best match and retrieve the corresponding episode details.
+This works for both absolute and official episode ordering.
+
+![Matching an Absolute Episode by Name](docs/img/11-MatchAbsoluteEpisodeByName.png)
+
+![Matching an Official Episode by Name](docs/img/12-MatchOfficialEpisodeByName.png)
+
 ## 7) Select tracks
 
 Examine the track list and unselect the ones you want to remove.
