@@ -95,7 +95,7 @@ test('TV-Show Retrieve Language IETF', async () => {
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.theTVDB).toBe(427202)
   expect(video.tvShow.title).contain('The Ones Who Live')
-  expect(video.searchBy).toBe(SearchBy.TVDB)
+  expect(video.searchBy).toBe(SearchBy.TVDB_POSITION)
   await video.search()
   expect(video.getOriginalLanguageIETF().code).toBe('en-US')
   video.destroy()
