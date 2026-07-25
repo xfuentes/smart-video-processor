@@ -25,6 +25,7 @@ type Props = {
   title: string | undefined
   year: string | number | undefined
   subTitle?: string
+  position?: string
   overview?: string | undefined
   altOverview?: string
   countries?: Country[]
@@ -39,6 +40,7 @@ export const VideoPreview = ({
   altOverview,
   secondaryPoster,
   subTitle,
+  position,
   countries,
   rating
 }: Props) => {
@@ -76,10 +78,14 @@ export const VideoPreview = ({
             }}
           >
             <div className="title">
-              <Tooltip content={title + (year ? ` (${year})` : '')} relationship="description">
+              <Tooltip
+                content={title + (year ? ` (${year})` : '') + (position ? ` - ${position}` : '')}
+                relationship="description"
+              >
                 <div className="shrinkable-text">
                   {title}
                   {year ? ` (${year})` : ''}
+                  {position ? ` - ${position}` : ''}
                 </div>
               </Tooltip>
             </div>

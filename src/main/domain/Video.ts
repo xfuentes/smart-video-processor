@@ -380,6 +380,7 @@ export class Video implements IVideo {
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
       this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
+      this.tvShow.setEpisodeTitle(data.tvShowEpisodeTitle)
       this.other.setTitle(data.otherTitle)
       this.other.setYear(data.otherYear)
       this.other.setMonth(data.otherMonth)
@@ -1048,7 +1049,7 @@ export class Video implements IVideo {
     const imdbMatches = imdbPattern.exec(this.filename)
 
     if (tvdbMatches?.groups) {
-      this.searchBy = SearchBy.TVDB
+      this.searchBy = SearchBy.TVDB_POSITION
       this.type = VideoType.TV_SHOW
       this.tvShow.setTheTVDB(tvdbMatches.groups.tvdb)
     }

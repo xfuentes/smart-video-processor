@@ -132,6 +132,12 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.7.0</h4>
+                    <ul>
+                      <li>Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)</li>
+                      <li>Improved episode matching for absolute-numbered series</li>
+                      <li>Better handling of missing or not-found episodes with clearer messages</li>
+                    </ul>
                     <h4>Version 1.6.8</h4>
                     <ul>
                       <li>Fix security issues</li>

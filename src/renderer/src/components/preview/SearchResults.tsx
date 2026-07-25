@@ -48,9 +48,9 @@ const columns: TableColumnDefinition<SearchResult>[] = [
   }),
   createTableColumn<SearchResult>({
     columnId: 'year',
-    compare: (a, b) => (a.year ?? -1) - (b.year ?? -1),
+    compare: (a, b) => (a.year ? a.year : -1) - (b.year ? b.year : -1),
     renderHeaderCell: () => 'Year',
-    renderCell: (item) => item.year
+    renderCell: (item) => (!item.year || isNaN(item.year) ? '' : item.year)
   })
 ]
 

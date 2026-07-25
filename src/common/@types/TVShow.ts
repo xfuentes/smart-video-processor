@@ -37,4 +37,5 @@ export interface ITVShow {
   episodePosterURL: string
   originalLanguage?: LanguageIETF
   originalCountries: Country[]
+  episodeCount?: number
 }

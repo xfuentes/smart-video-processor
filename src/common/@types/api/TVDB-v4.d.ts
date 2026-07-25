@@ -308,3 +308,15 @@ interface TVDBEpisodeResponse {
   data: EpisodeBaseRecord
   status: string
 }
+
+interface TVDBEpisodesListResponse {
+  data: EpisodeBaseRecord[]
+  status: string
+  links: {
+    prev: string
+    self: string
+    next: string
+    total_items: number
+    page_size: number
+  }
+}

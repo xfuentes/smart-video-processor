@@ -230,8 +230,8 @@ export class Strings {
     }
   }
 
-  static toLeadingZeroNumber(num: number): string {
-    return num.toString(10).padStart(2, '0')
+  static toLeadingZeroNumber(num: number, maxNum: number = 99): string {
+    return num.toString(10).padStart(('' + maxNum).length, '0')
   }
 
   static localeContains(search: string, base: string) {
@@ -310,5 +310,64 @@ export class Strings {
       }
     }
     return 1
+  }
+
+  static editDistance(s1: string, s2: string): number {
+    s1 = s1.toLowerCase()
+    s2 = s2.toLowerCase()
+    const costs: number[] = []
+    for (let i = 0; i <= s1.length; i++) {
+      let lastValue = i
+      for (let j = 0; j <= s2.length; j++) {
+        if (i == 0) costs[j] = j
+        else {
+          if (j > 0) {
+            let newValue = costs[j - 1]
+            if (s1.charAt(i - 1) != s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1
+            costs[j - 1] = lastValue
+            lastValue = newValue
+          }
+        }
+      }
+      if (i > 0) costs[s2.length] = lastValue
+    }
+    return costs[s2.length]
+  }
+
+  static getSimilarity(s1: string, s2: string): number {
+    const longer = s1.length > s2.length ? s1 : s2
+    const shorter = s1.length > s2.length ? s2 : s1
+    if (longer.length === 0) return 100
+    const distance = this.editDistance(longer, shorter)
+    return ((longer.length - distance) / longer.length) * 100
+  }
+
+  static normalizeForComparison(text: string): string {
+    // Remove accents by normalizing to NFD and removing diacritics
+    let normalized = text.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    // Convert to lowercase
+    normalized = normalized.toLowerCase()
+    // Remove punctuation (keep letters, numbers, and spaces)
+    normalized = normalized.replace(/[^\p{L}\p{N}\s]/gu, '')
+    // Replace multiple spaces with single space
+    normalized = normalized.replace(/\s+/g, ' ')
+    // Trim leading/trailing spaces
+    normalized = normalized.trim()
+    return normalized
+  }
+
+  static formatEpisodePosition(
+    season: number | undefined,
+    episode: number | undefined,
+    absoluteEpisode: number | undefined,
+    episodeCount: number = 99
+  ): string {
+    if (season !== undefined && episode !== undefined) {
+      return `S${this.toLeadingZeroNumber(season, 99)}E${this.toLeadingZeroNumber(episode, episodeCount)}`
+    }
+    if (absoluteEpisode !== undefined) {
+      return `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
+    }
+    return ''
   }
 }

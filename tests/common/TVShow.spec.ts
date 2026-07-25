@@ -18,7 +18,7 @@
 
 import { beforeAll, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
-import { VideoType } from '../../src/common/@types/Video'
+import { VideoType, SearchBy } from '../../src/common/@types/Video'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 
 beforeAll(() => {
@@ -34,5 +34,146 @@ test('TV-Show search with single match', async () => {
   await video.search()
   expect(video.tvShow.title).toBe('The Walking Dead: Dead City')
   expect(video.matched).toBeTruthy()
+  video.destroy()
+})
+
+test('TV-Show search by TVDB ID and Episode Name', async () => {
+  currentSettings.favoriteLanguages = ['en', 'es']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TVDB_EP_NAME
+  video.tvShow.setTheTVDB(81797)
+  video.tvShow.setEpisodeTitle('¡La explosión es la señal! El CP9 empieza a moverse')
+  video.tvShow.setOrder('absolute')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.tvShow.absoluteEpisode).toBe(242)
+  expect(video.matched).toBeTruthy()
+  video.destroy()
+})
+
+test('TV-Show search by TVDB ID and Episode Name - Episode not found', async () => {
+  currentSettings.favoriteLanguages = ['en', 'es']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TVDB_EP_NAME
+  video.tvShow.setTheTVDB(81797)
+  video.tvShow.setEpisodeTitle('Nonexistent Episode Title That Does Not Exist')
+  video.tvShow.setOrder('absolute')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
+  video.destroy()
+})
+
+test('TV-Show search by TVDB ID and Position', async () => {
+  currentSettings.favoriteLanguages = ['en']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TVDB_POSITION
+  video.tvShow.setTheTVDB(81797)
+  video.tvShow.setOrder('absolute')
+  video.tvShow.setAbsoluteEpisode('242')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.tvShow.absoluteEpisode).toBe(242)
+  expect(video.matched).toBeTruthy()
+  video.destroy()
+})
+
+test('TV-Show search by TVDB ID and Position - Episode not found', async () => {
+  currentSettings.favoriteLanguages = ['en']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TVDB_POSITION
+  video.tvShow.setTheTVDB(81797)
+  video.tvShow.setOrder('absolute')
+  video.tvShow.setAbsoluteEpisode('99999')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
+  video.destroy()
+})
+
+test('TV-Show search by TVDB ID and Position - No episode number', async () => {
+  currentSettings.favoriteLanguages = ['en']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TVDB_POSITION
+  video.tvShow.setTheTVDB(81797)
+  video.tvShow.setOrder('absolute')
+  video.tvShow.setAbsoluteEpisode('')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.tvShow.absoluteEpisode).toBe(undefined)
+  expect(video.tvShow.episode).toBe(undefined)
+  expect(video.tvShow.season).toBe(undefined)
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode number not specified. Please provide a valid episode number and try again.')
+  video.destroy()
+})
+
+test('TV-Show search by Title and Position', async () => {
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_POSITION
+  video.tvShow.setTitle('One Piece')
+  video.tvShow.setOrder('absolute')
+  video.tvShow.setAbsoluteEpisode('242')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.tvShow.absoluteEpisode).toBe(242)
+  expect(video.matched).toBeTruthy()
+  video.destroy()
+})
+
+test('TV-Show search by Title and Position - Episode not found', async () => {
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_POSITION
+  video.tvShow.setTitle('One Piece')
+  video.tvShow.setOrder('absolute')
+  video.tvShow.setAbsoluteEpisode('99999')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
+  video.destroy()
+})
+
+test('TV-Show search by Title and Episode Name', async () => {
+  currentSettings.favoriteLanguages = ['en', 'es']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_EP_NAME
+  video.tvShow.setTitle('One Piece')
+  video.tvShow.setEpisodeTitle('¡La explosión es la señal! El CP9 empieza a moverse')
+  video.tvShow.setOrder('absolute')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.tvShow.absoluteEpisode).toBe(242)
+  expect(video.matched).toBeTruthy()
+  video.destroy()
+})
+
+test('TV-Show search by Title and Episode Name - Episode not found', async () => {
+  currentSettings.favoriteLanguages = ['en', 'es']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_EP_NAME
+  video.tvShow.setTitle('One Piece')
+  video.tvShow.setEpisodeTitle('Nonexistent Episode Title That Does Not Exist')
+  video.tvShow.setOrder('absolute')
+  await video.search()
+  expect(video.tvShow.title).toBe('One Piece')
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
   video.destroy()
 })
