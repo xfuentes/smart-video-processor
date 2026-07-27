@@ -88,7 +88,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   }
 
   return (
-    <Toolbar aria-label="Main Buttons" style={{ justifyContent: 'space-between' }} size={'small'}>
+    <Toolbar aria-label="Main Buttons" style={{ justifyContent: 'space-between' }} size="small">
       <ToolbarGroup>
         <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
           Open

@@ -132,6 +132,13 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>Version 1.7.1</h4>
+                    <ul>
+                      <li>Fixed default search mode when parsing movie and TV show filenames</li>
+                      <li>Fixed series poster being downloaded to the wrong or duplicate location</li>
+                      <li>Improved track language detection when using manual hints</li>
+                      <li>UI consistency improvements for settings and multi-file matching</li>
+                    </ul>
                     <h4>Version 1.7.0</h4>
                     <ul>
                       <li>Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)</li>
@@ -377,7 +384,7 @@ export const AboutDialog = () => {
           </DialogContent>
           <DialogActions style={{ paddingTop: '10px' }}>
             <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary" onClick={handleClose}>
+              <Button size="small" appearance="secondary" onClick={handleClose}>
                 Close
               </Button>
             </DialogTrigger>

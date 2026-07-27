@@ -72,7 +72,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
       <div className="preview-buttons">
         <div className="button">
           <Button
-            size={'medium'}
+            size="small"
             appearance="secondary"
             icon={<MoviesAndTvRegular />}
             disabled={disabled}

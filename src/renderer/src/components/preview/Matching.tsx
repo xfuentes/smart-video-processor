@@ -397,7 +397,7 @@ export const Matching = ({ video, disabled }: Props) => {
               disabled={
                 disabled || !otherTitle || (!otherYear && (!!otherDay || !!otherMonth)) || (!otherMonth && !!otherDay)
               }
-              size={'small'}
+              size="small"
               appearance={'primary'}
               onClick={async () => search()}
             >
@@ -406,7 +406,7 @@ export const Matching = ({ video, disabled }: Props) => {
           ) : (
             <Button
               disabled={disabled}
-              size={'small'}
+              size="small"
               appearance={'primary'}
               icon={<Search16Regular />}
               onClick={async () => search()}

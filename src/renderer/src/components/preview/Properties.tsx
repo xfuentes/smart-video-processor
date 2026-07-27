@@ -149,6 +149,7 @@ export const Properties = ({ video, disabled }: Props) => {
       <div className="processing-form">
         <Field size="small" label="Source" className={disabled ? 'disabled' : ''}>
           <Select
+            size="small"
             value={source}
             disabled={disabled}
             onChange={(_ev, data) => {
@@ -178,6 +179,7 @@ export const Properties = ({ video, disabled }: Props) => {
         </Field>
         <Field size="small" label="Type" className={disabled ? 'disabled' : ''}>
           <Select
+            size="small"
             value={type}
             disabled={disabled}
             onChange={(_ev, data) => {
@@ -195,6 +197,7 @@ export const Properties = ({ video, disabled }: Props) => {
         </Field>
         <Field size="small" label="Property" className={disabled ? 'disabled' : ''}>
           <Select
+            size="small"
             value={property}
             disabled={disabled}
             onChange={(_ev, data) => {
@@ -215,6 +218,7 @@ export const Properties = ({ video, disabled }: Props) => {
             <Field size="small" label="New Value" required className={disabled ? 'disabled' : ''}>
               {propertyTypes[property] === 'string' && (
                 <Input
+                  size="small"
                   value={newValue as string}
                   disabled={disabled}
                   onChange={(_ev, data) => {
@@ -235,7 +239,7 @@ export const Properties = ({ video, disabled }: Props) => {
                 <LanguageSelector
                   id="language-input"
                   disabled={disabled}
-                  size={'small'}
+                  size="small"
                   multiselect={false}
                   value={newValue as string}
                   onChange={(value) => setNewValue(value)}
@@ -247,7 +251,7 @@ export const Properties = ({ video, disabled }: Props) => {
         )}
         <div className="buttons">
           <Button
-            size={'small'}
+            size="small"
             icon={<TaskListAddRegular />}
             onClick={async () => {
               const newUuid = await window.api.video.addChange(video.uuid, source, type, property, newValue)
@@ -259,7 +263,7 @@ export const Properties = ({ video, disabled }: Props) => {
             Insert
           </Button>
           <Button
-            size={'small'}
+            size="small"
             icon={<SaveRegular />}
             onClick={async () =>
               selectedChangeUuid &&
@@ -274,7 +278,7 @@ export const Properties = ({ video, disabled }: Props) => {
             Update
           </Button>
           <Button
-            size={'small'}
+            size="small"
             icon={<SubtractCircleRegular />}
             onClick={async () => {
               if (selectedChangeUuid !== undefined) {

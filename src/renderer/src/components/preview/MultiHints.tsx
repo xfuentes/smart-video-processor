@@ -51,7 +51,7 @@ export const MultiHints = ({ videos, commonHints, disabled }: Props) => {
                   <LanguageSelector
                     id={key}
                     disabled={disabled}
-                    size={'small'}
+                    size="small"
                     multiselect={false}
                     value={hint.value || ''}
                     onChange={async (value) => {
@@ -87,6 +87,7 @@ export const MultiHints = ({ videos, commonHints, disabled }: Props) => {
                   className={disabled ? 'disabled' : ''}
                 >
                   <Select
+                    size="small"
                     disabled={disabled}
                     value={hint.value || ''}
                     onChange={async (_ev, data) =>

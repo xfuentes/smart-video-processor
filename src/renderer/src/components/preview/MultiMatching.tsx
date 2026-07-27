@@ -119,11 +119,17 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
         <div>
           <Field size="small" label="Type" required className={disabled ? 'disabled' : ''}>
             <Select
+              size="small"
               disabled={disabled}
               value={type}
               onChange={(_ev, data) => {
-                setType(data.value as VideoType)
-                setSearchBy(SearchBy.TITLE)
+                const newType = data.value as VideoType
+                setType(newType)
+                if (newType === VideoType.TV_SHOW) {
+                  setSearchBy(SearchBy.TITLE_POSITION)
+                } else {
+                  setSearchBy(SearchBy.TITLE)
+                }
               }}
             >
               {initialType === undefined && (
@@ -142,6 +148,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             <div>
               <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
                 <Select
+                  size="small"
                   disabled={disabled}
                   value={searchBy}
                   onChange={(_ev, data) => setSearchBy(data.value as SearchBy)}
@@ -151,16 +158,17 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       Multiple values
                     </option>
                   )}
-                  <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
+                  <option key={SearchBy.TITLE_POSITION}>{SearchBy.TITLE_POSITION}</option>
                   <option key={SearchBy.TVDB_POSITION}>{SearchBy.TVDB_POSITION}</option>
                 </Select>
               </Field>
             </div>
-            {searchBy === SearchBy.TITLE && (
+            {searchBy === SearchBy.TITLE_POSITION && (
               <>
                 <div>
                   <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
                     <Input
+                      size="small"
                       disabled={disabled}
                       value={tvShowTitle ?? ''}
                       onChange={(_ev, data) => setTvShowTitle(data.value)}
@@ -170,6 +178,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 <div>
                   <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
                     <Input
+                      size="small"
                       type="number"
                       disabled={disabled}
                       value={tvShowYear ?? ''}
@@ -184,7 +193,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
               <>
                 <div>
                   <Field size="small" label="TVDB ID" required className={disabled ? 'disabled' : ''}>
-                    <Input disabled={disabled} value={tvShowTVDB} onChange={(_ev, data) => setTvShowTVDB(data.value)} />
+                    <Input
+                      size="small"
+                      disabled={disabled}
+                      value={tvShowTVDB ?? ''}
+                      onChange={(_ev, data) => setTvShowTVDB(data.value)}
+                    />
                   </Field>
                 </div>
               </>
@@ -192,6 +206,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             <div>
               <Field size="small" label="Order" className={disabled ? 'disabled' : ''}>
                 <Select
+                  size="small"
                   disabled={disabled}
                   value={tvShowOrder}
                   onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
@@ -207,11 +222,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </Select>
               </Field>
             </div>
-            {tvShowOrder !== 'absolute' && (
-              <>
+            {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TVDB_POSITION) &&
+              tvShowOrder !== 'absolute' && (
                 <div>
                   <Field size="small" label="Season" required className={disabled ? 'disabled' : ''}>
                     <Input
+                      size="small"
                       type="number"
                       disabled={disabled}
                       value={tvShowSeason ?? ''}
@@ -220,15 +236,14 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                     />
                   </Field>
                 </div>
-              </>
-            )}
+              )}
           </>
         )}
         <div className="buttons">
           {type === VideoType.TV_SHOW && (
             <Button
               disabled={disabled}
-              size={'small'}
+              size="small"
               appearance={'primary'}
               icon={<Search16Regular />}
               onClick={async () => search()}

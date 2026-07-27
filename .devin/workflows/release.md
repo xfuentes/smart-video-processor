@@ -51,3 +51,15 @@ description: Create a new release
      ```powershell
      git push origin vX.Y.Z
      ```
+
+8. **Update the GitHub release draft changelog**
+   - Pushing the tag creates a draft release on GitHub.
+   - Open the draft release on the GitHub **Releases** page.
+   - Copy the changelog entry from `src/renderer/src/components/AboutDialog.tsx` (Version X.Y.Z) and paste it as the release notes.
+   - For version 1.7.0, the notes are:
+     ```
+     - Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)
+     - Improved episode matching for absolute-numbered series
+     - Better handling of missing or not-found episodes with clearer messages
+     ```
+   - Save/publish the release once the changelog is set.

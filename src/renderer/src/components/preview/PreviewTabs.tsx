@@ -90,14 +90,14 @@ export const PreviewTabs = ({ video }: Props) => {
           Matching{' '}
           <CounterBadge
             color={video.matched ? 'informative' : 'danger'}
-            size={'small'}
+            size="small"
             showZero
             count={matchingCount}
           />
         </Tab>
         <Tab value="tracks" disabled={video.loading} icon={<TextBulletList20Regular />}>
           Tracks{' '}
-          <CounterBadge color={tracksCount === 0 ? 'important' : 'informative'} size={'small'} count={tracksCount} />
+          <CounterBadge color={tracksCount === 0 ? 'important' : 'informative'} size="small" count={tracksCount} />
         </Tab>
         {hintCount > 0 && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
@@ -106,13 +106,13 @@ export const PreviewTabs = ({ video }: Props) => {
           </Tab>
         )}
         <Tab value="properties" icon={<TaskListLtr20Regular />} disabled={!video.matched || hintMissing}>
-          Properties <CounterBadge color="informative" size={'small'} showZero count={changesCount} />
+          Properties <CounterBadge color="informative" size="small" showZero count={changesCount} />
         </Tab>
         <Tab value="processing" icon={<DataUsageSettings20Regular />} disabled={!video.matched || hintMissing}>
-          Processing <CounterBadge color="informative" size={'small'} showZero count={partsCount} />
+          Processing <CounterBadge color="informative" size="small" showZero count={partsCount} />
         </Tab>
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!video.matched || hintMissing}>
-          Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />
+          Encoding <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

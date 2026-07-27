@@ -149,7 +149,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
       <TabList selectedValue={selectedTab} onTabSelect={handleTabSelect} size="small">
         <Tab value="matching" icon={<Search20Regular />}>
           Matching{' '}
-          <CounterBadge color={allMatched ? 'informative' : 'danger'} size={'small'} showZero count={matchingCount} />
+          <CounterBadge color={allMatched ? 'informative' : 'danger'} size="small" showZero count={matchingCount} />
         </Tab>
         {hintCount > 0 && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
@@ -158,7 +158,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
           </Tab>
         )}
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
-          Encoding <CounterBadge color="informative" size={'small'} showZero count={encodingCount} />
+          Encoding <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

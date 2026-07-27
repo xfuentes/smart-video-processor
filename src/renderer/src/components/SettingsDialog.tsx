@@ -229,12 +229,12 @@ export const SettingsDialog = () => {
                 {selectedTab === 'general' && (
                   <div className="settings-form">
                     <div className="field">
-                      <Label size={'small'} required htmlFor="languageInput">
+                      <Label size="small" required htmlFor="languageInput">
                         Language
                       </Label>
                       <LanguageSelector
                         multiselect={false}
-                        size={'small'}
+                        size="small"
                         id="languageInput"
                         required
                         value={language}
@@ -282,12 +282,12 @@ export const SettingsDialog = () => {
                 {selectedTab === 'output' && (
                   <div className="settings-form">
                     <div className="field">
-                      <Label size={'small'} required htmlFor="tmpFilesPathInput">
+                      <Label size="small" required htmlFor="tmpFilesPathInput">
                         Temporary Files Path (Can be relative to source file path)
                       </Label>
                       <Input
                         required
-                        size={'small'}
+                        size="small"
                         type="text"
                         id="tmpFilesPathInput"
                         value={tmpFilesPath}
@@ -295,12 +295,12 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <div className="field">
-                      <Label size={'small'} required htmlFor="moviesOutputPathInput">
+                      <Label size="small" required htmlFor="moviesOutputPathInput">
                         Movies Output Path (Can be relative to source file path)
                       </Label>
                       <Input
                         required
-                        size={'small'}
+                        size="small"
                         type="text"
                         id="moviesOutputPathInput"
                         value={moviesOutputPath}
@@ -308,12 +308,12 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <div className="field">
-                      <Label size={'small'} required htmlFor="tvShowsOutputPathInput">
+                      <Label size="small" required htmlFor="tvShowsOutputPathInput">
                         TV Shows Output Path (Can be relative to source file path)
                       </Label>
                       <Input
                         required
-                        size={'small'}
+                        size="small"
                         type="text"
                         id="tvShowsOutputPathInput"
                         value={tvShowsOutputPath}
@@ -321,12 +321,12 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <div className="field">
-                      <Label size={'small'} required htmlFor="othersOutputPathInput">
+                      <Label size="small" required htmlFor="othersOutputPathInput">
                         Others Output Path (Can be relative to source file path)
                       </Label>
                       <Input
                         required
-                        size={'small'}
+                        size="small"
                         type="text"
                         id="othersOutputPathInput"
                         value={othersOutputPath}
@@ -350,7 +350,7 @@ export const SettingsDialog = () => {
                       <div className="field">
                         <Label
                           disabled={!isTrackFilteringEnabled}
-                          size={'small'}
+                          size="small"
                           required
                           htmlFor="favoriteLanguagesInput"
                         >
@@ -359,7 +359,7 @@ export const SettingsDialog = () => {
                         <LanguageSelector
                           disabled={!isTrackFilteringEnabled}
                           multiselect
-                          size={'small'}
+                          size="small"
                           id="favoriteLanguagesInput"
                           required
                           value={favoriteLanguages}
@@ -416,6 +416,7 @@ export const SettingsDialog = () => {
                             />
                           </Label>
                           <Select
+                            size="small"
                             id="codecSelection"
                             value={videoCodec}
                             disabled={!isTrackEncodingEnabled}
@@ -534,7 +535,7 @@ export const SettingsDialog = () => {
                 </ProgressButton>
               </DialogTrigger>
               <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary" onClick={handleCancel}>
+                <Button size="small" appearance="secondary" onClick={handleCancel}>
                   Cancel
                 </Button>
               </DialogTrigger>

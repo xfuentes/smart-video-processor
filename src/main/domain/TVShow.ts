@@ -133,14 +133,20 @@ export class TVShow implements ITVShow {
     }
 
     const tempDirectory = this.video.getTempDirectory()
+    const seriesPosterPath = Path.join(
+      this.video.getTempRootDirectory(),
+      'TVDB-' + this.theTVDB + '-poster.jpg'
+    )
     if (this.posterURL) {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image from TheTVDB.'
       this.video.fireChangeEvent()
-      fs.mkdirSync(tempDirectory, { recursive: true })
-      const fullPath = Path.join(tempDirectory, 'TVDB-' + this.theTVDB + '-poster.jpg')
-      this.poster = await Files.downloadFile(this.posterURL, fullPath)
-      debug(`Wrote poster file://${this.poster}`)
+      if (!Files.fileExistsAndIsReadable(seriesPosterPath)) {
+        fs.mkdirSync(this.video.getTempRootDirectory(), { recursive: true })
+        await Files.downloadFile(this.posterURL, seriesPosterPath)
+      }
+      this.poster = seriesPosterPath
+      debug(`Series poster file://${this.poster}`)
     }
     if (!this.episode && !this.absoluteEpisode) {
       if (episodeSearchFailed) {
