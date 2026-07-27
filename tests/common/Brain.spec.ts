@@ -24,7 +24,7 @@ import { Track } from '../../src/main/domain/Track'
 import { Brain } from '../../src/main/domain/Brain'
 import { Languages } from '../../src/common/LanguageIETF'
 import { currentSettings } from '../../src/main/domain/Settings'
-import { Countries } from '../../src/common/Countries'
+import { Countries, Country } from '../../src/common/Countries'
 import { HintType } from '../../src/common/@types/Hint'
 import { Hint } from '../../src/main/domain/Hint'
 
@@ -3900,4 +3900,233 @@ test('Blue bloods bug', () => {
   )
   const hints = hintListToMap(results.hints)
   expect(hints['Language 1']).toBe('und')
+})
+
+const pawPatrolTracks = [
+  {
+    id: 0,
+    name: undefined,
+    type: 'Video',
+    codec: 'AVC/H.264/MPEG-4p10',
+    language: 'en',
+    properties: {
+      videoDimensions: '1920x800',
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: undefined,
+      frames: 126166,
+      bitRate: 15219501,
+      fps: 23.976
+    },
+    default: true,
+    forced: false,
+    duration: 5262.17,
+    size: 10010950659,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 1,
+    name: 'French AC3 5.1',
+    type: 'Audio',
+    codec: 'AC-3',
+    language: 'fr',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: 6,
+      audioSamplingFrequency: 48000,
+      textSubtitles: undefined,
+      frames: 164442,
+      bitRate: 640000,
+      fps: 31
+    },
+    default: true,
+    forced: false,
+    duration: 5262.144,
+    size: 420971520,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 2,
+    name: 'English Dolby Atmos 7.1',
+    type: 'Audio',
+    codec: 'TrueHD Atmos',
+    language: 'en',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: 8,
+      audioSamplingFrequency: 48000,
+      textSubtitles: undefined,
+      frames: 6314559,
+      bitRate: 3002348,
+      fps: 1200
+    },
+    default: false,
+    forced: false,
+    duration: 5262.133,
+    size: 1974844342,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 3,
+    name: 'English AC3 5.1',
+    type: 'Audio',
+    codec: 'AC-3',
+    language: 'en',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: 6,
+      audioSamplingFrequency: 48000,
+      textSubtitles: undefined,
+      frames: 164442,
+      bitRate: 640000,
+      fps: 31
+    },
+    default: false,
+    forced: false,
+    duration: 5262.144,
+    size: 420971520,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 4,
+    name: 'French Forced SRT',
+    type: 'Subtitles',
+    codec: 'SubRip/SRT',
+    language: 'fr',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: true,
+      frames: 5,
+      bitRate: 0,
+      fps: 0
+    },
+    default: true,
+    forced: true,
+    duration: 5182.593,
+    size: 109,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 5,
+    name: 'French SRT',
+    type: 'Subtitles',
+    codec: 'SubRip/SRT',
+    language: 'fr',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: true,
+      frames: 772,
+      bitRate: 42,
+      fps: 0
+    },
+    default: false,
+    forced: false,
+    duration: 5182.593,
+    size: 27415,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 6,
+    name: 'French Forced SUP',
+    type: 'Subtitles',
+    codec: 'HDMV PGS',
+    language: 'fr',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: undefined,
+      frames: 10,
+      bitRate: 132,
+      fps: 0
+    },
+    default: false,
+    forced: false,
+    duration: 5182.594,
+    size: 86050,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 7,
+    name: 'French SUP',
+    type: 'Subtitles',
+    codec: 'HDMV PGS',
+    language: 'fr',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: undefined,
+      frames: 1544,
+      bitRate: 25688,
+      fps: 0
+    },
+    default: false,
+    forced: false,
+    duration: 5182.594,
+    size: 16641642,
+    copy: true,
+    unsupported: false
+  },
+  {
+    id: 8,
+    name: 'English SUP',
+    type: 'Subtitles',
+    codec: 'HDMV PGS',
+    language: 'en',
+    properties: {
+      videoDimensions: undefined,
+      audioChannels: undefined,
+      audioSamplingFrequency: undefined,
+      textSubtitles: undefined,
+      frames: 1592,
+      bitRate: 26849,
+      fps: 0
+    },
+    default: false,
+    forced: false,
+    duration: 5169.206,
+    size: 17348724,
+    copy: true,
+    unsupported: false
+  }
+] as Track[]
+
+test('GUESS COUNTRY - hints match expected list with user hint Language 4 = fr', () => {
+  const userHintLanguage4Fr = [new Hint(4, HintType.LANGUAGE, 'fr')]
+  const results = Brain.getInstance().analyse(
+    pawPatrolTracks,
+    getFakeAbsolutePath('Download', 'paw.patrol.the.mighty.movie.2023.multi.1080p.bluray.x264-ulysse.mkv'),
+    "La Pat' Patrouille : La Super Patrouille, le film (2023)",
+    undefined,
+    undefined,
+    undefined,
+    0,
+    Languages.getLanguageByCode('en'),
+    [Countries.getCountryByCode('US'), Countries.getCountryByCode('CA')].filter((c) => c !== undefined) as Country[],
+    [],
+    userHintLanguage4Fr
+  )
+  const hints = hintListToMap(results.hints)
+
+  expect(results.hints).toHaveLength(7)
+  expect(hints['Language 1']).toBe('fr-CA')
+  expect(hints['Language 2']).toBe('en')
+  expect(hints['Language 3']).toBe('en')
+  expect(hints['Language 4']).toBeDefined()
+  expect(hints['Language 4']).toBe('fr')
+  expect(hints['Language 5']).toBe('fr-CA')
+  expect(hints['Language 6']).toBe('fr-CA')
+  expect(hints['Language 7']).toBe('fr-CA')
 })

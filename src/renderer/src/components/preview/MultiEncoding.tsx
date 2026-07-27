@@ -142,7 +142,7 @@ export const MultiEncoding = ({ videos, commonEncoderSettings, disabled }: Props
         <div className="preview-buttons">
           <div className="button">
             <Button
-              size={'medium'}
+              size="small"
               appearance="primary"
               icon={<WrenchSettings20Regular />}
               disabled={disabled}

@@ -353,7 +353,8 @@ export class Brain {
       track.language === 'und' ||
       (track.language.indexOf('-') === -1 && track.type === TrackType.AUDIO && isRegionImportant) ||
       (languageHint !== undefined && languageHint.indexOf('-') != -1 && track.language !== languageHint) ||
-      (languageHint !== undefined && languageHint === originalLanguageIETF?.code && track.language !== languageHint)
+      (languageHint !== undefined && languageHint === originalLanguageIETF?.code && track.language !== languageHint) ||
+      userLanguageHint !== undefined
     ) {
       if (languageHint === undefined) {
         languageHint = track.language ?? ''

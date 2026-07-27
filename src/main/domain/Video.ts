@@ -1067,6 +1067,7 @@ export class Video implements IVideo {
 
     if (tvShowSeasonEpisodeMatches?.groups) {
       this.type = VideoType.TV_SHOW
+      if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
       this.tvShow.season = Number.parseInt(tvShowSeasonEpisodeMatches.groups.season, 10)
       this.tvShow.episode = Number.parseInt(tvShowSeasonEpisodeMatches.groups.episode, 10)
       this.tvShow.order = 'official'
@@ -1077,6 +1078,7 @@ export class Video implements IVideo {
       this.movie.year = Number.parseInt(movieMatches.groups.year, 10)
     } else if (tvShowAbsoluteEpisodeMatches?.groups) {
       this.type = VideoType.TV_SHOW
+      if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
       this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
       this.tvShow.order = 'absolute'
       this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title ?? '')
