@@ -18,9 +18,12 @@
 
 import { Arguments } from 'yargs'
 import { SvpArgs } from './svp-cli'
+import { SearchInputData, SearchBy } from '../common/@types/Video'
+import { EditionType } from '../common/@types/Movie'
+import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { Video } from '../main/domain/Video'
 import { version } from '../../package.json'
-import * as CLI from 'clui'
+import CLI from 'clui'
 import { renderVideoList } from './video-list'
 import { matchVideo } from './matching'
 import { requestTracksToCopy } from './track-list'
@@ -28,7 +31,7 @@ import { requestHints } from './hints'
 import { requestEncodingSelection } from './encoding'
 import { glob } from 'glob'
 import * as cliProgress from 'cli-progress'
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import { currentSettings } from '../main/domain/Settings'
 
 const progressBar: cliProgress.SingleBar = new cliProgress.SingleBar(
@@ -57,6 +60,35 @@ const finalListener = (video: Video) => {
       status: `${video.status}`,
       message: `${video.message} ${video.title}`
     })
+  }
+}
+
+const buildSearchInputData = (argv: Arguments<SvpArgs>): SearchInputData | undefined => {
+  if (!argv.type) {
+    return undefined
+  }
+  return {
+    type: argv.type,
+    searchBy: argv.searchBy ?? SearchBy.TITLE,
+    movieTitle: argv.title ?? '',
+    movieYear: argv.year ?? '',
+    movieIMDB: argv.imdb ?? '',
+    movieTMDB: argv.tmdb ?? '',
+    movieEdition: argv.edition ?? EditionType.THEATRICAL,
+    tvShowTitle: argv.title ?? '',
+    tvShowYear: argv.year ?? '',
+    tvShowTVDB: argv.tvdb ?? '',
+    tvShowOrder: (argv.order as EpisodeOrder) ?? 'official',
+    tvShowSeason: argv.season ?? '',
+    tvShowEpisode: argv.episode ?? '',
+    tvShowAbsoluteEpisode: argv.absoluteEpisode ?? '',
+    tvShowEpisodeTitle: argv.episodeTitle ?? '',
+    otherTitle: argv.title ?? '',
+    otherYear: argv.year ?? '',
+    otherMonth: argv.month ?? '',
+    otherDay: argv.day ?? '',
+    otherOriginalLanguage: argv.originalLanguage ?? '',
+    otherPosterPath: argv.poster ?? ''
   }
 }
 
@@ -95,6 +127,19 @@ export async function processFile(argv: Arguments<SvpArgs>) {
     video.addChangeListener(myAggregationListener)
     try {
       await video.lastPromise
+      for (const part of argv.parts ?? []) {
+        await video.addPart(part)
+      }
+      if (argv.startFrom !== undefined) {
+        await video.setStartFrom(argv.startFrom)
+      }
+      if (argv.endAt !== undefined) {
+        await video.setEndAt(argv.endAt)
+      }
+      const searchData = buildSearchInputData(argv)
+      if (searchData) {
+        await video.search(searchData).catch((error) => console.log(chalk.red((error as Error).message)))
+      }
       progressBar.update((current * 100) / total, {
         status: `${video.status}`,
         message: `${video.message} ${current}/${total}`

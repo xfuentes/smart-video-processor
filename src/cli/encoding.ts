@@ -19,7 +19,7 @@
 import { Video } from '../main/domain/Video'
 import { TrackType } from '../common/@types/Track'
 import { Strings } from '../common/Strings'
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import { confirm } from '@inquirer/prompts'
 
 const trackTypeEncodingSection = async (video: Video, type: TrackType, auto: boolean = false) => {
@@ -29,7 +29,7 @@ const trackTypeEncodingSection = async (video: Video, type: TrackType, auto: boo
     for (const track of filteredTracks) {
       const key = track.type + ' ' + track.id
       const es = video.encoderSettings.find((s) => s.trackId === track.id)
-      let infoLabel = undefined
+      let infoLabel: string | undefined = undefined
       let disabled = false
       if (track.unsupported) {
         infoLabel = 'Conversion to a supported audio format is mandatory.'

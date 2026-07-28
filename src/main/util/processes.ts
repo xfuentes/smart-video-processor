@@ -24,7 +24,20 @@ import { debug } from './log'
 import * as os from 'node:os'
 import * as fs from 'node:fs'
 import { Dict, ProcessEnv, ProcessesPriority } from '../../common/@types/processes'
-import { app } from 'electron'
+import { createRequire } from 'node:module'
+
+const nodeRequire = createRequire(import.meta.url)
+
+function getElectronApp() {
+  if (!process.versions.electron) {
+    return undefined
+  }
+  try {
+    return nodeRequire('electron').app
+  } catch {
+    return undefined
+  }
+}
 
 const defaultOptions = { spawn: true }
 const defaultLocale = 'en-US'
@@ -105,11 +118,11 @@ export class Processes {
   }
 
   static isSnapStore = (): boolean => {
-    return app?.getPath('exe').includes('/snap/') || false
+    return getElectronApp()?.getPath('exe').includes('/snap/') || false
   }
 
   static isLimitedPermissions = (): boolean => {
-    return app?.getPath('exe').includes('/snap/') || false
+    return getElectronApp()?.getPath('exe').includes('/snap/') || false
   }
 
   static setPriority(pid: number, priority: ProcessesPriority) {

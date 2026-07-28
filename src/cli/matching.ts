@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import { confirm, input, rawlist, select } from '@inquirer/prompts'
-import { toNumber } from 'lodash'
+import _ from 'lodash'
 import { ratingRenderer } from './renderers'
 import { SearchResult } from '../main/domain/SearchResult'
 import { SearchBy, VideoType } from '../common/@types/Video'
@@ -26,7 +26,7 @@ import { EditionType } from '../common/@types/Movie'
 import { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { Video } from '../main/domain/Video'
 import { Strings } from '../common/Strings'
-import * as CLI from 'clui'
+import CLI from 'clui'
 
 export const promptSearchResultID = async (searchResults: SearchResult[]) => {
   const options = searchResults.map((sr) => {
@@ -73,7 +73,7 @@ export const promptNumber = async (message: string, v: string, required = false)
     default: v,
     required,
     validate: (inputted) => {
-      const num = toNumber(inputted)
+      const num = _.toNumber(inputted)
       return num !== undefined
     }
   })

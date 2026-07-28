@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as CLI from 'clui'
-import * as chalk from 'chalk'
+import CLI from 'clui'
+import chalk from 'chalk'
 import { Video } from '../main/domain/Video'
 import {
   booleanRenderer,

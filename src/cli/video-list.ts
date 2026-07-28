@@ -17,8 +17,8 @@
  */
 
 import { Video } from '../main/domain/Video'
-import * as CLI from 'clui'
-import * as chalk from 'chalk'
+import CLI from 'clui'
+import chalk from 'chalk'
 import { qualityRenderer, sizeRenderer } from './renderers'
 
 export const renderVideoList = (outputBuffer: CLI.LineBuffer, video: Video) => {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import { Strings } from '../common/Strings'
 import { TrackProperties, TrackType } from '../common/@types/Track'
 
@@ -47,7 +47,7 @@ export function durationRenderer(duration?: number) {
 }
 
 export function trackPropertiesRenderer(properties: TrackProperties) {
-  const res = []
+  const res: string[] = []
   if (properties.videoDimensions) {
     res.push(properties.videoDimensions + (properties.fps ? '@' + properties.fps : ''))
   }

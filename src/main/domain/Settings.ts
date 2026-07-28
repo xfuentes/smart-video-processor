@@ -20,6 +20,9 @@ import { Processes } from '../util/processes'
 import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
 import * as Path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = Path.dirname(fileURLToPath(import.meta.url))
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import * as fs from 'node:fs'
@@ -30,14 +33,19 @@ const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
 
 const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
   if (os.platform() === 'win32') {
-    return process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1
-      ? Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
-      : Path.join(__dirname, '..', '..', 'dist', 'bin', `${tool}.exe`)
+    if (process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1) {
+      return Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+    }
+    const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'dist', 'bin', `${tool}.exe`)
+    if (isValidExecutable(toolPathFromSources)) {
+      return toolPathFromSources
+    }
+    return Processes.findCommandSync(tool, tool)
   } else if (os.platform() === 'linux') {
     if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
       return `${process.env.SNAP}/usr/bin/${tool}`
     }
-    const toolPathFromSources = Path.join(__dirname, '..', '..', 'dist', 'bin', tool)
+    const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'dist', 'bin', tool)
     if (isValidExecutable(toolPathFromSources)) {
       return toolPathFromSources
     }

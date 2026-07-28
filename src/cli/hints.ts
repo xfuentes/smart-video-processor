@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import { search } from '@inquirer/prompts'
 import { promptStringArray } from './matching'
 import { SubtitlesType } from '../common/SubtitlesType'
@@ -68,6 +68,7 @@ export const getCmdHint = (hint: Hint, languageHint?: string[]) => {
       }
     }
   }
+  return undefined
 }
 
 export const requestHints = async (video: Video, languageHint?: string[], auto: boolean = false) => {
