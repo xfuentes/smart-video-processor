@@ -16,14 +16,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { app } from 'electron'
+import { createRequire } from 'node:module'
 import * as fs from 'node:fs'
+import * as path from 'node:path'
+import * as os from 'node:os'
+
+const nodeRequire = createRequire(import.meta.url)
 
 export const getConfigPath = (): string => {
-  const path = app.getPath('userData')
+  let configPath: string | undefined
 
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path, { recursive: true })
+  if (process.versions.electron) {
+    try {
+      const { app } = nodeRequire('electron')
+      configPath = app.getPath('userData')
+    } catch {
+      // Not running in Electron, ignore
+    }
   }
-  return path
+
+  if (!configPath) {
+    configPath = path.join(os.homedir(), '.smart-video-processor')
+  }
+
+  if (!fs.existsSync(configPath)) {
+    fs.mkdirSync(configPath, { recursive: true })
+  }
+  return configPath
 }
