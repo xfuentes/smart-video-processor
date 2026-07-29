@@ -38,7 +38,6 @@ import { DropZone } from '@renderer/components/DropZone'
 import _ from 'lodash'
 import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@types/Video'
 
-
 const columns: TableColumnDefinition<IVideoListItem>[] = [
   createTableColumn<IVideoListItem>({
     columnId: 'filename',

@@ -44,7 +44,9 @@ export const AlertDialog = ({ title, children, modalType }: Props): JSXElement =
           <DialogContent>{children}</DialogContent>
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
-              <Button size="small" appearance="secondary">Dismiss</Button>
+              <Button size="small" appearance="secondary">
+                Dismiss
+              </Button>
             </DialogTrigger>
           </DialogActions>
         </DialogBody>

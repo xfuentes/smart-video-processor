@@ -5,12 +5,12 @@ name: build osx
 
 on:
   push:
-    branches: [ '**' ]
+    branches: ['**']
     paths:
       - 'src/**'
       - 'test/**'
   pull_request:
-    branches: [ "main", "beta" ]
+    branches: ['main', 'beta']
     paths:
       - 'src/**'
       - 'test/**'
@@ -18,7 +18,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -28,12 +27,12 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v6
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-    - run: yarn install --immutable
-    - run: yarn run build
-    - run: yarn run test
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn run build
+      - run: yarn run test

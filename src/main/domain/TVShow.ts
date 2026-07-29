@@ -133,10 +133,7 @@ export class TVShow implements ITVShow {
     }
 
     const tempDirectory = this.video.getTempDirectory()
-    const seriesPosterPath = Path.join(
-      this.video.getTempRootDirectory(),
-      'TVDB-' + this.theTVDB + '-poster.jpg'
-    )
+    const seriesPosterPath = Path.join(this.video.getTempRootDirectory(), 'TVDB-' + this.theTVDB + '-poster.jpg')
     if (this.posterURL) {
       this.video.status = JobStatus.LOADING
       this.video.message = 'Downloading poster image from TheTVDB.'

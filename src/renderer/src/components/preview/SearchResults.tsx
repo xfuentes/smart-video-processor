@@ -62,7 +62,7 @@ type Props = {
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
-  id: { defaultWidth: 35, minWidth: 35, idealWidth: 35 },
+  id: { defaultWidth: 45, minWidth: 45, idealWidth: 45 },
   title: { defaultWidth: 80, minWidth: 80, idealWidth: 600 },
   year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
 }

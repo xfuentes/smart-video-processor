@@ -16,6 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.preview-tabs,
+.preview-tabs *,
+.preview-tabs *::before,
+.preview-tabs *::after {
+  box-sizing: border-box;
+}
+
 .vertical-stack {
   height: 100%;
   display: flex;
@@ -43,7 +50,7 @@
 }
 
 .controls-area {
-  background-color: #f7f8fa
+  background-color: #f7f8fa;
 }
 
 .main {
@@ -82,8 +89,8 @@
   overflow: hidden;
   overflow-y: auto;
   padding: 0;
-  background-color: #FFFFFF;
-  border: 1px solid #EBEBEB;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
   flex-grow: 4;
   min-width: 40vw;
 }
@@ -108,6 +115,11 @@
   width: 100%;
   height: 100%;
   flex-grow: 1;
+}
+
+.mask-parent,
+.mask-parent * {
+  box-sizing: content-box;
 }
 
 .mask-parent > div {
@@ -180,8 +192,8 @@
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;
-  background-color: #FFFFFF;
-  border: 1px solid #EBEBEB;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
   grid-row: 1 / 3;
   grid-column: 1 / 2;
 }
@@ -218,8 +230,8 @@
   overflow-y: auto;
   padding: 0;
   flex-grow: 1;
-  background-color: #FFFFFF;
-  border: 1px solid #EBEBEB;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
 }
 
 .button {
@@ -230,7 +242,9 @@
 .img-thumbnail {
   width: 140px;
   text-align: center;
-  box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .132), 0 0.3px 0.9px 0 rgba(0, 0, 0, .108);
+  box-shadow:
+    0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
+    0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
   margin-left: 4px;
 }
 
@@ -247,7 +261,9 @@ p {
 }
 
 .ms-depth-4 {
-  box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .132), 0 0.3px 0.9px 0 rgba(0, 0, 0, .108);
+  box-shadow:
+    0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
+    0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
 }
 
 button:disabled.is-disabled.ms-Pivot-link {
@@ -369,7 +385,12 @@ button:disabled.is-disabled.ms-Pivot-link {
 }
 
 .quality-icon.silver {
-  background: linear-gradient(90deg, rgba(250, 250, 252, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(114, 115, 119, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(250, 250, 252, 1) 0%,
+    rgba(169, 170, 174, 1) 50%,
+    rgba(114, 115, 119, 1) 100%
+  );
 }
 
 .quality-icon.gold {
@@ -389,7 +410,7 @@ button:disabled.is-disabled.ms-Pivot-link {
 
 .quality-icon .long {
   margin: 1px;
-  background: #A68A40;
+  background: #a68a40;
   background: linear-gradient(45deg, rgba(166, 138, 64, 1) 0%, rgba(198, 170, 88, 1) 50%, rgba(220, 205, 119, 1) 100%);
   color: black;
   text-align: center;
@@ -402,7 +423,12 @@ button:disabled.is-disabled.ms-Pivot-link {
 }
 
 .quality-icon.silver .long {
-  background: linear-gradient(90deg, rgba(114, 115, 119, 1) 0%, rgba(169, 170, 174, 1) 50%, rgba(250, 250, 252, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(114, 115, 119, 1) 0%,
+    rgba(169, 170, 174, 1) 50%,
+    rgba(250, 250, 252, 1) 100%
+  );
 }
 
 .quality-icon.gold .long {
@@ -450,7 +476,7 @@ td.version {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  border: 1px solid #EBEBEB;
+  border: 1px solid #ebebeb;
 }
 
 .video-section-selector-field > .controller {
@@ -462,7 +488,7 @@ td.version {
 
 .video-section-selector-field > .controller > .current-position {
   text-align: center;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
   padding-right: 4px;
 }
 
@@ -470,7 +496,7 @@ td.version {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
 }
 
 .video-section-selector-field > .controller > .form {
@@ -479,7 +505,7 @@ td.version {
   gap: 4px;
   align-items: baseline;
   padding: 4px;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
 }
 
 .video-section-selector-field > .controller > .form Button {
@@ -533,7 +559,7 @@ td.version {
   bottom: 0;
 }
 
-.video-section-selector-field > .scrollable > .ruler > .preview >.mask {
+.video-section-selector-field > .scrollable > .ruler > .preview > .mask {
   content: '';
   position: absolute;
   inset: 0;
@@ -577,7 +603,7 @@ td.version {
 
 .hide-second-half > svg {
   position: absolute;
-  left: -9px
+  left: -9px;
 }
 
 .player-loading {
@@ -611,7 +637,7 @@ td.version {
   opacity: 50%;
 }
 
-.play-head>.inside {
+.play-head > .inside {
   position: relative;
   background-color: #98c0e4;
   width: 100%;
@@ -632,7 +658,7 @@ td.version {
   box-sizing: border-box;
 }
 
-.delimitation>.inside {
+.delimitation > .inside {
   position: relative;
   border: 2px solid #b3b3b3;
   border-right: none;
@@ -649,7 +675,7 @@ td.version {
   border-bottom: none;
 }
 
-.delimitation.end>.inside {
+.delimitation.end > .inside {
   position: relative;
   border: 2px solid #b3b3b3;
   border-left: none;

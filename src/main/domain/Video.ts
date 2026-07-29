@@ -72,6 +72,7 @@ import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
 import Chalk from 'chalk'
 import _ from 'lodash'
+import { parseFilename } from './FilenameParser'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -791,7 +792,8 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
-      previewProgression: this.previewProgression !== undefined ? _.omit(this.previewProgression, 'process') : undefined,
+      previewProgression:
+        this.previewProgression !== undefined ? _.omit(this.previewProgression, 'process') : undefined,
       previewPath: this.previewPath,
       snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,
@@ -1010,29 +1012,25 @@ export class Video implements IVideo {
   }
 
   private extractInfosFromFilename() {
-    const filename = Files.cleanFilename(this.filename)
     try {
       const stats = fs.statSync(this.sourcePath)
       this.size = stats.size
     } catch (e) {
       // TODO: Log
     }
-    const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]?/i
-    const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+)?.*?(?<absoluteEpisode>E?\d\d\d?\d?)/iu
 
+    const filename = Files.cleanFilename(this.filename)
     this.type = VideoType.OTHER
-    const tvShowSeasonEpisodePattern =
-      /(?<title>.+?)\s*s\p{L}*\s*(?<season>\d{1,3})\s*[éex]\p{L}*\s*(?<episode>\d{1,3})/iu
-    const tvShowSeasonEpisodeMatches = tvShowSeasonEpisodePattern.exec(filename)
-    const tvShowAbsoluteEpisodeMatches = tvShowAbsoluteEpisodePattern.exec(filename)
-    const movieMatches = moviePattern.exec(filename)
 
     const tvdbPattern = /\{tvdb-(?<tvdb>\d+)}/i
     const tvdbMatches = tvdbPattern.exec(this.sourcePath)
     const tmdbPattern = /\{tmdb-(?<tmdb>\d+)}/i
     const tmdbMatches = tmdbPattern.exec(this.filename)
+    const imdbPattern = /\{tt(?<imdb>\d+)}/i
+    const imdbMatches = imdbPattern.exec(this.filename)
     const editionPattern = /\{edition-(?<edition>[^}]+)}/i
     const editionMatches = editionPattern.exec(this.filename)
+
     if (editionMatches?.groups) {
       const edition: string = editionMatches.groups.edition.toLowerCase()
       if (edition.indexOf('director') != -1) {
@@ -1045,8 +1043,6 @@ export class Video implements IVideo {
         this.movie.edition = EditionType.THEATRICAL
       }
     }
-    const imdbPattern = /\{tt(?<imdb>\d+)}/i
-    const imdbMatches = imdbPattern.exec(this.filename)
 
     if (tvdbMatches?.groups) {
       this.searchBy = SearchBy.TVDB_POSITION
@@ -1065,29 +1061,62 @@ export class Video implements IVideo {
       this.searchBy = SearchBy.IMDB
     }
 
-    if (tvShowSeasonEpisodeMatches?.groups) {
+    const parsed = parseFilename(filename)
+
+    if (parsed.season !== undefined || parsed.episode !== undefined || parsed.episodeTitle) {
       this.type = VideoType.TV_SHOW
-      if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
-      this.tvShow.season = Number.parseInt(tvShowSeasonEpisodeMatches.groups.season, 10)
-      this.tvShow.episode = Number.parseInt(tvShowSeasonEpisodeMatches.groups.episode, 10)
+      if (this.searchBy === SearchBy.TITLE) {
+        this.searchBy =
+          parsed.episode === undefined && parsed.episodeTitle ? SearchBy.TITLE_EP_NAME : SearchBy.TITLE_POSITION
+      } else if (this.searchBy === SearchBy.TVDB_POSITION && parsed.episode === undefined && parsed.episodeTitle) {
+        this.searchBy = SearchBy.TVDB_EP_NAME
+      }
+      this.tvShow.title = Files.megaTrim(parsed.title ?? '')
+      this.tvShow.season = parsed.season
+      this.tvShow.episode = parsed.episode
+      this.tvShow.episodeTitle = parsed.episodeTitle ? Files.megaTrim(parsed.episodeTitle) : ''
       this.tvShow.order = 'official'
-      this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title ?? '')
-    } else if (movieMatches?.groups) {
+    } else if (parsed.year !== undefined && parsed.title) {
       this.type = VideoType.MOVIE
-      this.movie.title = Files.megaTrim(movieMatches.groups.title)
-      this.movie.year = Number.parseInt(movieMatches.groups.year, 10)
-    } else if (tvShowAbsoluteEpisodeMatches?.groups) {
-      this.type = VideoType.TV_SHOW
-      if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
-      this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
-      this.tvShow.order = 'absolute'
-      this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title ?? '')
+      this.movie.title = Files.megaTrim(parsed.title)
+      this.movie.year = parsed.year
+    }
+
+    if (this.type === VideoType.OTHER) {
+      const moviePattern = /(?<title>.*)[(\s](?<year>\d\d\d\d)[)\s]?/i
+      const tvShowAbsoluteEpisodePattern = /(?<title>[\p{L}\s()]+)?.*?(?<absoluteEpisode>E?\d\d\d?\d?)/iu
+      const tvShowSeasonEpisodePattern =
+        /(?<title>.+?)\s*s\p{L}*\s*(?<season>\d{1,3})\s*[éex]\p{L}*\s*(?<episode>\d{1,3})/iu
+
+      const tvShowSeasonEpisodeMatches = tvShowSeasonEpisodePattern.exec(filename)
+      const tvShowAbsoluteEpisodeMatches = tvShowAbsoluteEpisodePattern.exec(filename)
+      const movieMatches = moviePattern.exec(filename)
+
+      if (tvShowSeasonEpisodeMatches?.groups) {
+        this.type = VideoType.TV_SHOW
+        if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
+        this.tvShow.season = Number.parseInt(tvShowSeasonEpisodeMatches.groups.season, 10)
+        this.tvShow.episode = Number.parseInt(tvShowSeasonEpisodeMatches.groups.episode, 10)
+        this.tvShow.order = 'official'
+        this.tvShow.title = Files.megaTrim(tvShowSeasonEpisodeMatches.groups.title ?? '')
+      } else if (movieMatches?.groups) {
+        this.type = VideoType.MOVIE
+        this.movie.title = Files.megaTrim(movieMatches.groups.title)
+        this.movie.year = Number.parseInt(movieMatches.groups.year, 10)
+      } else if (tvShowAbsoluteEpisodeMatches?.groups) {
+        this.type = VideoType.TV_SHOW
+        if (this.searchBy === SearchBy.TITLE) this.searchBy = SearchBy.TITLE_POSITION
+        this.tvShow.absoluteEpisode = Number.parseInt(tvShowAbsoluteEpisodeMatches.groups.absoluteEpisode, 10)
+        this.tvShow.order = 'absolute'
+        this.tvShow.title = Files.megaTrim(tvShowAbsoluteEpisodeMatches.groups.title ?? '')
+      }
     }
 
     if (this.type === VideoType.OTHER) {
       const extPos = this.filename.lastIndexOf('.')
       this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
     }
+
     this.audioVersions = AudioVersions.extractVersions(filename)
   }
 }

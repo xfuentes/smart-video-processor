@@ -16,12 +16,7 @@
   "Listings": {
     "en-us": {
       "BaseListing": {
-        "Keywords": [
-          "video",
-          "processing",
-          "encoding",
-          "organizing"
-        ],
+        "Keywords": ["video", "processing", "encoding", "organizing"],
         "Description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265\u2014all in one place.",
         "Features": [
           "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
@@ -109,10 +104,7 @@
       "PlatformOverrides": {}
     }
   },
-  "HardwarePreferences": [
-    "Keyboard",
-    "Mouse"
-  ],
+  "HardwarePreferences": ["Keyboard", "Mouse"],
   "AutomaticBackupEnabled": true,
   "CanInstallOnRemovableMedia": true,
   "IsGameDvrEnabled": false,
@@ -142,8 +134,7 @@
     ],
     "CertificationReports": []
   },
-  "FileUploadUrl":
-  "https://ingestionpackagesprod1.blob.core.windows.net/ingestion/b856c62e-5b6d-493f-85e4-3178714ce7a5?skoid=6a05eb41-c97a-4f14-a5ce-d392056c0e00\u0026sktid=975f013f-7f24-47e8-a7d3-abc4752bf346\u0026skt=2025-11-27T15%3A41%3A42Z\u0026ske=2025-12-04T15%3A41%3A42Z\u0026sks=b\u0026skv=2024-05-04\u0026sv=2024-05-04\u0026se=2025-11-28T16%3A05%3A55Z\u0026sr=b\u0026sp=rwl\u0026sig=lNHILa9ZwBdi2gBKxP1qNPmErzKjzkahOn29NLX1iGU%3D",
+  "FileUploadUrl": "https://ingestionpackagesprod1.blob.core.windows.net/ingestion/b856c62e-5b6d-493f-85e4-3178714ce7a5?skoid=6a05eb41-c97a-4f14-a5ce-d392056c0e00\u0026sktid=975f013f-7f24-47e8-a7d3-abc4752bf346\u0026skt=2025-11-27T15%3A41%3A42Z\u0026ske=2025-12-04T15%3A41%3A42Z\u0026sks=b\u0026skv=2024-05-04\u0026sv=2024-05-04\u0026se=2025-11-28T16%3A05%3A55Z\u0026sr=b\u0026sp=rwl\u0026sig=lNHILa9ZwBdi2gBKxP1qNPmErzKjzkahOn29NLX1iGU%3D",
   "ApplicationPackages": [
     {
       "FileName": "smart-video-processor.appx",
@@ -151,9 +142,7 @@
       "Id": "2000000000091679417",
       "Version": "1.5.6.0",
       "Architecture": "x64",
-      "Languages": [
-        "en-US"
-      ],
+      "Languages": ["en-US"],
       "Capabilities": [
         "broadFileSystemAccess",
         "internetClient",
