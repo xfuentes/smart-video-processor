@@ -18,12 +18,7 @@
 
 import { afterEach, expect, test, vi } from 'vitest'
 import { ChildProcessWithoutNullStreams, SpawnOptionsWithStdioTuple, StdioPipe } from 'node:child_process'
-import {
-  JobStateChange,
-  recordJobStates,
-  simulateFileInfoResponse,
-  simulateMKVMergeProgression
-} from '../testUtils'
+import { JobStateChange, recordJobStates, simulateFileInfoResponse, simulateMKVMergeProgression } from '../testUtils'
 import { Processes } from '../../../src/main/util/processes'
 import { FFprobe } from '../../../src/main/domain/programs/FFprobe'
 import { Files } from '../../../src/main/util/files'

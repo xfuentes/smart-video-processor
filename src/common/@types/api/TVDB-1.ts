@@ -17,62 +17,62 @@
  */
 
 export interface TVDBResult {
-    "aliases": string[],
-    "banner": string,
-    "firstAired": string,
-    "id": number,
-    "image": string,
-    "network": string,
-    "overview": string,
-    "poster": string,
-    "seriesName": string,
-    "slug": string,
-    "status": string
+  aliases: string[]
+  banner: string
+  firstAired: string
+  id: number
+  image: string
+  network: string
+  overview: string
+  poster: string
+  seriesName: string
+  slug: string
+  status: string
 }
 
 export interface TVDBSearchResults {
-    data: TVDBResult[]
+  data: TVDBResult[]
 }
 
 export enum TVDBGenre {
-    ACTION = "Action",
-    ADVENTURE = "Adventure",
-    ANIMATION = "Animation",
-    ANIME = "Anime",
-    COMEDY = "Comedy",
-    DRAMA = "Drama",
-    FANTASY = "Fantasy"
+  ACTION = 'Action',
+  ADVENTURE = 'Adventure',
+  ANIMATION = 'Animation',
+  ANIME = 'Anime',
+  COMEDY = 'Comedy',
+  DRAMA = 'Drama',
+  FANTASY = 'Fantasy'
 }
 
 export interface TVDBDetails {
-    "data": {
-        "id": number,
-        "seriesId": number,
-        "seriesName": string,
-        "aliases": string[],
-        "season": number,
-        "poster": string,
-        "banner": string,
-        "fanart": string,
-        "status": string,
-        "firstAired": string,
-        "network": string,
-        "networkId": number,
-        "runtime": number,
-        "language": string,
-        "genre": TVDBGenre[],
-        "overview": string,
-        "lastUpdated": number,
-        "airsDayOfWeek": string,
-        "airsTime": string,
-        "rating": string,
-        "imdbId": string,
-        "zap2itId": string,
-        "added": string,
-        "addedBy": number,
-        "siteRating": number,
-        "siteRatingCount": number,
-        "slug": string
-    },
-    "Error": string
+  data: {
+    id: number
+    seriesId: number
+    seriesName: string
+    aliases: string[]
+    season: number
+    poster: string
+    banner: string
+    fanart: string
+    status: string
+    firstAired: string
+    network: string
+    networkId: number
+    runtime: number
+    language: string
+    genre: TVDBGenre[]
+    overview: string
+    lastUpdated: number
+    airsDayOfWeek: string
+    airsTime: string
+    rating: string
+    imdbId: string
+    zap2itId: string
+    added: string
+    addedBy: number
+    siteRating: number
+    siteRatingCount: number
+    slug: string
+  }
+  Error: string
 }

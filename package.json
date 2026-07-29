@@ -1,5 +1,5 @@
 {
-  "version": "1.7.1",
+  "version": "1.7.2",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "private": true,
@@ -30,9 +30,8 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "yarn run typecheck && electron-vite build",
-    "package": "electron-builder",
+    "package": "yarn build && electron-builder",
     "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
-    "cli": "tsx src/cli/svp-cli.ts",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled"
   },

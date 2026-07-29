@@ -76,6 +76,7 @@ export const PreviewTabs = ({ video }: Props) => {
   }
   return (
     <div
+      className="preview-tabs"
       style={{
         height: '100%',
         width: '100%',
@@ -88,12 +89,7 @@ export const PreviewTabs = ({ video }: Props) => {
       <TabList selectedValue={selectedTab} onTabSelect={handleTabSelect} size="small">
         <Tab value="matching" icon={<Search20Regular />}>
           Matching{' '}
-          <CounterBadge
-            color={video.matched ? 'informative' : 'danger'}
-            size="small"
-            showZero
-            count={matchingCount}
-          />
+          <CounterBadge color={video.matched ? 'informative' : 'danger'} size="small" showZero count={matchingCount} />
         </Tab>
         <Tab value="tracks" disabled={video.loading} icon={<TextBulletList20Regular />}>
           Tracks{' '}

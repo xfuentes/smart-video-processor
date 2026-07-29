@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectResources">
+    <resource url="http://schemas.microsoft.com/appx/2010/manifest" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/AppxManifestSchema.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/desktop/windows10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/DesktopManifestSchema.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/DesktopManifestSchema_v7.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/foundation/windows10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/FoundationManifestSchema.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/FoundationManifestSchema.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/uap/windows10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/UapManifestSchema.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/UapManifestSchema_v10.xsd" />
+  </component>
+</project>

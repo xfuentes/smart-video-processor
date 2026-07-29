@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Button, Field, Image, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
+import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
 import { useEffect, useState } from 'react'
 import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common/@types/Video'
@@ -425,7 +425,7 @@ export const Matching = ({ video, disabled }: Props) => {
       ) : (
         <>
           {type === VideoType.OTHER && (
-            <div style={{ display: 'flex' }}>
+            <div className="matching-results" style={{ padding: 0 }}>
               <div style={{ display: 'flex', flexFlow: 'column', flexGrow: 1 }}>
                 <div className="matching-form">
                   <Field
@@ -465,7 +465,12 @@ export const Matching = ({ video, disabled }: Props) => {
                       onChange={(_ev, data) => setOtherDay(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Original Language" className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label="Original Language"
+                    className={disabled ? 'disabled' : ''}
+                    style={{ marginLeft: 'auto' }}
+                  >
                     <LanguageSelector
                       size="small"
                       disabled={disabled}
@@ -487,18 +492,18 @@ export const Matching = ({ video, disabled }: Props) => {
                   />
                 </div>
               </div>
-              <Image
-                style={{
-                  border: '1px solid #7f7f7f',
-                  minWidth: !otherPosterPath ? '173px' : '0',
-                  width: 'auto',
-                  height: '173px'
-                }}
-                alt="No Poster"
-                bordered
-                src={otherPosterPath ? 'svp:///' + otherPosterPath : ''}
-                className="poster"
-              />
+              <div className="video-preview">
+                <div
+                  className="poster"
+                  style={{
+                    backgroundSize: 'auto 100%',
+                    backgroundRepeat: 'no-repeat',
+                    ...(otherPosterPath
+                      ? { backgroundImage: `url('${'svp:///' + otherPosterPath.replaceAll('\\', '/')}')` }
+                      : {})
+                  }}
+                />
+              </div>
             </div>
           )}
           {type !== VideoType.OTHER && (

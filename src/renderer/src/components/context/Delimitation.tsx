@@ -32,7 +32,7 @@ export const Delimitation = ({ time, posX, end = false }: props) => {
 
   return (
     <Tooltip content={`${end ? 'End' : 'Start'} Time Set At ${Strings.humanDuration(time)}`} relationship={'label'}>
-      <div className={`delimitation${end ? ' end' : ''}`} style={{ left: posX +  (end ? -6 : 0) }}>
+      <div className={`delimitation${end ? ' end' : ''}`} style={{ left: posX + (end ? -6 : 0) }}>
         <div className="inside" />
       </div>
     </Tooltip>

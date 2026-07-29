@@ -17,7 +17,8 @@
  */
 
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
-import { join } from 'path'
+import { extname, join } from 'path'
+import { existsSync, statSync } from 'node:fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico?asset'
 import { currentSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
@@ -36,6 +37,79 @@ import * as os from 'node:os'
 import { Processes } from './util/processes'
 
 if (electron_squirrel_startup) app.quit()
+
+const VIDEO_EXTENSIONS = new Set([
+  '.mkv',
+  '.mp4',
+  '.m4v',
+  '.avi',
+  '.mov',
+  '.qt',
+  '.webm',
+  '.flv',
+  '.wmv',
+  '.asf',
+  '.mpg',
+  '.mpeg',
+  '.ts',
+  '.m2ts',
+  '.mts',
+  '.vob',
+  '.ogv',
+  '.3gp',
+  '.rm',
+  '.rmvb'
+])
+
+function getCommandLineVideoFiles(argv: string[] = process.argv): string[] {
+  return argv
+    .slice(1)
+    .filter((arg) => !arg.startsWith('-'))
+    .filter((arg) => VIDEO_EXTENSIONS.has(extname(arg).toLowerCase()))
+    .filter((arg) => {
+      try {
+        return existsSync(arg) && statSync(arg).isFile()
+      } catch {
+        return false
+      }
+    })
+}
+
+let mainWindow: BrowserWindow | null = null
+const pendingVideoFiles: string[] = []
+
+function flushPendingVideoFiles() {
+  if (!mainWindow || mainWindow.webContents.isLoading() || pendingVideoFiles.length === 0) {
+    return
+  }
+  const filesToOpen = [...pendingVideoFiles]
+  pendingVideoFiles.length = 0
+  void VideoController.getInstance().openFiles(filesToOpen)
+}
+
+function addCommandLineVideoFiles(argv: string[] = process.argv) {
+  const files = getCommandLineVideoFiles(argv)
+  if (files.length > 0) {
+    pendingVideoFiles.push(...files)
+    flushPendingVideoFiles()
+  }
+}
+
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (_event, commandLine) => {
+    addCommandLineVideoFiles(commandLine)
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore()
+      }
+      mainWindow.focus()
+    }
+  })
+}
 
 if (os.platform() === 'win32' && !process.windowsStore) {
   updateElectronApp()
@@ -117,7 +191,7 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const mainWindow = createWindow()
+  mainWindow = createWindow()
   mainWindow.removeMenu()
 
   protocol.handle('svp', async (req) => {
@@ -177,7 +251,7 @@ app.whenReady().then(async () => {
     return validation
   })
   ipcMain.handle('main:openSingleFileExplorer', async (_event, title: string, defaultPath?: string) => {
-    const result = await dialog.showOpenDialog(mainWindow, {
+    const result = await dialog.showOpenDialog(mainWindow!, {
       title,
       defaultPath,
       properties: ['openFile', 'dontAddToRecent']
@@ -190,10 +264,15 @@ app.whenReady().then(async () => {
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   initVideoControllerIPC(mainWindow)
 
+  mainWindow.webContents.on('did-finish-load', () => {
+    flushPendingVideoFiles()
+  })
+  addCommandLineVideoFiles(process.argv)
+
   app.on('activate', function () {
     // On macOS, it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow = createWindow()
   })
 })
 

@@ -17,93 +17,93 @@
  */
 
 interface TMDBResult {
-    "popularity": number,
-    "id": number,
-    "video": boolean,
-    "vote_count": number,
-    "vote_average": number,
-    "title": string,
-    "release_date": string,
-    "original_language": string,
-    "original_title": string,
-    "genre_ids": number[],
-    "backdrop_path": string,
-    "adult": boolean,
-    "overview": string,
-    "poster_path": string
+  popularity: number
+  id: number
+  video: boolean
+  vote_count: number
+  vote_average: number
+  title: string
+  release_date: string
+  original_language: string
+  original_title: string
+  genre_ids: number[]
+  backdrop_path: string
+  adult: boolean
+  overview: string
+  poster_path: string
 }
 
 interface TMDBSearchResults {
-    "page": number,
-    "total_results": number,
-    "total_pages": number,
-    "results": TMDBResult[]
+  page: number
+  total_results: number
+  total_pages: number
+  results: TMDBResult[]
 }
 
 interface TMDBSearchIMDBResult {
-    "movie_results": TMDBResult[]
+  movie_results: TMDBResult[]
 }
 
 interface TMDBResponse {
-    "status_code": number,
-    "status_message": string,
-    "success": boolean
+  status_code: number
+  status_message: string
+  success: boolean
 }
 
 interface TMDBGenre {
-    id: number,
-    name: string
+  id: number
+  name: string
 }
 
 interface ProductionCompany {
-    "id": number,
-    "logo_path": string | null,
-    "name": string,
-    "origin_country": string
+  id: number
+  logo_path: string | null
+  name: string
+  origin_country: string
 }
 
 interface ProductionCountry {
-    "iso_3166_1": string,
-    "name": string
+  iso_3166_1: string
+  name: string
 }
 
 interface Language {
-    "iso_639_1": string,
-    "name": string
+  iso_639_1: string
+  name: string
 }
 
 interface TMDBDetails {
-    success?: boolean,
-    status_message: string,
-    "adult": boolean,
-    "backdrop_path": string,
-    "belongs_to_collection": {
-        "id": number,
-        "name": string,
-        "poster_path": string,
-        "backdrop_path": string
-    },
-    "budget": number,
-    "genres": TMDBGenre[],
-    "homepage": string,
-    "id": number,
-    "imdb_id": string,
-    "origin_country": string[],
-    "original_language": string,
-    "original_title": string,
-    "overview": string,
-    "popularity": number,
-    "poster_path": string,
-    "production_companies": ProductionCompany[],
-    "production_countries": ProductionCountry[],
-    "release_date": string,
-    "revenue": number,
-    "runtime": number,
-    "spoken_languages": Language[],
-    "status": "Released",
-    "tagline": string,
-    "title": string,
-    "video": boolean,
-    "vote_average": number,
-    "vote_count": number
+  success?: boolean
+  status_message: string
+  adult: boolean
+  backdrop_path: string
+  belongs_to_collection: {
+    id: number
+    name: string
+    poster_path: string
+    backdrop_path: string
+  }
+  budget: number
+  genres: TMDBGenre[]
+  homepage: string
+  id: number
+  imdb_id: string
+  origin_country: string[]
+  original_language: string
+  original_title: string
+  overview: string
+  popularity: number
+  poster_path: string
+  production_companies: ProductionCompany[]
+  production_countries: ProductionCountry[]
+  release_date: string
+  revenue: number
+  runtime: number
+  spoken_languages: Language[]
+  status: 'Released'
+  tagline: string
+  title: string
+  video: boolean
+  vote_average: number
+  vote_count: number
 }

@@ -119,7 +119,7 @@ const columns: TableColumnDefinition<ITrack>[] = [
 ]
 
 type Props = {
-  video: IVideo,
+  video: IVideo
   disabled?: boolean
 }
 

@@ -169,3 +169,22 @@ test('video with TMDB', async () => {
   expect(video.selectedSearchResultID).toBe(122977)
   video.destroy()
 })
+
+test('TV-Show with season and episode name but no episode number', () => {
+  const video = new Video(getFakeAbsolutePath('Download', 'The Series - The Episode Name.mkv'))
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.season).toBeUndefined()
+  expect(video.tvShow.episode).toBeUndefined()
+  expect(video.tvShow.title).toBe('The Series')
+  expect(video.tvShow.episodeTitle).toBe('The Episode Name')
+  expect(video.searchBy).toBe(SearchBy.TITLE_EP_NAME)
+})
+
+test('TV-Show with year range and release tags', () => {
+  const video = new Video('La Quatrième Dimension (1959-1960) - S01E01 - Webrip-1080p-X265- Multi -HEVC-ACC-Notag.mkv')
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.title).toBe('La Quatrième Dimension')
+  expect(video.tvShow.season).toBe(1)
+  expect(video.tvShow.episode).toBe(1)
+  expect(video.tvShow.episodeTitle).toBe('')
+})

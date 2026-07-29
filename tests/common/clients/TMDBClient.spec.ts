@@ -66,7 +66,7 @@ test('Search by name and year', async () => {
   expect(movies[0].originalTitle).toBe('From Dusk Till Dawn')
   expect(movies[0].overview).toBe(
     'After kidnapping a father and his two kids, the ' +
-    'Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious clientele.'
+      'Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious clientele.'
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
   expect(movies[0].language.code).toBe('en')

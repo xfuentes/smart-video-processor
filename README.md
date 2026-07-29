@@ -12,25 +12,28 @@ and encode to H.264 or H.265—all in one place.
 
 #### Core Features
 
-* __Automatic Media Recognition:__ Identifies movies and TV shows using TheMovieDB or TVDB
-* __Smart File Renaming:__ Renames files using Plex/Kodi-friendly naming conventions
-* __Metadata Correction:__ Fetches and corrects title, year, episode name...
-* __Audio & Subtitle Track Management:__ Detects and labels audio/subtitle languages; renames and reorders tracks.
-* __Poster & Thumbnail Download:__ Automatically downloads posters and thumbnails.
-* __Media File Splitting & Joining:__ Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
-* __Video Encoding (H.264 / H.265):__ Converts media to efficient formats with predefined presets.
-* __Batch Processing:__ Handles multiple files simultaneously with queue management.
+- **Automatic Media Recognition:** Identifies movies and TV shows using TheMovieDB or TVDB
+- **Smart File Renaming:** Renames files using Plex/Kodi-friendly naming conventions
+- **Metadata Correction:** Fetches and corrects title, year, episode name...
+- **Audio & Subtitle Track Management:** Detects and labels audio/subtitle languages; renames and reorders tracks.
+- **Poster & Thumbnail Download:** Automatically downloads posters and thumbnails.
+- **Media File Splitting & Joining:** Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
+- **Video Encoding (H.264 / H.265):** Converts media to efficient formats with predefined presets.
+- **Batch Processing:** Handles multiple files simultaneously with queue management.
 
 ## 1) Installation
+
 All dependencies are packaged with it, just install and you will be ready to go.
 
 ### a) Linux
+
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
 
 After installation from the Snap Store, you can optionally enable removable media write access with this command :
-  ```shell
-    sudo snap connect smart-video-processor:removable-media
-  ```
+
+```shell
+  sudo snap connect smart-video-processor:removable-media
+```
 
 Alternatively there is an APPIMAGE file available.
 

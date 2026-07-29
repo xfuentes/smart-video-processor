@@ -26,8 +26,10 @@ description: Create a new release
    - Continue the workflow only if all tests pass.
    - If any test fails, fix the issues and restart from this step.
 
-5. **Commit**
-   - Stage any modified files if needed:
+5. **Request user approval before committing**
+   - Present the changes (version bump, changelog, and any code fixes) to the user.
+   - Wait for the user's explicit approval before staging and committing.
+   - Once approved, stage any modified files if needed:
      ```powershell
      git add <list of changed files to stage>
      ```
@@ -54,12 +56,21 @@ description: Create a new release
 
 8. **Update the GitHub release draft changelog**
    - Pushing the tag creates a draft release on GitHub.
-   - Open the draft release on the GitHub **Releases** page.
-   - Copy the changelog entry from `src/renderer/src/components/AboutDialog.tsx` (Version X.Y.Z) and paste it as the release notes.
+   - Update the draft release notes with the changelog entry from `src/renderer/src/components/AboutDialog.tsx`:
+     ```powershell
+     $notes = @(
+       "- <changelog line 1>",
+       "- <changelog line 2>"
+     )
+     $path = "$env:TEMP\vX.Y.Z-notes.txt"
+     $notes | Set-Content -Path $path
+     gh release edit vX.Y.Z --notes-file $path --repo xfuentes/smart-video-processor
+     Remove-Item $path
+     ```
    - For version 1.7.0, the notes are:
      ```
      - Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)
      - Improved episode matching for absolute-numbered series
      - Better handling of missing or not-found episodes with clearer messages
      ```
-   - Save/publish the release once the changelog is set.
+   - Alternatively, open the draft release on the GitHub **Releases** page and paste the notes manually if `gh` is not available.

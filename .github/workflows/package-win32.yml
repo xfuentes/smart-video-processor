@@ -16,9 +16,9 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-2025, windows-11-arm ]
+        os: [windows-2025, windows-11-arm]
         node-version: [24.x]
-    env:  # Force Node.js 24 for all actions
+    env: # Force Node.js 24 for all actions
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
