@@ -24,6 +24,7 @@ import { currentSettings, defaultSettings } from '../../src/main/domain/Settings
 beforeAll(() => {
   currentSettings.language = 'en'
   currentSettings.favoriteLanguages = ['en']
+  currentSettings.additionalTvSearchLanguages = ['es']
   currentSettings.tmpFilesPath = defaultSettings.tmpFilesPath
 })
 
