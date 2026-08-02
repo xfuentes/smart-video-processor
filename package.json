@@ -39,11 +39,6 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "electron-updater": "^6.3.9",
-    "i18next": "^26.3.6",
-    "i18next-electron-fs-backend": "^4.0.0",
-    "i18next-icu": "^2.4.4",
-    "intl-messageformat": "^11.2.13",
-    "react-i18next": "^17.0.11",
     "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
@@ -72,6 +67,11 @@
     "cli-color": "^0.3.2",
     "cli-progress": "^3.12.0",
     "clui": "^0.3.6",
+    "i18next": "^26.3.6",
+    "i18next-electron-fs-backend": "^4.0.0",
+    "i18next-icu": "^2.4.4",
+    "intl-messageformat": "^11.2.13",
+    "react-i18next": "^17.0.11",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
     "electron-builder-squirrel-windows": "^26.0.12",
