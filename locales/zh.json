@@ -555,5 +555,6 @@
   "job.title.previewing": "正在准备视频预览。",
   "job.title.merging": "生成 Matroska 文件",
   "job.title.processing": "正在处理，请稍候。",
-  "job.title.encoding": "正在编码，请稍候。"
+  "job.title.encoding": "正在编码，请稍候。",
+  "settings.additional_languages.label": "其他电视搜索语言"
 }

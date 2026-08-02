@@ -555,5 +555,6 @@
   "job.title.previewing": "Video-voorbeeld wordt voorbereid.",
   "job.title.merging": "Een Matroska-bestand aanmaken",
   "job.title.processing": "Bezig met verwerken, even geduld a.u.b.",
-  "job.title.encoding": "Bezig met coderen, even geduld a.u.b."
+  "job.title.encoding": "Bezig met coderen, even geduld a.u.b.",
+  "settings.additional_languages.label": "Extra talen voor het zoeken naar tv-programma’s"
 }

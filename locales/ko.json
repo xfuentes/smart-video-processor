@@ -555,5 +555,6 @@
   "job.title.previewing": "동영상 미리보기를 준비 중입니다.",
   "job.title.merging": "마트로스카 파일 생성",
   "job.title.processing": "처리 중입니다. 잠시만 기다려 주세요.",
-  "job.title.encoding": "인코딩 중입니다. 잠시만 기다려 주세요."
+  "job.title.encoding": "인코딩 중입니다. 잠시만 기다려 주세요.",
+  "settings.additional_languages.label": "기타 TV 검색 언어"
 }
