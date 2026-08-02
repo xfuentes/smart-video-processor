@@ -20,6 +20,7 @@ import { IOther } from '../../common/@types/Other'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { Video } from './Video'
 import { Files } from '../util/files'
+import { _ } from '../i18n'
 import { debug } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { Numbers } from '../util/numbers'
@@ -45,7 +46,7 @@ export default class Other implements IOther {
     if (!this.title.trim()) {
       this.video.autoModePossible = false
       this.video.status = JobStatus.WARNING
-      this.video.message = 'Please provide a title for your custom video file.'
+      this.video.message = _('video.message.title_required', { defaultValue: 'Please provide a title for your custom video file.' })
       debug(Chalk.red(this.video.message))
     } else {
       await this.load()
@@ -58,7 +59,7 @@ export default class Other implements IOther {
     } else if (this.posterURL) {
       const fullPath = Path.join(this.video.getTempDirectory(), 'poster.jpg')
       this.video.status = JobStatus.LOADING
-      this.video.message = 'Downloading poster image.'
+      this.video.message = _('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
       this.video.fireChangeEvent()
       this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug(`Wrote poster file://${this.poster}`)

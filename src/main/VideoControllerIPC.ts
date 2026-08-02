@@ -18,6 +18,7 @@
 
 import { BrowserWindow, dialog, ipcMain } from 'electron'
 import { VideoController } from './controller/VideoController'
+import type { EpisodeOrder } from './domain/clients/TVDBClient'
 import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
@@ -49,6 +50,9 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   })
   ipcMain.handle('video:search', (_event, uuid: string, data?: SearchInputData) => {
     return VideoController.getInstance().search(uuid, data)
+  })
+  ipcMain.handle('video:setMultiTvShowOrder', (_event, uuids: string[], order: EpisodeOrder) => {
+    VideoController.getInstance().setMultiTvShowOrder(uuids, order)
   })
   ipcMain.handle('video:multiSelectSearchResultID', (_event, uuids: string[], searchResultID?: number) => {
     return VideoController.getInstance().multiSelectSearchResultID(uuids, searchResultID)

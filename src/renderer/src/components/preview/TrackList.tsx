@@ -43,77 +43,78 @@ import React from 'react'
 import xor from 'lodash/xor'
 import { ITrack } from '../../../../common/@types/Track'
 import { IVideo } from '../../../../common/@types/Video'
+import { _ } from '../../i18n'
 
 const columns: TableColumnDefinition<ITrack>[] = [
   createTableColumn<ITrack>({
     columnId: 'id',
     compare: (a, b) => a.id - b.id,
-    renderHeaderCell: () => 'ID',
+    renderHeaderCell: () => _('track_list.column.id.label', { defaultValue: 'ID' }),
     renderCell: (item) => item.id
   }),
   createTableColumn<ITrack>({
     columnId: 'type',
     compare: (a, b) => a.type.localeCompare(b.type),
-    renderHeaderCell: () => 'Type',
+    renderHeaderCell: () => _('track_list.column.type.label', { defaultValue: 'Type' }),
     renderCell: (item) => trackTypeRenderer(item.type)
   }),
   createTableColumn<ITrack>({
     columnId: 'language',
     compare: (a, b) => (a.language ?? 'und').localeCompare(b.language ?? 'und'),
-    renderHeaderCell: () => 'Language',
+    renderHeaderCell: () => _('track_list.column.language.label', { defaultValue: 'Language' }),
     renderCell: (item) => item.language
   }),
   createTableColumn<ITrack>({
     columnId: 'name',
     compare: (a, b) => a.name.localeCompare(b.name),
-    renderHeaderCell: () => 'Name',
+    renderHeaderCell: () => _('track_list.column.name.label', { defaultValue: 'Name' }),
     renderCell: (item) => <div className="overflow-safe">{item.name}</div>
   }),
   createTableColumn<ITrack>({
     columnId: 'codec',
     compare: (a, b) => a.codec.localeCompare(b.codec),
-    renderHeaderCell: () => 'Codec',
+    renderHeaderCell: () => _('track_list.column.codec.label', { defaultValue: 'Codec' }),
     renderCell: (item) => <div className="overflow-safe">{codecRenderer(item.codec)}</div>
   }),
   createTableColumn<ITrack>({
     columnId: 'bitrate',
     compare: (a, b) => (a.properties.bitRate ?? -1) - (b.properties.bitRate ?? -1),
-    renderHeaderCell: () => 'Bitrate',
+    renderHeaderCell: () => _('track_list.column.bitrate.label', { defaultValue: 'Bitrate' }),
     renderCell: (item) => bitrateRenderer(item.properties.bitRate)
   }),
   createTableColumn<ITrack>({
     columnId: 'properties',
-    renderHeaderCell: () => 'Properties',
+    renderHeaderCell: () => _('track_list.column.properties.label', { defaultValue: 'Properties' }),
     renderCell: (item) => <div className="overflow-safe">{trackPropertiesRenderer(item.properties)}</div>
   }),
   createTableColumn<ITrack>({
     columnId: 'default',
     compare: (a, b) => (a.default ? 1 : 0) - (b.default ? 1 : 0),
-    renderHeaderCell: () => 'Default',
+    renderHeaderCell: () => _('track_list.column.default.label', { defaultValue: 'Default' }),
     renderCell: (item) => booleanRenderer(item.default)
   }),
   createTableColumn<ITrack>({
     columnId: 'forced',
     compare: (a, b) => (a.forced ? 1 : 0) - (b.forced ? 1 : 0),
-    renderHeaderCell: () => 'Forced',
+    renderHeaderCell: () => _('track_list.column.forced.label', { defaultValue: 'Forced' }),
     renderCell: (item) => booleanRenderer(item.forced)
   }),
   createTableColumn<ITrack>({
     columnId: 'duration',
     compare: (a, b) => (a.duration ? a.duration : -1) - (b.duration ? b.duration : -1),
-    renderHeaderCell: () => 'Duration',
+    renderHeaderCell: () => _('track_list.column.duration.label', { defaultValue: 'Duration' }),
     renderCell: (item) => durationRenderer(item.duration)
   }),
   createTableColumn<ITrack>({
     columnId: 'frames',
     compare: (a, b) => (a.properties.frames ?? -1) - (b.properties.frames ?? -1),
-    renderHeaderCell: () => 'Frames',
+    renderHeaderCell: () => _('track_list.column.frames.label', { defaultValue: 'Frames' }),
     renderCell: (item) => framesRenderer(item.properties.frames)
   }),
   createTableColumn<ITrack>({
     columnId: 'size',
     compare: (a, b) => (a.size ?? -1) - (b.size ?? -1),
-    renderHeaderCell: () => 'Size',
+    renderHeaderCell: () => _('track_list.column.size.label', { defaultValue: 'Size' }),
     renderCell: (item) => sizeRenderer(item.size)
   })
 ]

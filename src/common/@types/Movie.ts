@@ -37,4 +37,6 @@ export interface IMovie {
   rating?: number
   originalCountries: Country[]
   edition: EditionType
+  isAnimation?: boolean
+  genres?: string[]
 }

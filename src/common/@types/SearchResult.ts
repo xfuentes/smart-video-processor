@@ -30,4 +30,6 @@ export interface ISearchResult {
   countries: Country[]
   imdb?: string
   note?: number
+  isAnimation?: boolean
+  genres?: string[]
 }

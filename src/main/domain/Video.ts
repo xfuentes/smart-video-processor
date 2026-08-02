@@ -42,6 +42,7 @@ import { SearchResult } from './SearchResult'
 import { currentSettings } from './Settings'
 import { Track } from './Track'
 import { JobManager } from './jobs/JobManager'
+import { _ } from '../i18n'
 import { debug } from '../util/log'
 import path from 'node:path'
 import Path from 'node:path'
@@ -71,7 +72,7 @@ import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
 import Chalk from 'chalk'
-import _ from 'lodash'
+import { isEqual, omit } from 'lodash'
 import { parseFilename } from './FilenameParser'
 
 type VideoChangeListener = (video: Video) => void
@@ -238,9 +239,9 @@ export class Video implements IVideo {
           }
         }
         if (
-          !_.isEqual(this.status, newStatus) ||
-          !_.isEqual(this.message, newMessage) ||
-          !_.isEqual(this.progression, newProgression) ||
+          !isEqual(this.status, newStatus) ||
+          !isEqual(this.message, newMessage) ||
+          !isEqual(this.progression, newProgression) ||
           newIndicator
         ) {
           this.status = newStatus
@@ -318,7 +319,7 @@ export class Video implements IVideo {
       await this.search()
     } else {
       this.status = JobStatus.WAITING
-      this.message = 'Ready to process.'
+      this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
       this.progression.progress = -1
     }
     this.loading = false
@@ -409,7 +410,10 @@ export class Video implements IVideo {
     } catch (error) {
       this.status = JobStatus.WARNING
       this.progression.progress = -1
-      this.message = (error as Error).message + '. Please check the information provided and try again.'
+      this.message = _('video.message.error_with_hint', {
+        defaultValue: '{error}. Please check the information provided and try again.',
+        error: (error as Error).message
+      })
       console.log(Chalk.red(this.message))
       this.searching = false
       this.fireChangeEvent()
@@ -469,15 +473,15 @@ export class Video implements IVideo {
       this.status = JobStatus.WAITING
       this.progression.progress = -1
       if (this.hintMissing) {
-        this.message = 'Waiting for your hints.'
+        this.message = _('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
         this.autoModePossible = false
       } else if (this.changes.length > 0) {
-        this.message = 'Ready to process.'
+        this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
       } else if (this.encoderSettings.length > 0) {
-        this.message = 'Ready to encode.'
+        this.message = _('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
       } else {
         this.status = JobStatus.WARNING
-        this.message = 'Nothing to do.'
+        this.message = _('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
       }
       if (!this.brainCalled) {
         this.selectAllTracks()
@@ -486,6 +490,8 @@ export class Video implements IVideo {
       }
       this.fireChangeEvent()
       if (this.autoModePossible && currentSettings.isAutoStartEnabled) {
+        this.loading = false
+        this.fireChangeEvent()
         await this.process()
       }
     }
@@ -534,15 +540,15 @@ export class Video implements IVideo {
       this.progression.progress = undefined
       this.status = JobStatus.ENCODING
       if (this.videoParts.length > 0) {
-        this.message = 'Processing video parts...'
+        this.message = _('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
       } else {
-        this.message = 'Trimming video...'
+        this.message = _('video.message.trimming_video', { defaultValue: 'Trimming video...' })
       }
       this.fireChangeEvent()
       try {
         this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
       } catch (e) {
-        this.message = (e as Error).message
+        this.message = _('video.message.ffmpeg_error', { defaultValue: '{error}', error: (e as Error).message })
         this.status = JobStatus.ERROR
         this.progression.progress = -1
         this.fireChangeEvent()
@@ -576,9 +582,13 @@ export class Video implements IVideo {
   getOutputDirectory() {
     let outputDirectory: fs.PathLike
     if (this.type === VideoType.MOVIE) {
-      outputDirectory = currentSettings.moviesOutputPath
+      outputDirectory = this.movie.isAnimation
+        ? currentSettings.animatedMoviesOutputPath
+        : currentSettings.moviesOutputPath
     } else if (this.type === VideoType.TV_SHOW) {
-      outputDirectory = currentSettings.tvShowsOutputPath
+      outputDirectory = this.tvShow.isAnimation
+        ? currentSettings.animatedTVShowsOutputPath
+        : currentSettings.tvShowsOutputPath
     } else {
       outputDirectory = currentSettings.othersOutputPath
     }
@@ -776,7 +786,7 @@ export class Video implements IVideo {
       endAt: this.endAt,
       status: this.status,
       message: this.message,
-      progression: _.omit(this.progression, 'process'),
+      progression: omit(this.progression, 'process'),
       loading: this.loading,
       searching: this.searching,
       processing: (this.job && this.job.processingOrPaused) ?? false,
@@ -793,7 +803,7 @@ export class Video implements IVideo {
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
       previewProgression:
-        this.previewProgression !== undefined ? _.omit(this.previewProgression, 'process') : undefined,
+        this.previewProgression !== undefined ? omit(this.previewProgression, 'process') : undefined,
       previewPath: this.previewPath,
       snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,
@@ -865,7 +875,7 @@ export class Video implements IVideo {
     if (this.keyFrames.length === 0) {
       const prevMessage = this.message
       const prevStatus = this.status
-      this.message = 'Extracting key frames...'
+      this.message = _('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
       this.progression.progress = undefined
       this.status = JobStatus.LOADING
       this.keyFrames = []

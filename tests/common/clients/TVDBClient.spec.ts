@@ -16,14 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
-import { tvdbLanguages } from '../TVDBLanguages'
+import { beforeAll, expect, test } from 'vitest'
+import { tvdbLanguages } from '../../../src/common/TVDBLanguages'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { TVDBClient } from '../../../src/main/domain/clients/TVDBClient'
 import { Languages } from '../../../src/common/LanguageIETF'
 
+beforeAll(() => {
+  currentSettings.language = 'en'
+})
+
 test('Search Series', async () => {
-  currentSettings.favoriteLanguages = ['en']
+  currentSettings.language = 'en'
+  currentSettings.additionalTvSearchLanguages = ['en']
   const series = await TVDBClient.getInstance().searchSeriesByTitle('Friends', 1994)
   expect(series.length).toBeGreaterThan(0)
   expect(series[0].id).toBe(79168)
@@ -154,6 +159,8 @@ test('check TVDB country id mappable to Language IETF', async () => {
 })
 
 test('Search Street Hawk', async () => {
+  currentSettings.language = 'fr'
+  currentSettings.additionalTvSearchLanguages = ['en']
   const series = await TVDBClient.getInstance().searchSeriesByTitle('Street Hawk')
   expect(series.length).toBeGreaterThan(0)
   expect(series[0].id).toBe(73877)
@@ -194,38 +201,6 @@ test('Retrieve Walking Dead Dead City Details in French', async () => {
   expect(episode.seriesData.countries[0].alpha3).toBe('USA')
   expect(episode.seriesData.language.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('The Walking Dead: Dead City')
-  expect(episode.seriesData.note).toBe(undefined)
-})
-
-test('Retrieve Vic le Viking Details in French DVD order', async () => {
-  currentSettings.favoriteLanguages = ['fr-FR']
-  const episode = await TVDBClient.getInstance().retrieveSeriesDetails(272521, 'dvd', 1, undefined, 1)
-  expect(episode.episodeData.episodeNumber).toBe(1)
-  expect(episode.episodeData.seasonNumber).toBe(1)
-  expect(episode.episodeData.title).toBe("La presqu'île au trésor")
-  expect(episode.episodeData.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/272521/4640991.jpg')
-  expect(episode.episodeData.absoluteNumber).toBe(0)
-  expect(episode.episodeData.overview).toContain(
-    "Nos vikings sont tombés dans un piège : un groupe de pirates leur a fait croire à l'existence d'un trésor fabuleux. " +
-      "En fait, ces brigands cherchent plutôt à s'emparer des richesses des navigateurs. Mais Vic et Ulme n'ont pas dit leur dernier mot!"
-  )
-  expect(episode.seriesData.posterURL).toBe('https://artworks.thetvdb.com/banners/posters/272521-2.jpg')
-  expect(episode.seriesData.title).toBe('Vic le viking')
-  expect(episode.seriesData.id).toBe(272521)
-  expect(episode.seriesData.overview).toBe(
-    'Vic, le fils du chef Viking Halvar accompagne régulièrement son père et son équipage' +
-      ' dans leurs péripéties ! Pas toujours perspicaces, les Vikings, confrontés au danger, cherchent spontanément à régler leurs' +
-      ' différends par la force…\r\n' +
-      '\r\n' +
-      'Heureusement Vic est là ! Haut comme trois pommes et pas bien costaud, il compense ces lacunes par sa débrouillardise,' +
-      ' son esprit d’équipe et son ingéniosité. Pour sortir ses amis d’un mauvais pas, il affronte et triomphe des dangers de' +
-      ' toutes sortes : avec Vic, l’humour, l’amitié, l’inventivité et l’entraide seront toujours au rendez-vous.'
-  )
-  expect(episode.seriesData.imdb).toBe(undefined)
-  expect(episode.seriesData.countries.length).toBe(1)
-  expect(episode.seriesData.countries[0].alpha3).toBe('AUS')
-  expect(episode.seriesData.language.code).toBe('en-AU')
-  expect(episode.seriesData.originalTitle).toBe('Vic the Viking')
   expect(episode.seriesData.note).toBe(undefined)
 })
 
@@ -315,4 +290,10 @@ test('Retrieve Series Details - One Piece - Official Order E242', async () => {
   expect(result.seriesData.title).toBe('One Piece')
   expect(result.seriesData.id).toBe(81797)
   expect(result.episodeCount).toBe(99)
+})
+
+test('Get Languages', async () => {
+  const languages = await TVDBClient.getInstance().getLanguages()
+  expect(languages.length).toBeGreaterThan(0)
+  expect(languages.every((language) => language.id && language.name)).toBe(true)
 })

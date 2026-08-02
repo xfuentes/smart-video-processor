@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 import { Button, Checkbox, Divider, Field, InfoLabel, ProgressBar } from '@fluentui/react-components'
 import { WrenchSettings20Regular } from '@fluentui/react-icons'
 import { ReactElement } from 'react'
+import { _ } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
@@ -35,15 +36,30 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
   return (
     filteredTracks.length > 0 && (
       <>
-        <Divider style={{ flexGrow: '0' }}>{type} Options</Divider>
+        <Divider style={{ flexGrow: '0' }}>{_('encoding.options', { defaultValue: '{type} Options', type })}</Divider>
         <div className="encoding-form" style={expand ? { flexGrow: 1 } : {}}>
           {filteredTracks.map((track: ITrack) => {
             const key = track.type + ' ' + track.id
+            const i18nKey = _('track_type.' + track.type.toLowerCase() + '.label_id', {
+              defaultValue: `${track.type} {id}`,
+              id: track.id
+            })
+
             const es = video.encoderSettings.find((s) => s.trackId === track.id)
             let infoLabel: ReactElement | undefined = undefined
             let forceDisabled = false
             if (track.unsupported) {
-              infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
+              infoLabel = (
+                <InfoLabel
+                  info={
+                    <div>
+                      {_('encoding.conversion_mandatory', {
+                        defaultValue: 'Conversion to a supported audio format is mandatory.'
+                      })}
+                    </div>
+                  }
+                />
+              )
               forceDisabled = true
             } else if (es && es.targetSize) {
               infoLabel = (
@@ -52,23 +68,26 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
                     <div style={{ whiteSpace: 'nowrap' }}>
                       {es.codec && (
                         <>
-                          {es.enforcingCodec ? 'Enforcing ' : ''}Codec: {es.codec}
+                          {es.enforcingCodec ? _('encoding.enforcing', { defaultValue: 'Enforcing' }) + ' ' : ''}
+                          {_('encoding.codec', { defaultValue: 'Codec' })}: {es.codec}
                           <br />
                         </>
                       )}
                       {es.compressionPercent !== undefined && (
                         <>
-                          Compression: {es.compressionPercent}%<br />
+                          {_('encoding.compression', { defaultValue: 'Compression' })}: {es.compressionPercent}%<br />
                         </>
                       )}
                       {es.originalSize !== undefined && (
                         <>
-                          Original: {Strings.humanFileSize(es.originalSize, false)}
+                          {_('encoding.original', { defaultValue: 'Original' })}:{' '}
+                          {Strings.humanFileSize(es.originalSize, false)}
                           <br />
                         </>
                       )}
                       <>
-                        Target: {Strings.humanFileSize(es.targetSize, false)}
+                        {_('encoding.target', { defaultValue: 'Target' })}:{' '}
+                        {Strings.humanFileSize(es.targetSize, false)}
                         <br />
                       </>
                     </div>
@@ -88,10 +107,10 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
                 disabled={disabled || forceDisabled}
                 label={
                   infoLabel === undefined ? (
-                    key
+                    i18nKey
                   ) : (
                     <>
-                      {key}
+                      {i18nKey}
                       {infoLabel}
                     </>
                   )
@@ -126,6 +145,10 @@ export const Encoding = ({ video, disabled }: Props) => {
       validation = 'error'
       break
   }
+  const statusI18n = _(`job.status.${video.status.toLowerCase()}.short`, { defaultValue: video.status })
+  const messageI18n = video.message
+    ? _('encoding.status_message', { defaultValue: '{status}: {message}', status: statusI18n, message: video.message })
+    : statusI18n
 
   return (
     <div className="encoding-main" style={{ flexGrow: '1' }}>
@@ -136,7 +159,7 @@ export const Encoding = ({ video, disabled }: Props) => {
           <>
             <Divider style={{ flexGrow: '0' }} />
             <div style={{ paddingTop: '5px', paddingBottom: '5px' }}>
-              <Field validationMessage={video.message} validationState={validation}>
+              <Field validationMessage={messageI18n} validationState={validation}>
                 {progression !== -1 ? (
                   <ProgressBar color={progressColor} value={progression} />
                 ) : (
@@ -156,7 +179,7 @@ export const Encoding = ({ video, disabled }: Props) => {
               disabled={disabled}
               onClick={() => void window.api.video.process(video.uuid)}
             >
-              Process
+              {_('encoding.process', { defaultValue: 'Process' })}
             </Button>
           </div>
         </div>

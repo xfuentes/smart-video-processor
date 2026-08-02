@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { _ } from '../../i18n'
 import { Job } from './Job'
 import { MKVMerge } from '../programs/MKVMerge'
 import { Track } from '../Track'
@@ -39,7 +40,7 @@ export class ProcessingJob extends Job<string> {
     subDirectories: string[] = [],
     extraDuration?: number
   ) {
-    super(JobStatus.MERGING, 'Generating matroska file', extraDuration)
+    super(JobStatus.MERGING, _('job.title.merging', { defaultValue: 'Generating matroska file' }), extraDuration)
     this.originalFilename = originalFilename
     this.sourcePath = sourcePath
     this.changes = changes

@@ -3,9 +3,11 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../common/@types/Video'
+import type { EpisodeOrder } from '../main/domain/clients/TVDBClient'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
+import { preloadBindings } from 'i18next-electron-fs-backend'
 import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
@@ -14,9 +16,12 @@ const installationStatus = await ipcRenderer.invoke('main:getInstallationStatus'
 
 // Custom APIs for renderer
 const api: SvpAPI = {
+  i18nextElectronBackend: preloadBindings(ipcRenderer, process),
   main: {
     ...version,
     ...installationStatus,
+    getLocaleBasePath: (): Promise<string> => ipcRenderer.invoke('main:getLocaleBasePath'),
+    getLicenseText: (language: string): Promise<string> => ipcRenderer.invoke('main:getLicenseText', language),
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
@@ -49,6 +54,8 @@ const api: SvpAPI = {
     selectSearchResultID: (uuid: string, searchResultID?: number): Promise<void> =>
       ipcRenderer.invoke('video:selectSearchResultID', uuid, searchResultID),
     search: (uuid: string, data: SearchInputData): Promise<void> => ipcRenderer.invoke('video:search', uuid, data),
+    setMultiTvShowOrder: (uuids: string[], order: EpisodeOrder): Promise<void> =>
+      ipcRenderer.invoke('video:setMultiTvShowOrder', uuids, order),
     multiSelectSearchResultID: (uuids: string[], searchResultID?: number): Promise<void> =>
       ipcRenderer.invoke('video:multiSelectSearchResultID', uuids, searchResultID),
     multiSearch: (uuids: string[], data: MultiSearchInputData): Promise<void> =>

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { EpisodeOrder } from './EpisodeOrder'
 import { LanguageIETF } from '../LanguageIETF'
 import { Country } from '../Countries'
 
@@ -38,4 +38,6 @@ export interface ITVShow {
   originalLanguage?: LanguageIETF
   originalCountries: Country[]
   episodeCount?: number
+  isAnimation?: boolean
+  genres?: string[]
 }

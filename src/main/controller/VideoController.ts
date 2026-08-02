@@ -18,6 +18,7 @@
 
 import { Video } from '../domain/Video'
 import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
+import { EpisodeOrder } from '../domain/clients/TVDBClient'
 import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
@@ -89,6 +90,13 @@ export class VideoController {
 
   setSearchBy(uuid: string, searchBy: SearchBy) {
     this.getVideoByUuid(uuid).setSearchBy(searchBy)
+  }
+
+  setMultiTvShowOrder(uuids: string[], order: EpisodeOrder) {
+    for (const uuid of uuids) {
+      this.getVideoByUuid(uuid).tvShow.setOrder(order)
+    }
+    this.fireListChangeEvent()
   }
 
   selectSearchResultID(uuid: string, searchResultID?: number) {

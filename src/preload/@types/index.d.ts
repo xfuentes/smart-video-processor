@@ -19,6 +19,7 @@
 import { Settings } from '../../common/@types/Settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../../common/@types/Video'
+import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
 import { IHint } from '../../common/@types/Hint'
@@ -29,14 +30,18 @@ export type ListChangedListener = (value: IVideo[]) => void
 export type VideoChangedListener = (value: IVideo) => void
 
 interface SvpAPI {
+  i18nextElectronBackend: unknown
   main: {
     version: string
+    development: boolean
     ffmpegVersion: string
     mkvmergeVersion: string
     fluentUIVersion: string
     viteVersion: string
     isLimitedPermissions: boolean
     hasRemovableMediaAccess: boolean
+    getLocaleBasePath: () => Promise<string>
+    getLicenseText: (language: string) => Promise<string>
     getCurrentSettings: () => Promise<FormValidation<Settings>>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
@@ -50,6 +55,7 @@ interface SvpAPI {
     addVideoChangedListener: (callback: VideoChangedListener) => () => void
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
     search: (uuid: string, data: SearchInputData) => Promise<void>
+    setMultiTvShowOrder: (uuids: string[], order: EpisodeOrder) => Promise<void>
     multiSelectSearchResultID: (uuids: string[], searchResultID?: number) => Promise<void>
     multiSearch: (uuids: string[], data: MultiSearchInputData) => Promise<void>
     setMultiHint: (uuids: string[], hint: IHint, value?: string) => Promise<void>

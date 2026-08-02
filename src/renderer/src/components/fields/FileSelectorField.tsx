@@ -1,5 +1,6 @@
 import { Button, Field, Input } from '@fluentui/react-components'
 import type { Slot } from '@fluentui/react-utilities'
+import { _ } from '../../i18n'
 import { Label } from '@fluentui/react-label'
 import { BinRecycle24Regular, BinRecycleFull24Regular, FolderOpenRegular } from '@fluentui/react-icons'
 
@@ -18,7 +19,10 @@ type Props = {
 
 export const FileSelectorField = (props: Props) => {
   const { clearable = false } = props
-  const title = typeof props.label === 'string' || props.label instanceof String ? '' + props.label : 'Select a file'
+  const title =
+    typeof props.label === 'string' || props.label instanceof String
+      ? '' + props.label
+      : _('file_selector.select_a_file', { defaultValue: 'Select a file' })
   const isClearable = !!props.value
   return (
     <Field
@@ -43,7 +47,7 @@ export const FileSelectorField = (props: Props) => {
             }
           }}
         >
-          Browse
+          {_('file_selector.browse', { defaultValue: 'Browse' })}
         </Button>
         {clearable && (
           <Button
@@ -52,7 +56,7 @@ export const FileSelectorField = (props: Props) => {
             size={props.size}
             onClick={async () => props.onChange && props.onChange('')}
           >
-            Clear
+            {_('file_selector.clear', { defaultValue: 'Clear' })}
           </Button>
         )}
       </div>

@@ -32,6 +32,8 @@ export class SearchResult implements ISearchResult {
   public countries: Country[] = []
   public imdb: string | undefined
   public note: number | undefined
+  public isAnimation: boolean | undefined
+  public genres?: string[]
 
   constructor(
     id: number,
@@ -43,7 +45,8 @@ export class SearchResult implements ISearchResult {
     language: LanguageIETF | undefined = undefined,
     countries: Country[] = [],
     imdb: string | undefined = undefined,
-    note: number | undefined = undefined
+    note: number | undefined = undefined,
+    isAnimation: boolean | undefined = undefined
   ) {
     this.id = id
     this.title = title
@@ -55,6 +58,7 @@ export class SearchResult implements ISearchResult {
     this.countries = countries
     this.imdb = imdb
     this.note = note
+    this.isAnimation = isAnimation
   }
 
   /**
@@ -153,7 +157,9 @@ export class SearchResult implements ISearchResult {
       language: this.language,
       countries: this.countries,
       imdb: this.imdb,
-      note: this.note
+      note: this.note,
+      isAnimation: this.isAnimation,
+      genres: this.genres
     }
   }
 }

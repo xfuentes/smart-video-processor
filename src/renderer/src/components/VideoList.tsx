@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,14 @@ import xor from 'lodash/xor'
 import { Strings } from '../../../common/Strings'
 import { DropZone } from '@renderer/components/DropZone'
 import _ from 'lodash'
+import { _ as t } from '../i18n'
 import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@types/Video'
 
 const columns: TableColumnDefinition<IVideoListItem>[] = [
   createTableColumn<IVideoListItem>({
     columnId: 'filename',
     compare: (a, b) => a.filename.localeCompare(b.filename),
-    renderHeaderCell: () => 'File',
+    renderHeaderCell: () => t('video_list.column.filename', { defaultValue: 'File' }),
     renderCell: (item) => (
       <div style={{ width: '100%' }}>
         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{item.filename}</div>
@@ -53,7 +54,7 @@ const columns: TableColumnDefinition<IVideoListItem>[] = [
   createTableColumn<IVideoListItem>({
     columnId: 'size',
     compare: (a, b) => a.size - b.size,
-    renderHeaderCell: () => 'Size',
+    renderHeaderCell: () => t('video_list.column.size', { defaultValue: 'Size' }),
     renderCell: (item) => sizeRenderer(item.size)
   }),
   createTableColumn<IVideoListItem>({
@@ -65,13 +66,13 @@ const columns: TableColumnDefinition<IVideoListItem>[] = [
       const bIndex = bPixels != undefined ? Strings.pixelsToQuality(bPixels).index : 0
       return aIndex - bIndex
     },
-    renderHeaderCell: () => 'Quality',
+    renderHeaderCell: () => t('video_list.column.quality', { defaultValue: 'Quality' }),
     renderCell: (item) => qualityRenderer(item.pixels)
   }),
   createTableColumn<IVideoListItem>({
     columnId: 'status',
     compare: (a, b) => a.status.localeCompare(b.status),
-    renderHeaderCell: () => 'Status',
+    renderHeaderCell: () => t('video_list.column.status', { defaultValue: 'Status' }),
     renderCell: (item) => <div>{statusRenderer(item.status, item.message)}</div>
   })
 ]
@@ -114,7 +115,6 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
     setSelectedItems(selItems)
     const selectedVideos = videos.filter((video) => selItems.has(video.uuid))
     if (onSelectionChange !== undefined) {
-      console.log('selection changed!')
       onSelectionChange(selectedVideos)
     }
   }
@@ -157,7 +157,9 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
         <DataGridHeader>
           <DataGridRow
             selectionCell={{
-              checkboxIndicator: { 'aria-label': 'Select all rows' }
+              checkboxIndicator: {
+                'aria-label': t('video_list.aria_label.select_all_rows', { defaultValue: 'Select all rows' })
+              }
             }}
           >
             {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
@@ -168,7 +170,9 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
             <DataGridRow<IVideoListItem>
               key={rowId}
               selectionCell={{
-                checkboxIndicator: { 'aria-label': 'Select row' }
+                checkboxIndicator: {
+                  'aria-label': t('video_list.aria_label.select_row', { defaultValue: 'Select row' })
+                }
               }}
             >
               {({ renderCell }) => (

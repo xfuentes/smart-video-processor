@@ -72,6 +72,12 @@ interface Language {
   name: string
 }
 
+interface TMDBLanguage {
+  iso_639_1: string
+  english_name: string
+  name: string
+}
+
 interface TMDBDetails {
   success?: boolean
   status_message: string

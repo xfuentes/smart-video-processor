@@ -20,6 +20,7 @@ import { Job } from './Job'
 import { FFmpeg } from '../programs/FFmpeg'
 import { Strings } from '../../../common/Strings'
 import { EncoderSettings } from '../../../common/@types/Encoding'
+import { _ } from '../../i18n'
 import { JobStatus } from '../../../common/@types/Job'
 import { IVideo } from '../../../common/@types/Video'
 
@@ -29,7 +30,7 @@ export class EncodingJob extends Job<string> {
   private readonly settings: EncoderSettings[]
 
   constructor(video: IVideo, destinationPath: string, settings: EncoderSettings[]) {
-    super(JobStatus.ENCODING, settings.length === 0 ? 'Processing, please wait.' : 'Encoding, please wait.')
+    super(JobStatus.ENCODING, settings.length === 0 ? _('job.title.processing', { defaultValue: 'Processing, please wait.' }) : _('job.title.encoding', { defaultValue: 'Encoding, please wait.' }))
     this.video = video
     this.destinationPath = destinationPath
     this.settings = settings

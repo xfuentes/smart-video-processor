@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 import { Button, Checkbox, Divider, InfoLabel } from '@fluentui/react-components'
 import { WrenchSettings20Regular } from '@fluentui/react-icons'
 import { ReactElement } from 'react'
+import { _ } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
@@ -54,15 +55,30 @@ const trackTypeEncodingSection = (
   return (
     commonFilteredTracks.length > 0 && (
       <>
-        <Divider style={{ flexGrow: '0' }}>{type} Options</Divider>
+        <Divider style={{ flexGrow: '0' }}>{_('encoding.options', { defaultValue: '{type} Options', type })}</Divider>
         <div className="encoding-form" style={expand ? { flexGrow: 1 } : {}}>
           {commonFilteredTracks.map((track: ITrack) => {
             const key = track.type + ' ' + track.id
+            const i18nKey = _('track_type.' + track.type.toLowerCase() + '.label_id', {
+              defaultValue: `${track.type} {id}`,
+              id: track.id
+            })
+
             const es = commonEncoderSettings.find((s) => s.trackId === track.id)
             let infoLabel: ReactElement | undefined = undefined
             let forceDisabled = false
             if (track.unsupported) {
-              infoLabel = <InfoLabel info={<div>Conversion to a supported audio format is mandatory.</div>} />
+              infoLabel = (
+                <InfoLabel
+                  info={
+                    <div>
+                      {_('encoding.conversion_mandatory', {
+                        defaultValue: 'Conversion to a supported audio format is mandatory.'
+                      })}
+                    </div>
+                  }
+                />
+              )
               forceDisabled = true
             } else if (es && es.targetSize) {
               infoLabel = (
@@ -70,28 +86,34 @@ const trackTypeEncodingSection = (
                   info={
                     <div style={{ whiteSpace: 'nowrap' }}>
                       <>
-                        Selected file{videos.length > 1 ? 's' : ''}: {videos.length}
+                        {_('encoding.selected_files', {
+                          defaultValue: 'Selected files: {count}',
+                          count: videos.length
+                        })}
                         <br />
                       </>
                       {es.codec !== undefined && (
                         <>
-                          {es.enforcingCodec ? 'Enforcing ' : ''}Codec: {es.codec}
+                          {es.enforcingCodec ? _('encoding.enforcing', { defaultValue: 'Enforcing' }) + ' ' : ''}
+                          {_('encoding.codec', { defaultValue: 'Codec' })}: {es.codec}
                           <br />
                         </>
                       )}
                       {es.compressionPercent !== undefined && (
                         <>
-                          Compression: {es.compressionPercent}%<br />
+                          {_('encoding.compression', { defaultValue: 'Compression' })}: {es.compressionPercent}%<br />
                         </>
                       )}
                       {es.originalSize !== undefined && (
                         <>
-                          Original: {Strings.humanFileSize(es.originalSize, false)}
+                          {_('encoding.original', { defaultValue: 'Original' })}:{' '}
+                          {Strings.humanFileSize(es.originalSize, false)}
                           <br />
                         </>
                       )}
                       <>
-                        Target: {Strings.humanFileSize(es.targetSize, false)}
+                        {_('encoding.target', { defaultValue: 'Target' })}:{' '}
+                        {Strings.humanFileSize(es.targetSize, false)}
                         <br />
                       </>
                     </div>
@@ -115,10 +137,10 @@ const trackTypeEncodingSection = (
                 disabled={disabled || forceDisabled}
                 label={
                   infoLabel === undefined ? (
-                    key
+                    i18nKey
                   ) : (
                     <>
-                      {key}
+                      {i18nKey}
                       {infoLabel}
                     </>
                   )
@@ -148,7 +170,7 @@ export const MultiEncoding = ({ videos, commonEncoderSettings, disabled }: Props
               disabled={disabled}
               onClick={() => void window.api.video.multiProcess(videos.map((v) => v.uuid))}
             >
-              Process
+              {_('encoding.process', { defaultValue: 'Process' })}
             </Button>
           </div>
         </div>

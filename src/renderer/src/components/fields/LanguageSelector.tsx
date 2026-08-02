@@ -20,7 +20,8 @@ import { Button, Combobox, ComboboxProps, Option, Tooltip } from '@fluentui/reac
 import React, { useEffect } from 'react'
 import { Dismiss12Regular } from '@fluentui/react-icons'
 import { searchAncestorsMatching } from '../../utils'
-import { Languages } from '../../../../common/LanguageIETF'
+import { LanguageIETF, Languages } from '../../../../common/LanguageIETF'
+import { _ } from '../../i18n'
 
 type MultipleProps = {
   multiselect: true
@@ -39,16 +40,31 @@ type Props = {
   size?: 'small' | 'medium' | 'large'
   required?: boolean
   disabled?: boolean
+  allowedCodes?: string[]
 } & (MultipleProps | SingleProps)
 
 export const LanguageSelector = (props: Props) => {
   const comboboxInputRef = React.useRef<HTMLInputElement>(null)
+  const languageOptions = props.allowedCodes
+    ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code))
+    : Languages.getList()
+  const selectedLanguage = !props.multiselect ? Languages.getLanguageByCode(props.value) : undefined
+  const getLanguageDisplay = (language: LanguageIETF): string => {
+    const englishText = language.label
+    const i18nText = _(language.i18nKey, { defaultValue: language.label })
+    return englishText != i18nText ? `${i18nText} (${englishText})` : i18nText
+  }
   const [value, setValue] = React.useState(
-    !props.multiselect ? (Languages.getLanguageByCode(props.value)?.label ?? '') : ''
+    !props.multiselect ? (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '') : ''
   )
 
   useEffect(() => {
-    setValue(!props.multiselect ? (Languages.getLanguageByCode(props.value)?.label ?? '') : '')
+    if (props.multiselect) {
+      setValue('')
+    } else {
+      const selected = Languages.getLanguageByCode(props.value)
+      setValue(selected ? getLanguageDisplay(selected) : '')
+    }
   }, [props.multiselect, props.value])
 
   const handleSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
@@ -92,10 +108,11 @@ export const LanguageSelector = (props: Props) => {
             >
               {/* The "Remove" span is used for naming the buttons without affecting the Combobox name */}
               <span id={`${props.id}-remove`} hidden>
-                Remove
+                {_('language_selector.remove', { defaultValue: 'Remove' })}
               </span>
               {props.value.map((code, i) => {
-                const desc = Languages.getLanguageByCode(code)?.label
+                const lang = Languages.getLanguageByCode(code)
+                const desc = lang ? getLanguageDisplay(lang) : undefined
                 return (
                   <Button
                     disabled={!!props.disabled}
@@ -124,16 +141,16 @@ export const LanguageSelector = (props: Props) => {
           ) : null}
           <Combobox
             multiselect={props.multiselect}
-            placeholder="Select one or more languages"
+            placeholder={_('language_selector.placeholder.multiple', { defaultValue: 'Select one or more languages' })}
             selectedOptions={props.value}
             onOptionSelect={handleSelect}
             size={props.size}
             ref={comboboxInputRef}
             disabled={!!props.disabled}
           >
-            {Languages.getList().map((lang) => (
+            {languageOptions.map((lang) => (
               <Option key={lang.code} value={lang.code}>
-                {lang.label}
+                {getLanguageDisplay(lang)}
               </Option>
             ))}
           </Combobox>
@@ -141,7 +158,7 @@ export const LanguageSelector = (props: Props) => {
       ) : (
         <>
           <Combobox
-            placeholder="Select a language"
+            placeholder={_('language_selector.placeholder.single', { defaultValue: 'Select a language' })}
             value={value}
             selectedOptions={[props.value]}
             onInput={handleInput}
@@ -151,9 +168,9 @@ export const LanguageSelector = (props: Props) => {
             ref={comboboxInputRef}
             disabled={!!props.disabled}
           >
-            {Languages.getList().map((lang) => (
-              <Option key={lang.code} value={lang.code} text={lang.label}>
-                {lang.label}
+            {languageOptions.map((lang) => (
+              <Option key={lang.code} value={lang.code} text={getLanguageDisplay(lang)}>
+                {getLanguageDisplay(lang)}
               </Option>
             ))}
           </Combobox>

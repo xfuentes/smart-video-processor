@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import {
 import { SettingsDialog } from '@renderer/components/SettingsDialog'
 import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } from '../../../common/@types/Video'
 import { AboutDialog } from '@renderer/components/AboutDialog'
+import { _ } from '../i18n'
 
 type Props = {
   onOpen: () => void
@@ -88,10 +89,14 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   }
 
   return (
-    <Toolbar aria-label="Main Buttons" style={{ justifyContent: 'space-between' }} size="small">
+    <Toolbar
+      aria-label={_('main.toolbar.aria_label', { defaultValue: 'Main Buttons' })}
+      style={{ justifyContent: 'space-between' }}
+      size="small"
+    >
       <ToolbarGroup>
         <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
-          Open
+          {_('main.toolbar.open', { defaultValue: 'Open' })}
         </ToolbarButton>
         <ToolbarButton
           vertical
@@ -99,15 +104,15 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
           onClick={handleProcess}
           disabled={!processingEnabled}
         >
-          Process
+          {_('main.toolbar.process', { defaultValue: 'Process' })}
         </ToolbarButton>
         {isPaused ? (
           <ToolbarButton vertical icon={<Play24Regular />} onClick={handlePause}>
-            Resume
+            {_('main.toolbar.resume', { defaultValue: 'Resume' })}
           </ToolbarButton>
         ) : (
           <ToolbarButton vertical icon={<Pause24Regular />} onClick={handlePause}>
-            Pause
+            {_('main.toolbar.pause', { defaultValue: 'Pause' })}
           </ToolbarButton>
         )}
         <ToolbarButton
@@ -116,19 +121,22 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
           onClick={handleCancel}
           disabled={selectedVideos === undefined || selectedVideos.find((video) => video.processing) === undefined}
         >
-          Cancel
+          {_('main.toolbar.cancel', { defaultValue: 'Cancel' })}
         </ToolbarButton>
         <ToolbarButton vertical icon={<SubtractSquare24Regular />} onClick={handleRemove} disabled={selectionEmpty}>
-          Remove
+          {_('main.toolbar.remove', { defaultValue: 'Remove' })}
         </ToolbarButton>
-        <Tooltip content="Clear processed videos" relationship="description">
+        <Tooltip
+          content={_('main.toolbar.clear_tooltip', { defaultValue: 'Clear processed videos' })}
+          relationship="description"
+        >
           <ToolbarButton
             vertical
             icon={isRecyclable ? <BinRecycleFull24Regular /> : <BinRecycle24Regular />}
             onClick={handleClear}
             disabled={!isRecyclable}
           >
-            Clear
+            {_('main.toolbar.clear', { defaultValue: 'Clear' })}
           </ToolbarButton>
         </Tooltip>
       </ToolbarGroup>

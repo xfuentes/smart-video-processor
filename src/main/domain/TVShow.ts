@@ -20,6 +20,7 @@ import { Files } from '../util/files'
 import { Video } from './Video'
 import { SearchResult } from './SearchResult'
 import Chalk from 'chalk'
+import { _ } from '../i18n'
 import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
 import { Strings } from '../../common/Strings'
 import { Numbers } from '../util/numbers'
@@ -52,6 +53,8 @@ export class TVShow implements ITVShow {
   public originalLanguage: LanguageIETF | undefined
   public originalCountries: Country[] = []
   public episodeCount?: number
+  public isAnimation: boolean = false
+  public genres?: string[]
 
   constructor(video: Video) {
     this.video = video
@@ -69,7 +72,7 @@ export class TVShow implements ITVShow {
         throw new Error('Series name is mandatory')
       }
       this.video.status = JobStatus.LOADING
-      this.video.message = 'Searching series on TheTVDB'
+      this.video.message = _('video.message.searching_series_tvdb', { defaultValue: 'Searching series on TheTVDB' })
       this.video.fireChangeEvent()
       this.video.searchResults = await TVDBClient.getInstance().searchSeriesByTitle(this.title, this.year)
       const seriesMatched = SearchResult.getBestMatch(this.video.searchResults, this.title, this.year)
@@ -77,7 +80,9 @@ export class TVShow implements ITVShow {
       if (!seriesMatched) {
         this.video.progression.progress = -1
         this.showWarning(
-          'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
+          _('video.message.tvdb_no_exact_match', {
+            defaultValue: 'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
+          })
         )
       } else {
         await this.selectSearchResultID(seriesMatched.id)
@@ -90,7 +95,8 @@ export class TVShow implements ITVShow {
       throw new Error('TVDB ID is mandatory.')
     }
 
-    this.video.message = 'Retrieving episode details'
+    this.video.message = _('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
+    const matchedSearchResult = this.video.searchResults?.find((r) => r.id === this.theTVDB)
     const { episodeData, seriesData, episodeCount } = await TVDBClient.getInstance().retrieveSeriesDetails(
       this.theTVDB,
       this.order ?? 'official',
@@ -111,15 +117,36 @@ export class TVShow implements ITVShow {
     this.originalCountries = seriesData.countries
     this.originalLanguage = seriesData.language
     this.episodeCount = episodeCount
+    this.isAnimation = matchedSearchResult?.isAnimation || seriesData.isAnimation || false
+    if (matchedSearchResult) {
+      matchedSearchResult.isAnimation = this.isAnimation
+    }
+    this.genres = seriesData.genres
     if (seriesData.year) {
       this.year = seriesData.year
     }
 
     if (this.episode || this.absoluteEpisode) {
       if (episodeData) {
-        this.season = this.order === 'absolute' ? undefined : episodeData.seasonNumber
-        this.episode = this.order === 'absolute' ? undefined : episodeData.episodeNumber
-        this.absoluteEpisode = this.order !== 'absolute' ? undefined : episodeData.absoluteNumber
+        if (this.order !== 'absolute') {
+          this.season = episodeData.seasonNumber
+          this.episode = episodeData.episodeNumber
+          this.absoluteEpisode = episodeData.absoluteNumber > 0 ? episodeData.absoluteNumber : undefined
+        } else if (this.order === 'absolute') {
+          this.absoluteEpisode = episodeData.absoluteNumber > 0 ? episodeData.absoluteNumber : episodeData.episodeNumber
+          if (episodeData.id !== undefined) {
+            try {
+              const officialEpisode = await TVDBClient.getInstance().getEpisodeById(episodeData.id)
+              this.season = officialEpisode.seasonNumber
+              this.episode = officialEpisode.number
+              if (officialEpisode.absoluteNumber > 0) {
+                this.absoluteEpisode = officialEpisode.absoluteNumber
+              }
+            } catch (error) {
+              debug(error)
+            }
+          }
+        }
         this.episodeTitle = episodeData.title
         this.episodePosterURL = episodeData.posterURL
         this.episodeOverview = episodeData.overview
@@ -136,7 +163,7 @@ export class TVShow implements ITVShow {
     const seriesPosterPath = Path.join(this.video.getTempRootDirectory(), 'TVDB-' + this.theTVDB + '-poster.jpg')
     if (this.posterURL) {
       this.video.status = JobStatus.LOADING
-      this.video.message = 'Downloading poster image from TheTVDB.'
+      this.video.message = _('video.message.downloading_poster_tvdb', { defaultValue: 'Downloading poster image from TheTVDB.' })
       this.video.fireChangeEvent()
       if (!Files.fileExistsAndIsReadable(seriesPosterPath)) {
         fs.mkdirSync(this.video.getTempRootDirectory(), { recursive: true })
@@ -147,12 +174,24 @@ export class TVShow implements ITVShow {
     }
     if (!this.episode && !this.absoluteEpisode) {
       if (episodeSearchFailed) {
-        this.showWarning('Episode not found. Please check the information provided and try again.')
+        this.showWarning(
+          _('video.message.tvdb_episode_not_found', {
+            defaultValue: 'Episode not found. Please check the information provided and try again.'
+          })
+        )
       } else {
-        this.showWarning('Episode number not specified. Please provide a valid episode number and try again.')
+        this.showWarning(
+          _('video.message.tvdb_episode_number_required', {
+            defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
+          })
+        )
       }
     } else if (!episodeData) {
-      this.showWarning('Episode not found. Please check the information provided and try again.')
+      this.showWarning(
+        _('video.message.tvdb_episode_not_found', {
+          defaultValue: 'Episode not found. Please check the information provided and try again.'
+        })
+      )
     } else {
       const position = Strings.formatEpisodePosition(this.season, this.episode, this.absoluteEpisode, this.episodeCount)
 
@@ -165,7 +204,7 @@ export class TVShow implements ITVShow {
             mimeType: 'image/jpeg'
           }
         } else if (this.episodePosterURL) {
-          this.video.message = 'Downloading episode image from TheTVDB.'
+          this.video.message = _('video.message.downloading_episode_tvdb', { defaultValue: 'Downloading episode image from TheTVDB.' })
           this.video.fireChangeEvent()
           const filename = `episode-${position}`
           fs.mkdirSync(tempDirectory, { recursive: true })
@@ -299,7 +338,9 @@ export class TVShow implements ITVShow {
       episodePosterURL: this.episodePosterURL,
       originalLanguage: this.originalLanguage,
       originalCountries: this.originalCountries,
-      episodeCount: this.episodeCount
+      episodeCount: this.episodeCount,
+      isAnimation: this.isAnimation,
+      genres: this.genres
     }
   }
 }

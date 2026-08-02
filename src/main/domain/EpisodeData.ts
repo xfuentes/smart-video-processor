@@ -19,6 +19,7 @@
 import { Strings } from '../../common/Strings'
 
 export class EpisodeData {
+  public id: number
   public episodeNumber: number
   public seasonNumber: number | undefined
   public absoluteNumber: number
@@ -27,19 +28,24 @@ export class EpisodeData {
   public overview: string
 
   constructor(
+    id: number,
     episodeNumber: number,
     season: number | undefined,
     absoluteEpisode: number,
     title: string,
     posterURL: string,
-    overview: string
+    overview: string,
+    episodeCount?: number
   ) {
+    this.id = id
     this.episodeNumber = episodeNumber
     this.seasonNumber = season
     this.absoluteNumber = absoluteEpisode
     this.title =
       title ??
-      (season ? 'S' + Strings.toLeadingZeroNumber(season) : '') + 'E' + Strings.toLeadingZeroNumber(episodeNumber)
+      (season ? 'S' + Strings.toLeadingZeroNumber(season) : '') +
+        'E' +
+        Strings.toLeadingZeroNumber(episodeNumber, episodeCount ?? 99)
     this.posterURL = posterURL
     this.overview = overview
   }

@@ -17,6 +17,7 @@
  */
 
 import { Image, RatingDisplay, Tooltip } from '@fluentui/react-components'
+import { _ } from '../../i18n'
 import { Country } from '../../../../common/Countries'
 
 type Props = {
@@ -30,6 +31,7 @@ type Props = {
   altOverview?: string
   countries?: Country[]
   rating?: number
+  genres?: string[]
 }
 
 export const VideoPreview = ({
@@ -42,7 +44,8 @@ export const VideoPreview = ({
   subTitle,
   position,
   countries,
-  rating
+  rating,
+  genres
 }: Props) => {
   return (
     <div className="video-preview">
@@ -79,7 +82,12 @@ export const VideoPreview = ({
           >
             <div className="title">
               <Tooltip
-                content={title + (year ? ` (${year})` : '') + (position ? ` - ${position}` : '')}
+                content={
+                  title +
+                  (year ? ` (${year})` : '') +
+                  (position ? ` - ${position}` : '') +
+                  (genres && genres.length > 0 ? ` | ${genres.join(', ')}` : '')
+                }
                 relationship="description"
               >
                 <div className="shrinkable-text">
@@ -119,7 +127,7 @@ export const VideoPreview = ({
             {secondaryPoster && (
               <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
                 <Image
-                  alt="No Episode Image"
+                  alt={_('video_preview.no_episode_image', { defaultValue: 'No Episode Image' })}
                   bordered
                   src={secondaryPoster ? 'svp:///' + secondaryPoster : ''}
                   className={'secondary-poster'}

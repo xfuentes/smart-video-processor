@@ -29,6 +29,7 @@ import {
 } from '@fluentui/react-components'
 import { DialogModalType } from '@fluentui/react-dialog'
 import React from 'react'
+import { _ } from '../i18n'
 type Props = {
   title: string
   children: React.ReactNode
@@ -45,7 +46,7 @@ export const AlertDialog = ({ title, children, modalType }: Props): JSXElement =
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
               <Button size="small" appearance="secondary">
-                Dismiss
+                {_('alert.dismiss', { defaultValue: 'Dismiss' })}
               </Button>
             </DialogTrigger>
           </DialogActions>

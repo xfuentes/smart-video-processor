@@ -21,15 +21,27 @@ import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
 import * as Path from 'node:path'
 import { fileURLToPath } from 'node:url'
-
-const __dirname = Path.dirname(fileURLToPath(import.meta.url))
 import { Settings } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
+import {
+  translationSupportedLanguageCodes,
+  tvdbSupportedLanguageCodes
+} from '../../common/TranslationSupportedLanguages'
 import * as fs from 'node:fs'
 import { FormValidationBuilder } from '../../common/FormValidation'
 import * as os from 'node:os'
 
+const __dirname = Path.dirname(fileURLToPath(import.meta.url))
+
 const systemLocale = Processes?.osLocaleSync() ?? 'en-US'
+
+const supportedLanguageCodes = new Set(translationSupportedLanguageCodes)
+const baseLocale = systemLocale.split('-')[0]
+const defaultLanguage = supportedLanguageCodes.has(systemLocale)
+  ? systemLocale
+  : supportedLanguageCodes.has(baseLocale)
+    ? baseLocale
+    : 'en'
 
 const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
   if (os.platform() === 'win32') {
@@ -57,10 +69,13 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
 
 export const defaultSettings: Settings = {
   isDebugEnabled: false,
-  language: systemLocale,
+  language: defaultLanguage,
+  additionalTvSearchLanguages: ['en'],
   tmpFilesPath: Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp'),
   moviesOutputPath: Path.join('.', 'Reworked'),
+  animatedMoviesOutputPath: Path.join('.', 'Reworked'),
   tvShowsOutputPath: Path.join('.', 'Reworked'),
+  animatedTVShowsOutputPath: Path.join('.', 'Reworked'),
   othersOutputPath: Path.join('.', 'Reworked'),
   isAutoStartEnabled: false,
   priority: 'BELOW_NORMAL',
@@ -94,6 +109,19 @@ export function loadSettings() {
     const favSet = new Set<string>()
     currentSettings.favoriteLanguages.forEach((l) => favSet.add(l))
     currentSettings.favoriteLanguages = [...favSet.values()]
+    if (!supportedLanguageCodes.has(currentSettings.language)) {
+      const base = currentSettings.language.split('-')[0]
+      currentSettings.language = supportedLanguageCodes.has(base) ? base : defaultLanguage
+    }
+    const additionalSet = new Set<string>()
+    const additional: string[] = []
+    for (const l of currentSettings.additionalTvSearchLanguages) {
+      if (tvdbSupportedLanguageCodes.includes(l) && !additionalSet.has(l)) {
+        additional.push(l)
+        additionalSet.add(l)
+      }
+    }
+    currentSettings.additionalTvSearchLanguages = additional.length > 0 ? additional : ['en']
   } else {
     currentSettings = defaultSettings
   }

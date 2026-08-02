@@ -22,6 +22,7 @@ import { VideoType, SearchBy } from '../../src/common/@types/Video'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 
 beforeAll(() => {
+  currentSettings.language = 'en'
   currentSettings.favoriteLanguages = ['en']
   currentSettings.tmpFilesPath = defaultSettings.tmpFilesPath
 })

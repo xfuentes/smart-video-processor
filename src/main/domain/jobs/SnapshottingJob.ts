@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { _ } from '../../i18n'
 import { Job } from './Job'
 import { JobStatus } from '../../../common/@types/Job'
 import { FFmpeg } from '../programs/FFmpeg'
@@ -36,7 +37,7 @@ export class SnapshottingJob extends Job<string> {
     totalWidth: number,
     durationSeconds: number
   ) {
-    super(JobStatus.GRABBING, 'Snapshotting video.')
+    super(JobStatus.GRABBING, _('job.title.snapshotting', { defaultValue: 'Snapshotting video.' }))
     this.sourcePath = sourcePath
     this.destinationPath = destinationPath
     this.snapshotHeight = snapshotHeight

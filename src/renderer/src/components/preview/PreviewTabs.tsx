@@ -17,6 +17,7 @@
  */
 
 import { useState } from 'react'
+import { _ } from '../../i18n'
 import { TrackList } from './TrackList'
 import {
   CounterBadge,
@@ -88,27 +89,27 @@ export const PreviewTabs = ({ video }: Props) => {
     >
       <TabList selectedValue={selectedTab} onTabSelect={handleTabSelect} size="small">
         <Tab value="matching" icon={<Search20Regular />}>
-          Matching{' '}
+          {_('preview.tab.matching', { defaultValue: 'Matching' })}{' '}
           <CounterBadge color={video.matched ? 'informative' : 'danger'} size="small" showZero count={matchingCount} />
         </Tab>
         <Tab value="tracks" disabled={video.loading} icon={<TextBulletList20Regular />}>
-          Tracks{' '}
+          {_('preview.tab.tracks', { defaultValue: 'Tracks' })}{' '}
           <CounterBadge color={tracksCount === 0 ? 'important' : 'informative'} size="small" count={tracksCount} />
         </Tab>
         {hintCount > 0 && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
-            Hints{' '}
+            {_('preview.tab.hints', { defaultValue: 'Hints' })}{' '}
             <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
           </Tab>
         )}
         <Tab value="properties" icon={<TaskListLtr20Regular />} disabled={!video.matched || hintMissing}>
-          Properties <CounterBadge color="informative" size="small" showZero count={changesCount} />
+          {_('preview.tab.properties', { defaultValue: 'Properties' })} <CounterBadge color="informative" size="small" showZero count={changesCount} />
         </Tab>
         <Tab value="processing" icon={<DataUsageSettings20Regular />} disabled={!video.matched || hintMissing}>
-          Processing <CounterBadge color="informative" size="small" showZero count={partsCount} />
+          {_('preview.tab.processing', { defaultValue: 'Processing' })} <CounterBadge color="informative" size="small" showZero count={partsCount} />
         </Tab>
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!video.matched || hintMissing}>
-          Encoding <CounterBadge color="informative" size="small" showZero count={encodingCount} />
+          {_('preview.tab.encoding', { defaultValue: 'Encoding' })} <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

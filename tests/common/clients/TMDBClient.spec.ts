@@ -17,7 +17,7 @@
  */
 
 import { expect, test } from 'vitest'
-import { tmdbLanguages } from '../TMDBLanguages'
+import { tmdbLanguages } from '../../../src/common/TMDBLanguages'
 import { TMDBClient } from '../../../src/main/domain/clients/TMDBClient'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { Languages } from '../../../src/common/LanguageIETF'
@@ -279,4 +279,10 @@ test('check TMDB language id mappable to Language IETF', async () => {
     ).toBeDefined()
     pos++
   }
+})
+
+test('Get Languages', async () => {
+  const languages = await TMDBClient.getInstance().getLanguages()
+  expect(languages.length).toBeGreaterThan(0)
+  expect(languages.every((language) => language.iso_639_1 && language.english_name)).toBe(true)
 })

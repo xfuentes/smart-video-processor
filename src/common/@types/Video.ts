@@ -27,7 +27,7 @@ import { ITVShow } from './TVShow'
 import { Container } from '../../main/domain/programs/MKVMerge'
 import { EncoderSettings } from './Encoding'
 import { IOther } from './Other'
-import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { EpisodeOrder } from './EpisodeOrder'
 
 export enum VideoType {
   MOVIE = 'Movie',

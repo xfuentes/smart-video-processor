@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react'
 import HlsVideoPlayer from '@renderer/components/fields/HlsVideoPlayer'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
+import { _ } from '../i18n'
 import { Field, ProgressBar } from '@fluentui/react-components'
 
 export const VideoPlayer = () => {
@@ -44,7 +45,7 @@ export const VideoPlayer = () => {
         ) : (
           <Field
             validationState="none"
-            validationMessage={{ children: 'Generating preview...', style: { color: 'white' } }}
+            validationMessage={{ children: _('video_player.generating_preview', { defaultValue: 'Generating preview...' }), style: { color: 'white' } }}
             style={{ width: '50%' }}
             color="white"
           >
