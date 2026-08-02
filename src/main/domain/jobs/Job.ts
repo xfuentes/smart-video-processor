@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import { JobManager } from './JobManager'
 import { Processes } from '../../util/processes'
 import { Strings } from '../../../common/Strings'
 import { currentSettings, defaultSettings } from '../Settings'
+import { _ } from '../../i18n'
 import { debug } from '../../util/log'
 import { ProcessesPriority, Progression } from '../../../common/@types/processes'
 import { IJob, JobStatus, JobType } from '../../../common/@types/Job'
@@ -47,9 +48,9 @@ export abstract class Job<T> implements IJob {
   private readonly extraDuration?: number
   private abortLaunched: boolean = false
 
-  protected constructor(type: JobType, title: string, extraDuration?: number) {
+  protected constructor(type: JobType, titleI18n: string, extraDuration?: number) {
     this.type = type
-    this.title = title
+    this.title = titleI18n
     this.extraDuration = extraDuration
     this.status = JobStatus.WAITING
     this.setStatus(JobStatus.WAITING)
@@ -152,28 +153,38 @@ export abstract class Job<T> implements IJob {
     const duration = this.getDuration()
     switch (this.status) {
       case JobStatus.QUEUED:
-        return `${this.type} queued. Please wait.`
+        return _('job.status.queued', { defaultValue: '{type} queued. Please wait.', type: this.type })
       case JobStatus.SUCCESS:
         if (duration !== undefined) {
-          return `Completed in ${Strings.humanDuration(duration)}.`
+          return _('job.status.completed', {
+            defaultValue: 'Completed in {duration}.',
+            duration: Strings.humanDuration(duration)
+          })
         }
-        return `Complete.`
+        return _('job.status.completed_no_duration', { defaultValue: 'Complete.' })
       case JobStatus.ABORTED:
         if (duration !== undefined) {
-          return `Canceled by user after ${Strings.humanDuration(duration)}.`
+          return _('job.status.canceled', {
+            defaultValue: 'Canceled by user after {duration}.',
+            duration: Strings.humanDuration(duration)
+          })
         }
-        return 'Canceled by user.'
+        return _('job.status.canceled_no_duration', { defaultValue: 'Canceled by user.' })
       case JobStatus.PAUSED:
-        return 'Paused.'
+        return _('job.status.paused', { defaultValue: 'Paused.' })
       case JobStatus.ERROR:
-        return this.error ?? `Unexpected error during ${this.type}`
+        return this.error ?? _('job.status.error', { defaultValue: 'An unexpected error occurred' })
       case JobStatus.LOADING:
       case JobStatus.MERGING:
       case JobStatus.ENCODING:
         return this.getTitle()
 
       default:
-        return `Unknown status: ${this.status} for ${this.type}`
+        return _('job.status.unknown', {
+          defaultValue: 'Unknown status: {status} for {type}',
+          status: this.status,
+          type: this.type
+        })
     }
   }
 

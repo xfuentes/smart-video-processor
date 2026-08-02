@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import {
 } from '@fluentui/react-components'
 import { SaveRegular, SubtractCircleRegular, TaskListAddRegular } from '@fluentui/react-icons'
 import { useState } from 'react'
+import { _ } from '../../i18n'
 import { Checkbox } from '@fluentui/react'
 import { attachmentRenderer, booleanRenderer } from './renderers'
 import {
@@ -74,29 +75,52 @@ const columns: TableColumnDefinition<IChange>[] = [
   createTableColumn<IChange>({
     columnId: 'source',
     compare: (a, b) => getChangeSource(a).localeCompare(getChangeSource(b)),
-    renderHeaderCell: () => <b>Source</b>,
-    renderCell: (item) => <div style={{ whiteSpace: 'nowrap' }}>{getChangeSource(item)}</div>
+    renderHeaderCell: () => <b>{_('properties.column.source.label', { defaultValue: 'Source' })}</b>,
+    renderCell: (item) => {
+      const source = item.sourceType
+      const num = item.trackId !== undefined ? String(item.trackId) : undefined
+      return (
+        <div style={{ whiteSpace: 'nowrap' }}>
+          {_(`change_source.${source.toLowerCase()}.label_id`, {
+            defaultValue: `${source} ${num ? ' {num}' : ''}`,
+            num
+          })}
+        </div>
+      )
+    }
   }),
   createTableColumn<IChange>({
     columnId: 'type',
     compare: (a, b) => a.changeType.localeCompare(b.changeType),
-    renderHeaderCell: () => <b>Type</b>,
-    renderCell: (item) => item.changeType
+    renderHeaderCell: () => <b>{_('properties.column.type.label', { defaultValue: 'Type' })}</b>,
+    renderCell: (item) => (
+      <div style={{ whiteSpace: 'nowrap' }}>
+        {_('change_type.' + item.changeType.toLowerCase() + '.label', { defaultValue: item.changeType })}
+      </div>
+    )
   }),
   createTableColumn<IChange>({
     columnId: 'property',
     compare: (a, b) => (a.property ?? '').localeCompare(b.property ?? ''),
-    renderHeaderCell: () => <b>Property</b>,
-    renderCell: (item) => item.property ?? ''
+    renderHeaderCell: () => <b>{_('properties.column.property.label', { defaultValue: 'Property' })}</b>,
+    renderCell: (item) => (
+      <div style={{ whiteSpace: 'nowrap' }}>
+        {item.property
+          ? _('change_property.' + item.property.toLowerCase().replace(/ /g, '_') + '.label', {
+              defaultValue: item.property
+            })
+          : ''}
+      </div>
+    )
   }),
   createTableColumn<IChange>({
     columnId: 'currentValue',
-    renderHeaderCell: () => <b>Current Value</b>,
+    renderHeaderCell: () => <b>{_('properties.column.current_value.label', { defaultValue: 'Current Value' })}</b>,
     renderCell: (item) => valueRenderer(item, item.currentValue)
   }),
   createTableColumn<IChange>({
     columnId: 'newValue',
-    renderHeaderCell: () => <b>New Value</b>,
+    renderHeaderCell: () => <b>{_('properties.column.new_value.label', { defaultValue: 'New Value' })}</b>,
     renderCell: (item) => valueRenderer(item, item.newValue)
   })
 ]
@@ -107,11 +131,11 @@ type Props = {
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
-  source: { defaultWidth: 60, minWidth: 60, idealWidth: 60 },
-  type: { defaultWidth: 50, minWidth: 50, idealWidth: 50 },
-  property: { defaultWidth: 70, minWidth: 70, idealWidth: 70 },
-  currentValue: { defaultWidth: 200, minWidth: 50, idealWidth: 300 },
-  newValue: { defaultWidth: 200, minWidth: 50, idealWidth: 300 }
+  source: { minWidth: 100, idealWidth: 100 },
+  type: { minWidth: 120, idealWidth: 120 },
+  property: { minWidth: 140, idealWidth: 140 },
+  currentValue: { minWidth: 150, idealWidth: 400 },
+  newValue: { minWidth: 150, idealWidth: 400 }
 }
 
 export const Properties = ({ video, disabled }: Props) => {
@@ -147,7 +171,11 @@ export const Properties = ({ video, disabled }: Props) => {
   return (
     <>
       <div className="processing-form">
-        <Field size="small" label="Source" className={disabled ? 'disabled' : ''}>
+        <Field
+          size="small"
+          label={_('properties.field.source.label', { defaultValue: 'Source' })}
+          className={disabled ? 'disabled' : ''}
+        >
           <Select
             size="small"
             value={source}
@@ -170,14 +198,24 @@ export const Properties = ({ video, disabled }: Props) => {
               setNewValue(retrieveChangePropertyValue(video, nextSource, nextProperty) ?? '')
             }}
           >
-            {retrievePossibleSources(video).map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
+            {retrievePossibleSources(video).map((key) => {
+              const [sourceType, num] = key.split(' ')
+              return (
+                <option key={key} value={key}>
+                  {_(`change_source.${sourceType.toLowerCase()}.label_id`, {
+                    defaultValue: `${sourceType} ${num ? ' {num}' : ''}`,
+                    num
+                  })}
+                </option>
+              )
+            })}
           </Select>
         </Field>
-        <Field size="small" label="Type" className={disabled ? 'disabled' : ''}>
+        <Field
+          size="small"
+          label={_('properties.field.type.label', { defaultValue: 'Type' })}
+          className={disabled ? 'disabled' : ''}
+        >
           <Select
             size="small"
             value={type}
@@ -190,12 +228,16 @@ export const Properties = ({ video, disabled }: Props) => {
               .filter((t) => source === 'Container' || t === ChangeType.UPDATE)
               .map((key) => (
                 <option key={key} value={key}>
-                  {key}
+                  {_(`change_type.${key.toLowerCase()}.label`, { defaultValue: key })}
                 </option>
               ))}
           </Select>
         </Field>
-        <Field size="small" label="Property" className={disabled ? 'disabled' : ''}>
+        <Field
+          size="small"
+          label={_('properties.field.property.label', { defaultValue: 'Property' })}
+          className={disabled ? 'disabled' : ''}
+        >
           <Select
             size="small"
             value={property}
@@ -208,14 +250,19 @@ export const Properties = ({ video, disabled }: Props) => {
           >
             {availableProperties.map((key) => (
               <option key={key} value={key}>
-                {key}
+                {_(`change_property.${key.toLowerCase().replace(/ /g, '_')}.label`, { defaultValue: key })}
               </option>
             ))}
           </Select>
         </Field>
         {type === ChangeType.UPDATE && property !== undefined && (
           <div className="growing-form-field">
-            <Field size="small" label="New Value" required className={disabled ? 'disabled' : ''}>
+            <Field
+              size="small"
+              label={_('properties.field.new_value.label', { defaultValue: 'New Value' })}
+              required
+              className={disabled ? 'disabled' : ''}
+            >
               {propertyTypes[property] === 'string' && (
                 <Input
                   size="small"
@@ -260,7 +307,7 @@ export const Properties = ({ video, disabled }: Props) => {
             }}
             disabled={disabled || changeExists(video, undefined, source, type, property)}
           >
-            Insert
+            {_('properties.button.insert', { defaultValue: 'Insert' })}
           </Button>
           <Button
             size="small"
@@ -275,7 +322,7 @@ export const Properties = ({ video, disabled }: Props) => {
               changeExists(video, selectedChangeUuid, source, type, property)
             }
           >
-            Update
+            {_('properties.button.update', { defaultValue: 'Update' })}
           </Button>
           <Button
             size="small"
@@ -289,7 +336,7 @@ export const Properties = ({ video, disabled }: Props) => {
             }}
             disabled={disabled || selectedChangeUuid === undefined}
           >
-            Remove
+            {_('properties.button.remove', { defaultValue: 'Remove' })}
           </Button>
         </div>
       </div>
@@ -312,7 +359,9 @@ export const Properties = ({ video, disabled }: Props) => {
             <DataGridHeader>
               <DataGridRow
                 selectionCell={{
-                  checkboxIndicator: { 'aria-label': 'Select all rows' }
+                  checkboxIndicator: {
+                    'aria-label': _('properties.aria_label.select_all_rows', { defaultValue: 'Select all rows' })
+                  }
                 }}
               >
                 {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}

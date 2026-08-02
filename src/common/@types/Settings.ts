@@ -29,6 +29,10 @@ export type Settings = {
    */
   language: string
   /**
+   * Additional languages, in addition to the main language, to use when searching for TV series names.
+   */
+  additionalTvSearchLanguages: string[]
+  /**
    * Output path where temporary files will be written (can be relative to the original file or absolute)
    */
   tmpFilesPath: string
@@ -37,9 +41,17 @@ export type Settings = {
    */
   moviesOutputPath: string
   /**
+   * Output path where animated movies will be saved (can be relative to the original file or absolute)
+   */
+  animatedMoviesOutputPath: string
+  /**
    * Output path where processed TV Shows will be saved (can be relative to the original file or absolute)
    */
   tvShowsOutputPath: string
+  /**
+   * Output path where animated TV shows will be saved (can be relative to the original file or absolute)
+   */
+  animatedTVShowsOutputPath: string
   /**
    * Output path where other processed files will be saved (can be relative to the original file or absolute)
    */

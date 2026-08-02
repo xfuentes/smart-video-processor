@@ -17,6 +17,7 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
+import { _ } from '../../i18n'
 import { Button, Divider } from '@fluentui/react-components'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 import { MoviesAndTvRegular } from '@fluentui/react-icons'
@@ -43,7 +44,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
           execute={() => window.api.video.takeSnapshots(video.uuid)}
           disabled={disabled || video.snapshots !== undefined}
         >
-          Prepare for Processing
+          {_('processing.prepare.label', { defaultValue: 'Prepare for Processing' })}
         </ProgressButton>
       </div>
     </>
@@ -52,11 +53,11 @@ export const Processing = ({ video, disabled = false }: Props) => {
       <DropZone onDropFiles={handleDropPart} style={{ padding: '5px', boxSizing: 'border-box', height: '100%' }}>
         <div className="processing-body">
           <div className="ruler">
-            <Divider style={{ flexGrow: '0' }}>Main Video File</Divider>
+            <Divider style={{ flexGrow: '0' }}>{_('processing.main_video_file.label', { defaultValue: 'Main Video File' })}</Divider>
             <VideoSectionSelectorField key={video.uuid} video={video} disabled={disabled} />
             {video.videoParts.map((part, i) => (
               <>
-                <Divider style={{ flexGrow: '0' }}>Part {i + 1}</Divider>
+                <Divider style={{ flexGrow: '0' }}>{_('processing.part.label', { defaultValue: 'Part {number}', number: i + 1 })}</Divider>
                 <VideoSectionSelectorField
                   key={part.uuid}
                   mainVideoUuid={video.uuid}
@@ -78,7 +79,7 @@ export const Processing = ({ video, disabled = false }: Props) => {
             disabled={disabled}
             onClick={() => void window.api.video.addPart(video.uuid)}
           >
-            Add Video Part
+            {_('processing.add_video_part.label', { defaultValue: 'Add Video Part' })}
           </Button>
         </div>
       </div>

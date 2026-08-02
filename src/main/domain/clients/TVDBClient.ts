@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import { RateLimiter } from './RateLimiter'
 import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
+import { _ } from '../../i18n'
 import { debug } from '../../util/log'
 import { simpleCachingAdapter } from './SimpleCachingAdapter'
 import { Strings } from '../../../common/Strings'
@@ -36,7 +37,9 @@ type SeriesEpisode = {
   episodeCount: number
 }
 
-export type EpisodeOrder = 'official' | 'dvd' | 'absolute'
+import type { EpisodeOrder } from '../../../common/@types/EpisodeOrder'
+
+export { type EpisodeOrder } from '../../../common/@types/EpisodeOrder'
 
 export class TVDBClient {
   private static instance: TVDBClient
@@ -52,6 +55,19 @@ export class TVDBClient {
       TVDBClient.instance = new TVDBClient()
     }
     return TVDBClient.instance
+  }
+
+  public async getLanguages(): Promise<TVDBLanguage[]> {
+    const tvdb = await this.getTVDBSession()
+    let response
+    try {
+      response = await tvdb.get<TVDBLanguagesResponse>('/languages')
+    } catch (error) {
+      debug(error)
+      const response = error as AxiosError<TVDBLanguagesResponse>
+      throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+    }
+    return response.data.data
   }
 
   public async searchSeriesByTitle(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
@@ -74,11 +90,6 @@ export class TVDBClient {
     }
     const results: SearchResult[] = []
     for (const r of response.data.data) {
-      let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
-      if (langCode.indexOf('-') != -1) {
-        langCode = langCode.substring(0, langCode.indexOf('-'))
-      }
-      const favoriteLanguage = Languages.getLanguageByCode(langCode)
       const language = Languages.getLanguageByCode(r.primary_language)
       const country = Countries.getCountryByCode(r.country)
       const imdb = r.remote_ids
@@ -88,32 +99,49 @@ export class TVDBClient {
       const originalName = r.name
       let name = originalName
       let overview = r.overview
+      let nameFound = false
+      let overviewFound = false
 
-      if (favoriteLanguage !== undefined) {
-        if (r.translations[favoriteLanguage.code] !== undefined) {
-          name = r.translations[favoriteLanguage.code]
-        } else {
-          for (const code of favoriteLanguage?.altCodes ?? []) {
-            if (r.translations[code] !== undefined) {
-              name = r.translations[code]
-              break
-            }
-          }
-        }
-        if (r.overviews) {
-          if (r.overviews[favoriteLanguage.code] !== undefined) {
-            overview = r.overviews[favoriteLanguage.code]
+      for (const langCode of [currentSettings.language, ...currentSettings.additionalTvSearchLanguages]) {
+        const favoriteLanguage = Languages.getLanguageByCode(langCode)
+        if (favoriteLanguage === undefined) continue
+
+        if (!nameFound) {
+          if (r.translations[favoriteLanguage.code] !== undefined) {
+            name = r.translations[favoriteLanguage.code]
+            nameFound = true
           } else {
-            for (const code of favoriteLanguage?.altCodes ?? []) {
-              if (r.overviews[code] !== undefined) {
-                overview = r.overviews[code]
+            for (const code of favoriteLanguage.altCodes ?? []) {
+              if (r.translations[code] !== undefined) {
+                name = r.translations[code]
+                nameFound = true
                 break
               }
             }
           }
         }
+
+        if (r.overviews && !overviewFound) {
+          if (r.overviews[favoriteLanguage.code] !== undefined) {
+            overview = r.overviews[favoriteLanguage.code]
+            overviewFound = true
+          } else {
+            for (const code of favoriteLanguage.altCodes ?? []) {
+              if (r.overviews[code] !== undefined) {
+                overview = r.overviews[code]
+                overviewFound = true
+                break
+              }
+            }
+          }
+        }
+
+        if (nameFound && (overviewFound || !r.overviews)) break
       }
 
+      const isAnimation = r.genres
+        ? r.genres.some((g) => g.toLowerCase() === 'animation' || g.toLowerCase() === 'anime')
+        : undefined
       results.push(
         new SearchResult(
           Number.parseInt(r.tvdb_id),
@@ -124,7 +152,9 @@ export class TVDBClient {
           r.image_url,
           language,
           country ? [country] : [],
-          imdb
+          imdb,
+          undefined,
+          isAnimation
         )
       )
     }
@@ -268,16 +298,57 @@ export class TVDBClient {
     const episodeData = response.data.data.episodes[0]
     const seriesData = response.data.data.series
 
-    // Get total episode count by calling without episodeNumber filter
+    let extendedGenres: string[] | undefined
+    try {
+      const extendedResponse = await tvdb.get<TVDBSeriesExtendedResponse>(`/series/${tvdbId}/extended`)
+      const rawGenres = extendedResponse.data.data.genres
+      if (rawGenres) {
+        extendedGenres = rawGenres.map((g) => g.name)
+      }
+    } catch (error) {
+      debug('Failed to fetch TVDB extended series info for genres')
+      debug(error)
+    }
+
+    const genres = extendedGenres ?? seriesData.genres ?? []
+    const seriesIsAnimation = genres.some((g) => g.toLowerCase() === 'animation' || g.toLowerCase() === 'anime')
+    const displayGenres = genres.map((g) =>
+      _(
+        'genre.' +
+          g
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '_')
+            .replace(/_+/g, '_'),
+        { defaultValue: g }
+      )
+    )
+
+    // Get episode count for the selected season
     let episodeCount = 1
     try {
-      const countParams = {
-        ...(order === 'absolute' || season === undefined ? { season: 1 } : { season })
+      const countParams: { limit: number; season?: number } = { limit: 10000 }
+      if (order !== 'absolute') {
+        countParams.season = season ?? 1
       }
       const countResponse = await tvdb.get<TVDBEpisodesListResponse>(`/series/${tvdbId}/episodes/${order}`, {
         params: countParams
       })
-      episodeCount = countResponse.data.links.total_items
+      const rawData = countResponse.data.data as unknown
+      const episodes: EpisodeBaseRecord[] =
+        (Array.isArray(rawData)
+          ? (rawData as EpisodeBaseRecord[])
+          : (rawData as { episodes?: EpisodeBaseRecord[] } | undefined)?.episodes) ?? []
+
+      if (order === 'absolute') {
+        episodeCount = countResponse.data.links?.total_items ?? (episodes.length > 0 ? episodes.length : 1)
+      } else {
+        const countSeason = countParams.season
+        const maxEpisodeNumber = episodes.reduce(
+          (max, e) => (e.seasonNumber === countSeason && e.number > max ? e.number : max),
+          0
+        )
+        episodeCount = maxEpisodeNumber > 0 ? maxEpisodeNumber : 1
+      }
     } catch (error) {
       debug('Failed to get episode count, defaulting to 1')
     }
@@ -310,18 +381,23 @@ export class TVDBClient {
         }
       }
 
+      const searchResult = new SearchResult(
+        seriesData.id,
+        name,
+        Number.parseInt(seriesData.year),
+        name,
+        overview,
+        seriesData.image,
+        language,
+        country ? [country] : [],
+        undefined,
+        undefined,
+        seriesIsAnimation
+      )
+      searchResult.genres = displayGenres
       return {
         episodeData: undefined,
-        seriesData: new SearchResult(
-          seriesData.id,
-          name,
-          Number.parseInt(seriesData.year),
-          name,
-          overview,
-          seriesData.image,
-          language,
-          country ? [country] : []
-        ),
+        seriesData: searchResult,
         episodeCount
       }
     }
@@ -331,12 +407,14 @@ export class TVDBClient {
     const name = this.cleanupSeriesTitle(seriesData.name)
     const result = {
       episodeData: new EpisodeData(
+        episodeData.id,
         episodeData.number,
         episodeData.seasonNumber,
         episodeData.absoluteNumber,
         episodeData.name,
         episodeData.image,
-        episodeData.overview
+        episodeData.overview,
+        episodeCount
       ),
       seriesData: new SearchResult(
         seriesData.id,
@@ -346,10 +424,14 @@ export class TVDBClient {
         seriesData.overview,
         seriesData.image,
         language,
-        country ? [country] : []
+        country ? [country] : [],
+        undefined,
+        undefined,
+        seriesIsAnimation
       ),
       episodeCount
     }
+    result.seriesData.genres = displayGenres
     let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
     if (langCode.indexOf('-') != -1) {
       langCode = langCode.substring(0, langCode.indexOf('-'))
@@ -380,9 +462,7 @@ export class TVDBClient {
         result.seriesData.posterURL = episodesTranslation.data.data.image
         for (const episode of episodesTranslation.data.data.episodes) {
           if (
-            ((order === 'official' || order === 'dvd') &&
-              episode.seasonNumber === season &&
-              episode.number === episodeNumber) ||
+            (order !== 'absolute' && episode.seasonNumber === season && episode.number === episodeNumber) ||
             (order === 'absolute' && episode.absoluteNumber === absoluteEpisodeNumber)
           ) {
             if (episode.name) {
@@ -405,6 +485,22 @@ export class TVDBClient {
 
   private cleanupSeriesTitle(title: string): string {
     return title.replace(/\s*\((\d+|\w+)\)$/gi, '')
+  }
+
+  public async getEpisodeById(id: number): Promise<EpisodeBaseRecord> {
+    const tvdb = await this.getTVDBSession()
+    let response: AxiosResponse<TVDBEpisodeResponse> | undefined = undefined
+    try {
+      response = await tvdb.get<TVDBEpisodeResponse>(`/episodes/${id}`)
+    } catch (error) {
+      debug(error)
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error('Unexpected TVDB API Error: ' + (axiosError.response?.data?.message ?? axiosError.message))
+      }
+      throw new Error('Unexpected TVDB API Error: ' + String(error))
+    }
+    return response.data.data
   }
 
   private async getTVDBSession(): Promise<AxiosInstance> {

@@ -49,8 +49,7 @@ function extractYear(input: string, beforeIndex?: number): number | undefined {
 
 function cleanupTitle(title: string): string {
   title = title.replace(/[()[\]_.,\-–]+$/, '')
-  title = title.replace(/^[.\-_\s]+/, '')
-  title = title.replace(/[-_\s]+$/, '')
+  title = title.replace(/[.\-_–]+/g, ' ')
   // Rebuild dotted acronyms like "T W D" -> "T.W.D"
   title = title.replace(/\b([A-Z])\s(?=[A-Z]\b)/g, '$1.')
   return Files.megaTrim(title)

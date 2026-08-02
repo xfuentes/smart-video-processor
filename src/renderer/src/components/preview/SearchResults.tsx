@@ -32,26 +32,27 @@ import { SearchResult } from '../../../../main/domain/SearchResult'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack } from '../../../../common/@types/Track'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
+import { _ } from '../../i18n'
 
 const columns: TableColumnDefinition<SearchResult>[] = [
   createTableColumn<SearchResult>({
     columnId: 'id',
     compare: (a, b) => a.id - b.id,
-    renderHeaderCell: () => 'ID',
+    renderHeaderCell: () => _('search_results.column.id.label', { defaultValue: 'ID' }),
     renderCell: (item) => item.id
   }),
   createTableColumn<SearchResult>({
     columnId: 'title',
     compare: (a, b) => a.title.localeCompare(b.title),
-    renderHeaderCell: () => 'Title',
+    renderHeaderCell: () => _('search_results.column.title.label', { defaultValue: 'Title' }),
     renderCell: (item) => <div className="overflow-safe">{item.title}</div>
   }),
   createTableColumn<SearchResult>({
     columnId: 'year',
     compare: (a, b) => (a.year ? a.year : -1) - (b.year ? b.year : -1),
-    renderHeaderCell: () => 'Year',
+    renderHeaderCell: () => _('search_results.column.year.label', { defaultValue: 'Year' }),
     renderCell: (item) => (!item.year || isNaN(item.year) ? '' : item.year)
-  })
+  }),
 ]
 
 type Props = {
@@ -79,7 +80,7 @@ export const SearchResultList = ({ results, selectedID, onSelectionChange, disab
     <div className="search-results">
       <div>
         <DataGrid
-          aria-label="search results"
+          aria-label={_('search_results.aria_label', { defaultValue: 'Search results' })}
           items={results}
           columns={columns}
           sortable

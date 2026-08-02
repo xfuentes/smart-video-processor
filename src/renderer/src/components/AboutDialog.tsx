@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import {
   News20Regular
 } from '@fluentui/react-icons'
 import { LicenseText } from '@renderer/components/LicenseTest'
+import { _ } from '../i18n'
 import ElectronLogo from '../assets/electron.svg'
 import FluentLogo from '../assets/fluent.svg'
 import ViteLogo from '../assets/vite.svg'
@@ -68,30 +69,28 @@ export const AboutDialog = () => {
     <Dialog modalType="modal" open={opened} onOpenChange={handleOpenChange}>
       <DialogTrigger>
         <ToolbarButton vertical icon={<CalendarInfoRegular />}>
-          About
+          {_('about.trigger.label', { defaultValue: 'About' })}
         </ToolbarButton>
       </DialogTrigger>
       <DialogSurface
-        aria-label="About"
+        aria-label={_('about.aria_label', { defaultValue: 'About' })}
         style={{ padding: '5px', display: 'flex', flexFlow: 'column', minWidth: '650px' }}
       >
         <DialogBody style={{ gap: 0, flexGrow: 1, minHeight: '600px', maxHeight: '700px' }}>
           <DialogContent className="settings-dialog">
             <div className="vertical-stack">
               <h3 style={{ textAlign: 'center', marginBlockStart: 0, marginBlockEnd: 0 }}>
-                Smart Video Processor v{version}
+                {_('about.title', { defaultValue: 'Smart Video Processor v{version}', version })}
               </h3>
               <p style={{ fontSize: 'small' }}>
-                This tool automatically identifies your movies and TV shows using popular databases, then streamlines
-                the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata
-                (including track language and type), split or join media files and encode to H.264 or H.265—all in one
-                place.
+                {_('about.description', {
+                  defaultValue:
+                    'This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.'
+                })}
                 <br />
-                Please visit the project{' '}
                 <Link onClick={() => window.open('https://github.com/xfuentes/smart-video-processor', '_blank')}>
-                  homepage
+                  {_('about.visit_project_homepage', { defaultValue: 'Please visit the project homepage.' })}
                 </Link>
-                .
               </p>
               <div style={{ fontSize: 'smaller' }}>
                 Copyright (c) 2025. Xavier Fuentes&nbsp;
@@ -109,16 +108,16 @@ export const AboutDialog = () => {
                 onTabSelect={(_event: SelectTabEvent, data: SelectTabData) => setSelectedTab(data.value as string)}
               >
                 <Tab value="news" icon={<News20Regular />}>
-                  What&#39;s new
+                  {_('about.tab.news', { defaultValue: "What''s new" })}
                 </Tab>
                 <Tab value="features" icon={<ClipboardBulletList20Regular />}>
-                  Features
+                  {_('about.tab.features', { defaultValue: 'Features' })}
                 </Tab>
                 <Tab value="powered" icon={<ArchiveSettings20Regular />}>
-                  Powered by
+                  {_('about.tab.powered_by', { defaultValue: 'Powered by' })}
                 </Tab>
                 <Tab value="license" icon={<DocumentSettings20Regular />}>
-                  License
+                  {_('about.tab.license', { defaultValue: 'License' })}
                 </Tab>
               </TabList>
               <div>
@@ -132,67 +131,122 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
-                    <h4>Version 1.7.2</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.0' })}</h4>
                     <ul>
-                      <li>Reworked filename parser for more reliable movie and TV show identification</li>
-                      <li>Added JDownloader EventScripter integration for automated download handling</li>
-                      <li>Improved build and packaging workflows</li>
-                      <li>Various bug fixes and UI polish</li>
+                      {_('about.news.version_1_8_0.items', {
+                        defaultValue:
+                          'Added full app translation support with 24 locales\nNew language settings and IETF-aware search\nImproved locale fallback and robustness for settings loading'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.7.1</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.7.2' })}</h4>
                     <ul>
-                      <li>Fixed default search mode when parsing movie and TV show filenames</li>
-                      <li>Fixed series poster being downloaded to the wrong or duplicate location</li>
-                      <li>Improved track language detection when using manual hints</li>
-                      <li>UI consistency improvements for settings and multi-file matching</li>
+                      {_('about.news.version_1_7_2.items', {
+                        defaultValue:
+                          'Reworked filename parser for more reliable movie and TV show identification\nAdded JDownloader EventScripter integration for automated download handling\nImproved build and packaging workflows\nVarious bug fixes and UI polish'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.7.0</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.7.1' })}</h4>
                     <ul>
-                      <li>
-                        Redesigned TV show matching with more search options (by title, TVDB ID, episode number or
-                        episode name)
-                      </li>
-                      <li>Improved episode matching for absolute-numbered series</li>
-                      <li>Better handling of missing or not-found episodes with clearer messages</li>
+                      {_('about.news.version_1_7_1.items', {
+                        defaultValue:
+                          'Fixed default search mode when parsing movie and TV show filenames\nFixed series poster being downloaded to the wrong or duplicate location\nImproved track language detection when using manual hints\nUI consistency improvements for settings and multi-file matching'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.8</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.7.0' })}</h4>
                     <ul>
-                      <li>Fix security issues</li>
+                      {_('about.news.version_1_7_0.items', {
+                        defaultValue:
+                          'Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)\nImproved episode matching for absolute-numbered series\nBetter handling of missing or not-found episodes with clearer messages'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.7</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.8' })}</h4>
                     <ul>
-                      <li>Fix preview not showing regression</li>
-                      <li>New packaging to fix security issues</li>
+                      {_('about.news.version_1_6_8.items', { defaultValue: 'Fix security issues' })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.5</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.7' })}</h4>
                     <ul>
-                      <li>Fix issues with track encoding selection</li>
-                      <li>Show mixed selection if different data on multi select</li>
+                      {_('about.news.version_1_6_7.items', {
+                        defaultValue: 'Fix preview not showing regression\nNew packaging to fix security issues'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.4</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.5' })}</h4>
                     <ul>
-                      <li>Improve absolute episode number matching (good for mangas)</li>
-                      <li>Improve UI performance</li>
-                      <li>Response caching for TVDB and TMDB</li>
+                      {_('about.news.version_1_6_5.items', {
+                        defaultValue:
+                          'Fix issues with track encoding selection\nShow mixed selection if different data on multi select'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.3</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.4' })}</h4>
                     <ul>
-                      <li>Re-encode on Codec Mismatch Setting</li>
-                      <li>Fix issue with multi encode</li>
-                      <li>Fix matching of series even if no episode number specified</li>
+                      {_('about.news.version_1_6_4.items', {
+                        defaultValue:
+                          'Improve absolute episode number matching (good for mangas)\nImprove UI performance\nResponse caching for TVDB and TMDB'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.2</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.3' })}</h4>
                     <ul>
-                      <li>Support drag and drop movie parts</li>
-                      <li>Display progression while generating preview</li>
-                      <li>High speed conversion of files if format is not supported for preview</li>
-                      <li>Fixed issue with second part joining and trimming</li>
+                      {_('about.news.version_1_6_3.items', {
+                        defaultValue:
+                          'Re-encode on Codec Mismatch Setting\nFix issue with multi encode\nFix matching of series even if no episode number specified'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
-                    <h4>Version 1.6.1</h4>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.2' })}</h4>
                     <ul>
-                      <li>Display a warning message if application can&#39;t access removable medias (snap)</li>
-                      <li>Added What&#39;s new section in about dialog</li>
-                      <li>Added Features section in about dialog</li>
+                      {_('about.news.version_1_6_2.items', {
+                        defaultValue:
+                          'Support drag and drop movie parts\nDisplay progression while generating preview\nHigh speed conversion of files if format is not supported for preview\nFixed issue with second part joining and trimming'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                    </ul>
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.6.1' })}</h4>
+                    <ul>
+                      {_('about.news.version_1_6_1.items', {
+                        defaultValue:
+                          "Display a warning message if application can''t access removable medias (snap)\nAdded What''s new section in about dialog\nAdded Features section in about dialog"
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
                     </ul>
                   </div>
                 )}
@@ -208,35 +262,88 @@ export const AboutDialog = () => {
                   >
                     <ul>
                       <li>
-                        <b>Automatic Media Recognition:</b>{' '}
-                        <small>Identifies movies and TV shows using TheMovieDB or TVDB</small>
+                        <b>
+                          {_('about.features.automatic_media_recognition.title', {
+                            defaultValue: 'Automatic Media Recognition:'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.automatic_media_recognition.description', {
+                            defaultValue: 'Identifies movies and TV shows using TheMovieDB or TVDB'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Smart File Renaming:</b>{' '}
-                        <small>Renames files using Plex/Kodi-friendly naming conventions</small>
+                        <b>{_('about.features.smart_file_renaming.title', { defaultValue: 'Smart File Renaming:' })}</b>{' '}
+                        <small>
+                          {_('about.features.smart_file_renaming.description', {
+                            defaultValue: 'Renames files using Plex/Kodi-friendly naming conventions'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Metadata Correction:</b> <small>Fetches and corrects title, year, episode name...</small>
+                        <b>{_('about.features.metadata_correction.title', { defaultValue: 'Metadata Correction:' })}</b>{' '}
+                        <small>
+                          {_('about.features.metadata_correction.description', {
+                            defaultValue: 'Fetches and corrects title, year, episode name...'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Audio & Subtitle Track Management:</b>{' '}
-                        <small>Detects and labels audio/subtitle languages; renames and reorders tracks.</small>
+                        <b>
+                          {_('about.features.audio_subtitle_management.title', {
+                            defaultValue: 'Audio & Subtitle Track Management:'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.audio_subtitle_management.description', {
+                            defaultValue: 'Detects and labels audio/subtitle languages; renames and reorders tracks.'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Poster & Thumbnail Download:</b>{' '}
-                        <small>Automatically downloads posters and thumbnails.</small>
+                        <b>
+                          {_('about.features.poster_thumbnail_download.title', {
+                            defaultValue: 'Poster & Thumbnail Download:'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.poster_thumbnail_download.description', {
+                            defaultValue: 'Automatically downloads posters and thumbnails.'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Media File Splitting & Joining:</b>{' '}
-                        <small>Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.</small>
+                        <b>
+                          {_('about.features.media_splitting_joining.title', {
+                            defaultValue: 'Media File Splitting & Joining:'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.media_splitting_joining.description', {
+                            defaultValue: 'Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Video Encoding (H.264 / H.265):</b>{' '}
-                        <small>Converts media to efficient formats with predefined presets.</small>
+                        <b>
+                          {_('about.features.video_encoding.title', {
+                            defaultValue: 'Video Encoding (H.264 / H.265):'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.video_encoding.description', {
+                            defaultValue: 'Converts media to efficient formats with predefined presets.'
+                          })}
+                        </small>
                       </li>
                       <li>
-                        <b>Batch Processing:</b>{' '}
-                        <small>Handles multiple files simultaneously with queue management.</small>
+                        <b>{_('about.features.batch_processing.title', { defaultValue: 'Batch Processing:' })}</b>{' '}
+                        <small>
+                          {_('about.features.batch_processing.description', {
+                            defaultValue: 'Handles multiple files simultaneously with queue management.'
+                          })}
+                        </small>
                       </li>
                     </ul>
                   </div>
@@ -278,7 +385,11 @@ export const AboutDialog = () => {
                         <tbody className={'powered-by-list'}>
                           <tr>
                             <td>
-                              <img src={MKVToolNixLogo} width={48} alt={'MKVToolNix Logo'} />
+                              <img
+                                src={MKVToolNixLogo}
+                                width={48}
+                                alt={_('about.powered.mkvtoolnix.alt', { defaultValue: 'MKVToolNix Logo' })}
+                              />
                             </td>
                             <td>MKVToolNix</td>
                             <td className="version">{window.api.main.mkvmergeVersion}</td>
@@ -298,7 +409,7 @@ export const AboutDialog = () => {
                                 style={{ backgroundColor: 'rgb(3, 37, 65)', padding: '2px' }}
                                 src={TMDBLogo}
                                 width={48}
-                                alt={'TMDB Logo'}
+                                alt={_('about.powered.tmdb.alt', { defaultValue: 'TMDB Logo' })}
                               />
                             </td>
                             <td>The Movie DB</td>
@@ -311,7 +422,11 @@ export const AboutDialog = () => {
                           </tr>
                           <tr>
                             <td>
-                              <img src={FFmpegLogo} width={48} alt={'FFmpeg Logo'} />
+                              <img
+                                src={FFmpegLogo}
+                                width={48}
+                                alt={_('about.powered.ffmpeg.alt', { defaultValue: 'FFmpeg Logo' })}
+                              />
                             </td>
                             <td>FFmpeg</td>
                             <td className="version">{window.api.main.ffmpegVersion}</td>
@@ -327,7 +442,7 @@ export const AboutDialog = () => {
                                 style={{ backgroundColor: 'black', padding: '2px' }}
                                 src={TVDBLogo}
                                 width={48}
-                                alt={'TVDB Logo'}
+                                alt={_('about.powered.tvdb.alt', { defaultValue: 'TVDB Logo' })}
                               />
                             </td>
                             <td>The TVDB</td>
@@ -340,7 +455,11 @@ export const AboutDialog = () => {
                           </tr>
                           <tr>
                             <td>
-                              <img src={NODEJSLogo} width={48} alt={'Node.js Logo'} />
+                              <img
+                                src={NODEJSLogo}
+                                width={48}
+                                alt={_('about.powered.nodejs.alt', { defaultValue: 'Node.js Logo' })}
+                              />
                             </td>
                             <td>Node.js</td>
                             <td className="version">{otherVersions.node}</td>
@@ -352,7 +471,11 @@ export const AboutDialog = () => {
                           </tr>
                           <tr>
                             <td>
-                              <img src={ElectronLogo} width={48} alt={'Electron Logo'} />
+                              <img
+                                src={ElectronLogo}
+                                width={48}
+                                alt={_('about.powered.electron.alt', { defaultValue: 'Electron Logo' })}
+                              />
                             </td>
                             <td>Electron</td>
                             <td className="version">{otherVersions.electron}</td>
@@ -364,7 +487,11 @@ export const AboutDialog = () => {
                           </tr>
                           <tr>
                             <td>
-                              <img src={FluentLogo} width={48} alt={'Fluent Logo'} />
+                              <img
+                                src={FluentLogo}
+                                width={48}
+                                alt={_('about.powered.fluent.alt', { defaultValue: 'Fluent Logo' })}
+                              />
                             </td>
                             <td>Fluent UI React </td>
                             <td className="version">{window.api.main.fluentUIVersion}</td>
@@ -376,7 +503,11 @@ export const AboutDialog = () => {
                           </tr>
                           <tr>
                             <td>
-                              <img src={ViteLogo} width={48} alt={'Vite Logo'} />
+                              <img
+                                src={ViteLogo}
+                                width={48}
+                                alt={_('about.powered.vite.alt', { defaultValue: 'Vite Logo' })}
+                              />
                             </td>
                             <td>Vite</td>
                             <td className="version">{window.api.main.viteVersion}</td>
@@ -395,7 +526,7 @@ export const AboutDialog = () => {
           <DialogActions style={{ paddingTop: '10px' }}>
             <DialogTrigger disableButtonEnhancement>
               <Button size="small" appearance="secondary" onClick={handleClose}>
-                Close
+                {_('about.close', { defaultValue: 'Close' })}
               </Button>
             </DialogTrigger>
           </DialogActions>

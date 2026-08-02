@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { _ } from '../../i18n'
 import { Job } from './Job'
 import { JobStatus } from '../../../common/@types/Job'
 import { FFmpeg } from '../programs/FFmpeg'
@@ -27,7 +28,7 @@ export class PreviewingJob extends Job<string> {
   private readonly durationSeconds: number
 
   constructor(video: IVideo, destinationPath: string, durationSeconds: number) {
-    super(JobStatus.LOADING, 'Preparing video preview.')
+    super(JobStatus.LOADING, _('job.title.previewing', { defaultValue: 'Preparing video preview.' }))
     this.video = video
     this.destinationPath = destinationPath
     this.durationSeconds = durationSeconds

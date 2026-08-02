@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { _ } from '../../i18n'
 import { Job } from './Job'
 import { Container, MKVMerge } from '../programs/MKVMerge'
 import { Track } from '../Track'
@@ -31,7 +32,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
   private readonly destinationPath: string
 
   constructor(path: string, destinationPath: string) {
-    super(JobStatus.LOADING, 'Loading file information.')
+    super(JobStatus.LOADING, _('job.title.loading_file_info', { defaultValue: 'Loading file information.' }))
     this.sourcePath = path
     this.destinationPath = destinationPath
   }

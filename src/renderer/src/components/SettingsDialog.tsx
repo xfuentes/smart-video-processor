@@ -52,6 +52,7 @@ import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
 import { ProgressButton } from '@renderer/components/ProgressButton'
 import { useSettings } from '@renderer/components/context/SettingsContext'
+import { _ } from '../i18n'
 
 export const SettingsDialog = () => {
   const { settingsValidation, setSettingsValidation } = useSettings()
@@ -68,7 +69,9 @@ export const SettingsDialog = () => {
       language,
       tmpFilesPath,
       moviesOutputPath,
+      animatedMoviesOutputPath,
       tvShowsOutputPath,
+      animatedTVShowsOutputPath,
       othersOutputPath,
       isAutoStartEnabled,
       priority,
@@ -106,7 +109,9 @@ export const SettingsDialog = () => {
       setLanguage(settingsValidation.result.language)
       setTmpFilesPath(settingsValidation.result.tmpFilesPath)
       setMoviesOutputPath(settingsValidation.result.moviesOutputPath)
+      setAnimatedMoviesOutputPath(settingsValidation.result.animatedMoviesOutputPath)
       setTVShowsOutputPath(settingsValidation.result.tvShowsOutputPath)
+      setAnimatedTVShowsOutputPath(settingsValidation.result.animatedTVShowsOutputPath)
       setOthersOutputPath(settingsValidation.result.othersOutputPath)
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
       setPriority(settingsValidation.result.priority)
@@ -164,7 +169,9 @@ export const SettingsDialog = () => {
   const [language, setLanguage] = useState(settingsValidation?.result?.language)
   const [tmpFilesPath, setTmpFilesPath] = useState(settingsValidation?.result?.tmpFilesPath)
   const [moviesOutputPath, setMoviesOutputPath] = useState(settingsValidation?.result?.moviesOutputPath)
+  const [animatedMoviesOutputPath, setAnimatedMoviesOutputPath] = useState(settingsValidation?.result?.animatedMoviesOutputPath)
   const [tvShowsOutputPath, setTVShowsOutputPath] = useState(settingsValidation?.result?.tvShowsOutputPath)
+  const [animatedTVShowsOutputPath, setAnimatedTVShowsOutputPath] = useState(settingsValidation?.result?.animatedTVShowsOutputPath)
   const [othersOutputPath, setOthersOutputPath] = useState(settingsValidation?.result?.othersOutputPath)
   const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
   const [priority, setPriority] = useState(settingsValidation?.result?.priority)
@@ -189,11 +196,11 @@ export const SettingsDialog = () => {
     <Dialog modalType="modal" open={opened} onOpenChange={handleOpenChange}>
       <DialogTrigger>
         <ToolbarButton vertical icon={<Settings24Regular />}>
-          Settings
+          {_('settings.trigger.label', { defaultValue: 'Settings' })}
         </ToolbarButton>
       </DialogTrigger>
       <DialogSurface
-        aria-label="Settings"
+        aria-label={_('settings.aria_label', { defaultValue: 'Settings' })}
         style={{ padding: '5px', minHeight: '500px', display: 'flex', flexFlow: 'column' }}
       >
         <form
@@ -213,16 +220,16 @@ export const SettingsDialog = () => {
                 onTabSelect={(_event: SelectTabEvent, data: SelectTabData) => setSelectedTab(data.value as string)}
               >
                 <Tab value="general" icon={<DocumentSettings20Regular />}>
-                  General
+                  {_('settings.tab.general', { defaultValue: 'General' })}
                 </Tab>
                 <Tab value="output" icon={<ArchiveSettings20Regular />}>
-                  Output
+                  {_('settings.tab.output', { defaultValue: 'Output' })}
                 </Tab>
                 <Tab value="filtering" icon={<SearchSettings20Regular />}>
-                  Filtering
+                  {_('settings.tab.filtering', { defaultValue: 'Filtering' })}
                 </Tab>
                 <Tab value="encoding" icon={<VideoSettings20Regular />}>
-                  Encoding
+                  {_('settings.tab.encoding', { defaultValue: 'Encoding' })}
                 </Tab>
               </TabList>
               <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column' }}>
@@ -230,7 +237,7 @@ export const SettingsDialog = () => {
                   <div className="settings-form">
                     <div className="field">
                       <Label size="small" required htmlFor="languageInput">
-                        Language
+                        {_('settings.language.label', { defaultValue: 'Language' })}
                       </Label>
                       <LanguageSelector
                         multiselect={false}
@@ -243,14 +250,14 @@ export const SettingsDialog = () => {
                     </div>
                     <div className="field">
                       <Switch
-                        label="Auto Start"
+                        label={_('settings.auto_start.label', { defaultValue: 'Auto Start' })}
                         checked={isAutoStartEnabled}
                         onChange={(ev: ChangeEvent<HTMLInputElement>) => setAutoStartEnabled(ev.currentTarget.checked)}
                       />
                     </div>
                     {!window.api.main.isLimitedPermissions && (
                       <div className="field">
-                        <Label htmlFor="prioritySlider">Processes Priority</Label>
+                        <Label htmlFor="prioritySlider">{_('settings.priority.label', { defaultValue: 'Processes Priority' })}</Label>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                           <Slider
                             min={-2}
@@ -264,7 +271,9 @@ export const SettingsDialog = () => {
                           />
                           <div>
                             <Label className={priorityClass} htmlFor="prioritySlider">
-                              {ProcessesPriority[priority]}
+                              {_('settings.priority.level.' + priority.toLowerCase(), {
+                                defaultValue: ProcessesPriority[priority]
+                              })}
                             </Label>
                           </div>
                         </div>
@@ -272,7 +281,7 @@ export const SettingsDialog = () => {
                     )}
                     <div className="field">
                       <Switch
-                        label="Debug Mode"
+                        label={_('settings.debug_mode.label', { defaultValue: 'Debug Mode' })}
                         checked={isDebugEnabled}
                         onChange={(ev: ChangeEvent<HTMLInputElement>) => setDebugEnabled(ev.currentTarget.checked)}
                       />
@@ -283,7 +292,7 @@ export const SettingsDialog = () => {
                   <div className="settings-form">
                     <div className="field">
                       <Label size="small" required htmlFor="tmpFilesPathInput">
-                        Temporary Files Path (Can be relative to source file path)
+                        {_('settings.tmp_files_path.label', { defaultValue: 'Temporary Files Path (Can be relative to source file path)' })}
                       </Label>
                       <Input
                         required
@@ -296,7 +305,7 @@ export const SettingsDialog = () => {
                     </div>
                     <div className="field">
                       <Label size="small" required htmlFor="moviesOutputPathInput">
-                        Movies Output Path (Can be relative to source file path)
+                        {_('settings.movies_output_path.label', { defaultValue: 'Movies Output Path (Can be relative to source file path)' })}
                       </Label>
                       <Input
                         required
@@ -308,8 +317,21 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <div className="field">
+                      <Label size="small" required htmlFor="animatedMoviesOutputPathInput">
+                        {_('settings.animated_movies_output_path.label', { defaultValue: 'Animated Movies Output Path (Can be relative to source file path)' })}
+                      </Label>
+                      <Input
+                        required
+                        size="small"
+                        type="text"
+                        id="animatedMoviesOutputPathInput"
+                        value={animatedMoviesOutputPath}
+                        onChange={handleFormInputChange.bind(null, setAnimatedMoviesOutputPath)}
+                      />
+                    </div>
+                    <div className="field">
                       <Label size="small" required htmlFor="tvShowsOutputPathInput">
-                        TV Shows Output Path (Can be relative to source file path)
+                        {_('settings.tv_shows_output_path.label', { defaultValue: 'TV Shows Output Path (Can be relative to source file path)' })}
                       </Label>
                       <Input
                         required
@@ -321,8 +343,21 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <div className="field">
+                      <Label size="small" required htmlFor="animatedTVShowsOutputPathInput">
+                        {_('settings.animated_tv_shows_output_path.label', { defaultValue: 'Animated TV Shows Output Path (Can be relative to source file path)' })}
+                      </Label>
+                      <Input
+                        required
+                        size="small"
+                        type="text"
+                        id="animatedTVShowsOutputPathInput"
+                        value={animatedTVShowsOutputPath}
+                        onChange={handleFormInputChange.bind(null, setAnimatedTVShowsOutputPath)}
+                      />
+                    </div>
+                    <div className="field">
                       <Label size="small" required htmlFor="othersOutputPathInput">
-                        Others Output Path (Can be relative to source file path)
+                        {_('settings.others_output_path.label', { defaultValue: 'Others Output Path (Can be relative to source file path)' })}
                       </Label>
                       <Input
                         required
@@ -339,7 +374,7 @@ export const SettingsDialog = () => {
                   <div className="settings-form">
                     <div className="field">
                       <Switch
-                        label="Track Filtering"
+                        label={_('settings.track_filtering.label', { defaultValue: 'Track Filtering' })}
                         checked={isTrackFilteringEnabled}
                         onChange={(ev: ChangeEvent<HTMLInputElement>) =>
                           setTrackFilteringEnabled(ev.currentTarget.checked)
@@ -354,7 +389,7 @@ export const SettingsDialog = () => {
                           required
                           htmlFor="favoriteLanguagesInput"
                         >
-                          Favorite Languages
+                          {_('settings.favorite_languages.label', { defaultValue: 'Favorite Languages' })}
                         </Label>
                         <LanguageSelector
                           disabled={!isTrackFilteringEnabled}
@@ -369,7 +404,7 @@ export const SettingsDialog = () => {
                       <div className="field">
                         <Switch
                           disabled={!isTrackFilteringEnabled}
-                          label="Keep VO"
+                          label={_('settings.keep_vo.label', { defaultValue: 'Keep VO' })}
                           checked={isKeepVOEnabled}
                           onChange={(ev: ChangeEvent<HTMLInputElement>) => setKeepVOEnabled(ev.currentTarget.checked)}
                         />
@@ -383,11 +418,11 @@ export const SettingsDialog = () => {
                       <Switch
                         label={
                           <div>
-                            Track Encoding
+                            {_('settings.track_encoding.label', { defaultValue: 'Track Encoding' })}
                             <InfoLabel
                               info={
                                 <div>
-                                  If enabled allow automatic track encoding when the given criteria are fulfilled.
+                                  {_('settings.track_encoding.info', { defaultValue: 'If enabled allow automatic track encoding when the given criteria are fulfilled.' })}
                                 </div>
                               }
                             />
@@ -400,17 +435,15 @@ export const SettingsDialog = () => {
                       />
                     </div>
                     <>
-                      <Divider style={{ flexGrow: '0' }}>Video</Divider>
+                      <Divider style={{ flexGrow: '0' }}>{_('settings.encoding.video_divider', { defaultValue: 'Video' })}</Divider>
                       <div className="field">
                         <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
                           <Label htmlFor="codecSelection" disabled={!isTrackEncodingEnabled}>
-                            Codec
+                            {_('settings.encoding.video_codec.label', { defaultValue: 'Codec' })}
                             <InfoLabel
                               info={
                                 <div>
-                                  Choose your favorite video codec. It will be used by default when video encoding is
-                                  recommended. Auto will select the most appropriate codec depending on the video
-                                  resolution.
+                                  {_('settings.encoding.video_codec.info', { defaultValue: 'Choose your favorite video codec. It will be used by default when video encoding is recommended. Auto will select the most appropriate codec depending on the video resolution.' })}
                                 </div>
                               }
                             />
@@ -435,11 +468,11 @@ export const SettingsDialog = () => {
                       <div className="field">
                         <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
                           <Label htmlFor="videoSizeReductionSlider" disabled={!isTrackEncodingEnabled}>
-                            Size Reduction
+                            {_('settings.encoding.size_reduction', { defaultValue: 'Size Reduction' })}
                             <InfoLabel
                               info={
                                 <div>
-                                  Choose the minimum size reduction ratio required to enable re-encoding a video track.
+                                  {_('settings.encoding.video_size_reduction.info', { defaultValue: 'Choose the minimum size reduction ratio required to enable re-encoding a video track.' })}
                                 </div>
                               }
                             />
@@ -464,10 +497,10 @@ export const SettingsDialog = () => {
                           disabled={!isTrackEncodingEnabled}
                           label={
                             <div>
-                              Re-encode on Codec Mismatch
+                              {_('settings.encoding.re_encode_on_mismatch', { defaultValue: 'Re-encode on Codec Mismatch' })}
                               <InfoLabel
                                 info={
-                                  <div>If enabled, re-encodes video stream when the codec is not H.264 or H.265.</div>
+                                  <div>{_('settings.encoding.video_re_encode_on_mismatch.info', { defaultValue: 'If enabled, re-encodes video stream when the codec is not H.264 or H.265.' })}</div>
                                 }
                               />
                             </div>
@@ -478,15 +511,15 @@ export const SettingsDialog = () => {
                           }
                         />
                       </div>
-                      <Divider style={{ flexGrow: '0' }}>Audio</Divider>
+                      <Divider style={{ flexGrow: '0' }}>{_('settings.encoding.audio_divider', { defaultValue: 'Audio' })}</Divider>
                       <div className="field">
                         <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
                           <Label htmlFor="audioSizeReductionSlider" disabled={!isTrackEncodingEnabled}>
-                            Size Reduction
+                            {_('settings.encoding.size_reduction', { defaultValue: 'Size Reduction' })}
                             <InfoLabel
                               info={
                                 <div>
-                                  Choose the minimum size reduction ratio required to enable re-encoding an audio track.
+                                  {_('settings.encoding.audio_size_reduction.info', { defaultValue: 'Choose the minimum size reduction ratio required to enable re-encoding an audio track.' })}
                                 </div>
                               }
                             />
@@ -511,9 +544,9 @@ export const SettingsDialog = () => {
                           disabled={!isTrackEncodingEnabled}
                           label={
                             <div>
-                              Re-encode on Codec Mismatch
+                              {_('settings.encoding.re_encode_on_mismatch', { defaultValue: 'Re-encode on Codec Mismatch' })}
                               <InfoLabel
-                                info={<div>If enabled, re-encodes audio stream when the codec is not AAC.</div>}
+                                info={<div>{_('settings.encoding.audio_re_encode_on_mismatch.info', { defaultValue: 'If enabled, re-encodes audio stream when the codec is not AAC.' })}</div>}
                               />
                             </div>
                           }
@@ -531,12 +564,12 @@ export const SettingsDialog = () => {
             <DialogActions style={{ paddingTop: '10px' }}>
               <DialogTrigger disableButtonEnhancement>
                 <ProgressButton appearance="primary" execute={handleSubmit}>
-                  Apply
+                  {_('settings.apply.label', { defaultValue: 'Apply' })}
                 </ProgressButton>
               </DialogTrigger>
               <DialogTrigger disableButtonEnhancement>
                 <Button size="small" appearance="secondary" onClick={handleCancel}>
-                  Cancel
+                  {_('settings.cancel.label', { defaultValue: 'Cancel' })}
                 </Button>
               </DialogTrigger>
             </DialogActions>

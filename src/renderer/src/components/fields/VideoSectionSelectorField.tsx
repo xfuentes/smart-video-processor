@@ -31,6 +31,7 @@ import {
   SubtractSquareRegular
 } from '@fluentui/react-icons'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
+import { _ } from '../../i18n'
 import { PlayHead } from '@renderer/components/context/PlayHead'
 import { Delimitation } from '@renderer/components/context/Delimitation'
 
@@ -306,7 +307,11 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
         </div>
         <div className="video-controls">
           <Tooltip
-            content={mainVideoUuid === undefined ? "Main video can't be removed here" : 'Remove this video part'}
+            content={
+              mainVideoUuid === undefined
+                ? _('video_section.remove_main_tooltip', { defaultValue: "Main video can't be removed here" })
+                : _('video_section.remove_part_tooltip', { defaultValue: 'Remove this video part' })
+            }
             relationship="description"
           >
             <Button
@@ -318,7 +323,11 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
             />
           </Tooltip>
           <Tooltip
-            content={startFromChecked ? 'Unset video start time' : 'Set video start time to current position'}
+            content={
+              startFromChecked
+                ? _('video_section.start_unset_tooltip', { defaultValue: 'Unset video start time' })
+                : _('video_section.start_set_tooltip', { defaultValue: 'Set video start time to current position' })
+            }
             relationship="description"
           >
             <ToggleButton
@@ -341,7 +350,11 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
             />
           </Tooltip>
           <Tooltip
-            content={endAtChecked ? 'Unset video end time' : 'Set video end time to current position'}
+            content={
+              endAtChecked
+                ? _('video_section.end_unset_tooltip', { defaultValue: 'Unset video end time' })
+                : _('video_section.end_set_tooltip', { defaultValue: 'Set video end time to current position' })
+            }
             relationship="description"
           >
             <ToggleButton

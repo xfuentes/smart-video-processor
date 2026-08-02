@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,6 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
         if (Hls.isSupported()) {
           hls = new Hls(config)
           hlsRef.current = hls
-          console.log('loading video from: ' + src)
           hls.loadSource(src)
           hls.attachMedia(video)
 

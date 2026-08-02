@@ -24,6 +24,7 @@ import { TMDBClient } from './clients/TMDBClient'
 import Chalk from 'chalk'
 import { Countries, Country } from '../../common/Countries'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
+import { _ } from '../i18n'
 import { debug } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
@@ -43,6 +44,8 @@ export default class Movie implements IMovie {
   public rating?: number
   public originalCountries: Country[] = []
   public edition: EditionType = EditionType.THEATRICAL
+  public isAnimation: boolean = false
+  public genres?: string[]
   private video: Video
   private duration?: number
 
@@ -67,7 +70,7 @@ export default class Movie implements IMovie {
         }
       }
       this.video.status = JobStatus.LOADING
-      this.video.message = 'Searching movie on TMDB.'
+      this.video.message = _('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
       this.video.fireChangeEvent()
       if (by === SearchBy.TITLE) {
         this.video.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(this.title, this.year)
@@ -83,10 +86,11 @@ export default class Movie implements IMovie {
         this.video.status = JobStatus.WARNING
         this.video.progression.progress = -1
         if (by === SearchBy.TITLE) {
-          this.video.message =
-            'Unable to find an exact match on TMDB. Please check the information provided and try again.'
+          this.video.message = _('video.message.tmdb_no_exact_match', {
+          defaultValue: 'Unable to find an exact match on TMDB. Please check the information provided and try again.'
+        })
         } else {
-          this.video.message = 'Unable to find the movie on TMDB.'
+          this.video.message = _('video.message.tmdb_not_found', { defaultValue: 'Unable to find the movie on TMDB.' })
         }
         debug(Chalk.red(this.video.message))
       } else {
@@ -100,7 +104,7 @@ export default class Movie implements IMovie {
       throw new Error('TMDB ID is mandatory')
     }
     this.video.status = JobStatus.LOADING
-    this.video.message = 'Retrieving movie details from TMDB.'
+    this.video.message = _('video.message.retrieving_movie_tmdb', { defaultValue: 'Retrieving movie details from TMDB.' })
     this.video.fireChangeEvent()
     try {
       const movieData = await TMDBClient.getInstance().retrieveMovieDetails(this.tmdb)
@@ -115,6 +119,8 @@ export default class Movie implements IMovie {
       this.imdb = movieData.imdb
       this.rating = movieData.rating
       this.duration = movieData.duration
+      this.isAnimation = movieData.isAnimation
+      this.genres = movieData.genres
       const tracksDuration = this.video.getTracksDuration()
       if (
         this.duration != undefined &&
@@ -152,7 +158,7 @@ export default class Movie implements IMovie {
       const fullPath = Path.join(tempDirectory, 'TMDB-' + this.tmdb + '-poster.jpg')
       if (this.posterURL) {
         this.video.status = JobStatus.LOADING
-        this.video.message = 'Downloading poster image from TMDB.'
+        this.video.message = _('video.message.downloading_poster_tmdb', { defaultValue: 'Downloading poster image from TMDB.' })
         this.video.fireChangeEvent()
         this.poster = await Files.downloadFile(this.posterURL, fullPath)
         debug(`Wrote poster file://${this.poster}`)
@@ -172,7 +178,7 @@ export default class Movie implements IMovie {
       this.video.fireChangeEvent()
     } catch (error) {
       this.video.status = JobStatus.ERROR
-      this.video.message = (error as Error).message
+      this.video.message = _('video.message.tmdb_error', { defaultValue: '{error}', error: (error as Error).message })
       this.video.fireChangeEvent()
     }
   }
@@ -231,7 +237,9 @@ export default class Movie implements IMovie {
       originalLanguage: this.originalLanguage,
       rating: this.rating,
       originalCountries: this.originalCountries,
-      edition: this.edition
+      edition: this.edition,
+      isAnimation: this.isAnimation,
+      genres: this.genres
     }
   }
 }

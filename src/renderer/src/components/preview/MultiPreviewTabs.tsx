@@ -26,6 +26,7 @@ import {
   TabList
 } from '@fluentui/react-components'
 import { ResizeVideo20Regular, Search20Regular, SquareHintArrowBack20Regular } from '@fluentui/react-icons'
+import { _ } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { IHint } from '../../../../common/@types/Hint'
@@ -148,17 +149,17 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
     >
       <TabList selectedValue={selectedTab} onTabSelect={handleTabSelect} size="small">
         <Tab value="matching" icon={<Search20Regular />}>
-          Matching{' '}
+          {_('preview.tab.matching', { defaultValue: 'Matching' })}{' '}
           <CounterBadge color={allMatched ? 'informative' : 'danger'} size="small" showZero count={matchingCount} />
         </Tab>
         {hintCount > 0 && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
-            Hints{' '}
+            {_('preview.tab.hints', { defaultValue: 'Hints' })}{' '}
             <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
           </Tab>
         )}
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
-          Encoding <CounterBadge color="informative" size="small" showZero count={encodingCount} />
+          {_('preview.tab.encoding', { defaultValue: 'Encoding' })} <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

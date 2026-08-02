@@ -268,6 +268,13 @@ interface SeriesBaseRecord {
   status: Status
   year: string
   overview: string
+  genres?: string[]
+}
+
+interface TVDBGenreDetail {
+  id: number
+  name: string
+  slug: string
 }
 
 interface TVDBSeriesResponse {
@@ -275,6 +282,12 @@ interface TVDBSeriesResponse {
     series: SeriesBaseRecord
     episodes: EpisodeBaseRecord[]
   }
+  status: string
+  message: string
+}
+
+interface TVDBSeriesExtendedResponse {
+  data: Omit<SeriesBaseRecord, 'genres'> & { genres?: TVDBGenreDetail[] }
   status: string
   message: string
 }
@@ -307,6 +320,7 @@ interface TVDBEpisodesTranslationResponse {
 interface TVDBEpisodeResponse {
   data: EpisodeBaseRecord
   status: string
+  message?: string
 }
 
 interface TVDBEpisodesListResponse {
@@ -319,4 +333,17 @@ interface TVDBEpisodesListResponse {
     total_items: number
     page_size: number
   }
+}
+
+interface TVDBLanguage {
+  id: string
+  name: string
+  nativeName: string
+  shortCode: string | null
+}
+
+interface TVDBLanguagesResponse {
+  data: TVDBLanguage[]
+  status: string
+  message?: string
 }

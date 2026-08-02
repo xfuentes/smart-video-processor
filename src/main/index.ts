@@ -18,10 +18,10 @@
 
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
 import { extname, join } from 'path'
-import { existsSync, statSync } from 'node:fs'
+import fs from 'node:fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico?asset'
-import { currentSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
+import { currentSettings, defaultSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
 import { Settings } from '../common/@types/Settings'
@@ -29,6 +29,7 @@ import { initVideoControllerIPC } from './VideoControllerIPC'
 
 import electron_squirrel_startup from 'electron-squirrel-startup'
 import { FormValidation } from '../common/FormValidation'
+import { mainBindings } from 'i18next-electron-fs-backend'
 import { updateElectronApp } from 'update-electron-app'
 import { FFmpeg } from './domain/programs/FFmpeg'
 import { MKVMerge } from './domain/programs/MKVMerge'
@@ -68,7 +69,7 @@ function getCommandLineVideoFiles(argv: string[] = process.argv): string[] {
     .filter((arg) => VIDEO_EXTENSIONS.has(extname(arg).toLowerCase()))
     .filter((arg) => {
       try {
-        return existsSync(arg) && statSync(arg).isFile()
+        return fs.existsSync(arg) && fs.statSync(arg).isFile()
       } catch {
         return false
       }
@@ -214,7 +215,8 @@ app.whenReady().then(async () => {
   })
   ipcMain.handle('main:getVersion', async () => {
     return {
-      version: `${app.getVersion()}${!app.isPackaged ? ' - Development' : ''}`,
+      version: `${app.getVersion()}`,
+      development: !app.isPackaged,
       ffmpegVersion: ffmpegVersion,
       mkvmergeVersion: mkvmergeVersion,
       fluentUIVersion: packageJSON.devDependencies['@fluentui/react-components'].replace(/^\^/, ''),
@@ -227,7 +229,37 @@ app.whenReady().then(async () => {
       hasRemovableMediaAccess: Processes.hasRemovableMediaAccess()
     }
   })
-  ipcMain.handle('main:getCurrentSettings', () => validateSettings(currentSettings))
+  ipcMain.handle('main:getCurrentSettings', () => {
+    try {
+      return validateSettings(currentSettings)
+    } catch {
+      return defaultSettings
+    }
+  })
+  ipcMain.handle('main:getLocaleBasePath', () => {
+    try {
+      return join(app.getAppPath(), 'locales')
+    } catch {
+      return ''
+    }
+  })
+  ipcMain.handle('main:getLicenseText', (_event, language: string): string => {
+    const localePath = join(app.getAppPath(), 'locales')
+    const aliases: Record<string, string[]> = { zh: ['zh-cn'], pt: ['pt-br'], no: ['nn'] }
+    const code = (language || 'en').toLowerCase()
+    const candidates = new Set<string>([code])
+    for (const alias of aliases[code] || []) {
+      candidates.add(alias)
+    }
+    candidates.add('en')
+    for (const candidate of candidates) {
+      const filePath = join(localePath, 'licenses', `gpl-3.0-${candidate}.html`)
+      if (fs.existsSync(filePath)) {
+        return fs.readFileSync(filePath, 'utf8')
+      }
+    }
+    return ''
+  })
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
     const priorityUpdated = currentSettings.priority !== settings.priority
     const encoderSettingsUpdated =
@@ -263,6 +295,7 @@ app.whenReady().then(async () => {
   })
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   initVideoControllerIPC(mainWindow)
+  mainBindings(ipcMain, mainWindow, fs)
 
   mainWindow.webContents.on('did-finish-load', () => {
     flushPendingVideoFiles()

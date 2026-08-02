@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,9 @@ import { useEffect, useState } from 'react'
 import { IVideo, MultiSearchInputData, SearchBy, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
-import { EpisodeOrder } from '../../../../main/domain/clients/TVDBClient'
+import { EPISODE_ORDER_LABELS, EPISODE_ORDERS, EpisodeOrder } from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
+import { _ } from '../../i18n'
 import { keepIfSameFilenameReducer, keepIfSameReducer } from '@renderer/utils'
 import { Country } from '../../../../common/Countries'
 
@@ -117,7 +118,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     <>
       <div className="matching-form">
         <div>
-          <Field size="small" label="Type" required className={disabled ? 'disabled' : ''}>
+          <Field
+            size="small"
+            label={_('matching.field.type.label', { defaultValue: 'Type' })}
+            required
+            className={disabled ? 'disabled' : ''}
+          >
             <Select
               size="small"
               disabled={disabled}
@@ -134,11 +140,13 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             >
               {initialType === undefined && (
                 <option key={undefined} value={undefined}>
-                  Multiple values
+                  {_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                 </option>
               )}
               {Object.values(VideoType).map((key) => (
-                <option key={key}>{key}</option>
+                <option key={key} value={key}>
+                  {_(`video_type.${key.toLowerCase().replace(/-/g, '_')}.label`, { defaultValue: key })}
+                </option>
               ))}
             </Select>
           </Field>
@@ -146,7 +154,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
         {type === VideoType.TV_SHOW && (
           <>
             <div>
-              <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
+              <Field
+                size="small"
+                label={_('matching.field.search_by.label', { defaultValue: 'Search By' })}
+                required
+                className={disabled ? 'disabled' : ''}
+              >
                 <Select
                   size="small"
                   disabled={disabled}
@@ -155,18 +168,27 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 >
                   {initialSearchBy === undefined && (
                     <option key={undefined} value={undefined}>
-                      Multiple values
+                      {_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                     </option>
                   )}
-                  <option key={SearchBy.TITLE_POSITION}>{SearchBy.TITLE_POSITION}</option>
-                  <option key={SearchBy.TVDB_POSITION}>{SearchBy.TVDB_POSITION}</option>
+                  <option key={SearchBy.TITLE_POSITION} value={SearchBy.TITLE_POSITION}>
+                    {_('search_by.title_position.label', { defaultValue: 'Title & Position' })}
+                  </option>
+                  <option key={SearchBy.TVDB_POSITION} value={SearchBy.TVDB_POSITION}>
+                    {_('search_by.tvdb_position.label', { defaultValue: 'TVDB ID & Position' })}
+                  </option>
                 </Select>
               </Field>
             </div>
             {searchBy === SearchBy.TITLE_POSITION && (
               <>
                 <div>
-                  <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label={_('matching.field.title.label', { defaultValue: 'Title' })}
+                    required
+                    className={disabled ? 'disabled' : ''}
+                  >
                     <Input
                       size="small"
                       disabled={disabled}
@@ -176,7 +198,11 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label={_('matching.field.year.label', { defaultValue: 'Year' })}
+                    className={disabled ? 'disabled' : ''}
+                  >
                     <Input
                       size="small"
                       type="number"
@@ -192,7 +218,12 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             {searchBy === SearchBy.TVDB_POSITION && (
               <>
                 <div>
-                  <Field size="small" label="TVDB ID" required className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label={_('matching.field.tvdb_id.label', { defaultValue: 'TVDB ID' })}
+                    required
+                    className={disabled ? 'disabled' : ''}
+                  >
                     <Input
                       size="small"
                       disabled={disabled}
@@ -204,28 +235,48 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
               </>
             )}
             <div>
-              <Field size="small" label="Order" className={disabled ? 'disabled' : ''}>
+              <Field
+                size="small"
+                label={_('matching.field.order.label', { defaultValue: 'Order' })}
+                className={disabled ? 'disabled' : ''}
+              >
                 <Select
                   size="small"
                   disabled={disabled}
                   value={tvShowOrder}
-                  onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
+                  onChange={(_ev, data) => {
+                    const order = data.value as EpisodeOrder
+                    if (order !== undefined) {
+                      setTvShowOrder(order)
+                      window.api.video.setMultiTvShowOrder(
+                        videos.map((v) => v.uuid),
+                        order
+                      )
+                    }
+                  }}
                 >
                   {initialTvShowOrder === undefined && (
                     <option key={undefined} value={undefined}>
-                      Multiple values
+                      {_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                     </option>
                   )}
-                  <option value="official">Official</option>
-                  <option value="dvd">DVD</option>
-                  <option value="absolute">Absolute</option>
+                  {EPISODE_ORDERS.map((order) => (
+                    <option key={order} value={order}>
+                      {_(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
+                    </option>
+                  ))}
                 </Select>
               </Field>
             </div>
             {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TVDB_POSITION) &&
               tvShowOrder !== 'absolute' && (
                 <div>
-                  <Field size="small" label="Season" required className={disabled ? 'disabled' : ''}>
+                  <Field
+                    size="small"
+                    label={_('matching.field.season.label', { defaultValue: 'Season' })}
+                    required
+                    className={disabled ? 'disabled' : ''}
+                  >
                     <Input
                       size="small"
                       type="number"

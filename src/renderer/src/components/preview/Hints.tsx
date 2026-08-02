@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ import { Divider, Field, Select } from '@fluentui/react-components'
 import { IVideo } from '../../../../common/@types/Video'
 import { HintType } from '../../../../common/@types/Hint'
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
+import { _ } from '../../i18n'
 import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
@@ -34,7 +35,7 @@ export const Hints = ({ video, disabled }: Props) => {
     <div className="hints-main">
       {languageHints.length > 0 && (
         <>
-          <Divider appearance="default">Missing Language</Divider>
+          <Divider appearance="default">{_('hints.missing_language', { defaultValue: 'Missing Language' })}</Divider>
           <div className="hints-form">
             {languageHints.map((hint) => {
               const key = hint.type + ' ' + hint.trackId
@@ -43,7 +44,14 @@ export const Hints = ({ video, disabled }: Props) => {
                 <Field
                   key={key}
                   size="small"
-                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  label={
+                    track?.type
+                      ? _('track_type.' + track.type.toLowerCase() + '.label_id', {
+                          defaultValue: `${track.type} {id}`,
+                          id: hint.trackId
+                        })
+                      : _('track.unknown.label_id', { defaultValue: 'Unknown {id}', id: hint.trackId })
+                  }
                   required
                   className={disabled ? 'disabled' : ''}
                 >
@@ -68,7 +76,9 @@ export const Hints = ({ video, disabled }: Props) => {
       )}
       {subtitlesTypeHints.length > 0 && (
         <>
-          <Divider appearance="default">Missing Subtitles Type</Divider>
+          <Divider appearance="default">
+            {_('hints.missing_subtitles_type', { defaultValue: 'Missing Subtitles Type' })}
+          </Divider>
           <div className="hints-form">
             {subtitlesTypeHints.map((hint) => {
               const key = hint.type + ' ' + hint.trackId
@@ -77,7 +87,7 @@ export const Hints = ({ video, disabled }: Props) => {
                 <Field
                   key={key}
                   size="small"
-                  label={`${track?.type ?? 'Unknown'} ${hint.trackId}`}
+                  label={`${track?.type ? _('track_type.' + track.type.toLowerCase() + '.label', { defaultValue: track.type }) : _('track.unknown', { defaultValue: 'Unknown' })} ${hint.trackId}`}
                   required
                   className={disabled ? 'disabled' : ''}
                 >
@@ -89,7 +99,7 @@ export const Hints = ({ video, disabled }: Props) => {
                   >
                     {Object.values(SubtitlesType).map((key) => (
                       <option key={key} value={key}>
-                        {key}
+                        {_(`subtitles_type.${key.toLowerCase().replace(/ /g, '_')}.label`, { defaultValue: key })}
                       </option>
                     ))}
                   </Select>

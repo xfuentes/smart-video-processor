@@ -81,7 +81,7 @@ test('Movie extracts tmdb ID', async () => {
 test('Movie extracts title and year', async () => {
   const video = new Video('Celine Dion - Live at Tokyo Dome 2018.mkv')
   expect(video.type).toBe(VideoType.MOVIE)
-  expect(video.movie.title).toBe('Celine Dion - Live at Tokyo Dome')
+  expect(video.movie.title).toBe('Celine Dion   Live at Tokyo Dome')
   expect(video.movie.year).toBe(2018)
 })
 
@@ -97,7 +97,7 @@ test('TV-Show Retrieve Language IETF', async () => {
   expect(video.tvShow.title).contain('The Ones Who Live')
   expect(video.searchBy).toBe(SearchBy.TVDB_POSITION)
   await video.search()
-  expect(video.getOriginalLanguageIETF().code).toBe('en-US')
+  expect(video.getOriginalLanguageIETF()?.code).toBe('en-US')
   video.destroy()
 })
 
@@ -110,7 +110,7 @@ test('Movie Retrieve Language IETF', async () => {
   expect(video.searchBy).toBe(SearchBy.TMDB)
 
   await video.search()
-  expect(video.getOriginalLanguageIETF().code).toBe('fr-FR')
+  expect(video.getOriginalLanguageIETF()?.code).toBe('fr-FR')
   video.destroy()
 })
 
@@ -121,7 +121,7 @@ test('Movie Search by TMDB', async () => {
   expect(video.searchBy).toBe(SearchBy.TMDB)
 
   await video.search()
-  expect(video.getOriginalLanguageIETF().code).toBe('es-AR')
+  expect(video.getOriginalLanguageIETF()?.code).toBe('es-AR')
   expect(video.searchResults.length).toBe(1)
   expect(video.searchResults[0].id).toBe(81022)
   expect(video.searchResults[0].title).toBe('Widows')
@@ -161,7 +161,7 @@ test('video with TMDB', async () => {
   expect(video.searchBy).toBe(SearchBy.TMDB)
 
   await video.search()
-  expect(video.getOriginalLanguageIETF().code).toBe('it-IT')
+  expect(video.getOriginalLanguageIETF()?.code).toBe('it-IT')
   expect(video.searchResults.length).toBe(1)
   expect(video.searchResults[0].id).toBe(122977)
   expect(video.searchResults[0].title).toBe('Saint John Bosco Mission to Love')

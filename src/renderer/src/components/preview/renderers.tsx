@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import { JobStatus } from '../../../../common/@types/Job'
 import { Attachment } from '../../../../common/Change'
 import React from 'react'
 import { Progression } from '../../../../common/@types/processes'
+import { _ } from '../../i18n'
 
 export function bitrateRenderer(bitrate?: number) {
   return bitrate ? <span>{Strings.humanBitrate(bitrate)} </span> : <span>-</span>
@@ -116,6 +117,10 @@ export function attachmentRenderer(value: Attachment) {
 }
 
 export function statusRenderer(status: JobStatus, message: string | undefined, size: 'small' | 'large' = 'small') {
+  const statusI18n = _(`job.status.${status.toLowerCase()}.short`, { defaultValue: status })
+  const messageI18n = message
+    ? _('encoding.status_message', { defaultValue: '{status}: {message}', status: statusI18n, message })
+    : statusI18n
   let intent: MessageBarIntent
   switch (status) {
     case JobStatus.ERROR:
@@ -140,10 +145,10 @@ export function statusRenderer(status: JobStatus, message: string | undefined, s
         </MessageBar>
       </MessageBarGroup>
     )
-    return message === undefined ? (
+    return messageI18n === undefined ? (
       messageGroup
     ) : (
-      <Tooltip content={message} relationship="description">
+      <Tooltip content={messageI18n} relationship="description">
         {messageGroup}
       </Tooltip>
     )
@@ -151,7 +156,7 @@ export function statusRenderer(status: JobStatus, message: string | undefined, s
     return (
       <MessageBarGroup>
         <MessageBar style={{ minHeight: '20px', minWidth: '100px' }} shape="rounded" intent={intent}>
-          {message}
+          {messageI18n}
         </MessageBar>
       </MessageBarGroup>
     )
@@ -175,7 +180,10 @@ export function trackTypeRenderer(trackType: TrackType): React.JSX.Element {
       break
   }
   return (
-    <Tooltip content={trackType} relationship={'description'}>
+    <Tooltip
+      content={_('track_type.' + trackType.toLowerCase() + '.label', { defaultValue: trackType })}
+      relationship={'description'}
+    >
       {image}
     </Tooltip>
   )

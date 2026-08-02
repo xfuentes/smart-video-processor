@@ -27,6 +27,8 @@ export class MovieData {
   public imdb?: string
   public rating?: number
   public duration: number | undefined
+  public isAnimation: boolean
+  public genres: string[] = []
 
   constructor(
     tmdb: number,
@@ -38,7 +40,9 @@ export class MovieData {
     countries: string[],
     imdb?: string,
     rating?: number,
-    duration?: number
+    duration?: number,
+    isAnimation: boolean = false,
+    genres: string[] = []
   ) {
     this.tmdb = tmdb
     this.title = title
@@ -50,5 +54,7 @@ export class MovieData {
     this.countries = countries
     this.rating = rating
     this.duration = duration
+    this.isAnimation = isAnimation
+    this.genres = genres
   }
 }

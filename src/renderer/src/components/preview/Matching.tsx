@@ -23,11 +23,16 @@ import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EditionType } from '../../../../common/@types/Movie'
-import { EpisodeOrder } from '../../../../main/domain/clients/TVDBClient'
+import {
+  EpisodeOrder,
+  EPISODE_ORDERS,
+  EPISODE_ORDER_LABELS
+} from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 import { Strings } from '../../../../common/Strings'
+import { _ } from '../../i18n'
 
 type Props = {
   video: IVideo
@@ -140,7 +145,7 @@ export const Matching = ({ video, disabled }: Props) => {
     <>
       <div className="matching-form">
         <div>
-          <Field size="small" label="Type" required className={disabled ? 'disabled' : ''}>
+          <Field size="small" label={_('matching.field.type.label', { defaultValue: 'Type' })} required className={disabled ? 'disabled' : ''}>
             <Select
               size="small"
               disabled={disabled}
@@ -156,7 +161,7 @@ export const Matching = ({ video, disabled }: Props) => {
               }}
             >
               {Object.values(VideoType).map((key) => (
-                <option key={key}>{key}</option>
+                <option key={key}>{_(`video_type.${key.toLowerCase().replace(/-/g, '_')}.label`, { defaultValue: key })}</option>
               ))}
             </Select>
           </Field>
@@ -164,7 +169,7 @@ export const Matching = ({ video, disabled }: Props) => {
         {type === VideoType.MOVIE && (
           <>
             <div>
-              <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
+              <Field size="small" label={_('matching.field.search_by.label', { defaultValue: 'Search By' })} required className={disabled ? 'disabled' : ''}>
                 <Select
                   size="small"
                   value={searchBy}
@@ -173,16 +178,16 @@ export const Matching = ({ video, disabled }: Props) => {
                     setSearchBy(data.value as SearchBy)
                   }}
                 >
-                  <option key={SearchBy.TITLE}>{SearchBy.TITLE}</option>
-                  <option key={SearchBy.IMDB}>{SearchBy.IMDB}</option>
-                  <option key={SearchBy.TMDB}>{SearchBy.TMDB}</option>
+                  <option key={SearchBy.TITLE}>{_('search_by.title.label', { defaultValue: 'Title' })}</option>
+                  <option key={SearchBy.IMDB}>{_('search_by.imdb.label', { defaultValue: 'IMDB ID' })}</option>
+                  <option key={SearchBy.TMDB}>{_('search_by.tmdb.label', { defaultValue: 'TMDB ID' })}</option>
                 </Select>
               </Field>
             </div>
             {searchBy === SearchBy.TITLE && (
               <>
                 <div className="growing-form-field">
-                  <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.title.label', { defaultValue: 'Title' })} required className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       disabled={disabled}
@@ -192,7 +197,7 @@ export const Matching = ({ video, disabled }: Props) => {
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.year.label', { defaultValue: 'Year' })} className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       type="number"
@@ -207,7 +212,7 @@ export const Matching = ({ video, disabled }: Props) => {
             )}
             {searchBy === SearchBy.IMDB && (
               <div>
-                <Field size="small" label="IMDB ID" required className={disabled ? 'disabled' : ''}>
+                <Field size="small" label={_('matching.field.imdb_id.label', { defaultValue: 'IMDB ID' })} required className={disabled ? 'disabled' : ''}>
                   <Input
                     size="small"
                     disabled={disabled}
@@ -219,7 +224,7 @@ export const Matching = ({ video, disabled }: Props) => {
             )}
             {searchBy === SearchBy.TMDB && (
               <div>
-                <Field size="small" label="TMDB ID" required className={disabled ? 'disabled' : ''}>
+                <Field size="small" label={_('matching.field.tmdb_id.label', { defaultValue: 'TMDB ID' })} required className={disabled ? 'disabled' : ''}>
                   <Input
                     size="small"
                     disabled={disabled}
@@ -230,7 +235,7 @@ export const Matching = ({ video, disabled }: Props) => {
                 </Field>
               </div>
             )}
-            <Field size="small" label="Edition" className={disabled ? 'disabled' : ''}>
+            <Field size="small" label={_('matching.field.edition.label', { defaultValue: 'Edition' })} className={disabled ? 'disabled' : ''}>
               <Select
                 size="small"
                 disabled={disabled}
@@ -239,7 +244,7 @@ export const Matching = ({ video, disabled }: Props) => {
               >
                 {Object.values(EditionType).map((key) => (
                   <option key={key} value={key}>
-                    {key}
+                    {_(`edition_type.${key.toLowerCase().replace(/[' ]/g, '_')}.label`, { defaultValue: key })}
                   </option>
                 ))}
               </Select>
@@ -249,7 +254,7 @@ export const Matching = ({ video, disabled }: Props) => {
         {type === VideoType.TV_SHOW && (
           <>
             <div>
-              <Field size="small" label="Search By" required className={disabled ? 'disabled' : ''}>
+              <Field size="small" label={_('matching.field.search_by.label', { defaultValue: 'Search By' })} required className={disabled ? 'disabled' : ''}>
                 <Select
                   size="small"
                   disabled={disabled}
@@ -258,17 +263,17 @@ export const Matching = ({ video, disabled }: Props) => {
                     setSearchBy(data.value as SearchBy)
                   }}
                 >
-                  <option key={SearchBy.TITLE_POSITION}>{SearchBy.TITLE_POSITION}</option>
-                  <option key={SearchBy.TITLE_EP_NAME}>{SearchBy.TITLE_EP_NAME}</option>
-                  <option key={SearchBy.TVDB_POSITION}>{SearchBy.TVDB_POSITION}</option>
-                  <option key={SearchBy.TVDB_EP_NAME}>{SearchBy.TVDB_EP_NAME}</option>
+                  <option key={SearchBy.TITLE_POSITION}>{_('search_by.title_position.label', { defaultValue: 'Title & Position' })}</option>
+                  <option key={SearchBy.TITLE_EP_NAME}>{_('search_by.title_ep_name.label', { defaultValue: 'Title & EP Name' })}</option>
+                  <option key={SearchBy.TVDB_POSITION}>{_('search_by.tvdb_position.label', { defaultValue: 'TVDB ID & Position' })}</option>
+                  <option key={SearchBy.TVDB_EP_NAME}>{_('search_by.tvdb_ep_name.label', { defaultValue: 'TVDB ID & EP Name' })}</option>
                 </Select>
               </Field>
             </div>
             {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TITLE_EP_NAME) && (
               <>
                 <div>
-                  <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.title.label', { defaultValue: 'Title' })} required className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       disabled={disabled}
@@ -278,7 +283,7 @@ export const Matching = ({ video, disabled }: Props) => {
                   </Field>
                 </div>
                 <div>
-                  <Field size="small" label="Year" className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.year.label', { defaultValue: 'Year' })} className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       type="number"
@@ -294,7 +299,7 @@ export const Matching = ({ video, disabled }: Props) => {
             {(searchBy === SearchBy.TVDB_POSITION || searchBy === SearchBy.TVDB_EP_NAME) && (
               <>
                 <div>
-                  <Field size="small" label="TVDB ID" required className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.tvdb_id.label', { defaultValue: 'TVDB ID' })} required className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       disabled={disabled}
@@ -306,22 +311,28 @@ export const Matching = ({ video, disabled }: Props) => {
               </>
             )}
             <div>
-              <Field size="small" label="Order" className={disabled ? 'disabled' : ''}>
+              <Field size="small" label={_('matching.field.order.label', { defaultValue: 'Order' })} className={disabled ? 'disabled' : ''}>
                 <Select
                   size="small"
                   disabled={disabled}
                   value={tvShowOrder}
-                  onChange={(_ev, data) => setTvShowOrder(data.value as EpisodeOrder)}
+                  onChange={(_ev, data) => {
+                    const order = data.value as EpisodeOrder
+                    setTvShowOrder(order)
+                    window.api.video.setMultiTvShowOrder([video.uuid], order)
+                  }}
                 >
-                  <option value="official">Official</option>
-                  <option value="dvd">DVD</option>
-                  <option value="absolute">Absolute</option>
+                  {EPISODE_ORDERS.map((order) => (
+                    <option key={order} value={order}>
+                      {_(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
+                    </option>
+                  ))}
                 </Select>
               </Field>
             </div>
             {searchBy == SearchBy.TITLE_EP_NAME || searchBy == SearchBy.TVDB_EP_NAME ? (
               <div>
-                <Field size="small" label="Episode Name" required className={disabled ? 'disabled' : ''}>
+                <Field size="small" label={_('matching.field.episode_name.label', { defaultValue: 'Episode Name' })} required className={disabled ? 'disabled' : ''}>
                   <Input
                     size="small"
                     disabled={disabled}
@@ -335,7 +346,7 @@ export const Matching = ({ video, disabled }: Props) => {
                 {tvShowOrder !== 'absolute' ? (
                   <>
                     <div>
-                      <Field size="small" label="Season" required className={disabled ? 'disabled' : ''}>
+                      <Field size="small" label={_('matching.field.season.label', { defaultValue: 'Season' })} required className={disabled ? 'disabled' : ''}>
                         <Input
                           size="small"
                           type="number"
@@ -347,7 +358,7 @@ export const Matching = ({ video, disabled }: Props) => {
                       </Field>
                     </div>
                     <div>
-                      <Field size="small" label="Episode" required className={disabled ? 'disabled' : ''}>
+                      <Field size="small" label={_('matching.field.episode.label', { defaultValue: 'Episode' })} required className={disabled ? 'disabled' : ''}>
                         <Input
                           size="small"
                           type="number"
@@ -361,7 +372,7 @@ export const Matching = ({ video, disabled }: Props) => {
                   </>
                 ) : (
                   <div>
-                    <Field size="small" label="Episode" required className={disabled ? 'disabled' : ''}>
+                    <Field size="small" label={_('matching.field.episode.label', { defaultValue: 'Episode' })} required className={disabled ? 'disabled' : ''}>
                       <Input
                         size="small"
                         type="number"
@@ -380,7 +391,7 @@ export const Matching = ({ video, disabled }: Props) => {
         {type === VideoType.OTHER && (
           <>
             <div className="growing-form-field">
-              <Field size="small" label="Title" required className={disabled ? 'disabled' : ''}>
+              <Field size="small" label={_('matching.field.title.label', { defaultValue: 'Title' })} required className={disabled ? 'disabled' : ''}>
                 <Input
                   size="small"
                   disabled={disabled}
@@ -430,7 +441,7 @@ export const Matching = ({ video, disabled }: Props) => {
                 <div className="matching-form">
                   <Field
                     size="small"
-                    label="Year"
+                    label={_('matching.field.year.label', { defaultValue: 'Year' })}
                     required={!!otherDay || !!otherMonth}
                     className={disabled ? 'disabled' : ''}
                   >
@@ -444,7 +455,7 @@ export const Matching = ({ video, disabled }: Props) => {
                       onChange={(_ev, data) => setOtherYear(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Month" required={!!otherDay} className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.month.label', { defaultValue: 'Month' })} required={!!otherDay} className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       type="number"
@@ -455,7 +466,7 @@ export const Matching = ({ video, disabled }: Props) => {
                       onChange={(_ev, data) => setOtherMonth(data.value)}
                     />
                   </Field>
-                  <Field size="small" label="Day" className={disabled ? 'disabled' : ''}>
+                  <Field size="small" label={_('matching.field.day.label', { defaultValue: 'Day' })} className={disabled ? 'disabled' : ''}>
                     <Input
                       size="small"
                       type="number"
@@ -467,7 +478,7 @@ export const Matching = ({ video, disabled }: Props) => {
                   </Field>
                   <Field
                     size="small"
-                    label="Original Language"
+                    label={_('matching.field.original_language.label', { defaultValue: 'Original Language' })}
                     className={disabled ? 'disabled' : ''}
                     style={{ marginLeft: 'auto' }}
                   >
@@ -485,7 +496,7 @@ export const Matching = ({ video, disabled }: Props) => {
                   <FileSelectorField
                     clearable
                     disabled={disabled}
-                    label="JPG Poster Path"
+                    label={_('matching.field.jpg_poster_path.label', { defaultValue: 'JPG Poster Path' })}
                     size="small"
                     value={otherPosterPath}
                     onChange={(newFile) => setOtherPosterPath(newFile)}
@@ -529,6 +540,7 @@ export const Matching = ({ video, disabled }: Props) => {
                     countries={video.movie?.originalCountries}
                     year={video.movie?.year}
                     rating={video.movie?.rating}
+                    genres={video.movie?.genres}
                   />
                 )}
                 {type === VideoType.TV_SHOW && (
@@ -544,6 +556,7 @@ export const Matching = ({ video, disabled }: Props) => {
                     year={video.tvShow?.year}
                     countries={video.tvShow?.originalCountries}
                     secondaryPoster={video.tvShow?.episodePoster}
+                    genres={video.tvShow?.genres}
                   />
                 )}
               </div>

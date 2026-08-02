@@ -45,6 +45,19 @@ export class TMDBClient {
     return TMDBClient.instance
   }
 
+  public async getLanguages(): Promise<TMDBLanguage[]> {
+    const tmdb = await this.getTMDBSession()
+    let response: AxiosResponse<TMDBLanguage[]>
+    try {
+      response = await tmdb.get<TMDBLanguage[]>('/configuration/languages')
+    } catch (error) {
+      debug(error)
+      const response = error as AxiosError<TMDBResponse>
+      throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
+    }
+    return response.data
+  }
+
   public async searchMovieByImdb(imdb: string): Promise<SearchResult[]> {
     const tmdb = await this.getTMDBSession()
     let response: AxiosResponse<TMDBSearchIMDBResult>
@@ -149,6 +162,9 @@ export class TMDBClient {
       /* empty */
     }
 
+    const genres = (movieDetails.genres ?? []).map((g) => g.name)
+    const isAnimation = (movieDetails.genres ?? []).some((g) => g.id === 16)
+
     return new MovieData(
       movieDetails.id,
       movieDetails.title.replace(/\u200E/g, ''),
@@ -159,7 +175,9 @@ export class TMDBClient {
       movieDetails.origin_country ?? [],
       !movieDetails.imdb_id ? undefined : movieDetails.imdb_id,
       movieDetails.vote_average / 2,
-      movieDetails.runtime ? movieDetails.runtime * 60 : undefined
+      movieDetails.runtime ? movieDetails.runtime * 60 : undefined,
+      isAnimation,
+      genres
     )
   }
 
