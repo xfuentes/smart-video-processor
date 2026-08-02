@@ -555,5 +555,6 @@
   "job.title.previewing": "Подготовка предварительного просмотра видео.",
   "job.title.merging": "Создание файла Matroska",
   "job.title.processing": "Обработка данных, пожалуйста, подождите.",
-  "job.title.encoding": "Ожидайте кодирования."
+  "job.title.encoding": "Ожидайте кодирования.",
+  "settings.additional_languages.label": "Дополнительные языки поиска телепрограмм"
 }

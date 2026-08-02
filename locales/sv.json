@@ -555,5 +555,6 @@
   "job.title.previewing": "Förbereder videoförhandsvisning.",
   "job.title.merging": "Skapa en Matroska-fil",
   "job.title.processing": "Bearbetar, vänta ett ögonblick.",
-  "job.title.encoding": "Kodning pågår, vänligen vänta."
+  "job.title.encoding": "Kodning pågår, vänligen vänta.",
+  "settings.additional_languages.label": "Ytterligare språk för TV-sökning"
 }

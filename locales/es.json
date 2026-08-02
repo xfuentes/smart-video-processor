@@ -555,5 +555,6 @@
   "job.title.previewing": "Preparando la vista previa del vídeo.",
   "job.title.merging": "Creación de un archivo Matroska",
   "job.title.processing": "Se está procesando, por favor, espera.",
-  "job.title.encoding": "Se está realizando la codificación, por favor, espera."
+  "job.title.encoding": "Se está realizando la codificación, por favor, espera.",
+  "settings.additional_languages.label": "Otros idiomas de búsqueda de programas de televisión"
 }

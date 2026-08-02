@@ -555,5 +555,6 @@
   "job.title.previewing": "Video önizlemesi hazırlanıyor.",
   "job.title.merging": "Matroska dosyası oluşturma",
   "job.title.processing": "İşlem yapılıyor, lütfen bekleyin.",
-  "job.title.encoding": "Kodlama işlemi devam ediyor, lütfen bekleyin."
+  "job.title.encoding": "Kodlama işlemi devam ediyor, lütfen bekleyin.",
+  "settings.additional_languages.label": "Diğer TV Arama Dilleri"
 }

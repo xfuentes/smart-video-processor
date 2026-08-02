@@ -555,5 +555,6 @@
   "job.title.previewing": "動画のプレビューを準備中です。",
   "job.title.merging": "Matroskaファイルの作成",
   "job.title.processing": "処理中です。しばらくお待ちください。",
-  "job.title.encoding": "エンコード中ですので、しばらくお待ちください。"
+  "job.title.encoding": "エンコード中ですので、しばらくお待ちください。",
+  "settings.additional_languages.label": "その他のテレビ検索言語"
 }

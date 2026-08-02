@@ -252,6 +252,7 @@
   "settings.tab.filtering": "Filtering",
   "settings.tab.encoding": "Encoding",
   "settings.language.label": "Language",
+  "settings.additional_languages.label": "Additional TV Search Languages",
   "settings.auto_start.label": "Auto Start",
   "settings.priority.label": "Processes Priority",
   "settings.debug_mode.label": "Debug Mode",

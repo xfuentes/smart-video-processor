@@ -555,5 +555,6 @@
   "job.title.previewing": "Przygotowywanie podglądu wideo.",
   "job.title.merging": "Tworzenie pliku Matroska",
   "job.title.processing": "Trwa przetwarzanie, proszę poczekać.",
-  "job.title.encoding": "Trwa kodowanie, proszę poczekać."
+  "job.title.encoding": "Trwa kodowanie, proszę poczekać.",
+  "settings.additional_languages.label": "Dodatkowe języki wyszukiwania programów telewizyjnych"
 }

@@ -555,5 +555,6 @@
   "job.title.previewing": "A videó előnézetének előkészítése.",
   "job.title.merging": "Matroska-fájl létrehozása",
   "job.title.processing": "Feldolgozás folyamatban, kérjük, várjon.",
-  "job.title.encoding": "Kódolás folyamatban, kérjük, várjon."
+  "job.title.encoding": "Kódolás folyamatban, kérjük, várjon.",
+  "settings.additional_languages.label": "További nyelvek a TV-kereséshez"
 }

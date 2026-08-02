@@ -555,5 +555,6 @@
   "job.title.previewing": "Preparazione dell''anteprima video.",
   "job.title.merging": "Creazione di un file Matroska",
   "job.title.processing": "Elaborazione in corso, attendere prego.",
-  "job.title.encoding": "Codifica in corso, attendere prego."
+  "job.title.encoding": "Codifica in corso, attendere prego.",
+  "settings.additional_languages.label": "Altre lingue per la ricerca TV"
 }

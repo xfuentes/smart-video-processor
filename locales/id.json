@@ -555,5 +555,6 @@
   "job.title.previewing": "Sedang menyiapkan pratinjau video.",
   "job.title.merging": "Membuat berkas Matroska",
   "job.title.processing": "Sedang diproses, mohon tunggu.",
-  "job.title.encoding": "Sedang melakukan pengkodean, mohon tunggu."
+  "job.title.encoding": "Sedang melakukan pengkodean, mohon tunggu.",
+  "settings.additional_languages.label": "Bahasa Tambahan untuk Pencarian TV"
 }
