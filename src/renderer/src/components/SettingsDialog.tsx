@@ -50,6 +50,7 @@ import {
 import { Settings } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
+import { tvdbSupportedLanguageCodes } from '../../../common/TranslationSupportedLanguages'
 import { ProgressButton } from '@renderer/components/ProgressButton'
 import { useSettings } from '@renderer/components/context/SettingsContext'
 import { _ } from '../i18n'
@@ -67,6 +68,7 @@ export const SettingsDialog = () => {
     const newSettings: Settings = {
       ...settingsValidation.result,
       language,
+      additionalTvSearchLanguages,
       tmpFilesPath,
       moviesOutputPath,
       animatedMoviesOutputPath,
@@ -107,6 +109,7 @@ export const SettingsDialog = () => {
   const handleCancel = (_ev: React.FormEvent) => {
     if (settingsValidation.result) {
       setLanguage(settingsValidation.result.language)
+      setAdditionalTvSearchLanguages(settingsValidation.result.additionalTvSearchLanguages)
       setTmpFilesPath(settingsValidation.result.tmpFilesPath)
       setMoviesOutputPath(settingsValidation.result.moviesOutputPath)
       setAnimatedMoviesOutputPath(settingsValidation.result.animatedMoviesOutputPath)
@@ -167,6 +170,9 @@ export const SettingsDialog = () => {
   }
 
   const [language, setLanguage] = useState(settingsValidation?.result?.language)
+  const [additionalTvSearchLanguages, setAdditionalTvSearchLanguages] = useState(
+    settingsValidation?.result?.additionalTvSearchLanguages ?? ['en']
+  )
   const [tmpFilesPath, setTmpFilesPath] = useState(settingsValidation?.result?.tmpFilesPath)
   const [moviesOutputPath, setMoviesOutputPath] = useState(settingsValidation?.result?.moviesOutputPath)
   const [animatedMoviesOutputPath, setAnimatedMoviesOutputPath] = useState(settingsValidation?.result?.animatedMoviesOutputPath)
@@ -246,6 +252,21 @@ export const SettingsDialog = () => {
                         required
                         value={language}
                         onChange={(data) => setLanguage(data)}
+                      />
+                    </div>
+                    <div className="field">
+                      <Label size="small" htmlFor="additionalTvSearchLanguagesInput">
+                        {_('settings.additional_languages.label', {
+                          defaultValue: 'Additional TV Search Languages'
+                        })}
+                      </Label>
+                      <LanguageSelector
+                        multiselect
+                        size="small"
+                        id="additionalTvSearchLanguagesInput"
+                        allowedCodes={tvdbSupportedLanguageCodes}
+                        value={additionalTvSearchLanguages}
+                        onChanges={(data) => setAdditionalTvSearchLanguages(data)}
                       />
                     </div>
                     <div className="field">

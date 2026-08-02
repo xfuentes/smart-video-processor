@@ -555,5 +555,6 @@
   "job.title.previewing": "Probíhá příprava náhledu videa.",
   "job.title.merging": "Vytvoření souboru Matroska",
   "job.title.processing": "Probíhá zpracování, prosím vyčkejte.",
-  "job.title.encoding": "Probíhá kódování, prosím vyčkejte."
+  "job.title.encoding": "Probíhá kódování, prosím vyčkejte.",
+  "settings.additional_languages.label": "Další jazyky pro vyhledávání televizních pořadů"
 }

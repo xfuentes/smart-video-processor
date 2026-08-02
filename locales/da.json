@@ -555,5 +555,6 @@
   "job.title.previewing": "Forbereder videovisning.",
   "job.title.merging": "Oprettelse af en Matroska-fil",
   "job.title.processing": "Behandler, vent venligst.",
-  "job.title.encoding": "Kodning, vent venligst."
+  "job.title.encoding": "Kodning, vent venligst.",
+  "settings.additional_languages.label": "Yderligere sprog til tv-søgning"
 }
