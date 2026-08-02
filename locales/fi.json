@@ -555,5 +555,6 @@
   "job.title.previewing": "Videon esikatselua valmistellaan.",
   "job.title.merging": "Matroska-tiedoston luominen",
   "job.title.processing": "Käsittely käynnissä, odota hetki.",
-  "job.title.encoding": "Koodaus on käynnissä, odota hetki."
+  "job.title.encoding": "Koodaus on käynnissä, odota hetki.",
+  "settings.additional_languages.label": "Muita televisiohakukieliä"
 }

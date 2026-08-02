@@ -167,7 +167,7 @@ export class TVDBClient {
     title: string
   ): Promise<{ episodeNumber?: number; absoluteEpisodeNumber?: number; season?: number }> {
     const tvdb = await this.getTVDBSession()
-    let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
+    let langCode = currentSettings.language
     if (langCode.indexOf('-') != -1) {
       langCode = langCode.substring(0, langCode.indexOf('-'))
     }
@@ -203,10 +203,10 @@ export class TVDBClient {
       }
     }
 
-    // If no good match, try translations in favorite languages
+    // If no good match, try translations in TV search languages
     if (bestScore < threshold) {
-      for (const favLang of currentSettings.favoriteLanguages) {
-        let baseLang = favLang
+      for (const searchLangCode of [currentSettings.language, ...currentSettings.additionalTvSearchLanguages]) {
+        let baseLang = searchLangCode
         if (baseLang.indexOf('-') != -1) {
           baseLang = baseLang.substring(0, baseLang.indexOf('-'))
         }

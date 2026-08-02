@@ -555,5 +555,6 @@
   "job.title.previewing": "جاري إعداد معاينة الفيديو.",
   "job.title.merging": "إنشاء ملف ماتروسكا",
   "job.title.processing": "جاري المعالجة، يرجى الانتظار.",
-  "job.title.encoding": "جاري الترميز، يرجى الانتظار."
+  "job.title.encoding": "جاري الترميز، يرجى الانتظار.",
+  "settings.additional_languages.label": "لغات إضافية للبحث التلفزيوني"
 }

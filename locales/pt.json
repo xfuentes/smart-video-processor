@@ -555,5 +555,6 @@
   "job.title.previewing": "A preparar a pré-visualização do vídeo.",
   "job.title.merging": "Criação de um ficheiro Matroska",
   "job.title.processing": "A processar, por favor aguarde.",
-  "job.title.encoding": "A codificar, por favor aguarde."
+  "job.title.encoding": "A codificar, por favor aguarde.",
+  "settings.additional_languages.label": "Idiomas adicionais para a pesquisa de programas de televisão"
 }
