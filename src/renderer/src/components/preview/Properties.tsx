@@ -35,7 +35,7 @@ import {
 } from '@fluentui/react-components'
 import { SaveRegular, SubtractCircleRegular, TaskListAddRegular } from '@fluentui/react-icons'
 import { useState } from 'react'
-import { _ } from '../../i18n'
+import { _, useI18n } from '../../i18n'
 import { Checkbox } from '@fluentui/react'
 import { attachmentRenderer, booleanRenderer } from './renderers'
 import {
@@ -138,7 +138,9 @@ const columnSizingOptions: TableColumnSizingOptions = {
   newValue: { minWidth: 150, idealWidth: 400 }
 }
 
-export const Properties = ({ video, disabled }: Props) => {
+export const Properties = ({
+ video, disabled }: Props) => {
+  const _ = useI18n()
   const [source, setSource] = useState<string>('Container')
   const [type, setType] = useState<ChangeType>(ChangeType.UPDATE)
   const availableProperties = Change.getAvailablePropertiesBySource(source, type)

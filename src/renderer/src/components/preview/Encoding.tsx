@@ -19,7 +19,7 @@
 import { Button, Checkbox, Divider, Field, InfoLabel, ProgressBar } from '@fluentui/react-components'
 import { WrenchSettings20Regular } from '@fluentui/react-icons'
 import { ReactElement } from 'react'
-import { _ } from '../../i18n'
+import { _, useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
@@ -124,7 +124,9 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
   )
 }
 
-export const Encoding = ({ video, disabled }: Props) => {
+export const Encoding = ({
+ video, disabled }: Props) => {
+  const _ = useI18n()
   const progression = video.progression.progress
   let progressColor: 'brand' | 'success' | 'warning' | 'error' = 'brand'
   let validation: 'error' | 'warning' | 'success' | 'none' = 'none'

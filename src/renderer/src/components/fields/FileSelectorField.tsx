@@ -1,6 +1,6 @@
 import { Button, Field, Input } from '@fluentui/react-components'
 import type { Slot } from '@fluentui/react-utilities'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { Label } from '@fluentui/react-label'
 import { BinRecycle24Regular, BinRecycleFull24Regular, FolderOpenRegular } from '@fluentui/react-icons'
 
@@ -18,6 +18,8 @@ type Props = {
 }
 
 export const FileSelectorField = (props: Props) => {
+  const _ = useI18n()
+
   const { clearable = false } = props
   const title =
     typeof props.label === 'string' || props.label instanceof String

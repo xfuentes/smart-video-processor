@@ -28,14 +28,16 @@ import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 import { Strings } from '../../../../common/Strings'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 
 type Props = {
   video: IVideo
   disabled?: boolean
 }
 
-export const Matching = ({ video, disabled }: Props) => {
+export const Matching = ({
+ video, disabled }: Props) => {
+  const _ = useI18n()
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
   const [type, setType] = useState<VideoType>(video.type)
   const [searchBy, setSearchBy] = useState<SearchBy>(video.searchBy)

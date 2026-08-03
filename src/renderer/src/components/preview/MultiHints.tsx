@@ -20,7 +20,7 @@ import { Divider, Field, Select } from '@fluentui/react-components'
 import { IVideo } from '../../../../common/@types/Video'
 import { HintType, IHint } from '../../../../common/@types/Hint'
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { SubtitlesType } from '../../../../common/SubtitlesType'
 
 type Props = {
@@ -29,7 +29,9 @@ type Props = {
   disabled?: boolean
 }
 
-export const MultiHints = ({ videos, commonHints, disabled }: Props) => {
+export const MultiHints = ({
+ videos, commonHints, disabled }: Props) => {
+  const _ = useI18n()
   const languageHints = commonHints.filter((h) => h.type === HintType.LANGUAGE)
   const subtitlesTypeHints = commonHints.filter((h) => h.type === HintType.SUBTITLES_TYPE)
   return (

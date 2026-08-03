@@ -29,14 +29,16 @@ import {
 } from '@fluentui/react-components'
 import { DialogModalType } from '@fluentui/react-dialog'
 import React from 'react'
-import { _ } from '../i18n'
+import { useI18n } from '../i18n'
 type Props = {
   title: string
   children: React.ReactNode
   modalType?: DialogModalType
 }
 
-export const AlertDialog = ({ title, children, modalType }: Props): JSXElement => {
+export const AlertDialog = ({
+ title, children, modalType }: Props): JSXElement => {
+  const _ = useI18n()
   return (
     <Dialog modalType={modalType} defaultOpen>
       <DialogSurface>

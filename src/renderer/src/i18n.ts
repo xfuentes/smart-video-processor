@@ -1,6 +1,6 @@
 import i18n, { type TOptions } from 'i18next'
 import Backend from 'i18next-electron-fs-backend'
-import { initReactI18next } from 'react-i18next'
+import { initReactI18next, useTranslation } from 'react-i18next'
 import ICU from 'i18next-icu'
 
 const basePath = await window.api.main.getLocaleBasePath()
@@ -30,5 +30,10 @@ await i18n
   })
 
 export const _ = (key: string, options?: Record<string, unknown>): string => i18n.t(key, options as TOptions) as string
+
+export const useI18n = (): ((key: string, options?: Record<string, unknown>) => string) => {
+  const { t } = useTranslation()
+  return (key: string, options?: Record<string, unknown>): string => t(key, options as TOptions) as string
+}
 
 export default i18n

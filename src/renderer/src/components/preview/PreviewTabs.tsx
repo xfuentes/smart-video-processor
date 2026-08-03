@@ -17,7 +17,7 @@
  */
 
 import { useState } from 'react'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { TrackList } from './TrackList'
 import {
   CounterBadge,
@@ -47,7 +47,9 @@ type Props = {
   video: IVideo
 }
 
-export const PreviewTabs = ({ video }: Props) => {
+export const PreviewTabs = ({
+ video }: Props) => {
+  const _ = useI18n()
   const { videoPlayerOpened, setVideoPlayerOpened } = useVideoPlayer()
   const [selectedTab, setSelectedTab] = useState('matching')
 

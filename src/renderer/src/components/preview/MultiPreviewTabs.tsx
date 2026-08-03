@@ -26,7 +26,7 @@ import {
   TabList
 } from '@fluentui/react-components'
 import { ResizeVideo20Regular, Search20Regular, SquareHintArrowBack20Regular } from '@fluentui/react-icons'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { IHint } from '../../../../common/@types/Hint'
@@ -39,7 +39,9 @@ type Props = {
   videos: IVideo[]
 }
 
-export const MultiPreviewTabs = ({ videos }: Props) => {
+export const MultiPreviewTabs = ({
+ videos }: Props) => {
+  const _ = useI18n()
   const { videoPlayerOpened, setVideoPlayerOpened } = useVideoPlayer()
   const [selectedTab, setSelectedTab] = useState('matching')
 

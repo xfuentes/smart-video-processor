@@ -56,9 +56,11 @@ import {
 } from '../../../common/TranslationSupportedLanguages'
 import { ProgressButton } from '@renderer/components/ProgressButton'
 import { useSettings } from '@renderer/components/context/SettingsContext'
-import { _ } from '../i18n'
+import i18n, { useI18n } from '../i18n'
 
 export const SettingsDialog = () => {
+  const _ = useI18n()
+
   const { settingsValidation, setSettingsValidation } = useSettings()
   const [selectedTab, setSelectedTab] = useState('general')
   const [opened, setOpened] = useState(settingsValidation.status !== 'success')
@@ -96,6 +98,7 @@ export const SettingsDialog = () => {
     }
     const validation = await window.api.main.saveSettings(newSettings)
     setSettingsValidation(validation)
+    await i18n.changeLanguage(language)
     if (validation.status != 'success') {
       throw new Error('Validation error')
     }

@@ -17,7 +17,7 @@
  */
 
 import { IVideo } from '../../../../common/@types/Video'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { Button, Divider } from '@fluentui/react-components'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 import { MoviesAndTvRegular } from '@fluentui/react-icons'
@@ -29,7 +29,9 @@ type Props = {
   disabled: boolean
 }
 
-export const Processing = ({ video, disabled = false }: Props) => {
+export const Processing = ({
+ video, disabled = false }: Props) => {
+  const _ = useI18n()
   const handleDropPart = (files: File[]) => {
     if (files.length > 0) {
       void window.api.video.addParts(video.uuid, files)

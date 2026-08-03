@@ -31,7 +31,7 @@ import {
   SubtractSquareRegular
 } from '@fluentui/react-icons'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { PlayHead } from '@renderer/components/context/PlayHead'
 import { Delimitation } from '@renderer/components/context/Delimitation'
 
@@ -41,7 +41,9 @@ type Props = {
   mainVideoUuid?: string
 }
 
-export const VideoSectionSelectorField = function ({ video, mainVideoUuid = undefined }: Props) {
+export const VideoSectionSelectorField = function ({
+ video, mainVideoUuid = undefined }: Props) {
+  const _ = useI18n()
   const {
     videoPlayed,
     setVideoPlayed,

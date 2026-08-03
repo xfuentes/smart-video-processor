@@ -19,7 +19,7 @@
 import { Button, Checkbox, Divider, InfoLabel } from '@fluentui/react-components'
 import { WrenchSettings20Regular } from '@fluentui/react-icons'
 import { ReactElement } from 'react'
-import { _ } from '../../i18n'
+import { _, useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
@@ -154,7 +154,9 @@ const trackTypeEncodingSection = (
   )
 }
 
-export const MultiEncoding = ({ videos, commonEncoderSettings, disabled }: Props) => {
+export const MultiEncoding = ({
+ videos, commonEncoderSettings, disabled }: Props) => {
+  const _ = useI18n()
   return (
     <div className="encoding-main" style={{ flexGrow: '1' }}>
       {trackTypeEncodingSection(videos, commonEncoderSettings, TrackType.VIDEO, disabled)}
