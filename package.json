@@ -2,6 +2,7 @@
   "version": "1.8.2",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
+  "desktopName": "smart-video-processor",
   "private": true,
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
