@@ -30,6 +30,7 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "yarn run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
     "package": "yarn build && electron-builder",
     "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
     "test": "vitest run",
