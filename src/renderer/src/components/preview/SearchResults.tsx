@@ -32,7 +32,7 @@ import { SearchResult } from '../../../../main/domain/SearchResult'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack } from '../../../../common/@types/Track'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
-import { _ } from '../../i18n'
+import { _, useI18n } from '../../i18n'
 
 const columns: TableColumnDefinition<SearchResult>[] = [
   createTableColumn<SearchResult>({
@@ -68,7 +68,9 @@ const columnSizingOptions: TableColumnSizingOptions = {
   year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
 }
 
-export const SearchResultList = ({ results, selectedID, onSelectionChange, disabled }: Props) => {
+export const SearchResultList = ({
+ results, selectedID, onSelectionChange, disabled }: Props) => {
+  const _ = useI18n()
   const handleSelectionChange: DataGridProps['onSelectionChange'] = (_e, data) => {
     const selectedResult = results.find((result) => data.selectedItems.has(result.id))
     if (onSelectionChange !== undefined) {

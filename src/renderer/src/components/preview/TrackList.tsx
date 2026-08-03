@@ -43,7 +43,7 @@ import React from 'react'
 import xor from 'lodash/xor'
 import { ITrack } from '../../../../common/@types/Track'
 import { IVideo } from '../../../../common/@types/Video'
-import { _ } from '../../i18n'
+import { _, useI18n } from '../../i18n'
 
 const columns: TableColumnDefinition<ITrack>[] = [
   createTableColumn<ITrack>({
@@ -139,7 +139,9 @@ const columnSizingOptions: TableColumnSizingOptions = {
   size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 }
 }
 
-export const TrackList = ({ video, disabled }: Props) => {
+export const TrackList = ({
+ video, disabled }: Props) => {
+  useI18n()
   const handleSelectionChange: DataGridProps['onSelectionChange'] = async (
     _e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,
     data: OnSelectionChangeData

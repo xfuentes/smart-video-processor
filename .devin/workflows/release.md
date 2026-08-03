@@ -13,12 +13,20 @@ description: Create a new release
 2. **Update version**
    - Edit `package.json` and bump the `version` field accordingly.
 
-3. **Update changelog**
+3. **Update changelog and About dialog**
+   - Open `CHANGELOG.md` and rename the `## [Unreleased]` section to `## [X.Y.Z] - YYYY-MM-DD` (use the new version and today's date).
+   - Add a new, empty `## [Unreleased]` section at the top of `CHANGELOG.md`.
    - Open `src/renderer/src/components/AboutDialog.tsx`.
-   - Add a new `Version X.Y.Z` entry under the **What's new** tab.
+   - Insert a new `Version X.Y.Z` entry at the top of the **What's new** tab, using the bullet points from the versioned `CHANGELOG.md` section.
    - Keep entries concise and user-focused (only what matters to the end user).
 
-4. **Run tests**
+4. **Translate missing strings**
+   - Check all `locales/*.json` files for missing keys.
+   - Add the same keys to every locale file and translate the missing English source strings.
+   - Validate JSON syntax, consistent key sets, and no escaped apostrophes (`\'`).
+   - See the `translation` skill for the full locale sync and re-serialization procedure.
+
+5. **Run tests**
    - Run the test suite locally:
      ```powershell
      npm run test
@@ -26,7 +34,7 @@ description: Create a new release
    - Continue the workflow only if all tests pass.
    - If any test fails, fix the issues and restart from this step.
 
-5. **Request user approval before committing**
+6. **Request user approval before committing**
    - Present the changes (version bump, changelog, and any code fixes) to the user.
    - Wait for the user's explicit approval before staging and committing.
    - Once approved, stage any modified files if needed:
@@ -38,13 +46,13 @@ description: Create a new release
      git commit -m "Release vX.Y.Z: <short summary of changes>"
      ```
 
-6. **Push**
+7. **Push**
    - Push the release commit to the remote repository:
      ```powershell
      git push
      ```
 
-7. **Tag the release**
+8. **Tag the release**
    - Create a version tag starting with `v`:
      ```powershell
      git tag vX.Y.Z
@@ -54,9 +62,9 @@ description: Create a new release
      git push origin vX.Y.Z
      ```
 
-8. **Update the GitHub release draft changelog**
+9. **Update the GitHub release draft changelog**
    - Pushing the tag creates a draft release on GitHub.
-   - Update the draft release notes with the changelog entry from `src/renderer/src/components/AboutDialog.tsx`:
+   - Update the draft release notes with the `CHANGELOG.md` entry for version `X.Y.Z`:
      ```powershell
      $notes = @(
        "- <changelog line 1>",

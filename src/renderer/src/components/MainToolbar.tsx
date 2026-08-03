@@ -31,7 +31,7 @@ import {
 import { SettingsDialog } from '@renderer/components/SettingsDialog'
 import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } from '../../../common/@types/Video'
 import { AboutDialog } from '@renderer/components/AboutDialog'
-import { _ } from '../i18n'
+import { useI18n } from '../i18n'
 
 type Props = {
   onOpen: () => void
@@ -39,7 +39,9 @@ type Props = {
   selectedVideos: IVideo[] | undefined
 }
 
-export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
+export const MainToolbar = ({
+ onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
+  const _ = useI18n()
   const [isPaused, setPaused] = React.useState(false)
   const checkIsRecyclable = useCallback(() => {
     return videos !== undefined && videos.find((v) => checkVideoProcessingSuccessful(v)) !== undefined

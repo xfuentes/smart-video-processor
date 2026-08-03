@@ -40,7 +40,7 @@ import {
   News20Regular
 } from '@fluentui/react-icons'
 import { LicenseText } from '@renderer/components/LicenseTest'
-import { _ } from '../i18n'
+import { useI18n } from '../i18n'
 import ElectronLogo from '../assets/electron.svg'
 import FluentLogo from '../assets/fluent.svg'
 import ViteLogo from '../assets/vite.svg'
@@ -54,6 +54,8 @@ const version = window.api.main.version
 const otherVersions = window.electron.process.versions
 
 export const AboutDialog = () => {
+  const _ = useI18n()
+
   const [selectedTab, setSelectedTab] = useState('news')
   const [opened, setOpened] = useState(false)
 

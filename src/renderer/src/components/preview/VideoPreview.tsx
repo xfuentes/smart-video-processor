@@ -17,7 +17,7 @@
  */
 
 import { Image, RatingDisplay, Tooltip } from '@fluentui/react-components'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { Country } from '../../../../common/Countries'
 
 type Props = {
@@ -35,6 +35,7 @@ type Props = {
 }
 
 export const VideoPreview = ({
+
   title,
   year,
   poster,
@@ -47,6 +48,7 @@ export const VideoPreview = ({
   rating,
   genres
 }: Props) => {
+  const _ = useI18n()
   return (
     <div className="video-preview">
       {altOverview ? (

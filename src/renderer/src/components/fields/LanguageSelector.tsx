@@ -21,7 +21,7 @@ import React, { useEffect } from 'react'
 import { Dismiss12Regular } from '@fluentui/react-icons'
 import { searchAncestorsMatching } from '../../utils'
 import { LanguageIETF, Languages } from '../../../../common/LanguageIETF'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 
 type MultipleProps = {
   multiselect: true
@@ -44,6 +44,8 @@ type Props = {
 } & (MultipleProps | SingleProps)
 
 export const LanguageSelector = (props: Props) => {
+  const _ = useI18n()
+
   const comboboxInputRef = React.useRef<HTMLInputElement>(null)
   const getLanguageDisplay = (language: LanguageIETF): string => {
     const englishText = language.label

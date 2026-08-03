@@ -24,7 +24,7 @@ import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EPISODE_ORDER_LABELS, EPISODE_ORDERS, EpisodeOrder } from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
-import { _ } from '../../i18n'
+import { useI18n } from '../../i18n'
 import { keepIfSameFilenameReducer, keepIfSameReducer } from '@renderer/utils'
 import { Country } from '../../../../common/Countries'
 
@@ -33,7 +33,9 @@ type Props = {
   disabled?: boolean
 }
 
-export const MultiMatching = ({ videos, disabled }: Props) => {
+export const MultiMatching = ({
+ videos, disabled }: Props) => {
+  const _ = useI18n()
   const initialType = videos.map((v): VideoType | undefined => v.type).reduce(keepIfSameReducer)
   const initialSearchBy = videos.map((v): SearchBy | undefined => v.searchBy).reduce(keepIfSameReducer)
   const initialTvShowTitle = videos.map((v): string | undefined => v.tvShow?.title).reduce(keepIfSameReducer)

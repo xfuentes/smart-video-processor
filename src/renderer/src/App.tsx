@@ -8,10 +8,12 @@ import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerPro
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
 import { MultiPreviewTabs } from '@renderer/components/preview/MultiPreviewTabs'
-import { _ } from './i18n'
+import { useI18n } from './i18n'
 import { AlertDialog } from '@renderer/components/AlertDialog'
 
 export const App = (): React.JSX.Element => {
+  const _ = useI18n()
+
   const preventDefault = (e: SyntheticEvent) => {
     e.preventDefault()
   }

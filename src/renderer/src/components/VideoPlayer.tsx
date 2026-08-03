@@ -19,10 +19,12 @@
 import { useEffect, useState } from 'react'
 import HlsVideoPlayer from '@renderer/components/fields/HlsVideoPlayer'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
-import { _ } from '../i18n'
+import { useI18n } from '../i18n'
 import { Field, ProgressBar } from '@fluentui/react-components'
 
 export const VideoPlayer = () => {
+  const _ = useI18n()
+
   const { videoPlayed, videoPlayerCurrentTime } = useVideoPlayer()
   const [previewPath, setPreviewPath] = useState<string | undefined>(videoPlayed?.previewPath)
 
