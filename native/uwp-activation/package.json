@@ -1,0 +1,8 @@
+{
+  "name": "uwp-activation",
+  "version": "1.0.0",
+  "description": "UWP activation native module for Smart Video Processor",
+  "private": true,
+  "main": "build/Release/uwp_activation.node",
+  "gypfile": true
+}

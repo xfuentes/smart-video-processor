@@ -36,3 +36,4 @@ description: Update CHANGELOG.md automatically when a notable new feature or bug
 
 4. Keep entries in English, one line, and focused on what the user can see or do differently.
 5. Do not set a version number; the release workflow will move the `Unreleased` entries to a versioned section.
+6. Do not commit an empty `## [Unreleased]` section. If a release moves all entries to a versioned section, remove the empty `## [Unreleased]` heading from the commit and re-create it only when the next change is added.

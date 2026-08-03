@@ -259,8 +259,10 @@ export const SettingsDialog = () => {
                         multiselect={false}
                         size="small"
                         id="languageInput"
+                        includeEnglishInLabel
                         required
                         allowedCodes={translationSupportedLanguageCodes}
+
                         value={language}
                         onChange={(data) => setLanguage(data)}
                       />

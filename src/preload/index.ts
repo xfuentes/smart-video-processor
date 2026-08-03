@@ -40,6 +40,7 @@ const api: SvpAPI = {
     addListChangedListener: (callback: ListChangedListener) => {
       const subscriber = (_event: IpcRendererEvent, videos: IVideo[]) => callback(videos)
       ipcRenderer.on('video:listChanged', subscriber)
+      ipcRenderer.send('video:requestList')
       return () => {
         ipcRenderer.off('video:listChanged', subscriber)
       }

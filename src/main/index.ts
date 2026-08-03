@@ -24,6 +24,7 @@ import icon from '../../resources/icon.ico?asset'
 import { currentSettings, defaultSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
+import { getUwpActivationFiles } from './uwpActivation'
 import { Settings } from '../common/@types/Settings'
 import { initVideoControllerIPC } from './VideoControllerIPC'
 
@@ -96,6 +97,22 @@ function addCommandLineVideoFiles(argv: string[] = process.argv) {
   }
 }
 
+function addUwpActivationFiles() {
+  if (process.platform !== 'win32' || !process.windowsStore) {
+    return
+  }
+  try {
+    const uwpArguments = getUwpActivationFiles()
+    const files = getCommandLineVideoFiles(['uwp-activation', ...uwpArguments])
+    if (files.length > 0) {
+      pendingVideoFiles.push(...files)
+      flushPendingVideoFiles()
+    }
+  } catch {
+    /* UWP activation data is unavailable or the native module is missing */
+  }
+}
+
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
@@ -137,6 +154,10 @@ function createWindow(): BrowserWindow {
   mainWindow.webContents.setWindowOpenHandler((details) => {
     void shell.openExternal(details.url)
     return { action: 'deny' }
+  })
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    flushPendingVideoFiles()
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -296,11 +317,13 @@ app.whenReady().then(async () => {
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   initVideoControllerIPC(mainWindow)
   mainBindings(ipcMain, mainWindow, fs)
-
-  mainWindow.webContents.on('did-finish-load', () => {
+  ipcMain.on('video:requestList', () => {
     flushPendingVideoFiles()
+    VideoController.getInstance().fireListChangeEvent()
   })
+
   addCommandLineVideoFiles(process.argv)
+  addUwpActivationFiles()
 
   app.on('activate', function () {
     // On macOS, it's common to re-create a window in the app when the

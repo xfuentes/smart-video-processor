@@ -1,5 +1,5 @@
 {
-  "version": "1.8.1",
+  "version": "1.8.2",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "private": true,
@@ -33,7 +33,9 @@
     "package": "yarn build && electron-builder",
     "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
     "test": "vitest run",
-    "coverage": "vitest --coverage.enabled"
+    "coverage": "vitest --coverage.enabled",
+    "build:native": "node-gyp rebuild --directory native/uwp-activation",
+    "build:native:electron": "electron-rebuild -f -m native/uwp-activation"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -45,6 +47,7 @@
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
+    "@electron/rebuild": "^3.7.0",
     "@fluentui/react": "^8.125.7",
     "@fluentui/react-components": "^9.74.4",
     "@fluentui/react-icons": "^2.0.333",
@@ -84,6 +87,7 @@
     "intl-messageformat": "^11.2.13",
     "lcid": "^5.0.0",
     "lodash": "^4.17.21",
+    "node-addon-api": "^8.5.1",
     "node-fetch": "^3.3.2",
     "prettier": "^3.6.2",
     "react": "^18.3.1",

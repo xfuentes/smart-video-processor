@@ -133,6 +133,17 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.2' })}</h4>
+                    <ul>
+                      {_('about.news.version_1_8_2.items', {
+                        defaultValue:
+                          'Opening a video file from the Windows right-click menu now works for the Microsoft Store version\nNow only the language selector in Settings shows the English name of each language next to its translation'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                    </ul>
                     <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.1' })}</h4>
                     <ul>
                       {_('about.news.version_1_8_1.items', {
