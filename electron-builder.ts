@@ -21,7 +21,6 @@ import { Configuration } from 'electron-builder'
 export default {
   appId: 'XavierFuentes.SmartVideoProcessor',
   productName: 'Smart Video Processor',
-  desktopName: 'smart-video-processor',
   copyright: 'Copyright (c) 2025. Xavier Fuentes',
   removePackageScripts: true,
   compression: 'normal',
