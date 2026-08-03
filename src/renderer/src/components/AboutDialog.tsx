@@ -131,6 +131,17 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.1' })}</h4>
+                    <ul>
+                      {_('about.news.version_1_8_1.items', {
+                        defaultValue:
+                          'Fixed missing translations in packaged builds\nImproved language selector sorting\nImproved TV show matching and episode position display'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                    </ul>
                     <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.0' })}</h4>
                     <ul>
                       {_('about.news.version_1_8_0.items', {
