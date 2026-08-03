@@ -36,6 +36,11 @@ export default {
       from: 'dist/bin',
       to: 'bin',
       filter: ['*']
+    },
+    {
+      from: 'native/uwp-activation/build/Release',
+      to: 'native/uwp-activation/build/Release',
+      filter: ['*.node']
     }
   ],
   asar: true,

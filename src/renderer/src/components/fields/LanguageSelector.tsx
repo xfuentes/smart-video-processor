@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ type Props = {
   id: string
   size?: 'small' | 'medium' | 'large'
   required?: boolean
+  includeEnglishInLabel?: boolean
   disabled?: boolean
   allowedCodes?: string[]
 } & (MultipleProps | SingleProps)
@@ -50,11 +51,10 @@ export const LanguageSelector = (props: Props) => {
   const getLanguageDisplay = (language: LanguageIETF): string => {
     const englishText = language.label
     const i18nText = _(language.i18nKey, { defaultValue: language.label })
-    return englishText != i18nText ? `${i18nText} (${englishText})` : i18nText
+    return props.includeEnglishInLabel && englishText != i18nText ? `${i18nText} (${englishText})` : i18nText
   }
-  const languageOptions = (props.allowedCodes
-    ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code))
-    : Languages.getList()
+  const languageOptions = (
+    props.allowedCodes ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code)) : Languages.getList()
   ).sort((a, b) => getLanguageDisplay(a).localeCompare(getLanguageDisplay(b)))
   const selectedLanguage = !props.multiselect ? Languages.getLanguageByCode(props.value) : undefined
   const [value, setValue] = React.useState(
@@ -68,7 +68,7 @@ export const LanguageSelector = (props: Props) => {
       const selected = Languages.getLanguageByCode(props.value)
       setValue(selected ? getLanguageDisplay(selected) : '')
     }
-  }, [props.multiselect, props.value])
+  }, [getLanguageDisplay, props.multiselect, props.value])
 
   const handleSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
     // update selectedOptions
