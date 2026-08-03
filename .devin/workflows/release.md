@@ -64,7 +64,7 @@ description: Create a new release
 
 9. **Update the GitHub release draft changelog**
    - Pushing the tag creates a draft release on GitHub.
-   - Update the draft release notes with the `CHANGELOG.md` entry for version `X.Y.Z`:
+   - Update the draft release notes with the `CHANGELOG.md` entry for version `X.Y.Z` **without publishing the release**:
      ```powershell
      $notes = @(
        "- <changelog line 1>",
@@ -72,9 +72,10 @@ description: Create a new release
      )
      $path = "$env:TEMP\vX.Y.Z-notes.txt"
      $notes | Set-Content -Path $path
-     gh release edit vX.Y.Z --notes-file $path --repo xfuentes/smart-video-processor
+     gh release edit vX.Y.Z --draft --notes-file $path --repo xfuentes/smart-video-processor
      Remove-Item $path
      ```
+   - Do **not** publish the release on GitHub until all package artifacts have finished uploading.
    - For version 1.7.0, the notes are:
      ```
      - Redesigned TV show matching with more search options (by title, TVDB ID, episode number or episode name)
