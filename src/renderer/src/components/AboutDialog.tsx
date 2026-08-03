@@ -356,6 +356,19 @@ export const AboutDialog = () => {
                           })}
                         </small>
                       </li>
+                      <li>
+                        <b>
+                          {_('about.features.multilingual_support.title', {
+                            defaultValue: 'Multilingual Support:'
+                          })}
+                        </b>{' '}
+                        <small>
+                          {_('about.features.multilingual_support.description', {
+                            defaultValue: 'Available in {count} languages.',
+                            count: 23
+                          })}
+                        </small>
+                      </li>
                     </ul>
                   </div>
                 )}

@@ -20,6 +20,7 @@ and encode to H.264 or H.265—all in one place.
 - **Media File Splitting & Joining:** Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
 - **Video Encoding (H.264 / H.265):** Converts media to efficient formats with predefined presets.
 - **Batch Processing:** Handles multiple files simultaneously with queue management.
+- **Multilingual Support:** Available in 23 languages.
 
 ## 1) Installation
 
