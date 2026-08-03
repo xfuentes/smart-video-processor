@@ -11,7 +11,7 @@ export default {
     output: 'dist',
     buildResources: 'assets'
   },
-  files: ['build/**/*', 'resources/flags'],
+  files: ['build/**/*', 'resources/flags', 'locales/**'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   extraResources: [
     {

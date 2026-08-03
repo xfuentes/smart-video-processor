@@ -17,6 +17,7 @@
  */
 
 import { VideoFormats } from './@types/Strings'
+import { EpisodeOrder } from './@types/EpisodeOrder'
 
 export class Strings {
   static humanBitrate(
@@ -357,16 +358,17 @@ export class Strings {
   }
 
   static formatEpisodePosition(
+    order: EpisodeOrder | undefined,
     season: number | undefined,
     episode: number | undefined,
     absoluteEpisode: number | undefined,
     episodeCount: number = 99
   ): string {
+    if (order === 'absolute' && absoluteEpisode !== undefined) {
+      return `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
+    }
     if (season !== undefined && episode !== undefined) {
       return `S${this.toLeadingZeroNumber(season, 99)}E${this.toLeadingZeroNumber(episode, episodeCount)}`
-    }
-    if (absoluteEpisode !== undefined) {
-      return `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
     }
     return ''
   }

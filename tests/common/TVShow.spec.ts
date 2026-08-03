@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 import { beforeAll, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
-import { VideoType, SearchBy } from '../../src/common/@types/Video'
+import { SearchBy, VideoType } from '../../src/common/@types/Video'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 
 beforeAll(() => {
@@ -177,5 +177,23 @@ test('TV-Show search by Title and Episode Name - Episode not found', async () =>
   expect(video.matched).toBeFalsy()
   expect(video.status).toBe('Warning')
   expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
+  video.destroy()
+})
+
+test('No match for Spanish episode name when only French and English are enabled', async () => {
+  currentSettings.language = 'fr-FR'
+  currentSettings.additionalTvSearchLanguages = ['en']
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_EP_NAME
+  video.tvShow.setTheTVDB(76666)
+  video.setSearchBy(SearchBy.TVDB_EP_NAME)
+  video.tvShow.setEpisodeTitle('Han robado las bolas de dragon')
+  video.tvShow.setOrder('default')
+  await video.search()
+  expect(video.tvShow.title).toBe('Dragon Ball')
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Épisode non trouvé. Veuillez vérifier les informations fournies et réessayer.')
   video.destroy()
 })

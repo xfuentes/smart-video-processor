@@ -45,15 +45,16 @@ type Props = {
 
 export const LanguageSelector = (props: Props) => {
   const comboboxInputRef = React.useRef<HTMLInputElement>(null)
-  const languageOptions = props.allowedCodes
-    ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code))
-    : Languages.getList()
-  const selectedLanguage = !props.multiselect ? Languages.getLanguageByCode(props.value) : undefined
   const getLanguageDisplay = (language: LanguageIETF): string => {
     const englishText = language.label
     const i18nText = _(language.i18nKey, { defaultValue: language.label })
     return englishText != i18nText ? `${i18nText} (${englishText})` : i18nText
   }
+  const languageOptions = (props.allowedCodes
+    ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code))
+    : Languages.getList()
+  ).sort((a, b) => getLanguageDisplay(a).localeCompare(getLanguageDisplay(b)))
+  const selectedLanguage = !props.multiselect ? Languages.getLanguageByCode(props.value) : undefined
   const [value, setValue] = React.useState(
     !props.multiselect ? (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '') : ''
   )

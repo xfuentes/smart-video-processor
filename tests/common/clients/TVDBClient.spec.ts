@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -296,4 +296,27 @@ test('Get Languages', async () => {
   const languages = await TVDBClient.getInstance().getLanguages()
   expect(languages.length).toBeGreaterThan(0)
   expect(languages.every((language) => language.id && language.name)).toBe(true)
+})
+
+test('No match for Spanish episode name when only French and English are enabled', async () => {
+  currentSettings.language = 'fr-FR'
+  currentSettings.additionalTvSearchLanguages = ['en']
+
+  await expect(
+    TVDBClient.getInstance().searchEpisodeByTitle(76666, 'official', 'Han robado las bolas de dragon')
+  ).rejects.toThrow('TVDB: No episode found matching the title')
+})
+
+test('Match for Spanish episode name when Spansih enabled', async () => {
+  currentSettings.language = 'fr-FR'
+  currentSettings.additionalTvSearchLanguages = ['es']
+
+  const result = await TVDBClient.getInstance().searchEpisodeByTitle(
+    76666,
+    'official',
+    'Han robado las bolas de dragon'
+  )
+  expect(result.season).toBe(1)
+  expect(result.episodeNumber).toBe(10)
+  expect(result.absoluteEpisodeNumber).toBeUndefined()
 })

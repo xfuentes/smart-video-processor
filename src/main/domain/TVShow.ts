@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,8 @@ export class TVShow implements ITVShow {
         this.video.progression.progress = -1
         this.showWarning(
           _('video.message.tvdb_no_exact_match', {
-            defaultValue: 'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
+            defaultValue:
+              'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
           })
         )
       } else {
@@ -163,7 +164,9 @@ export class TVShow implements ITVShow {
     const seriesPosterPath = Path.join(this.video.getTempRootDirectory(), 'TVDB-' + this.theTVDB + '-poster.jpg')
     if (this.posterURL) {
       this.video.status = JobStatus.LOADING
-      this.video.message = _('video.message.downloading_poster_tvdb', { defaultValue: 'Downloading poster image from TheTVDB.' })
+      this.video.message = _('video.message.downloading_poster_tvdb', {
+        defaultValue: 'Downloading poster image from TheTVDB.'
+      })
       this.video.fireChangeEvent()
       if (!Files.fileExistsAndIsReadable(seriesPosterPath)) {
         fs.mkdirSync(this.video.getTempRootDirectory(), { recursive: true })
@@ -193,7 +196,7 @@ export class TVShow implements ITVShow {
         })
       )
     } else {
-      const position = Strings.formatEpisodePosition(this.season, this.episode, this.absoluteEpisode, this.episodeCount)
+      const position = Strings.formatEpisodePosition(this.order, this.season, this.episode, this.absoluteEpisode, this.episodeCount)
 
       if (this.episodePosterURL || this.poster) {
         if (!this.episodePosterURL && this.poster) {
@@ -204,7 +207,9 @@ export class TVShow implements ITVShow {
             mimeType: 'image/jpeg'
           }
         } else if (this.episodePosterURL) {
-          this.video.message = _('video.message.downloading_episode_tvdb', { defaultValue: 'Downloading episode image from TheTVDB.' })
+          this.video.message = _('video.message.downloading_episode_tvdb', {
+            defaultValue: 'Downloading episode image from TheTVDB.'
+          })
           this.video.fireChangeEvent()
           const filename = `episode-${position}`
           fs.mkdirSync(tempDirectory, { recursive: true })
