@@ -1,3 +1,21 @@
+/*
+ * Smart Video Processor
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { Configuration } from 'electron-builder'
 
 export default {
@@ -34,13 +52,7 @@ export default {
     signtoolOptions: {
       publisherName: 'CN=F8CDDB61-F860-4CB9-B176-609E178A4DA9'
     },
-    target: [
-      'appx',
-      {
-        target: 'squirrel',
-        arch: 'x64'
-      }
-    ],
+    target: process.arch === 'arm64' ? ['appx'] : ['appx', 'squirrel'],
     icon: 'icons/icon.ico',
     executableName: 'SmartVideoProcessor',
     artifactName: '${name}-${arch}.${ext}'
