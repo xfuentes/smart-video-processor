@@ -21,7 +21,13 @@ import { Files } from '../util/files'
 import { getConfigPath } from '../util/path'
 import * as Path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Settings } from '../../common/@types/Settings'
+import {
+  OutputRule,
+  OutputRuleCondition,
+  OutputRuleOperator,
+  OutputRuleProperty,
+  Settings
+} from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import {
   translationSupportedLanguageCodes,
@@ -72,11 +78,8 @@ export const defaultSettings: Settings = {
   language: defaultLanguage,
   additionalTvSearchLanguages: ['en'],
   tmpFilesPath: Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp'),
-  moviesOutputPath: Path.join('.', 'Reworked'),
-  animatedMoviesOutputPath: Path.join('.', 'Reworked'),
-  tvShowsOutputPath: Path.join('.', 'Reworked'),
-  animatedTVShowsOutputPath: Path.join('.', 'Reworked'),
-  othersOutputPath: Path.join('.', 'Reworked'),
+  defaultOutputPath: Path.join('.', 'Reworked'),
+  outputRules: [],
   isAutoStartEnabled: false,
   priority: 'BELOW_NORMAL',
   isTrackFilteringEnabled: false,
@@ -92,13 +95,70 @@ export const defaultSettings: Settings = {
   ffmpegPath: getDefaultToolPath('ffmpeg'),
   ffprobePath: getDefaultToolPath('ffprobe')
 }
+function migrateOutputRuleCondition(condition: unknown): OutputRuleCondition {
+  const c = condition as Record<string, unknown>
+  let property = (c.property as OutputRuleProperty | 'resolution' | undefined) ?? 'type'
+  const rawOperator = (c.operator as OutputRuleOperator | 'contains' | undefined) ?? 'eq'
+  const rawValue = (c.value as string | string[] | undefined) ?? ''
+  let operator: OutputRuleOperator = rawOperator as OutputRuleOperator
+  let value: string | string[] = rawValue
+  if (rawOperator === 'contains') {
+    operator = 'containsAny'
+    value = Array.isArray(rawValue) ? rawValue : [rawValue]
+  }
+  if (property === 'resolution') {
+    property = 'quality'
+    const resolutionToQuality: Record<string, string> = {
+      '480p': 'SD',
+      '720p': 'HD',
+      '1080p': 'FHD',
+      '1440p': 'QHD',
+      '2160p': '4K',
+      '4320p': '8K'
+    }
+    if (typeof value === 'string') {
+      value = resolutionToQuality[value] ?? value
+    }
+  }
+  return { property, operator, value }
+}
+
+function migrateOutputRule(rule: unknown): OutputRule {
+  const r = rule as Record<string, unknown>
+  const conditions: OutputRuleCondition[] =
+    r.conditions !== undefined
+      ? (r.conditions as unknown[]).map((c) => migrateOutputRuleCondition(c))
+      : r.condition !== undefined
+        ? [migrateOutputRuleCondition(r.condition)]
+        : []
+  return {
+    enabled: (r.enabled as boolean | undefined) ?? true,
+    match: (r.match as 'all' | 'any' | undefined) ?? 'all',
+    conditions,
+    outputPath: (r.outputPath as string | undefined) ?? ''
+  }
+}
+
 export let currentSettings: Settings = defaultSettings
 
 export function loadSettings() {
   if (Files.fileExistsAndIsReadable(Path.join(getConfigPath(), 'settings.json'))) {
     const data = Files.loadTextFileSync(getConfigPath(), 'settings.json')
     if (data !== undefined) {
-      currentSettings = JSON.parse(data) as Settings
+      const loaded = JSON.parse(data) as unknown as Settings & Record<string, unknown>
+      const migratedDefaultOutputPath =
+        (loaded.outputRules as OutputRule[] | undefined) === undefined && loaded.othersOutputPath !== undefined
+          ? (loaded.othersOutputPath as string)
+          : ((loaded.defaultOutputPath as string | undefined) ?? defaultSettings.defaultOutputPath)
+      const loadedOutputRules = loaded.outputRules as unknown[] | undefined
+      const migratedOutputRules: OutputRule[] = Array.isArray(loadedOutputRules)
+        ? loadedOutputRules.map((r) => migrateOutputRule(r))
+        : defaultSettings.outputRules
+      currentSettings = {
+        ...loaded,
+        defaultOutputPath: migratedDefaultOutputPath,
+        outputRules: migratedOutputRules
+      } as Settings
     }
     for (const key of Object.keys(defaultSettings) as Array<keyof Settings>) {
       if (currentSettings[key] === undefined) {

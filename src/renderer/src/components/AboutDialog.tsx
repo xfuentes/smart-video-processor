@@ -82,7 +82,7 @@ export const AboutDialog = () => {
           <DialogContent className="settings-dialog">
             <div className="vertical-stack">
               <h3 style={{ textAlign: 'center', marginBlockStart: 0, marginBlockEnd: 0 }}>
-                {_('about.title', { defaultValue: 'Smart Video Processor v{version}', version })}
+                Smart Video Processor v{version}
               </h3>
               <p style={{ fontSize: 'small' }}>
                 {_('about.description', {
@@ -133,6 +133,17 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.3' })}</h4>
+                    <ul>
+                      {_('about.news.version_1_8_3.items', {
+                        defaultValue:
+                          'Added Output Rules to route processed videos to custom directories based on type, language, year, genres, country or quality\nImproved filename parsing for franchise-style movie titles with a year separator\nFixed language matching for output rules so a region-less code like fr correctly matches fr-FR'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                    </ul>
                     <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.2' })}</h4>
                     <ul>
                       {_('about.news.version_1_8_2.items', {

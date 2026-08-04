@@ -19,6 +19,31 @@
 import { ProcessesPriority } from './processes'
 import { VideoCodec } from './Encoding'
 
+export type OutputRuleProperty = 'type' | 'language' | 'year' | 'genres' | 'quality' | 'country'
+export type OutputRuleOperator =
+  | 'eq'
+  | 'neq'
+  | 'lt'
+  | 'lte'
+  | 'gt'
+  | 'gte'
+  | 'in'
+  | 'containsAny'
+  | 'containsAll'
+export type OutputRuleCondition = {
+  property: OutputRuleProperty
+  operator: OutputRuleOperator
+  value: string | string[]
+}
+export type OutputRuleMatch = 'all' | 'any'
+
+export type OutputRule = {
+  enabled: boolean
+  match: OutputRuleMatch
+  conditions: OutputRuleCondition[]
+  outputPath: string
+}
+
 export type Settings = {
   /**
    * Enable this for detailed output for debugging.
@@ -37,25 +62,13 @@ export type Settings = {
    */
   tmpFilesPath: string
   /**
-   * Output path where processed movies will be saved (can be relative to the original file or absolute)
+   * Default output path used when no output rule matches (can be relative to the original file or absolute)
    */
-  moviesOutputPath: string
+  defaultOutputPath: string
   /**
-   * Output path where animated movies will be saved (can be relative to the original file or absolute)
+   * Ordered list of output rules evaluated to determine the output directory
    */
-  animatedMoviesOutputPath: string
-  /**
-   * Output path where processed TV Shows will be saved (can be relative to the original file or absolute)
-   */
-  tvShowsOutputPath: string
-  /**
-   * Output path where animated TV shows will be saved (can be relative to the original file or absolute)
-   */
-  animatedTVShowsOutputPath: string
-  /**
-   * Output path where other processed files will be saved (can be relative to the original file or absolute)
-   */
-  othersOutputPath: string
+  outputRules: OutputRule[]
   /**
    * if enabled automatically encode and/or process the files as soon as they are added (if no user input is requested)
    */

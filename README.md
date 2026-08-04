@@ -146,3 +146,9 @@ background.
 You can see progression info and estimated time left.
 
 ![Waiting](docs/img/10-Waiting.png)
+
+## 13) Output Rules
+
+Output Rules allow you to define custom conditions that determine where processed videos are saved. Each rule can match a video based on properties like type, language, year, genres, country, or quality, and assign a specific output directory. Rules are evaluated in order, and the first matching rule wins.
+
+![Output Rules](docs/img/13-OutputRules.png)

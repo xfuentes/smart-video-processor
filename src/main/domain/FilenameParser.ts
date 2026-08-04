@@ -189,10 +189,21 @@ export function parseFilename(filename: string): ParsedFilename {
   const year = extractYear(yearSource)
   if (year !== undefined) {
     result.year = year
-    // Truncate title at the year position
+    // Truncate title at the year position, but include the following segment
+    // if the year is used as a separator, e.g. "James Bond 007 - 1974 - Title"
     const yearMatch = yearSource.match(YEAR_PATTERN)
     if (yearMatch && yearMatch.index !== undefined) {
-      result.title = cleanupTitle(yearSource.substring(0, yearMatch.index))
+      const before = yearSource.substring(0, yearMatch.index)
+      const after = yearSource.substring(yearMatch.index + 4)
+      if (/[-–]\s*$/.test(before) && /^\s*[-–]/.test(after)) {
+        const beforeStem = before.replace(/[-–]\s*$/, '').trim()
+        const cleanedAfter = after.replace(/^\s*[-–]\s*/, '')
+        const nextSeparator = cleanedAfter.match(/\s+[-–]\s+/)
+        const afterTitle = nextSeparator ? cleanedAfter.substring(0, nextSeparator.index) : cleanedAfter
+        result.title = cleanupTitle(beforeStem + ' ' + afterTitle)
+      } else {
+        result.title = cleanupTitle(before)
+      }
     }
   }
 

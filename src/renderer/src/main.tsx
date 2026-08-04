@@ -5,11 +5,13 @@ import { createRoot } from 'react-dom/client'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { App } from './App'
 import { initializeIcons } from '@uifabric/icons'
+import i18n from './i18n'
 
 const version = window.api.main.version
+const development = window.api.main.development
 
 initializeIcons()
-document.title = `Smart Video Processor  v${version}`
+document.title = `Smart Video Processor  v${version}${development ? ' - ' + i18n.t('title.development', { defaultValue: 'Development' }) : ''}`
 console.log(document.title)
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

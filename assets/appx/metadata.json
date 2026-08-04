@@ -1,177 +1,1176 @@
 {
-  "Id": "1152921505700211104",
-  "ApplicationCategory": "PhotoAndVideo",
-  "Pricing": {
-    "TrialPeriod": "NoFreeTrial",
-    "MarketSpecificPricings": {
+  "id": "1152921505701572024",
+  "applicationCategory": "PhotoAndVideo",
+  "pricing": {
+    "trialPeriod": "NoFreeTrial",
+    "marketSpecificPricings": {
       "LB": "NotAvailable",
       "EH": "NotAvailable"
     },
-    "PriceId": "Free",
-    "IsAdvancedPricingModel": true
+    "sales": [],
+    "priceId": "Free",
+    "isAdvancedPricingModel": true
   },
-  "Visibility": "Public",
-  "TargetPublishMode": "Immediate",
-  "TargetPublishDate": "1601-01-01T00:00:00Z",
-  "Listings": {
+  "visibility": "Public",
+  "targetPublishMode": "Immediate",
+  "targetPublishDate": "1601-01-01T00:00:00.0000000Z",
+  "listings": {
     "en-us": {
-      "BaseListing": {
-        "Keywords": ["video", "processing", "encoding", "organizing"],
-        "Description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265\u2014all in one place.",
-        "Features": [
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "processing",
+          "encoding",
+          "organizing"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.",
+        "features": [
           "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
           "Smart File Renaming: Renames files using Plex/Kodi-friendly naming conventions",
           "Metadata Correction: Fetches and corrects title, year, episode name...",
-          "Audio \u0026 Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
-          "Poster \u0026 Thumbnail Download: Automatically downloads posters and thumbnails.",
-          "Media File Splitting \u0026 Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
+          "Audio & Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
+          "Poster & Thumbnail Download: Automatically downloads posters and thumbnails.",
+          "Media File Splitting & Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
           "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
           "Batch Processing: Handles multiple files simultaneously with queue management."
         ],
-        "ReleaseNotes": "Fixes packaging.",
-        "Images": [
+        "releaseNotes": "",
+        "images": [
           {
-            "FileName": "08-Processing.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022977859",
-            "ImageType": "Screenshot"
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "03-Movie.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022977773",
-            "ImageType": "Screenshot"
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "04-TVShow.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022977774",
-            "ImageType": "Screenshot"
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "05-Tracks.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978171",
-            "ImageType": "Screenshot"
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "06-Hints.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978172",
-            "ImageType": "Screenshot"
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "07-Properties.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978173",
-            "ImageType": "Screenshot"
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "09-Encoding.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978174",
-            "ImageType": "Screenshot"
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "10-Waiting.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022977775",
-            "ImageType": "Screenshot"
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "01-Settings.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978176",
-            "ImageType": "Screenshot"
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
           },
           {
-            "FileName": "AppTileIcon-300x300.png",
-            "FileStatus": "Uploaded",
-            "Id": "1152922700022978177",
-            "ImageType": "Icon"
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
           }
         ],
-        "RecommendedHardware": [],
-        "MinimumHardware": [],
-        "Title": "Smart Video Processor",
-        "LicenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
-        "CopyrightAndTrademarkInfo": "Copyright (c) 2025. Xavier Fuentes \u003Cxfuentes-dev@hotmail.com\u003E",
-        "ShortDescription": "Organize, Enhance and Encode Your Media Library Effortlessly",
-        "ShortTitle": null,
-        "VoiceTitle": null,
-        "DevStudio": "Xavier Fuentes"
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
+        "devStudio": "Xavier Fuentes"
       },
-      "PlatformOverrides": {}
+      "platformOverrides": {}
+    },
+    "fr-fr": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "vidéo",
+          "traitement",
+          "encodage",
+          "organisation"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Cet outil identifie automatiquement vos films et séries télévisées à l'aide de bases de données courantes, puis simplifie l'ensemble du processus : renommer les fichiers selon les conventions Plex, associer des jaquettes, corriger les métadonnées (notamment la langue et le type de piste), diviser ou fusionner des fichiers multimédias et les encoder au format H.264 ou H.265 — le tout depuis un seul et même endroit.",
+        "features": [
+          "Reconnaissance automatique des contenus multimédias : identifie les films et les séries télévisées à l'aide de TheMovieDB ou TVDB",
+          "Renommage intelligent des fichiers : renomme les fichiers selon des conventions de nommage compatibles avec Plex/Kodi",
+          "Correction des métadonnées : récupère et corrige le titre, l'année, le nom de l'épisode…",
+          "Gestion des pistes audio et des sous-titres : détecte et identifie les langues des pistes audio et des sous-titres ; renomme et réorganise les pistes.",
+          "Téléchargement des affiches et des vignettes : télécharge automatiquement les affiches et les vignettes.",
+          "Fractionnement et fusion de fichiers multimédias : permet de fractionner des fichiers volumineux ou de fusionner plusieurs parties (par exemple, DVD1/DVD2) en un seul fichier.",
+          "Encodage vidéo (H.264 / H.265) : convertit les fichiers multimédias en formats optimisés grâce à des préréglages prédéfinis.",
+          "Traitement par lots : permet de traiter plusieurs fichiers simultanément grâce à la gestion des files d'attente."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Processeur vidéo intelligent",
+        "shortDescription": "Traitement vidéo automatisé. Réorganisation, réencodage, ajout de métadonnées et d'images.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "de-de": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "Video",
+          "Verarbeitung",
+          "Kodierung",
+          "Organisation"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Dieses Tool identifiziert Ihre Filme und Fernsehsendungen automatisch mithilfe gängiger Datenbanken und optimiert anschließend den gesamten Prozess: Umbenennen von Dateien nach Plex-konformen Konventionen, Hinzufügen von Coverbildern, Korrigieren von Metadaten (einschließlich Sprache und Typ der Tonspur), Aufteilen oder Zusammenfügen von Mediendateien sowie die Kodierung in H.264 oder H.265 – alles an einem Ort.",
+        "features": [
+          "Automatische Medienerkennung: Erkennt Filme und Fernsehsendungen mithilfe von TheMovieDB oder TVDB",
+          "Intelligente Dateiumbenennung: Benennt Dateien gemäß den von Plex/Kodi unterstützten Namenskonventionen um",
+          "Metadatenkorrektur: Ruft Titel, Jahr, Episodennamen ab und korrigiert diese...",
+          "Verwaltung von Audio- und Untertitelspuren: Erkennt und kennzeichnet Audio- und Untertitelsprachen; benennt Spuren um und ordnet sie neu an.",
+          "Poster und Vorschaubilder herunterladen: Lädt Poster und Vorschaubilder automatisch herunter.",
+          "Teilen und Zusammenfügen von Mediendateien: Teilt große Dateien auf oder fügt mehrere Teile (z. B. DVD1/DVD2) zu einer Datei zusammen.",
+          "Videokodierung (H.264 / H.265): Konvertiert Medien mithilfe vordefinierter Voreinstellungen in effiziente Formate.",
+          "Stapelverarbeitung: Verarbeitet mehrere Dateien gleichzeitig mithilfe einer Warteschlangenverwaltung."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Intelligenter Videoprozessor",
+        "shortDescription": "Automatisierte Videoverarbeitung. Neu ordnen, neu kodieren, Metadaten und Bilder hinzufügen.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "it-it": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "elaborazione",
+          "codifica",
+          "organizzazione"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Questo strumento identifica automaticamente i tuoi film e le tue serie TV utilizzando database diffusi, quindi semplifica l'intero processo: rinomina i file secondo le convenzioni compatibili con Plex, associa le copertine, corregge i metadati (compresa la lingua e il tipo di traccia), divide o unisce i file multimediali e li codifica in H.264 o H.265, il tutto da un'unica piattaforma.",
+        "features": [
+          "Riconoscimento automatico dei contenuti multimediali: identifica film e serie TV utilizzando TheMovieDB o TVDB",
+          "Rinominazione intelligente dei file: rinomina i file utilizzando convenzioni di denominazione compatibili con Plex/Kodi",
+          "Correzione dei metadati: recupera e corregge titolo, anno, nome dell'episodio...",
+          "Gestione delle tracce audio e dei sottotitoli: rileva e identifica le lingue delle tracce audio e dei sottotitoli; rinomina e riordina le tracce.",
+          "Download di poster e miniature: scarica automaticamente poster e miniature.",
+          "Suddivisione e unione di file multimediali: consente di suddividere file di grandi dimensioni o di unire più parti (ad esempio, DVD1/DVD2) in un unico file.",
+          "Codifica video (H.264 / H.265): converte i file multimediali in formati efficienti utilizzando impostazioni predefinite.",
+          "Elaborazione in batch: gestisce più file contemporaneamente grazie alla gestione delle code."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Processore video intelligente",
+        "shortDescription": "Elaborazione video automatizzata. Riorganizzazione, ricodifica, aggiunta di metadati e immagini.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "es-es": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "vídeo",
+          "procesamiento",
+          "codificación",
+          "organización"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Esta herramienta identifica automáticamente tus películas y series de televisión utilizando bases de datos populares y, a continuación, agiliza todo el proceso: renombra los archivos siguiendo las convenciones de Plex, añade carátulas, corrige los metadatos (incluido el idioma y el tipo de pista), divide o une archivos multimedia y codifica a H.264 o H.265, todo ello desde un único lugar.",
+        "features": [
+          "Reconocimiento automático de contenidos multimedia: identifica películas y series de televisión mediante TheMovieDB o TVDB",
+          "Renombramiento inteligente de archivos: renombra los archivos siguiendo convenciones de nomenclatura compatibles con Plex y Kodi",
+          "Corrección de metadatos: recupera y corrige el título, el año, el nombre del episodio...",
+          "Gestión de pistas de audio y subtítulos: detecta e identifica los idiomas del audio y los subtítulos; cambia el nombre de las pistas y las reordena.",
+          "Descarga de pósteres y miniaturas: Descarga automáticamente pósteres y miniaturas.",
+          "División y unión de archivos multimedia: divide archivos de gran tamaño o une varias partes (por ejemplo, DVD1/DVD2) en uno solo.",
+          "Codificación de vídeo (H.264 / H.265): Convierte archivos multimedia a formatos eficientes mediante ajustes predefinidos.",
+          "Procesamiento por lotes: gestiona varios archivos a la vez mediante la gestión de colas."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Procesador de vídeo inteligente",
+        "shortDescription": "Procesamiento automatizado de vídeo. Reorganiza, recodifica y añade metadatos e imágenes.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "pt-br": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "vídeo",
+          "processamento",
+          "codificação",
+          "organização"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Essa ferramenta identifica automaticamente seus filmes e séries de TV usando bancos de dados populares e, em seguida, agiliza todo o processo: renomeia arquivos seguindo as convenções do Plex, adiciona capas, corrige metadados (incluindo idioma e tipo da faixa), divide ou une arquivos de mídia e codifica para H.264 ou H.265 — tudo em um só lugar.",
+        "features": [
+          "Reconhecimento automático de mídia: identifica filmes e séries de TV usando o TheMovieDB ou o TVDB",
+          "Renomeação inteligente de arquivos: renomeia arquivos usando convenções de nomenclatura compatíveis com o Plex/Kodi",
+          "Correção de metadados: Busca e corrige o título, o ano, o nome do episódio...",
+          "Gerenciamento de faixas de áudio e legendas: detecta e identifica os idiomas do áudio e das legendas; renomeia e reordena as faixas.",
+          "Download de pôsteres e miniaturas: Baixa automaticamente pôsteres e miniaturas.",
+          "Divisão e junção de arquivos de mídia: divide arquivos grandes ou une várias partes (por exemplo, DVD1/DVD2) em um único arquivo.",
+          "Codificação de vídeo (H.264 / H.265): Converte arquivos de mídia em formatos eficientes com predefinições.",
+          "Processamento em lote: processa vários arquivos simultaneamente com gerenciamento de fila."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Processador de Vídeo Inteligente",
+        "shortDescription": "Processamento automatizado de vídeos. Reorganizar, recodificar, adicionar metadados e imagens.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "nl-nl": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "verwerking",
+          "codering",
+          "organiseren"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Deze tool herkent je films en tv-series automatisch aan de hand van populaire databases en stroomlijnt vervolgens het hele proces: bestanden hernoemen volgens de door Plex aanbevolen conventies, omslagafbeeldingen toevoegen, metagegevens corrigeren (waaronder de taal en het type van de audiotrack), mediabestanden splitsen of samenvoegen en coderen naar H.264 of H.265 – allemaal vanuit één plek.",
+        "features": [
+          "Automatische mediherkenning: herkent films en tv-series met behulp van TheMovieDB of TVDB",
+          "Slimme bestandshernoeming: hernoemt bestanden volgens naamgevingsconventies die geschikt zijn voor Plex/Kodi",
+          "Correctie van metagegevens: haalt titel, jaar, afleveringsnaam op en corrigeert deze...",
+          "Beheer van audio- en ondertitelingssporen: herkent en labelt audio- en ondertitelingstalen; hernoemt en herschikt sporen.",
+          "Posters en miniaturen downloaden: Hiermee worden posters en miniaturen automatisch gedownload.",
+          "Bestanden splitsen en samenvoegen: Splits grote bestanden of voeg meerdere delen (bijv. DVD1/DVD2) samen tot één bestand.",
+          "Videocodering (H.264 / H.265): Converteert mediabestanden naar efficiënte formaten met vooraf gedefinieerde instellingen.",
+          "Batchverwerking: Verwerkt meerdere bestanden tegelijkertijd met behulp van wachtrijbeheer."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Slimme videoprocessor",
+        "shortDescription": "Geautomatiseerde videoverwerking. Herindelen, opnieuw coderen, metadata en afbeeldingen toevoegen.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "zh-cn": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "视频",
+          "处理",
+          "编码",
+          "组织"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "该工具会利用主流数据库自动识别您的电影和电视剧，随后简化整个处理流程：按照 Plex 兼容的命名规范重命名文件、添加封面图、修正元数据（包括音轨语言和类型）、拆分或合并媒体文件，并将其编码为 H.264 或 H.265 格式——所有操作均可在同一界面内完成。",
+        "features": [
+          "自动媒体识别：通过 TheMovieDB 或 TVDB 识别电影和电视剧",
+          "智能文件重命名：根据 Plex/Kodi 兼容的命名规范重命名文件",
+          "元数据更正：获取并更正标题、年份、剧集名称……",
+          "音频和字幕轨道管理：检测并标注音频/字幕语言；重命名和重新排序轨道。",
+          "海报和缩略图下载：自动下载海报和缩略图。",
+          "媒体文件分割与合并：将大文件分割成多个部分，或将多个部分（例如 DVD1/DVD2）合并为一个文件。",
+          "视频编码（H.264 / H.265）：利用预设方案将媒体文件转换为高效格式。",
+          "批处理：通过队列管理同时处理多个文件。"
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "智能视频处理器",
+        "shortDescription": "自动化视频处理。重新整理、重新编码、添加元数据和图片。",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "ja-jp": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "動画",
+          "処理",
+          "エンコーディング",
+          "整理"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "このツールは、人気のあるデータベースを利用して映画やテレビ番組を自動的に識別し、一連の処理を効率化します。Plexに対応した命名規則に従ってファイル名を変更したり、アートワークを添付したり、メタデータ（音声トラックの言語や種類など）を修正したり、メディアファイルを分割・結合したり、H.264またはH.265形式にエンコードしたり――これらすべてを1か所で行うことができます。",
+        "features": [
+          "自動メディア認識：TheMovieDB または TVDB を利用して、映画やテレビ番組を識別します",
+          "スマートファイル名変更：Plex/Kodiに対応した命名規則に従ってファイル名を変更します",
+          "メタデータの修正：タイトル、制作年、エピソード名などを取得して修正します…",
+          "音声・字幕トラックの管理：音声・字幕の言語を検出してラベル付けし、トラックの名前を変更したり順序を変更したりします。",
+          "ポスターとサムネイルのダウンロード：ポスターとサムネイルを自動的にダウンロードします。",
+          "メディアファイルの分割・結合：大容量のファイルを分割したり、複数のパート（例：DVD1／DVD2）を1つに結合したりできます。",
+          "動画エンコード（H.264 / H.265）：あらかじめ定義されたプリセットを使用して、メディアを効率的な形式に変換します。",
+          "バッチ処理：キュー管理機能により、複数のファイルを同時に処理します。"
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "スマートビデオプロセッサ",
+        "shortDescription": "動画の自動処理。再整理、再エンコード、メタデータや画像の追加を行います。",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "ko-kr": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "동영상",
+          "처리",
+          "인코딩",
+          "정리"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "이 도구는 널리 사용되는 데이터베이스를 활용해 사용자의 영화와 TV 프로그램을 자동으로 식별한 다음, 전체 과정을 간소화합니다. Plex 호환 규칙에 따라 파일 이름을 변경하고, 커버 이미지를 추가하며, 메타데이터(트랙 언어 및 유형 포함)를 수정하고, 미디어 파일을 분할하거나 병합하며, H.264 또는 H.265로 인코딩하는 모든 작업을 한 곳에서 처리할 수 있습니다.",
+        "features": [
+          "자동 미디어 인식: TheMovieDB 또는 TVDB를 사용하여 영화와 TV 프로그램을 식별합니다.",
+          "스마트 파일 이름 변경: Plex/Kodi에 적합한 명명 규칙을 사용하여 파일 이름을 변경합니다.",
+          "메타데이터 수정: 제목, 연도, 에피소드명 등을 가져와 수정합니다...",
+          "오디오 및 자막 트랙 관리: 오디오/자막 언어를 감지하고 분류하며, 트랙 이름을 변경하고 순서를 재정렬합니다.",
+          "포스터 및 썸네일 다운로드: 포스터와 썸네일을 자동으로 다운로드합니다.",
+          "미디어 파일 분할 및 병합: 대용량 파일을 여러 부분으로 분할하거나, 여러 부분(예: DVD1/DVD2)을 하나로 병합합니다.",
+          "비디오 인코딩 (H.264 / H.265): 미리 정의된 프리셋을 사용하여 미디어를 효율적인 형식으로 변환합니다.",
+          "일괄 처리: 대기열 관리 기능을 통해 여러 파일을 동시에 처리합니다."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "스마트 비디오 프로세서",
+        "shortDescription": "자동화된 동영상 처리. 재구성, 재인코딩, 메타데이터 및 이미지 추가.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "ru-ru": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "видео",
+          "обработка",
+          "кодирование",
+          "организация"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Этот инструмент автоматически распознает ваши фильмы и сериалы с помощью популярных баз данных, а затем оптимизирует весь процесс: переименовывает файлы в соответствии с конвенциями Plex, добавляет обложки, исправляет метаданные (включая язык и тип звуковой дорожки), разделяет или объединяет медиафайлы и кодирует их в форматы H.264 или H.265 — и всё это в одном месте.",
+        "features": [
+          "Автоматическое распознавание медиафайлов: определяет фильмы и телепередачи с помощью баз данных TheMovieDB или TVDB",
+          "Интеллектуальное переименование файлов: переименовывает файлы с использованием соглашений об именовании, совместимых с Plex/Kodi",
+          "Исправление метаданных: извлекает и исправляет название, год, название эпизода...",
+          "Управление звуковыми и субтитровыми дорожками: определяет и маркирует языки звуковых дорожек и субтитров; переименовывает и изменяет порядок дорожек.",
+          "Загрузка постеров и миниатюр: автоматическая загрузка постеров и миниатюр.",
+          "Разделение и объединение медиафайлов: позволяет разбивать большие файлы на части или объединять несколько частей (например, DVD1/DVD2) в один файл.",
+          "Кодирование видео (H.264 / H.265): преобразует медиафайлы в оптимизированные форматы с помощью готовых настроек.",
+          "Пакетная обработка: одновременная обработка нескольких файлов с управлением очередью."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Интеллектуальный видеопроцессор",
+        "shortDescription": "Автоматическая обработка видео. Перегруппировка, перекодировка, добавление метаданных и изображений.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
     }
   },
-  "HardwarePreferences": ["Keyboard", "Mouse"],
-  "AutomaticBackupEnabled": true,
-  "CanInstallOnRemovableMedia": true,
-  "IsGameDvrEnabled": false,
-  "GamingOptions": [
+  "hardwarePreferences": [
+    "Keyboard",
+    "Mouse"
+  ],
+  "automaticBackupEnabled": true,
+  "canInstallOnRemovableMedia": true,
+  "isGameDvrEnabled": false,
+  "gamingOptions": [
     {
-      "Genres": [],
-      "IsLocalMultiplayer": false,
-      "IsLocalCooperative": false,
-      "IsOnlineMultiplayer": false,
-      "IsOnlineCooperative": false,
-      "IsBroadcastingPrivilegeGranted": true,
-      "IsCrossPlayEnabled": false,
-      "KinectDataForExternal": "Disabled"
+      "genres": [],
+      "isLocalMultiplayer": false,
+      "isLocalCooperative": false,
+      "isOnlineMultiplayer": false,
+      "isOnlineCooperative": false,
+      "isBroadcastingPrivilegeGranted": true,
+      "isCrossPlayEnabled": false,
+      "kinectDataForExternal": "Disabled"
     }
   ],
-  "HasExternalInAppProducts": false,
-  "MeetAccessibilityGuidelines": false,
-  "NotesForCertification": "",
-  "Status": "PendingCommit",
-  "StatusDetails": {
-    "Errors": [],
-    "Warnings": [
+  "hasExternalInAppProducts": false,
+  "meetAccessibilityGuidelines": false,
+  "notesForCertification": "",
+  "status": "Published",
+  "statusDetails": {
+    "errors": [],
+    "warnings": [
       {
-        "Code": "SalesUnsupportedWarning",
-        "Details": "The sales resource is no longer supported. To view or edit the sales data for this submission, use the Dev Center dashboard."
+        "code": "SalesUnsupportedWarning",
+        "details": "The sales resource is no longer supported. To view or edit the sales data for this submission, use the Dev Center dashboard."
       }
     ],
-    "CertificationReports": []
+    "certificationReports": []
   },
-  "FileUploadUrl": "https://ingestionpackagesprod1.blob.core.windows.net/ingestion/b856c62e-5b6d-493f-85e4-3178714ce7a5?skoid=6a05eb41-c97a-4f14-a5ce-d392056c0e00\u0026sktid=975f013f-7f24-47e8-a7d3-abc4752bf346\u0026skt=2025-11-27T15%3A41%3A42Z\u0026ske=2025-12-04T15%3A41%3A42Z\u0026sks=b\u0026skv=2024-05-04\u0026sv=2024-05-04\u0026se=2025-11-28T16%3A05%3A55Z\u0026sr=b\u0026sp=rwl\u0026sig=lNHILa9ZwBdi2gBKxP1qNPmErzKjzkahOn29NLX1iGU%3D",
-  "ApplicationPackages": [
+  "applicationPackages": [
     {
-      "FileName": "smart-video-processor.appx",
-      "FileStatus": "Uploaded",
-      "Id": "2000000000091679417",
-      "Version": "1.5.6.0",
-      "Architecture": "x64",
-      "Languages": ["en-US"],
-      "Capabilities": [
+      "fileName": "smart-video-processor-x64.appx",
+      "fileStatus": "Uploaded",
+      "id": "2000000000096894025",
+      "version": "1.8.2.0",
+      "architecture": "x64",
+      "targetPlatform": "Windows10",
+      "languages": [
+        "en-US"
+      ],
+      "capabilities": [
         "broadFileSystemAccess",
         "internetClient",
         "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe",
         "runFullTrust"
       ],
-      "MinimumDirectXVersion": "None",
-      "MinimumSystemRam": "None"
+      "minimumDirectXVersion": "None",
+      "minimumSystemRam": "None",
+      "targetDeviceFamilies": [
+        "Windows.Desktop min version 10.0.17763.0"
+      ]
+    },
+    {
+      "fileName": "smart-video-processor-arm64.appx",
+      "fileStatus": "Uploaded",
+      "id": "2000000000096894722",
+      "version": "1.8.2.0",
+      "architecture": "arm64",
+      "targetPlatform": "Windows10",
+      "languages": [
+        "en-US"
+      ],
+      "capabilities": [
+        "broadFileSystemAccess",
+        "internetClient",
+        "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe",
+        "runFullTrust"
+      ],
+      "minimumDirectXVersion": "None",
+      "minimumSystemRam": "None",
+      "targetDeviceFamilies": [
+        "Windows.Desktop min version 10.0.17763.0"
+      ]
     }
   ],
-  "PackageDeliveryOptions": {
-    "PackageRollout": {
-      "IsPackageRollout": false,
-      "PackageRolloutPercentage": 0,
-      "PackageRolloutStatus": "PackageRolloutNotStarted",
-      "FallbackSubmissionId": "0"
+  "packageDeliveryOptions": {
+    "packageRollout": {
+      "isPackageRollout": false,
+      "packageRolloutPercentage": 0,
+      "packageRolloutStatus": "PackageRolloutNotStarted",
+      "fallbackSubmissionId": "1152921505700201551"
     },
-    "IsMandatoryUpdate": false,
-    "MandatoryUpdateEffectiveDate": "1601-01-01T00:00:00Z"
+    "isMandatoryUpdate": false,
+    "mandatoryUpdateEffectiveDate": "1601-01-01T00:00:00.0000000Z"
   },
-  "EnterpriseLicensing": "None",
-  "AllowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": true,
-  "AllowTargetFutureDeviceFamilies": {
+  "enterpriseLicensing": "None",
+  "allowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": true,
+  "allowTargetFutureDeviceFamilies": {
+    "7": false,
     "Desktop": true,
     "Mobile": false,
     "Xbox": false,
     "Team": false,
     "Holographic": false
   },
-  "FriendlyName": "Submission 4",
-  "Trailers": []
+  "friendlyName": "Submission 21",
+  "trailers": []
 }

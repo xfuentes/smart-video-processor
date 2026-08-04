@@ -314,6 +314,17 @@ app.whenReady().then(async () => {
     }
     return ''
   })
+  ipcMain.handle('main:openDirectoryExplorer', async (_event, title: string, defaultPath?: string) => {
+    const result = await dialog.showOpenDialog(mainWindow!, {
+      title,
+      defaultPath,
+      properties: ['openDirectory', 'dontAddToRecent']
+    })
+    if (!result.canceled) {
+      return result.filePaths[0]
+    }
+    return ''
+  })
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   initVideoControllerIPC(mainWindow)
   mainBindings(ipcMain, mainWindow, fs)
