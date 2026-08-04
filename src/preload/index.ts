@@ -29,7 +29,9 @@ const api: SvpAPI = {
       ipcRenderer.on('main:invalidSettings', (_event, jsonValue: string) => callback(JSON.parse(jsonValue))),
     switchPaused: (): Promise<boolean> => ipcRenderer.invoke('main:switchPaused'),
     openSingleFileExplorer: (title: string, defaultPath?: string): Promise<string> =>
-      ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath)
+      ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath),
+    openDirectoryExplorer: (title: string, defaultPath?: string): Promise<string> =>
+      ipcRenderer.invoke('main:openDirectoryExplorer', title, defaultPath)
   },
   video: {
     openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),

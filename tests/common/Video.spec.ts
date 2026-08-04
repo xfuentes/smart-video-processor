@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { beforeAll, expect, test } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
 import { getFakeAbsolutePath } from './testUtils'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
+import type { OutputRule } from '../../src/common/@types/Settings'
+import { Languages } from '../../src/common/LanguageIETF'
+import type { Country } from '../../src/common/Countries'
 
 beforeAll(() => {
   currentSettings.favoriteLanguages = ['en']
@@ -181,10 +184,185 @@ test('TV-Show with season and episode name but no episode number', () => {
 })
 
 test('TV-Show with year range and release tags', () => {
-  const video = new Video('La Quatrième Dimension (1959-1960) - S01E01 - Webrip-1080p-X265- Multi -HEVC-ACC-Notag.mkv')
+  const video = new Video(
+    getFakeAbsolutePath(
+      'Download',
+      'La Quatrième Dimension (1959-1960) - S01E01 - Webrip-1080p-X265- Multi -HEVC-ACC-Notag.mkv'
+    )
+  )
   expect(video.type).toBe(VideoType.TV_SHOW)
   expect(video.tvShow.title).toBe('La Quatrième Dimension')
   expect(video.tvShow.season).toBe(1)
   expect(video.tvShow.episode).toBe(1)
   expect(video.tvShow.episodeTitle).toBe('')
+})
+
+describe('Output directory rules', () => {
+  beforeEach(() => {
+    currentSettings.defaultOutputPath = 'NotMatched'
+    currentSettings.outputRules = []
+  })
+
+  afterEach(() => {
+    currentSettings.defaultOutputPath = defaultSettings.defaultOutputPath
+    currentSettings.outputRules = []
+  })
+
+  const matchedRule = (conditions: OutputRule['conditions'], match: OutputRule['match'] = 'all'): OutputRule => ({
+    enabled: true,
+    match,
+    conditions,
+    outputPath: 'MatchedDirectory'
+  })
+
+  test('rule on type eq matches', () => {
+    currentSettings.outputRules = [matchedRule([{ property: 'type', operator: 'eq', value: 'movie' }])]
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on type eq does not match', () => {
+    currentSettings.outputRules = [matchedRule([{ property: 'type', operator: 'eq', value: 'tv_show' }])]
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule on year eq matches', () => {
+    currentSettings.outputRules = [matchedRule([{ property: 'year', operator: 'eq', value: '2011' }])]
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on year eq does not match', () => {
+    currentSettings.outputRules = [matchedRule([{ property: 'year', operator: 'eq', value: '2020' }])]
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule on language eq matches', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.originalLanguage = Languages.getLanguageByCode('fr-FR')
+    currentSettings.outputRules = [matchedRule([{ property: 'language', operator: 'eq', value: 'fr-FR' }])]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on language eq matches with no country', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.originalLanguage = Languages.getLanguageByCode('fr-FR')
+    currentSettings.outputRules = [matchedRule([{ property: 'language', operator: 'eq', value: 'fr' }])]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on language eq does not match', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.originalLanguage = Languages.getLanguageByCode('fr-FR')
+    currentSettings.outputRules = [matchedRule([{ property: 'language', operator: 'eq', value: 'en-US' }])]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule on genres containsAny matches ignore case', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.genres = ['Action', 'Drama']
+    currentSettings.outputRules = [matchedRule([{ property: 'genres', operator: 'containsAny', value: ['drama'] }])]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on genres containsAny does not match', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.genres = ['Action', 'Drama']
+    currentSettings.outputRules = [matchedRule([{ property: 'genres', operator: 'containsAny', value: ['Horror'] }])]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule on quality eq matches', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.pixels = '1920x1080'
+    currentSettings.outputRules = [matchedRule([{ property: 'quality', operator: 'eq', value: 'FHD' }])]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on quality eq does not match', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.pixels = '1920x1080'
+    currentSettings.outputRules = [matchedRule([{ property: 'quality', operator: 'eq', value: '4K' }])]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule on country containsAny matches', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.originalCountries = [{ alpha2: 'FR' } as Country]
+    currentSettings.outputRules = [matchedRule([{ property: 'country', operator: 'containsAny', value: ['fr'] }])]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule on country containsAny does not match', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    video.movie.originalCountries = [{ alpha2: 'FR' } as Country]
+    currentSettings.outputRules = [matchedRule([{ property: 'country', operator: 'containsAny', value: ['US'] }])]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule with match all matches only when every condition is true', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    currentSettings.outputRules = [
+      matchedRule(
+        [
+          { property: 'type', operator: 'eq', value: 'movie' },
+          { property: 'year', operator: 'eq', value: '2011' }
+        ],
+        'all'
+      )
+    ]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule with match all does not match when one condition is false', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    currentSettings.outputRules = [
+      matchedRule(
+        [
+          { property: 'type', operator: 'eq', value: 'movie' },
+          { property: 'year', operator: 'eq', value: '2020' }
+        ],
+        'all'
+      )
+    ]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+
+  test('rule with match any matches when at least one condition is true', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    currentSettings.outputRules = [
+      matchedRule(
+        [
+          { property: 'type', operator: 'eq', value: 'tv_show' },
+          { property: 'year', operator: 'eq', value: '2011' }
+        ],
+        'any'
+      )
+    ]
+    expect(video.getOutputDirectory().toString()).toMatch(/MatchedDirectory$/)
+  })
+
+  test('rule with match any does not match when every condition is false', () => {
+    const video = new Video(getFakeAbsolutePath('out put', 'Widows.(2011).mkv'))
+    currentSettings.outputRules = [
+      matchedRule(
+        [
+          { property: 'type', operator: 'eq', value: 'tv_show' },
+          { property: 'year', operator: 'eq', value: '2020' }
+        ],
+        'any'
+      )
+    ]
+    expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
+    expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
 })

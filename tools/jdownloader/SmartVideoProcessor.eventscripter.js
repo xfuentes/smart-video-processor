@@ -1,4 +1,22 @@
 /*
+ * Smart Video Processor
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
  * Smart Video Processor - JDownloader Plugin
  * Type : EventScripter script
  * Triggers : "A download stopped" and "Archive extracted"
@@ -14,7 +32,9 @@
 //   - Squirrel (installer) : C:\Users\<name>\AppData\Local\smart-video-processor\SmartVideoProcessor.exe
 //   - MSI / machine-wide    : C:\Program Files\Smart Video Processor\SmartVideoProcessor.exe
 // var SVP_PATH = "C:\\Program Files\\Smart Video Processor\\SmartVideoProcessor.exe";
-var SVP_PATH = 'C:\\Users\\xfuentes\\AppData\\Local\\smart-video-processor\\app-1.7.1\\SmartVideoProcessor.exe'
+// Squirrel :var SVP_PATH = 'C:\\Users\\xfuentes\\AppData\\Local\\smart-video-processor\\app-1.7.1\\SmartVideoProcessor.exe'
+// MS Store :
+var SVP_PATH = 'svp.exe'
 
 // File extensions recognized as video files (must match Smart Video Processor)
 var VIDEO_EXTENSIONS = [

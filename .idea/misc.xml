@@ -8,5 +8,6 @@
     <resource url="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/FoundationManifestSchema.xsd" />
     <resource url="http://schemas.microsoft.com/appx/manifest/uap/windows10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/UapManifestSchema.xsd" />
     <resource url="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/UapManifestSchema_v10.xsd" />
+    <resource url="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" location="$PROJECT_DIR$/../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt/UapManifestSchema_v5.xsd" />
   </component>
 </project>

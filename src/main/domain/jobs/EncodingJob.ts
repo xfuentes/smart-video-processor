@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,12 @@ export class EncodingJob extends Job<string> {
   private readonly settings: EncoderSettings[]
 
   constructor(video: IVideo, destinationPath: string, settings: EncoderSettings[]) {
-    super(JobStatus.ENCODING, settings.length === 0 ? _('job.title.processing', { defaultValue: 'Processing, please wait.' }) : _('job.title.encoding', { defaultValue: 'Encoding, please wait.' }))
+    super(
+      JobStatus.ENCODING,
+      settings.length === 0
+        ? _('job.title.processing', { defaultValue: 'Processing, please wait.' })
+        : _('job.title.encoding', { defaultValue: 'Encoding, please wait.' })
+    )
     this.video = video
     this.destinationPath = destinationPath
     this.settings = settings

@@ -47,6 +47,7 @@ interface SvpAPI {
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
     switchPaused: () => Promise<boolean>
     openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
+    openDirectoryExplorer: (title: string, defaultPath?: string) => Promise<string>
   }
   video: {
     openFileExplorer: () => Promise<void>

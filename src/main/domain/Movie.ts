@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,8 +87,8 @@ export default class Movie implements IMovie {
         this.video.progression.progress = -1
         if (by === SearchBy.TITLE) {
           this.video.message = _('video.message.tmdb_no_exact_match', {
-          defaultValue: 'Unable to find an exact match on TMDB. Please check the information provided and try again.'
-        })
+            defaultValue: 'Unable to find an exact match on TMDB. Please check the information provided and try again.'
+          })
         } else {
           this.video.message = _('video.message.tmdb_not_found', { defaultValue: 'Unable to find the movie on TMDB.' })
         }
@@ -104,7 +104,9 @@ export default class Movie implements IMovie {
       throw new Error('TMDB ID is mandatory')
     }
     this.video.status = JobStatus.LOADING
-    this.video.message = _('video.message.retrieving_movie_tmdb', { defaultValue: 'Retrieving movie details from TMDB.' })
+    this.video.message = _('video.message.retrieving_movie_tmdb', {
+      defaultValue: 'Retrieving movie details from TMDB.'
+    })
     this.video.fireChangeEvent()
     try {
       const movieData = await TMDBClient.getInstance().retrieveMovieDetails(this.tmdb)
@@ -158,7 +160,9 @@ export default class Movie implements IMovie {
       const fullPath = Path.join(tempDirectory, 'TMDB-' + this.tmdb + '-poster.jpg')
       if (this.posterURL) {
         this.video.status = JobStatus.LOADING
-        this.video.message = _('video.message.downloading_poster_tmdb', { defaultValue: 'Downloading poster image from TMDB.' })
+        this.video.message = _('video.message.downloading_poster_tmdb', {
+          defaultValue: 'Downloading poster image from TMDB.'
+        })
         this.video.fireChangeEvent()
         this.poster = await Files.downloadFile(this.posterURL, fullPath)
         debug(`Wrote poster file://${this.poster}`)
@@ -178,7 +182,7 @@ export default class Movie implements IMovie {
       this.video.fireChangeEvent()
     } catch (error) {
       this.video.status = JobStatus.ERROR
-      this.video.message = _('video.message.tmdb_error', { defaultValue: '{error}', error: (error as Error).message })
+      this.video.message = (error as Error).message
       this.video.fireChangeEvent()
     }
   }

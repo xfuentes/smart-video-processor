@@ -62,9 +62,7 @@
                              ExcludeFromShowInNewInstall="true"
                              Description="${description}"/>
         </desktop7:Extension>
-        <uap5:Extension Category="windows.appExecutionAlias"
-                        Executable="${executable}"
-                        EntryPoint="Windows.FullTrustApplication">
+        <uap5:Extension Category="windows.appExecutionAlias">
           <uap5:AppExecutionAlias>
             <uap5:ExecutionAlias Alias="svp.exe"/>
           </uap5:AppExecutionAlias>

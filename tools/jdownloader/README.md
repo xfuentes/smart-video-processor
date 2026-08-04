@@ -11,7 +11,7 @@ This folder contains an **EventScripter script** for [JDownloader](https://jdown
 - JDownloader 2 installed and up to date.
 - The **EventScripter** extension must be installed (it is bundled with JDownloader but may need to be enabled).
 - Smart Video Processor installed on the machine.
-- The path to the `SmartVideoProcessor.exe` executable is known.
+- The path to the `SmartVideoProcessor.exe` executable is known (svp.exe without path can be used with Windows Store version).
 
 ## Installation
 

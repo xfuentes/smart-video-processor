@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
 import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
+import { OutputRule, OutputRuleCondition } from '../../common/@types/Settings'
 import {
   ISnapshots,
   IVideo,
@@ -63,7 +64,7 @@ import {
   VideoType
 } from '../../common/@types/Video'
 import { EditionType } from '../../common/@types/Movie'
-import { LanguageIETF } from '../../common/LanguageIETF'
+import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
 import { IHint } from '../../common/@types/Hint'
 import Other from './Other'
@@ -76,6 +77,15 @@ import { isEqual, omit } from 'lodash'
 import { parseFilename } from './FilenameParser'
 
 type VideoChangeListener = (video: Video) => void
+
+const QUALITY_INDEX: Record<string, number> = {
+  SD: 0,
+  HD: 1,
+  FHD: 2,
+  QHD: 3,
+  '4K': 4,
+  '8K': 5
+}
 
 export class Video implements IVideo {
   public readonly uuid: string = UUIDv4()
@@ -548,7 +558,7 @@ export class Video implements IVideo {
       try {
         this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
       } catch (e) {
-        this.message = _('video.message.ffmpeg_error', { defaultValue: '{error}', error: (e as Error).message })
+        this.message = (e as Error).message
         this.status = JobStatus.ERROR
         this.progression.progress = -1
         this.fireChangeEvent()
@@ -580,23 +590,103 @@ export class Video implements IVideo {
   }
 
   getOutputDirectory() {
-    let outputDirectory: fs.PathLike
-    if (this.type === VideoType.MOVIE) {
-      outputDirectory = this.movie.isAnimation
-        ? currentSettings.animatedMoviesOutputPath
-        : currentSettings.moviesOutputPath
-    } else if (this.type === VideoType.TV_SHOW) {
-      outputDirectory = this.tvShow.isAnimation
-        ? currentSettings.animatedTVShowsOutputPath
-        : currentSettings.tvShowsOutputPath
-    } else {
-      outputDirectory = currentSettings.othersOutputPath
+    let outputDirectory: fs.PathLike = currentSettings.defaultOutputPath
+    for (const rule of currentSettings.outputRules) {
+      if (rule.enabled && this.matchesOutputRule(rule)) {
+        outputDirectory = rule.outputPath
+        break
+      }
     }
     if (!path.isAbsolute(outputDirectory)) {
       // Output path is relative to the original filename dirname.
       outputDirectory = path.join(path.dirname(this.sourcePath), outputDirectory)
     }
     return outputDirectory
+  }
+
+  private matchesOutputRule(rule: OutputRule): boolean {
+    const results = rule.conditions.map((condition) => this.matchesOutputRuleCondition(condition))
+    return rule.match === 'any' ? results.some(Boolean) : results.every(Boolean)
+  }
+
+  private matchesOutputRuleCondition(condition: OutputRuleCondition): boolean {
+    const { property, operator, value } = condition
+    let actual: string | number | string[] | undefined
+    switch (property) {
+      case 'type':
+        actual = this.type.toLowerCase()
+        break
+      case 'language': {
+        const lang = this.movie?.originalLanguage ?? this.tvShow?.originalLanguage ?? this.other?.originalLanguage
+        actual = typeof lang === 'string' ? lang : lang?.code
+        break
+      }
+      case 'year':
+        actual = this.movie?.year ?? this.tvShow?.year ?? this.other?.year
+        break
+      case 'genres':
+        actual = this.movie?.genres ?? this.tvShow?.genres
+        break
+      case 'quality':
+        actual = this.pixels ? Strings.pixelsToQuality(this.pixels).shortName : undefined
+        break
+      case 'country':
+        actual = this.getOriginalCountries().map((c) => c.alpha2)
+        break
+    }
+    if (actual === undefined) return false
+    const valueStr = Array.isArray(value) ? value.join(', ') : value
+    if (operator === 'containsAny' || operator === 'containsAll') {
+      if (!Array.isArray(actual)) return false
+      const expected = Array.isArray(value) ? value : [value]
+      const actualLower = actual.map((v) => v.toLowerCase())
+      if (operator === 'containsAny') {
+        return expected.some((v) => actualLower.includes(v.toLowerCase()))
+      }
+      return expected.every((v) => actualLower.includes(v.toLowerCase()))
+    }
+    const actualStr = actual.toString()
+    const actualNum =
+      property === 'quality' && this.pixels ? Strings.pixelsToQuality(this.pixels).index : Number(actual)
+    const valueNum = property === 'quality' ? (QUALITY_INDEX[valueStr] ?? NaN) : Number(valueStr)
+    switch (operator) {
+      case 'eq':
+        if (property === 'language') {
+          const actualParts = Languages.fromIETF(actualStr)
+          const valueParts = Languages.fromIETF(valueStr)
+          return (
+            actualStr.toLowerCase() === valueStr.toLowerCase() ||
+            (valueParts.region === undefined &&
+              actualParts.language !== undefined &&
+              actualParts.language.toLowerCase() === valueParts.language?.toLowerCase())
+          )
+        }
+        return actualStr === valueStr
+      case 'neq':
+        if (property === 'language') {
+          const actualParts = Languages.fromIETF(actualStr)
+          const valueParts = Languages.fromIETF(valueStr)
+          return !(
+            actualStr.toLowerCase() === valueStr.toLowerCase() ||
+            (valueParts.region === undefined &&
+              actualParts.language !== undefined &&
+              actualParts.language.toLowerCase() === valueParts.language?.toLowerCase())
+          )
+        }
+        return actualStr !== valueStr
+      case 'lt':
+        return !isNaN(actualNum) && !isNaN(valueNum) && actualNum < valueNum
+      case 'lte':
+        return !isNaN(actualNum) && !isNaN(valueNum) && actualNum <= valueNum
+      case 'gt':
+        return !isNaN(actualNum) && !isNaN(valueNum) && actualNum > valueNum
+      case 'gte':
+        return !isNaN(actualNum) && !isNaN(valueNum) && actualNum >= valueNum
+      case 'in':
+        return Array.isArray(value) ? value.some((v) => v === actualStr) : value === actualStr
+      default:
+        return false
+    }
   }
 
   getTempRootDirectory() {
@@ -802,8 +892,7 @@ export class Video implements IVideo {
       hintMissing: this.hintMissing,
       encoderSettings: this.encoderSettings,
       trackEncodingEnabled: this.trackEncodingEnabled,
-      previewProgression:
-        this.previewProgression !== undefined ? omit(this.previewProgression, 'process') : undefined,
+      previewProgression: this.previewProgression !== undefined ? omit(this.previewProgression, 'process') : undefined,
       previewPath: this.previewPath,
       snapshots: this.snapshots,
       preProcessPath: this.preProcessPath,
