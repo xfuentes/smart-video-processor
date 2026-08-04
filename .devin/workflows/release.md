@@ -151,10 +151,20 @@ description: Create a new release
 
       $metadata = Get-Content $metadataPath -Raw | ConvertFrom-Json
 
+      $imgFiles = Get-ChildItem (Join-Path $docsImgDir '*.png') -File | Sort-Object Name | Select-Object -First 10
+      $imgList = foreach ($img in $imgFiles) {
+        @{
+          fileName = $img.Name
+          imageType = 'Screenshot'
+          fileStatus = 'PendingUpload'
+        }
+      }
+
       foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
         $metadata.listings.$locale.baseListing.keywords = @()
         $metadata.listings.$locale.baseListing.features = @()
         $metadata.listings.$locale.baseListing.title = 'Smart Video Processor'
+        $metadata.listings.$locale.baseListing.images = $imgList
       }
 
       foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
@@ -195,10 +205,16 @@ description: Create a new release
       $assets = $release.assets | Where-Object { $needed -contains $_.name }
       if ($assets.Count -ne 2) { throw 'Missing package assets on the GitHub release.' }
 
+      $docsImgDir = Join-Path (Get-Location) 'docs\img'
+
       $temp = Join-Path $env:TEMP "store-$tag"
       Remove-Item -Recurse -Force $temp -ErrorAction SilentlyContinue
       New-Item -ItemType Directory -Path $temp -Force | Out-Null
       gh release download $tag -p $needed[0] -p $needed[1] --dir $temp --clobber
+
+      $imgFiles = Get-ChildItem (Join-Path $docsImgDir '*.png') -File | Sort-Object Name | Select-Object -First 10
+      Copy-Item -Path $imgFiles -Destination $temp
+
       $found = Get-ChildItem $temp -File | Where-Object { $needed -contains $_.Name }
 
       Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -278,3 +294,15 @@ description: Create a new release
       Write-Output "Submission $submissionId committed for certification."
       ```
     - Monitor Partner Center for the certification status.
+
+12. **Remove the `.appx` assets from GitHub and publish the release**
+    - Once the Microsoft Store submission has been committed and is in certification, the `.appx` files are no longer needed on the GitHub draft release.
+    - Delete the package assets and publish the release:
+      ```powershell
+      $tag = 'vX.Y.Z'
+      $repo = 'xfuentes/smart-video-processor'
+
+      gh release delete-asset $tag 'smart-video-processor-x64.appx' --yes -R $repo
+      gh release delete-asset $tag 'smart-video-processor-arm64.appx' --yes -R $repo
+      gh release edit $tag --draft=false -R $repo
+      ```
