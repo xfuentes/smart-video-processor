@@ -94,12 +94,15 @@ description: Create a new release
     - Make sure the environment variables `AZURE_AD_TENANT_ID`, `AZURE_AD_GH_CLIENT_ID`, `AZURE_AD_GH_SECRET`, and `DEEPL_API_KEY` are set.
     - Run the following PowerShell script after replacing `vX.Y.Z` with the actual version tag:
       ```powershell
+      $ErrorActionPreference = 'Stop'
+
       $tag = 'vX.Y.Z'
+      $appId = '9PG7L9JR8K6M'
       $tenantId = $env:AZURE_AD_TENANT_ID
       $clientId = $env:AZURE_AD_GH_CLIENT_ID
       $clientSecret = $env:AZURE_AD_GH_SECRET
       $deeplKey = $env:DEEPL_API_KEY
-      $appId = '9PG7L9JR8K6M'
+      $metadataPath = Join-Path (Get-Location) 'assets\appx\metadata.json'
 
       $release = gh release view $tag --json body | ConvertFrom-Json
       $notes = $release.body
@@ -133,21 +136,43 @@ description: Create a new release
       }
 
       $token = Get-StoreToken
-      $headers = @{ Authorization = "Bearer $token" }
+      $authHeaders = @{ Authorization = "Bearer $token" }
+      $jsonHeaders = $authHeaders + @{ 'Content-Type' = 'application/json; charset=utf-8' }
 
-      $submission = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions" -Method POST -Headers $headers
-      $submissionId = $submission.id
+      $app = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId" -Method GET -Headers $authHeaders
+      $submissionId = $app.pendingApplicationSubmission.id
 
-      $locales = @('en-us') + $targetLangs.Keys
-      foreach ($locale in $locales) {
-        $value = $submission.listings.PSObject.Properties[$locale].Value
-        $value.baseListing.releaseNotes = if ($locale -eq 'en-us') { $notes } else { Get-Translation $notes $targetLangs[$locale] }
+      if (-not $submissionId) {
+        $new = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions" -Method POST -Headers $jsonHeaders -Body ''
+        $submissionId = $new.id
       }
 
-      $payload = $submission | ConvertTo-Json -Depth 100
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers ($headers + @{ 'Content-Type' = 'application/json' }) -Body $payload
+      $submission = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method GET -Headers $authHeaders
 
-      Write-Output "Draft submission $submissionId created and release notes updated."
+      $metadata = Get-Content $metadataPath -Raw | ConvertFrom-Json
+
+      foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
+        $metadata.listings.$locale.baseListing.keywords = @()
+        $metadata.listings.$locale.baseListing.features = @()
+        $metadata.listings.$locale.baseListing.title = 'Smart Video Processor'
+      }
+
+      foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
+        if ($locale -eq 'en-us') {
+          $metadata.listings.$locale.baseListing.releaseNotes = $notes
+        } elseif ($targetLangs.ContainsKey($locale)) {
+          $translated = Get-Translation $notes $targetLangs[$locale]
+          $metadata.listings.$locale.baseListing.releaseNotes = $translated
+        }
+      }
+
+      $submission.listings = $metadata.listings
+
+      $payload = $submission | ConvertTo-Json -Depth 100
+      $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $jsonHeaders -Body $payloadBytes
+
+      Write-Output "Submission $submissionId updated with translated release notes."
       ```
     - Verify in Partner Center that the draft submission has the translated release notes before publishing.
 
@@ -156,6 +181,8 @@ description: Create a new release
     - Make sure `AZURE_AD_TENANT_ID`, `AZURE_AD_GH_CLIENT_ID`, and `AZURE_AD_GH_SECRET` are set. `curl.exe` must be available.
     - Run the following PowerShell script, replacing `vX.Y.Z` with the actual tag:
       ```powershell
+      $ErrorActionPreference = 'Stop'
+
       $tag = 'vX.Y.Z'
       $appId = '9PG7L9JR8K6M'
       $tenantId = $env:AZURE_AD_TENANT_ID
@@ -163,20 +190,29 @@ description: Create a new release
       $clientSecret = $env:AZURE_AD_GH_SECRET
 
       $needed = @('smart-video-processor-x64.appx','smart-video-processor-arm64.appx')
-      $release = $null
-      do {
-        $release = gh release view $tag --json assets | ConvertFrom-Json
-        $found = $release.assets | Where-Object { $needed -contains $_.name }
-        if ($found.Count -eq 2) { break }
-        Write-Output 'Waiting for package assets...'
-        Start-Sleep -Seconds 60
-      } while ($true)
+
+      $release = gh release view $tag --json assets | ConvertFrom-Json
+      $assets = $release.assets | Where-Object { $needed -contains $_.name }
+      if ($assets.Count -ne 2) { throw 'Missing package assets on the GitHub release.' }
 
       $temp = Join-Path $env:TEMP "store-$tag"
+      Remove-Item -Recurse -Force $temp -ErrorAction SilentlyContinue
       New-Item -ItemType Directory -Path $temp -Force | Out-Null
-      foreach ($asset in $found) {
-        $out = Join-Path $temp $asset.name
-        Invoke-RestMethod -Uri $asset.browser_download_url -OutFile $out
+      gh release download $tag -p $needed[0] -p $needed[1] --dir $temp --clobber
+      $found = Get-ChildItem $temp -File | Where-Object { $needed -contains $_.Name }
+
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      function Get-AppxVersion($path) {
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($path)
+        $entry = $zip.GetEntry('AppxManifest.xml')
+        $stream = $entry.Open()
+        $reader = [System.IO.StreamReader]::new($stream)
+        $xml = $reader.ReadToEnd()
+        $reader.Dispose()
+        $stream.Dispose()
+        $zip.Dispose()
+        [xml]$manifest = $xml
+        return $manifest.Package.Identity.Version
       }
 
       function Get-StoreToken() {
@@ -185,44 +221,60 @@ description: Create a new release
         return $res.access_token
       }
 
-      $token = Get-StoreToken
-      $headers = @{ Authorization = "Bearer $token" }
+      $zip = Join-Path $env:TEMP "store-$tag.zip"
+      Remove-Item -Force $zip -ErrorAction SilentlyContinue
+      [System.IO.Compression.ZipFile]::CreateFromDirectory($temp, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
 
-      $app = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId" -Method GET -Headers $headers
-      $submissionId = $app.inProgressApplicationSubmission.id
+      $token = Get-StoreToken
+      $authHeaders = @{ Authorization = "Bearer $token" }
+      $jsonHeaders = $authHeaders + @{ 'Content-Type' = 'application/json; charset=utf-8' }
+
+      $app = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId" -Method GET -Headers $authHeaders
+      $submissionId = $app.pendingApplicationSubmission.id
       if (-not $submissionId) {
-        $new = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions" -Method POST -Headers $headers
+        $new = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions" -Method POST -Headers $jsonHeaders -Body ''
         $submissionId = $new.id
       }
 
-      $submission = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method GET -Headers $headers
+      $submission = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method GET -Headers $authHeaders
       $sas = $submission.fileUploadUrl
 
-      function Upload-ToBlob($filePath, $sasUrl) {
-        $fileName = Split-Path -Leaf $filePath
-        $uri = [System.Uri]$sasUrl
-        $builder = [System.UriBuilder]$uri
-        $builder.Path = $builder.Path.TrimEnd('/') + '/' + $fileName
-        $url = $builder.Uri.AbsoluteUri
-        & curl.exe -X PUT -T $filePath -H 'x-ms-blob-type: BlockBlob' $url
+      Write-Output "Uploading zip to blob..."
+      & curl.exe -X PUT -T $zip -H 'x-ms-blob-type: BlockBlob' $sas
+      if ($LASTEXITCODE -ne 0) { throw 'ZIP upload to Azure blob failed.' }
+
+      $newPackages = foreach ($asset in $found) {
+        $path = $asset.FullName
+        $arch = if ($asset.Name -like '*-x64.*') { 'X64' } else { 'Arm64' }
+        $version = Get-AppxVersion $path
+        @{
+          fileName = $asset.Name
+          fileStatus = 'PendingUpload'
+          version = $version
+          architecture = $arch
+          languages = @('en-US')
+          capabilities = @()
+          minimumDirectXVersion = 'None'
+          minimumSystemRam = 'None'
+        }
       }
 
-      foreach ($asset in $found) {
-        $path = Join-Path $temp $asset.name
-        Upload-ToBlob $path $sas
+      $packages = [System.Collections.Generic.List[object]]::new()
+      foreach ($pkg in $submission.applicationPackages) {
+        $pkg.fileStatus = 'PendingDelete'
+        $packages.Add($pkg)
       }
-
-      $version = $tag.Substring(1)
-      $packages = foreach ($asset in $found) {
-        $arch = if ($asset.name -like '*-x64.*') { 'X64' } else { 'Arm64' }
-        @{ fileName = $asset.name; version = $version; architecture = $arch; languages = @('en-us'); capabilities = @() }
+      foreach ($p in $newPackages) {
+        $packages.Add($p)
       }
       $submission.applicationPackages = $packages
 
       $payload = $submission | ConvertTo-Json -Depth 100
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers ($headers + @{ 'Content-Type' = 'application/json' }) -Body $payload
+      $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $jsonHeaders -Body $payloadBytes
 
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId/commit" -Method POST -Headers $headers
+      $commitHeaders = $authHeaders + @{ 'Content-Type' = 'application/json' }
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId/commit" -Method POST -Headers $commitHeaders -Body ''
       Write-Output "Submission $submissionId committed for certification."
       ```
     - Monitor Partner Center for the certification status.
