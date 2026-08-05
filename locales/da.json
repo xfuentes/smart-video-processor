@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Vælg udskriftsmappe",
   "settings.output_rules.apply": "Ansøg",
   "settings.output_rules.cancel": "Annuller",
-  "title.development": "Udvikling"
+  "title.development": "Udvikling",
+  "settings.auto_delete_processed_files.label": "Slet behandlede kildefiler ved rydning/afslutning",
+  "job.encoding.speed": "Kodning ved {speed}x.",
+  "job.encoding.first_pass_countdown": "Færdiggørelse af første gennemløb i {duration}.",
+  "job.encoding.countdown": "Færdiggørelse om {duration}.",
+  "main.toolbar.shutdown": "Sluk",
+  "main.toolbar.shutdown_tooltip": "Sluk computeren, når al behandling er færdig",
+  "shutdown.dialog.title": "Sluk computeren",
+  "shutdown.dialog.message": "Computeren slukker om {time}, medmindre du klikker på Annuller.",
+  "shutdown.dialog.cancel": "Ophæve"
 }

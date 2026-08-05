@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Velg utdatakatalog",
   "settings.output_rules.apply": "Søk",
   "settings.output_rules.cancel": "Avbryt",
-  "title.development": "Utvikling"
+  "title.development": "Utvikling",
+  "settings.auto_delete_processed_files.label": "Slett behandlede kildefiler ved fjerning/avslutning",
+  "job.encoding.speed": "Koding med {speed}x.",
+  "job.encoding.first_pass_countdown": "Fullføring av første pass på {duration}.",
+  "job.encoding.countdown": "Fullføring om {duration}.",
+  "main.toolbar.shutdown": "Slå av",
+  "main.toolbar.shutdown_tooltip": "Slå av datamaskinen når all behandling er fullført",
+  "shutdown.dialog.title": "Slå av datamaskinen",
+  "shutdown.dialog.message": "Datamaskinen slår seg av om {time} med mindre du klikker på Avbryt.",
+  "shutdown.dialog.cancel": "Kansellere"
 }

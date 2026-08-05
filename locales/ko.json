@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "출력 디렉터리 선택",
   "settings.output_rules.apply": "신청하기",
   "settings.output_rules.cancel": "취소",
-  "title.development": "개발"
+  "title.development": "개발",
+  "settings.auto_delete_processed_files.label": "종료/정지 시 처리된 원본 파일을 삭제합니다.",
+  "job.encoding.speed": "{speed}x 속도로 인코딩 중입니다.",
+  "job.encoding.first_pass_countdown": "첫 번째 패스가 {duration} 시간에 완료되었습니다.",
+  "job.encoding.countdown": "완료까지 {duration}분 소요됩니다.",
+  "main.toolbar.shutdown": "전원 끄기",
+  "main.toolbar.shutdown_tooltip": "모든 처리가 완료되면 컴퓨터를 끄십시오.",
+  "shutdown.dialog.title": "컴퓨터를 끄세요",
+  "shutdown.dialog.message": "취소 버튼을 클릭하지 않으면 컴퓨터가 {시간} 후에 자동으로 꺼집니다.",
+  "shutdown.dialog.cancel": "취소"
 }

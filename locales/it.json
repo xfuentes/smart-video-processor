@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Seleziona la directory di output",
   "settings.output_rules.apply": "Candidati",
   "settings.output_rules.cancel": "Annulla",
-  "title.development": "Sviluppo"
+  "title.development": "Sviluppo",
+  "settings.auto_delete_processed_files.label": "Elimina i file sorgente elaborati quando chiudi/esci",
+  "job.encoding.speed": "Codifica a {speed}x.",
+  "job.encoding.first_pass_countdown": "Completamento della prima passata in {duration}.",
+  "job.encoding.countdown": "Completamento in {duration}.",
+  "main.toolbar.shutdown": "Spegnere",
+  "main.toolbar.shutdown_tooltip": "Spegnere il computer al termine di tutte le elaborazioni.",
+  "shutdown.dialog.title": "Spegni il computer",
+  "shutdown.dialog.message": "Il computer si spegnerà tra {time} a meno che non si faccia clic su Annulla.",
+  "shutdown.dialog.cancel": "Cancellare"
 }

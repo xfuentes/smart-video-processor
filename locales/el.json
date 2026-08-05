@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Επιλογή καταλόγου εξόδου",
   "settings.output_rules.apply": "Υποβολή αίτησης",
   "settings.output_rules.cancel": "Ακύρωση",
-  "title.development": "Ανάπτυξη"
+  "title.development": "Ανάπτυξη",
+  "settings.auto_delete_processed_files.label": "Διαγραφή επεξεργασμένων αρχείων προέλευσης κατά την εκκαθάριση/έξοδο",
+  "job.encoding.speed": "Κωδικοποίηση σε {speed}x.",
+  "job.encoding.first_pass_countdown": "Ολοκλήρωση του πρώτου περάσματος σε {duration}.",
+  "job.encoding.countdown": "Ολοκλήρωση σε {duration}.",
+  "main.toolbar.shutdown": "Σβήνω",
+  "main.toolbar.shutdown_tooltip": "Απενεργοποιήστε τον υπολογιστή όταν ολοκληρωθούν όλες οι επεξεργασίες",
+  "shutdown.dialog.title": "Απενεργοποιήστε τον υπολογιστή",
+  "shutdown.dialog.message": "Ο υπολογιστής θα απενεργοποιηθεί σε {time} εκτός αν κάνετε κλικ στο κουμπί Άκυρο.",
+  "shutdown.dialog.cancel": "Ματαίωση"
 }

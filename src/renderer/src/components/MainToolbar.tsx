@@ -24,6 +24,7 @@ import {
   FolderOpen24Regular,
   Pause24Regular,
   Play24Regular,
+  Power20Regular,
   Stop24Regular,
   SubtractSquare24Regular,
   WrenchSettings20Regular
@@ -31,6 +32,7 @@ import {
 import { SettingsDialog } from '@renderer/components/SettingsDialog'
 import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } from '../../../common/@types/Video'
 import { AboutDialog } from '@renderer/components/AboutDialog'
+import { ShutdownDialog } from '@renderer/components/ShutdownDialog'
 import { useI18n } from '../i18n'
 
 type Props = {
@@ -43,6 +45,9 @@ export const MainToolbar = ({
  onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
   const _ = useI18n()
   const [isPaused, setPaused] = React.useState(false)
+  const [shutdownRequested, setShutdownRequested] = React.useState(false)
+  const [shutdownDialogOpen, setShutdownDialogOpen] = React.useState(false)
+  const isAnyProcessing = videos.some((video) => video.processing)
   const checkIsRecyclable = useCallback(() => {
     return videos !== undefined && videos.find((v) => checkVideoProcessingSuccessful(v)) !== undefined
   }, [videos])
@@ -51,6 +56,13 @@ export const MainToolbar = ({
   useEffect(() => {
     setRecyclable(checkIsRecyclable())
   }, [checkIsRecyclable])
+
+  useEffect(() => {
+    if (shutdownRequested && !isAnyProcessing && !shutdownDialogOpen) {
+      setShutdownDialogOpen(true)
+      setShutdownRequested(false)
+    }
+  }, [shutdownRequested, isAnyProcessing, shutdownDialogOpen])
 
   const processingEnabled =
     selectedVideos !== undefined && selectedVideos.find((v) => checkVideoProcessingEnabled(v)) !== undefined
@@ -90,13 +102,27 @@ export const MainToolbar = ({
     await window.api.video.clearCompleted()
   }
 
+  const handleShutdownChange = () => {
+    if (isAnyProcessing) {
+      setShutdownRequested((previous) => !previous)
+    }
+  }
+
+  const handleShutdownDialogChange = (open: boolean) => {
+    setShutdownDialogOpen(open)
+    if (!open) {
+      setShutdownRequested(false)
+    }
+  }
+
   return (
-    <Toolbar
-      aria-label={_('main.toolbar.aria_label', { defaultValue: 'Main Buttons' })}
-      style={{ justifyContent: 'space-between' }}
-      size="small"
-    >
-      <ToolbarGroup>
+    <>
+      <Toolbar
+        aria-label={_('main.toolbar.aria_label', { defaultValue: 'Main Buttons' })}
+        style={{ justifyContent: 'space-between' }}
+        size="small"
+      >
+        <ToolbarGroup>
         <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
           {_('main.toolbar.open', { defaultValue: 'Open' })}
         </ToolbarButton>
@@ -141,11 +167,29 @@ export const MainToolbar = ({
             {_('main.toolbar.clear', { defaultValue: 'Clear' })}
           </ToolbarButton>
         </Tooltip>
+        <Tooltip
+          content={_('main.toolbar.shutdown_tooltip', {
+            defaultValue: 'Switch off the computer when all processing is complete'
+          })}
+          relationship="description"
+        >
+          <ToolbarButton
+            vertical
+            icon={<Power20Regular />}
+            onClick={handleShutdownChange}
+            disabled={!isAnyProcessing}
+            appearance={shutdownRequested ? 'primary' : 'subtle'}
+          >
+            {_('main.toolbar.shutdown', { defaultValue: 'Switch Off' })}
+          </ToolbarButton>
+        </Tooltip>
       </ToolbarGroup>
       <ToolbarGroup>
         <SettingsDialog />
         <AboutDialog />
       </ToolbarGroup>
     </Toolbar>
+    <ShutdownDialog open={shutdownDialogOpen} onOpenChange={handleShutdownDialogChange} />
+  </>
   )
 }

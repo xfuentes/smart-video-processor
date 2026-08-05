@@ -50,6 +50,10 @@ export type Settings = {
    */
   isDebugEnabled: boolean
   /**
+   * If enabled, successfully processed source files are deleted when clearing the list or quitting the application.
+   */
+  isAutoDeleteProcessedFilesEnabled: boolean
+  /**
    * Language to use for retrieving movies descriptions and to display this program.
    */
   language: string

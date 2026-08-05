@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Pilih Direktori Keluaran",
   "settings.output_rules.apply": "Daftar",
   "settings.output_rules.cancel": "Batal",
-  "title.development": "Pembangunan"
+  "title.development": "Pembangunan",
+  "settings.auto_delete_processed_files.label": "Hapus file sumber yang telah diproses saat membersihkan/keluar",
+  "job.encoding.speed": "Pengkodean pada {speed}x.",
+  "job.encoding.first_pass_countdown": "Penyelesaian tahap pertama dalam {duration}.",
+  "job.encoding.countdown": "Penyelesaian dalam {duration}.",
+  "main.toolbar.shutdown": "Mematikan",
+  "main.toolbar.shutdown_tooltip": "Matikan komputer setelah semua proses selesai.",
+  "shutdown.dialog.title": "Matikan komputer",
+  "shutdown.dialog.message": "Komputer akan mati dalam {waktu} kecuali Anda mengklik Batal.",
+  "shutdown.dialog.cancel": "Membatalkan"
 }

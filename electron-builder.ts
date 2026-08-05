@@ -78,7 +78,7 @@ export default {
     publisherDisplayName: 'Xavier Fuentes',
     minVersion: '10.0.17763.0',
     maxVersionTested: '10.0.22000.1',
-    languages: ['en-US'],
+    languages: ['ar-SA', 'cs-CZ', 'da-DK', 'de-DE', 'el-GR', 'en-US', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'id-ID', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'nb-NO', 'pl-PL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA', 'zh-CN'],
     backgroundColor: 'transparent',
     customManifestPath: 'AppxManifestTemplate.xml'
   },

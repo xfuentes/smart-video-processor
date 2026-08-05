@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Вибрати каталог для збереження результатів",
   "settings.output_rules.apply": "Подати заявку",
   "settings.output_rules.cancel": "Скасувати",
-  "title.development": "Розвиток"
+  "title.development": "Розвиток",
+  "settings.auto_delete_processed_files.label": "Видаляти оброблені вихідні файли при очищенні/виході",
+  "job.encoding.speed": "Кодування зі швидкістю {speed}x.",
+  "job.encoding.first_pass_countdown": "Завершення першого проходу через {duration}.",
+  "job.encoding.countdown": "Завершення через {duration}.",
+  "main.toolbar.shutdown": "Вимкнути",
+  "main.toolbar.shutdown_tooltip": "Вимкніть комп'ютер після завершення всієї обробки",
+  "shutdown.dialog.title": "Вимкніть комп'ютер",
+  "shutdown.dialog.message": "Комп’ютер вимкнеться через {time}, якщо ви не натиснете «Скасувати».",
+  "shutdown.dialog.cancel": "Скасувати"
 }

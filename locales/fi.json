@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Valitse tulostuskansio",
   "settings.output_rules.apply": "Hae",
   "settings.output_rules.cancel": "Peruuta",
-  "title.development": "Kehitys"
+  "title.development": "Kehitys",
+  "settings.auto_delete_processed_files.label": "Poista käsitellyt lähdetiedostot tyhjennyksen/sulkemisen yhteydessä",
+  "job.encoding.speed": "Koodaus nopeudella {speed}x.",
+  "job.encoding.first_pass_countdown": "Ensimmäisen kierroksen suoritus kesti {duration}.",
+  "job.encoding.countdown": "Valmistuminen kestossa {duration}.",
+  "main.toolbar.shutdown": "Sammuta",
+  "main.toolbar.shutdown_tooltip": "Sammuta tietokone, kun kaikki käsittely on valmis",
+  "shutdown.dialog.title": "Sammuta tietokone",
+  "shutdown.dialog.message": "Tietokone sammuu {ajan} kuluttua, ellet napsauta Peruuta.",
+  "shutdown.dialog.cancel": "Peruuttaa"
 }

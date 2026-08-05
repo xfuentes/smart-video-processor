@@ -17,6 +17,7 @@
  */
 
 import { Video } from '../domain/Video'
+import { currentSettings } from '../domain/Settings'
 import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { EpisodeOrder } from '../domain/clients/TVDBClient'
 import { IHint } from '../../common/@types/Hint'
@@ -199,7 +200,13 @@ export class VideoController {
   }
 
   clearCompleted() {
-    const toRemoveUuid = this.videos.filter((v) => v.isProcessed()).map((v) => v.uuid)
+    const toRemove = this.videos.filter((v) => v.isProcessed())
+    if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
+      for (const video of toRemove) {
+        video.deleteSourceFiles()
+      }
+    }
+    const toRemoveUuid = toRemove.map((v) => v.uuid)
     this.remove(toRemoveUuid)
   }
 
@@ -243,6 +250,13 @@ export class VideoController {
    * Called before quit to clean temp files
    */
   destroy() {
+    if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
+      for (const video of this.videos) {
+        if (video.isProcessed()) {
+          video.deleteSourceFiles()
+        }
+      }
+    }
     for (const video of this.videos) {
       video.destroy()
     }

@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Sélectionner le répertoire de sortie",
   "settings.output_rules.apply": "Appliquer",
   "settings.output_rules.cancel": "Annuler",
-  "title.development": "Développement"
+  "title.development": "Développement",
+  "settings.auto_delete_processed_files.label": "Supprimer les fichiers sources traités lors du nétoyage",
+  "job.encoding.speed": "Encodage à {speed}x.",
+  "job.encoding.first_pass_countdown": "Fin de la première passe dans {duration}.",
+  "job.encoding.countdown": "Achèvement dans {duration}.",
+  "main.toolbar.shutdown": "Éteindre",
+  "main.toolbar.shutdown_tooltip": "Éteignez l'ordinateur une fois le traitement terminé.",
+  "shutdown.dialog.title": "Éteignez l'ordinateur",
+  "shutdown.dialog.message": "L'ordinateur s'éteindra dans {time} sauf si vous cliquez sur Annuler.",
+  "shutdown.dialog.cancel": "Annuler"
 }

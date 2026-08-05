@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "出力ディレクトリを選択してください",
   "settings.output_rules.apply": "応募する",
   "settings.output_rules.cancel": "キャンセル",
-  "title.development": "開発"
+  "title.development": "開発",
+  "settings.auto_delete_processed_files.label": "クリア/終了時に処理済みのソースファイルを削除します",
+  "job.encoding.speed": "{speed}xの速度でエンコードしています。",
+  "job.encoding.first_pass_countdown": "最初の処理が{duration}で完了しました。",
+  "job.encoding.countdown": "完了まで{duration}時間かかります。",
+  "main.toolbar.shutdown": "電源を切る",
+  "main.toolbar.shutdown_tooltip": "処理がすべて完了したら、コンピュータの電源を切ってください。",
+  "shutdown.dialog.title": "コンピューターの電源を切る",
+  "shutdown.dialog.message": "「キャンセル」をクリックしない限り、コンピューターは{time}後に電源が切れます。",
+  "shutdown.dialog.cancel": "キャンセル"
 }

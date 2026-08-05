@@ -49,6 +49,18 @@ description: Maintain and sync the locale JSON files for the Smart Video Process
 2. Re-serialize with `JSON.stringify(obj, null, 2) + "\n"`.
 3. Verify it parses again and that `Object.keys(obj).length` matches the other locale file.
 
+## Adding a new translation key
+
+When a new translation key must be created, do not add it manually. Use the `add-translation-key.js` script to add the key to every supported locale file and generate the translations automatically.
+
+1. Set the `GOOGLE_API_KEY` environment variable.
+2. Run the script from the project root:
+   ```bash
+   node .devin/skills/translation/add-translation-key.js <dot.separated.key> "English source text"
+   ```
+3. The script writes the English source value to `locales/en.json` and a Google Translate generated value to every other `locales/<lang>.json`.
+4. Review the generated output, especially ICU placeholders such as `{count}`, `{version}`, etc., because automatic translation may alter them.
+
 ## ICU MessageFormat
 
 The project uses the `i18next-icu` plugin. All locale values are parsed as ICU MessageFormat.
@@ -87,4 +99,4 @@ The project uses the `i18next-icu` plugin. All locale values are parsed as ICU M
   - `fr.json`: `"main.file_list.photo_counter": "Vous avez {count, plural, =0 {aucune photo.} one {une photo.} other {# photos.}}"`
 - Keep the same set of keys in every locale file. Add the context key in all files, then add the localized ICU value in the matching `<language>.json`.
 
-Use this workflow when adding, editing, or deduplicating translations.
+Use the maintenance workflow above when editing or deduplicating translations; use `add-translation-key.js` when adding new keys.

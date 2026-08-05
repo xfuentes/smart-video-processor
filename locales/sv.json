@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Välj utdatakatalog",
   "settings.output_rules.apply": "Ansök",
   "settings.output_rules.cancel": "Avbryt",
-  "title.development": "Utveckling"
+  "title.development": "Utveckling",
+  "settings.auto_delete_processed_files.label": "Ta bort bearbetade källfiler vid rensning/avslutning",
+  "job.encoding.speed": "Kodning vid {speed}x.",
+  "job.encoding.first_pass_countdown": "Första passet slutfört om {duration}.",
+  "job.encoding.countdown": "Slutförande om {duration}.",
+  "main.toolbar.shutdown": "Stänga av",
+  "main.toolbar.shutdown_tooltip": "Stäng av datorn när all bearbetning är klar",
+  "shutdown.dialog.title": "Stäng av datorn",
+  "shutdown.dialog.message": "Datorn stängs av om {time} om du inte klickar på Avbryt.",
+  "shutdown.dialog.cancel": "Avboka"
 }

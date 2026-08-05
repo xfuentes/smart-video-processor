@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Selecionar diretório de saída",
   "settings.output_rules.apply": "Candidatar-se",
   "settings.output_rules.cancel": "Cancelar",
-  "title.development": "Desenvolvimento"
+  "title.development": "Desenvolvimento",
+  "settings.auto_delete_processed_files.label": "Excluir arquivos de origem processados ao limpar/encerrar o processo",
+  "job.encoding.speed": "Codificação na velocidade {speed}x.",
+  "job.encoding.first_pass_countdown": "Conclusão da primeira passagem em {duration}.",
+  "job.encoding.countdown": "Conclusão em {duration}.",
+  "main.toolbar.shutdown": "Desligar",
+  "main.toolbar.shutdown_tooltip": "Desligue o computador quando todo o processamento estiver concluído.",
+  "shutdown.dialog.title": "Desligue o computador",
+  "shutdown.dialog.message": "O computador será desligado em {time}, a menos que você clique em Cancelar.",
+  "shutdown.dialog.cancel": "Cancelar"
 }

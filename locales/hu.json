@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Kimeneti mappa kiválasztása",
   "settings.output_rules.apply": "Jelentkezés",
   "settings.output_rules.cancel": "Mégse",
-  "title.development": "Fejlesztés"
+  "title.development": "Fejlesztés",
+  "settings.auto_delete_processed_files.label": "Feldolgozott forrásfájlok törlése törlés/kilépés esetén",
+  "job.encoding.speed": "Kódolás {speed}x sebességgel.",
+  "job.encoding.first_pass_countdown": "Első menet befejezése {duration} idő alatt.",
+  "job.encoding.countdown": "Befejezés {duration} idő alatt.",
+  "main.toolbar.shutdown": "Kikapcsol",
+  "main.toolbar.shutdown_tooltip": "Kapcsolja ki a számítógépet, amikor az összes feldolgozás befejeződött",
+  "shutdown.dialog.title": "Kapcsold ki a számítógépet",
+  "shutdown.dialog.message": "A számítógép {idő} múlva kikapcsol, hacsak nem kattint a Mégse gombra.",
+  "shutdown.dialog.cancel": "Mégsem"
 }
