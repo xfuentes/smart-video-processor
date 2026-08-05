@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "选择输出目录",
   "settings.output_rules.apply": "申请",
   "settings.output_rules.cancel": "取消",
-  "title.development": "发展"
+  "title.development": "发展",
+  "settings.auto_delete_processed_files.label": "清除/退出时删除已处理的源文件",
+  "job.encoding.speed": "以速度 x 进行编码。",
+  "job.encoding.first_pass_countdown": "第一轮测试在{duration}内完成。",
+  "job.encoding.countdown": "完成时间为{duration}。",
+  "main.toolbar.shutdown": "关闭",
+  "main.toolbar.shutdown_tooltip": "所有处理完成后，请关闭计算机。",
+  "shutdown.dialog.title": "关闭电脑",
+  "shutdown.dialog.message": "电脑将在{time}后关机，除非您点击“取消”。",
+  "shutdown.dialog.cancel": "取消"
 }

@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Выбрать каталог для сохранения результатов",
   "settings.output_rules.apply": "Подать заявку",
   "settings.output_rules.cancel": "Отменить",
-  "title.development": "Разработка"
+  "title.development": "Разработка",
+  "settings.auto_delete_processed_files.label": "При завершении работы программы удаляйте обработанные исходные файлы.",
+  "job.encoding.speed": "Кодирование со скоростью {speed}x.",
+  "job.encoding.first_pass_countdown": "Завершение первого прохода за {duration}.",
+  "job.encoding.countdown": "Завершение через {duration}.",
+  "main.toolbar.shutdown": "Выключить",
+  "main.toolbar.shutdown_tooltip": "Выключите компьютер, когда вся обработка завершится.",
+  "shutdown.dialog.title": "Выключите компьютер",
+  "shutdown.dialog.message": "Компьютер выключится через {время}, если вы не нажмете кнопку «Отмена».",
+  "shutdown.dialog.cancel": "Отмена"
 }

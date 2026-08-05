@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Wybierz katalog docelowy",
   "settings.output_rules.apply": "Zgłoś się",
   "settings.output_rules.cancel": "Anuluj",
-  "title.development": "Rozwój"
+  "title.development": "Rozwój",
+  "settings.auto_delete_processed_files.label": "Usuń przetworzone pliki źródłowe podczas czyszczenia/zamykania",
+  "job.encoding.speed": "Kodowanie z {speed}x.",
+  "job.encoding.first_pass_countdown": "Zakończenie pierwszego podejścia za {duration}.",
+  "job.encoding.countdown": "Zakończenie za {duration}.",
+  "main.toolbar.shutdown": "Wyłączać",
+  "main.toolbar.shutdown_tooltip": "Wyłącz komputer po zakończeniu całego przetwarzania",
+  "shutdown.dialog.title": "Wyłącz komputer",
+  "shutdown.dialog.message": "Komputer wyłączy się za {time}, chyba że klikniesz Anuluj.",
+  "shutdown.dialog.cancel": "Anulować"
 }

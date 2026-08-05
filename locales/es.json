@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Seleccionar directorio de salida",
   "settings.output_rules.apply": "Solicitar",
   "settings.output_rules.cancel": "Cancelar",
-  "title.development": "Desarrollo"
+  "title.development": "Desarrollo",
+  "settings.auto_delete_processed_files.label": "Eliminar los archivos fuente procesados al borrar/salir.",
+  "job.encoding.speed": "Codificación a {speed}x.",
+  "job.encoding.first_pass_countdown": "Finalización de la primera pasada en {duration}.",
+  "job.encoding.countdown": "Finalización en {duration}.",
+  "main.toolbar.shutdown": "Desconectar",
+  "main.toolbar.shutdown_tooltip": "Apague el ordenador cuando haya finalizado todo el procesamiento.",
+  "shutdown.dialog.title": "Apaga el ordenador",
+  "shutdown.dialog.message": "El ordenador se apagará en {time} a menos que haga clic en Cancelar.",
+  "shutdown.dialog.cancel": "Cancelar"
 }

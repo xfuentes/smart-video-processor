@@ -75,6 +75,7 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
 
 export const defaultSettings: Settings = {
   isDebugEnabled: false,
+  isAutoDeleteProcessedFilesEnabled: false,
   language: defaultLanguage,
   additionalTvSearchLanguages: ['en'],
   tmpFilesPath: Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp'),

@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Kies de uitvoermap",
   "settings.output_rules.apply": "Solliciteren",
   "settings.output_rules.cancel": "Annuleren",
-  "title.development": "Ontwikkeling"
+  "title.development": "Ontwikkeling",
+  "settings.auto_delete_processed_files.label": "Verwijder verwerkte bronbestanden bij het afsluiten/wissen.",
+  "job.encoding.speed": "Coderen met {speed}x.",
+  "job.encoding.first_pass_countdown": "Eerste doorgang voltooid in {duration}.",
+  "job.encoding.countdown": "Voltooiing binnen {duration}.",
+  "main.toolbar.shutdown": "Schakel uit",
+  "main.toolbar.shutdown_tooltip": "Schakel de computer uit zodra alle verwerking is voltooid.",
+  "shutdown.dialog.title": "Schakel de computer uit.",
+  "shutdown.dialog.message": "De computer wordt over {time} uitgeschakeld, tenzij u op Annuleren klikt.",
+  "shutdown.dialog.cancel": "Annuleren"
 }

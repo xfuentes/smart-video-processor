@@ -20,15 +20,16 @@ description: Create a new release
    - Insert a new `Version X.Y.Z` entry at the top of the **What's new** tab, using the bullet points from the versioned `CHANGELOG.md` section.
    - Keep entries concise and user-focused (only what matters to the end user).
 
-4. **Translate missing strings with DeepL**
-   - Ensure `DEEPL_API_KEY` is set in the environment.
+4. **Translate missing strings with Google Translate**
+   - Ensure `GOOGLE_API_KEY` is set in the environment.
    - First sync the locale files so that all `locales/*.json` files contain the same keys as `locales/en.json` (see the `translation` skill for the re-serialization procedure).
-   - For every non-English locale, translate each new English source string with the DeepL API **before committing the release**:
-     - Endpoint: `https://api-free.deepl.com/v2/translate`
-     - Use `source_lang=EN`, the correct `target_lang` for the locale (e.g. `FR`, `DE`, `ES`, `PT-PT`, `NB`, `JA`, `KO`, `ZH`, ...), and `preserve_formatting=1`.
+   - For every non-English locale, translate each new English source string with the Google Cloud Translation API **before committing the release**:
+     - Endpoint: `https://translation.googleapis.com/language/translate/v2`
+     - POST a JSON body with `q=<text>`, `source='en'`, `target=<locale>` (e.g. `fr`, `de`, `es`, `pt-BR`, `nb`, `ja`, `ko`, `zh-CN`, ...), and `format='text'`, plus the `key` query parameter set to `GOOGLE_API_KEY`.
+     - The translated text is at `data.translations[0].translatedText`.
      - Preserve ICU placeholders such as `{version}`, `{num}`, `{count}`, etc. Do not translate words inside braces.
      - Multi-line strings (e.g. changelog bullet lists) should be translated line-by-line so that the bullet order is preserved.
-   - If a locale is not supported by DeepL (e.g. Arabic is not currently supported), keep the English fallback and add a note in the release summary.
+   - If a locale is not supported by Google Translate, keep the English fallback and add a note in the release summary.
    - Validate JSON syntax, consistent key sets across all locale files, and no escaped apostrophes (`\'`).
 
 5. **Run tests**
@@ -90,8 +91,8 @@ description: Create a new release
    - Alternatively, open the draft release on the GitHub **Releases** page and paste the notes manually if `gh` is not available.
 
 10. **Create a new draft Microsoft Store submission and update release notes**
-    - This step reads the GitHub draft release notes, creates a new in-progress Store submission, translates the notes into the Tier 1 languages from `metadata.json` (excluding Arabic), and updates the submission.
-    - Make sure the environment variables `AZURE_AD_TENANT_ID`, `AZURE_AD_GH_CLIENT_ID`, `AZURE_AD_GH_SECRET`, and `DEEPL_API_KEY` are set.
+    - This step reads the GitHub draft release notes, creates a new in-progress Store submission, translates the notes into all supported languages from `metadata.json`, and updates the submission.
+    - Make sure the environment variables `AZURE_AD_TENANT_ID`, `AZURE_AD_GH_CLIENT_ID`, `AZURE_AD_GH_SECRET`, and `GOOGLE_API_KEY` are set.
     - Run the following PowerShell script after replacing `vX.Y.Z` with the actual version tag:
       ```powershell
       $ErrorActionPreference = 'Stop'
@@ -101,7 +102,7 @@ description: Create a new release
       $tenantId = $env:AZURE_AD_TENANT_ID
       $clientId = $env:AZURE_AD_GH_CLIENT_ID
       $clientSecret = $env:AZURE_AD_GH_SECRET
-      $deeplKey = $env:DEEPL_API_KEY
+      $googleKey = $env:GOOGLE_API_KEY
       $metadataPath = Join-Path (Get-Location) 'assets\appx\metadata.json'
 
       $release = gh release view $tag --json body | ConvertFrom-Json
@@ -111,22 +112,26 @@ description: Create a new release
       }
 
       $targetLangs = @{
-        'fr-fr' = 'FR'
-        'de-de' = 'DE'
-        'it-it' = 'IT'
-        'es-es' = 'ES'
-        'pt-br' = 'PT-BR'
-        'nl-nl' = 'NL'
-        'zh-cn' = 'ZH'
-        'ja-jp' = 'JA'
-        'ko-kr' = 'KO'
-        'ru-ru' = 'RU'
+        'fr-fr' = 'fr'
+        'de-de' = 'de'
+        'it-it' = 'it'
+        'es-es' = 'es'
+        'pt-br' = 'pt-BR'
+        'nl-nl' = 'nl'
+        'zh-cn' = 'zh-CN'
+        'ja-jp' = 'ja'
+        'ko-kr' = 'ko'
+        'ru-ru' = 'ru'
+        'ar-sa' = 'ar'
       }
 
       function Get-Translation($text, $target) {
-        $body = @{ source_lang = 'EN'; target_lang = $target; preserve_formatting = '1'; text = $text }
-        $res = Invoke-RestMethod -Uri 'https://api-free.deepl.com/v2/translate' -Method POST -Headers @{ Authorization = "DeepL-Auth-Key $deeplKey" } -Body $body
-        return $res.translations[0].text
+        $wc = New-Object System.Net.WebClient
+        $wc.Encoding = [System.Text.Encoding]::UTF8
+        $wc.Headers.Add('Content-Type', 'application/json; charset=utf-8')
+        $body = @{ q = $text; source = 'en'; target = $target; format = 'text' } | ConvertTo-Json
+        $json = $wc.UploadString("https://translation.googleapis.com/language/translate/v2?key=$googleKey", 'POST', $body) | ConvertFrom-Json
+        return $json.data.translations[0].translatedText
       }
 
       function Get-StoreToken() {
@@ -149,7 +154,8 @@ description: Create a new release
 
       $submission = Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method GET -Headers $authHeaders
 
-      $metadata = Get-Content $metadataPath -Raw | ConvertFrom-Json
+      $metadata = Get-Content $metadataPath -Raw -Encoding UTF8 | ConvertFrom-Json
+      $docsImgDir = Join-Path (Get-Location) 'docs\img'
 
       $imgFiles = Get-ChildItem (Join-Path $docsImgDir '*.png') -File | Sort-Object Name | Select-Object -First 10
       $imgList = foreach ($img in $imgFiles) {
@@ -161,10 +167,17 @@ description: Create a new release
       }
 
       foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
-        $metadata.listings.$locale.baseListing.keywords = @()
-        $metadata.listings.$locale.baseListing.features = @()
-        $metadata.listings.$locale.baseListing.title = 'Smart Video Processor'
-        $metadata.listings.$locale.baseListing.images = $imgList
+        $bl = $metadata.listings.$locale.baseListing
+        # Partner Center limits: up to 20 features of 200 chars and 7 keywords of 30 chars.
+        # Truncate at runtime so translated content does not exceed the limits.
+        if ($bl.features) {
+          $bl.features = ($bl.features | Select-Object -First 20 | ForEach-Object { $_.Substring(0, [System.Math]::Min(200, $_.Length)) })
+        }
+        if ($bl.keywords) {
+          $bl.keywords = ($bl.keywords | Select-Object -First 7 | ForEach-Object { $_.Substring(0, [System.Math]::Min(30, $_.Length)) })
+        }
+        $bl.title = 'Smart Video Processor'
+        $bl.images = $imgList
       }
 
       foreach ($locale in $metadata.listings.PSObject.Properties.Name) {
@@ -180,7 +193,7 @@ description: Create a new release
 
       $payload = $submission | ConvertTo-Json -Depth 100
       $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $jsonHeaders -Body $payloadBytes
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $authHeaders -ContentType 'application/json; charset=utf-8' -Body $payloadBytes
 
       Write-Output "Submission $submissionId updated with translated release notes."
       ```
@@ -218,7 +231,7 @@ description: Create a new release
       $found = Get-ChildItem $temp -File | Where-Object { $needed -contains $_.Name }
 
       Add-Type -AssemblyName System.IO.Compression.FileSystem
-      function Get-AppxVersion($path) {
+      function Get-AppxManifest($path) {
         $zip = [System.IO.Compression.ZipFile]::OpenRead($path)
         $entry = $zip.GetEntry('AppxManifest.xml')
         $stream = $entry.Open()
@@ -228,7 +241,16 @@ description: Create a new release
         $stream.Dispose()
         $zip.Dispose()
         [xml]$manifest = $xml
-        return $manifest.Package.Identity.Version
+        return $manifest
+      }
+
+      function Get-AppxVersion($path) {
+        return (Get-AppxManifest $path).Package.Identity.Version
+      }
+
+      function Get-AppxLanguages($path) {
+        $manifest = Get-AppxManifest $path
+        return @($manifest.Package.Resources.Resource | ForEach-Object { $_.Language })
       }
 
       function Get-StoreToken() {
@@ -268,7 +290,7 @@ description: Create a new release
           fileStatus = 'PendingUpload'
           version = $version
           architecture = $arch
-          languages = @('en-US')
+          languages = (Get-AppxLanguages $path)
           capabilities = @()
           minimumDirectXVersion = 'None'
           minimumSystemRam = 'None'
@@ -287,12 +309,80 @@ description: Create a new release
 
       $payload = $submission | ConvertTo-Json -Depth 100
       $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $jsonHeaders -Body $payloadBytes
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId" -Method PUT -Headers $authHeaders -ContentType 'application/json; charset=utf-8' -Body $payloadBytes
 
-      $commitHeaders = $authHeaders + @{ 'Content-Type' = 'application/json' }
-      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId/commit" -Method POST -Headers $commitHeaders -Body ''
+      Invoke-RestMethod -Uri "https://manage.devcenter.microsoft.com/v1.0/my/applications/$appId/submissions/$submissionId/commit" -Method POST -Headers $authHeaders -ContentType 'application/json' -Body ''
       Write-Output "Submission $submissionId committed for certification."
       ```
+    - If the packages are already up to date for the current version, use the image-only upload script to send the Store listing screenshots and commit without re-downloading packages:
+      ```powershell
+      $ErrorActionPreference = 'Stop'
+
+      $tenantId = $env:AZURE_AD_TENANT_ID
+      $clientId = $env:AZURE_AD_GH_CLIENT_ID
+      $clientSecret = $env:AZURE_AD_GH_SECRET
+      $appId = '9PG7L9JR8K6M'
+      $docsImgDir = Join-Path (Get-Location) 'docs\img'
+
+      function Get-StoreToken {
+        $body = @{ grant_type='client_credentials'; client_id=$clientId; client_secret=$clientSecret; scope='https://manage.devcenter.microsoft.com/.default' }
+        $res = Invoke-RestMethod -Uri ('https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token') -Method POST -Body $body
+        return $res.access_token
+      }
+
+      function Get-Submission($token, $id) {
+        $wc = New-Object System.Net.WebClient
+        $wc.Encoding = [System.Text.Encoding]::UTF8
+        $wc.Headers.Add('Authorization', 'Bearer ' + $token)
+        $json = $wc.DownloadString('https://manage.devcenter.microsoft.com/v1.0/my/applications/' + $appId + '/submissions/' + $id)
+        return ($json | ConvertFrom-Json)
+      }
+
+      function Put-Submission($token, $id, $submission) {
+        $wc = New-Object System.Net.WebClient
+        $wc.Encoding = [System.Text.Encoding]::UTF8
+        $wc.Headers.Add('Authorization', 'Bearer ' + $token)
+        $wc.Headers.Add('Content-Type', 'application/json; charset=utf-8')
+        $payload = $submission | ConvertTo-Json -Depth 100
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+        $url = 'https://manage.devcenter.microsoft.com/v1.0/my/applications/' + $appId + '/submissions/' + $id
+        $resBytes = $wc.UploadData($url, 'PUT', $bytes)
+        $resString = [System.Text.Encoding]::UTF8.GetString($resBytes)
+        return ($resString | ConvertFrom-Json)
+      }
+
+      $token = Get-StoreToken
+      $app = Invoke-RestMethod -Uri ('https://manage.devcenter.microsoft.com/v1.0/my/applications/' + $appId) -Method GET -Headers @{ Authorization = 'Bearer ' + $token }
+      $submissionId = $app.pendingApplicationSubmission.id
+      $submission = Get-Submission $token $submissionId
+      $sas = $submission.fileUploadUrl
+
+      $temp = Join-Path $env:TEMP 'store-listing-images'
+      Remove-Item -Recurse -Force $temp -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Path $temp -Force | Out-Null
+
+      $imgFiles = Get-ChildItem (Join-Path $docsImgDir '*.png') -File | Sort-Object Name | Select-Object -First 10
+      Copy-Item -Path $imgFiles -Destination $temp
+
+      $zip = Join-Path $env:TEMP 'store-listing-images.zip'
+      Remove-Item -Force $zip -ErrorAction SilentlyContinue
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      [System.IO.Compression.ZipFile]::CreateFromDirectory($temp, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+
+      Write-Output ('Uploading image zip to ' + $sas)
+      & 'curl.exe' -X PUT -T $zip -H 'x-ms-blob-type: BlockBlob' $sas
+      if ($LASTEXITCODE -ne 0) { throw 'ZIP upload to Azure blob failed.' }
+
+      Put-Submission $token $submissionId $submission | Out-Null
+
+      $wc = New-Object System.Net.WebClient
+      $wc.Encoding = [System.Text.Encoding]::UTF8
+      $wc.Headers.Add('Authorization', 'Bearer ' + $token)
+      $wc.Headers.Add('Content-Type', 'application/json')
+      $wc.UploadString('https://manage.devcenter.microsoft.com/v1.0/my/applications/' + $appId + '/submissions/' + $submissionId + '/commit', 'POST', '')
+      Write-Output ('Submission ' + $submissionId + ' committed for certification')
+      ```
+
     - Monitor Partner Center for the certification status.
 
 12. **Remove the `.appx` assets from GitHub and publish the release**

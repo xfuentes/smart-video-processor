@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Çıktı Dizinini Seç",
   "settings.output_rules.apply": "Başvur",
   "settings.output_rules.cancel": "İptal et",
-  "title.development": "Geliştirme"
+  "title.development": "Geliştirme",
+  "settings.auto_delete_processed_files.label": "Temizleme/çıkış işleminde işlenmiş kaynak dosyaları silin.",
+  "job.encoding.speed": "Kodlama hızı {speed}x.",
+  "job.encoding.first_pass_countdown": "İlk geçişin tamamlanması {duration}.",
+  "job.encoding.countdown": "Tamamlanma süresi {duration}.",
+  "main.toolbar.shutdown": "Kapat",
+  "main.toolbar.shutdown_tooltip": "Tüm işlemler tamamlandığında bilgisayarı kapatın.",
+  "shutdown.dialog.title": "Bilgisayarı kapatın.",
+  "shutdown.dialog.message": "İptal'e tıklamadığınız takdirde bilgisayar {süre} sonra kapanacaktır.",
+  "shutdown.dialog.cancel": "İptal etmek"
 }

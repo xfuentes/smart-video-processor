@@ -31,7 +31,8 @@ const api: SvpAPI = {
     openSingleFileExplorer: (title: string, defaultPath?: string): Promise<string> =>
       ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath),
     openDirectoryExplorer: (title: string, defaultPath?: string): Promise<string> =>
-      ipcRenderer.invoke('main:openDirectoryExplorer', title, defaultPath)
+      ipcRenderer.invoke('main:openDirectoryExplorer', title, defaultPath),
+    shutdown: (): Promise<void> => ipcRenderer.invoke('main:shutdown')
   },
   video: {
     openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),

@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Vyberte výstupní adresář",
   "settings.output_rules.apply": "Přihlásit se",
   "settings.output_rules.cancel": "Zrušit",
-  "title.development": "Vývoj"
+  "title.development": "Vývoj",
+  "settings.auto_delete_processed_files.label": "Smazat zpracované zdrojové soubory při vymazání/ukončení",
+  "job.encoding.speed": "Kódování rychlostí {speed}x.",
+  "job.encoding.first_pass_countdown": "Dokončení prvního průchodu za {duration}.",
+  "job.encoding.countdown": "Dokončení za {duration}.",
+  "main.toolbar.shutdown": "Vypnout",
+  "main.toolbar.shutdown_tooltip": "Po dokončení veškerého zpracování vypněte počítač.",
+  "shutdown.dialog.title": "Vypněte počítač",
+  "shutdown.dialog.message": "Počítač se vypne za {time}, pokud nekliknete na tlačítko Zrušit.",
+  "shutdown.dialog.cancel": "Zrušit"
 }

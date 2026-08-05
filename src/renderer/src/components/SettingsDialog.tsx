@@ -116,6 +116,7 @@ export const SettingsDialog = () => {
       isAutoStartEnabled,
       priority,
       isDebugEnabled,
+      isAutoDeleteProcessedFilesEnabled,
       isTrackFilteringEnabled,
       favoriteLanguages,
       isKeepVOEnabled,
@@ -155,6 +156,7 @@ export const SettingsDialog = () => {
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
       setPriority(settingsValidation.result.priority)
       setDebugEnabled(settingsValidation.result.isDebugEnabled)
+      setAutoDeleteProcessedFilesEnabled(settingsValidation.result.isAutoDeleteProcessedFilesEnabled)
       setTrackFilteringEnabled(settingsValidation.result.isTrackFilteringEnabled)
       setFavoriteLanguages(settingsValidation.result.favoriteLanguages)
       setKeepVOEnabled(settingsValidation.result.isKeepVOEnabled)
@@ -217,6 +219,9 @@ export const SettingsDialog = () => {
   const [priority, setPriority] = useState(settingsValidation?.result?.priority)
   const priorityClass = 'priority-' + priority?.toLowerCase()
   const [isDebugEnabled, setDebugEnabled] = useState(settingsValidation?.result?.isDebugEnabled)
+  const [isAutoDeleteProcessedFilesEnabled, setAutoDeleteProcessedFilesEnabled] = useState(
+    settingsValidation?.result?.isAutoDeleteProcessedFilesEnabled
+  )
   const [isTrackFilteringEnabled, setTrackFilteringEnabled] = useState(
     settingsValidation?.result?.isTrackFilteringEnabled
   )
@@ -410,6 +415,17 @@ export const SettingsDialog = () => {
                           label={_('settings.debug_mode.label', { defaultValue: 'Debug Mode' })}
                           checked={isDebugEnabled}
                           onChange={(ev: ChangeEvent<HTMLInputElement>) => setDebugEnabled(ev.currentTarget.checked)}
+                        />
+                      </div>
+                      <div className="field">
+                        <Switch
+                          label={_('settings.auto_delete_processed_files.label', {
+                            defaultValue: 'Delete processed source files on clear/quit'
+                          })}
+                          checked={isAutoDeleteProcessedFilesEnabled}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                            setAutoDeleteProcessedFilesEnabled(ev.currentTarget.checked)
+                          }
                         />
                       </div>
                     </div>

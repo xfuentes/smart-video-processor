@@ -201,7 +201,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Processeur vidéo intelligent",
+        "title": "Smart Video Processor",
         "shortDescription": "Traitement vidéo automatisé. Réorganisation, réencodage, ajout de métadonnées et d'images.",
         "devStudio": "Xavier Fuentes"
       },
@@ -297,7 +297,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Intelligenter Videoprozessor",
+        "title": "Smart Video Processor",
         "shortDescription": "Automatisierte Videoverarbeitung. Neu ordnen, neu kodieren, Metadaten und Bilder hinzufügen.",
         "devStudio": "Xavier Fuentes"
       },
@@ -393,7 +393,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Processore video intelligente",
+        "title": "Smart Video Processor",
         "shortDescription": "Elaborazione video automatizzata. Riorganizzazione, ricodifica, aggiunta di metadati e immagini.",
         "devStudio": "Xavier Fuentes"
       },
@@ -489,7 +489,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Procesador de vídeo inteligente",
+        "title": "Smart Video Processor",
         "shortDescription": "Procesamiento automatizado de vídeo. Reorganiza, recodifica y añade metadatos e imágenes.",
         "devStudio": "Xavier Fuentes"
       },
@@ -585,7 +585,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Processador de Vídeo Inteligente",
+        "title": "Smart Video Processor",
         "shortDescription": "Processamento automatizado de vídeos. Reorganizar, recodificar, adicionar metadados e imagens.",
         "devStudio": "Xavier Fuentes"
       },
@@ -681,7 +681,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Slimme videoprocessor",
+        "title": "Smart Video Processor",
         "shortDescription": "Geautomatiseerde videoverwerking. Herindelen, opnieuw coderen, metadata en afbeeldingen toevoegen.",
         "devStudio": "Xavier Fuentes"
       },
@@ -777,7 +777,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "智能视频处理器",
+        "title": "Smart Video Processor",
         "shortDescription": "自动化视频处理。重新整理、重新编码、添加元数据和图片。",
         "devStudio": "Xavier Fuentes"
       },
@@ -873,7 +873,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "スマートビデオプロセッサ",
+        "title": "Smart Video Processor",
         "shortDescription": "動画の自動処理。再整理、再エンコード、メタデータや画像の追加を行います。",
         "devStudio": "Xavier Fuentes"
       },
@@ -969,7 +969,7 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "스마트 비디오 프로세서",
+        "title": "Smart Video Processor",
         "shortDescription": "자동화된 동영상 처리. 재구성, 재인코딩, 메타데이터 및 이미지 추가.",
         "devStudio": "Xavier Fuentes"
       },
@@ -990,12 +990,12 @@
         "websiteUrl": "",
         "description": "Этот инструмент автоматически распознает ваши фильмы и сериалы с помощью популярных баз данных, а затем оптимизирует весь процесс: переименовывает файлы в соответствии с конвенциями Plex, добавляет обложки, исправляет метаданные (включая язык и тип звуковой дорожки), разделяет или объединяет медиафайлы и кодирует их в форматы H.264 или H.265 — и всё это в одном месте.",
         "features": [
-          "Автоматическое распознавание медиафайлов: определяет фильмы и телепередачи с помощью баз данных TheMovieDB или TVDB",
-          "Интеллектуальное переименование файлов: переименовывает файлы с использованием соглашений об именовании, совместимых с Plex/Kodi",
+          "Автоматическое распознавание медиафайлов: определяет фильмы и телепередачи с помощью баз данных TheMovieDB",
+          "Интеллектуальное переименование файлов: переименовывает файлы по правилам Plex/Kodi",
           "Исправление метаданных: извлекает и исправляет название, год, название эпизода...",
-          "Управление звуковыми и субтитровыми дорожками: определяет и маркирует языки звуковых дорожек и субтитров; переименовывает и изменяет порядок дорожек.",
+          "Управление звуковыми и субтитровыми дорожками: определяет, маркирует, переименовывает и упорядочивает дорожки.",
           "Загрузка постеров и миниатюр: автоматическая загрузка постеров и миниатюр.",
-          "Разделение и объединение медиафайлов: позволяет разбивать большие файлы на части или объединять несколько частей (например, DVD1/DVD2) в один файл.",
+          "Разделение и объединение медиафайлов: разбивает большие файлы или объединяет части (DVD1/DVD2) в один файл.",
           "Кодирование видео (H.264 / H.265): преобразует медиафайлы в оптимизированные форматы с помощью готовых настроек.",
           "Пакетная обработка: одновременная обработка нескольких файлов с управлением очередью."
         ],
@@ -1065,8 +1065,104 @@
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
-        "title": "Интеллектуальный видеопроцессор",
+        "title": "Smart Video Processor",
         "shortDescription": "Автоматическая обработка видео. Перегруппировка, перекодировка, добавление метаданных и изображений.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "ar-sa": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "فيديو",
+          "يعالج",
+          "التشفير",
+          "تنظيم"
+        ],
+        "licenseTerms": "هذا البرنامج برنامج حر: يمكنك إعادة توزيعه و/أو تعديله\nبموجب شروط رخصة جنو العمومية العامة كما نشرتها\nمؤسسة البرمجيات الحرة، سواء الإصدار 3 من الرخصة، أو\n(حسب اختيارك) أي إصدار لاحق.\n\nيُوزع هذا البرنامج على أمل أن يكون مفيدًا،\nولكن بدون أي ضمان؛ حتى بدون الضمان الضمني لقابلية التسويق أو الملاءمة لغرض معين. راجع\nرخصة جنو العمومية العامة لمزيد من التفاصيل.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "تقوم هذه الأداة تلقائيًا بتحديد أفلامك وبرامجك التلفزيونية باستخدام قواعد البيانات الشائعة، ثم تبسط العملية بأكملها: إعادة تسمية الملفات باستخدام اصطلاحات متوافقة مع Plex، وإرفاق الصور، وتصحيح البيانات الوصفية (بما في ذلك لغة المسار ونوعه)، وتقسيم أو دمج ملفات الوسائط وتشفيرها إلى H.264 أو H.265 - كل ذلك في مكان واحد.",
+        "features": [
+          "التعرف التلقائي على الوسائط: يحدد الأفلام والبرامج التلفزيونية باستخدام TheMovieDB أو TVDB",
+          "إعادة تسمية الملفات الذكية: تعيد تسمية الملفات باستخدام اصطلاحات التسمية المتوافقة مع Plex/Kodi",
+          "تصحيح البيانات الوصفية: يقوم بجلب وتصحيح العنوان والسنة واسم الحلقة...",
+          "إدارة مسارات الصوت والترجمة: يكتشف لغات الصوت/الترجمة ويصنفها؛ ويعيد تسمية المسارات وإعادة ترتيبها.",
+          "تنزيل الملصقات والصور المصغرة: يقوم بتنزيل الملصقات والصور المصغرة تلقائيًا.",
+          "تقسيم ودمج ملفات الوسائط: يقوم بتقسيم الملفات الكبيرة أو دمج أجزاء متعددة (مثل DVD1/DVD2) في ملف واحد.",
+          "ترميز الفيديو (H.264 / H.265): يحول الوسائط إلى تنسيقات فعالة مع إعدادات مسبقة محددة مسبقًا.",
+          "المعالجة الدفعية: تتعامل مع ملفات متعددة في وقت واحد مع إدارة قائمة الانتظار."
+        ],
+        "releaseNotes": "",
+        "images": [
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977859",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977773",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977774",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978171",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978172",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978173",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978174",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022977775",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978176",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "AppTileIcon-300x300.png",
+            "fileStatus": "Uploaded",
+            "id": "1152922700022978177",
+            "description": "",
+            "imageType": "Icon"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "معالجة الفيديو الآلية. إعادة تنظيم، إعادة ترميز، إضافة البيانات الوصفية والصورة.",
         "devStudio": "Xavier Fuentes"
       },
       "platformOverrides": {}

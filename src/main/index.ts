@@ -37,6 +37,7 @@ import { MKVMerge } from './domain/programs/MKVMerge'
 import packageJSON from '../../package.json' with { type: 'json' }
 import * as os from 'node:os'
 import { Processes } from './util/processes'
+import { shutdownComputer } from './util/shutdown'
 
 if (electron_squirrel_startup) app.quit()
 
@@ -326,6 +327,7 @@ app.whenReady().then(async () => {
     return ''
   })
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
+  ipcMain.handle('main:shutdown', () => shutdownComputer())
   initVideoControllerIPC(mainWindow)
   mainBindings(ipcMain, mainWindow, fs)
   ipcMain.on('video:requestList', () => {

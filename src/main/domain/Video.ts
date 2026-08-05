@@ -817,6 +817,19 @@ export class Video implements IVideo {
     return this.status === JobStatus.SUCCESS && this.processed
   }
 
+  deleteSourceFiles() {
+    for (const part of this.videoParts) {
+      part.deleteSourceFiles()
+    }
+    try {
+      if (fs.existsSync(this.sourcePath)) {
+        Files.unlinkSync(this.sourcePath)
+      }
+    } catch (e) {
+      console.error('Failed to delete source file', this.sourcePath, e)
+    }
+  }
+
   switchTrackSelection(changedItems: number[]) {
     this.tracks
       .filter((t) => changedItems.includes(t.id))
@@ -1080,7 +1093,7 @@ export class Video implements IVideo {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
       subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
-      if (this.tvShow.season !== undefined) {
+      if (this.tvShow.season !== undefined && this.tvShow.order !== 'absolute') {
         subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
       }
     }

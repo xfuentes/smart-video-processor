@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "Ausgabeverzeichnis auswählen",
   "settings.output_rules.apply": "Bewerben",
   "settings.output_rules.cancel": "Abbrechen",
-  "title.development": "Entwicklung"
+  "title.development": "Entwicklung",
+  "settings.auto_delete_processed_files.label": "Verarbeitete Quelldateien beim Löschen/Beenden löschen",
+  "job.encoding.speed": "Kodierung mit {speed}x.",
+  "job.encoding.first_pass_countdown": "Der erste Durchlauf ist in {duration} abgeschlossen.",
+  "job.encoding.countdown": "Fertigstellung in {duration}.",
+  "main.toolbar.shutdown": "Ausschalten",
+  "main.toolbar.shutdown_tooltip": "Schalten Sie den Computer aus, sobald die gesamte Verarbeitung abgeschlossen ist.",
+  "shutdown.dialog.title": "Schalten Sie den Computer aus.",
+  "shutdown.dialog.message": "Der Computer schaltet sich in {time} aus, es sei denn, Sie klicken auf Abbrechen.",
+  "shutdown.dialog.cancel": "Stornieren"
 }

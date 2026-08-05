@@ -45,13 +45,13 @@ export class EncodingJob extends Job<string> {
     const progression = this.getProgression()
     const result: string[] = []
     if (progression.xSpeed !== undefined) {
-      result.push(`Encoding at ${progression.xSpeed.toFixed(1)}x.`)
+      result.push(_('job.encoding.speed', { defaultValue: 'Encoding at {speed}x.', speed: progression.xSpeed.toFixed(1) }))
     }
     if (progression.countdown !== undefined) {
       if (progression.pass === 1) {
-        result.push(`Completion of first pass in ${Strings.humanDuration(progression.countdown)}.`)
+        result.push(_('job.encoding.first_pass_countdown', { defaultValue: 'Completion of first pass in {duration}.', duration: Strings.humanDuration(progression.countdown) }))
       } else {
-        result.push(`Completion in ${Strings.humanDuration(progression.countdown)}.`)
+        result.push(_('job.encoding.countdown', { defaultValue: 'Completion in {duration}.', duration: Strings.humanDuration(progression.countdown) }))
       }
     }
     return result.length > 0 ? result.join(' ') : this.title

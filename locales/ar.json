@@ -574,5 +574,14 @@
   "settings.output_rules.browse.title": "اختر مجلد الإخراج",
   "settings.output_rules.apply": "تقدم بطلب",
   "settings.output_rules.cancel": "إلغاء",
-  "title.development": "التنمية"
+  "title.development": "التنمية",
+  "settings.auto_delete_processed_files.label": "احذف ملفات المصدر المعالجة عند مسح/إنهاء البرنامج",
+  "job.encoding.speed": "التشفير بسرعة {speed}x.",
+  "job.encoding.first_pass_countdown": "إتمام المرحلة الأولى في {duration}.",
+  "job.encoding.countdown": "الإنجاز في {duration}.",
+  "main.toolbar.shutdown": "أطفئ",
+  "main.toolbar.shutdown_tooltip": "أطفئ الكمبيوتر عند اكتمال جميع عمليات المعالجة",
+  "shutdown.dialog.title": "أطفئ الكمبيوتر",
+  "shutdown.dialog.message": "سيتم إيقاف تشغيل الكمبيوتر خلال {الوقت} ما لم تنقر على \"إلغاء\".",
+  "shutdown.dialog.cancel": "يلغي"
 }

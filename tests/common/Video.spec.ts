@@ -16,9 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { afterEach, beforeAll, beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest'
 import { Video } from '../../src/main/domain/Video'
 import { SearchBy, VideoType } from '../../src/common/@types/Video'
+import { Job } from '../../src/main/domain/jobs/Job'
+import { ProcessingJob } from '../../src/main/domain/jobs/ProcessingJob'
 import { getFakeAbsolutePath } from './testUtils'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 import type { OutputRule } from '../../src/common/@types/Settings'
@@ -364,5 +366,43 @@ describe('Output directory rules', () => {
     ]
     expect(video.getOutputDirectory().toString()).not.toMatch(/MatchedDirectory$/)
     expect(video.getOutputDirectory().toString()).toMatch(/NotMatched$/)
+  })
+})
+
+describe('TV show merge output subdirectories', () => {
+  test('official order creates a season subfolder', async () => {
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'One Piece'
+    video.tvShow.theTVDB = 81797
+    video.tvShow.order = 'official'
+    video.tvShow.season = 1
+    video.tvShow.episode = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('One Piece {tvdb-81797}')
+    expect(outputPath).toContain('Season 01')
+    video.destroy()
+  })
+
+  test('absolute order does not create a season subfolder even when season is known', async () => {
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'One Piece'
+    video.tvShow.theTVDB = 81797
+    video.tvShow.order = 'absolute'
+    video.tvShow.absoluteEpisode = 242
+    video.tvShow.season = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('One Piece {tvdb-81797}')
+    expect(outputPath).not.toContain('Season 01')
+    video.destroy()
   })
 })

@@ -48,6 +48,7 @@ interface SvpAPI {
     switchPaused: () => Promise<boolean>
     openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
     openDirectoryExplorer: (title: string, defaultPath?: string) => Promise<string>
+    shutdown: () => Promise<void>
   }
   video: {
     openFileExplorer: () => Promise<void>

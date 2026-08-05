@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Added a main toolbar toggle to switch off the computer when all active processing is complete, with a 3-minute countdown cancellation dialog.
+- Added a setting to automatically delete successfully processed source files when clearing the list or quitting the application.
+- Added Arabic (ar-SA) to the Microsoft Store listing.
+- Declared all 23 supported languages in the Windows Store package manifest.
+
+### Changed
+- Encoding job progress messages in the job list are now translated based on the selected language.
+
+### Fixed
+- TV shows using absolute episode numbering are no longer placed in a season subfolder.
+
 ## [1.8.3] - 2026-08-04
 
 ### Added
