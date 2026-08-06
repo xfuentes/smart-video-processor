@@ -79,11 +79,11 @@ export const ShutdownDialog = ({ open, onOpenChange }: Props): React.JSX.Element
               }}
             >
               <Warning24Filled style={{ color: 'red' }} />
-              {_('shutdown.dialog.title', { defaultValue: 'Switch off the computer' })}
+              {_('shutdown.dialog.title', { defaultValue: 'Turn off the computer' })}
             </h3>
             <p>
               {_('shutdown.dialog.message', {
-                defaultValue: 'The computer will switch off in {time} unless you click Cancel.',
+                defaultValue: 'The computer will shut down in {time} unless you click Cancel.',
                 time: formattedTime
               })}
             </p>

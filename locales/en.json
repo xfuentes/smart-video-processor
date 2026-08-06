@@ -580,8 +580,9 @@
   "job.encoding.first_pass_countdown": "Completion of first pass in {duration}.",
   "job.encoding.countdown": "Completion in {duration}.",
   "shutdown.dialog.cancel": "Cancel",
-  "main.toolbar.shutdown": "Switch Off",
-  "main.toolbar.shutdown_tooltip": "Switch off the computer when all processing is complete",
-  "shutdown.dialog.title": "Switch off the computer",
-  "shutdown.dialog.message": "The computer will switch off in {time} unless you click Cancel."
+  "main.toolbar.shutdown": "Turn Off",
+  "main.toolbar.shutdown_tooltip": "Turn off the computer when all processing is complete",
+  "shutdown.dialog.title": "Turn off the computer",
+  "shutdown.dialog.message": "The computer will shut down in {time} unless you click Cancel.",
+  "about.news.version_1_8_4.items": "Added a shutdown button to the main toolbar to turn off the computer when all processing is complete\nAdded an option to delete source files after they are processed\nAdded Arabic (ar-SA) to the Microsoft Store listing\nDeclared all 23 supported languages in the Windows Store package\nEncoding job progress messages are now translated based on the selected language\nTV shows using absolute episode numbering are no longer placed in a season subfolder\nPinned taskbar icons no longer duplicate when launching the Microsoft Store version from the Start menu"
 }

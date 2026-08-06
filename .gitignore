@@ -22,3 +22,5 @@ bruno/
 !.yarn/versions
 .pnp.*
 .devin/tmp/
+.devin/workflows/*.pfx
+.devin/workflows/*.cer

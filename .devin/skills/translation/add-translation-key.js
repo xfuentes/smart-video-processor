@@ -1,11 +1,62 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 const localesDir = path.resolve(import.meta.dirname, '..', '..', '..', 'locales')
+const sourceDir = path.resolve(import.meta.dirname, '..', '..', '..', 'src')
 const apiKey = process.env.GOOGLE_API_KEY
 
+function findSourceForKey(key) {
+  const files = fs
+    .readdirSync(sourceDir, { recursive: true })
+    .map((name) => path.resolve(sourceDir, name))
+    .filter((file) => ['.ts', '.tsx', '.js', '.jsx'].includes(path.extname(file)) && fs.statSync(file).isFile())
+
+  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const callPattern = new RegExp(`_\\(\\s*(?:\\?\\s*)?['"]${escapedKey}['"]\\s*,\\s*\\{([\\s\\S]*?)\\}\\s*\\)`, 'g')
+
+  for (const file of files) {
+    const text = fs.readFileSync(file, 'utf8')
+    const match = callPattern.exec(text)
+    if (match) {
+      const block = match[1]
+      const defaultValueMatch = block.match(/defaultValue:\\s*(['"])((?:[^'\\\\]|''|\\\\.)*?)\\1/)
+      const codMatch = block.match(/cod:\\s*(['"])((?:[^'\\\\]|''|\\\\.)*?)\\1/)
+      return {
+        value: defaultValueMatch ? defaultValueMatch[2] : undefined,
+        cod: codMatch ? codMatch[2] : undefined
+      }
+    }
+  }
+
+  return { value: undefined, cod: undefined }
+}
+
+// Direct-object context marker: `Open %%video file%%` gives Google Translate
+// extra context for infinitive verbs. The marker is stripped from all locale
+// values after translation.
+const COD_MARKER = /\s*%%[^%]*%%\s*/g
+
+export function hasCodContext(text) {
+  return /%%[^%]+%%/.test(text)
+}
+
+export function stripCodContext(text) {
+  return text.replace(COD_MARKER, '').trim()
+}
+
+export function buildTranslationSource(value, cod) {
+  if (!cod) {
+    return value
+  }
+  const infinitiveValue = value.toLowerCase().startsWith('to ') ? value : `to ${value}`
+  return `${infinitiveValue} %%${cod}%%`
+}
+
 function usage() {
-  console.error('Usage: GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> "English source text"')
+  console.error('Usage: GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> ["English source text" ["COD"]] [--update]')
+  console.error('       GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> --update')
+  console.error('\nWhen "English source text" is omitted, the script reads defaultValue and cod from the _() call in the source.')
   process.exit(1)
 }
 
@@ -48,10 +99,28 @@ function writeJson(file, obj) {
 }
 
 async function main() {
-  const [key, ...valueParts] = process.argv.slice(2)
-  const value = valueParts.join(' ')
+  const update = process.argv.includes('--update')
+  const positional = process.argv.slice(2).filter((arg) => !arg.startsWith('-'))
+  const key = positional[0]
+  let value = positional[1]
+  let cod = positional[2]
 
-  if (!key || !value || !apiKey) {
+  if (!key || !apiKey) {
+    usage()
+  }
+
+  if (value === undefined) {
+    const source = findSourceForKey(key)
+    if (!source.value) {
+      fail(`Could not find _() call for "${key}" in the source.`)
+    }
+    value = source.value
+    if (cod === undefined) {
+      cod = source.cod
+    }
+  }
+
+  if (!value) {
     usage()
   }
 
@@ -67,14 +136,17 @@ async function main() {
   const enFile = files.find((f) => f.lang === 'en')
   const en = readJson(enFile.path)
   if (Object.prototype.hasOwnProperty.call(en, key)) {
-    fail(`Key "${key}" already exists in locales/en.json`)
+    if (!update) {
+      fail(`Key "${key}" already exists in locales/en.json. Use --update to overwrite.`)
+    }
   }
 
   const locales = files.filter((f) => f.lang !== 'en')
-  const translated = { en: value }
+  const source = buildTranslationSource(value, cod)
+  const translated = { en: stripCodContext(value) }
 
   for (const locale of locales) {
-    translated[locale.lang] = await translate(value, locale.lang)
+    translated[locale.lang] = stripCodContext(await translate(source, locale.lang))
   }
 
   for (const { lang, path: filePath } of files) {
@@ -87,7 +159,9 @@ async function main() {
   console.log('\nDone. Review the generated translations, especially ICU placeholders such as {count}, {version}, etc.')
 }
 
-main().catch((err) => {
-  console.error(err.message)
-  process.exit(1)
-})
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error(err.message)
+    process.exit(1)
+  })
+}

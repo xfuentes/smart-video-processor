@@ -41,8 +41,7 @@ type Props = {
   selectedVideos: IVideo[] | undefined
 }
 
-export const MainToolbar = ({
- onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
+export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
   const _ = useI18n()
   const [isPaused, setPaused] = React.useState(false)
   const [shutdownRequested, setShutdownRequested] = React.useState(false)
@@ -123,73 +122,73 @@ export const MainToolbar = ({
         size="small"
       >
         <ToolbarGroup>
-        <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
-          {_('main.toolbar.open', { defaultValue: 'Open' })}
-        </ToolbarButton>
-        <ToolbarButton
-          vertical
-          icon={<WrenchSettings20Regular />}
-          onClick={handleProcess}
-          disabled={!processingEnabled}
-        >
-          {_('main.toolbar.process', { defaultValue: 'Process' })}
-        </ToolbarButton>
-        {isPaused ? (
-          <ToolbarButton vertical icon={<Play24Regular />} onClick={handlePause}>
-            {_('main.toolbar.resume', { defaultValue: 'Resume' })}
+          <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
+            {_('main.toolbar.open', { defaultValue: 'Open' })}
           </ToolbarButton>
-        ) : (
-          <ToolbarButton vertical icon={<Pause24Regular />} onClick={handlePause}>
-            {_('main.toolbar.pause', { defaultValue: 'Pause' })}
-          </ToolbarButton>
-        )}
-        <ToolbarButton
-          vertical
-          icon={<Stop24Regular />}
-          onClick={handleCancel}
-          disabled={selectedVideos === undefined || selectedVideos.find((video) => video.processing) === undefined}
-        >
-          {_('main.toolbar.cancel', { defaultValue: 'Cancel' })}
-        </ToolbarButton>
-        <ToolbarButton vertical icon={<SubtractSquare24Regular />} onClick={handleRemove} disabled={selectionEmpty}>
-          {_('main.toolbar.remove', { defaultValue: 'Remove' })}
-        </ToolbarButton>
-        <Tooltip
-          content={_('main.toolbar.clear_tooltip', { defaultValue: 'Clear processed videos' })}
-          relationship="description"
-        >
           <ToolbarButton
             vertical
-            icon={isRecyclable ? <BinRecycleFull24Regular /> : <BinRecycle24Regular />}
-            onClick={handleClear}
-            disabled={!isRecyclable}
+            icon={<WrenchSettings20Regular />}
+            onClick={handleProcess}
+            disabled={!processingEnabled}
           >
-            {_('main.toolbar.clear', { defaultValue: 'Clear' })}
+            {_('main.toolbar.process', { defaultValue: 'Process' })}
           </ToolbarButton>
-        </Tooltip>
-        <Tooltip
-          content={_('main.toolbar.shutdown_tooltip', {
-            defaultValue: 'Switch off the computer when all processing is complete'
-          })}
-          relationship="description"
-        >
+          {isPaused ? (
+            <ToolbarButton vertical icon={<Play24Regular />} onClick={handlePause}>
+              {_('main.toolbar.resume', { defaultValue: 'Resume' })}
+            </ToolbarButton>
+          ) : (
+            <ToolbarButton vertical icon={<Pause24Regular />} onClick={handlePause}>
+              {_('main.toolbar.pause', { defaultValue: 'Pause' })}
+            </ToolbarButton>
+          )}
           <ToolbarButton
             vertical
-            icon={<Power20Regular />}
-            onClick={handleShutdownChange}
-            disabled={!isAnyProcessing}
-            appearance={shutdownRequested ? 'primary' : 'subtle'}
+            icon={<Stop24Regular />}
+            onClick={handleCancel}
+            disabled={selectedVideos === undefined || selectedVideos.find((video) => video.processing) === undefined}
           >
-            {_('main.toolbar.shutdown', { defaultValue: 'Switch Off' })}
+            {_('main.toolbar.cancel', { defaultValue: 'Cancel' })}
           </ToolbarButton>
-        </Tooltip>
-      </ToolbarGroup>
-      <ToolbarGroup>
-        <SettingsDialog />
-        <AboutDialog />
-      </ToolbarGroup>
-    </Toolbar>
-    <ShutdownDialog open={shutdownDialogOpen} onOpenChange={handleShutdownDialogChange} />
-  </>
+          <ToolbarButton vertical icon={<SubtractSquare24Regular />} onClick={handleRemove} disabled={selectionEmpty}>
+            {_('main.toolbar.remove', { defaultValue: 'Remove' })}
+          </ToolbarButton>
+          <Tooltip
+            content={_('main.toolbar.clear_tooltip', { defaultValue: 'Clear processed videos' })}
+            relationship="description"
+          >
+            <ToolbarButton
+              vertical
+              icon={isRecyclable ? <BinRecycleFull24Regular /> : <BinRecycle24Regular />}
+              onClick={handleClear}
+              disabled={!isRecyclable}
+            >
+              {_('main.toolbar.clear', { defaultValue: 'Clear' })}
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip
+            content={_('main.toolbar.shutdown_tooltip', {
+              defaultValue: 'Turn off the computer when all processing is complete'
+            })}
+            relationship="description"
+          >
+            <ToolbarButton
+              vertical
+              icon={<Power20Regular />}
+              onClick={handleShutdownChange}
+              disabled={!isAnyProcessing}
+              appearance={shutdownRequested ? 'primary' : 'subtle'}
+            >
+              {_('main.toolbar.shutdown', { defaultValue: 'Turn Off' })}
+            </ToolbarButton>
+          </Tooltip>
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <SettingsDialog />
+          <AboutDialog />
+        </ToolbarGroup>
+      </Toolbar>
+      <ShutdownDialog open={shutdownDialogOpen} onOpenChange={handleShutdownDialogChange} />
+    </>
   )
 }

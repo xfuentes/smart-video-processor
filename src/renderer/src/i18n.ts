@@ -29,7 +29,11 @@ await i18n
     }
   })
 
-export const _ = (key: string, options?: Record<string, unknown>): string => i18n.t(key, options as TOptions) as string
+export const _ = (key: string, options?: Record<string, unknown>): string => {
+  // `cod` is used by the translation skill and must not reach i18next.
+  const { cod: _, ...rest } = options ?? {}
+  return i18n.t(key, rest as TOptions) as string
+}
 
 export const useI18n = (): ((key: string, options?: Record<string, unknown>) => string) => {
   const { t } = useTranslation()

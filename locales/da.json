@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kodning ved {speed}x.",
   "job.encoding.first_pass_countdown": "Færdiggørelse af første gennemløb i {duration}.",
   "job.encoding.countdown": "Færdiggørelse om {duration}.",
-  "main.toolbar.shutdown": "Sluk",
+  "main.toolbar.shutdown": "at slukke",
   "main.toolbar.shutdown_tooltip": "Sluk computeren, når al behandling er færdig",
   "shutdown.dialog.title": "Sluk computeren",
-  "shutdown.dialog.message": "Computeren slukker om {time}, medmindre du klikker på Annuller.",
-  "shutdown.dialog.cancel": "Ophæve"
+  "shutdown.dialog.message": "Computeren lukker ned om {time}, medmindre du klikker på Annuller.",
+  "shutdown.dialog.cancel": "Ophæve",
+  "about.news.version_1_8_4.items": "Tilføjet en nedlukningsknap til hovedværktøjslinjen for at slukke computeren, når al behandling er færdig\nTilføjet en mulighed for at slette kildefiler efter behandling\nTilføjet arabisk (ar-SA) til Microsoft Store-listen\nAlle 23 understøttede sprog i Windows Store-pakken erklæret\nMeddelelser om kodning af jobstatus oversættes nu baseret på det valgte sprog\nTv-serier, der bruger absolut episodenummerering, placeres ikke længere i en sæsonundermappe\nFastgjorte ikoner på proceslinjen duplikeres ikke længere, når Microsoft Store-versionen startes fra Start-menuen."
 }

@@ -579,9 +579,10 @@
   "job.encoding.speed": "Pengkodean pada {speed}x.",
   "job.encoding.first_pass_countdown": "Penyelesaian tahap pertama dalam {duration}.",
   "job.encoding.countdown": "Penyelesaian dalam {duration}.",
-  "main.toolbar.shutdown": "Mematikan",
+  "main.toolbar.shutdown": "Untuk mematikan komputer",
   "main.toolbar.shutdown_tooltip": "Matikan komputer setelah semua proses selesai.",
   "shutdown.dialog.title": "Matikan komputer",
   "shutdown.dialog.message": "Komputer akan mati dalam {waktu} kecuali Anda mengklik Batal.",
-  "shutdown.dialog.cancel": "Membatalkan"
+  "shutdown.dialog.cancel": "Membatalkan",
+  "about.news.version_1_8_4.items": "Menambahkan tombol matikan ke bilah alat utama untuk mematikan komputer setelah semua pemrosesan selesai.\nMenambahkan opsi untuk menghapus file sumber setelah diproses.\nBahasa Arab (ar-SA) telah ditambahkan ke daftar Microsoft Store.\nSemua 23 bahasa yang didukung telah diumumkan dalam paket Windows Store.\nPesan kemajuan pekerjaan pengkodean kini diterjemahkan berdasarkan bahasa yang dipilih.\nAcara TV yang menggunakan penomoran episode absolut tidak lagi ditempatkan dalam subfolder musim.\nIkon yang disematkan di taskbar tidak lagi berduplikasi saat meluncurkan versi Microsoft Store dari menu Mulai."
 }

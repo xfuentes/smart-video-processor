@@ -579,9 +579,10 @@
   "job.encoding.speed": "Coderen met {speed}x.",
   "job.encoding.first_pass_countdown": "Eerste doorgang voltooid in {duration}.",
   "job.encoding.countdown": "Voltooiing binnen {duration}.",
-  "main.toolbar.shutdown": "Schakel uit",
+  "main.toolbar.shutdown": "De computer uitschakelen",
   "main.toolbar.shutdown_tooltip": "Schakel de computer uit zodra alle verwerking is voltooid.",
   "shutdown.dialog.title": "Schakel de computer uit.",
   "shutdown.dialog.message": "De computer wordt over {time} uitgeschakeld, tenzij u op Annuleren klikt.",
-  "shutdown.dialog.cancel": "Annuleren"
+  "shutdown.dialog.cancel": "Annuleren",
+  "about.news.version_1_8_4.items": "Er is een afsluitknop toegevoegd aan de hoofdwerkbalk om de computer uit te schakelen wanneer alle processen zijn voltooid.\nEr is een optie toegevoegd om bronbestanden te verwijderen nadat ze zijn verwerkt.\nArabisch (ar-SA) toegevoegd aan de Microsoft Store-lijst.\nAlle 23 ondersteunde talen zijn opgenomen in het Windows Store-pakket.\nDe voortgangsberichten van de coderingstaak worden nu vertaald op basis van de geselecteerde taal.\nTv-series die gebruikmaken van absolute afleveringsnummering worden niet langer in een submap voor seizoenen geplaatst.\nVastgepinde taakbalkpictogrammen worden niet langer gedupliceerd wanneer de Microsoft Store-versie vanuit het Startmenu wordt gestart."
 }

@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kodierung mit {speed}x.",
   "job.encoding.first_pass_countdown": "Der erste Durchlauf ist in {duration} abgeschlossen.",
   "job.encoding.countdown": "Fertigstellung in {duration}.",
-  "main.toolbar.shutdown": "Ausschalten",
-  "main.toolbar.shutdown_tooltip": "Schalten Sie den Computer aus, sobald die gesamte Verarbeitung abgeschlossen ist.",
+  "main.toolbar.shutdown": "den Computer ausschalten",
+  "main.toolbar.shutdown_tooltip": "Schalten Sie den Computer aus, sobald alle Verarbeitungsvorgänge abgeschlossen sind.",
   "shutdown.dialog.title": "Schalten Sie den Computer aus.",
-  "shutdown.dialog.message": "Der Computer schaltet sich in {time} aus, es sei denn, Sie klicken auf Abbrechen.",
-  "shutdown.dialog.cancel": "Stornieren"
+  "shutdown.dialog.message": "Der Computer schaltet sich in {time} ab, sofern Sie nicht auf Abbrechen klicken.",
+  "shutdown.dialog.cancel": "Stornieren",
+  "about.news.version_1_8_4.items": "Der Hauptsymbolleiste wurde eine Schaltfläche zum Herunterfahren hinzugefügt, um den Computer nach Abschluss aller Verarbeitungsvorgänge auszuschalten.\nEs wurde eine Option hinzugefügt, um Quelldateien nach ihrer Verarbeitung zu löschen.\nArabisch (ar-SA) wurde dem Microsoft Store-Eintrag hinzugefügt.\nAlle 23 unterstützten Sprachen wurden im Windows Store-Paket deklariert.\nDie Fortschrittsmeldungen für Codierungsaufträge werden nun basierend auf der ausgewählten Sprache übersetzt.\nFernsehsendungen mit absoluter Episodennummerierung werden nicht mehr in einem Staffelunterordner abgelegt.\nAngeheftete Taskleistensymbole werden beim Starten der Microsoft Store-Version über das Startmenü nicht mehr dupliziert."
 }

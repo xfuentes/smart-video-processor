@@ -579,9 +579,10 @@
   "job.encoding.speed": "以速度 x 进行编码。",
   "job.encoding.first_pass_countdown": "第一轮测试在{duration}内完成。",
   "job.encoding.countdown": "完成时间为{duration}。",
-  "main.toolbar.shutdown": "关闭",
+  "main.toolbar.shutdown": "关闭计算机",
   "main.toolbar.shutdown_tooltip": "所有处理完成后，请关闭计算机。",
   "shutdown.dialog.title": "关闭电脑",
-  "shutdown.dialog.message": "电脑将在{time}后关机，除非您点击“取消”。",
-  "shutdown.dialog.cancel": "取消"
+  "shutdown.dialog.message": "计算机将在{time}后关机，除非您点击“取消”。",
+  "shutdown.dialog.cancel": "取消",
+  "about.news.version_1_8_4.items": "在主工具栏中添加了关机按钮，用于在所有处理完成后关闭计算机。\n新增了在处理完成后删除源文件的选项。\n在 Microsoft Store 列表中添加了阿拉伯语 (ar-SA)\n已在 Windows 应用商店包中声明所有 23 种受支持的语言\n现在，编码作业进度消息会根据所选语言进行翻译。\n使用绝对集数编号的电视剧不再放在季子文件夹中。\n从“开始”菜单启动 Microsoft Store 版本时，固定的任务栏图标不再重复出现。"
 }
