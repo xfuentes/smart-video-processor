@@ -18,6 +18,7 @@
 
 import { Job } from './Job'
 import { JobStatus, JobType } from '../../../common/@types/Job'
+import { info } from '../../util/log'
 
 export class JobManager {
   private static instance: JobManager
@@ -52,7 +53,7 @@ export class JobManager {
 
   queue<T>(job: Job<T>) {
     if (job.finished) {
-      console.log('Job already Ran ' + job.uuid)
+      info('log.job.already_ran', { defaultValue: 'Job already ran {uuid}', uuid: job.uuid })
       if (job.success) {
         return Promise.resolve(job.getResult() as T)
       } else {

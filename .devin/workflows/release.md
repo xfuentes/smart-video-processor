@@ -383,8 +383,6 @@ description: Create a new release
       Write-Output ('Submission ' + $submissionId + ' committed for certification')
       ```
 
-    - Monitor Partner Center for the certification status.
-
 12. **Remove the `.appx` assets from GitHub and publish the release**
     - Once the Microsoft Store submission has been committed and is in certification, the `.appx` files are no longer needed on the GitHub draft release.
     - Delete the package assets and publish the release:

@@ -1,14 +1,32 @@
+/*
+ * Smart Video Processor
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { contextBridge, webUtils } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../common/@types/Video'
-import type { EpisodeOrder } from '../main/domain/clients/TVDBClient'
+import type { EpisodeOrder } from '../common/@types/EpisodeOrder'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
 import { preloadBindings } from 'i18next-electron-fs-backend'
-import { InvalidSettingsListener, ListChangedListener, SvpAPI, VideoChangedListener } from './@types'
+import { InvalidSettingsListener, ListChangedListener, LogEntry, SvpAPI, VideoChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
@@ -32,6 +50,14 @@ const api: SvpAPI = {
       ipcRenderer.invoke('main:openSingleFileExplorer', title, defaultPath),
     openDirectoryExplorer: (title: string, defaultPath?: string): Promise<string> =>
       ipcRenderer.invoke('main:openDirectoryExplorer', title, defaultPath),
+    getLogs: (): Promise<LogEntry[]> => ipcRenderer.invoke('main:getLogs'),
+    addLogAddedListener: (callback: (entry: LogEntry) => void) => {
+      const subscriber = (_event: IpcRendererEvent, entry: LogEntry) => callback(entry)
+      ipcRenderer.on('main:logAdded', subscriber)
+      return () => {
+        ipcRenderer.off('main:logAdded', subscriber)
+      }
+    },
     shutdown: (): Promise<void> => ipcRenderer.invoke('main:shutdown')
   },
   video: {

@@ -51,7 +51,7 @@ export class TMDBClient {
     try {
       response = await tmdb.get<TMDBLanguage[]>('/configuration/languages')
     } catch (error) {
-      debug(error)
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TMDBResponse>
       throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
     }
@@ -69,7 +69,7 @@ export class TMDBClient {
         }
       })
     } catch (error) {
-      debug(error)
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TMDBResponse>
       throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
     }
@@ -104,7 +104,7 @@ export class TMDBClient {
         }
       })
     } catch (error) {
-      debug(error)
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TMDBResponse>
       throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
     }
@@ -141,7 +141,7 @@ export class TMDBClient {
           : {}
       })
     } catch (error) {
-      debug(error)
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TMDBResponse>
       throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
     }

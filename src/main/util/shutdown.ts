@@ -17,6 +17,7 @@
  */
 
 import { exec } from 'node:child_process'
+import { error } from './log'
 
 export const SHUTDOWN_DELAY_SECONDS = 0
 
@@ -33,9 +34,9 @@ export const getShutdownCommand = (platform: string = process.platform): string 
 
 export const shutdownComputer = (platform: string = process.platform): void => {
   const command = getShutdownCommand(platform)
-  exec(command, (error) => {
-    if (error) {
-      console.error('Failed to shut down the computer:', error)
+  exec(command, (err) => {
+    if (err) {
+      error('log.shutdown.failed', { defaultValue: 'Failed to shut down the computer: {detail}', detail: String(err) })
     }
   })
 }

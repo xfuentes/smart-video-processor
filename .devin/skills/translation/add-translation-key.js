@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { restorePlaceholders } from './icu-placeholders.js'
 
 const localesDir = path.resolve(import.meta.dirname, '..', '..', '..', 'locales')
 const sourceDir = path.resolve(import.meta.dirname, '..', '..', '..', 'src')
@@ -21,42 +22,18 @@ function findSourceForKey(key) {
     if (match) {
       const block = match[1]
       const defaultValueMatch = block.match(/defaultValue:\\s*(['"])((?:[^'\\\\]|''|\\\\.)*?)\\1/)
-      const codMatch = block.match(/cod:\\s*(['"])((?:[^'\\\\]|''|\\\\.)*?)\\1/)
-      return {
-        value: defaultValueMatch ? defaultValueMatch[2] : undefined,
-        cod: codMatch ? codMatch[2] : undefined
-      }
+      return defaultValueMatch ? defaultValueMatch[2] : undefined
     }
   }
 
-  return { value: undefined, cod: undefined }
+  return undefined
 }
 
-// Direct-object context marker: `Open %%video file%%` gives Google Translate
-// extra context for infinitive verbs. The marker is stripped from all locale
-// values after translation.
-const COD_MARKER = /\s*%%[^%]*%%\s*/g
-
-export function hasCodContext(text) {
-  return /%%[^%]+%%/.test(text)
-}
-
-export function stripCodContext(text) {
-  return text.replace(COD_MARKER, '').trim()
-}
-
-export function buildTranslationSource(value, cod) {
-  if (!cod) {
-    return value
-  }
-  const infinitiveValue = value.toLowerCase().startsWith('to ') ? value : `to ${value}`
-  return `${infinitiveValue} %%${cod}%%`
-}
 
 function usage() {
-  console.error('Usage: GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> ["English source text" ["COD"]] [--update]')
+  console.error('Usage: GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> ["English source text"] [--update]')
   console.error('       GOOGLE_API_KEY=<key> node add-translation-key.js <dot.separated.key> --update')
-  console.error('\nWhen "English source text" is omitted, the script reads defaultValue and cod from the _() call in the source.')
+  console.error('\nWhen "English source text" is omitted, the script reads defaultValue from the _() call in the source.')
   process.exit(1)
 }
 
@@ -103,20 +80,15 @@ async function main() {
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith('-'))
   const key = positional[0]
   let value = positional[1]
-  let cod = positional[2]
 
   if (!key || !apiKey) {
     usage()
   }
 
   if (value === undefined) {
-    const source = findSourceForKey(key)
-    if (!source.value) {
+    value = findSourceForKey(key)
+    if (!value) {
       fail(`Could not find _() call for "${key}" in the source.`)
-    }
-    value = source.value
-    if (cod === undefined) {
-      cod = source.cod
     }
   }
 
@@ -142,11 +114,11 @@ async function main() {
   }
 
   const locales = files.filter((f) => f.lang !== 'en')
-  const source = buildTranslationSource(value, cod)
-  const translated = { en: stripCodContext(value) }
+  const translated = { en: value }
 
   for (const locale of locales) {
-    translated[locale.lang] = stripCodContext(await translate(source, locale.lang))
+    const raw = await translate(value, locale.lang)
+    translated[locale.lang] = restorePlaceholders(value, raw, { key, locale: locale.lang })
   }
 
   for (const { lang, path: filePath } of files) {

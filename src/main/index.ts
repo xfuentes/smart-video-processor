@@ -38,6 +38,7 @@ import packageJSON from '../../package.json' with { type: 'json' }
 import * as os from 'node:os'
 import { Processes } from './util/processes'
 import { shutdownComputer } from './util/shutdown'
+import { error, getLogs, info } from './util/log'
 
 if (electron_squirrel_startup) app.quit()
 
@@ -196,8 +197,7 @@ app.whenReady().then(async () => {
   // (PackageFamilyName!ApplicationId) so that pinned taskbar icons group
   // with the running window. For other Windows builds, use the explicit id.
   const isMsix =
-    process.platform === 'win32' &&
-    (process.windowsStore || process.execPath.toLowerCase().includes('\\windowsapps\\'))
+    process.platform === 'win32' && (process.windowsStore || process.execPath.toLowerCase().includes('\\windowsapps\\'))
   if (!isMsix) {
     electronApp.setAppUserModelId('XavierFuentes.SmartVideoProcessor')
   }
@@ -208,12 +208,14 @@ app.whenReady().then(async () => {
   let mkvmergeVersion = '-'
   try {
     ffmpegVersion = await FFmpeg.getInstance().getVersion()
+    info('log.ffmpeg.version', { defaultValue: 'FFmpeg version: {version}', version: ffmpegVersion })
   } catch (_err) {
     /* error will be shown in settings */
   }
 
   try {
     mkvmergeVersion = await MKVMerge.getInstance().getVersion()
+    info('log.mkvmerge.version', { defaultValue: 'MKVMerge version: {version}', version: mkvmergeVersion })
   } catch (_err) {
     /* error will be shown in settings */
   }
@@ -229,18 +231,26 @@ app.whenReady().then(async () => {
     const filePath = new URL(req.url).pathname
     try {
       return await net.fetch(`file://${filePath}`)
-    } catch (error) {
-      console.error(`Unable to fetch '${filePath}':${error}`)
-      throw error
+    } catch (err) {
+      error('log.protocol.unable_to_fetch', {
+        defaultValue: "Unable to fetch '{path}': {error}",
+        path: filePath,
+        error: String(err)
+      })
+      throw err
     }
   })
   protocol.handle('svp-stream', async (req) => {
     const filePath = new URL(req.url).pathname
     try {
       return await net.fetch(`file://${filePath}`)
-    } catch (error) {
-      console.error(`Unable to fetch '${filePath}':${error}`)
-      throw error
+    } catch (err) {
+      error('log.protocol.unable_to_fetch', {
+        defaultValue: "Unable to fetch '{path}': {error}",
+        path: filePath,
+        error: String(err)
+      })
+      throw err
     }
   })
   ipcMain.handle('main:getVersion', async () => {
@@ -336,6 +346,7 @@ app.whenReady().then(async () => {
   })
   ipcMain.handle('main:switchPaused', () => JobManager.getInstance().switchPaused())
   ipcMain.handle('main:shutdown', () => shutdownComputer())
+  ipcMain.handle('main:getLogs', () => getLogs())
   initVideoControllerIPC(mainWindow)
   mainBindings(ipcMain, mainWindow, fs)
   ipcMain.on('video:requestList', () => {
