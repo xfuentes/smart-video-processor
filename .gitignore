@@ -24,3 +24,4 @@ bruno/
 .devin/tmp/
 .devin/workflows/*.pfx
 .devin/workflows/*.cer
+.devin/
