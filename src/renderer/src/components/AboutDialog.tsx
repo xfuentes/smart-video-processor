@@ -37,9 +37,11 @@ import {
   CalendarInfoRegular,
   ClipboardBulletList20Regular,
   DocumentSettings20Regular,
+  DocumentText20Regular,
   News20Regular
 } from '@fluentui/react-icons'
 import { LicenseText } from '@renderer/components/LicenseTest'
+import { LogPanel } from '@renderer/components/LogPanel'
 import { useI18n } from '../i18n'
 import ElectronLogo from '../assets/electron.svg'
 import FluentLogo from '../assets/fluent.svg'
@@ -120,6 +122,9 @@ export const AboutDialog = () => {
                 </Tab>
                 <Tab value="license" icon={<DocumentSettings20Regular />}>
                   {_('about.tab.license', { defaultValue: 'License' })}
+                </Tab>
+                <Tab value="logs" icon={<DocumentText20Regular />}>
+                  {_('about.tab.logs', { defaultValue: 'Event logs' })}
                 </Tab>
               </TabList>
               <div>
@@ -421,6 +426,7 @@ export const AboutDialog = () => {
                     <LicenseText />
                   </div>
                 )}
+                {selectedTab === 'logs' && <LogPanel />}
                 {selectedTab === 'powered' && (
                   <div
                     style={{

@@ -43,7 +43,7 @@ import { currentSettings } from './Settings'
 import { Track } from './Track'
 import { JobManager } from './jobs/JobManager'
 import { _ } from '../i18n'
-import { debug } from '../util/log'
+import { debug, error, info, warning } from '../util/log'
 import path from 'node:path'
 import Path from 'node:path'
 import * as fs from 'node:fs'
@@ -72,7 +72,6 @@ import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
-import Chalk from 'chalk'
 import { isEqual, omit } from 'lodash'
 import { parseFilename } from './FilenameParser'
 
@@ -327,9 +326,19 @@ export class Video implements IVideo {
     if (this.type !== VideoType.OTHER && searchEnabled) {
       // Only manual mode enabled for custom videos
       await this.search()
+    } else if (this.type === VideoType.OTHER) {
+      this.status = JobStatus.WARNING
+      this.message = _('video.message.complete_required_info', {
+        defaultValue: 'Please complete the required information for this custom video.'
+      })
+      warning('video.message.complete_required_info', {
+        defaultValue: 'Please complete the required information for this custom video.'
+      })
+      this.progression.progress = -1
     } else {
       this.status = JobStatus.WAITING
       this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
+      info('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
       this.progression.progress = -1
     }
     this.loading = false
@@ -346,8 +355,8 @@ export class Video implements IVideo {
         (s) => (this.trackEncodingEnabled[s.trackType + ' ' + s.trackId] = s.encodingEnabled ?? false)
       )
     }
-    debug('### ENCODER SETTINGS ###')
-    debug(this.encoderSettings)
+    debug('log.video.encoder_settings', { defaultValue: '### ENCODER SETTINGS ###' })
+    debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.encoderSettings) })
 
     const filenameChange = Brain.getInstance().generateFilenameChange(
       this.sourcePath,
@@ -417,14 +426,15 @@ export class Video implements IVideo {
       }
       this.searching = false
       this.fireChangeEvent()
-    } catch (error) {
+    } catch (err) {
       this.status = JobStatus.WARNING
       this.progression.progress = -1
-      this.message = _('video.message.error_with_hint', {
+      const errorOptions = {
         defaultValue: '{error}. Please check the information provided and try again.',
-        error: (error as Error).message
-      })
-      console.log(Chalk.red(this.message))
+        error: (err as Error).message
+      }
+      this.message = _('video.message.error_with_hint', errorOptions)
+      error('video.message.error_with_hint', errorOptions)
       this.searching = false
       this.fireChangeEvent()
     }
@@ -449,12 +459,12 @@ export class Video implements IVideo {
   async analyse() {
     const selectedTracks = this.getSelectedTracks()
     if (this.matched && selectedTracks.length > 0) {
-      debug('### TRACKS ###')
-      debug(this.tracks)
-      debug('### OriginalLanguageIETF ###')
-      debug(this.getOriginalLanguageIETF())
-      debug('### Attachments ###')
-      debug(this.container?.attachments)
+      debug('log.video.tracks', { defaultValue: '### TRACKS ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.tracks) })
+      debug('log.video.original_language', { defaultValue: '### ORIGINAL LANGUAGE IETF ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.getOriginalLanguageIETF()) })
+      debug('log.video.attachments', { defaultValue: '### ATTACHMENTS ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.container?.attachments) })
 
       const processingResults = Brain.getInstance().analyse(
         selectedTracks,
@@ -476,22 +486,26 @@ export class Video implements IVideo {
       this.hints = processingResults.hints
       this.hintMissing = this.hints.find((h) => !h.value) !== undefined
 
-      debug('### CHANGES ###')
-      debug(this.changes)
-      debug('### HINTS ###')
-      debug(this.hints)
+      debug('log.video.changes', { defaultValue: '### CHANGES ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.changes) })
+      debug('log.video.hints', { defaultValue: '### HINTS ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.hints) })
       this.status = JobStatus.WAITING
       this.progression.progress = -1
       if (this.hintMissing) {
         this.message = _('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
+        info('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
         this.autoModePossible = false
       } else if (this.changes.length > 0) {
         this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
+        info('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
       } else if (this.encoderSettings.length > 0) {
         this.message = _('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
+        info('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
       } else {
         this.status = JobStatus.WARNING
         this.message = _('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
+        warning('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
       }
       if (!this.brainCalled) {
         this.selectAllTracks()
@@ -546,19 +560,22 @@ export class Video implements IVideo {
   async process() {
     if (this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
       // Need to launch preprocessing
-      debug('Pre-processing video parts')
+      info('log.video.preprocessing', { defaultValue: 'Pre-processing video parts' })
       this.progression.progress = undefined
       this.status = JobStatus.ENCODING
       if (this.videoParts.length > 0) {
         this.message = _('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
+        info('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
       } else {
         this.message = _('video.message.trimming_video', { defaultValue: 'Trimming video...' })
+        info('video.message.trimming_video', { defaultValue: 'Trimming video...' })
       }
       this.fireChangeEvent()
       try {
         this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
       } catch (e) {
         this.message = (e as Error).message
+        error('video.message.ffmpeg_error', { defaultValue: '{error}', error: (e as Error).message })
         this.status = JobStatus.ERROR
         this.progression.progress = -1
         this.fireChangeEvent()
@@ -826,7 +843,11 @@ export class Video implements IVideo {
         Files.unlinkSync(this.sourcePath)
       }
     } catch (e) {
-      console.error('Failed to delete source file', this.sourcePath, e)
+      error('log.video.delete_source_failed', {
+        defaultValue: 'Failed to delete source file {path}: {error}',
+        path: this.sourcePath,
+        error: String(e)
+      })
     }
   }
 
@@ -978,6 +999,7 @@ export class Video implements IVideo {
       const prevMessage = this.message
       const prevStatus = this.status
       this.message = _('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
+      info('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
       this.progression.progress = undefined
       this.status = JobStatus.LOADING
       this.keyFrames = []
@@ -1075,7 +1097,10 @@ export class Video implements IVideo {
 
   destroy() {
     this.abortJob()
-    debug('Cleaning temporary files for video [' + this.filename + ']...')
+    debug('log.video.cleanup', {
+      defaultValue: 'Cleaning temporary files for video [{filename}]...',
+      filename: this.filename
+    })
     for (const part of this.videoParts) {
       part.destroy()
     }

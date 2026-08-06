@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 import * as fs from 'node:fs'
 import { PathLike, WriteFileOptions } from 'node:fs'
 import http from 'node:http'
-import { debug } from './log'
+import { debug, error } from './log'
 import path from 'node:path'
 import * as https from 'node:https'
 import { globSync } from 'glob'
@@ -29,12 +29,12 @@ export class Files {
   static loadTextFileSync(dir: string, name: string, encoding: BufferEncoding = 'utf8'): string | undefined {
     const filename = path.join(dir, name)
     try {
-      debug('Loading file ' + filename)
+      debug('log.files.loading', { defaultValue: 'Loading file {filename}', filename })
       fs.accessSync(filename, fs.constants.R_OK)
       const buffer = fs.readFileSync(filename)
       return buffer.toString(encoding)
     } catch (err) {
-      console.log(err)
+      error('log.error', { defaultValue: 'Error: {message}', message: String(err) })
     }
     return undefined
   }
@@ -63,7 +63,7 @@ export class Files {
     encoding: WriteFileOptions | undefined = 'utf8'
   ) {
     const filename = path.join(dir, name)
-    debug('Writing file ' + filename)
+    debug('log.files.writing', { defaultValue: 'Writing file {filename}', filename })
     fs.writeFileSync(filename, data, encoding)
     return filename
   }
@@ -214,7 +214,7 @@ export class Files {
         })
         .on('error', (err: Error) => {
           fs.unlink(fullPath, () => {
-            console.log(err)
+            error('log.download.error', { defaultValue: 'Error downloading file: {message}', message: err.message })
             reject(new Error('Error downloading file. ' + err.message))
           })
         })

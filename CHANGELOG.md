@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- The application log viewer is now available in a new "Logs" tab in the About dialog instead of the main toolbar.
+- Logs now indicate their severity (debug, info, warning, error) and are shown with an appropriate color in the log viewer.
+- Video status messages (info, warning and error) are now also emitted to the event log.
+- Custom videos now display a warning asking the user to complete the required information before processing.
+- The log viewer now stores all log levels; debug entries are shown only when the Debug setting is enabled.
+- Process priority values shown in the event log are now translated.
+
 ## [1.8.4] - 2026-08-06
 
 ### Added

@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { currentSettings } from '../domain/Settings'
+import { BrowserWindow } from 'electron'
+import { LogEntry, LogLevel } from '../../common/@types/Log'
 
-export function debug(message?: unknown): void {
-  if (currentSettings.isDebugEnabled) {
-    console.log(message)
+const MAX_LOGS = 10000
+const logs: LogEntry[] = []
+
+function formatTime(date: Date): string {
+  return date.toTimeString().slice(0, 8)
+}
+
+export function getLogs(): LogEntry[] {
+  return [...logs]
+}
+
+function log(level: LogLevel, key: string, options?: Record<string, unknown>): void {
+  const entry = { level, key, options, timestamp: formatTime(new Date()) }
+  logs.push(entry)
+  if (logs.length > MAX_LOGS) {
+    logs.shift()
   }
+  BrowserWindow.getAllWindows().forEach((win) => win.webContents.send('main:logAdded', entry))
+}
+
+export function debug(key: string, options?: Record<string, unknown>): void {
+  log('debug', key, options)
+}
+
+export function info(key: string, options?: Record<string, unknown>): void {
+  log('info', key, options)
+}
+
+export function warning(key: string, options?: Record<string, unknown>): void {
+  log('warning', key, options)
+}
+
+export function error(key: string, options?: Record<string, unknown>): void {
+  log('error', key, options)
 }

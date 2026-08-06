@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import * as child_process from 'node:child_process'
 import { ChildProcess, ChildProcessWithoutNullStreams } from 'node:child_process'
 import lcid from 'lcid'
 import { debug } from './log'
+import { _ } from '../i18n'
 import * as os from 'node:os'
 import * as fs from 'node:fs'
 import { Dict, ProcessEnv, ProcessesPriority } from '../../common/@types/processes'
@@ -51,12 +52,10 @@ export class Processes {
     args: readonly string[],
     options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
   ): ChildProcessWithoutNullStreams {
-    debug(
-      'Spawning ' +
-        command +
-        ' ' +
-        args.map((arg) => (arg.indexOf(' ') != -1 || arg.indexOf('[') != -1 ? '"' + arg + '"' : arg)).join(' ')
-    )
+    const argsString = args
+      .map((arg) => (arg.indexOf(' ') != -1 || arg.indexOf('[') != -1 ? '"' + arg + '"' : arg))
+      .join(' ')
+    debug('log.process.spawning', { defaultValue: 'Spawning {command} {args}', command, args: argsString })
     return child_process.spawn(command, args, options)
   }
 
@@ -145,7 +144,8 @@ export class Processes {
           priorityNum = os.constants.priority.PRIORITY_HIGH
           break
       }
-      debug('Set priority: ' + pid + ' priority: ' + priorityNum)
+      const priorityLabel = _(`priority.${priority.toLowerCase().replace(/\s+/g, '_')}`, { defaultValue: priority })
+      debug('log.process.priority', { defaultValue: 'Process pid: {pid} set to priority: {priority}', pid, priority: priorityLabel })
       os.setPriority(pid, priorityNum)
     }
   }

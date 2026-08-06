@@ -63,7 +63,7 @@ export class TVDBClient {
     try {
       response = await tvdb.get<TVDBLanguagesResponse>('/languages')
     } catch (error) {
-      debug(error)
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TVDBLanguagesResponse>
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
@@ -84,7 +84,7 @@ export class TVDBClient {
         }
       })
     } catch (error) {
-      debug(error)
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TVDBSeriesResponse>
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
@@ -180,7 +180,7 @@ export class TVDBClient {
         }
       })
     } catch (error) {
-      debug(error)
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TVDBSeriesResponse>
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
@@ -245,7 +245,7 @@ export class TVDBClient {
 
           if (bestScore >= threshold) break // Stop if we found a good match
         } catch (error) {
-          debug(error)
+          debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
           // Continue with next language
         }
       }
@@ -285,12 +285,12 @@ export class TVDBClient {
       episodeNumber: order === 'absolute' ? (absoluteEpisodeNumber ?? 1) : (episodeNumber ?? 1)
     }
     try {
-      debug(`Calling /series/${tvdbId}/episodes/${order} with params: ${params}`)
+      debug('log.tvdb.calling_episodes', { defaultValue: 'Calling /series/{tvdbId}/episodes/{order} with params: {params}', tvdbId, order, params: JSON.stringify(params) })
       response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
         params
       })
     } catch (error) {
-      debug(error)
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TVDBSeriesResponse>
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
     }
@@ -306,8 +306,8 @@ export class TVDBClient {
         extendedGenres = rawGenres.map((g) => g.name)
       }
     } catch (error) {
-      debug('Failed to fetch TVDB extended series info for genres')
-      debug(error)
+      debug('log.tvdb.extended_info_failed', { defaultValue: 'Failed to fetch TVDB extended series info for genres' })
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
     }
 
     const genres = extendedGenres ?? seriesData.genres ?? []
@@ -350,7 +350,7 @@ export class TVDBClient {
         episodeCount = maxEpisodeNumber > 0 ? maxEpisodeNumber : 1
       }
     } catch (error) {
-      debug('Failed to get episode count, defaulting to 1')
+      debug('log.tvdb.episode_count_fallback', { defaultValue: 'Failed to get episode count, defaulting to 1' })
     }
 
     if (episodeData === undefined) {
@@ -377,7 +377,7 @@ export class TVDBClient {
             name = this.cleanupSeriesTitle(seriesTranslation.data.data.name)
           }
         } catch (e) {
-          debug('Failed to fetch translation, using original name')
+          debug('log.tvdb.translation_fallback', { defaultValue: 'Failed to fetch translation, using original name' })
         }
       }
 
@@ -451,7 +451,7 @@ export class TVDBClient {
           result.seriesData.overview = seriesTranslation.data.data.overview
         }
       } catch (error) {
-        debug(error)
+        debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
         const response = error as AxiosError<TVDBSeriesResponse>
         throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
       }
@@ -475,7 +475,7 @@ export class TVDBClient {
           }
         }
       } catch (error) {
-        debug(error)
+        debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
         const response = error as AxiosError<TVDBSeriesResponse>
         throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
       }
@@ -493,7 +493,7 @@ export class TVDBClient {
     try {
       response = await tvdb.get<TVDBEpisodeResponse>(`/episodes/${id}`)
     } catch (error) {
-      debug(error)
+      debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message?: string }>
         throw new Error('Unexpected TVDB API Error: ' + (axiosError.response?.data?.message ?? axiosError.message))
@@ -522,7 +522,7 @@ export class TVDBClient {
       try {
         response = await this.retrieveTokenPromise
       } catch (error) {
-        debug(error)
+        debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
         const response = error as AxiosError<TVDBSeriesResponse>
         throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
       } finally {
@@ -533,7 +533,7 @@ export class TVDBClient {
         tvdb.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`
         return tvdb
       } else {
-        debug('No Response but no Error as well ?!?')
+        debug('log.tvdb.no_response', { defaultValue: 'No response but no error either' })
         throw new Error('TVDB: Unexpected API Error')
       }
     }

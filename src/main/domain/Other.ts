@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@ import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { Video } from './Video'
 import { Files } from '../util/files'
 import { _ } from '../i18n'
-import { debug } from '../util/log'
+import { debug, info, warning } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { Numbers } from '../util/numbers'
-import Chalk from 'chalk'
 import Path from 'node:path'
 
 export default class Other implements IOther {
@@ -46,8 +45,10 @@ export default class Other implements IOther {
     if (!this.title.trim()) {
       this.video.autoModePossible = false
       this.video.status = JobStatus.WARNING
-      this.video.message = _('video.message.title_required', { defaultValue: 'Please provide a title for your custom video file.' })
-      debug(Chalk.red(this.video.message))
+      this.video.message = _('video.message.title_required', {
+        defaultValue: 'Please provide a title for your custom video file.'
+      })
+      warning('video.message.title_required', { defaultValue: 'Please provide a title for your custom video file.' })
     } else {
       await this.load()
     }
@@ -55,14 +56,15 @@ export default class Other implements IOther {
 
   async load() {
     if (this.poster && Files.fileExistsAndIsReadable(this.poster)) {
-      debug(`Using poster file://${this.poster}`)
+      debug('log.other.using_poster', { defaultValue: 'Using poster file://{poster}', poster: this.poster })
     } else if (this.posterURL) {
       const fullPath = Path.join(this.video.getTempDirectory(), 'poster.jpg')
       this.video.status = JobStatus.LOADING
       this.video.message = _('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
+      info('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
       this.video.fireChangeEvent()
       this.poster = await Files.downloadFile(this.posterURL, fullPath)
-      debug(`Wrote poster file://${this.poster}`)
+      debug('log.other.wrote_poster', { defaultValue: 'Wrote poster file://{poster}', poster: this.poster })
     }
     if (this.poster) {
       this.video.poster = {

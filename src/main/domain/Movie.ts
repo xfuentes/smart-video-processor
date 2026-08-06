@@ -21,11 +21,10 @@ import { Video } from './Video'
 import { SearchResult } from './SearchResult'
 import { Numbers } from '../util/numbers'
 import { TMDBClient } from './clients/TMDBClient'
-import Chalk from 'chalk'
 import { Countries, Country } from '../../common/Countries'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { _ } from '../i18n'
-import { debug } from '../util/log'
+import { debug, error, info, warning } from '../util/log'
 import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
@@ -71,28 +70,31 @@ export default class Movie implements IMovie {
       }
       this.video.status = JobStatus.LOADING
       this.video.message = _('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
+      info('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
       this.video.fireChangeEvent()
       if (by === SearchBy.TITLE) {
         this.video.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(this.title, this.year)
       } else if (this.imdb) {
         this.video.searchResults = await TMDBClient.getInstance().searchMovieByImdb(this.imdb)
       }
-      debug('### SEARCH RESULTS ###')
-      debug(this.video.searchResults)
+      debug('log.movie.search_results', { defaultValue: '### MOVIE SEARCH RESULTS ###' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.video.searchResults) })
       const movieMatched = SearchResult.getPerfectMatch(this.video.searchResults, this.title, this.year)
 
       if (!movieMatched) {
         this.video.autoModePossible = false
         this.video.status = JobStatus.WARNING
         this.video.progression.progress = -1
-        if (by === SearchBy.TITLE) {
-          this.video.message = _('video.message.tmdb_no_exact_match', {
-            defaultValue: 'Unable to find an exact match on TMDB. Please check the information provided and try again.'
-          })
-        } else {
-          this.video.message = _('video.message.tmdb_not_found', { defaultValue: 'Unable to find the movie on TMDB.' })
-        }
-        debug(Chalk.red(this.video.message))
+        const key = by === SearchBy.TITLE ? 'video.message.tmdb_no_exact_match' : 'video.message.tmdb_not_found'
+        const options =
+          by === SearchBy.TITLE
+            ? {
+                defaultValue:
+                  'Unable to find an exact match on TMDB. Please check the information provided and try again.'
+              }
+            : { defaultValue: 'Unable to find the movie on TMDB.' }
+        this.video.message = _(key, options)
+        warning(key, options)
       } else {
         await this.selectSearchResultID(movieMatched.id)
       }
@@ -105,6 +107,9 @@ export default class Movie implements IMovie {
     }
     this.video.status = JobStatus.LOADING
     this.video.message = _('video.message.retrieving_movie_tmdb', {
+      defaultValue: 'Retrieving movie details from TMDB.'
+    })
+    info('video.message.retrieving_movie_tmdb', {
       defaultValue: 'Retrieving movie details from TMDB.'
     })
     this.video.fireChangeEvent()
@@ -133,9 +138,10 @@ export default class Movie implements IMovie {
         this.setEdition(EditionType.THEATRICAL)
       }
 
-      debug('GUESS COUNTRY')
-      debug(movieData.countries)
-      debug(this.originalLanguage)
+      debug('log.movie.guess_country', { defaultValue: '# GUESS COUNTRY #' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(movieData.countries) })
+      debug('log.movie.original_language', { defaultValue: '# ORIGINAL LANGUAGE #' })
+      debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.originalLanguage) })
       if (this.video.searchResults.length === 0) {
         this.video.searchResults.push(
           new SearchResult(
@@ -163,9 +169,12 @@ export default class Movie implements IMovie {
         this.video.message = _('video.message.downloading_poster_tmdb', {
           defaultValue: 'Downloading poster image from TMDB.'
         })
+        info('video.message.downloading_poster_tmdb', {
+          defaultValue: 'Downloading poster image from TMDB.'
+        })
         this.video.fireChangeEvent()
         this.poster = await Files.downloadFile(this.posterURL, fullPath)
-        debug(`Wrote poster file://${this.poster}`)
+        debug('log.movie.wrote_poster', { defaultValue: 'Wrote poster file://{poster}', poster: this.poster })
       }
       if (this.poster && this.posterURL) {
         this.video.poster = {
@@ -180,9 +189,10 @@ export default class Movie implements IMovie {
       this.video.status = JobStatus.WAITING
       this.video.message = ''
       this.video.fireChangeEvent()
-    } catch (error) {
+    } catch (err) {
       this.video.status = JobStatus.ERROR
-      this.video.message = (error as Error).message
+      this.video.message = (err as Error).message
+      error('video.message.tmdb_error', { defaultValue: '{error}', error: (err as Error).message })
       this.video.fireChangeEvent()
     }
   }

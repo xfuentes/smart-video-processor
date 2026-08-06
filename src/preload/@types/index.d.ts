@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,18 @@
 import { Settings } from '../../common/@types/Settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../../common/@types/Video'
-import { EpisodeOrder } from '../../main/domain/clients/TVDBClient'
+import { EpisodeOrder } from '../../common/@types/EpisodeOrder'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
 import { IHint } from '../../common/@types/Hint'
-import { ipcRenderer } from 'electron/renderer'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
 export type VideoChangedListener = (value: IVideo) => void
 
-interface SvpAPI {
+export { LogEntry, LogLevel } from '../../common/@types/Log'
+
+export interface SvpAPI {
   i18nextElectronBackend: unknown
   main: {
     version: string
@@ -48,6 +49,8 @@ interface SvpAPI {
     switchPaused: () => Promise<boolean>
     openSingleFileExplorer: (title: string, defaultPath?: string) => Promise<string>
     openDirectoryExplorer: (title: string, defaultPath?: string) => Promise<string>
+    getLogs: () => Promise<LogEntry[]>
+    addLogAddedListener: (callback: (entry: LogEntry) => void) => () => void
     shutdown: () => Promise<void>
   }
   video: {

@@ -35,10 +35,10 @@ export const simpleCachingAdapter: AxiosAdapter = async (
   const key = generateKey(config)
 
   if (cache.has(key)) {
-    debug(`${key} -> READING FROM CACHE`)
+    debug('log.cache.reading', { defaultValue: '{key} -> READING FROM CACHE', key })
     return cache.get(key)!
   } else {
-    debug(`${key} -> CACHING RESPONSE`)
+    debug('log.cache.caching', { defaultValue: '{key} -> CACHING RESPONSE', key })
   }
 
   const defaultAdapter = getAdapter(axios.defaults.adapter)
