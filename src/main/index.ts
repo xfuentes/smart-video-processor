@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,7 +192,15 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId('XavierFuentes.SmartVideoProcessor')
+  // For the packaged MSIX build, let Windows derive the package AUMID
+  // (PackageFamilyName!ApplicationId) so that pinned taskbar icons group
+  // with the running window. For other Windows builds, use the explicit id.
+  const isMsix =
+    process.platform === 'win32' &&
+    (process.windowsStore || process.execPath.toLowerCase().includes('\\windowsapps\\'))
+  if (!isMsix) {
+    electronApp.setAppUserModelId('XavierFuentes.SmartVideoProcessor')
+  }
 
   loadSettings()
 

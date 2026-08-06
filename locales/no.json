@@ -579,9 +579,10 @@
   "job.encoding.speed": "Koding med {speed}x.",
   "job.encoding.first_pass_countdown": "Fullføring av første pass på {duration}.",
   "job.encoding.countdown": "Fullføring om {duration}.",
-  "main.toolbar.shutdown": "Slå av",
+  "main.toolbar.shutdown": "for å slå av",
   "main.toolbar.shutdown_tooltip": "Slå av datamaskinen når all behandling er fullført",
   "shutdown.dialog.title": "Slå av datamaskinen",
   "shutdown.dialog.message": "Datamaskinen slår seg av om {time} med mindre du klikker på Avbryt.",
-  "shutdown.dialog.cancel": "Kansellere"
+  "shutdown.dialog.cancel": "Kansellere",
+  "about.news.version_1_8_4.items": "La til en avstengningsknapp på hovedverktøylinjen for å slå av datamaskinen når all behandling er fullført\nLa til et alternativ for å slette kildefiler etter at de er behandlet\nLa til arabisk (ar-SA) i Microsoft Store-oppføringen\nDeklarerte alle 23 støttede språk i Windows Store-pakken\nKoding av jobbfremdriftsmeldinger oversettes nå basert på det valgte språket\nTV-serier som bruker absolutt episodenummerering plasseres ikke lenger i en undermappe for sesonger.\nFestede oppgavelinjeikoner dupliserer ikke lenger når du starter Microsoft Store-versjonen fra Start-menyen"
 }

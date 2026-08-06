@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kodowanie z {speed}x.",
   "job.encoding.first_pass_countdown": "Zakończenie pierwszego podejścia za {duration}.",
   "job.encoding.countdown": "Zakończenie za {duration}.",
-  "main.toolbar.shutdown": "Wyłączać",
+  "main.toolbar.shutdown": "Aby wyłączyć",
   "main.toolbar.shutdown_tooltip": "Wyłącz komputer po zakończeniu całego przetwarzania",
   "shutdown.dialog.title": "Wyłącz komputer",
-  "shutdown.dialog.message": "Komputer wyłączy się za {time}, chyba że klikniesz Anuluj.",
-  "shutdown.dialog.cancel": "Anulować"
+  "shutdown.dialog.message": "Komputer wyłączy się za {time}, jeśli nie klikniesz Anuluj.",
+  "shutdown.dialog.cancel": "Anulować",
+  "about.news.version_1_8_4.items": "Dodano przycisk wyłączania do głównego paska narzędzi, aby wyłączyć komputer po zakończeniu całego przetwarzania\nDodano opcję usuwania plików źródłowych po ich przetworzeniu\nDodano język arabski (ar-SA) do oferty sklepu Microsoft Store\nZadeklarowano wszystkie 23 obsługiwane języki w pakiecie Windows Store\nKomunikaty o postępie kodowania zadań są teraz tłumaczone na podstawie wybranego języka\nProgramy telewizyjne korzystające z bezwzględnej numeracji odcinków nie są już umieszczane w podfolderze sezonu\nPrzypięte ikony paska zadań nie duplikują się już podczas uruchamiania wersji ze sklepu Microsoft Store z menu Start"
 }

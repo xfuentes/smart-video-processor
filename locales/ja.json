@@ -579,9 +579,10 @@
   "job.encoding.speed": "{speed}xの速度でエンコードしています。",
   "job.encoding.first_pass_countdown": "最初の処理が{duration}で完了しました。",
   "job.encoding.countdown": "完了まで{duration}時間かかります。",
-  "main.toolbar.shutdown": "電源を切る",
+  "main.toolbar.shutdown": "コンピューターの電源を切る",
   "main.toolbar.shutdown_tooltip": "処理がすべて完了したら、コンピュータの電源を切ってください。",
   "shutdown.dialog.title": "コンピューターの電源を切る",
-  "shutdown.dialog.message": "「キャンセル」をクリックしない限り、コンピューターは{time}後に電源が切れます。",
-  "shutdown.dialog.cancel": "キャンセル"
+  "shutdown.dialog.message": "「キャンセル」をクリックしない限り、{time}後にコンピュータはシャットダウンします。",
+  "shutdown.dialog.cancel": "キャンセル",
+  "about.news.version_1_8_4.items": "メインツールバーにシャットダウンボタンを追加し、すべての処理が完了したらコンピュータの電源を切るようにしました。\n処理後にソースファイルを削除するオプションを追加しました。\nMicrosoft Storeの商品ページにアラビア語（ar-SA）を追加しました。\nWindowsストアパッケージでサポートされている23言語すべてを宣言しました\nエンコード作業の進捗メッセージは、選択された言語に基づいて翻訳されるようになりました。\n絶対番号付けを使用しているテレビ番組は、シーズンサブフォルダには配置されなくなりました。\nスタートメニューからMicrosoft Store版を起動した際に、ピン留めされたタスクバーアイコンが重複して表示されなくなりました。"
 }

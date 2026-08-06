@@ -579,9 +579,10 @@
   "job.encoding.speed": "Codificação na velocidade {speed}x.",
   "job.encoding.first_pass_countdown": "Conclusão da primeira passagem em {duration}.",
   "job.encoding.countdown": "Conclusão em {duration}.",
-  "main.toolbar.shutdown": "Desligar",
+  "main.toolbar.shutdown": "Para desligar o computador.",
   "main.toolbar.shutdown_tooltip": "Desligue o computador quando todo o processamento estiver concluído.",
-  "shutdown.dialog.title": "Desligue o computador",
+  "shutdown.dialog.title": "Desligar o computador",
   "shutdown.dialog.message": "O computador será desligado em {time}, a menos que você clique em Cancelar.",
-  "shutdown.dialog.cancel": "Cancelar"
+  "shutdown.dialog.cancel": "Cancelar",
+  "about.news.version_1_8_4.items": "Adicionamos um botão de desligamento à barra de ferramentas principal para desligar o computador quando todo o processamento estiver concluído.\nAdicionada opção para excluir arquivos de origem após o processamento.\nAdicionada a opção árabe (ar-SA) à lista da Microsoft Store.\nDeclaramos todos os 23 idiomas suportados no pacote da Windows Store.\nAs mensagens de progresso da codificação agora são traduzidas com base no idioma selecionado.\nSéries de TV que utilizam numeração absoluta de episódios não são mais colocadas em uma subpasta de temporada.\nOs ícones fixados na barra de tarefas não serão mais duplicados ao iniciar a versão da Microsoft Store a partir do menu Iniciar."
 }

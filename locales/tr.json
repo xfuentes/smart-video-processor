@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kodlama hızı {speed}x.",
   "job.encoding.first_pass_countdown": "İlk geçişin tamamlanması {duration}.",
   "job.encoding.countdown": "Tamamlanma süresi {duration}.",
-  "main.toolbar.shutdown": "Kapat",
+  "main.toolbar.shutdown": "Bilgisayarı kapatmak için",
   "main.toolbar.shutdown_tooltip": "Tüm işlemler tamamlandığında bilgisayarı kapatın.",
   "shutdown.dialog.title": "Bilgisayarı kapatın.",
-  "shutdown.dialog.message": "İptal'e tıklamadığınız takdirde bilgisayar {süre} sonra kapanacaktır.",
-  "shutdown.dialog.cancel": "İptal etmek"
+  "shutdown.dialog.message": "İptal'e tıklamazsanız bilgisayar {süre} sonra kapanacaktır.",
+  "shutdown.dialog.cancel": "İptal etmek",
+  "about.news.version_1_8_4.items": "Ana araç çubuğuna, tüm işlemler tamamlandığında bilgisayarı kapatmak için bir kapatma düğmesi eklendi.\nİşlem tamamlandıktan sonra kaynak dosyaları silme seçeneği eklendi.\nMicrosoft Store listesine Arapça (ar-SA) eklendi.\nWindows Mağazası paketinde desteklenen 23 dilin tamamı açıklandı.\nKodlama işlemi ilerleme mesajları artık seçilen dile göre çevriliyor.\nMutlak bölüm numaralandırması kullanan TV dizileri artık sezon alt klasörüne yerleştirilmiyor.\nBaşlat menüsünden Microsoft Store sürümünü başlattığınızda, sabitlenmiş görev çubuğu simgeleri artık çoğalmıyor."
 }

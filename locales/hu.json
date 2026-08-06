@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kódolás {speed}x sebességgel.",
   "job.encoding.first_pass_countdown": "Első menet befejezése {duration} idő alatt.",
   "job.encoding.countdown": "Befejezés {duration} idő alatt.",
-  "main.toolbar.shutdown": "Kikapcsol",
+  "main.toolbar.shutdown": "a számítógép kikapcsolásához",
   "main.toolbar.shutdown_tooltip": "Kapcsolja ki a számítógépet, amikor az összes feldolgozás befejeződött",
   "shutdown.dialog.title": "Kapcsold ki a számítógépet",
-  "shutdown.dialog.message": "A számítógép {idő} múlva kikapcsol, hacsak nem kattint a Mégse gombra.",
-  "shutdown.dialog.cancel": "Mégsem"
+  "shutdown.dialog.message": "A számítógép {time} múlva leáll, hacsak nem kattint a Mégse gombra.",
+  "shutdown.dialog.cancel": "Mégsem",
+  "about.news.version_1_8_4.items": "Hozzáadtunk egy leállító gombot a fő eszköztárhoz, hogy a számítógép kikapcsolhasson, amikor az összes feldolgozás befejeződött.\nHozzáadott egy lehetőséget a forrásfájlok törlésére a feldolgozás után\nHozzáadva az arab (ar-SA) nyelv a Microsoft Store listájához\nMind a 23 támogatott nyelvet deklarálta a Windows Áruház csomagban\nA kódolási feladat előrehaladási üzenetei mostantól a kiválasztott nyelv alapján kerülnek lefordításra.\nAz abszolút epizódszámozást használó tévéműsorok már nem kerülnek évad almappába.\nA rögzített tálcaikonok már nem ismétlődnek meg, amikor a Microsoft Store verzióját a Start menüből indítjuk el."
 }

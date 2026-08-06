@@ -579,9 +579,10 @@
   "job.encoding.speed": "Codificación a {speed}x.",
   "job.encoding.first_pass_countdown": "Finalización de la primera pasada en {duration}.",
   "job.encoding.countdown": "Finalización en {duration}.",
-  "main.toolbar.shutdown": "Desconectar",
+  "main.toolbar.shutdown": "Para apagar",
   "main.toolbar.shutdown_tooltip": "Apague el ordenador cuando haya finalizado todo el procesamiento.",
-  "shutdown.dialog.title": "Apaga el ordenador",
+  "shutdown.dialog.title": "Quitar el computador",
   "shutdown.dialog.message": "El ordenador se apagará en {time} a menos que haga clic en Cancelar.",
-  "shutdown.dialog.cancel": "Cancelar"
+  "shutdown.dialog.cancel": "Cancelar",
+  "about.news.version_1_8_4.items": "Se agregó un botón de apagado a la barra de herramientas principal para apagar la computadora cuando se complete todo el procesamiento.\nSe agregó una opción para eliminar los archivos fuente después de que se procesen.\nSe agregó el árabe (ar-SA) a la lista de productos de Microsoft Store.\nSe declararon los 23 idiomas compatibles en el paquete de la Tienda Windows.\nLos mensajes de progreso del trabajo de codificación ahora se traducen según el idioma seleccionado.\nLas series de televisión que utilizan numeración absoluta de episodios ya no se colocan en una subcarpeta de temporada.\nLos iconos anclados de la barra de tareas ya no se duplican al iniciar la versión de Microsoft Store desde el menú Inicio."
 }

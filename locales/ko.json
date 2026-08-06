@@ -579,9 +579,10 @@
   "job.encoding.speed": "{speed}x 속도로 인코딩 중입니다.",
   "job.encoding.first_pass_countdown": "첫 번째 패스가 {duration} 시간에 완료되었습니다.",
   "job.encoding.countdown": "완료까지 {duration}분 소요됩니다.",
-  "main.toolbar.shutdown": "전원 끄기",
+  "main.toolbar.shutdown": "컴퓨터를 끄려면",
   "main.toolbar.shutdown_tooltip": "모든 처리가 완료되면 컴퓨터를 끄십시오.",
   "shutdown.dialog.title": "컴퓨터를 끄세요",
-  "shutdown.dialog.message": "취소 버튼을 클릭하지 않으면 컴퓨터가 {시간} 후에 자동으로 꺼집니다.",
-  "shutdown.dialog.cancel": "취소"
+  "shutdown.dialog.message": "취소 버튼을 클릭하지 않으면 컴퓨터가 {시간} 후에 종료됩니다.",
+  "shutdown.dialog.cancel": "취소",
+  "about.news.version_1_8_4.items": "모든 처리가 완료되면 컴퓨터를 끌 수 있도록 메인 툴바에 종료 버튼을 추가했습니다.\n처리 후 소스 파일을 삭제하는 옵션을 추가했습니다.\nMicrosoft Store 상품 목록에 아랍어(ar-SA)를 추가했습니다.\nWindows 스토어 패키지에 지원되는 23개 언어를 모두 명시했습니다.\n인코딩 작업 진행 메시지가 이제 선택한 언어에 따라 번역됩니다.\n절대 번호 매기기를 사용하는 TV 프로그램은 더 이상 시즌 하위 폴더에 배치되지 않습니다.\n시작 메뉴에서 Microsoft Store 버전을 실행할 때 작업 표시줄에 고정된 아이콘이 더 이상 중복되지 않습니다."
 }

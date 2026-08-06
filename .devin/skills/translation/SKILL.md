@@ -43,11 +43,43 @@ description: Maintain and sync the locale JSON files for the Smart Video Process
 - Keep the same set of keys in all locale files. Add a key to every file at the same time.
 - All skill/project documentation is in English. Non-English text only appears in locale values.
 - Use 2-space indentation and a trailing newline.
+- For infinitive-verb labels, provide a direct-object complement (COD) in the `_()` call via a `cod` option. The script builds a `to <verb> %%<COD>%%` prompt for Google Translate and strips the translated `%%...%%` block from every locale value.
 
 ## Maintenance workflow
 1. Parse the file with `JSON.parse`.
 2. Re-serialize with `JSON.stringify(obj, null, 2) + "\n"`.
 3. Verify it parses again and that `Object.keys(obj).length` matches the other locale file.
+
+## Infinitive-verb context
+
+Infinitive-verb labels such as `Open` or `Turn Off` are ambiguous for machine translation. Provide a short direct-object complement (COD) in the `_()` call and the skill will use it to build a clearer prompt.
+
+In the source code:
+```tsx
+{_('main.toolbar.shutdown', { defaultValue: 'Turn Off', cod: 'this computer' })}
+```
+
+The script can then read `defaultValue` and `cod` directly from the source:
+```bash
+node .devin/skills/translation/add-translation-key.js main.toolbar.shutdown --update
+```
+
+The script:
+1. Builds the source sentence `to Turn Off %%this computer%%` and sends it to Google Translate.
+2. Writes the clean English `defaultValue` to `locales/en.json`:
+   ```json
+   {
+    "main.toolbar.shutdown": "Turn Off"
+   }
+   ```
+3. For every other language, strips the translated `%%...%%` block and any surrounding spaces:
+   ```json
+   {
+    "main.toolbar.shutdown": "Éteindre"
+   }
+   ```
+
+The `defaultValue` in code and in `locales/en.json` must not contain the `to` prefix or the `%%...%%` context; the script adds `to` and `%%...%%` internally.
 
 ## Adding a new translation key
 
@@ -56,9 +88,13 @@ When a new translation key must be created, do not add it manually. Use the `add
 1. Set the `GOOGLE_API_KEY` environment variable.
 2. Run the script from the project root:
    ```bash
-   node .devin/skills/translation/add-translation-key.js <dot.separated.key> "English source text"
+   node .devin/skills/translation/add-translation-key.js <dot.separated.key> ["English source text" ["COD"]] [--update]
    ```
-3. The script writes the English source value to `locales/en.json` and a Google Translate generated value to every other `locales/<lang>.json`.
+   For new keys with context already in the `_()` call, you can pass just the key:
+   ```bash
+   node .devin/skills/translation/add-translation-key.js <dot.separated.key> --update
+   ```
+3. The script writes the English source value to `locales/en.json` and a Google Translate generated value to every other `locales/<lang>.json`. When a COD is provided, the source value is used as-is for `en.json` while the full `to <verb> %%<COD>%%` prompt is used for translation. Use `--update` to overwrite existing keys.
 4. Review the generated output, especially ICU placeholders such as `{count}`, `{version}`, etc., because automatic translation may alter them.
 
 ## ICU MessageFormat
@@ -83,6 +119,10 @@ The project uses the `i18next-icu` plugin. All locale values are parsed as ICU M
     defaultValue: 'You have {count, plural, =0 {no photos.} one {one photo.} other {# photos.}}',
     count: count
   });
+  ```
+- For infinitive-verb labels, add a `cod` option with the direct object to help machine translation. The `cod` option is ignored by i18next and only used by the translation skill:
+  ```tsx
+  {_('main.toolbar.shutdown', { defaultValue: 'Turn Off', cod: 'this computer' })}
   ```
 - The `en.json` value for a key must match its `defaultValue` exactly.
 

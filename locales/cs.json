@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kódování rychlostí {speed}x.",
   "job.encoding.first_pass_countdown": "Dokončení prvního průchodu za {duration}.",
   "job.encoding.countdown": "Dokončení za {duration}.",
-  "main.toolbar.shutdown": "Vypnout",
+  "main.toolbar.shutdown": "Vypnout počítač",
   "main.toolbar.shutdown_tooltip": "Po dokončení veškerého zpracování vypněte počítač.",
   "shutdown.dialog.title": "Vypněte počítač",
   "shutdown.dialog.message": "Počítač se vypne za {time}, pokud nekliknete na tlačítko Zrušit.",
-  "shutdown.dialog.cancel": "Zrušit"
+  "shutdown.dialog.cancel": "Zrušit",
+  "about.news.version_1_8_4.items": "Na hlavní panel nástrojů přidáno tlačítko pro vypnutí počítače po dokončení veškerého zpracování.\nPřidána možnost smazat zdrojové soubory po jejich zpracování\nDo seznamu v obchodě Microsoft Store přidána arabština (ar-SA)\nV balíčku Windows Store deklarováno všech 23 podporovaných jazyků.\nZprávy o průběhu kódování jsou nyní překládány na základě vybraného jazyka.\nTelevizní pořady používající absolutní číslování epizod již nejsou umisťovány do podsložky sezóny.\nPřipnuté ikony na hlavním panelu se již neduplikují při spuštění verze z Microsoft Storu z nabídky Start."
 }

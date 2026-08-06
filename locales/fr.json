@@ -583,5 +583,6 @@
   "main.toolbar.shutdown_tooltip": "Éteignez l'ordinateur une fois le traitement terminé.",
   "shutdown.dialog.title": "Éteignez l'ordinateur",
   "shutdown.dialog.message": "L'ordinateur s'éteindra dans {time} sauf si vous cliquez sur Annuler.",
-  "shutdown.dialog.cancel": "Annuler"
+  "shutdown.dialog.cancel": "Annuler",
+  "about.news.version_1_8_4.items": "Ajout d'un bouton d'arrêt à la barre d'outils principale pour éteindre l'ordinateur une fois le traitement terminé.\nAjout d'une option permettant de supprimer les fichiers sources après leur traitement.\nAjout de l'arabe (ar-SA) à la liste du Microsoft Store\nLes 23 langues prises en charge sont déclarées dans le package du Windows Store.\nLes messages d'avancement des tâches d'encodage sont désormais traduits en fonction de la langue sélectionnée.\nLes séries télévisées utilisant une numérotation absolue des épisodes ne sont plus placées dans un sous-dossier de saison.\nLes icônes épinglées à la barre des tâches ne se dupliquent plus lors du lancement de la version du Microsoft Store depuis le menu Démarrer."
 }

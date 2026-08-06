@@ -579,9 +579,10 @@
   "job.encoding.speed": "Kodning vid {speed}x.",
   "job.encoding.first_pass_countdown": "Första passet slutfört om {duration}.",
   "job.encoding.countdown": "Slutförande om {duration}.",
-  "main.toolbar.shutdown": "Stänga av",
+  "main.toolbar.shutdown": "för att stänga av",
   "main.toolbar.shutdown_tooltip": "Stäng av datorn när all bearbetning är klar",
   "shutdown.dialog.title": "Stäng av datorn",
   "shutdown.dialog.message": "Datorn stängs av om {time} om du inte klickar på Avbryt.",
-  "shutdown.dialog.cancel": "Avboka"
+  "shutdown.dialog.cancel": "Avboka",
+  "about.news.version_1_8_4.items": "Lade till en avstängningsknapp i huvudverktygsfältet för att stänga av datorn när all bearbetning är klar\nLade till ett alternativ för att ta bort källfiler efter att de har bearbetats\nLade till arabiska (ar-SA) i Microsoft Store-listan\nDeklarerade alla 23 språk som stöds i Windows Store-paketet\nMeddelanden om kodning av jobbförlopp översätts nu baserat på det valda språket\nTV-program som använder absolut avsnittsnumrering placeras inte längre i en undermapp för säsonger\nFästade aktivitetsfältsikoner dupliceras inte längre när Microsoft Store-versionen startas från Start-menyn"
 }

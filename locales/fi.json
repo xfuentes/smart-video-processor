@@ -579,9 +579,10 @@
   "job.encoding.speed": "Koodaus nopeudella {speed}x.",
   "job.encoding.first_pass_countdown": "Ensimmäisen kierroksen suoritus kesti {duration}.",
   "job.encoding.countdown": "Valmistuminen kestossa {duration}.",
-  "main.toolbar.shutdown": "Sammuta",
+  "main.toolbar.shutdown": "sammuttaaksesi",
   "main.toolbar.shutdown_tooltip": "Sammuta tietokone, kun kaikki käsittely on valmis",
   "shutdown.dialog.title": "Sammuta tietokone",
-  "shutdown.dialog.message": "Tietokone sammuu {ajan} kuluttua, ellet napsauta Peruuta.",
-  "shutdown.dialog.cancel": "Peruuttaa"
+  "shutdown.dialog.message": "Tietokone sammuu {time} kuluttua, ellet napsauta Peruuta.",
+  "shutdown.dialog.cancel": "Peruuttaa",
+  "about.news.version_1_8_4.items": "Lisätty sammutuspainike päätyökaluriville, jolla tietokone sammutetaan, kun kaikki käsittely on valmis.\nLisätty vaihtoehto lähdetiedostojen poistamiseen niiden käsittelyn jälkeen\nLisätty arabia (ar-SA) Microsoft Storen listaukseen\nIlmoitti kaikki 23 tuettua kieltä Windows Store -paketissa\nKoodaustyön edistymisviestit käännetään nyt valitun kielen perusteella.\nAbsoluuttista jaksonumerointia käyttävät TV-ohjelmat eivät enää sijoitu kausien alikansioon.\nKiinnitetyt tehtäväpalkin kuvakkeet eivät enää kaksoistue, kun Microsoft Storen versio käynnistetään Käynnistä-valikosta."
 }

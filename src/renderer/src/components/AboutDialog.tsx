@@ -133,6 +133,17 @@ export const AboutDialog = () => {
                       border: '1px solid #EBEBEB'
                     }}
                   >
+                    <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.4' })}</h4>
+                    <ul>
+                      {_('about.news.version_1_8_4.items', {
+                        defaultValue:
+                          'Added a shutdown button to the main toolbar to turn off the computer when all processing is complete\nAdded an option to delete source files after they are processed\nAdded Arabic (ar-SA) to the Microsoft Store listing\nDeclared all 23 supported languages in the Windows Store package\nEncoding job progress messages are now translated based on the selected language\nTV shows using absolute episode numbering are no longer placed in a season subfolder\nPinned taskbar icons no longer duplicate when launching the Microsoft Store version from the Start menu'
+                      })
+                        .split('\n')
+                        .map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                    </ul>
                     <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.3' })}</h4>
                     <ul>
                       {_('about.news.version_1_8_3.items', {
