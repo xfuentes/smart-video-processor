@@ -1,12 +1,9 @@
 {
-  "id": "1152921505701572024",
+  "id": "1152921505701594258",
   "applicationCategory": "PhotoAndVideo",
   "pricing": {
     "trialPeriod": "NoFreeTrial",
-    "marketSpecificPricings": {
-      "LB": "NotAvailable",
-      "EH": "NotAvailable"
-    },
+    "marketSpecificPricings": { "LB": "NotAvailable", "EH": "NotAvailable" },
     "sales": [],
     "priceId": "Free",
     "isAdvancedPricingModel": true
@@ -18,12 +15,7 @@
     "en-us": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "video",
-          "processing",
-          "encoding",
-          "organizing"
-        ],
+        "keywords": ["video", "processing", "encoding", "organizing"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -39,69 +31,18 @@
           "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
           "Batch Processing: Handles multiple files simultaneously with queue management."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Added a main toolbar toggle to switch off the computer when all active processing is complete, with a 3-minute countdown cancellation dialog.\r\n- Added a setting to automatically delete successfully processed source files when clearing the list or quitting the application.\r\n- Added Arabic (ar-SA) to the Microsoft Store listing.\r\n- Declared all 23 supported languages in the Windows Store package manifest.\r\n- Encoding job progress messages in the job list are now translated based on the selected language.\r\n- TV shows using absolute episode numbering are no longer placed in a season subfolder.\r\n- Pinned taskbar icons no longer duplicate when launching the Microsoft Store version from the Start menu.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317981", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318091", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318067", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318034", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318179", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318150", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317898", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317982", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318068", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318151", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -114,12 +55,7 @@
     "fr-fr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "vidéo",
-          "traitement",
-          "encodage",
-          "organisation"
-        ],
+        "keywords": ["vidéo", "traitement", "encodage", "organisation"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -135,69 +71,18 @@
           "Encodage vidéo (H.264 / H.265) : convertit les fichiers multimédias en formats optimisés grâce à des préréglages prédéfinis.",
           "Traitement par lots : permet de traiter plusieurs fichiers simultanément grâce à la gestion des files d'attente."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Ajout d'un bouton dans la barre d'outils principale permettant d'éteindre l'ordinateur une fois tous les traitements en cours terminés, avec une boîte de dialogue d'annulation après un compte à rebours de 3 minutes.\n\n- Ajout d'une option permettant de supprimer automatiquement les fichiers sources traités avec succès lors de l'effacement de la liste ou de la fermeture de l'application.\n\n- Ajout de l'arabe (ar-SA) à la liste des applications du Microsoft Store.\n\n- Déclaration des 23 langues prises en charge dans le manifeste du package du Microsoft Store.\n\n- Les messages de progression des tâches d'encodage dans la liste des tâches sont désormais traduits en fonction de la langue sélectionnée.\n\n- Les séries TV utilisant une numérotation absolue des épisodes ne sont plus placées dans un sous-dossier de saison.\n\n- Les icônes épinglées à la barre des tâches ne se dupliquent plus lors du lancement de la version du Microsoft Store depuis le menu Démarrer.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318035", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317953", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318092", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318093", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318094", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318069", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318095", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318009", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317954", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317983", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -210,12 +95,7 @@
     "de-de": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "Video",
-          "Verarbeitung",
-          "Kodierung",
-          "Organisation"
-        ],
+        "keywords": ["Video", "Verarbeitung", "Kodierung", "Organisation"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -231,69 +111,18 @@
           "Videokodierung (H.264 / H.265): Konvertiert Medien mithilfe vordefinierter Voreinstellungen in effiziente Formate.",
           "Stapelverarbeitung: Verarbeitet mehrere Dateien gleichzeitig mithilfe einer Warteschlangenverwaltung."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Ein Schalter in der Hauptsymbolleiste wurde hinzugefügt, mit dem der Computer nach Abschluss aller aktiven Prozesse heruntergefahren werden kann. Ein Abbruchdialog mit 3-Minuten-Countdown wird angezeigt.\n\n- Eine Einstellung zum automatischen Löschen erfolgreich verarbeiteter Quelldateien beim Leeren der Liste oder Beenden der Anwendung wurde hinzugefügt.\n\n- Arabisch (ar-SA) wurde dem Microsoft Store-Eintrag hinzugefügt.\n\n- Alle 23 unterstützten Sprachen wurden im Windows Store-Paketmanifest deklariert.\n\n- Fortschrittsmeldungen für Codierungsaufträge in der Auftragsliste werden nun basierend auf der ausgewählten Sprache übersetzt.\n\n- Fernsehsendungen mit absoluter Episodennummerierung werden nicht mehr in einem Staffelunterordner abgelegt.\n\n- Angeheftete Taskleistensymbole werden beim Starten der Microsoft Store-Version über das Startmenü nicht mehr dupliziert.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318096", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318070", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317926", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317899", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317900", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318178", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317984", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318121", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317927", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317901", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -306,12 +135,7 @@
     "it-it": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "video",
-          "elaborazione",
-          "codifica",
-          "organizzazione"
-        ],
+        "keywords": ["video", "elaborazione", "codifica", "organizzazione"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -327,69 +151,18 @@
           "Codifica video (H.264 / H.265): converte i file multimediali in formati efficienti utilizzando impostazioni predefinite.",
           "Elaborazione in batch: gestisce più file contemporaneamente grazie alla gestione delle code."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Aggiunto un interruttore nella barra degli strumenti principale per spegnere il computer al termine di tutte le elaborazioni attive, con una finestra di dialogo di annullamento con conto alla rovescia di 3 minuti.\n\n- Aggiunta un'impostazione per eliminare automaticamente i file sorgente elaborati correttamente quando si cancella l'elenco o si chiude l'applicazione.\n\n- Aggiunta la lingua araba (ar-SA) alla scheda del Microsoft Store.\n\nDichiarate tutte le 23 lingue supportate nel manifesto del pacchetto di Windows Store.\n\nI messaggi di avanzamento dei processi di codifica nell'elenco dei processi vengono ora tradotti in base alla lingua selezionata.\n\nLe serie TV con numerazione assoluta degli episodi non vengono più inserite in una sottocartella di stagione.\n\nLe icone bloccate nella barra delle applicazioni non vengono più duplicate all'avvio della versione del Microsoft Store dal menu Start.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318097", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318098", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318071", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317955", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318010", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317985", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317928", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317956", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317986", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318152", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -402,12 +175,7 @@
     "es-es": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "vídeo",
-          "procesamiento",
-          "codificación",
-          "organización"
-        ],
+        "keywords": ["vídeo", "procesamiento", "codificación", "organización"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -423,69 +191,18 @@
           "Codificación de vídeo (H.264 / H.265): Convierte archivos multimedia a formatos eficientes mediante ajustes predefinidos.",
           "Procesamiento por lotes: gestiona varios archivos a la vez mediante la gestión de colas."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Se agregó un interruptor en la barra de herramientas principal para apagar el equipo cuando finalicen todos los procesos activos, con un cuadro de diálogo de cancelación con cuenta regresiva de 3 minutos.\n\n- Se agregó una configuración para eliminar automáticamente los archivos de origen procesados correctamente al borrar la lista o cerrar la aplicación.\n\n- Se agregó el árabe (ar-SA) a la ficha de Microsoft Store.\n\n- Se declararon los 23 idiomas compatibles en el manifiesto del paquete de Windows Store.\n\n- Los mensajes de progreso de codificación en la lista de tareas ahora se traducen según el idioma seleccionado.\n\n- Las series de televisión que utilizan numeración absoluta de episodios ya no se colocan en una subcarpeta de temporada.\n\n- Los iconos anclados a la barra de tareas ya no se duplican al iniciar la versión de Microsoft Store desde el menú Inicio.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318180", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318104", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318020", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317963", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317936", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318105", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318078", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318106", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318126", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318127", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -498,12 +215,7 @@
     "pt-br": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "vídeo",
-          "processamento",
-          "codificação",
-          "organização"
-        ],
+        "keywords": ["vídeo", "processamento", "codificação", "organização"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -519,69 +231,18 @@
           "Codificação de vídeo (H.264 / H.265): Converte arquivos de mídia em formatos eficientes com predefinições.",
           "Processamento em lote: processa vários arquivos simultaneamente com gerenciamento de fila."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Adicionada uma opção na barra de ferramentas principal para desligar o computador quando todo o processamento ativo for concluído, com uma caixa de diálogo de cancelamento com contagem regressiva de 3 minutos.\n\n- Adicionada uma configuração para excluir automaticamente os arquivos de origem processados com sucesso ao limpar a lista ou fechar o aplicativo.\n\n- Adicionado o idioma árabe (ar-SA) à lista da Microsoft Store.\n\n- Declaradas todas as 23 línguas suportadas no manifesto do pacote da Windows Store.\n\n- As mensagens de progresso da codificação na lista de tarefas agora são traduzidas com base no idioma selecionado.\n\n- Séries de TV que usam numeração absoluta de episódios não são mais colocadas em uma subpasta de temporada.\n\n- Os ícones fixados na barra de tarefas não são mais duplicados ao iniciar a versão da Microsoft Store pelo menu Iniciar.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318017", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318124", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318077", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318018", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317934", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318125", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318043", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318157", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317935", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318019", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -594,12 +255,7 @@
     "nl-nl": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "video",
-          "verwerking",
-          "codering",
-          "organiseren"
-        ],
+        "keywords": ["video", "verwerking", "codering", "organiseren"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -615,69 +271,18 @@
           "Videocodering (H.264 / H.265): Converteert mediabestanden naar efficiënte formaten met vooraf gedefinieerde instellingen.",
           "Batchverwerking: Verwerkt meerdere bestanden tegelijkertijd met behulp van wachtrijbeheer."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Er is een schakelaar in de hoofdwerkbalk toegevoegd om de computer uit te schakelen wanneer alle actieve processen zijn voltooid, met een dialoogvenster voor annulering na 3 minuten.\n\n- Er is een instelling toegevoegd om succesvol verwerkte bronbestanden automatisch te verwijderen bij het wissen van de lijst of het afsluiten van de toepassing.\n\n- Arabisch (ar-SA) is toegevoegd aan de Microsoft Store-vermelding.\n\n- Alle 23 ondersteunde talen zijn opgenomen in het manifest van het Windows Store-pakket.\n\n- Berichten over de voortgang van codeertaken in de takenlijst worden nu vertaald op basis van de geselecteerde taal.\n\n- Tv-series met absolute afleveringsnummering worden niet langer in een submap van een seizoen geplaatst.\n\n- Vastgezette taakbalkpictogrammen worden niet langer gedupliceerd wanneer de Microsoft Store-versie vanuit het Startmenu wordt gestart.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317960", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317933", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317961", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318076", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318042", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318156", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317988", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318016", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318103", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317962", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -690,12 +295,7 @@
     "zh-cn": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "视频",
-          "处理",
-          "编码",
-          "组织"
-        ],
+        "keywords": ["视频", "处理", "编码", "组织"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -711,69 +311,18 @@
           "视频编码（H.264 / H.265）：利用预设方案将媒体文件转换为高效格式。",
           "批处理：通过队列管理同时处理多个文件。"
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- 新增主工具栏开关，用于在所有活动处理完成后关闭计算机，并带有 3 分钟倒计时取消对话框。\n\n- 新增设置，可在清除列表或退出应用程序时自动删除已成功处理的源文件。\n\n- 在 Microsoft Store 列表中添加了阿拉伯语 (ar-SA)。\n\n- 在 Windows 应用商店程序包清单中声明了所有 23 种受支持的语言。\n\n- 作业列表中编码的作业进度消息现在会根据所选语言进行翻译。\n\n- 使用绝对剧集编号的电视剧不再放置在季子文件夹中。\n\n- 从“开始”菜单启动 Microsoft Store 版本时，固定的任务栏图标不再重复显示。",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318013", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318153", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318154", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318014", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317908", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318209", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318155", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318102", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318015", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318075", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -786,12 +335,7 @@
     "ja-jp": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "動画",
-          "処理",
-          "エンコーディング",
-          "整理"
-        ],
+        "keywords": ["動画", "処理", "エンコーディング", "整理"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -807,69 +351,18 @@
           "動画エンコード（H.264 / H.265）：あらかじめ定義されたプリセットを使用して、メディアを効率的な形式に変換します。",
           "バッチ処理：キュー管理機能により、複数のファイルを同時に処理します。"
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- メインツールバーに、すべての処理が完了した際にコンピューターの電源を切るトグルボタンを追加しました。キャンセル時には3分間のカウントダウンダイアログが表示されます。\n\n- リストをクリアするかアプリケーションを終了する際に、処理済みのソースファイルを自動的に削除する設定を追加しました。\n\n- Microsoft Storeの製品情報にアラビア語（ar-SA）を追加しました。\n\n- Windows Storeパッケージのマニフェストに、サポートされている23言語すべてを記載しました。\n\n- ジョブリストのジョブ進行状況メッセージは、選択された言語に基づいて翻訳されるようになりました。\n\n- 絶対番号でエピソード番号が付けられているテレビ番組は、シーズンサブフォルダーに配置されなくなりました。\n\n- スタートメニューからMicrosoft Store版を起動した際に、タスクバーにピン留めされたアイコンが重複して表示されなくなりました。",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317932", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318038", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318101", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318039", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317907", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317959", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318040", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318074", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318041", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318123", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -882,12 +375,7 @@
     "ko-kr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "동영상",
-          "처리",
-          "인코딩",
-          "정리"
-        ],
+        "keywords": ["동영상", "처리", "인코딩", "정리"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -903,69 +391,18 @@
           "비디오 인코딩 (H.264 / H.265): 미리 정의된 프리셋을 사용하여 미디어를 효율적인 형식으로 변환합니다.",
           "일괄 처리: 대기열 관리 기능을 통해 여러 파일을 동시에 처리합니다."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- 모든 활성 처리가 완료되면 3분 카운트다운 취소 대화 상자가 표시되는 컴퓨터 전원 끄기 토글 기능을 기본 툴바에 추가했습니다.\n\n- 목록을 지우거나 애플리케이션을 종료할 때 처리가 완료된 소스 파일을 자동으로 삭제하는 설정을 추가했습니다.\n\n- Microsoft Store 목록에 아랍어(ar-SA)를 추가했습니다.\n\n- Windows Store 패키지 매니페스트에 지원되는 23개 언어를 모두 선언했습니다.\n\n- 작업 목록의 인코딩 작업 진행 메시지가 이제 선택한 언어에 따라 번역됩니다.\n\n- 절대 번호 매기기를 사용하는 TV 프로그램은 더 이상 시즌 하위 폴더에 배치되지 않습니다.\n\n- 시작 메뉴에서 Microsoft Store 버전을 실행할 때 작업 표시줄에 고정된 아이콘이 더 이상 중복되지 않습니다.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318122", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318036", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317904", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318073", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317905", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318037", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317930", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317958", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317906", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317931", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -978,12 +415,7 @@
     "ru-ru": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "видео",
-          "обработка",
-          "кодирование",
-          "организация"
-        ],
+        "keywords": ["видео", "обработка", "кодирование", "организация"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -999,69 +431,18 @@
           "Кодирование видео (H.264 / H.265): преобразует медиафайлы в оптимизированные форматы с помощью готовых настроек.",
           "Пакетная обработка: одновременная обработка нескольких файлов с управлением очередью."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- Добавлен переключатель на главной панели инструментов для выключения компьютера после завершения всей активной обработки, с диалоговым окном отмены обратного отсчета в течение 3 минут.\n\n- Добавлена настройка для автоматического удаления успешно обработанных исходных файлов при очистке списка или выходе из приложения.\n\n- Добавлен арабский язык (ar-SA) в список Microsoft Store.\n\n- В манифесте пакета Windows Store указаны все 23 поддерживаемых языка.\n\n- Сообщения о ходе выполнения заданий в списке заданий теперь переводятся в зависимости от выбранного языка.\n\n- Телешоу, использующие абсолютную нумерацию эпизодов, больше не размещаются в подпапке сезона.\n\n- Закрепленные значки на панели задач больше не дублируются при запуске версии Microsoft Store из меню «Пуск».",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318072", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318011", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317902", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318099", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317987", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318100", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317903", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317929", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317957", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318012", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -1074,12 +455,7 @@
     "ar-sa": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": [
-          "فيديو",
-          "يعالج",
-          "التشفير",
-          "تنظيم"
-        ],
+        "keywords": ["فيديو", "يعالج", "التشفير", "تنظيم"],
         "licenseTerms": "هذا البرنامج برنامج حر: يمكنك إعادة توزيعه و/أو تعديله\nبموجب شروط رخصة جنو العمومية العامة كما نشرتها\nمؤسسة البرمجيات الحرة، سواء الإصدار 3 من الرخصة، أو\n(حسب اختيارك) أي إصدار لاحق.\n\nيُوزع هذا البرنامج على أمل أن يكون مفيدًا،\nولكن بدون أي ضمان؛ حتى بدون الضمان الضمني لقابلية التسويق أو الملاءمة لغرض معين. راجع\nرخصة جنو العمومية العامة لمزيد من التفاصيل.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1095,69 +471,18 @@
           "ترميز الفيديو (H.264 / H.265): يحول الوسائط إلى تنسيقات فعالة مع إعدادات مسبقة محددة مسبقًا.",
           "المعالجة الدفعية: تتعامل مع ملفات متعددة في وقت واحد مع إدارة قائمة الانتظار."
         ],
-        "releaseNotes": "",
+        "releaseNotes": "- تمت إضافة زر تبديل في شريط الأدوات الرئيسي لإيقاف تشغيل الكمبيوتر عند اكتمال جميع عمليات المعالجة النشطة، مع مربع حوار إلغاء العد التنازلي لمدة 3 دقائق.\n\n- تمت إضافة إعداد لحذف ملفات المصدر التي تمت معالجتها بنجاح تلقائيًا عند مسح القائمة أو إغلاق التطبيق.\n\n- تمت إضافة اللغة العربية (ar-SA) إلى قائمة متجر Microsoft.\n\n- تم الإعلان عن جميع اللغات الـ 23 المدعومة في بيان حزمة متجر Windows.\n\n- يتم الآن ترجمة رسائل تقدم عملية التشفير في قائمة المهام بناءً على اللغة المختارة.\n\n- لم تعد المسلسلات التلفزيونية التي تستخدم ترقيم الحلقات المطلق تُوضع في مجلد فرعي خاص بالموسم.\n\n- لم تعد أيقونات شريط المهام المثبتة تتكرر عند تشغيل إصدار متجر Microsoft من قائمة ابدأ.",
         "images": [
-          {
-            "fileName": "08-Processing.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977859",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "03-Movie.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977773",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "04-TVShow.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977774",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "05-Tracks.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978171",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "06-Hints.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978172",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "07-Properties.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978173",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "09-Encoding.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978174",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "10-Waiting.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022977775",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "01-Settings.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978176",
-            "imageType": "Screenshot"
-          },
-          {
-            "fileName": "AppTileIcon-300x300.png",
-            "fileStatus": "Uploaded",
-            "id": "1152922700022978177",
-            "description": "",
-            "imageType": "Icon"
-          }
+          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317937", "imageType": "Screenshot" },
+          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317964", "imageType": "Screenshot" },
+          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318044", "imageType": "Screenshot" },
+          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318079", "imageType": "Screenshot" },
+          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318107", "imageType": "Screenshot" },
+          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317965", "imageType": "Screenshot" },
+          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318045", "imageType": "Screenshot" },
+          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318021", "imageType": "Screenshot" },
+          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318181", "imageType": "Screenshot" },
+          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318108", "imageType": "Screenshot" }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -1168,10 +493,7 @@
       "platformOverrides": {}
     }
   },
-  "hardwarePreferences": [
-    "Keyboard",
-    "Mouse"
-  ],
+  "hardwarePreferences": ["Keyboard", "Mouse"],
   "automaticBackupEnabled": true,
   "canInstallOnRemovableMedia": true,
   "isGameDvrEnabled": false,
@@ -1203,36 +525,36 @@
   },
   "applicationPackages": [
     {
-      "fileName": "smart-video-processor-x64.appx",
-      "fileStatus": "Uploaded",
-      "id": "2000000000096894025",
-      "version": "1.8.2.0",
-      "architecture": "x64",
-      "targetPlatform": "Windows10",
-      "languages": [
-        "en-US"
-      ],
-      "capabilities": [
-        "broadFileSystemAccess",
-        "internetClient",
-        "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe",
-        "runFullTrust"
-      ],
-      "minimumDirectXVersion": "None",
-      "minimumSystemRam": "None",
-      "targetDeviceFamilies": [
-        "Windows.Desktop min version 10.0.17763.0"
-      ]
-    },
-    {
       "fileName": "smart-video-processor-arm64.appx",
       "fileStatus": "Uploaded",
-      "id": "2000000000096894722",
-      "version": "1.8.2.0",
+      "id": "2000000000096991359",
+      "version": "1.8.4.0",
       "architecture": "arm64",
       "targetPlatform": "Windows10",
       "languages": [
-        "en-US"
+        "ar-SA",
+        "cs-CZ",
+        "da-DK",
+        "de-DE",
+        "el-GR",
+        "en-US",
+        "es-ES",
+        "fi-FI",
+        "fr-FR",
+        "hu-HU",
+        "id-ID",
+        "it-IT",
+        "ja-JP",
+        "ko-KR",
+        "nb-NO",
+        "nl-NL",
+        "pl-PL",
+        "pt-BR",
+        "ru-RU",
+        "sv-SE",
+        "tr-TR",
+        "uk-UA",
+        "zh-CN"
       ],
       "capabilities": [
         "broadFileSystemAccess",
@@ -1242,15 +564,55 @@
       ],
       "minimumDirectXVersion": "None",
       "minimumSystemRam": "None",
-      "targetDeviceFamilies": [
-        "Windows.Desktop min version 10.0.17763.0"
-      ]
+      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
+    },
+    {
+      "fileName": "smart-video-processor-x64.appx",
+      "fileStatus": "Uploaded",
+      "id": "2000000000096991562",
+      "version": "1.8.4.0",
+      "architecture": "x64",
+      "targetPlatform": "Windows10",
+      "languages": [
+        "ar-SA",
+        "cs-CZ",
+        "da-DK",
+        "de-DE",
+        "el-GR",
+        "en-US",
+        "es-ES",
+        "fi-FI",
+        "fr-FR",
+        "hu-HU",
+        "id-ID",
+        "it-IT",
+        "ja-JP",
+        "ko-KR",
+        "nb-NO",
+        "nl-NL",
+        "pl-PL",
+        "pt-BR",
+        "ru-RU",
+        "sv-SE",
+        "tr-TR",
+        "uk-UA",
+        "zh-CN"
+      ],
+      "capabilities": [
+        "broadFileSystemAccess",
+        "internetClient",
+        "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe",
+        "runFullTrust"
+      ],
+      "minimumDirectXVersion": "None",
+      "minimumSystemRam": "None",
+      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
     }
   ],
   "packageDeliveryOptions": {
     "packageRollout": {
       "isPackageRollout": false,
-      "packageRolloutPercentage": 0,
+      "packageRolloutPercentage": 0.0,
       "packageRolloutStatus": "PackageRolloutNotStarted",
       "fallbackSubmissionId": "1152921505700201551"
     },
@@ -1260,13 +622,12 @@
   "enterpriseLicensing": "None",
   "allowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": true,
   "allowTargetFutureDeviceFamilies": {
-    "7": false,
     "Desktop": true,
     "Mobile": false,
     "Xbox": false,
     "Team": false,
     "Holographic": false
   },
-  "friendlyName": "Submission 21",
+  "friendlyName": "Submission 23",
   "trailers": []
 }
