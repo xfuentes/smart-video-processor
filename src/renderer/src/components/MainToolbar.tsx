@@ -31,7 +31,7 @@ import {
 } from '@fluentui/react-icons'
 import { SettingsDialog } from '@renderer/components/SettingsDialog'
 import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } from '../../../common/@types/Video'
-import { AboutDialog } from '@renderer/components/AboutDialog'
+import { AboutDialog } from '@renderer/components/about/AboutDialog'
 import { ShutdownDialog } from '@renderer/components/ShutdownDialog'
 import { useI18n } from '../i18n'
 
