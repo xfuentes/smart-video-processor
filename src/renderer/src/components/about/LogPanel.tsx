@@ -17,10 +17,10 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useI18n } from '../i18n'
-import { useSettings } from './context/SettingsContext'
+import { useI18n } from '../../i18n'
+import { useSettings } from '../context/SettingsContext'
 
-import { LogEntry, LogLevel } from '../../../common/@types/Log'
+import { LogEntry, LogLevel } from '../../../../common/@types/Log'
 
 const levelColor: Record<LogLevel, string> = {
   debug: 'inherit',
