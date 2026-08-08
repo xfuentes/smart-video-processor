@@ -232,10 +232,10 @@ export class Video implements IVideo {
     this.fireChangeEvent()
   }
 
-  showError(message: string, logKey: string, logOptions: Record<string, unknown>): void {
+  showError(key: string, options: Record<string, unknown>): void {
     this.status = JobStatus.ERROR
-    this.message = message
-    error(logKey, logOptions)
+    this.message = _(key, options)
+    error(key, options)
     this.progression.progress = -1
     this.fireChangeEvent()
   }
@@ -588,7 +588,7 @@ export class Video implements IVideo {
       try {
         this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
       } catch (e) {
-        this.showError((e as Error).message, 'video.message.ffmpeg_error', {
+        this.showError('video.message.ffmpeg_error', {
           defaultValue: '{error}',
           error: (e as Error).message
         })
@@ -605,9 +605,23 @@ export class Video implements IVideo {
 
     if (encodingRequired && this.container !== undefined) {
       encodingJob = this.attachJob(new EncodingJob(this.toJSON(), this.getTempDirectory(), finalEncoderSettings))
-      this.encodedPath = (await encodingJob.queue()) as string
+      try {
+        this.encodedPath = (await encodingJob.queue()) as string
+      } catch (error) {
+        if (error instanceof Error && error.message === 'Aborted') {
+          return
+        }
+        throw error
+      }
     }
-    await this.merge(this.getOutputDirectory(), encodingJob?.getDuration())
+    try {
+      await this.merge(this.getOutputDirectory(), encodingJob?.getDuration())
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Aborted') {
+        return
+      }
+      throw error
+    }
     this.queued = false
     this.processed = true
     this.fireChangeEvent()
@@ -813,6 +827,8 @@ export class Video implements IVideo {
       info('log.video.removed_from_queue', { defaultValue: 'Removed from the queue.' })
     } else if (this.job) {
       JobManager.getInstance().removeFromQueueAndAbort(this.job)
+      this.autoModePossible = false
+    } else {
       this.autoModePossible = false
     }
   }
