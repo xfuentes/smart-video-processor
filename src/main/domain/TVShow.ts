@@ -24,7 +24,6 @@ import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
 import { Strings } from '../../common/Strings'
 import { Numbers } from '../util/numbers'
 import { debug, info, warning } from '../util/log'
-import { JobStatus } from '../../common/@types/Job'
 import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
 import { LanguageIETF } from '../../common/LanguageIETF'
@@ -70,16 +69,13 @@ export class TVShow implements ITVShow {
       if (!this.title) {
         throw new Error('Series name is mandatory')
       }
-      this.video.status = JobStatus.LOADING
-      this.video.message = _('video.message.searching_series_tvdb', { defaultValue: 'Searching series on TheTVDB' })
-      info('video.message.searching_series_tvdb', { defaultValue: 'Searching series on TheTVDB' })
-      this.video.fireChangeEvent()
+      this.video.showLoading('video.message.searching_series_tvdb', { defaultValue: 'Searching series on TheTVDB' })
       this.video.searchResults = await TVDBClient.getInstance().searchSeriesByTitle(this.title, this.year)
       const seriesMatched = SearchResult.getBestMatch(this.video.searchResults, this.title, this.year)
 
       if (!seriesMatched) {
         this.video.progression.progress = -1
-        this.showWarning('video.message.tvdb_no_exact_match', {
+        this.video.showWarning('video.message.tvdb_no_exact_match', {
           defaultValue: 'Unable to find an exact match on TheTVDB. Please check the information provided and try again.'
         })
       } else {
@@ -161,14 +157,9 @@ export class TVShow implements ITVShow {
     const tempDirectory = this.video.getTempDirectory()
     const seriesPosterPath = Path.join(this.video.getTempRootDirectory(), 'TVDB-' + this.theTVDB + '-poster.jpg')
     if (this.posterURL) {
-      this.video.status = JobStatus.LOADING
-      this.video.message = _('video.message.downloading_poster_tvdb', {
+      this.video.showLoading('video.message.downloading_poster_tvdb', {
         defaultValue: 'Downloading poster image from TheTVDB.'
       })
-      info('video.message.downloading_poster_tvdb', {
-        defaultValue: 'Downloading poster image from TheTVDB.'
-      })
-      this.video.fireChangeEvent()
       if (!Files.fileExistsAndIsReadable(seriesPosterPath)) {
         fs.mkdirSync(this.video.getTempRootDirectory(), { recursive: true })
         await Files.downloadFile(this.posterURL, seriesPosterPath)
@@ -178,16 +169,16 @@ export class TVShow implements ITVShow {
     }
     if (!this.episode && !this.absoluteEpisode) {
       if (episodeSearchFailed) {
-        this.showWarning('video.message.tvdb_episode_not_found', {
+        this.video.showWarning('video.message.tvdb_episode_not_found', {
           defaultValue: 'Episode not found. Please check the information provided and try again.'
         })
       } else {
-        this.showWarning('video.message.tvdb_episode_number_required', {
+        this.video.showWarning('video.message.tvdb_episode_number_required', {
           defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
         })
       }
     } else if (!episodeData) {
-      this.showWarning('video.message.tvdb_episode_not_found', {
+      this.video.showWarning('video.message.tvdb_episode_not_found', {
         defaultValue: 'Episode not found. Please check the information provided and try again.'
       })
     } else {
@@ -310,12 +301,6 @@ export class TVShow implements ITVShow {
     await this.loadSeries(episodeSearchFailed)
   }
 
-  private showWarning(key: string, options: Record<string, unknown>) {
-    this.video.status = JobStatus.WARNING
-    this.video.message = _(key, options)
-    warning(key, options)
-    this.video.fireChangeEvent()
-  }
 
   private clearEpisodeNumbers() {
     this.setSeason('')

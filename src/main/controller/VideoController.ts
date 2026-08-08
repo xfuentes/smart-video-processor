@@ -105,7 +105,9 @@ export class VideoController {
   }
 
   search(uuid: string, data?: SearchInputData) {
-    return this.getVideoByUuid(uuid).search(data)
+    const video = this.getVideoByUuid(uuid)
+    video.autoModePossible = false
+    return video.search(data)
   }
 
   async multiSelectSearchResultID(uuids: string[], searchResultID: number | undefined) {
@@ -118,10 +120,19 @@ export class VideoController {
     const videos = uuids.map((uuid: string) => this.getVideoByUuid(uuid))
     for (const video of videos) {
       video.prepareMultiSearch(data)
+      video.autoModePossible = false
     }
     this.fireListChangeEvent()
+    let firstError: unknown
     for (const video of videos) {
-      await video.search()
+      try {
+        await video.search()
+      } catch (err) {
+        firstError = firstError ?? err
+      }
+    }
+    if (firstError !== undefined) {
+      throw firstError as Error
     }
   }
 

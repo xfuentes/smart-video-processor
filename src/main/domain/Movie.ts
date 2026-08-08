@@ -23,9 +23,7 @@ import { Numbers } from '../util/numbers'
 import { TMDBClient } from './clients/TMDBClient'
 import { Countries, Country } from '../../common/Countries'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
-import { _ } from '../i18n'
-import { debug, error, info, warning } from '../util/log'
-import { JobStatus } from '../../common/@types/Job'
+import { debug } from '../util/log'
 import { SearchBy } from '../../common/@types/Video'
 import { EditionType, IMovie } from '../../common/@types/Movie'
 import Path from 'node:path'
@@ -68,10 +66,7 @@ export default class Movie implements IMovie {
           throw new Error('IMDB ID is mandatory')
         }
       }
-      this.video.status = JobStatus.LOADING
-      this.video.message = _('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
-      info('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
-      this.video.fireChangeEvent()
+      this.video.showLoading('video.message.searching_movie_tmdb', { defaultValue: 'Searching movie on TMDB.' })
       if (by === SearchBy.TITLE) {
         this.video.searchResults = await TMDBClient.getInstance().searchMovieByNameYear(this.title, this.year)
       } else if (this.imdb) {
@@ -83,8 +78,6 @@ export default class Movie implements IMovie {
 
       if (!movieMatched) {
         this.video.autoModePossible = false
-        this.video.status = JobStatus.WARNING
-        this.video.progression.progress = -1
         const key = by === SearchBy.TITLE ? 'video.message.tmdb_no_exact_match' : 'video.message.tmdb_not_found'
         const options =
           by === SearchBy.TITLE
@@ -93,8 +86,7 @@ export default class Movie implements IMovie {
                   'Unable to find an exact match on TMDB. Please check the information provided and try again.'
               }
             : { defaultValue: 'Unable to find the movie on TMDB.' }
-        this.video.message = _(key, options)
-        warning(key, options)
+        this.video.showWarning(key, options)
       } else {
         await this.selectSearchResultID(movieMatched.id)
       }
@@ -105,14 +97,7 @@ export default class Movie implements IMovie {
     if (!this.tmdb) {
       throw new Error('TMDB ID is mandatory')
     }
-    this.video.status = JobStatus.LOADING
-    this.video.message = _('video.message.retrieving_movie_tmdb', {
-      defaultValue: 'Retrieving movie details from TMDB.'
-    })
-    info('video.message.retrieving_movie_tmdb', {
-      defaultValue: 'Retrieving movie details from TMDB.'
-    })
-    this.video.fireChangeEvent()
+    this.video.showLoading('video.message.retrieving_movie_tmdb', { defaultValue: 'Retrieving movie details from TMDB.' })
     try {
       const movieData = await TMDBClient.getInstance().retrieveMovieDetails(this.tmdb)
       this.originalCountries = movieData.countries
@@ -165,14 +150,7 @@ export default class Movie implements IMovie {
 
       const fullPath = Path.join(tempDirectory, 'TMDB-' + this.tmdb + '-poster.jpg')
       if (this.posterURL) {
-        this.video.status = JobStatus.LOADING
-        this.video.message = _('video.message.downloading_poster_tmdb', {
-          defaultValue: 'Downloading poster image from TMDB.'
-        })
-        info('video.message.downloading_poster_tmdb', {
-          defaultValue: 'Downloading poster image from TMDB.'
-        })
-        this.video.fireChangeEvent()
+        this.video.showLoading('video.message.downloading_poster_tmdb', { defaultValue: 'Downloading poster image from TMDB.' })
         this.poster = await Files.downloadFile(this.posterURL, fullPath)
         debug('log.movie.wrote_poster', { defaultValue: 'Wrote poster file://{poster}', poster: this.poster })
       }
@@ -186,14 +164,13 @@ export default class Movie implements IMovie {
       }
       this.video.title = `${this.title} (${this.year})`
       this.video.matched = true
-      this.video.status = JobStatus.WAITING
-      this.video.message = ''
-      this.video.fireChangeEvent()
+      this.video.showWaiting()
     } catch (err) {
-      this.video.status = JobStatus.ERROR
-      this.video.message = (err as Error).message
-      error('video.message.tmdb_error', { defaultValue: '{error}', error: (err as Error).message })
-      this.video.fireChangeEvent()
+      this.video.showError(
+        (err as Error).message,
+        'video.message.tmdb_error',
+        { defaultValue: '{error}', error: (err as Error).message }
+      )
     }
   }
 

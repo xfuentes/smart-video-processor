@@ -579,7 +579,7 @@
   "job.encoding.speed": "Kodierung mit {speed}x.",
   "job.encoding.first_pass_countdown": "Der erste Durchlauf ist in {duration} abgeschlossen.",
   "job.encoding.countdown": "Fertigstellung in {duration}.",
-  "main.toolbar.shutdown": "den Computer ausschalten",
+  "main.toolbar.shutdown": "Ausschalten",
   "main.toolbar.shutdown_tooltip": "Schalten Sie den Computer aus, sobald alle Verarbeitungsvorgänge abgeschlossen sind.",
   "shutdown.dialog.title": "Schalten Sie den Computer aus.",
   "shutdown.dialog.message": "Der Computer schaltet sich in {time} ab, sofern Sie nicht auf Abbrechen klicken.",
@@ -664,5 +664,7 @@
   "about.news.version_0_3_0.items": "Problem mit Pause/Fortsetzen, Abbrechen und deaktiviertem Prozesssymbol behoben. Inkonsistenz der Sprachargumente bei Mkvmerge behoben.",
   "about.news.version_0_2_1.items": "Fehlerbehebung bei der Aktualisierung der Einstellungen und der x265-Codierung unter Linux",
   "about.news.version_0_2_0.items": "Einstellungen für externe Programmpfade hinzugefügt. Einstellungsprüfung beim Start hinzugefügt.",
-  "about.news.version_0_1_0.items": "Dateien per Drag & Drop oder Schaltfläche öffnen und Einstellungsdialog hinzugefügt.\nRestliche Benutzeroberfläche hinzugefügt.\nVorschau für Abgleich und Spuren verbessert.\nBenutzeroberfläche zum Verbinden mit dem Controller über IPC repariert und Windows-Paketierung korrigiert."
+  "about.news.version_0_1_0.items": "Dateien per Drag & Drop oder Schaltfläche öffnen und Einstellungsdialog hinzugefügt.\nRestliche Benutzeroberfläche hinzugefügt.\nVorschau für Abgleich und Spuren verbessert.\nBenutzeroberfläche zum Verbinden mit dem Controller über IPC repariert und Windows-Paketierung korrigiert.",
+  "log.video.removed_from_queue": "Aus der Warteschlange entfernt.",
+  "about.news.version_1_8_5.items": "Die Aktion „Abbrechen“ in der Symbolleiste entfernt nun auch ausgewählte Videos aus der Warteschlange und versetzt sie in den Status „Bereit zur Verarbeitung“.\\nDas Anwendungsprotokoll befindet sich jetzt auf der neuen Registerkarte „Protokolle“ im Dialogfeld „Über“ anstatt in der Hauptsymbolleiste.\\nVideostatusmeldungen (Info, Warnung und Fehler) werden nun auch im Ereignisprotokoll protokolliert.\\nBei benutzerdefinierten Videos wird nun eine Warnung angezeigt, die den Benutzer auffordert, die erforderlichen Informationen vor der Verarbeitung einzugeben.\\nDie Mehrfachsuche wird nun mit den verbleibenden ausgewählten Videos fortgesetzt, wenn eine Suche fehlschlägt, sodass die Mehrfachauswahlfelder nicht deaktiviert bleiben.\\nDer automatische Startmodus ist nun für abgebrochene oder manuell gesuchte Videos deaktiviert, um eine erneute automatische Verarbeitung zu verhindern."
 }

@@ -84,6 +84,11 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   const handleCancel = async () => {
     if (selectedVideos) {
       for (const video of selectedVideos) {
+        if (video.queued && !video.processing) {
+          await window.api.video.abortJob(video.uuid)
+        }
+      }
+      for (const video of selectedVideos) {
         if (video.processing) {
           await window.api.video.abortJob(video.uuid)
         }
@@ -146,7 +151,10 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
             vertical
             icon={<Stop24Regular />}
             onClick={handleCancel}
-            disabled={selectedVideos === undefined || selectedVideos.find((video) => video.processing) === undefined}
+            disabled={
+              selectedVideos === undefined ||
+              selectedVideos.find((video) => video.processing || video.queued) === undefined
+            }
           >
             {_('main.toolbar.cancel', { defaultValue: 'Cancel' })}
           </ToolbarButton>

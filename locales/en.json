@@ -664,5 +664,7 @@
   "about.news.version_0_3_0.items": "Fixed Pause/unpause, cancel and process icon disabled issue\nFixed Mkvmerge language argument inconsistency",
   "about.news.version_0_2_1.items": "Fixed Settings update and x265 encoding on linux",
   "about.news.version_0_2_0.items": "Added External program path settings\nAdded Settings validation at startup",
-  "about.news.version_0_1_0.items": "Added Open files with drag drop or button and settings dialog\nAdded Rest of UI\nImproved Preview matching and tracks\nFixed Connect UI to controller with IPC and fix windows packaging"
+  "about.news.version_0_1_0.items": "Added Open files with drag drop or button and settings dialog\nAdded Rest of UI\nImproved Preview matching and tracks\nFixed Connect UI to controller with IPC and fix windows packaging",
+  "log.video.removed_from_queue": "Removed from the queue.",
+  "about.news.version_1_8_5.items": "The Cancel toolbar action now also removes selected videos that are waiting in the queue and resets them to the ready-to-process state\\nThe application log viewer is now available in a new \"Logs\" tab in the About dialog instead of the main toolbar\\nVideo status messages (info, warning and error) are now also emitted to the event log\\nCustom videos now display a warning asking the user to complete the required information before processing\\nMulti-search now continues with the remaining selected videos if one search fails, preventing the multi-selection panels from staying disabled\\nAuto-start mode is now disabled for videos that have been canceled or manually searched, preventing them from automatically processing again"
 }

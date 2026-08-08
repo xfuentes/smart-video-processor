@@ -20,9 +20,7 @@ import { IOther } from '../../common/@types/Other'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { Video } from './Video'
 import { Files } from '../util/files'
-import { _ } from '../i18n'
-import { debug, info, warning } from '../util/log'
-import { JobStatus } from '../../common/@types/Job'
+import { debug } from '../util/log'
 import { Numbers } from '../util/numbers'
 import Path from 'node:path'
 
@@ -44,11 +42,9 @@ export default class Other implements IOther {
     this.video.searchResults = []
     if (!this.title.trim()) {
       this.video.autoModePossible = false
-      this.video.status = JobStatus.WARNING
-      this.video.message = _('video.message.title_required', {
+      this.video.showWarning('video.message.title_required', {
         defaultValue: 'Please provide a title for your custom video file.'
       })
-      warning('video.message.title_required', { defaultValue: 'Please provide a title for your custom video file.' })
     } else {
       await this.load()
     }
@@ -59,10 +55,7 @@ export default class Other implements IOther {
       debug('log.other.using_poster', { defaultValue: 'Using poster file://{poster}', poster: this.poster })
     } else if (this.posterURL) {
       const fullPath = Path.join(this.video.getTempDirectory(), 'poster.jpg')
-      this.video.status = JobStatus.LOADING
-      this.video.message = _('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
-      info('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
-      this.video.fireChangeEvent()
+      this.video.showLoading('video.message.downloading_poster', { defaultValue: 'Downloading poster image.' })
       this.poster = await Files.downloadFile(this.posterURL, fullPath)
       debug('log.other.wrote_poster', { defaultValue: 'Wrote poster file://{poster}', poster: this.poster })
     }
@@ -81,9 +74,7 @@ export default class Other implements IOther {
       : ''
     this.video.title = `${isoDate ? isoDate + ': ' : ''}${this.title}`
     this.video.matched = true
-    this.video.status = JobStatus.WAITING
-    this.video.message = ''
-    this.video.fireChangeEvent()
+    this.video.showWaiting()
   }
 
   setTitle(newTitle: string) {

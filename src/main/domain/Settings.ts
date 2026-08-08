@@ -58,7 +58,7 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
     if (isValidExecutable(toolPathFromSources)) {
       return toolPathFromSources
     }
-    return Processes.findCommandSync(tool, tool)
+    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
   } else if (os.platform() === 'linux') {
     if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
       return `${process.env.SNAP}/usr/bin/${tool}`
@@ -67,9 +67,9 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
     if (isValidExecutable(toolPathFromSources)) {
       return toolPathFromSources
     }
-    return Processes.findCommandSync(tool, tool)
+    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
   } else {
-    return Processes.findCommandSync(tool, tool)
+    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
   }
 }
 
@@ -78,7 +78,7 @@ export const defaultSettings: Settings = {
   isAutoDeleteProcessedFilesEnabled: false,
   language: defaultLanguage,
   additionalTvSearchLanguages: ['en'],
-  tmpFilesPath: Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp'),
+  tmpFilesPath: Path.join(os.tmpdir(), 'svp-tmp'),
   defaultOutputPath: Path.join('.', 'Reworked'),
   outputRules: [],
   isAutoStartEnabled: false,
@@ -92,9 +92,9 @@ export const defaultSettings: Settings = {
   videoEnforceCodec: false,
   audioSizeReduction: 70,
   audioEnforceCodec: false,
-  mkvMergePath: getDefaultToolPath('mkvmerge'),
-  ffmpegPath: getDefaultToolPath('ffmpeg'),
-  ffprobePath: getDefaultToolPath('ffprobe')
+  mkvMergePath: 'mkvmerge',
+  ffmpegPath: 'ffmpeg',
+  ffprobePath: 'ffprobe'
 }
 function migrateOutputRuleCondition(condition: unknown): OutputRuleCondition {
   const c = condition as Record<string, unknown>
@@ -186,9 +186,10 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  currentSettings.mkvMergePath = defaultSettings.mkvMergePath
-  currentSettings.ffmpegPath = defaultSettings.ffmpegPath
-  currentSettings.ffprobePath = defaultSettings.ffprobePath
+  currentSettings.tmpFilesPath = Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp')
+  currentSettings.mkvMergePath = getDefaultToolPath('mkvmerge')
+  currentSettings.ffmpegPath = getDefaultToolPath('ffmpeg')
+  currentSettings.ffprobePath = getDefaultToolPath('ffprobe')
 }
 
 export function saveSettings(settings: Settings) {
