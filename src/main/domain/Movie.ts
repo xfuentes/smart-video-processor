@@ -166,11 +166,10 @@ export default class Movie implements IMovie {
       this.video.matched = true
       this.video.showWaiting()
     } catch (err) {
-      this.video.showError(
-        (err as Error).message,
-        'video.message.tmdb_error',
-        { defaultValue: '{error}', error: (err as Error).message }
-      )
+      this.video.showError('video.message.tmdb_error', {
+        defaultValue: '{error}',
+        error: (err as Error).message
+      })
     }
   }
 

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Fixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet.
+
 ## [1.8.5] - 2026-08-08
 
 ### Changed
