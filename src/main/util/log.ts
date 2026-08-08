@@ -36,7 +36,9 @@ function log(level: LogLevel, key: string, options?: Record<string, unknown>): v
   if (logs.length > MAX_LOGS) {
     logs.shift()
   }
-  BrowserWindow.getAllWindows().forEach((win) => win.webContents.send('main:logAdded', entry))
+  if (BrowserWindow) {
+    BrowserWindow.getAllWindows().forEach((win) => win.webContents.send('main:logAdded', entry))
+  }
 }
 
 export function debug(key: string, options?: Record<string, unknown>): void {

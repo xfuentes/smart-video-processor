@@ -32,6 +32,17 @@ export const NewsPanel = (): React.JSX.Element => {
         border: '1px solid #EBEBEB'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.5' })}</h4>
+      <ul>
+        {_('about.news.version_1_8_5.items', {
+          defaultValue:
+            'The Cancel toolbar action now also removes selected videos that are waiting in the queue and resets them to the ready-to-process state\nThe application log viewer is now available in a new "Logs" tab in the About dialog instead of the main toolbar\nVideo status messages (info, warning and error) are now also emitted to the event log\nCustom videos now display a warning asking the user to complete the required information before processing\nMulti-search now continues with the remaining selected videos if one search fails, preventing the multi-selection panels from staying disabled\nAuto-start mode is now disabled for videos that have been canceled or manually searched, preventing them from automatically processing again'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.4' })}</h4>
       <ul>
         {_('about.news.version_1_8_4.items', {

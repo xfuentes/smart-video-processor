@@ -224,6 +224,40 @@ export class Video implements IVideo {
     })
   }
 
+  showWarning(key: string, options: Record<string, unknown>): void {
+    this.status = JobStatus.WARNING
+    this.message = _(key, options)
+    warning(key, options)
+    this.progression.progress = -1
+    this.fireChangeEvent()
+  }
+
+  showError(message: string, logKey: string, logOptions: Record<string, unknown>): void {
+    this.status = JobStatus.ERROR
+    this.message = message
+    error(logKey, logOptions)
+    this.progression.progress = -1
+    this.fireChangeEvent()
+  }
+
+  showWaiting(key?: string, options?: Record<string, unknown>): void {
+    this.status = JobStatus.WAITING
+    this.message = key ? _(key, options ?? {}) : ''
+    if (key) {
+      info(key, options ?? {})
+    }
+    this.progression.progress = -1
+    this.fireChangeEvent()
+  }
+
+  showLoading(key: string, options: Record<string, unknown>): void {
+    this.status = JobStatus.LOADING
+    this.message = _(key, options)
+    info(key, options)
+    this.progression.progress = undefined
+    this.fireChangeEvent()
+  }
+
   attachJob<T>(job: Job<T>): Job<T> {
     if (this.job === undefined || this.job.finished) {
       this.job = job
@@ -327,19 +361,11 @@ export class Video implements IVideo {
       // Only manual mode enabled for custom videos
       await this.search()
     } else if (this.type === VideoType.OTHER) {
-      this.status = JobStatus.WARNING
-      this.message = _('video.message.complete_required_info', {
+      this.showWarning('video.message.complete_required_info', {
         defaultValue: 'Please complete the required information for this custom video.'
       })
-      warning('video.message.complete_required_info', {
-        defaultValue: 'Please complete the required information for this custom video.'
-      })
-      this.progression.progress = -1
     } else {
-      this.status = JobStatus.WAITING
-      this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
-      info('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
-      this.progression.progress = -1
+      this.showWaiting('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
     }
     this.loading = false
     this.fireChangeEvent()
@@ -427,16 +453,11 @@ export class Video implements IVideo {
       this.searching = false
       this.fireChangeEvent()
     } catch (err) {
-      this.status = JobStatus.WARNING
-      this.progression.progress = -1
-      const errorOptions = {
+      this.searching = false
+      this.showWarning('video.message.error_with_hint', {
         defaultValue: '{error}. Please check the information provided and try again.',
         error: (err as Error).message
-      }
-      this.message = _('video.message.error_with_hint', errorOptions)
-      error('video.message.error_with_hint', errorOptions)
-      this.searching = false
-      this.fireChangeEvent()
+      })
     }
     if (this.status !== JobStatus.WARNING) {
       await this.analyse()
@@ -490,22 +511,15 @@ export class Video implements IVideo {
       debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.changes) })
       debug('log.video.hints', { defaultValue: '### HINTS ###' })
       debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.hints) })
-      this.status = JobStatus.WAITING
-      this.progression.progress = -1
       if (this.hintMissing) {
-        this.message = _('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
-        info('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
+        this.showWaiting('video.message.waiting_for_hints', { defaultValue: 'Waiting for your hints.' })
         this.autoModePossible = false
       } else if (this.changes.length > 0) {
-        this.message = _('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
-        info('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
+        this.showWaiting('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
       } else if (this.encoderSettings.length > 0) {
-        this.message = _('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
-        info('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
+        this.showWaiting('video.message.ready_to_encode', { defaultValue: 'Ready to encode.' })
       } else {
-        this.status = JobStatus.WARNING
-        this.message = _('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
-        warning('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
+        this.showWarning('video.message.nothing_to_do', { defaultValue: 'Nothing to do.' })
       }
       if (!this.brainCalled) {
         this.selectAllTracks()
@@ -574,11 +588,10 @@ export class Video implements IVideo {
       try {
         this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
       } catch (e) {
-        this.message = (e as Error).message
-        error('video.message.ffmpeg_error', { defaultValue: '{error}', error: (e as Error).message })
-        this.status = JobStatus.ERROR
-        this.progression.progress = -1
-        this.fireChangeEvent()
+        this.showError((e as Error).message, 'video.message.ffmpeg_error', {
+          defaultValue: '{error}',
+          error: (e as Error).message
+        })
         return
       }
     }
@@ -789,7 +802,16 @@ export class Video implements IVideo {
   }
 
   abortJob() {
-    if (this.job) {
+    if (this.queued && (this.job === undefined || !this.job.started)) {
+      if (this.job) {
+        JobManager.getInstance().removeFromQueueAndAbort(this.job)
+        this.job = undefined
+      }
+      this.queued = false
+      this.autoModePossible = false
+      this.showWaiting('video.message.ready_to_process', { defaultValue: 'Ready to process.' })
+      info('log.video.removed_from_queue', { defaultValue: 'Removed from the queue.' })
+    } else if (this.job) {
       JobManager.getInstance().removeFromQueueAndAbort(this.job)
       this.autoModePossible = false
     }
@@ -998,12 +1020,8 @@ export class Video implements IVideo {
     if (this.keyFrames.length === 0) {
       const prevMessage = this.message
       const prevStatus = this.status
-      this.message = _('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
-      info('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
-      this.progression.progress = undefined
-      this.status = JobStatus.LOADING
       this.keyFrames = []
-      this.fireChangeEvent()
+      this.showLoading('video.message.extracting_key_frames', { defaultValue: 'Extracting key frames...' })
       this.keyFrames = await FFprobe.getInstance().retrieveKeyFramesInformation(this.sourcePath)
       this.message = prevMessage
       this.progression.progress = -1
