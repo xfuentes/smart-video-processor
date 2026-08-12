@@ -21,4 +21,5 @@ bruno/
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
-.devin/
+.devin/*
+
