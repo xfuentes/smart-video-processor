@@ -32,6 +32,17 @@ export const NewsPanel = (): React.JSX.Element => {
         border: '1px solid #EBEBEB'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.6' })}</h4>
+      <ul>
+        {_('about.news.version_1_8_6.items', {
+          defaultValue:
+            'Fixed a Fluent UI runtime error that could break the About and other dialogs\nUpdated the JDownloader integration to support both Linux and Windows and to launch Smart Video Processor in the background\nImproved dependency resolution for Fluent UI and build tooling'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.5' })}</h4>
       <ul>
         {_('about.news.version_1_8_5.items', {
