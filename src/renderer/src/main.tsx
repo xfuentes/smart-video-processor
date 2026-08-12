@@ -4,7 +4,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { App } from './App'
-import { initializeIcons } from '@uifabric/icons'
+import { initializeIcons } from '@fluentui/react'
 import i18n from './i18n'
 
 const version = window.api.main.version
