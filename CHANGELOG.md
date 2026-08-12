@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.6] - 2026-08-12
+
+### Fixed
+- Fixed a Fluent UI runtime error (`presenceFn is not a function`) by deduping renderer dependencies.
+- Fixed peer dependency warnings for Fluent UI, uifabric and electron-builder packages.
+
+### Changed
+- Updated the JDownloader EventScripter script to launch Smart Video Processor as a detached background process.
+- Added Windows support for the JDownloader EventScripter script.
+
 ## [1.8.5] - 2026-08-08
 
 ### Changed
