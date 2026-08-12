@@ -1,23 +1,6 @@
 /*
- * Smart Video Processor
- * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-/*
  * Smart Video Processor - JDownloader Plugin
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
  * Type : EventScripter script
  * Triggers : "A download stopped" and "Archive extracted"
  *
@@ -28,13 +11,13 @@
 
 // === CONFIGURATION ===
 // Update the path below to the Smart Video Processor executable on your machine.
-// Common locations:
-//   - Squirrel (installer) : C:\Users\<name>\AppData\Local\smart-video-processor\SmartVideoProcessor.exe
-//   - MSI / machine-wide    : C:\Program Files\Smart Video Processor\SmartVideoProcessor.exe
-// var SVP_PATH = "C:\\Program Files\\Smart Video Processor\\SmartVideoProcessor.exe";
-// Squirrel :var SVP_PATH = 'C:\\Users\\xfuentes\\AppData\\Local\\smart-video-processor\\app-1.7.1\\SmartVideoProcessor.exe'
-// MS Store :
-var SVP_PATH = 'svp.exe'
+// Set to true if JDownloader runs on Windows.
+var IS_WINDOWS = false
+// Squirrel :var SVP_PATH = 'C:\\Users\\<name>\\AppData\\Local\\smart-video-processor\\app-1.8.6\\SmartVideoProcessor.exe'
+// MS Store : var SVP_PATH = 'svp.exe'
+// Linux : make sure to use non-snap or flatpack versions of JDownloader,
+// or it won't be able to run smart-video-processor
+var SVP_PATH = '/snap/bin/smart-video-processor'
 
 // File extensions recognized as video files (must match Smart Video Processor)
 var VIDEO_EXTENSIONS = [
@@ -85,6 +68,26 @@ function getLinkFilePath(link) {
   return null
 }
 
+function escapeShellArg(arg) {
+  return "'" + String(arg).replace(/'/g, "'\\''") + "'"
+}
+
+function buildLaunchArgs(paths) {
+  if (IS_WINDOWS) {
+    var args = [SVP_PATH]
+    for (var i = 0; i < paths.length; i++) {
+      args.push(paths[i])
+    }
+    return args
+  }
+  var cmd = 'setsid nohup ' + escapeShellArg(SVP_PATH)
+  for (var i = 0; i < paths.length; i++) {
+    cmd += ' ' + escapeShellArg(paths[i])
+  }
+  cmd += ' </dev/null >/dev/null 2>&1 &'
+  return ['/bin/sh', '-c', cmd]
+}
+
 function launchSmartVideoProcessor(filePath) {
   if (!filePath || !hasVideoExtension(filePath)) {
     return
@@ -94,8 +97,7 @@ function launchSmartVideoProcessor(filePath) {
     function (exitCode, stdOut, errOut) {
       log('[SVP] Finished for ' + filePath + ' (code: ' + exitCode + ')')
     },
-    SVP_PATH,
-    filePath
+    buildLaunchArgs([filePath])
   )
 }
 
@@ -151,11 +153,9 @@ function launchSmartVideoProcessorForFiles(filePaths) {
     return
   }
   log('[SVP] Launching Smart Video Processor for ' + filePaths.length + ' file(s)')
-  // callAsync supports an array where the first element is the program
-  // and the remaining elements are command-line arguments.
   callAsync(function (exitCode, stdOut, errOut) {
     log('[SVP] Finished for ' + filePaths.length + ' file(s) (code: ' + exitCode + ')')
-  }, [SVP_PATH].concat(filePaths))
+  }, buildLaunchArgs(filePaths))
 }
 
 function processArchive(archive) {

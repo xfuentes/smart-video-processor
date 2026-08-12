@@ -25,7 +25,14 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src')
-      }
+      },
+      dedupe: [
+        'react',
+        'react-dom',
+        '@fluentui/react-components',
+        '@fluentui/react-motion',
+        '@fluentui/react-context-selector'
+      ]
     },
     plugins: [react()],
     build: {
