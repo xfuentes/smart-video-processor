@@ -3,7 +3,10 @@
   "applicationCategory": "PhotoAndVideo",
   "pricing": {
     "trialPeriod": "NoFreeTrial",
-    "marketSpecificPricings": { "LB": "NotAvailable", "EH": "NotAvailable" },
+    "marketSpecificPricings": {
+      "LB": "NotAvailable",
+      "EH": "NotAvailable"
+    },
     "sales": [],
     "priceId": "Free",
     "isAdvancedPricingModel": true
@@ -15,7 +18,12 @@
     "en-us": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["video", "processing", "encoding", "organizing"],
+        "keywords": [
+          "video",
+          "processing",
+          "encoding",
+          "organizing"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -31,18 +39,68 @@
           "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
           "Batch Processing: Handles multiple files simultaneously with queue management."
         ],
-        "releaseNotes": "- Added a main toolbar toggle to switch off the computer when all active processing is complete, with a 3-minute countdown cancellation dialog.\r\n- Added a setting to automatically delete successfully processed source files when clearing the list or quitting the application.\r\n- Added Arabic (ar-SA) to the Microsoft Store listing.\r\n- Declared all 23 supported languages in the Windows Store package manifest.\r\n- Encoding job progress messages in the job list are now translated based on the selected language.\r\n- TV shows using absolute episode numbering are no longer placed in a season subfolder.\r\n- Pinned taskbar icons no longer duplicate when launching the Microsoft Store version from the Start menu.",
+        "releaseNotes": "- Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application.\n\n- Fixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317981", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318091", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318067", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318034", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318179", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318150", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317898", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317982", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318068", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318151", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400317981",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318091",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318067",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318034",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400318179",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318150",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317898",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400317982",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318068",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318151",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -55,7 +113,12 @@
     "fr-fr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["vidéo", "traitement", "encodage", "organisation"],
+        "keywords": [
+          "vidéo",
+          "traitement",
+          "encodage",
+          "organisation"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -71,18 +134,68 @@
           "Encodage vidéo (H.264 / H.265) : convertit les fichiers multimédias en formats optimisés grâce à des préréglages prédéfinis.",
           "Traitement par lots : permet de traiter plusieurs fichiers simultanément grâce à la gestion des files d'attente."
         ],
-        "releaseNotes": "- Ajout d'un bouton dans la barre d'outils principale permettant d'éteindre l'ordinateur une fois tous les traitements en cours terminés, avec une boîte de dialogue d'annulation après un compte à rebours de 3 minutes.\n\n- Ajout d'une option permettant de supprimer automatiquement les fichiers sources traités avec succès lors de l'effacement de la liste ou de la fermeture de l'application.\n\n- Ajout de l'arabe (ar-SA) à la liste des applications du Microsoft Store.\n\n- Déclaration des 23 langues prises en charge dans le manifeste du package du Microsoft Store.\n\n- Les messages de progression des tâches d'encodage dans la liste des tâches sont désormais traduits en fonction de la langue sélectionnée.\n\n- Les séries TV utilisant une numérotation absolue des épisodes ne sont plus placées dans un sous-dossier de saison.\n\n- Les icônes épinglées à la barre des tâches ne se dupliquent plus lors du lancement de la version du Microsoft Store depuis le menu Démarrer.",
+        "releaseNotes": "- Ajout d'une boîte de dialogue de progression du nettoyage affichant la suppression des fichiers temporaires lors de la fermeture de l'application.\n\n- Correction des sauts de ligne échappés dans la liste des nouveautés de la version 1.8.5 : chaque élément s'affiche désormais comme une puce distincte.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318035", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317953", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318092", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318093", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318094", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318069", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318095", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318009", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317954", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317983", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318035",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400317953",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318092",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318093",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400318094",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318069",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318095",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318009",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317954",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400317983",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -95,7 +208,12 @@
     "de-de": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["Video", "Verarbeitung", "Kodierung", "Organisation"],
+        "keywords": [
+          "Video",
+          "Verarbeitung",
+          "Kodierung",
+          "Organisation"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -111,18 +229,68 @@
           "Videokodierung (H.264 / H.265): Konvertiert Medien mithilfe vordefinierter Voreinstellungen in effiziente Formate.",
           "Stapelverarbeitung: Verarbeitet mehrere Dateien gleichzeitig mithilfe einer Warteschlangenverwaltung."
         ],
-        "releaseNotes": "- Ein Schalter in der Hauptsymbolleiste wurde hinzugefügt, mit dem der Computer nach Abschluss aller aktiven Prozesse heruntergefahren werden kann. Ein Abbruchdialog mit 3-Minuten-Countdown wird angezeigt.\n\n- Eine Einstellung zum automatischen Löschen erfolgreich verarbeiteter Quelldateien beim Leeren der Liste oder Beenden der Anwendung wurde hinzugefügt.\n\n- Arabisch (ar-SA) wurde dem Microsoft Store-Eintrag hinzugefügt.\n\n- Alle 23 unterstützten Sprachen wurden im Windows Store-Paketmanifest deklariert.\n\n- Fortschrittsmeldungen für Codierungsaufträge in der Auftragsliste werden nun basierend auf der ausgewählten Sprache übersetzt.\n\n- Fernsehsendungen mit absoluter Episodennummerierung werden nicht mehr in einem Staffelunterordner abgelegt.\n\n- Angeheftete Taskleistensymbole werden beim Starten der Microsoft Store-Version über das Startmenü nicht mehr dupliziert.",
+        "releaseNotes": "– Ein Dialogfeld zur Anzeige des Löschfortschritts temporärer Dateien beim Schließen der Anwendung wurde hinzugefügt.\n\n– Die fehlerhafte Darstellung von Zeilenumbrüchen in der Liste „Neuerungen“ in Version 1.8.5 wurde korrigiert, sodass jeder Eintrag als separater Punkt angezeigt wird.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318096", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318070", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317926", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317899", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317900", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318178", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317984", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318121", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317927", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317901", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318096",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318070",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400317926",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400317899",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317900",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318178",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317984",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318121",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317927",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400317901",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -135,7 +303,12 @@
     "it-it": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["video", "elaborazione", "codifica", "organizzazione"],
+        "keywords": [
+          "video",
+          "elaborazione",
+          "codifica",
+          "organizzazione"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -151,18 +324,68 @@
           "Codifica video (H.264 / H.265): converte i file multimediali in formati efficienti utilizzando impostazioni predefinite.",
           "Elaborazione in batch: gestisce più file contemporaneamente grazie alla gestione delle code."
         ],
-        "releaseNotes": "- Aggiunto un interruttore nella barra degli strumenti principale per spegnere il computer al termine di tutte le elaborazioni attive, con una finestra di dialogo di annullamento con conto alla rovescia di 3 minuti.\n\n- Aggiunta un'impostazione per eliminare automaticamente i file sorgente elaborati correttamente quando si cancella l'elenco o si chiude l'applicazione.\n\n- Aggiunta la lingua araba (ar-SA) alla scheda del Microsoft Store.\n\nDichiarate tutte le 23 lingue supportate nel manifesto del pacchetto di Windows Store.\n\nI messaggi di avanzamento dei processi di codifica nell'elenco dei processi vengono ora tradotti in base alla lingua selezionata.\n\nLe serie TV con numerazione assoluta degli episodi non vengono più inserite in una sottocartella di stagione.\n\nLe icone bloccate nella barra delle applicazioni non vengono più duplicate all'avvio della versione del Microsoft Store dal menu Start.",
+        "releaseNotes": "- Aggiunta una finestra di dialogo che mostra l'avanzamento della pulizia dei file temporanei alla chiusura dell'applicazione.\n\n- Corretto il problema dei caratteri di fine riga con escape nell'elenco \"Novità\" per la versione 1.8.5, in modo che ogni elemento venga visualizzato come un punto elenco separato.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318097", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318098", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318071", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317955", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318010", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317985", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317928", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317956", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317986", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318152", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318097",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318098",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318071",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400317955",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400318010",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400317985",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317928",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400317956",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317986",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318152",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -175,7 +398,12 @@
     "es-es": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["vídeo", "procesamiento", "codificación", "organización"],
+        "keywords": [
+          "vídeo",
+          "procesamiento",
+          "codificación",
+          "organización"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -191,18 +419,68 @@
           "Codificación de vídeo (H.264 / H.265): Convierte archivos multimedia a formatos eficientes mediante ajustes predefinidos.",
           "Procesamiento por lotes: gestiona varios archivos a la vez mediante la gestión de colas."
         ],
-        "releaseNotes": "- Se agregó un interruptor en la barra de herramientas principal para apagar el equipo cuando finalicen todos los procesos activos, con un cuadro de diálogo de cancelación con cuenta regresiva de 3 minutos.\n\n- Se agregó una configuración para eliminar automáticamente los archivos de origen procesados correctamente al borrar la lista o cerrar la aplicación.\n\n- Se agregó el árabe (ar-SA) a la ficha de Microsoft Store.\n\n- Se declararon los 23 idiomas compatibles en el manifiesto del paquete de Windows Store.\n\n- Los mensajes de progreso de codificación en la lista de tareas ahora se traducen según el idioma seleccionado.\n\n- Las series de televisión que utilizan numeración absoluta de episodios ya no se colocan en una subcarpeta de temporada.\n\n- Los iconos anclados a la barra de tareas ya no se duplican al iniciar la versión de Microsoft Store desde el menú Inicio.",
+        "releaseNotes": "- Se agregó un cuadro de diálogo de progreso de limpieza que muestra el progreso de la eliminación de archivos temporales al cerrar la aplicación.\n\n- Se corrigió el problema de los saltos de línea escapados en la lista de Novedades de la versión 1.8.5 para que cada elemento se muestre como una viñeta independiente.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318180", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318104", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318020", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400317963", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317936", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318105", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318078", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318106", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318126", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318127", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318180",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318104",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318020",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400317963",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317936",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318105",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318078",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318106",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318126",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318127",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -215,7 +493,12 @@
     "pt-br": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["vídeo", "processamento", "codificação", "organização"],
+        "keywords": [
+          "vídeo",
+          "processamento",
+          "codificação",
+          "organização"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -231,18 +514,68 @@
           "Codificação de vídeo (H.264 / H.265): Converte arquivos de mídia em formatos eficientes com predefinições.",
           "Processamento em lote: processa vários arquivos simultaneamente com gerenciamento de fila."
         ],
-        "releaseNotes": "- Adicionada uma opção na barra de ferramentas principal para desligar o computador quando todo o processamento ativo for concluído, com uma caixa de diálogo de cancelamento com contagem regressiva de 3 minutos.\n\n- Adicionada uma configuração para excluir automaticamente os arquivos de origem processados com sucesso ao limpar a lista ou fechar o aplicativo.\n\n- Adicionado o idioma árabe (ar-SA) à lista da Microsoft Store.\n\n- Declaradas todas as 23 línguas suportadas no manifesto do pacote da Windows Store.\n\n- As mensagens de progresso da codificação na lista de tarefas agora são traduzidas com base no idioma selecionado.\n\n- Séries de TV que usam numeração absoluta de episódios não são mais colocadas em uma subpasta de temporada.\n\n- Os ícones fixados na barra de tarefas não são mais duplicados ao iniciar a versão da Microsoft Store pelo menu Iniciar.",
+        "releaseNotes": "- Adicionada uma caixa de diálogo de progresso de limpeza que mostra o andamento da exclusão de arquivos temporários ao fechar o aplicativo.\n\n- Corrigidas as quebras de linha escapadas na lista \"Novidades\" da versão 1.8.5 para que cada item seja exibido como um marcador separado.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318017", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318124", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318077", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318018", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317934", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318125", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318043", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318157", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317935", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318019", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318017",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318124",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318077",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318018",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317934",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318125",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318043",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318157",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317935",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318019",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -255,7 +588,12 @@
     "nl-nl": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["video", "verwerking", "codering", "organiseren"],
+        "keywords": [
+          "video",
+          "verwerking",
+          "codering",
+          "organiseren"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -271,18 +609,68 @@
           "Videocodering (H.264 / H.265): Converteert mediabestanden naar efficiënte formaten met vooraf gedefinieerde instellingen.",
           "Batchverwerking: Verwerkt meerdere bestanden tegelijkertijd met behulp van wachtrijbeheer."
         ],
-        "releaseNotes": "- Er is een schakelaar in de hoofdwerkbalk toegevoegd om de computer uit te schakelen wanneer alle actieve processen zijn voltooid, met een dialoogvenster voor annulering na 3 minuten.\n\n- Er is een instelling toegevoegd om succesvol verwerkte bronbestanden automatisch te verwijderen bij het wissen van de lijst of het afsluiten van de toepassing.\n\n- Arabisch (ar-SA) is toegevoegd aan de Microsoft Store-vermelding.\n\n- Alle 23 ondersteunde talen zijn opgenomen in het manifest van het Windows Store-pakket.\n\n- Berichten over de voortgang van codeertaken in de takenlijst worden nu vertaald op basis van de geselecteerde taal.\n\n- Tv-series met absolute afleveringsnummering worden niet langer in een submap van een seizoen geplaatst.\n\n- Vastgezette taakbalkpictogrammen worden niet langer gedupliceerd wanneer de Microsoft Store-versie vanuit het Startmenu wordt gestart.",
+        "releaseNotes": "- Er is een dialoogvenster toegevoegd dat de voortgang van het verwijderen van tijdelijke bestanden weergeeft bij het afsluiten van de applicatie.\n\n- De fout met de ontsnapte regeleinden in de lijst 'Wat is nieuw' voor versie 1.8.5 is verholpen, zodat elk item nu als een apart opsommingsteken wordt weergegeven.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317960", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317933", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317961", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318076", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318042", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318156", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317988", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318016", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318103", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317962", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400317960",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400317933",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400317961",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318076",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400318042",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318156",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317988",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318016",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318103",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400317962",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -295,7 +683,12 @@
     "zh-cn": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["视频", "处理", "编码", "组织"],
+        "keywords": [
+          "视频",
+          "处理",
+          "编码",
+          "组织"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -311,18 +704,68 @@
           "视频编码（H.264 / H.265）：利用预设方案将媒体文件转换为高效格式。",
           "批处理：通过队列管理同时处理多个文件。"
         ],
-        "releaseNotes": "- 新增主工具栏开关，用于在所有活动处理完成后关闭计算机，并带有 3 分钟倒计时取消对话框。\n\n- 新增设置，可在清除列表或退出应用程序时自动删除已成功处理的源文件。\n\n- 在 Microsoft Store 列表中添加了阿拉伯语 (ar-SA)。\n\n- 在 Windows 应用商店程序包清单中声明了所有 23 种受支持的语言。\n\n- 作业列表中编码的作业进度消息现在会根据所选语言进行翻译。\n\n- 使用绝对剧集编号的电视剧不再放置在季子文件夹中。\n\n- 从“开始”菜单启动 Microsoft Store 版本时，固定的任务栏图标不再重复显示。",
+        "releaseNotes": "- 新增清理进度对话框，在关闭应用程序时显示临时文件的删除进度。\n\n- 修复了 1.8.5 版本中“新增功能”列表中转义换行符的问题，现在每个项目都显示为单独的项目符号。",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318013", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318153", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318154", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318014", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317908", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318209", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318155", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318102", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318015", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318075", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318013",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318153",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318154",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318014",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317908",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318209",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318155",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318102",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318015",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318075",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -335,7 +778,12 @@
     "ja-jp": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["動画", "処理", "エンコーディング", "整理"],
+        "keywords": [
+          "動画",
+          "処理",
+          "エンコーディング",
+          "整理"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -351,18 +799,68 @@
           "動画エンコード（H.264 / H.265）：あらかじめ定義されたプリセットを使用して、メディアを効率的な形式に変換します。",
           "バッチ処理：キュー管理機能により、複数のファイルを同時に処理します。"
         ],
-        "releaseNotes": "- メインツールバーに、すべての処理が完了した際にコンピューターの電源を切るトグルボタンを追加しました。キャンセル時には3分間のカウントダウンダイアログが表示されます。\n\n- リストをクリアするかアプリケーションを終了する際に、処理済みのソースファイルを自動的に削除する設定を追加しました。\n\n- Microsoft Storeの製品情報にアラビア語（ar-SA）を追加しました。\n\n- Windows Storeパッケージのマニフェストに、サポートされている23言語すべてを記載しました。\n\n- ジョブリストのジョブ進行状況メッセージは、選択された言語に基づいて翻訳されるようになりました。\n\n- 絶対番号でエピソード番号が付けられているテレビ番組は、シーズンサブフォルダーに配置されなくなりました。\n\n- スタートメニューからMicrosoft Store版を起動した際に、タスクバーにピン留めされたアイコンが重複して表示されなくなりました。",
+        "releaseNotes": "アプリケーション終了時に一時ファイルの削除状況を表示するクリーンアップ進行状況ダイアログを追加しました。\n\nバージョン1.8.5の新機能一覧における改行コードのエスケープ処理を修正し、各項目が個別の箇条書きとして表示されるようにしました。",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317932", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318038", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318101", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318039", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317907", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317959", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318040", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318074", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318041", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318123", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400317932",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318038",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318101",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318039",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317907",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400317959",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318040",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318074",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318041",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318123",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -375,7 +873,12 @@
     "ko-kr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["동영상", "처리", "인코딩", "정리"],
+        "keywords": [
+          "동영상",
+          "처리",
+          "인코딩",
+          "정리"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -391,18 +894,68 @@
           "비디오 인코딩 (H.264 / H.265): 미리 정의된 프리셋을 사용하여 미디어를 효율적인 형식으로 변환합니다.",
           "일괄 처리: 대기열 관리 기능을 통해 여러 파일을 동시에 처리합니다."
         ],
-        "releaseNotes": "- 모든 활성 처리가 완료되면 3분 카운트다운 취소 대화 상자가 표시되는 컴퓨터 전원 끄기 토글 기능을 기본 툴바에 추가했습니다.\n\n- 목록을 지우거나 애플리케이션을 종료할 때 처리가 완료된 소스 파일을 자동으로 삭제하는 설정을 추가했습니다.\n\n- Microsoft Store 목록에 아랍어(ar-SA)를 추가했습니다.\n\n- Windows Store 패키지 매니페스트에 지원되는 23개 언어를 모두 선언했습니다.\n\n- 작업 목록의 인코딩 작업 진행 메시지가 이제 선택한 언어에 따라 번역됩니다.\n\n- 절대 번호 매기기를 사용하는 TV 프로그램은 더 이상 시즌 하위 폴더에 배치되지 않습니다.\n\n- 시작 메뉴에서 Microsoft Store 버전을 실행할 때 작업 표시줄에 고정된 아이콘이 더 이상 중복되지 않습니다.",
+        "releaseNotes": "- 애플리케이션 종료 시 임시 파일 삭제 진행 상황을 보여주는 정리 진행 대화 상자를 추가했습니다.\n\n- 버전 1.8.5의 '새로운 기능' 목록에서 이스케이프 처리된 줄 바꿈이 수정되어 각 항목이 별도의 글머리 기호로 표시됩니다.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318122", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318036", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317904", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318073", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317905", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318037", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317930", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317958", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317906", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400317931", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318122",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318036",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400317904",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318073",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317905",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318037",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317930",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400317958",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317906",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400317931",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -415,7 +968,12 @@
     "ru-ru": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["видео", "обработка", "кодирование", "организация"],
+        "keywords": [
+          "видео",
+          "обработка",
+          "кодирование",
+          "организация"
+        ],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -431,18 +989,68 @@
           "Кодирование видео (H.264 / H.265): преобразует медиафайлы в оптимизированные форматы с помощью готовых настроек.",
           "Пакетная обработка: одновременная обработка нескольких файлов с управлением очередью."
         ],
-        "releaseNotes": "- Добавлен переключатель на главной панели инструментов для выключения компьютера после завершения всей активной обработки, с диалоговым окном отмены обратного отсчета в течение 3 минут.\n\n- Добавлена настройка для автоматического удаления успешно обработанных исходных файлов при очистке списка или выходе из приложения.\n\n- Добавлен арабский язык (ar-SA) в список Microsoft Store.\n\n- В манифесте пакета Windows Store указаны все 23 поддерживаемых языка.\n\n- Сообщения о ходе выполнения заданий в списке заданий теперь переводятся в зависимости от выбранного языка.\n\n- Телешоу, использующие абсолютную нумерацию эпизодов, больше не размещаются в подпапке сезона.\n\n- Закрепленные значки на панели задач больше не дублируются при запуске версии Microsoft Store из меню «Пуск».",
+        "releaseNotes": "- Добавлено диалоговое окно хода очистки, отображающее процесс удаления временных файлов при закрытии приложения.\n\n- Исправлены экранированные переносы строк в списке «Что нового» для версии 1.8.5, теперь каждый пункт отображается как отдельный маркер.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400318072", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400318011", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400317902", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318099", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400317987", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400318100", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400317903", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400317929", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400317957", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318012", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400318072",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400318011",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400317902",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318099",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400317987",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400318100",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400317903",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400317929",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400317957",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318012",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -455,7 +1063,12 @@
     "ar-sa": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
-        "keywords": ["فيديو", "يعالج", "التشفير", "تنظيم"],
+        "keywords": [
+          "فيديو",
+          "يعالج",
+          "التشفير",
+          "تنظيم"
+        ],
         "licenseTerms": "هذا البرنامج برنامج حر: يمكنك إعادة توزيعه و/أو تعديله\nبموجب شروط رخصة جنو العمومية العامة كما نشرتها\nمؤسسة البرمجيات الحرة، سواء الإصدار 3 من الرخصة، أو\n(حسب اختيارك) أي إصدار لاحق.\n\nيُوزع هذا البرنامج على أمل أن يكون مفيدًا،\nولكن بدون أي ضمان؛ حتى بدون الضمان الضمني لقابلية التسويق أو الملاءمة لغرض معين. راجع\nرخصة جنو العمومية العامة لمزيد من التفاصيل.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -471,18 +1084,68 @@
           "ترميز الفيديو (H.264 / H.265): يحول الوسائط إلى تنسيقات فعالة مع إعدادات مسبقة محددة مسبقًا.",
           "المعالجة الدفعية: تتعامل مع ملفات متعددة في وقت واحد مع إدارة قائمة الانتظار."
         ],
-        "releaseNotes": "- تمت إضافة زر تبديل في شريط الأدوات الرئيسي لإيقاف تشغيل الكمبيوتر عند اكتمال جميع عمليات المعالجة النشطة، مع مربع حوار إلغاء العد التنازلي لمدة 3 دقائق.\n\n- تمت إضافة إعداد لحذف ملفات المصدر التي تمت معالجتها بنجاح تلقائيًا عند مسح القائمة أو إغلاق التطبيق.\n\n- تمت إضافة اللغة العربية (ar-SA) إلى قائمة متجر Microsoft.\n\n- تم الإعلان عن جميع اللغات الـ 23 المدعومة في بيان حزمة متجر Windows.\n\n- يتم الآن ترجمة رسائل تقدم عملية التشفير في قائمة المهام بناءً على اللغة المختارة.\n\n- لم تعد المسلسلات التلفزيونية التي تستخدم ترقيم الحلقات المطلق تُوضع في مجلد فرعي خاص بالموسم.\n\n- لم تعد أيقونات شريط المهام المثبتة تتكرر عند تشغيل إصدار متجر Microsoft من قائمة ابدأ.",
+        "releaseNotes": "- تمت إضافة نافذة حوار لعرض تقدم عملية التنظيف، تُظهر تقدم حذف الملفات المؤقتة عند إغلاق التطبيق.\n\n- تم إصلاح مشكلة ظهور أسطر جديدة غير مفهومة في قائمة \"ما الجديد\" للإصدار 1.8.5، بحيث يظهر كل عنصر كنقطة منفصلة.",
         "images": [
-          { "fileName": "01-Settings.png", "fileStatus": "Uploaded", "id": "400317937", "imageType": "Screenshot" },
-          { "fileName": "02-VideoList.png", "fileStatus": "Uploaded", "id": "400317964", "imageType": "Screenshot" },
-          { "fileName": "03-Movie.png", "fileStatus": "Uploaded", "id": "400318044", "imageType": "Screenshot" },
-          { "fileName": "04-TVShow.png", "fileStatus": "Uploaded", "id": "400318079", "imageType": "Screenshot" },
-          { "fileName": "05-Tracks.png", "fileStatus": "Uploaded", "id": "400318107", "imageType": "Screenshot" },
-          { "fileName": "06-Hints.png", "fileStatus": "Uploaded", "id": "400317965", "imageType": "Screenshot" },
-          { "fileName": "07-Properties.png", "fileStatus": "Uploaded", "id": "400318045", "imageType": "Screenshot" },
-          { "fileName": "08-Processing.png", "fileStatus": "Uploaded", "id": "400318021", "imageType": "Screenshot" },
-          { "fileName": "09-Encoding.png", "fileStatus": "Uploaded", "id": "400318181", "imageType": "Screenshot" },
-          { "fileName": "10-Waiting.png", "fileStatus": "Uploaded", "id": "400318108", "imageType": "Screenshot" }
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "Uploaded",
+            "id": "400317937",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "Uploaded",
+            "id": "400317964",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "Uploaded",
+            "id": "400318044",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "Uploaded",
+            "id": "400318079",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "Uploaded",
+            "id": "400318107",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "Uploaded",
+            "id": "400317965",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "Uploaded",
+            "id": "400318045",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "Uploaded",
+            "id": "400318021",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "Uploaded",
+            "id": "400318181",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "Uploaded",
+            "id": "400318108",
+            "imageType": "Screenshot"
+          }
         ],
         "recommendedHardware": [],
         "minimumHardware": [],
@@ -491,9 +1154,947 @@
         "devStudio": "Xavier Fuentes"
       },
       "platformOverrides": {}
+    },
+    "cs-cz": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "zpracování",
+          "kódování",
+          "organizování"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Tento nástroj automaticky identifikuje vaše filmy a televizní pořady pomocí oblíbených databází a poté celý proces zefektivní: přejmenuje soubory pomocí konvencí kompatibilních s Plexem, připojí grafiku, opraví metadata (včetně jazyka a typu stopy), rozdělí nebo spojí mediální soubory a kóduje je do formátu H.264 nebo H.265 – vše na jednom místě.",
+        "features": [
+          "Automatické rozpoznávání médií: Identifikuje filmy a televizní pořady pomocí TheMovieDB nebo TVDB",
+          "Inteligentní přejmenování souborů: Přejmenuje soubory pomocí konvencí pojmenování kompatibilních s Plex/Kodi.",
+          "Oprava metadat: Načte a opraví název, rok, název epizody...",
+          "Správa zvukových stop a titulků: Detekuje a označuje jazyky zvukových stop/titulků; přejmenuje a změní pořadí stop.",
+          "Stažení plakátů a miniatur: Automaticky stahuje plakáty a miniatury.",
+          "Rozdělování a spojování mediálních souborů: Rozděluje velké soubory nebo spojuje více částí (např. DVD1/DVD2) do jedné.",
+          "Kódování videa (H.264 / H.265): Převádí média do efektivních formátů s předdefinovanými předvolbami.",
+          "Dávkové zpracování: Zpracovává více souborů současně se správou fronty."
+        ],
+        "releaseNotes": "- Přidán dialogový okénko průběhu čištění, které zobrazuje průběh mazání dočasných souborů při zavření aplikace.\n\n- Opraveny znaky nového řádku v seznamu Co je nového pro verzi 1.8.5, takže každá položka se zobrazuje jako samostatná odrážka.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatizované zpracování videa. Reorganizace, překódování, přidání metadat a obrázků.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "da-dk": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "forarbejdning",
+          "kodning",
+          "organisering"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Dette værktøj identificerer automatisk dine film og tv-serier ved hjælp af populære databaser og strømliner derefter hele processen: omdøb filer ved hjælp af Plex-venlige konventioner, vedhæft grafik, korriger metadata (inklusive sporsprog og -type), opdel eller sammenføj mediefiler og kod til H.264 eller H.265 – alt sammen på ét sted.",
+        "features": [
+          "Automatisk mediegenkendelse: Identificerer film og tv-serier ved hjælp af TheMovieDB eller TVDB",
+          "Smart filomdøbning: Omdøber filer ved hjælp af Plex/Kodi-venlige navngivningskonventioner",
+          "Metadatakorrektion: Henter og retter titel, år, episodenavn...",
+          "Administration af lyd- og undertekstspor: Registrerer og navngiver lyd-/undertekstsprog; omdøber og omarrangerer spor.",
+          "Download af plakater og miniaturebilleder: Downloader automatisk plakater og miniaturebilleder.",
+          "Opdeling og sammenføjning af mediefiler: Opdeler store filer eller sammenføjer flere dele (f.eks. DVD1/DVD2) til én.",
+          "Videokodning (H.264 / H.265): Konverterer medier til effektive formater med foruddefinerede forudindstillinger.",
+          "Batchbehandling: Håndterer flere filer samtidigt med køstyring."
+        ],
+        "releaseNotes": "- Tilføjet en dialogboks for oprydningsstatus, der viser sletningsstatus for midlertidige filer, når programmet lukkes.\n\n- Rettede escapede nye linjer i listen over nye elementer i version 1.8.5, så hvert element gengives som et separat punkt.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatiseret videobehandling. Reorganiser, omkod, tilføj metadata og billede.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "el-gr": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "βίντεο",
+          "επεξεργασία",
+          "κωδικοποίηση",
+          "οργανωτικός"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Αυτό το εργαλείο αναγνωρίζει αυτόματα τις ταινίες και τις τηλεοπτικές εκπομπές σας χρησιμοποιώντας δημοφιλείς βάσεις δεδομένων και, στη συνέχεια, βελτιστοποιεί ολόκληρη τη διαδικασία: μετονομάστε αρχεία χρησιμοποιώντας συμβάσεις φιλικές προς το Plex, επισυνάψτε γραφικά, διορθώστε μεταδεδομένα (συμπεριλαμβανομένης της γλώσσας και του τύπου κομματιού), διαιρέστε ή ενώστε αρχεία πολυμέσων και κωδικοποιήστε σε H.264 ή H.265—όλα σε ένα μέρος.",
+        "features": [
+          "Αυτόματη αναγνώριση πολυμέσων: Αναγνωρίζει ταινίες και τηλεοπτικές εκπομπές χρησιμοποιώντας το TheMovieDB ή το TVDB",
+          "Έξυπνη μετονομασία αρχείων: Μετονομάζει αρχεία χρησιμοποιώντας συμβάσεις ονοματοδοσίας φιλικές προς Plex/Kodi",
+          "Διόρθωση μεταδεδομένων: Ανακτά και διορθώνει τον τίτλο, το έτος, το όνομα του επεισοδίου...",
+          "Διαχείριση κομματιών ήχου και υποτίτλων: Εντοπίζει και επισημαίνει τις γλώσσες ήχου/υπότιτλων· μετονομάζει και αναδιατάσσει τα κομμάτια.",
+          "Λήψη αφίσας και μικρογραφιών: Λήψη αφισών και μικρογραφιών αυτόματα.",
+          "Διαχωρισμός και ένωση αρχείων πολυμέσων: Διαχωρίζει μεγάλα αρχεία ή ενώνει πολλά μέρη (π.χ., DVD1/DVD2) σε ένα.",
+          "Κωδικοποίηση βίντεο (H.264 / H.265): Μετατρέπει τα μέσα σε αποδοτικές μορφές με προκαθορισμένες προεπιλογές.",
+          "Μαζική επεξεργασία: Χειρίζεται πολλά αρχεία ταυτόχρονα με διαχείριση ουράς αναμονής."
+        ],
+        "releaseNotes": "- Προστέθηκε ένα παράθυρο διαλόγου προόδου καθαρισμού που εμφανίζει την πρόοδο διαγραφής προσωρινών αρχείων κατά το κλείσιμο της εφαρμογής.\n\n- Διορθώθηκαν οι νέες γραμμές διαφυγής στη λίστα \"Τι νέο υπάρχει\" για την έκδοση 1.8.5, ώστε κάθε στοιχείο να αποδίδεται ως ξεχωριστή κουκκίδα.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Αυτοματοποιημένη επεξεργασία βίντεο. Αναδιοργάνωση, επανακωδικοποίηση, προσθήκη μεταδεδομένων και εικόνας.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "fi-fi": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "käsittely",
+          "koodaus",
+          "järjestäminen"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Tämä työkalu tunnistaa elokuvasi ja TV-ohjelmasi automaattisesti suosittujen tietokantojen avulla ja virtaviivaistaa sitten koko prosessin: nimeä tiedostot uudelleen Plex-yhteensopivien käytäntöjen mukaisesti, liitä kuvitus, korjaa metatiedot (mukaan lukien kappaleen kieli ja tyyppi), jaa tai yhdistä mediatiedostot ja koodaat H.264- tai H.265-muotoon – kaikki yhdessä paikassa.",
+        "features": [
+          "Automaattinen median tunnistus: Tunnistaa elokuvat ja TV-ohjelmat TheMovieDB:n tai TVDB:n avulla",
+          "Älykäs tiedostojen uudelleennimeäminen: Tiedostojen uudelleennimeäminen Plex/Kodi-ystävällisten nimeämiskäytäntöjen mukaisesti",
+          "Metadatan korjaus: Noutaa ja korjaa otsikon, vuoden, jakson nimen...",
+          "Ääni- ja tekstitysraitojen hallinta: Tunnistaa ja nimeää ääni-/tekstityskielet; nimeää kappaleet uudelleen ja järjestää ne uudelleen.",
+          "Julisteen ja pikkukuvien lataus: Lataa julisteet ja pikkukuvat automaattisesti.",
+          "Mediatiedostojen jakaminen ja yhdistäminen: Jakaa suuria tiedostoja tai yhdistää useita osia (esim. DVD1/DVD2) yhdeksi.",
+          "Videokoodaus (H.264 / H.265): Muuntaa median tehokkaisiin formaatteihin ennalta määritettyjen esiasetusten avulla.",
+          "Eräkäsittely: Käsittelee useita tiedostoja samanaikaisesti jononhallinnan avulla."
+        ],
+        "releaseNotes": "- Lisätty siivouksen edistymisikkuna, joka näyttää väliaikaisten tiedostojen poiston edistymisen sovellusta suljettaessa.\n\n- Korjattu koodinvaihtomerkkien käyttö version 1.8.5 Uutta-luettelossa, joten jokainen kohta näkyy omana luettelomerkkinään.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatisoitu videonkäsittely. Järjestä uudelleen, koodaus uudelleen, lisää metatietoja ja kuvia.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "hu-hu": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "videó",
+          "feldolgozás",
+          "kódolás",
+          "szervezés"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Ez az eszköz automatikusan azonosítja a filmjeidet és tévéműsoraidat népszerű adatbázisok segítségével, majd leegyszerűsíti a teljes folyamatot: fájlokat nevezhet át Plex-barát konvenciók szerint, csatolhat grafikát, javíthatja a metaadatokat (beleértve a szám nyelvét és típusát), feloszthatja vagy összevonhatja a médiafájlokat, és kódolhatja H.264 vagy H.265 formátumban – mindezt egy helyen.",
+        "features": [
+          "Automatikus médiafelismerés: Filmeket és tévéműsorokat azonosít a TheMovieDB vagy a TVDB segítségével",
+          "Intelligens fájlátnevezés: Fájlok átnevezése Plex/Kodi-barát elnevezési konvenciók használatával",
+          "Metaadat-javítás: Lekéri és kijavítja a címet, az évet, az epizód címét...",
+          "Hang- és feliratsáv-kezelés: Észleli és címkézi a hang-/feliratnyelveket; átnevezi és átrendezi a sávokat.",
+          "Poszter és indexkép letöltése: Automatikusan letölti a posztereket és az indexképeket.",
+          "Médiafájlok felosztása és egyesítése: Nagy fájlokat oszt fel, vagy több részt (pl. DVD1/DVD2) egyesít egybe.",
+          "Videokódolás (H.264 / H.265): Előre beállított előbeállításokkal hatékony formátumokba konvertálja a médiát.",
+          "Kötegelt feldolgozás: Több fájl egyidejű kezelése a sorkezeléssel."
+        ],
+        "releaseNotes": "- Hozzáadott egy törlési folyamatjelző párbeszédpanelt, amely az alkalmazás bezárásakor mutatja az ideiglenes fájlok törlésének folyamatát.\n\n- Kijavítottuk az új sorok karaktereit az Újdonságok listában az 1.8.5-ös verzióban, így minden elem külön felsorolásjelként jelent meg.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatizált videófeldolgozás. Újraszervezés, újrakódolás, metaadatok és kép hozzáadása.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "id-id": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "pengolahan",
+          "pengkodean",
+          "mengorganisir"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Alat ini secara otomatis mengidentifikasi film dan acara TV Anda menggunakan basis data populer, kemudian menyederhanakan seluruh proses: mengganti nama file menggunakan konvensi yang kompatibel dengan Plex, melampirkan gambar sampul, mengoreksi metadata (termasuk bahasa dan jenis trek), memisahkan atau menggabungkan file media, dan melakukan encoding ke H.264 atau H.265—semuanya di satu tempat.",
+        "features": [
+          "Pengenalan Media Otomatis: Mengidentifikasi film dan acara TV menggunakan TheMovieDB atau TVDB",
+          "Penggantian Nama File Cerdas: Mengganti nama file menggunakan konvensi penamaan yang kompatibel dengan Plex/Kodi.",
+          "Koreksi Metadata: Mengambil dan mengoreksi judul, tahun, nama episode...",
+          "Manajemen Trek Audio & Subtitle: Mendeteksi dan memberi label bahasa audio/subtitle; mengganti nama dan menyusun ulang trek.",
+          "Unduh Poster & Gambar Miniatur: Secara otomatis mengunduh poster dan gambar miniatur.",
+          "Pemisahan & Penggabungan File Media: Memisahkan file berukuran besar atau menggabungkan beberapa bagian (misalnya, DVD1/DVD2) menjadi satu.",
+          "Pengkodean Video (H.264 / H.265): Mengonversi media ke format yang efisien dengan pengaturan preset yang telah ditentukan.",
+          "Pemrosesan Batch: Menangani banyak file secara bersamaan dengan manajemen antrian."
+        ],
+        "releaseNotes": "- Menambahkan dialog kemajuan pembersihan yang menampilkan kemajuan penghapusan file sementara saat menutup aplikasi.\n\n- Memperbaiki karakter escape untuk baris baru di daftar \"Yang Baru\" untuk versi 1.8.5 sehingga setiap item ditampilkan sebagai poin terpisah.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Pemrosesan video otomatis. Mengatur ulang, mengkode ulang, menambahkan metadata dan gambar.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "nb-no": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "behandling",
+          "koding",
+          "organisering"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Dette verktøyet identifiserer automatisk filmene og TV-programmene dine ved hjelp av populære databaser, og effektiviserer deretter hele prosessen: gi filer nytt navn ved hjelp av Plex-vennlige konvensjoner, legg ved omslag, korriger metadata (inkludert sporspråk og -type), del eller slå sammen mediefiler og kode til H.264 eller H.265 – alt på ett sted.",
+        "features": [
+          "Automatisk mediegjenkjenning: Identifiserer filmer og TV-serier ved hjelp av TheMovieDB eller TVDB",
+          "Smart filnavnendring: Gir filer nytt navn ved hjelp av Plex/Kodi-vennlige navnekonvensjoner",
+          "Metadatakorrigering: Henter og korrigerer tittel, år, episodenavn...",
+          "Administrasjon av lyd- og tekstspor: Oppdager og merker lyd-/tekstspråk; gir nytt navn til og endrer rekkefølgen på spor.",
+          "Nedlasting av plakater og miniatyrbilder: Laster ned plakater og miniatyrbilder automatisk.",
+          "Deling og sammenføyning av mediefiler: Deler store filer eller sammenføyer flere deler (f.eks. DVD1/DVD2) til én.",
+          "Videokoding (H.264 / H.265): Konverterer media til effektive formater med forhåndsdefinerte forhåndsinnstillinger.",
+          "Batchbehandling: Håndterer flere filer samtidig med køhåndtering."
+        ],
+        "releaseNotes": "– Lagt til en dialogboks for oppryddingsfremdrift som viser slettingsfremdriften for midlertidige filer når programmet lukkes.\n\n– Fikset escapede linjeskift i Nyheter-listen for versjon 1.8.5 slik at hvert element gjengis som et separat punkt.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatisert videobehandling. Reorganiser, rekod, legg til metadata og bilder.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "pl-pl": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "wideo",
+          "przetwarzanie",
+          "kodowanie",
+          "organizowanie"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "To narzędzie automatycznie identyfikuje Twoje filmy i programy telewizyjne przy użyciu popularnych baz danych, a następnie usprawnia cały proces: zmienia nazwy plików, stosując przyjazne dla Plex konwencje, dołącza grafikę, poprawia metadane (w tym język i typ ścieżki), dzieli lub łączy pliki multimedialne i koduje w standardzie H.264 lub H.265 — wszystko w jednym miejscu.",
+        "features": [
+          "Automatyczne rozpoznawanie multimediów: identyfikuje filmy i programy telewizyjne za pomocą TheMovieDB lub TVDB",
+          "Inteligentne zmienianie nazw plików: zmienia nazwy plików, korzystając z konwencji nazewnictwa zgodnych z Plex/Kodi",
+          "Korekta metadanych: Pobiera i poprawia tytuł, rok, nazwę odcinka...",
+          "Zarządzanie ścieżkami audio i napisami: wykrywanie i oznaczanie języków ścieżki audio/napisów, zmiana nazw i kolejności ścieżek.",
+          "Pobieranie plakatów i miniatur: Automatyczne pobieranie plakatów i miniatur.",
+          "Dzielenie i łączenie plików multimedialnych: Dzielenie dużych plików lub łączenie wielu części (np. DVD1/DVD2) w jedną.",
+          "Kodowanie wideo (H.264/H.265): Konwertuje multimedia do wydajnych formatów z wykorzystaniem predefiniowanych ustawień.",
+          "Przetwarzanie wsadowe: obsługuje wiele plików jednocześnie, wykorzystując zarządzanie kolejką."
+        ],
+        "releaseNotes": "- Dodano okno dialogowe postępu czyszczenia, które pokazuje postęp usuwania plików tymczasowych podczas zamykania aplikacji.\n\n- Naprawiono znaki nowej linii w liście „Co nowego” w wersji 1.8.5, dzięki czemu każdy element jest wyświetlany jako osobny punkt.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatyczne przetwarzanie wideo. Reorganizacja, ponowne kodowanie, dodawanie metadanych i obrazu.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "sv-se": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "bearbetning",
+          "kodning",
+          "organisering"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Det här verktyget identifierar automatiskt dina filmer och TV-program med hjälp av populära databaser och effektiviserar sedan hela processen: byt namn på filer med Plex-vänliga konventioner, bifoga omslag, korrigera metadata (inklusive spårspråk och typ), dela eller sammanfoga mediefiler och koda till H.264 eller H.265 – allt på ett ställe.",
+        "features": [
+          "Automatisk medieigenkänning: Identifierar filmer och TV-program med hjälp av TheMovieDB eller TVDB",
+          "Smart filnamnsbyte: Byter namn på filer med Plex/Kodi-vänliga namngivningskonventioner",
+          "Metadatakorrigering: Hämtar och korrigerar titel, år, avsnittsnamn...",
+          "Hantering av ljud- och textningsspår: Identifierar och etiketterar ljud-/textningsspråk; byter namn på och ändrar ordning på spår.",
+          "Nedladdning av affischer och miniatyrbilder: Laddar automatiskt ner affischer och miniatyrbilder.",
+          "Dela och sammanfoga mediefiler: Delar upp stora filer eller sammanfogar flera delar (t.ex. DVD1/DVD2) till en.",
+          "Videokodning (H.264/H.265): Konverterar media till effektiva format med fördefinierade förinställningar.",
+          "Batchbehandling: Hanterar flera filer samtidigt med köhantering."
+        ],
+        "releaseNotes": "- Lade till en dialogruta för rensningsförlopp som visar borttagningsförloppet för temporära filer när programmet stängs.\n\n- Åtgärdade radbrytningar i listan Nyheter för version 1.8.5 så att varje objekt visas som en separat punkt.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Automatiserad videobearbetning. Omorganisera, omkoda, lägga till metadata och bild.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "tr-tr": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "video",
+          "işleme",
+          "kodlama",
+          "organize etmek"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Bu araç, popüler veritabanlarını kullanarak filmlerinizi ve dizilerinizi otomatik olarak tanımlar ve ardından tüm süreci kolaylaştırır: Plex uyumlu kurallara göre dosyaları yeniden adlandırın, kapak resmini ekleyin, meta verileri düzeltin (parça dili ve türü dahil), medya dosyalarını bölün veya birleştirin ve H.264 veya H.265'e kodlayın - hepsi tek bir yerde.",
+        "features": [
+          "Otomatik Medya Tanıma: TheMovieDB veya TVDB kullanarak filmleri ve TV şovlarını tanımlar.",
+          "Akıllı Dosya Yeniden Adlandırma: Dosyaları Plex/Kodi uyumlu adlandırma kurallarına göre yeniden adlandırır.",
+          "Meta Veri Düzeltme: Başlık, yıl, bölüm adı gibi bilgileri alır ve düzeltir...",
+          "Ses ve Altyazı Parça Yönetimi: Ses/altyazı dillerini algılar ve etiketler; parçaları yeniden adlandırır ve sıralar.",
+          "Poster ve Küçük Resim İndirme: Posterleri ve küçük resimleri otomatik olarak indirir.",
+          "Medya Dosyası Bölme ve Birleştirme: Büyük dosyaları böler veya birden fazla parçayı (örneğin, DVD1/DVD2) tek bir dosyada birleştirir.",
+          "Video Kodlama (H.264 / H.265): Önceden tanımlanmış ayarlar kullanarak medyayı verimli formatlara dönüştürür.",
+          "Toplu İşleme: Sıra yönetimiyle aynı anda birden fazla dosyayı işler."
+        ],
+        "releaseNotes": "- Uygulamayı kapatırken geçici dosyaların silme ilerlemesini gösteren bir temizleme ilerleme iletişim kutusu eklendi.\n\n- 1.8.5 sürümündeki \"Yenilikler\" listesindeki yeni satırların kaçış karakterleriyle düzeltilmesi sağlandı, böylece her öğe ayrı bir madde işareti olarak görüntüleniyor.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Otomatik video işleme. Yeniden düzenleme, yeniden kodlama, meta veri ve görüntü ekleme.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
+    },
+    "uk-ua": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>",
+        "keywords": [
+          "відео",
+          "обробка",
+          "кодування",
+          "організуючий"
+        ],
+        "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "Цей інструмент автоматично ідентифікує ваші фільми та телешоу за допомогою популярних баз даних, а потім спрощує весь процес: перейменовує файли за допомогою зручних для Plex правил, додає обкладинки, виправляє метадані (включаючи мову та тип доріжки), розділяє або об'єднує медіафайли та кодує їх у формат H.264 або H.265 — все в одному місці.",
+        "features": [
+          "Автоматичне розпізнавання медіа: ідентифікує фільми та телешоу за допомогою TheMovieDB або TVDB",
+          "Розумне перейменування файлів: Перейменовує файли, використовуючи зручні для Plex/Kodi правила іменування.",
+          "Корекція метаданих: Отримує та виправляє назву, рік, назву епізоду...",
+          "Керування аудіодоріжками та субтитрами: Визначає та позначає мови аудіо/субтитрів; перейменовує та змінює порядок доріжок.",
+          "Завантаження постерів та мініатюр: Автоматичне завантаження постерів та мініатюр.",
+          "Розділення та об'єднання медіафайлів: Розділення великих файлів або об'єднання кількох частин (наприклад, DVD1/DVD2) в одну.",
+          "Кодування відео (H.264 / H.265): Конвертує медіафайли в ефективні формати з попередньо визначеними пресетами.",
+          "Пакетна обробка: Обробляє кілька файлів одночасно з керуванням чергою."
+        ],
+        "releaseNotes": "- Додано діалогове вікно процесу очищення, яке відображає процес видалення тимчасових файлів під час закриття програми.\n\n- Виправлено екрановані символи нового рядка у списку \"Що нового\" для версії 1.8.5, тепер кожен елемент відображатиметься як окремий маркований список.",
+        "images": [
+          {
+            "fileName": "01-Settings.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "02-VideoList.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "03-Movie.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "04-TVShow.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "05-Tracks.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "06-Hints.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "07-Properties.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "08-Processing.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "09-Encoding.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          },
+          {
+            "fileName": "10-Waiting.png",
+            "fileStatus": "PendingUpload",
+            "imageType": "Screenshot"
+          }
+        ],
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "Smart Video Processor",
+        "shortDescription": "Автоматизована обробка відео. Реорганізація, перекодування, додавання метаданих та зображень.",
+        "devStudio": "Xavier Fuentes"
+      },
+      "platformOverrides": {}
     }
   },
-  "hardwarePreferences": ["Keyboard", "Mouse"],
+  "hardwarePreferences": [
+    "Keyboard",
+    "Mouse"
+  ],
   "automaticBackupEnabled": true,
   "canInstallOnRemovableMedia": true,
   "isGameDvrEnabled": false,
@@ -564,7 +2165,9 @@
       ],
       "minimumDirectXVersion": "None",
       "minimumSystemRam": "None",
-      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
+      "targetDeviceFamilies": [
+        "Windows.Desktop min version 10.0.17763.0"
+      ]
     },
     {
       "fileName": "smart-video-processor-x64.appx",
@@ -606,13 +2209,15 @@
       ],
       "minimumDirectXVersion": "None",
       "minimumSystemRam": "None",
-      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
+      "targetDeviceFamilies": [
+        "Windows.Desktop min version 10.0.17763.0"
+      ]
     }
   ],
   "packageDeliveryOptions": {
     "packageRollout": {
       "isPackageRollout": false,
-      "packageRolloutPercentage": 0.0,
+      "packageRolloutPercentage": 0,
       "packageRolloutStatus": "PackageRolloutNotStarted",
       "fallbackSubmissionId": "1152921505700201551"
     },
