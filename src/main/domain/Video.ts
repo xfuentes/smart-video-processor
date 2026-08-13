@@ -47,6 +47,7 @@ import { debug, error, info, warning } from '../util/log'
 import path from 'node:path'
 import Path from 'node:path'
 import * as fs from 'node:fs'
+import { shell } from 'electron'
 import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
 import { JobStatus } from '../../common/@types/Job'
@@ -872,17 +873,17 @@ export class Video implements IVideo {
     return this.status === JobStatus.SUCCESS && this.processed
   }
 
-  deleteSourceFiles() {
+  async deleteSourceFiles() {
     for (const part of this.videoParts) {
-      part.deleteSourceFiles()
+      await part.deleteSourceFiles()
     }
     try {
       if (fs.existsSync(this.sourcePath)) {
-        Files.unlinkSync(this.sourcePath)
+        await shell.trashItem(this.sourcePath)
       }
     } catch (e) {
       error('log.video.delete_source_failed', {
-        defaultValue: 'Failed to delete source file {path}: {error}',
+        defaultValue: 'Failed to move source file {path} to trash: {error}',
         path: this.sourcePath,
         error: String(e)
       })

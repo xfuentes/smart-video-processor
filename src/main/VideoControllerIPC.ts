@@ -17,6 +17,7 @@
  */
 
 import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { closeCleanupDialog, showCleanupDialog, updateCleanupProgress } from './CleanupDialog'
 import { VideoController } from './controller/VideoController'
 import type { EpisodeOrder } from './domain/clients/TVDBClient'
 import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
@@ -139,8 +140,15 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:remove', (_event, videoUuidList: string[]) => {
     VideoController.getInstance().remove(videoUuidList)
   })
-  ipcMain.handle('video:clearCompleted', (_event) => {
-    VideoController.getInstance().clearCompleted()
+  ipcMain.handle('video:clearCompleted', async (_event) => {
+    showCleanupDialog()
+    try {
+      await VideoController.getInstance().clearCompleted((current, total) => {
+        updateCleanupProgress(current, total)
+      })
+    } finally {
+      closeCleanupDialog()
+    }
   })
   ipcMain.handle('video:takeSnapshots', (_event, uuid: string): Promise<string> => {
     return VideoController.getInstance().takeSnapshots(uuid)

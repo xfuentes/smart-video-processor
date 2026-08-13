@@ -27,6 +27,7 @@ import { JobManager } from './domain/jobs/JobManager'
 import { getUwpActivationFiles } from './uwpActivation'
 import { Settings } from '../common/@types/Settings'
 import { initVideoControllerIPC } from './VideoControllerIPC'
+import { closeCleanupDialog, showCleanupDialog, updateCleanupProgress } from './CleanupDialog'
 
 import electron_squirrel_startup from 'electron-squirrel-startup'
 import { FormValidation } from '../common/FormValidation'
@@ -373,6 +374,18 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('before-quit', (_event) => {
-  VideoController.getInstance().destroy()
+let isQuitting = false
+app.on('before-quit', async (event) => {
+  if (isQuitting) return
+  event.preventDefault()
+  isQuitting = true
+  showCleanupDialog()
+  try {
+    await VideoController.getInstance().destroy((current, total) => {
+      updateCleanupProgress(current, total)
+    })
+  } finally {
+    closeCleanupDialog()
+  }
+  app.quit()
 })
