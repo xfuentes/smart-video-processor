@@ -210,12 +210,15 @@ export class VideoController {
     this.fireListChangeEvent()
   }
 
-  clearCompleted() {
+  async clearCompleted(onProgress?: (current: number, total: number) => void) {
     const toRemove = this.videos.filter((v) => v.isProcessed())
-    if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
-      for (const video of toRemove) {
-        video.deleteSourceFiles()
+    const total = toRemove.length
+    for (let i = 0; i < toRemove.length; i++) {
+      const video = toRemove[i]
+      if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
+        await video.deleteSourceFiles()
       }
+      onProgress?.(i + 1, total)
     }
     const toRemoveUuid = toRemove.map((v) => v.uuid)
     this.remove(toRemoveUuid)
@@ -260,16 +263,15 @@ export class VideoController {
   /**
    * Called before quit to clean temp files
    */
-  destroy() {
-    if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
-      for (const video of this.videos) {
-        if (video.isProcessed()) {
-          video.deleteSourceFiles()
-        }
+  async destroy(onProgress?: (current: number, total: number) => void) {
+    const total = this.videos.length
+    for (let i = 0; i < this.videos.length; i++) {
+      const video = this.videos[i]
+      if (currentSettings.isAutoDeleteProcessedFilesEnabled && video.isProcessed()) {
+        await video.deleteSourceFiles()
       }
-    }
-    for (const video of this.videos) {
       video.destroy()
+      onProgress?.(i + 1, total)
     }
   }
 
