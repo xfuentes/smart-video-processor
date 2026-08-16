@@ -120,6 +120,7 @@
   "genre.romance": "Romantika",
   "genre.science_fiction": "Sci-fi",
   "genre.soap": "Szappan",
+  "genre.spectacle": "Látvány",
   "genre.sport": "Sport",
   "genre.suspense": "Feszültség",
   "genre.talk_show": "Talk-show",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Kódolás {speed}x sebességgel.",
   "job.encoding.first_pass_countdown": "Első menet befejezése {duration} idő alatt.",
   "job.encoding.countdown": "Befejezés {duration} idő alatt.",
+  "shutdown.dialog.cancel": "Mégsem",
   "main.toolbar.shutdown": "a számítógép kikapcsolásához",
   "main.toolbar.shutdown_tooltip": "Kapcsolja ki a számítógépet, amikor az összes feldolgozás befejeződött",
   "shutdown.dialog.title": "Kapcsold ki a számítógépet",
   "shutdown.dialog.message": "A számítógép {time} múlva leáll, hacsak nem kattint a Mégse gombra.",
-  "shutdown.dialog.cancel": "Mégsem",
   "about.news.version_1_8_4.items": "Hozzáadtunk egy leállító gombot a fő eszköztárhoz, hogy a számítógép kikapcsolhasson, amikor az összes feldolgozás befejeződött.\nHozzáadott egy lehetőséget a forrásfájlok törlésére a feldolgozás után\nHozzáadva az arab (ar-SA) nyelv a Microsoft Store listájához\nMind a 23 támogatott nyelvet deklarálta a Windows Áruház csomagban\nA kódolási feladat előrehaladási üzenetei mostantól a kiválasztott nyelv alapján kerülnek lefordításra.\nAz abszolút epizódszámozást használó tévéműsorok már nem kerülnek évad almappába.\nA rögzített tálcaikonok már nem ismétlődnek meg, amikor a Microsoft Store verzióját a Start menüből indítjuk el.",
   "log.error": "Hiba: {message}",
   "log.shutdown.failed": "Nem sikerült leállítani a számítógépet: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Lekerült a sorból.",
   "about.news.version_1_8_5.items": "A Mégse eszköztár művelet mostantól eltávolítja a sorban várakozó kijelölt videókat, és visszaállítja azokat a feldolgozásra kész állapotba.\nAz alkalmazásnapló-megjelenítő mostantól egy új „Naplók” lapon érhető el a Névjegy párbeszédpanelen a fő eszköztár helyett.\nA videó állapotüzenetei (információ, figyelmeztetés és hiba) mostantól az eseménynaplóba is megjelennek.\nAz egyéni videók mostantól figyelmeztetést jelenítenek meg, amely arra kéri a felhasználót, hogy a feldolgozás előtt adja meg a szükséges információkat.\nA többes keresés mostantól a fennmaradó kiválasztott videókkal folytatódik, ha az egyik keresés sikertelen, így megakadályozva, hogy a többes kijelölésű panelek letiltva maradjanak.\nAz automatikus indítás mód mostantól le van tiltva a megszakított vagy manuálisan keresett videók esetében, így megakadályozva, hogy automatikusan újra feldolgozzák őket.",
   "about.news.version_1_8_6.items": "Kijavítottunk egy Fluent UI futásidejű hibát, amely miatt a Névjegy és más párbeszédpanelek megszakadhattak.\nFrissítettük a JDownloader integrációját, hogy támogassa mind a Linux, mind a Windows rendszert, és elindítsa a Smart Video Processort a háttérben.\nTovábbfejlesztett függőségfeloldás a Fluent UI és a build eszközök esetében",
-  "about.news.version_1_8_7.items": "Hozzáadott egy törlési folyamat párbeszédpanelt, amely az alkalmazás bezárásakor mutatja az ideiglenes fájlok törlésének folyamatát.\nKijavítottuk az új sorok karaktereit az Újdonságok listában az 1.8.5-ös verzióban, így minden elem külön felsorolásjelként jelent meg."
+  "about.news.version_1_8_8.items": "Automatikus „Spectacle” műfajfelismerés hozzáadva élő előadásokhoz (egyszemélyes show, stand-up comedy, színházi darab, koncert, élő előadás stb.) a filmadatok TMDB-ből történő lekérésekor.\nA takarítási folyamat párbeszédpanel mostantól lefordított üzeneteket és a megfelelő alkalmazásikont használ.",
+  "about.news.version_1_8_7.items": "Hozzáadott egy törlési folyamat párbeszédpanelt, amely az alkalmazás bezárásakor mutatja az ideiglenes fájlok törlésének folyamatát.\nKijavítottuk az új sorok karaktereit az Újdonságok listában az 1.8.5-ös verzióban, így minden elem külön felsorolásjelként jelent meg.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

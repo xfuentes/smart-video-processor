@@ -32,11 +32,22 @@ export const NewsPanel = (): React.JSX.Element => {
         border: '1px solid #EBEBEB'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.8' })}</h4>
+      <ul>
+        {_('about.news.version_1_8_8.items', {
+          defaultValue:
+            'Added automatic "Spectacle" genre detection for live performances (one-man show, stand-up comedy, theater play, concert, live performance, etc.) when retrieving movie details from TMDB\nCleanup progress dialog now uses translated messages and the correct application icon'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.7' })}</h4>
       <ul>
         {_('about.news.version_1_8_7.items', {
           defaultValue:
-            'Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application\nFixed escaped newlines in the What\'s New list for version 1.8.5 so each item renders as a separate bullet'
+            "Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application\nFixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet"
         })
           .split('\n')
           .map((item, i) => (

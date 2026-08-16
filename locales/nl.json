@@ -120,6 +120,7 @@
   "genre.romance": "Romantiek",
   "genre.science_fiction": "Sciencefiction",
   "genre.soap": "Zeep",
+  "genre.spectacle": "Schouwspel",
   "genre.sport": "Sport",
   "genre.suspense": "Spanning",
   "genre.talk_show": "Talkshow",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Coderen met {speed}x.",
   "job.encoding.first_pass_countdown": "Eerste doorgang voltooid in {duration}.",
   "job.encoding.countdown": "Voltooiing binnen {duration}.",
+  "shutdown.dialog.cancel": "Annuleren",
   "main.toolbar.shutdown": "De computer uitschakelen",
   "main.toolbar.shutdown_tooltip": "Schakel de computer uit zodra alle verwerking is voltooid.",
   "shutdown.dialog.title": "Schakel de computer uit.",
   "shutdown.dialog.message": "De computer wordt over {time} uitgeschakeld, tenzij u op Annuleren klikt.",
-  "shutdown.dialog.cancel": "Annuleren",
   "about.news.version_1_8_4.items": "Er is een afsluitknop toegevoegd aan de hoofdwerkbalk om de computer uit te schakelen wanneer alle processen zijn voltooid.\nEr is een optie toegevoegd om bronbestanden te verwijderen nadat ze zijn verwerkt.\nArabisch (ar-SA) toegevoegd aan de Microsoft Store-lijst.\nAlle 23 ondersteunde talen zijn opgenomen in het Windows Store-pakket.\nDe voortgangsberichten van de coderingstaak worden nu vertaald op basis van de geselecteerde taal.\nTv-series die gebruikmaken van absolute afleveringsnummering worden niet langer in een submap voor seizoenen geplaatst.\nVastgepinde taakbalkpictogrammen worden niet langer gedupliceerd wanneer de Microsoft Store-versie vanuit het Startmenu wordt gestart.",
   "log.error": "Fout: {message}",
   "log.shutdown.failed": "Het afsluiten van de computer is mislukt: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Verwijderd uit de wachtrij.",
   "about.news.version_1_8_5.items": "De actie 'Annuleren' in de werkbalk verwijdert nu ook geselecteerde video's die in de wachtrij staan en zet ze terug naar de status 'gereed voor verwerking'. De toepassingslogboekviewer is nu beschikbaar in een nieuw tabblad 'Logboeken' in het dialoogvenster 'Over' in plaats van in de hoofdwerkbalk. Videostatusberichten (info, waarschuwing en fout) worden nu ook naar het gebeurtenislogboek geschreven. Aangepaste video's tonen nu een waarschuwing waarin de gebruiker wordt gevraagd de vereiste informatie in te vullen voordat ze worden verwerkt. Zoeken met meerdere video's gaat nu verder met de resterende geselecteerde video's als één zoekopdracht mislukt, waardoor de panelen voor meerdere selecties niet uitgeschakeld blijven. De automatische startmodus is nu uitgeschakeld voor video's die zijn geannuleerd of handmatig zijn doorzocht, waardoor ze niet automatisch opnieuw worden verwerkt.",
   "about.news.version_1_8_6.items": "Een runtimefout in Fluent UI die ervoor kon zorgen dat het 'Over'-venster en andere dialoogvensters niet meer werkten, is verholpen.\nDe JDownloader-integratie is bijgewerkt om zowel Linux als Windows te ondersteunen en Smart Video Processor op de achtergrond te starten.\nVerbeterde afhankelijkheidsresolutie voor Fluent UI en buildtools.",
-  "about.news.version_1_8_7.items": "Er is een dialoogvenster toegevoegd dat de voortgang van het verwijderen van tijdelijke bestanden weergeeft bij het sluiten van de applicatie.\nDe ontsnapte regeleinden in de lijst 'Wat is nieuw' voor versie 1.8.5 zijn gecorrigeerd, zodat elk item nu als een afzonderlijk opsommingsteken wordt weergegeven."
+  "about.news.version_1_8_8.items": "Automatische detectie van het genre \"Spectakel\" toegevoegd voor live-optredens (solovoorstelling, stand-upcomedy, theaterstuk, concert, live-optreden, enz.) bij het ophalen van filmgegevens van TMDB.\nHet dialoogvenster voor de voortgang van het opruimen gebruikt nu vertaalde berichten en het juiste toepassingspictogram.",
+  "about.news.version_1_8_7.items": "Er is een dialoogvenster toegevoegd dat de voortgang van het verwijderen van tijdelijke bestanden weergeeft bij het sluiten van de applicatie.\nDe ontsnapte regeleinden in de lijst 'Wat is nieuw' voor versie 1.8.5 zijn gecorrigeerd, zodat elk item nu als een afzonderlijk opsommingsteken wordt weergegeven.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

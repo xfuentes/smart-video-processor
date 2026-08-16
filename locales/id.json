@@ -120,6 +120,7 @@
   "genre.romance": "Romansa",
   "genre.science_fiction": "Fiksi Ilmiah",
   "genre.soap": "Sabun",
+  "genre.spectacle": "Tontonan",
   "genre.sport": "Olahraga",
   "genre.suspense": "Ketegangan",
   "genre.talk_show": "Acara Bincang-bincang",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Pengkodean pada {speed}x.",
   "job.encoding.first_pass_countdown": "Penyelesaian tahap pertama dalam {duration}.",
   "job.encoding.countdown": "Penyelesaian dalam {duration}.",
+  "shutdown.dialog.cancel": "Membatalkan",
   "main.toolbar.shutdown": "Untuk mematikan komputer",
   "main.toolbar.shutdown_tooltip": "Matikan komputer setelah semua proses selesai.",
   "shutdown.dialog.title": "Matikan komputer",
   "shutdown.dialog.message": "Komputer akan mati dalam {time} kecuali Anda mengklik Batal.",
-  "shutdown.dialog.cancel": "Membatalkan",
   "about.news.version_1_8_4.items": "Menambahkan tombol matikan ke bilah alat utama untuk mematikan komputer setelah semua pemrosesan selesai.\nMenambahkan opsi untuk menghapus file sumber setelah diproses.\nBahasa Arab (ar-SA) telah ditambahkan ke daftar Microsoft Store.\nSemua 23 bahasa yang didukung telah diumumkan dalam paket Windows Store.\nPesan kemajuan pekerjaan pengkodean kini diterjemahkan berdasarkan bahasa yang dipilih.\nAcara TV yang menggunakan penomoran episode absolut tidak lagi ditempatkan dalam subfolder musim.\nIkon yang disematkan di taskbar tidak lagi berduplikasi saat meluncurkan versi Microsoft Store dari menu Mulai.",
   "log.error": "Kesalahan: {message}",
   "log.shutdown.failed": "Gagal mematikan komputer: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Dikeluarkan dari antrian.",
   "about.news.version_1_8_5.items": "Tindakan Batalkan pada toolbar sekarang juga menghapus video terpilih yang sedang menunggu dalam antrean dan mengatur ulang statusnya menjadi siap diproses.\nPenampil log aplikasi sekarang tersedia di tab \"Log\" baru di dialog Tentang, bukan di toolbar utama.\nPesan status video (info, peringatan, dan kesalahan) sekarang juga dipancarkan ke log peristiwa.\nVideo kustom sekarang menampilkan peringatan yang meminta pengguna untuk melengkapi informasi yang diperlukan sebelum diproses.\nPencarian multi-video sekarang berlanjut dengan video terpilih yang tersisa jika satu pencarian gagal, mencegah panel multi-seleksi tetap dinonaktifkan.\nMode mulai otomatis sekarang dinonaktifkan untuk video yang telah dibatalkan atau dicari secara manual, mencegahnya diproses secara otomatis lagi.",
   "about.news.version_1_8_6.items": "Memperbaiki kesalahan runtime Fluent UI yang dapat menyebabkan kerusakan pada dialog Tentang dan dialog lainnya.\nIntegrasi JDownloader telah diperbarui untuk mendukung Linux dan Windows serta menjalankan Smart Video Processor di latar belakang.\nPeningkatan resolusi dependensi untuk Fluent UI dan alat bantu pembuatan perangkat lunak.",
-  "about.news.version_1_8_7.items": "Menambahkan dialog kemajuan pembersihan yang menunjukkan kemajuan penghapusan file sementara saat menutup aplikasi.\nMemperbaiki karakter escape untuk baris baru di daftar \"Yang Baru\" untuk versi 1.8.5 sehingga setiap item ditampilkan sebagai poin terpisah."
+  "about.news.version_1_8_8.items": "Menambahkan deteksi genre \"Pertunjukan\" otomatis untuk pertunjukan langsung (pertunjukan solo, komedi tunggal, drama teater, konser, pertunjukan langsung, dll.) saat mengambil detail film dari TMDB.\nDialog kemajuan pembersihan kini menggunakan pesan terjemahan dan ikon aplikasi yang benar.",
+  "about.news.version_1_8_7.items": "Menambahkan dialog kemajuan pembersihan yang menunjukkan kemajuan penghapusan file sementara saat menutup aplikasi.\nMemperbaiki karakter escape untuk baris baru di daftar \"Yang Baru\" untuk versi 1.8.5 sehingga setiap item ditampilkan sebagai poin terpisah.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

@@ -71,6 +71,7 @@ const GENRE_KEYS = [
   'romance',
   'science_fiction',
   'soap',
+  'spectacle',
   'sport',
   'suspense',
   'talk_show',

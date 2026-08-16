@@ -136,9 +136,10 @@ export class TMDBClient {
       response = await tmdb.get<TMDBDetails>('/movie/' + tmdbId, {
         params: currentSettings.favoriteLanguages[0]
           ? {
-              language: currentSettings.favoriteLanguages[0]
+              language: currentSettings.favoriteLanguages[0],
+              append_to_response: 'keywords'
             }
-          : {}
+          : { append_to_response: 'keywords' }
       })
     } catch (error) {
       debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
@@ -150,7 +151,9 @@ export class TMDBClient {
 
     // If no overview, lets try to retrieve the movie details without translation.
     try {
-      response = await tmdb.get<TMDBDetails>('/movie/' + tmdbId)
+      response = await tmdb.get<TMDBDetails>('/movie/' + tmdbId, {
+        params: { append_to_response: 'keywords' }
+      })
       if (!movieDetails.runtime || response.data.runtime > movieDetails.runtime) {
         // Using US runtime if longer.
         movieDetails.runtime = response.data.runtime
@@ -162,8 +165,33 @@ export class TMDBClient {
       /* empty */
     }
 
-    const genres = (movieDetails.genres ?? []).map((g) => g.name)
+    const tmdbGenres = (movieDetails.genres ?? []).map((g) => g.name)
     const isAnimation = (movieDetails.genres ?? []).some((g) => g.id === 16)
+
+    const keywordNames = (movieDetails.keywords?.keywords ?? []).map((k) => k.name.toLowerCase())
+    const spectacleKeywords = [
+      'one-man show',
+      'one man show',
+      'stand-up comedy',
+      'stand-up',
+      'concert',
+      'live performance',
+      'theater play',
+      'live play'
+    ]
+    const hasSpectacleKeyword = keywordNames.some((k) => spectacleKeywords.includes(k))
+
+    const text = ((movieDetails.overview ?? '') + ' ' + (movieDetails.tagline ?? '')).toLowerCase()
+    const spectaclePhrases = [
+      'spectacle capté',
+      'enregistré en public',
+      'live at',
+      'stand-up special'
+    ]
+    const hasSpectaclePhrase = spectaclePhrases.some((p) => text.includes(p))
+
+    const isSpectacle = hasSpectacleKeyword || hasSpectaclePhrase
+    const genres = isSpectacle ? [...tmdbGenres, 'Spectacle'] : tmdbGenres
 
     return new MovieData(
       movieDetails.id,

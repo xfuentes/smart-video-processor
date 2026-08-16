@@ -120,6 +120,7 @@
   "genre.romance": "Romantik",
   "genre.science_fiction": "Science fiction",
   "genre.soap": "Tvål",
+  "genre.spectacle": "Skådespel",
   "genre.sport": "Sport",
   "genre.suspense": "Spänning",
   "genre.talk_show": "Talkshow",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Kodning vid {speed}x.",
   "job.encoding.first_pass_countdown": "Första passet slutfört om {duration}.",
   "job.encoding.countdown": "Slutförande om {duration}.",
+  "shutdown.dialog.cancel": "Avboka",
   "main.toolbar.shutdown": "för att stänga av",
   "main.toolbar.shutdown_tooltip": "Stäng av datorn när all bearbetning är klar",
   "shutdown.dialog.title": "Stäng av datorn",
   "shutdown.dialog.message": "Datorn stängs av om {time} om du inte klickar på Avbryt.",
-  "shutdown.dialog.cancel": "Avboka",
   "about.news.version_1_8_4.items": "Lade till en avstängningsknapp i huvudverktygsfältet för att stänga av datorn när all bearbetning är klar\nLade till ett alternativ för att ta bort källfiler efter att de har bearbetats\nLade till arabiska (ar-SA) i Microsoft Store-listan\nDeklarerade alla 23 språk som stöds i Windows Store-paketet\nMeddelanden om kodning av jobbförlopp översätts nu baserat på det valda språket\nTV-program som använder absolut avsnittsnumrering placeras inte längre i en undermapp för säsonger\nFästade aktivitetsfältsikoner dupliceras inte längre när Microsoft Store-versionen startas från Start-menyn",
   "log.error": "Fel: {message}",
   "log.shutdown.failed": "Misslyckades med att stänga av datorn: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Borttagen från kön.",
   "about.news.version_1_8_5.items": "Verktygsfältsåtgärden Avbryt tar nu även bort valda videor som väntar i kön och återställer dem till redo att bearbetas.\nProgramloggvisaren är nu tillgänglig i en ny flik \"Loggar\" i dialogrutan Om istället för huvudverktygsfältet.\nVideostatusmeddelanden (info, varning och fel) skickas nu också till händelseloggen.\nAnpassade videor visar nu en varning som ber användaren att fylla i den information som krävs innan bearbetning.\nFlersökning fortsätter nu med de återstående valda videorna om en sökning misslyckas, vilket förhindrar att flervalspanelerna förblir inaktiverade.\nAutostartläget är nu inaktiverat för videor som har avbrutits eller sökts manuellt, vilket förhindrar att de bearbetas automatiskt igen.",
   "about.news.version_1_8_6.items": "Åtgärdade ett runtime-fel i Fluent UI som kunde störa dialogrutorna Om och andra dialogrutor.\nUppdaterade JDownloader-integrationen för att stödja både Linux och Windows och för att starta Smart Video Processor i bakgrunden.\nFörbättrad beroendelösning för Fluent UI och byggverktyg",
-  "about.news.version_1_8_7.items": "Lade till en dialogruta för rensningsförlopp som visar borttagningsförloppet för temporära filer när programmet stängs.\nÅtgärdade escaped newlines i Nyhetslistan för version 1.8.5 så att varje objekt återges som en separat punkt."
+  "about.news.version_1_8_8.items": "Lade till automatisk genreidentifiering av \"Spectacle\" för liveframträdanden (enmansshow, ståuppkomik, teaterpjäs, konsert, liveframträdande etc.) vid hämtning av filminformation från TMDB.\nDialogrutan för rensningsförlopp använder nu översatta meddelanden och korrekt programikon",
+  "about.news.version_1_8_7.items": "Lade till en dialogruta för rensningsförlopp som visar borttagningsförloppet för temporära filer när programmet stängs.\nÅtgärdade escaped newlines i Nyhetslistan för version 1.8.5 så att varje objekt återges som en separat punkt.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

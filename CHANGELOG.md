@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.8] - 2026-08-16
+
+### Added
+- Added automatic "Spectacle" genre detection for live performances (one-man show, stand-up comedy, theater play, concert, live performance, etc.) when retrieving movie details from TMDB.
+
+### Changed
+- Cleanup progress dialog now uses translated messages and the correct application icon.
+
 ## [1.8.7] - 2026-08-13
 
 ### Added
@@ -408,4 +416,3 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fixed Connect UI to controller with IPC and fix windows packaging
-

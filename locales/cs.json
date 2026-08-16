@@ -120,6 +120,7 @@
   "genre.romance": "Romantika",
   "genre.science_fiction": "Vědecká fantastika",
   "genre.soap": "Mýdlo",
+  "genre.spectacle": "Podívaná",
   "genre.sport": "Sport",
   "genre.suspense": "Napětí",
   "genre.talk_show": "Talk show",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Kódování rychlostí {speed}x.",
   "job.encoding.first_pass_countdown": "Dokončení prvního průchodu za {duration}.",
   "job.encoding.countdown": "Dokončení za {duration}.",
+  "shutdown.dialog.cancel": "Zrušit",
   "main.toolbar.shutdown": "Vypnout počítač",
   "main.toolbar.shutdown_tooltip": "Po dokončení veškerého zpracování vypněte počítač.",
   "shutdown.dialog.title": "Vypněte počítač",
   "shutdown.dialog.message": "Počítač se vypne za {time}, pokud nekliknete na tlačítko Zrušit.",
-  "shutdown.dialog.cancel": "Zrušit",
   "about.news.version_1_8_4.items": "Na hlavní panel nástrojů přidáno tlačítko pro vypnutí počítače po dokončení veškerého zpracování.\nPřidána možnost smazat zdrojové soubory po jejich zpracování\nDo seznamu v obchodě Microsoft Store přidána arabština (ar-SA)\nV balíčku Windows Store deklarováno všech 23 podporovaných jazyků.\nZprávy o průběhu kódování jsou nyní překládány na základě vybraného jazyka.\nTelevizní pořady používající absolutní číslování epizod již nejsou umisťovány do podsložky sezóny.\nPřipnuté ikony na hlavním panelu se již neduplikují při spuštění verze z Microsoft Storu z nabídky Start.",
   "log.error": "Chyba: {message}",
   "log.shutdown.failed": "Nepodařilo se vypnout počítač: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Odebráno z fronty.",
   "about.news.version_1_8_5.items": "Akce Zrušit na panelu nástrojů nyní také odstraní vybraná videa, která čekají ve frontě, a resetuje je do stavu připraveno ke zpracování.\nProhlížeč protokolů aplikací je nyní k dispozici na nové kartě „Protokoly“ v dialogovém okně O aplikaci namísto hlavního panelu nástrojů.\nDo protokolu událostí se nyní také odesílají zprávy o stavu videa (informace, varování a chyba).\nVlastní videa nyní zobrazují varování s žádostí o vyplnění požadovaných informací před zpracováním.\nVícenásobné vyhledávání nyní pokračuje se zbývajícími vybranými videi, pokud jedno vyhledávání selže, čímž se zabrání tomu, aby panely s vícenásobným výběrem zůstaly deaktivovány.\nRežim automatického spuštění je nyní deaktivován pro videa, která byla zrušena nebo ručně vyhledána, což brání jejich automatickému opětovnému zpracování.",
   "about.news.version_1_8_6.items": "Opravena chyba běhového prostředí Fluent UI, která mohla narušit zobrazování dialogů O aplikaci a dalších dialogů.\nAktualizována integrace JDownloaderu pro Linux i Windows a pro spouštění Smart Video Processoru na pozadí.\nVylepšené rozlišení závislostí pro Fluent UI a nástroje pro sestavení",
-  "about.news.version_1_8_7.items": "Přidán dialogový okénko s postupem čištění, které zobrazuje průběh mazání dočasných souborů při zavření aplikace.\nOpraveny escapované nové řádky v seznamu Co je nového pro verzi 1.8.5, takže každá položka se zobrazuje jako samostatná odrážka."
+  "about.news.version_1_8_8.items": "Přidána automatická detekce žánru „Spectacle“ pro živá vystoupení (one-man show, stand-up comedy, divadelní hra, koncert, živé vystoupení atd.) při načítání informací o filmu z TMDB\nDialogové okno s postupem čištění nyní používá přeložené zprávy a správnou ikonu aplikace.",
+  "about.news.version_1_8_7.items": "Přidán dialogový okénko s postupem čištění, které zobrazuje průběh mazání dočasných souborů při zavření aplikace.\nOpraveny escapované nové řádky v seznamu Co je nového pro verzi 1.8.5, takže každá položka se zobrazuje jako samostatná odrážka.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }
