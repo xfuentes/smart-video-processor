@@ -1,8 +1,6 @@
 import { BrowserWindow } from 'electron'
-import { pathToFileURL } from 'node:url'
 import { _ } from './i18n'
 import icon from '../../resources/icon.ico?asset'
-import iconPng from '../../resources/icon.png?asset'
 
 let cleanupWindow: BrowserWindow | null = null
 let cleanupWindowReady = false
@@ -59,7 +57,7 @@ export function showCleanupDialog() {
       webSecurity: false
     }
   })
-  const iconUrl = pathToFileURL(iconPng).toString().replace('file://', 'svp://')
+  const iconUrl = new URL('../../resources/icon.png', import.meta.url).href.replace('file://', 'svp://')
   const message = _('cleanup.message', { defaultValue: 'Cleaning temporary files...' })
   const progressTemplate = _('cleanup.progress', { defaultValue: 'Cleaning temporary files... ({current}/{total})' })
   const html = getCleanupDialogHtml(iconUrl, message, progressTemplate)

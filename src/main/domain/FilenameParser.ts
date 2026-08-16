@@ -48,6 +48,7 @@ function extractYear(input: string, beforeIndex?: number): number | undefined {
 }
 
 function cleanupTitle(title: string): string {
+  title = title.replace(/^(?:(?:\[[^\]]+\]|\([^)]+\))\s*)+/, '')
   title = title.replace(/[()[\]_.,\-–]+$/, '')
   title = title.replace(/[.\-_–]+/g, ' ')
   // Rebuild dotted acronyms like "T W D" -> "T.W.D"

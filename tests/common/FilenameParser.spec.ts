@@ -42,3 +42,15 @@ test('parse movie filename with franchise prefix and year separator', () => {
     absoluteEpisode: undefined
   })
 })
+
+test('parse movie filename with leading [Film] tag and dotted year', () => {
+  const result = parseFilename('[Film] Les désaxés.1961.Multi.Web-DL.1080p.H265-KANE .mkv')
+  expect(result).toStrictEqual({
+    title: 'Les désaxés',
+    year: 1961,
+    season: undefined,
+    episode: undefined,
+    episodeTitle: undefined,
+    absoluteEpisode: undefined
+  })
+})
