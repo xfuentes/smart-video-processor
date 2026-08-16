@@ -16,13 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
+import { afterEach, beforeAll, expect, test } from 'vitest'
+import '../recordedHttpClient'
 import { tmdbLanguages } from '../../../src/common/TMDBLanguages'
 import { TMDBClient } from '../../../src/main/domain/clients/TMDBClient'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { Languages } from '../../../src/common/LanguageIETF'
 
 const posterUrlRE = /https:\/\/image.tmdb.org\/t\/p\/w1280\/[^.]+\.jpg/
+
+beforeAll(() => {
+  TMDBClient.getInstance().rateLimiter.setRate(1000)
+})
+
+afterEach(() => {
+  TMDBClient.getInstance().rateLimiter.setRate(1000)
+})
 
 test('Search by IMDB ID', async () => {
   const movies = await TMDBClient.getInstance().searchMovieByImdb('tt0120201')
@@ -37,7 +46,7 @@ test('Search by IMDB ID', async () => {
       'against the backdrop of an interstellar war between mankind and an arachnoid species known as "the Bugs."'
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
-  expect(movies[0].language.code).toBe('en')
+  expect(movies[0].language?.code).toBe('en')
 })
 
 test('Search by name', async () => {
@@ -54,7 +63,7 @@ test('Search by name', async () => {
       "erase all the soldier's memories, he begins to experience flashbacks that are forcing him to recall his past."
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
-  expect(movies[0].language.code).toBe('en')
+  expect(movies[0].language?.code).toBe('en')
 })
 
 test('Search by name and year', async () => {
@@ -69,7 +78,7 @@ test('Search by name and year', async () => {
       'Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious clientele.'
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
-  expect(movies[0].language.code).toBe('en')
+  expect(movies[0].language?.code).toBe('en')
 })
 
 test('Retrieve movie details', async () => {
@@ -106,19 +115,19 @@ test('Retrieve movie details issue with nobody has to know', async () => {
 
 test('Rate limiter', async () => {
   TMDBClient.getInstance().rateLimiter.setRate(1)
-  let firstExecutedAt: number
+  let firstExecutedAt!: number
   const prom1 = TMDBClient.getInstance()
     .searchMovieByImdb('tt0120201')
     .then((_result) => {
       firstExecutedAt = Date.now()
     })
-  let secondExecutedAt: number
+  let secondExecutedAt!: number
   const prom2 = TMDBClient.getInstance()
     .searchMovieByNameYear('universal soldier')
     .then((_result) => {
       secondExecutedAt = Date.now()
     })
-  let thirdExecutedAt: number
+  let thirdExecutedAt!: number
   const prom3 = TMDBClient.getInstance()
     .searchMovieByNameYear('une nuit en enfer', 1996)
     .then((_result) => {
@@ -147,7 +156,7 @@ test('Search pacifist cowboy', async () => {
       'qui a vaincu grâce au cinéma sa timidité et ses tourments.'
   )
   expect(movies[0].posterURL).toMatch(posterUrlRE)
-  expect(movies[0].language.code).toBe('de')
+  expect(movies[0].language?.code).toBe('de')
 })
 
 test('Retrieve movie details french', async () => {

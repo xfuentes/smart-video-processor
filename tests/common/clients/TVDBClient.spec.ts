@@ -16,7 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { beforeAll, expect, test } from 'vitest'
+import { afterEach, beforeAll, expect, test, vi } from 'vitest'
+import '../recordedHttpClient'
+import axios, { AxiosResponse } from 'axios'
+import fs from 'node:fs'
+import path from 'node:path'
 import { tvdbLanguages } from '../../../src/common/TVDBLanguages'
 import { currentSettings } from '../../../src/main/domain/Settings'
 import { TVDBClient } from '../../../src/main/domain/clients/TVDBClient'
@@ -24,6 +28,25 @@ import { Languages } from '../../../src/common/LanguageIETF'
 
 beforeAll(() => {
   currentSettings.language = 'en'
+  TVDBClient.getInstance().rateLimiter.setRate(1000)
+
+  const loginFile = path.resolve(__dirname, '../../resources/http-recordings/2cf9ae83b867922438095ef2f7142734.json')
+  const loginData = JSON.parse(fs.readFileSync(loginFile, 'utf8'))
+  vi.spyOn(axios, 'post').mockImplementation(
+    async (): Promise<AxiosResponse> =>
+      ({
+        data: loginData,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {} as never,
+        request: undefined
+      }) as AxiosResponse
+  )
+})
+
+afterEach(() => {
+  TVDBClient.getInstance().rateLimiter.setRate(1000)
 })
 
 test('Search Series', async () => {
@@ -37,7 +60,7 @@ test('Search Series', async () => {
   expect(series[0].originalTitle).toBe('Friends')
   expect(series[0].overview).toContain('Chandler Bing')
   expect(series[0].posterURL).toBe('https://artworks.thetvdb.com/banners/posters/79168-27.jpg')
-  expect(series[0].language.code).toBe('en')
+  expect(series[0].language?.code).toBe('en')
   expect(series[0].countries.length).toBe(1)
   expect(series[0].countries[0].alpha3).toBe('USA')
   expect(series[0].imdb).toContain('tt0108778')
@@ -46,12 +69,12 @@ test('Search Series', async () => {
 test('Retrieve Series Details', async () => {
   currentSettings.favoriteLanguages = ['en']
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
-  expect(episode.episodeData.episodeNumber).toBe(10)
-  expect(episode.episodeData.seasonNumber).toBe(2)
-  expect(episode.episodeData.title).toBe('The One with Russ')
-  expect(episode.episodeData.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg')
-  expect(episode.episodeData.absoluteNumber).toBe(34)
-  expect(episode.episodeData.overview).toContain('Fun Bobby')
+  expect(episode.episodeData!.episodeNumber).toBe(10)
+  expect(episode.episodeData!.seasonNumber).toBe(2)
+  expect(episode.episodeData!.title).toBe('The One with Russ')
+  expect(episode.episodeData!.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg')
+  expect(episode.episodeData!.absoluteNumber).toBe(34)
+  expect(episode.episodeData!.overview).toContain('Fun Bobby')
   expect(episode.seriesData.posterURL).toBe('https://artworks.thetvdb.com/banners/posters/79168-27.jpg')
   expect(episode.seriesData.title).toBe('Friends')
   expect(episode.seriesData.id).toBe(79168)
@@ -59,21 +82,21 @@ test('Retrieve Series Details', async () => {
   expect(episode.seriesData.imdb).toBe(undefined)
   expect(episode.seriesData.countries.length).toBe(1)
   expect(episode.seriesData.countries[0].alpha3).toBe('USA')
-  expect(episode.seriesData.language.code).toBe('en-US')
+  expect(episode.seriesData.language?.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('Friends')
 })
 
 test('Retrieve Series Captain Marleau', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(316274, 'official', 1, undefined, 4)
-  expect(episode.episodeData.episodeNumber).toBe(1)
-  expect(episode.episodeData.seasonNumber).toBe(4)
-  expect(episode.episodeData.title).toBe('La cité des âmes en peine')
-  expect(episode.episodeData.posterURL).toBe(
+  expect(episode.episodeData!.episodeNumber).toBe(1)
+  expect(episode.episodeData!.seasonNumber).toBe(4)
+  expect(episode.episodeData!.title).toBe('La cité des âmes en peine')
+  expect(episode.episodeData!.posterURL).toBe(
     'https://artworks.thetvdb.com/banners/v4/episode/8141218/screencap/606fff72bc7a6.jpg'
   )
-  expect(episode.episodeData.absoluteNumber).toBe(23)
-  expect(episode.episodeData.overview).toContain(
+  expect(episode.episodeData!.absoluteNumber).toBe(23)
+  expect(episode.episodeData!.overview).toContain(
     "Une vieille connaissance de Marleau est accusée de meurtre. La victime ? Le patron d’une pêcherie de Royan. La capitaine doit composer avec Alex Weller, un flic renommé que le procureur a co-saisi, et qui semble enquêter à charge. Entre trafic de cigarettes, précarité et revanche sociale, les mobiles fleurissent autour des habitants d'un quartier menacé de destruction. Mais les soupçons de Marleau se portent bientôt sur Weller : pourquoi a-t-il tenu à être chargé de l’enquête ? Y aurait-il un lien avec sa fille, autrefois retrouvée morte alors qu’elle était en vacances dans la région ?"
   )
   expect(episode.seriesData.posterURL).toBe(
@@ -87,19 +110,19 @@ test('Retrieve Series Captain Marleau', async () => {
   expect(episode.seriesData.imdb).toBe(undefined)
   expect(episode.seriesData.countries.length).toBe(1)
   expect(episode.seriesData.countries[0].alpha2).toBe('FR')
-  expect(episode.seriesData.language.code).toBe('fr-FR')
+  expect(episode.seriesData.language?.code).toBe('fr-FR')
   expect(episode.seriesData.originalTitle).toBe('Capitaine Marleau')
 })
 
 test('Retrieve Series Details in French', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
-  expect(episode.episodeData.episodeNumber).toBe(10)
-  expect(episode.episodeData.seasonNumber).toBe(2)
-  expect(episode.episodeData.title).toBe('Celui qui se dédouble')
-  expect(episode.episodeData.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg')
-  expect(episode.episodeData.absoluteNumber).toBe(34)
-  expect(episode.episodeData.overview).toContain('Rachel sort avec un garçon')
+  expect(episode.episodeData!.episodeNumber).toBe(10)
+  expect(episode.episodeData!.seasonNumber).toBe(2)
+  expect(episode.episodeData!.title).toBe('Celui qui se dédouble')
+  expect(episode.episodeData!.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/79168/303854.jpg')
+  expect(episode.episodeData!.absoluteNumber).toBe(34)
+  expect(episode.episodeData!.overview).toContain('Rachel sort avec un garçon')
   expect(episode.seriesData.posterURL).toBe('https://artworks.thetvdb.com/banners/posters/79168-27.jpg')
   expect(episode.seriesData.title).toBe('Friends')
   expect(episode.seriesData.id).toBe(79168)
@@ -107,26 +130,26 @@ test('Retrieve Series Details in French', async () => {
   expect(episode.seriesData.imdb).toBe(undefined)
   expect(episode.seriesData.countries.length).toBe(1)
   expect(episode.seriesData.countries[0].alpha3).toBe('USA')
-  expect(episode.seriesData.language.code).toBe('en-US')
+  expect(episode.seriesData.language?.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('Friends')
   expect(episode.seriesData.note).toBe(undefined)
 })
 
 test('Rate limiter', async () => {
   TVDBClient.getInstance().rateLimiter.setRate(1)
-  let firstExecutedAt: number
+  let firstExecutedAt = 0
   const prom1 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
     .then((_result) => {
       firstExecutedAt = Date.now()
     })
-  let secondExecutedAt: number
+  let secondExecutedAt = 0
   const prom2 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 5, undefined, 2)
     .then((_result) => {
       secondExecutedAt = Date.now()
     })
-  let thirdExecutedAt: number
+  let thirdExecutedAt = 0
   const prom3 = TVDBClient.getInstance()
     .retrieveSeriesDetails(79168, 'official', 4, undefined, 2)
     .then((_result) => {
@@ -173,7 +196,7 @@ test('Search Street Hawk', async () => {
       'perfectionnées et capable de dépasser les 500 km/h.'
   )
   expect(series[0].posterURL).toBe('https://artworks.thetvdb.com/banners/posters/73877-2.jpg')
-  expect(series[0].language.code).toBe('en')
+  expect(series[0].language?.code).toBe('en')
   expect(series[0].countries.length).toBe(1)
   expect(series[0].countries[0].alpha2).toBe('US')
   expect(series[0].imdb).toContain('tt0088618')
@@ -182,14 +205,14 @@ test('Search Street Hawk', async () => {
 test('Retrieve Walking Dead Dead City Details in French', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(417549, 'official', 7, undefined, 2)
-  expect(episode.episodeData.episodeNumber).toBe(7)
-  expect(episode.episodeData.seasonNumber).toBe(2)
-  expect(episode.episodeData.title).toBe('Novi dan, novi pocetak')
-  expect(episode.episodeData.posterURL).toBe(
+  expect(episode.episodeData!.episodeNumber).toBe(7)
+  expect(episode.episodeData!.seasonNumber).toBe(2)
+  expect(episode.episodeData!.title).toBe('Novi dan, novi pocetak')
+  expect(episode.episodeData!.posterURL).toBe(
     'https://artworks.thetvdb.com/banners/v4/episode/10803215/screencap/684e9572af0f5.jpg'
   )
-  expect(episode.episodeData.absoluteNumber).toBe(13)
-  expect(episode.episodeData.overview).toContain(
+  expect(episode.episodeData!.absoluteNumber).toBe(13)
+  expect(episode.episodeData!.overview).toContain(
     "Negan et Maggie s'embarquent dans des missions éprouvantes et font face à des épreuves inattendues, autant physiques qu'émotionnelles."
   )
   expect(episode.seriesData.posterURL).toContain('https://artworks.thetvdb.com/banners/')
@@ -199,7 +222,7 @@ test('Retrieve Walking Dead Dead City Details in French', async () => {
   expect(episode.seriesData.imdb).toBe(undefined)
   expect(episode.seriesData.countries.length).toBe(1)
   expect(episode.seriesData.countries[0].alpha3).toBe('USA')
-  expect(episode.seriesData.language.code).toBe('en-US')
+  expect(episode.seriesData.language?.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('The Walking Dead: Dead City')
   expect(episode.seriesData.note).toBe(undefined)
 })
@@ -207,12 +230,12 @@ test('Retrieve Walking Dead Dead City Details in French', async () => {
 test('Shameless US Cleanup', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(161511, 'official', 1, undefined, 1)
-  expect(episode.episodeData.episodeNumber).toBe(1)
-  expect(episode.episodeData.seasonNumber).toBe(1)
-  expect(episode.episodeData.title).toBe('Les Gallagher')
-  expect(episode.episodeData.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/161511/2861921.jpg')
-  expect(episode.episodeData.absoluteNumber).toBe(1)
-  expect(episode.episodeData.overview).toContain(
+  expect(episode.episodeData!.episodeNumber).toBe(1)
+  expect(episode.episodeData!.seasonNumber).toBe(1)
+  expect(episode.episodeData!.title).toBe('Les Gallagher')
+  expect(episode.episodeData!.posterURL).toBe('https://artworks.thetvdb.com/banners/episodes/161511/2861921.jpg')
+  expect(episode.episodeData!.absoluteNumber).toBe(1)
+  expect(episode.episodeData!.overview).toContain(
     'Depuis que leur mère, Monica, a quitté la maison, les enfants Gallagher se débrouillent ' +
       "comme ils peuvent. Leur père, Frank, un chômeur paumé doublé d'un ivrogne patenté, dilapide en boisson l'argent des allocations " +
       'familiales. Un jour, Fiona, 20 ans, se fait voler son sac à main dans une discothèque. Un jeune homme, Steve, lui vient en aide, ' +
@@ -230,7 +253,7 @@ test('Shameless US Cleanup', async () => {
   expect(episode.seriesData.imdb).toBe(undefined)
   expect(episode.seriesData.countries.length).toBe(1)
   expect(episode.seriesData.countries[0].alpha3).toBe('USA')
-  expect(episode.seriesData.language.code).toBe('en-US')
+  expect(episode.seriesData.language?.code).toBe('en-US')
   expect(episode.seriesData.originalTitle).toBe('Shameless')
   expect(episode.seriesData.note).toBe(undefined)
 })
@@ -274,8 +297,8 @@ test('Search Episode by Title - One Piece - Official en', async () => {
 test('Retrieve Series Details - One Piece - Absolute Order E242', async () => {
   currentSettings.favoriteLanguages = ['es']
   const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'absolute', undefined, 242, undefined)
-  expect(result.episodeData.absoluteNumber).toBe(242)
-  expect(result.episodeData.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
+  expect(result.episodeData!.absoluteNumber).toBe(242)
+  expect(result.episodeData!.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
   expect(result.seriesData.title).toBe('One Piece')
   expect(result.seriesData.id).toBe(81797)
   expect(result.episodeCount).toBeDefined()
@@ -285,8 +308,8 @@ test('Retrieve Series Details - One Piece - Absolute Order E242', async () => {
 test('Retrieve Series Details - One Piece - Official Order E242', async () => {
   currentSettings.favoriteLanguages = ['es']
   const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'official', 16, undefined, 11)
-  expect(result.episodeData.absoluteNumber).toBe(242)
-  expect(result.episodeData.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
+  expect(result.episodeData!.absoluteNumber).toBe(242)
+  expect(result.episodeData!.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
   expect(result.seriesData.title).toBe('One Piece')
   expect(result.seriesData.id).toBe(81797)
   expect(result.episodeCount).toBe(99)
