@@ -120,6 +120,7 @@
   "genre.romance": "Romantiikka",
   "genre.science_fiction": "Tieteiskirjallisuus",
   "genre.soap": "Saippua",
+  "genre.spectacle": "Spektaakkeli",
   "genre.sport": "Urheilu",
   "genre.suspense": "Jännitys",
   "genre.talk_show": "Talk Show",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Koodaus nopeudella {speed}x.",
   "job.encoding.first_pass_countdown": "Ensimmäisen kierroksen suoritus kesti {duration}.",
   "job.encoding.countdown": "Valmistuminen kestossa {duration}.",
+  "shutdown.dialog.cancel": "Peruuttaa",
   "main.toolbar.shutdown": "sammuttaaksesi",
   "main.toolbar.shutdown_tooltip": "Sammuta tietokone, kun kaikki käsittely on valmis",
   "shutdown.dialog.title": "Sammuta tietokone",
   "shutdown.dialog.message": "Tietokone sammuu {time} kuluttua, ellet napsauta Peruuta.",
-  "shutdown.dialog.cancel": "Peruuttaa",
   "about.news.version_1_8_4.items": "Lisätty sammutuspainike päätyökaluriville, jolla tietokone sammutetaan, kun kaikki käsittely on valmis.\nLisätty vaihtoehto lähdetiedostojen poistamiseen niiden käsittelyn jälkeen\nLisätty arabia (ar-SA) Microsoft Storen listaukseen\nIlmoitti kaikki 23 tuettua kieltä Windows Store -paketissa\nKoodaustyön edistymisviestit käännetään nyt valitun kielen perusteella.\nAbsoluuttista jaksonumerointia käyttävät TV-ohjelmat eivät enää sijoitu kausien alikansioon.\nKiinnitetyt tehtäväpalkin kuvakkeet eivät enää kaksoistue, kun Microsoft Storen versio käynnistetään Käynnistä-valikosta.",
   "log.error": "Virhe: {message}",
   "log.shutdown.failed": "Tietokoneen sammuttaminen epäonnistui: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Poistettu jonosta.",
   "about.news.version_1_8_5.items": "Peruuta-työkalurivin toiminto poistaa nyt myös jonossa odottavat valitut videot ja palauttaa ne valmiiksi käsiteltäväksi -tilaan.\nSovelluslokien katseluohjelma on nyt saatavilla uudella \"Lokit\"-välilehdellä Tietoja-valintaikkunassa päätyökalurivin sijaan.\nVideoiden tilaviestit (tiedot, varoitus ja virhe) lähetetään nyt myös tapahtumalokiin.\nMukautetut videot näyttävät nyt varoituksen, jossa käyttäjää pyydetään täyttämään vaaditut tiedot ennen käsittelyä.\nUsea haku jatkuu nyt jäljellä olevilla valituilla videoilla, jos yksi haku epäonnistuu, mikä estää monivalintapaneelien pysymisen poissa käytöstä.\nAutomaattinen käynnistystila on nyt poistettu käytöstä peruutetuille tai manuaalisesti haetuille videoille, mikä estää niiden automaattisen uudelleenkäsittelyn.",
   "about.news.version_1_8_6.items": "Korjattu Fluent UI:n suorituksenaikainen virhe, joka saattoi rikkoa Tietoja-ikkunan ja muut valintaikkunat.\nPäivitetty JDownloader-integraatio tukemaan sekä Linuxia että Windowsia ja käynnistämään Smart Video Processorin taustalla.\nParannettu riippuvuuksien ratkaiseminen Fluent-käyttöliittymässä ja koontityökaluissa",
-  "about.news.version_1_8_7.items": "Lisätty siivouksen edistymisvalintaikkuna, joka näyttää väliaikaisten tiedostojen poistamisen edistymisen sovellusta suljettaessa.\nKorjattu version 1.8.5 Uutta-luettelon koodinvaihtomerkkien aiheuttama rivinvaihto, jonka jälkeen jokainen kohta näkyy erillisenä luettelomerkkinä."
+  "about.news.version_1_8_8.items": "Lisätty automaattinen \"Spektaakkeli\"-tyylilajin tunnistus live-esityksille (yksimiehen show, stand up -komedia, teatterinäytelmä, konsertti, live-esitys jne.) elokuvan tietoja haettaessa TMDB:stä.\nSiivouksen edistymisvalintaikkuna käyttää nyt käännettyjä viestejä ja oikeaa sovelluskuvaketta",
+  "about.news.version_1_8_7.items": "Lisätty siivouksen edistymisvalintaikkuna, joka näyttää väliaikaisten tiedostojen poistamisen edistymisen sovellusta suljettaessa.\nKorjattu version 1.8.5 Uutta-luettelon koodinvaihtomerkkien aiheuttama rivinvaihto, jonka jälkeen jokainen kohta näkyy erillisenä luettelomerkkinä.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

@@ -55,6 +55,15 @@ interface TMDBGenre {
   name: string
 }
 
+interface TMDBKeyword {
+  id: number
+  name: string
+}
+
+interface TMDBKeywords {
+  keywords: TMDBKeyword[]
+}
+
 interface ProductionCompany {
   id: number
   logo_path: string | null
@@ -108,6 +117,7 @@ interface TMDBDetails {
   spoken_languages: Language[]
   status: 'Released'
   tagline: string
+  keywords?: TMDBKeywords
   title: string
   video: boolean
   vote_average: number

@@ -1,12 +1,14 @@
 import { BrowserWindow } from 'electron'
 import { pathToFileURL } from 'node:url'
+import { _ } from './i18n'
 import icon from '../../resources/icon.ico?asset'
+import iconPng from '../../resources/icon.png?asset'
 
 let cleanupWindow: BrowserWindow | null = null
 let cleanupWindowReady = false
 let pendingCleanupProgress: { current: number; total: number } | null = null
 
-function getCleanupDialogHtml(iconUrl: string): string {
+function getCleanupDialogHtml(iconUrl: string, message: string, progressTemplate: string): string {
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -20,14 +22,15 @@ progress { width: 280px; height: 16px; }
 </style>
 </head>
 <body>
-<img id="app-icon" src="${iconUrl}" alt="icon">
+<img id="app-icon" src="${iconUrl}" alt="${message}">
 <div id="left">
-  <div id="message">Cleaning temporary files...</div>
+  <div id="message"></div>
   <progress id="bar" value="0" max="100"></progress>
 </div>
 <script>
+document.getElementById('message').textContent = ${JSON.stringify(message)};
 window.updateProgress = (current, total, percent) => {
-  document.getElementById('message').textContent = 'Cleaning temporary files... (' + current + '/' + total + ')';
+  document.getElementById('message').textContent = ${JSON.stringify(progressTemplate)}.replace('{current}', current).replace('{total}', total);
   document.getElementById('bar').value = percent;
 }
 </script>
@@ -56,8 +59,10 @@ export function showCleanupDialog() {
       webSecurity: false
     }
   })
-  const iconUrl = pathToFileURL(icon).toString().replace(/^file:\/\//, 'svp://')
-  const html = getCleanupDialogHtml(iconUrl)
+  const iconUrl = pathToFileURL(iconPng).toString().replace('file://', 'svp://')
+  const message = _('cleanup.message', { defaultValue: 'Cleaning temporary files...' })
+  const progressTemplate = _('cleanup.progress', { defaultValue: 'Cleaning temporary files... ({current}/{total})' })
+  const html = getCleanupDialogHtml(iconUrl, message, progressTemplate)
   void cleanupWindow.loadURL(`data:text/html;base64,${Buffer.from(html).toString('base64')}`)
   cleanupWindow.webContents.on('did-finish-load', () => {
     cleanupWindowReady = true

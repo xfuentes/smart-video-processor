@@ -120,6 +120,7 @@
   "genre.romance": "Romance",
   "genre.science_fiction": "Science Fiction",
   "genre.soap": "Soap",
+  "genre.spectacle": "Spectacle",
   "genre.sport": "Sport",
   "genre.suspense": "Suspense",
   "genre.talk_show": "Talk Show",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Removed from the queue.",
   "about.news.version_1_8_5.items": "The Cancel toolbar action now also removes selected videos that are waiting in the queue and resets them to the ready-to-process state\nThe application log viewer is now available in a new \"Logs\" tab in the About dialog instead of the main toolbar\nVideo status messages (info, warning and error) are now also emitted to the event log\nCustom videos now display a warning asking the user to complete the required information before processing\nMulti-search now continues with the remaining selected videos if one search fails, preventing the multi-selection panels from staying disabled\nAuto-start mode is now disabled for videos that have been canceled or manually searched, preventing them from automatically processing again",
   "about.news.version_1_8_6.items": "Fixed a Fluent UI runtime error that could break the About and other dialogs\nUpdated the JDownloader integration to support both Linux and Windows and to launch Smart Video Processor in the background\nImproved dependency resolution for Fluent UI and build tooling",
-  "about.news.version_1_8_7.items": "Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application\nFixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet"
+  "about.news.version_1_8_8.items": "Added automatic \"Spectacle\" genre detection for live performances (one-man show, stand-up comedy, theater play, concert, live performance, etc.) when retrieving movie details from TMDB\nCleanup progress dialog now uses translated messages and the correct application icon",
+  "about.news.version_1_8_7.items": "Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application\nFixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

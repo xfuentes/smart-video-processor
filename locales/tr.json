@@ -120,6 +120,7 @@
   "genre.romance": "Romantizm",
   "genre.science_fiction": "Bilim Kurgu",
   "genre.soap": "Sabun",
+  "genre.spectacle": "Gösteri",
   "genre.sport": "Spor",
   "genre.suspense": "Gerilim",
   "genre.talk_show": "Talk Show",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Kodlama hızı {speed}x.",
   "job.encoding.first_pass_countdown": "İlk geçişin tamamlanması {duration}.",
   "job.encoding.countdown": "Tamamlanma süresi {duration}.",
+  "shutdown.dialog.cancel": "İptal etmek",
   "main.toolbar.shutdown": "Bilgisayarı kapatmak için",
   "main.toolbar.shutdown_tooltip": "Tüm işlemler tamamlandığında bilgisayarı kapatın.",
   "shutdown.dialog.title": "Bilgisayarı kapatın.",
   "shutdown.dialog.message": "İptal'e tıklamazsanız bilgisayar {time} sonra kapanacaktır.",
-  "shutdown.dialog.cancel": "İptal etmek",
   "about.news.version_1_8_4.items": "Ana araç çubuğuna, tüm işlemler tamamlandığında bilgisayarı kapatmak için bir kapatma düğmesi eklendi.\nİşlem tamamlandıktan sonra kaynak dosyaları silme seçeneği eklendi.\nMicrosoft Store listesine Arapça (ar-SA) eklendi.\nWindows Mağazası paketinde desteklenen 23 dilin tamamı açıklandı.\nKodlama işlemi ilerleme mesajları artık seçilen dile göre çevriliyor.\nMutlak bölüm numaralandırması kullanan TV dizileri artık sezon alt klasörüne yerleştirilmiyor.\nBaşlat menüsünden Microsoft Store sürümünü başlattığınızda, sabitlenmiş görev çubuğu simgeleri artık çoğalmıyor.",
   "log.error": "Hata: {message}",
   "log.shutdown.failed": "Bilgisayarı kapatma işlemi başarısız oldu: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Sıradan çıkarıldı.",
   "about.news.version_1_8_5.items": "İptal araç çubuğu eylemi artık kuyrukta bekleyen seçili videoları da kaldırıyor ve işleme hazır duruma getiriyor.\nUygulama günlük görüntüleyici artık ana araç çubuğu yerine Hakkında iletişim kutusundaki yeni \"Günlükler\" sekmesinde bulunuyor.\nVideo durum mesajları (bilgi, uyarı ve hata) artık olay günlüğüne de kaydediliyor.\nÖzel videolar artık kullanıcıdan işleme başlamadan önce gerekli bilgileri tamamlamasını isteyen bir uyarı gösteriyor.\nÇoklu arama, bir arama başarısız olursa kalan seçili videolarla devam ediyor ve çoklu seçim panellerinin devre dışı kalmasını önlüyor.\nOtomatik başlatma modu, iptal edilen veya manuel olarak aranan videolar için devre dışı bırakılarak, bunların tekrar otomatik olarak işlenmesi engelleniyor.",
   "about.news.version_1_8_6.items": "Fluent UI çalışma zamanında ortaya çıkan ve Hakkında ve diğer iletişim kutularını bozabilen bir hata düzeltildi.\nJDownloader entegrasyonu hem Linux hem de Windows'u destekleyecek ve Smart Video Processor'ı arka planda başlatacak şekilde güncellendi.\nFluent UI ve derleme araçları için geliştirilmiş bağımlılık çözümü.",
-  "about.news.version_1_8_7.items": "Uygulamayı kapatırken geçici dosyaların silme ilerlemesini gösteren bir temizleme ilerleme iletişim kutusu eklendi.\n1.8.5 sürümündeki \"Yenilikler\" listesindeki yeni satırların kaçış karakterleriyle düzeltilmesi sağlandı, böylece her öğe ayrı bir madde işareti olarak görüntüleniyor."
+  "about.news.version_1_8_8.items": "TMDB'den film detaylarını alırken canlı performanslar (tek kişilik gösteri, stand-up komedi, tiyatro oyunu, konser, canlı performans vb.) için otomatik \"Gösteri\" türü algılama özelliği eklendi.\nTemizleme ilerleme iletişim kutusu artık çevrilmiş mesajlar ve doğru uygulama simgesini kullanıyor.",
+  "about.news.version_1_8_7.items": "Uygulamayı kapatırken geçici dosyaların silme ilerlemesini gösteren bir temizleme ilerleme iletişim kutusu eklendi.\n1.8.5 sürümündeki \"Yenilikler\" listesindeki yeni satırların kaçış karakterleriyle düzeltilmesi sağlandı, böylece her öğe ayrı bir madde işareti olarak görüntüleniyor.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

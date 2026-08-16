@@ -120,6 +120,7 @@
   "genre.romance": "로맨스",
   "genre.science_fiction": "공상과학",
   "genre.soap": "비누",
+  "genre.spectacle": "안경",
   "genre.sport": "스포츠",
   "genre.suspense": "서스펜스",
   "genre.talk_show": "토크쇼",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "{speed}x 속도로 인코딩 중입니다.",
   "job.encoding.first_pass_countdown": "첫 번째 패스가 {duration} 시간에 완료되었습니다.",
   "job.encoding.countdown": "완료까지 {duration}분 소요됩니다.",
+  "shutdown.dialog.cancel": "취소",
   "main.toolbar.shutdown": "컴퓨터를 끄려면",
   "main.toolbar.shutdown_tooltip": "모든 처리가 완료되면 컴퓨터를 끄십시오.",
   "shutdown.dialog.title": "컴퓨터를 끄세요",
   "shutdown.dialog.message": "취소 버튼을 클릭하지 않으면 컴퓨터가 {time} 후에 종료됩니다.",
-  "shutdown.dialog.cancel": "취소",
   "about.news.version_1_8_4.items": "모든 처리가 완료되면 컴퓨터를 끌 수 있도록 메인 툴바에 종료 버튼을 추가했습니다.\n처리 후 소스 파일을 삭제하는 옵션을 추가했습니다.\nMicrosoft Store 상품 목록에 아랍어(ar-SA)를 추가했습니다.\nWindows 스토어 패키지에 지원되는 23개 언어를 모두 명시했습니다.\n인코딩 작업 진행 메시지가 이제 선택한 언어에 따라 번역됩니다.\n절대 번호 매기기를 사용하는 TV 프로그램은 더 이상 시즌 하위 폴더에 배치되지 않습니다.\n시작 메뉴에서 Microsoft Store 버전을 실행할 때 작업 표시줄에 고정된 아이콘이 더 이상 중복되지 않습니다.",
   "log.error": "오류: {message}",
   "log.shutdown.failed": "컴퓨터 종료에 실패했습니다: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "대기열에서 제거되었습니다.",
   "about.news.version_1_8_5.items": "이제 툴바의 '취소' 버튼을 클릭하면 대기열에 있는 선택된 비디오도 제거되고 처리 준비 상태로 재설정됩니다.\n애플리케이션 로그 뷰어는 이제 기본 툴바 대신 '정보' 대화 상자의 새 '로그' 탭에서 사용할 수 있습니다.\n비디오 상태 메시지(정보, 경고 및 오류)도 이제 이벤트 로그에 기록됩니다.\n사용자 지정 비디오는 이제 처리하기 전에 필요한 정보를 입력하라는 경고 메시지를 표시합니다.\n다중 검색은 이제 하나의 검색이 실패하더라도 나머지 선택된 비디오로 계속 진행되어 다중 선택 패널이 비활성화된 상태로 유지되지 않습니다.\n취소되었거나 수동으로 검색된 비디오는 자동 시작 모드가 비활성화되어 자동으로 다시 처리되지 않습니다.",
   "about.news.version_1_8_6.items": "Fluent UI 런타임 오류를 수정하여 '정보' 및 기타 대화 상자가 제대로 표시되지 않도록 했습니다.\nJDownloader 통합 기능을 업데이트하여 Linux와 Windows를 모두 지원하고 Smart Video Processor를 백그라운드에서 실행하도록 했습니다.\nFluent UI 및 빌드 도구의 종속성 해결 기능이 개선되었습니다.",
-  "about.news.version_1_8_7.items": "애플리케이션을 종료할 때 임시 파일 삭제 진행 상황을 보여주는 정리 진행 대화 상자를 추가했습니다.\n버전 1.8.5의 '새로운 기능' 목록에서 이스케이프 처리된 줄 바꿈 문자가 각 항목이 별도의 글머리 기호로 표시되도록 수정했습니다."
+  "about.news.version_1_8_8.items": "TMDB에서 영화 정보를 가져올 때 라이브 공연(1인극, 스탠드업 코미디, 연극, 콘서트, 라이브 공연 등)에 대해 자동으로 \"볼거리\" 장르를 감지하는 기능을 추가했습니다.\n정리 진행 상황 대화 상자에 이제 번역된 메시지와 올바른 애플리케이션 아이콘이 표시됩니다.",
+  "about.news.version_1_8_7.items": "애플리케이션을 종료할 때 임시 파일 삭제 진행 상황을 보여주는 정리 진행 대화 상자를 추가했습니다.\n버전 1.8.5의 '새로운 기능' 목록에서 이스케이프 처리된 줄 바꿈 문자가 각 항목이 별도의 글머리 기호로 표시되도록 수정했습니다.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

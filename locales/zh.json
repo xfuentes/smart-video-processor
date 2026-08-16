@@ -120,6 +120,7 @@
   "genre.romance": "爱情小说",
   "genre.science_fiction": "科幻小说",
   "genre.soap": "肥皂",
+  "genre.spectacle": "奇观",
   "genre.sport": "体育",
   "genre.suspense": "悬念",
   "genre.talk_show": "脱口秀",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "以 {speed}x 速度编码。",
   "job.encoding.first_pass_countdown": "第一轮测试在{duration}内完成。",
   "job.encoding.countdown": "完成时间为{duration}。",
+  "shutdown.dialog.cancel": "取消",
   "main.toolbar.shutdown": "关闭计算机",
   "main.toolbar.shutdown_tooltip": "所有处理完成后，请关闭计算机。",
   "shutdown.dialog.title": "关闭电脑",
   "shutdown.dialog.message": "计算机将在{time}后关机，除非您点击“取消”。",
-  "shutdown.dialog.cancel": "取消",
   "about.news.version_1_8_4.items": "在主工具栏中添加了关机按钮，用于在所有处理完成后关闭计算机。\n新增了在处理完成后删除源文件的选项。\n在 Microsoft Store 列表中添加了阿拉伯语 (ar-SA)\n已在 Windows 应用商店包中声明所有 23 种受支持的语言\n现在，编码作业进度消息会根据所选语言进行翻译。\n使用绝对集数编号的电视剧不再放在季子文件夹中。\n从“开始”菜单启动 Microsoft Store 版本时，固定的任务栏图标不再重复出现。",
   "log.error": "错误: {message}",
   "log.shutdown.failed": "计算机关机失败：{detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "已从队列中移除。",
   "about.news.version_1_8_5.items": "现在，“取消”工具栏操作还会移除队列中等待处理的已选视频，并将其重置为待处理状态。应用程序日志查看器现在位于“关于”对话框的“日志”选项卡中，而不是主工具栏中。视频状态消息（信息、警告和错误）现在也会记录到事件日志中。自定义视频现在会显示警告，提示用户在处理前填写所需信息。如果一次搜索失败，多选搜索现在会继续搜索剩余的已选视频，从而避免多选面板一直处于禁用状态。已取消或手动搜索的视频的自动启动模式现在已被禁用，从而避免它们再次自动处理。",
   "about.news.version_1_8_6.items": "修复了可能导致“关于”和其他对话框崩溃的 Fluent UI 运行时错误。\n更新了 JDownloader 集成，使其同时支持 Linux 和 Windows 系统，并可在后台启动 Smart Video Processor。\n改进了 Fluent UI 和构建工具的依赖关系解析",
-  "about.news.version_1_8_7.items": "新增清理进度对话框，在关闭应用程序时显示临时文件的删除进度。\n修复了 1.8.5 版本中“新增功能”列表中转义换行符的问题，现在每个项目都显示为单独的项目符号。"
+  "about.news.version_1_8_8.items": "从 TMDB 获取电影详情时，新增了对现场表演（单人秀、脱口秀、戏剧、音乐会、现场演出等）的自动“Spectacle”类型检测功能。\n清理进度对话框现在使用翻译后的消息和正确的应用程序图标。",
+  "about.news.version_1_8_7.items": "新增清理进度对话框，在关闭应用程序时显示临时文件的删除进度。\n修复了 1.8.5 版本中“新增功能”列表中转义换行符的问题，现在每个项目都显示为单独的项目符号。",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }

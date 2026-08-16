@@ -120,6 +120,7 @@
   "genre.romance": "Romanticismo",
   "genre.science_fiction": "Fantascienza",
   "genre.soap": "Sapone",
+  "genre.spectacle": "Spettacolo",
   "genre.sport": "Sport",
   "genre.suspense": "Suspense",
   "genre.talk_show": "Talk show",
@@ -579,11 +580,11 @@
   "job.encoding.speed": "Codifica a {speed}x.",
   "job.encoding.first_pass_countdown": "Completamento della prima passata in {duration}.",
   "job.encoding.countdown": "Completamento in {duration}.",
+  "shutdown.dialog.cancel": "Cancellare",
   "main.toolbar.shutdown": "per spegnere",
   "main.toolbar.shutdown_tooltip": "Spegnere il computer al termine di tutte le elaborazioni.",
   "shutdown.dialog.title": "Spegni il computer",
   "shutdown.dialog.message": "Il computer si spegnerà tra {time} a meno che non si faccia clic su Annulla.",
-  "shutdown.dialog.cancel": "Cancellare",
   "about.news.version_1_8_4.items": "È stato aggiunto un pulsante di spegnimento alla barra degli strumenti principale per spegnere il computer al termine di tutte le elaborazioni.\nAggiunta un'opzione per eliminare i file sorgente dopo l'elaborazione.\nAggiunta la lingua araba (ar-SA) all'elenco del Microsoft Store.\nSono state dichiarate tutte le 23 lingue supportate nel pacchetto di Windows Store.\nI messaggi relativi all'avanzamento del processo di codifica vengono ora tradotti in base alla lingua selezionata.\nLe serie TV che utilizzano la numerazione assoluta degli episodi non vengono più inserite in una sottocartella di stagione.\nLe icone bloccate sulla barra delle applicazioni non vengono più duplicate all'avvio della versione del Microsoft Store dal menu Start.",
   "log.error": "Messaggio: {message}",
   "log.shutdown.failed": "Impossibile spegnere il computer: {detail}",
@@ -668,5 +669,8 @@
   "log.video.removed_from_queue": "Rimosso dalla coda.",
   "about.news.version_1_8_5.items": "L'azione Annulla nella barra degli strumenti ora rimuove anche i video selezionati in attesa nella coda e li riporta allo stato pronto per l'elaborazione.\nIl visualizzatore del registro dell'applicazione è ora disponibile in una nuova scheda \"Registri\" nella finestra di dialogo Informazioni anziché nella barra degli strumenti principale.\nI messaggi di stato del video (informazioni, avvisi ed errori) vengono ora emessi anche nel registro eventi.\nI video personalizzati ora visualizzano un avviso che chiede all'utente di completare le informazioni richieste prima dell'elaborazione.\nLa ricerca multipla ora continua con i video selezionati rimanenti se una ricerca non riesce, impedendo che i pannelli di selezione multipla rimangano disabilitati.\nLa modalità di avvio automatico è ora disabilitata per i video che sono stati annullati o cercati manualmente, impedendone la successiva elaborazione automatica.",
   "about.news.version_1_8_6.items": "Risolto un errore di runtime di Fluent UI che poteva causare il malfunzionamento delle finestre di dialogo \"Informazioni\" e di altre finestre di dialogo.\nHo aggiornato l'integrazione con JDownloader per supportare sia Linux che Windows e per avviare Smart Video Processor in background.\nRisoluzione delle dipendenze migliorata per Fluent UI e strumenti di compilazione",
-  "about.news.version_1_8_7.items": "Aggiunta una finestra di dialogo che mostra lo stato di avanzamento della pulizia dei file temporanei alla chiusura dell'applicazione. Corretto il problema dei caratteri di nuova riga con escape nell'elenco \"Novità\" per la versione 1.8.5, in modo che ogni elemento venga visualizzato come un punto elenco separato."
+  "about.news.version_1_8_8.items": "Aggiunto il rilevamento automatico del genere \"Spettacolo\" per le esibizioni dal vivo (spettacolo solista, cabaret, opera teatrale, concerto, performance dal vivo, ecc.) durante il recupero dei dettagli dei film da TMDB.\nLa finestra di dialogo relativa all'avanzamento della pulizia ora utilizza messaggi tradotti e l'icona corretta dell'applicazione.",
+  "about.news.version_1_8_7.items": "Aggiunta una finestra di dialogo che mostra lo stato di avanzamento della pulizia dei file temporanei alla chiusura dell'applicazione. Corretto il problema dei caratteri di nuova riga con escape nell'elenco \"Novità\" per la versione 1.8.5, in modo che ogni elemento venga visualizzato come un punto elenco separato.",
+  "cleanup.message": "Cleaning temporary files...",
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
 }
