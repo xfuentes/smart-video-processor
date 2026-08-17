@@ -29,5 +29,11 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'off'
     }
   },
+  {
+    files: ['**/*.mjs'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off'
+    }
+  },
   eslintConfigPrettier
 )
