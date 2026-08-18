@@ -32,6 +32,17 @@ export const NewsPanel = (): React.JSX.Element => {
         border: '1px solid #EBEBEB'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.9' })}</h4>
+      <ul>
+        {_('about.news.version_1_8_9.items', {
+          defaultValue:
+            'Fixed filename parsing for movie titles containing bracketed release tags such as [REMASTERED]\nImproved reliability of automatic source file deletion by falling back to permanent delete when the system trash is unavailable'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.8' })}</h4>
       <ul>
         {_('about.news.version_1_8_8.items', {
