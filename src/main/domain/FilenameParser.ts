@@ -48,7 +48,8 @@ function extractYear(input: string, beforeIndex?: number): number | undefined {
 }
 
 function cleanupTitle(title: string): string {
-  title = title.replace(/^(?:(?:\[[^\]]+\]|\([^)]+\))\s*)+/, '')
+  title = title.replace(/^(?:(?:\[[^\]]+]|\([^)]+\))\s*)+/, '')
+  title = title.replace(/\[([^\]]+)]/g, (match, content) => (releaseNoiseTest.test(content) ? '' : match))
   title = title.replace(/[()[\]_.,\-–]+$/, '')
   title = title.replace(/[.\-_–]+/g, ' ')
   // Rebuild dotted acronyms like "T W D" -> "T.W.D"
@@ -62,6 +63,8 @@ function normalize(input: string): string {
 
 const RELEASE_NOISE_PATTERN =
   /\b(Webrip|WEBRip|WEB-DL|Web-DL|HEVC|H264|H265|x264|x265|Notag|NoTag|MULTI|Multi|FRENCH|VFF|VO|VOSTFR|1080p|720p|2160p|4K|BluRay|BDRip|HDRip|DVDRip|HDTV|AAC|ACC|AC3|DDP5\.1|DTS|HDLight|VFI|VFQ|VOST|SUBFRENCH|COMPLETE|REPACK|PROPER|EXTENDED|UNRATED|REMASTERED|WEB|DL)\b/gi
+
+const releaseNoiseTest = new RegExp(RELEASE_NOISE_PATTERN.source, 'i')
 
 function removeReleaseNoise(input: string): string {
   let cleaned = input.replace(RELEASE_NOISE_PATTERN, '')

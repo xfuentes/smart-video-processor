@@ -54,3 +54,17 @@ test('parse movie filename with leading [Film] tag and dotted year', () => {
     absoluteEpisode: undefined
   })
 })
+
+test('parse movie filename with bracketed release noise before year', () => {
+  const result = parseFilename(
+    'Le Septième Voyage De Sinbad [REMASTERED] (1958) VFF ENG 1080p MULTi AC3 5.1 @384Kbps.x264-RHT.mkv'
+  )
+  expect(result).toStrictEqual({
+    title: 'Le Septième Voyage De Sinbad',
+    year: 1958,
+    season: undefined,
+    episode: undefined,
+    episodeTitle: undefined,
+    absoluteEpisode: undefined
+  })
+})

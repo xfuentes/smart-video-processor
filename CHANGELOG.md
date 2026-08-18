@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.9] - 2026-08-18
+
+### Fixed
+- Fixed filename parsing for movie titles containing bracketed release noise such as `[REMASTERED]`.
+- Improved automatic source file deletion by falling back to a permanent delete when the system trash is unavailable.
+
 ## [1.8.8] - 2026-08-16
 
 ### Added

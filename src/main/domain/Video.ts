@@ -877,16 +877,26 @@ export class Video implements IVideo {
     for (const part of this.videoParts) {
       await part.deleteSourceFiles()
     }
+    if (!fs.existsSync(this.sourcePath)) {
+      return
+    }
     try {
-      if (fs.existsSync(this.sourcePath)) {
-        await shell.trashItem(this.sourcePath)
-      }
+      await shell.trashItem(this.sourcePath)
     } catch (e) {
-      error('log.video.delete_source_failed', {
-        defaultValue: 'Failed to move source file {path} to trash: {error}',
+      warning('log.video.delete_source_failed', {
+        defaultValue: 'Failed to move source file {path} to trash, deleting permanently: {error}',
         path: this.sourcePath,
         error: String(e)
       })
+      try {
+        await fs.promises.unlink(this.sourcePath)
+      } catch (unlinkError) {
+        error('log.video.delete_source_failed', {
+          defaultValue: 'Failed to delete source file {path}: {error}',
+          path: this.sourcePath,
+          error: String(unlinkError)
+        })
+      }
     }
   }
 
