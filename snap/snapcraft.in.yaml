@@ -35,18 +35,6 @@ apps:
       TMPDIR: $XDG_RUNTIME_DIR
 
 parts:
-  mkvmerge:
-    plugin: nil
-    override-pull: |
-      mkdir -p /tmp/keyrings
-      curl -fsSL https://mkvtoolnix.download/gpg-pub-moritzbunkus.gpg | gpg --dearmor > /tmp/keyrings/gpg-pub-moritzbunkus.gpg
-      echo "deb [arch=__DEB_ARCH__ signed-by=/tmp/keyrings/gpg-pub-moritzbunkus.gpg] https://mkvtoolnix.download/ubuntu noble main" > /etc/apt/sources.list.d/mkvtoolnix.list
-      apt-get update
-      apt-get install -y mkvtoolnix
-      install -D /usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/usr/bin/mkvmerge
-      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/lib
-      cp -v $(ldd /usr/bin/mkvmerge | grep '=> /' | awk '{print $3}' | grep '^/') $SNAPCRAFT_PART_INSTALL/usr/lib/
-
   smart-video-processor:
     plugin: nil
     source: .
@@ -59,6 +47,22 @@ parts:
       install -D ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.desktop
       install -D dist/bin/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
       install -D dist/bin/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
+
+      # mkvmerge is distributed as an AppImage, but AppImages do not work
+      # inside a strict snap. Extract the real binary + libraries and wrap it.
+      dist/bin/mkvmerge --appimage-extract
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib
+      cp -P squashfs-root/usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin/mkvmerge.real
+      cp -P squashfs-root/usr/lib/* $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib/
+      rm -rf squashfs-root
+
+      APP_BIN="$SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/resources/bin"
+      rm -f "$APP_BIN/mkvmerge"
+      printf '%s\n' '#!/bin/sh' 'export LD_LIBRARY_PATH="$SNAP/opt/mkvmerge/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"' 'exec "$SNAP/opt/mkvmerge/usr/bin/mkvmerge.real" "$@"' > "$APP_BIN/mkvmerge"
+      chmod +x "$APP_BIN/mkvmerge"
+
+      install -D "$APP_BIN/mkvmerge" $SNAPCRAFT_PART_INSTALL/usr/bin/mkvmerge
     build-snaps:
       - node/22/stable
     build-packages:

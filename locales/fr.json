@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Ajout de la détection automatique du genre « Spectacle » pour les spectacles vivants (one-man show, stand-up comedy, théâtre, concert, performance live, etc.) lors de la récupération des fiches films depuis TMDB\nLa boîte de dialogue de progression du nettoyage utilise désormais des messages traduits et la bonne icône de l'application",
   "about.news.version_1_8_7.items": "Ajout d'une boîte de dialogue de progression du nettoyage affichant la suppression des fichiers temporaires lors de la fermeture de l'application.\nCorrection des sauts de ligne échappés dans la liste des nouveautés de la version 1.8.5 : chaque élément s'affiche désormais comme une puce distincte.",
   "cleanup.message": "Nettoyage des fichiers temporaires...",
-  "cleanup.progress": "Nettoyage des fichiers temporaires... ({current}/{total})"
+  "cleanup.progress": "Nettoyage des fichiers temporaires... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Pour pouvoir traiter des fichiers provenant de n'importe quel emplacement de votre système, activez l'accès au système de fichiers hôte avec cette commande :",
+  "alert.copy": "Copie",
+  "alert.copied": "Copié !",
+  "alert.do_not_show_again": "Ne plus afficher",
+  "about.news.version_1_9_0.items": "Ajout d'un paquet Flatpak avec une bannière d'autorisation du système de fichiers hôte\nJ'ai repensé les paramètres des règles de sortie avec une liste modifiable par glisser-déposer et de nouveaux opérateurs de correspondance.\nAjout d'une option « Ne plus afficher » et d'une commande de copie dans le presse-papiers pour les avertissements d'autorisation.\nLa boîte de dialogue Paramètres a été réorganisée en onglets pour une navigation plus facile."
 }

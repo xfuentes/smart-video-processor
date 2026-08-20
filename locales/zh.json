@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "从 TMDB 获取电影详情时，新增了对现场表演（单人秀、脱口秀、戏剧、音乐会、现场演出等）的自动“Spectacle”类型检测功能。\n清理进度对话框现在使用翻译后的消息和正确的应用程序图标。",
   "about.news.version_1_8_7.items": "新增清理进度对话框，在关闭应用程序时显示临时文件的删除进度。\n修复了 1.8.5 版本中“新增功能”列表中转义换行符的问题，现在每个项目都显示为单独的项目符号。",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "要能够从系统上的任何位置处理文件，请使用以下命令启用主机文件系统访问：",
+  "alert.copy": "复制",
+  "alert.copied": "已复制！",
+  "alert.do_not_show_again": "不要再次显示",
+  "about.news.version_1_9_0.items": "添加了带有主机文件系统权限横幅的 Flatpak 打包\n重新设计了输出规则设置，使其具有可编辑的拖放列表和新的匹配运算符。\n为权限警告添加了“不再显示”选项和复制到剪贴板命令\n将“设置”对话框重新组织成选项卡，以便于导航。"
 }

@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "La til automatisk sjangerdeteksjon av typen «Spectacle» for liveopptredener (enmannsshow, standupkomedie, teaterstykke, konsert, liveopptreden osv.) ved henting av filmdetaljer fra TMDB.\nDialogboksen for opprydding bruker nå oversatte meldinger og riktig programikon",
   "about.news.version_1_8_7.items": "La til en dialogboks for oppryddingsfremdrift som viser slettingsfremdriften for midlertidige filer når programmet lukkes.\nFikset feil på linjeskift i Nyheter-listen for versjon 1.8.5, slik at hvert element gjengis som et separat punkt.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "For å kunne behandle filer fra hvor som helst på systemet ditt, aktiver tilgang til vertsfilsystemet med denne kommandoen:",
+  "alert.copy": "Kopiere",
+  "alert.copied": "Kopiert!",
+  "alert.do_not_show_again": "Ikke vis igjen",
+  "about.news.version_1_9_0.items": "La til Flatpak-pakking med et tillatelsesbanner for vertsfilsystemet\nOmarbeidet innstillingene for utdataregler med en redigerbar dra-og-slipp-liste og nye samsvarende operatorer\nLa til et «Ikke vis igjen»-alternativ og en kommando for kopiering til utklippstavlen for tillatelsesvarsler.\nOmorganiserte Innstillinger-dialogboksen i faner for enklere navigering"
 }

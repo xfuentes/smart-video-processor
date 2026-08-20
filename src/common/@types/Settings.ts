@@ -129,4 +129,8 @@ export type Settings = {
    * ffprobe command full path.
    */
   ffprobePath: string
+  /**
+   * Map of alert keys the user has chosen not to show again.
+   */
+  dismissedAlerts: Record<string, boolean>
 }

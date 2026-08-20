@@ -1,7 +1,8 @@
 {
-  "version": "1.8.9",
+  "version": "1.9.0",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
+  "appId": "io.github.xfuentes.smart-video-processor",
   "desktopName": "smart-video-processor",
   "private": true,
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
@@ -34,7 +35,7 @@
     "build": "yarn run typecheck && electron-vite build",
     "postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",
     "package": "yarn build && electron-builder",
-    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/",
+    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/ && node ./tools/configure.js ./flatpak/",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled",
     "build:native": "node-gyp rebuild --directory native/uwp-activation",
@@ -47,6 +48,9 @@
     "update-electron-app": "^3.3.0"
   },
   "devDependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",

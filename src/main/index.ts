@@ -188,7 +188,8 @@ protocol.registerSchemesAsPrivileged([
       secure: true,
       supportFetchAPI: true,
       stream: true,
-      bypassCSP: true
+      bypassCSP: true,
+      corsEnabled: true
     }
   }
 ])
@@ -244,7 +245,16 @@ app.whenReady().then(async () => {
   protocol.handle('svp-stream', async (req) => {
     const filePath = new URL(req.url).pathname
     try {
-      return await net.fetch(`file://${filePath}`)
+      const response = await net.fetch(`file://${filePath}`)
+      const headers = new Headers(response.headers)
+      headers.set('Access-Control-Allow-Origin', '*')
+      headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS')
+      headers.set('Access-Control-Allow-Headers', '*')
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+      })
     } catch (err) {
       error('log.protocol.unable_to_fetch', {
         defaultValue: "Unable to fetch '{path}': {error}",
@@ -265,9 +275,15 @@ app.whenReady().then(async () => {
     }
   })
   ipcMain.handle('main:getInstallationStatus', async () => {
+    const isFlatpak = Processes.isFlatpak()
+    const hasHostFilesystemAccess = Processes.hasHostFilesystemAccess()
+    const flatpakAppId = process.env.FLATPAK_ID ?? 'io.github.xfuentes.smart-video-processor'
     return {
       isLimitedPermissions: Processes.isLimitedPermissions(),
-      hasRemovableMediaAccess: Processes.hasRemovableMediaAccess()
+      hasRemovableMediaAccess: Processes.hasRemovableMediaAccess(),
+      isFlatpak,
+      hasHostFilesystemAccess,
+      flatpakOverrideCommand: isFlatpak ? `flatpak override --user ${flatpakAppId} --filesystem=host` : ''
     }
   })
   ipcMain.handle('main:getCurrentSettings', () => {

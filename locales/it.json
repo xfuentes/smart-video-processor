@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Aggiunto il rilevamento automatico del genere \"Spettacolo\" per le esibizioni dal vivo (spettacolo solista, cabaret, opera teatrale, concerto, performance dal vivo, ecc.) durante il recupero dei dettagli dei film da TMDB.\nLa finestra di dialogo relativa all'avanzamento della pulizia ora utilizza messaggi tradotti e l'icona corretta dell'applicazione.",
   "about.news.version_1_8_7.items": "Aggiunta una finestra di dialogo che mostra lo stato di avanzamento della pulizia dei file temporanei alla chiusura dell'applicazione. Corretto il problema dei caratteri di nuova riga con escape nell'elenco \"Novità\" per la versione 1.8.5, in modo che ogni elemento venga visualizzato come un punto elenco separato.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Per poter elaborare i file da qualsiasi posizione del sistema, abilita l'accesso al filesystem host con questo comando:",
+  "alert.copy": "Copia",
+  "alert.copied": "Copiato!",
+  "alert.do_not_show_again": "Non mostrare più",
+  "about.news.version_1_9_0.items": "Aggiunto il pacchetto Flatpak con un banner di autorizzazione per il filesystem host.\nLe impostazioni delle regole di output sono state rielaborate con un elenco modificabile tramite trascinamento e rilascio e nuovi operatori di corrispondenza.\nAggiunta l'opzione \"Non mostrare più\" e il comando \"Copia negli appunti\" per gli avvisi di autorizzazione.\nLa finestra di dialogo Impostazioni è stata riorganizzata in schede per una navigazione più semplice."
 }

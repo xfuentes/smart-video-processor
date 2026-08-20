@@ -22,11 +22,13 @@ export const LicensePanel = () => {
   return (
     <div
       style={{
+        backgroundColor: 'var(--colorNeutralBackground1)',
         height: '360px',
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '5px',
-        border: '1px solid #EBEBEB'
+        border: '1px solid var(--colorNeutralStroke1)',
+        boxSizing: 'border-box'
       }}
     >
       <h3 style={{ textAlign: 'center' }}>GNU GENERAL PUBLIC LICENSE</h3>

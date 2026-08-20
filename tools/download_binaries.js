@@ -34,12 +34,14 @@ const getDownloadUrls = () => {
     if (arch === 'arm64') {
       return [
         { filename: 'ffmpeg', url: 'https://mesfichiers.org/?v8bqjrir58z22f40b6u9' },
-        { filename: 'ffprobe', url: 'https://mesfichiers.org/?qfooirxit9alswnr4gxf' }
+        { filename: 'ffprobe', url: 'https://mesfichiers.org/?qfooirxit9alswnr4gxf' },
+        { filename: 'mkvmerge', url: 'https://mesfichiers.org/?oc53ym9l2wz5qud32n7p' }
       ]
     } else {
       return [
         { filename: 'ffmpeg', url: 'https://mesfichiers.org/?akqb2gkb2czjf0v7a7mo' },
-        { filename: 'ffprobe', url: 'https://mesfichiers.org/?bjrqaa0mnlwztohjfuf4' }
+        { filename: 'ffprobe', url: 'https://mesfichiers.org/?bjrqaa0mnlwztohjfuf4' },
+        { filename: 'mkvmerge', url: 'https://mesfichiers.org/?4c1bsnfnbnbmxwpj3dcw' }
       ]
     }
   } else if (platform === 'win32') {
@@ -86,9 +88,7 @@ async function downloadFromMyFiles(urlToFile) {
   })
 
   if (process.platform !== 'win32') {
-    fs.chmod(filePath, '755', (err) => {
-      if (err) throw err
-    })
+    fs.chmodSync(filePath, 0o755)
   }
 
   return filePath

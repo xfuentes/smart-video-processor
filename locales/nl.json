@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Automatische detectie van het genre \"Spectakel\" toegevoegd voor live-optredens (solovoorstelling, stand-upcomedy, theaterstuk, concert, live-optreden, enz.) bij het ophalen van filmgegevens van TMDB.\nHet dialoogvenster voor de voortgang van het opruimen gebruikt nu vertaalde berichten en het juiste toepassingspictogram.",
   "about.news.version_1_8_7.items": "Er is een dialoogvenster toegevoegd dat de voortgang van het verwijderen van tijdelijke bestanden weergeeft bij het sluiten van de applicatie.\nDe ontsnapte regeleinden in de lijst 'Wat is nieuw' voor versie 1.8.5 zijn gecorrigeerd, zodat elk item nu als een afzonderlijk opsommingsteken wordt weergegeven.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Om bestanden vanaf elke locatie op uw systeem te kunnen verwerken, schakelt u de toegang tot het hostbestandssysteem in met dit commando:",
+  "alert.copy": "Kopiëren",
+  "alert.copied": "Gekopieerd!",
+  "alert.do_not_show_again": "Niet opnieuw weergeven",
+  "about.news.version_1_9_0.items": "Flatpak-verpakking toegevoegd met een banner voor hostbestandssysteemrechten\nDe instellingen voor de uitvoerregels zijn herzien en bevatten nu een bewerkbare lijst die je kunt slepen en neerzetten, evenals nieuwe overeenkomende operatoren.\nEen optie 'Niet meer weergeven' en een opdracht om waarschuwingen over machtigingen naar het klembord te kopiëren zijn toegevoegd.\nHet instellingendialoogvenster is opnieuw ingedeeld in tabbladen voor eenvoudigere navigatie."
 }

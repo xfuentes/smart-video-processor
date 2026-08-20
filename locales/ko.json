@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "TMDB에서 영화 정보를 가져올 때 라이브 공연(1인극, 스탠드업 코미디, 연극, 콘서트, 라이브 공연 등)에 대해 자동으로 \"볼거리\" 장르를 감지하는 기능을 추가했습니다.\n정리 진행 상황 대화 상자에 이제 번역된 메시지와 올바른 애플리케이션 아이콘이 표시됩니다.",
   "about.news.version_1_8_7.items": "애플리케이션을 종료할 때 임시 파일 삭제 진행 상황을 보여주는 정리 진행 대화 상자를 추가했습니다.\n버전 1.8.5의 '새로운 기능' 목록에서 이스케이프 처리된 줄 바꿈 문자가 각 항목이 별도의 글머리 기호로 표시되도록 수정했습니다.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "시스템의 어느 위치에서든 파일을 처리할 수 있도록 하려면 다음 명령어를 사용하여 호스트 파일 시스템 액세스를 활성화하십시오.",
+  "alert.copy": "복사",
+  "alert.copied": "복사했어요!",
+  "alert.do_not_show_again": "다시 표시하지 않음",
+  "about.news.version_1_9_0.items": "호스트 파일 시스템 권한 배너가 포함된 Flatpak 패키징을 추가했습니다.\n편집 가능한 드래그 앤 드롭 목록과 새로운 일치 연산자를 사용하여 출력 규칙 설정을 재구성했습니다.\n권한 경고에 대해 '다시 표시 안 함' 옵션과 '클립보드에 복사' 명령을 추가했습니다.\n탐색이 더 쉬워지도록 설정 대화 상자를 탭으로 재구성했습니다."
 }

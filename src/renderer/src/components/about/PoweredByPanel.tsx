@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from '@fluentui/react-components'
 import { useI18n } from '../../i18n'
 
@@ -27,22 +27,43 @@ import MKVToolNixLogo from '../../assets/mkvtoolnix.png'
 import FFmpegLogo from '../../assets/ffmpeg.png'
 import TMDBLogo from '../../assets/tmdb.svg'
 import TVDBLogo from '../../assets/tvdb.svg'
-import NODEJSLogo from '../../assets/Node.js.svg'
+import NODEJSLogoDark from '../../assets/Node.js-dark.svg'
+import NODEJSLogoLight from '../../assets/Node.js-light.svg'
 
 const otherVersions = window.electron.process.versions
 
+function getIsDark(): boolean {
+  const dark = window.matchMedia('(prefers-color-scheme: dark)')
+  const light = window.matchMedia('(prefers-color-scheme: light)')
+  return dark.matches || !light.matches
+}
+
 export const PoweredByPanel = (): React.JSX.Element => {
   const _ = useI18n()
+  const [isDark, setIsDark] = useState(getIsDark)
+
+  useEffect(() => {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)')
+    const light = window.matchMedia('(prefers-color-scheme: light)')
+    const handler = () => setIsDark(getIsDark())
+    dark.addEventListener('change', handler)
+    light.addEventListener('change', handler)
+    return () => {
+      dark.removeEventListener('change', handler)
+      light.removeEventListener('change', handler)
+    }
+  }, [])
 
   return (
     <div
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'var(--colorNeutralBackground2)',
         height: '360px',
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '5px',
-        border: '1px solid #EBEBEB'
+        border: '1px solid var(--colorNeutralStroke1)',
+        boxSizing: 'border-box'
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
@@ -116,7 +137,7 @@ export const PoweredByPanel = (): React.JSX.Element => {
             <tr>
               <td>
                 <img
-                  src={NODEJSLogo}
+                  src={isDark ? NODEJSLogoDark : NODEJSLogoLight}
                   width={48}
                   alt={_('about.powered.nodejs.alt', { defaultValue: 'Node.js Logo' })}
                 />

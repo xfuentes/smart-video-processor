@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Lisätty automaattinen \"Spektaakkeli\"-tyylilajin tunnistus live-esityksille (yksimiehen show, stand up -komedia, teatterinäytelmä, konsertti, live-esitys jne.) elokuvan tietoja haettaessa TMDB:stä.\nSiivouksen edistymisvalintaikkuna käyttää nyt käännettyjä viestejä ja oikeaa sovelluskuvaketta",
   "about.news.version_1_8_7.items": "Lisätty siivouksen edistymisvalintaikkuna, joka näyttää väliaikaisten tiedostojen poistamisen edistymisen sovellusta suljettaessa.\nKorjattu version 1.8.5 Uutta-luettelon koodinvaihtomerkkien aiheuttama rivinvaihto, jonka jälkeen jokainen kohta näkyy erillisenä luettelomerkkinä.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Jotta voit käsitellä tiedostoja mistä tahansa järjestelmästäsi, ota isäntätiedostojärjestelmän käyttöoikeus käyttöön tällä komennolla:",
+  "alert.copy": "Kopioida",
+  "alert.copied": "Kopioitu!",
+  "alert.do_not_show_again": "Älä näytä uudelleen",
+  "about.news.version_1_9_0.items": "Lisätty Flatpak-pakkaus isäntätiedostojärjestelmän käyttöoikeusbannerilla\nTulostussääntöjen asetuksia on muokattu muokattavalla vedä ja pudota -luettelolla sekä uusilla vastaavuusoperaattoreilla.\nLisätty Älä näytä uudelleen -vaihtoehto ja kopioi leikepöydälle -komento käyttöoikeusvaroituksille\nAsetukset-valintaikkuna järjestettiin uudelleen välilehdiksi helpomman navigoinnin takaamiseksi"
 }

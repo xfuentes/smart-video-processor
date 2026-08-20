@@ -29,18 +29,18 @@ import {
   Label,
   Option,
   Select,
-  SelectTabData
+  SelectTabData,
+  tokens
 } from '@fluentui/react-components'
 import { Dispatch, SetStateAction } from 'react'
+import { OutputRule, OutputRuleOperator, OutputRuleProperty } from '../../../../common/@types/Settings'
 import {
-  OutputRule,
-  OutputRuleOperator,
-  OutputRuleProperty
-} from '../../../common/@types/Settings'
-import { tmdbSupportedLanguageCodes, tvdbSupportedLanguageCodes } from '../../../common/TranslationSupportedLanguages'
-import { Countries } from '../../../common/Countries'
-import { Languages } from '../../../common/LanguageIETF'
-import { useI18n } from '../i18n'
+  tmdbSupportedLanguageCodes,
+  tvdbSupportedLanguageCodes
+} from '../../../../common/TranslationSupportedLanguages'
+import { Countries } from '../../../../common/Countries'
+import { Languages } from '../../../../common/LanguageIETF'
+import { useI18n } from '../../i18n'
 
 const GENRE_KEYS = [
   'action',
@@ -115,6 +115,7 @@ export type OutputRuleDialogProps = {
   setRuleDraft: Dispatch<SetStateAction<OutputRule | undefined>>
   onSave: () => void
   onCancel: () => void
+  onDelete?: () => void
   getOperatorLabel: (operator: OutputRuleOperator) => string
   language: string
 }
@@ -125,6 +126,7 @@ export const OutputRuleDialog = ({
   setRuleDraft,
   onSave,
   onCancel,
+  onDelete,
   getOperatorLabel,
   language
 }: OutputRuleDialogProps) => {
@@ -223,7 +225,13 @@ export const OutputRuleDialog = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={(_event, data) => { if (!data.open) onCancel() }} modalType="modal">
+    <Dialog
+      open={open}
+      onOpenChange={(_event, data) => {
+        if (!data.open) onCancel()
+      }}
+      modalType="modal"
+    >
       <DialogSurface style={{ minWidth: '600px', padding: '10px' }}>
         <DialogBody>
           <DialogContent>
@@ -446,6 +454,19 @@ export const OutputRuleDialog = ({
           </DialogContent>
         </DialogBody>
         <DialogActions style={{ paddingTop: '10px' }}>
+          {onDelete !== undefined && (
+            <Button
+              appearance="primary"
+              size="small"
+              style={{
+                backgroundColor: tokens.colorPaletteRedBackground3,
+                color: tokens.colorNeutralForeground1
+              }}
+              onClick={onDelete}
+            >
+              {_('settings.output_rules.remove', { defaultValue: 'Delete' })}
+            </Button>
+          )}
           <Button
             appearance="primary"
             disabled={

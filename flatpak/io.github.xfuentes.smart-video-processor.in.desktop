@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=__APP_ID__ %F
+Icon=__APP_ID__
+Type=Application
+Terminal=false
+Name=Smart Video Processor
+Comment=__DESCRIPTION__
+Categories=AudioVideo
+MimeType=video/x-matroska;video/x-msvideo;video/mp4
+Keywords=encode;organize;video;movie;show

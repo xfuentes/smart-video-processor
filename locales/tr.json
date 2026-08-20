@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "TMDB'den film detaylarını alırken canlı performanslar (tek kişilik gösteri, stand-up komedi, tiyatro oyunu, konser, canlı performans vb.) için otomatik \"Gösteri\" türü algılama özelliği eklendi.\nTemizleme ilerleme iletişim kutusu artık çevrilmiş mesajlar ve doğru uygulama simgesini kullanıyor.",
   "about.news.version_1_8_7.items": "Uygulamayı kapatırken geçici dosyaların silme ilerlemesini gösteren bir temizleme ilerleme iletişim kutusu eklendi.\n1.8.5 sürümündeki \"Yenilikler\" listesindeki yeni satırların kaçış karakterleriyle düzeltilmesi sağlandı, böylece her öğe ayrı bir madde işareti olarak görüntüleniyor.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Sisteminizdeki herhangi bir yerden dosya işleyebilmek için, şu komutla ana bilgisayar dosya sistemi erişimini etkinleştirin:",
+  "alert.copy": "Kopyala",
+  "alert.copied": "Kopyalandı!",
+  "alert.do_not_show_again": "Bir daha gösterme",
+  "about.news.version_1_9_0.items": "Ana dosya sistemi izin başlığı içeren Flatpak paketleme eklendi.\nÇıktı Kuralları ayarları, düzenlenebilir, sürükle ve bırak özellikli bir liste ve yeni eşleştirme operatörleri ile yeniden düzenlendi.\nİzin uyarıları için \"Bir daha gösterme\" seçeneği ve panoya kopyala komutu eklendi.\nAyarlar iletişim kutusu, daha kolay gezinme için sekmeler halinde yeniden düzenlendi."
 }

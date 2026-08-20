@@ -22,7 +22,7 @@ export const ListOrVideoContainer = ({ videos, selectedVideos, onSelectionChange
         </div>
       ) : (
         <>
-          <div style={{ backgroundColor: '#f7f8fa' }}>
+          <div style={{ backgroundColor: 'var(--colorNeutralBackground1)' }}>
             <MainToolbar
               onOpen={() => window.api.video.openFileExplorer()}
               videos={videos}

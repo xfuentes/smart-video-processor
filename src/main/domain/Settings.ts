@@ -60,8 +60,11 @@ const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
     }
     return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
   } else if (os.platform() === 'linux') {
-    if (process.env.SNAP && process.env.SNAP.indexOf('smart-video-processor') !== -1) {
-      return `${process.env.SNAP}/usr/bin/${tool}`
+    if (process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1) {
+      const toolPathFromResources = Path.join(process.resourcesPath, 'bin', tool)
+      if (isValidExecutable(toolPathFromResources)) {
+        return toolPathFromResources
+      }
     }
     const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'dist', 'bin', tool)
     if (isValidExecutable(toolPathFromSources)) {
@@ -94,7 +97,8 @@ export const defaultSettings: Settings = {
   audioEnforceCodec: false,
   mkvMergePath: 'mkvmerge',
   ffmpegPath: 'ffmpeg',
-  ffprobePath: 'ffprobe'
+  ffprobePath: 'ffprobe',
+  dismissedAlerts: {}
 }
 function migrateOutputRuleCondition(condition: unknown): OutputRuleCondition {
   const c = condition as Record<string, unknown>
@@ -186,7 +190,9 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  currentSettings.tmpFilesPath = Processes.isLimitedPermissions() ? Path.join('.', 'svp-tmp') : Path.join(os.tmpdir(), 'svp-tmp')
+  currentSettings.tmpFilesPath = Processes.isLimitedPermissions()
+    ? Path.join('.', 'svp-tmp')
+    : Path.join(os.tmpdir(), 'svp-tmp')
   currentSettings.mkvMergePath = getDefaultToolPath('mkvmerge')
   currentSettings.ffmpegPath = getDefaultToolPath('ffmpeg')
   currentSettings.ffprobePath = getDefaultToolPath('ffprobe')

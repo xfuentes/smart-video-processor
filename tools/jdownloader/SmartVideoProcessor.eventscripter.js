@@ -9,15 +9,83 @@
  * command-line argument.
  */
 
-// === CONFIGURATION ===
-// Update the path below to the Smart Video Processor executable on your machine.
-// Set to true if JDownloader runs on Windows.
-var IS_WINDOWS = false
-// Squirrel :var SVP_PATH = 'C:\\Users\\<name>\\AppData\\Local\\smart-video-processor\\app-1.8.6\\SmartVideoProcessor.exe'
-// MS Store : var SVP_PATH = 'svp.exe'
-// Linux : make sure to use non-snap or flatpack versions of JDownloader,
-// or it won't be able to run smart-video-processor
-var SVP_PATH = '/snap/bin/smart-video-processor'
+// === CONFIGURATION / AUTO-DETECTION ===
+// SVP_PATH is detected automatically from the environment.
+
+function getJavaSystemProperty(name) {
+  try {
+    return String(Packages.java.lang.System.getProperty(name) || '')
+  } catch (e) {
+    return ''
+  }
+}
+
+function getJavaEnv(name) {
+  try {
+    var value = Packages.java.lang.System.getenv(name)
+    return value === null ? null : String(value)
+  } catch (e) {
+    return null
+  }
+}
+
+function javaFileExists(path) {
+  try {
+    return new Packages.java.io.File(path).exists()
+  } catch (e) {
+    return false
+  }
+}
+
+function findFileCaseInsensitive(dir, fileName) {
+  try {
+    var d = new Packages.java.io.File(dir)
+    if (!d.isDirectory()) return null
+    var files = d.list()
+    for (var i = 0; i < files.length; i++) {
+      var f = new Packages.java.io.File(d, files[i])
+      if (f.isDirectory()) {
+        var found = findFileCaseInsensitive(f.getAbsolutePath(), fileName)
+        if (found) return found
+      } else if (String(files[i]).toLowerCase() === fileName.toLowerCase()) {
+        return f.getAbsolutePath()
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+  return null
+}
+
+function resolveWindowsPath() {
+  var localAppData = getJavaEnv('LOCALAPPDATA')
+  if (localAppData) {
+    var found = findFileCaseInsensitive(localAppData + '\\smart-video-processor', 'SmartVideoProcessor.exe')
+    if (found) return found
+  }
+  return 'svp.exe'
+}
+
+function resolveLinuxPath() {
+  var home = getJavaSystemProperty('user.home')
+  var candidates = [
+    '/snap/bin/smart-video-processor',
+    home + '/.local/share/flatpak/exports/bin/io.github.xfuentes.SmartVideoProcessor',
+    '/var/lib/flatpak/exports/bin/io.github.xfuentes.SmartVideoProcessor',
+    home + '/.local/bin/smart-video-processor'
+  ]
+  for (var i = 0; i < candidates.length; i++) {
+    if (javaFileExists(candidates[i])) {
+      return candidates[i]
+    }
+  }
+  return 'smart-video-processor'
+}
+
+var IS_WINDOWS = /windows/i.test(getJavaSystemProperty('os.name') || '')
+var SVP_PATH = IS_WINDOWS ? resolveWindowsPath() : resolveLinuxPath()
+
+log('[SVP] Detected path: ' + SVP_PATH)
 
 // File extensions recognized as video files (must match Smart Video Processor)
 var VIDEO_EXTENSIONS = [

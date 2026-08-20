@@ -60,11 +60,13 @@ export const LogPanel = (): React.JSX.Element => {
     <div
       ref={scrollRef}
       style={{
+        backgroundColor: 'var(--colorNeutralBackground1)',
         height: '360px',
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '5px',
-        border: '1px solid #EBEBEB',
+        border: '1px solid var(--colorNeutralStroke1)',
+        boxSizing: 'border-box',
         fontFamily: 'monospace',
         fontSize: 'small',
         whiteSpace: 'pre-wrap',

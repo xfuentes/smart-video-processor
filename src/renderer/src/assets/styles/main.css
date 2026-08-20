@@ -26,6 +26,17 @@
   background-color: #242424;
 
   font-synthesis: none;
+
+  /* Fluent UI tokens — the FluentProvider replaces these at runtime */
+  --colorNeutralBackground1: #ffffff;
+  --colorNeutralBackground2: #fafafa;
+  --colorNeutralForeground1: #242424;
+  --colorNeutralForeground3: #616161;
+  --colorNeutralStroke1: #d1d1d1;
+  --colorNeutralStroke2: #e0e0e0;
+  --colorBrandStroke1: #0f6cbd;
+  --colorBrandBackground2: #ebf3fc;
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

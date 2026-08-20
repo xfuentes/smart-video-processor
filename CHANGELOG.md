@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0] - 2026-08-20
+
+### Added
+- Added Flatpak packaging support and a host-filesystem permission banner.
+- Added copy-to-clipboard actions and a "Do not show again" option for permission warnings.
+- Added new Output Rules matching operators (`in`, `contains any`, `contains all`).
+
+### Changed
+- Reworked the Output Rules settings as an editable, drag-and-drop list.
+- Reorganized the Settings dialog into General, Output, Filtering and Encoding tabs.
+
 ## [1.8.9] - 2026-08-18
 
 ### Fixed

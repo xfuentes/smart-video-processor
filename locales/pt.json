@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Adicionada detecção automática do gênero \"Espetáculo\" para apresentações ao vivo (show solo, stand-up comedy, peça de teatro, concerto, performance ao vivo, etc.) ao recuperar detalhes de filmes do TMDB.\nA caixa de diálogo de progresso da limpeza agora usa mensagens traduzidas e o ícone correto do aplicativo.",
   "about.news.version_1_8_7.items": "Adicionada uma caixa de diálogo de progresso de limpeza que mostra o progresso da exclusão de arquivos temporários ao fechar o aplicativo.\nCorrigidas as quebras de linha escapadas na lista \"Novidades\" da versão 1.8.5 para que cada item seja exibido como um marcador separado.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Para poder processar arquivos de qualquer lugar do seu sistema, habilite o acesso ao sistema de arquivos do host com este comando:",
+  "alert.copy": "Cópia",
+  "alert.copied": "Copiado!",
+  "alert.do_not_show_again": "Não mostrar novamente",
+  "about.news.version_1_9_0.items": "Adicionada a opção de empacotamento Flatpak com um banner de permissões do sistema de arquivos do host.\nReformulamos as configurações das Regras de Saída com uma lista editável do tipo \"arrastar e soltar\" e novos operadores de correspondência.\nAdicionada a opção \"Não mostrar novamente\" e o comando \"copiar para a área de transferência\" para avisos de permissão.\nReorganizamos a caixa de diálogo Configurações em abas para facilitar a navegação."
 }
