@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Added automatic \"Spectacle\" genre detection for live performances (one-man show, stand-up comedy, theater play, concert, live performance, etc.) when retrieving movie details from TMDB\nCleanup progress dialog now uses translated messages and the correct application icon",
   "about.news.version_1_8_7.items": "Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application\nFixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "To be able to process files from anywhere on your system, enable host filesystem access with this command: ",
+  "alert.copy": "Copy",
+  "alert.copied": "Copied!",
+  "alert.do_not_show_again": "Do not show again",
+  "about.news.version_1_9_0.items": "Added Flatpak packaging with a host-filesystem permission banner\nReworked the Output Rules settings with an editable, drag-and-drop list and new matching operators\nAdded a Do not show again option and copy-to-clipboard command for permission warnings\nReorganized the Settings dialog into tabs for easier navigation"
 }

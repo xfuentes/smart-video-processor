@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import HlsVideoPlayer from '@renderer/components/fields/HlsVideoPlayer'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { useI18n } from '../i18n'
@@ -26,7 +26,8 @@ export const VideoPlayer = () => {
   const _ = useI18n()
 
   const { videoPlayed, videoPlayerCurrentTime } = useVideoPlayer()
-  const [previewPath, setPreviewPath] = useState<string | undefined>(videoPlayed?.previewPath)
+  const previewPath = useMemo(() => videoPlayed?.previewPath?.replaceAll('\\', '/'), [videoPlayed?.previewPath])
+  const src = useMemo(() => (previewPath ? `svp-stream:///${previewPath}` : ''), [previewPath])
 
   useEffect(() => {
     if (videoPlayed && videoPlayed.previewPath === undefined && videoPlayed.previewProgression === undefined) {
@@ -34,20 +35,19 @@ export const VideoPlayer = () => {
     }
   }, [videoPlayed])
 
-  useEffect(() => {
-    setPreviewPath(videoPlayed?.previewPath?.replaceAll('\\', '/'))
-  }, [videoPlayed?.previewPath])
-
   const progression = videoPlayed?.previewProgression?.progress
   return (
     <>
       <div className="player-loading">
         {previewPath ? (
-          <HlsVideoPlayer src={`svp-stream:///${previewPath}`} autoPlay={true} startAt={videoPlayerCurrentTime} />
+          <HlsVideoPlayer src={src} autoPlay={true} startAt={videoPlayerCurrentTime} />
         ) : (
           <Field
             validationState="none"
-            validationMessage={{ children: _('video_player.generating_preview', { defaultValue: 'Generating preview...' }), style: { color: 'white' } }}
+            validationMessage={{
+              children: _('video_player.generating_preview', { defaultValue: 'Generating preview...' }),
+              style: { color: 'white' }
+            }}
             style={{ width: '50%' }}
             color="white"
           >

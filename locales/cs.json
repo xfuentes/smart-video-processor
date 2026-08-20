@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Přidána automatická detekce žánru „Spectacle“ pro živá vystoupení (one-man show, stand-up comedy, divadelní hra, koncert, živé vystoupení atd.) při načítání informací o filmu z TMDB\nDialogové okno s postupem čištění nyní používá přeložené zprávy a správnou ikonu aplikace.",
   "about.news.version_1_8_7.items": "Přidán dialogový okénko s postupem čištění, které zobrazuje průběh mazání dočasných souborů při zavření aplikace.\nOpraveny escapované nové řádky v seznamu Co je nového pro verzi 1.8.5, takže každá položka se zobrazuje jako samostatná odrážka.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Abyste mohli zpracovávat soubory z libovolného místa ve vašem systému, povolte přístup k souborovému systému hostitele pomocí tohoto příkazu:",
+  "alert.copy": "Kopie",
+  "alert.copied": "Zkopírováno!",
+  "alert.do_not_show_again": "Nezobrazovat znovu",
+  "about.news.version_1_9_0.items": "Přidán balíček Flatpak s bannerem s oprávněními pro souborový systém hostitele.\nPřepracováno nastavení výstupních pravidel s upravitelným seznamem s funkcí drag-and-drop a novými operátory porovnávání.\nPřidána možnost „Nezobrazovat znovu“ a příkaz „kopírovat do schránky“ pro upozornění na oprávnění.\nDialogové okno Nastavení bylo přeuspořádáno do karet pro snazší navigaci"
 }

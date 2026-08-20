@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Dodano automatyczne wykrywanie gatunku „Spektakl” w przypadku występów na żywo (monograficzny show, stand-up, sztuka teatralna, koncert, występ na żywo itp.) podczas pobierania szczegółów filmu z bazy danych TMDB\nOkno dialogowe postępu czyszczenia zawiera teraz przetłumaczone komunikaty i prawidłową ikonę aplikacji",
   "about.news.version_1_8_7.items": "Dodano okno dialogowe postępu czyszczenia, które pokazuje postęp usuwania plików tymczasowych podczas zamykania aplikacji.\nNaprawiono znaki nowej linii w liście „Co nowego” w wersji 1.8.5, dzięki czemu każdy element jest wyświetlany jako osobny punkt.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Aby móc przetwarzać pliki z dowolnego miejsca w systemie, włącz dostęp do systemu plików hosta za pomocą tego polecenia:",
+  "alert.copy": "Kopia",
+  "alert.copied": "Skopiowano!",
+  "alert.do_not_show_again": "Nie pokazuj ponownie",
+  "about.news.version_1_9_0.items": "Dodano pakiet Flatpak z banerem uprawnień hosta-systemu plików\nPrzeprojektowano ustawienia reguł wyjściowych, dodając edytowalną listę „przeciągnij i upuść” oraz nowe operatory dopasowania\nDodano opcję Nie pokazuj ponownie i polecenie kopiowania do schowka w przypadku ostrzeżeń dotyczących uprawnień\nZreorganizowano okno dialogowe Ustawienia, dzieląc je na karty, aby ułatwić nawigację"
 }

@@ -145,7 +145,11 @@ export class Processes {
           break
       }
       const priorityLabel = _(`priority.${priority.toLowerCase().replace(/\s+/g, '_')}`, { defaultValue: priority })
-      debug('log.process.priority', { defaultValue: 'Process pid: {pid} set to priority: {priority}', pid, priority: priorityLabel })
+      debug('log.process.priority', {
+        defaultValue: 'Process pid: {pid} set to priority: {priority}',
+        pid,
+        priority: priorityLabel
+      })
       os.setPriority(pid, priorityNum)
     }
   }
@@ -188,6 +192,29 @@ export class Processes {
     const normalised = this.normalise(locale || defaultLocale)
     cache.set(options.spawn, normalised)
     return normalised
+  }
+
+  static isFlatpak = (): boolean => {
+    return process.platform === 'linux' && (process.env.FLATPAK_ID !== undefined || fs.existsSync('/.flatpak-info'))
+  }
+
+  static hasHostFilesystemAccess = (): boolean => {
+    if (!this.isFlatpak()) {
+      return true
+    }
+    try {
+      const info = fs.readFileSync('/.flatpak-info', 'utf8')
+      const match = info.match(/\[Context\][\s\S]*?filesystems=([^\n]+)/)
+      if (!match) {
+        return false
+      }
+      return match[1]
+        .split(';')
+        .map((value) => value.trim())
+        .includes('host')
+    } catch {
+      return false
+    }
   }
 
   static hasRemovableMediaAccess() {

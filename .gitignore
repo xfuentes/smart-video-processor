@@ -23,3 +23,7 @@ bruno/
 .pnp.*
 .devin
 
+/flatpak/io.github.xfuentes.smart-video-processor.yml
+/flatpak/io.github.xfuentes.smart-video-processor.metainfo.xml
+/flatpak/io.github.xfuentes.smart-video-processor.desktop
+/repo/

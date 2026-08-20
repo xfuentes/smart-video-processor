@@ -25,11 +25,13 @@ export const FeaturesPanel = (): React.JSX.Element => {
   return (
     <div
       style={{
+        backgroundColor: 'var(--colorNeutralBackground1)',
         height: '360px',
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '5px',
-        border: '1px solid #EBEBEB'
+        border: '1px solid var(--colorNeutralStroke1)',
+        boxSizing: 'border-box'
       }}
     >
       <ul>

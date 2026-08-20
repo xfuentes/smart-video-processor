@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>__APP_ID__</id>
+  <launchable type="desktop-id">__APP_ID__.desktop</launchable>
+  <name>Smart Video Processor</name>
+  <developer id="xfuentes">
+    <name>Xavier Fuentes</name>
+  </developer>
+  <summary>__DESCRIPTION__</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <content_rating type="oars-1.1" />
+  <url type="homepage">https://github.com/xfuentes/smart-video-processor</url>
+  <url type="bugtracker">https://github.com/xfuentes/smart-video-processor/issues</url>
+  <description>
+    <p>
+      This tool automatically identifies your movies and TV shows using popular databases,
+      then streamlines the entire process: rename files using Plex-friendly conventions,
+      attach artwork, correct metadata (including track language and type), split or join media files
+      and encode to H.264 or H.265—all in one place.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/main/docs/img/01-Settings.png</image>
+      <caption>Settings panel</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/main/docs/img/03-Movie.png</image>
+      <caption>Movie details</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/main/docs/img/08-Processing.png</image>
+      <caption>Processing queue</caption>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="__VERSION__" date="__DATE__" />
+  </releases>
+</component>

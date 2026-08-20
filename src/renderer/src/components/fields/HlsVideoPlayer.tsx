@@ -41,10 +41,15 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
   const { setVideoRef } = useVideoPlayer()
 
   const hlsRef = useRef<Hls | null>(null)
+  const startAtRef = useRef(startAt)
 
   useEffect(() => {
     setVideoRef(videoRef)
   }, [setVideoRef, videoRef])
+
+  useEffect(() => {
+    startAtRef.current = startAt
+  }, [startAt])
 
   useEffect(() => {
     let hls: Hls | null = null
@@ -80,7 +85,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
 
           hls.on(Hls.Events.MANIFEST_PARSED, () => {
             if (autoPlay) {
-              video.currentTime = startAt
+              video.currentTime = startAtRef.current
               video.play().catch((e) => {
                 console.error('Autoplay failed:', e)
                 // Electron apps often need user interaction first
@@ -112,6 +117,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
           console.log('using fallback')
           video.src = src
           if (autoPlay) {
+            video.currentTime = startAtRef.current
             video.play().catch((e) => console.error('Autoplay failed:', e))
           }
         }
@@ -126,7 +132,7 @@ const HlsVideoPlayer: React.FC<ElectronHlsPlayerProps> = ({
         hlsRef.current = null
       }
     }
-  }, [src, autoPlay, startAt])
+  }, [src, autoPlay])
 
   return (
     <video

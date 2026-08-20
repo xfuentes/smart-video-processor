@@ -36,73 +36,38 @@ import {
   Switch,
   Tab,
   TabList,
-  ToolbarButton,
-  Tooltip
+  ToolbarButton
 } from '@fluentui/react-components'
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
-  Delete20Regular,
   DocumentSettings20Regular,
-  Edit20Regular,
   SearchSettings20Regular,
   Settings24Regular,
   VideoSettings20Regular
 } from '@fluentui/react-icons'
-import {
-  OutputRule,
-  OutputRuleCondition,
-  OutputRuleOperator,
-  OutputRuleProperty,
-  Settings
-} from '../../../common/@types/Settings'
+import { OutputRule, Settings } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
 import { ProgressButton } from '@renderer/components/ProgressButton'
 import { useSettings } from '@renderer/components/context/SettingsContext'
-import { translationSupportedLanguageCodes, tvdbSupportedLanguageCodes } from '../../../common/TranslationSupportedLanguages'
-import { OutputRuleDialog } from './OutputRuleDialog'
+import {
+  translationSupportedLanguageCodes,
+  tvdbSupportedLanguageCodes
+} from '../../../common/TranslationSupportedLanguages'
+import { OutputRulesField } from './fields/OutputRulesField'
 import i18n, { useI18n } from '../i18n'
 
 export const SettingsDialog = () => {
   const _ = useI18n()
 
-  const getOperatorLabel = (operator: OutputRuleOperator): string => {
-    switch (operator) {
-      case 'eq':
-        return '='
-      case 'neq':
-        return '!='
-      case 'lt':
-        return '<'
-      case 'lte':
-        return '<='
-      case 'gt':
-        return '>'
-      case 'gte':
-        return '>='
-      case 'in':
-        return _('settings.output_rules.operator.in', { defaultValue: 'in' })
-      case 'containsAny':
-        return _('settings.output_rules.operator.contains_any', { defaultValue: 'contains any of' })
-      case 'containsAll':
-        return _('settings.output_rules.operator.contains_all', { defaultValue: 'contains all of' })
-      default:
-        return operator
-    }
-  }
-
   const { settingsValidation, setSettingsValidation } = useSettings()
   const [selectedTab, setSelectedTab] = useState('general')
   const [opened, setOpened] = useState(settingsValidation.status !== 'success')
-  const [ruleModalOpen, setRuleModalOpen] = useState(false)
 
   const handleOpenChange = (_event, data) => {
     setOpened(data.open)
-    if (!data.open) {
-      setRuleModalOpen(false)
-    }
   }
 
   const handleSubmit = async () => {
@@ -170,7 +135,6 @@ export const SettingsDialog = () => {
       setFfmpegPath(settingsValidation.result.ffmpegPath)
       setFfprobePath(settingsValidation.result.ffprobePath)
     }
-    setRuleModalOpen(false)
     setOpened(false)
   }
 
@@ -237,69 +201,6 @@ export const SettingsDialog = () => {
   const [ffmpegPath, setFfmpegPath] = useState(settingsValidation?.result?.ffmpegPath ?? '')
   const [ffprobePath, setFfprobePath] = useState(settingsValidation?.result?.ffprobePath ?? '')
 
-  const [editingRuleIndex, setEditingRuleIndex] = useState<number>(-1)
-  const [ruleDraft, setRuleDraft] = useState<OutputRule | undefined>()
-
-  const createDefaultRule = (): OutputRule => ({
-    enabled: true,
-    match: 'all',
-    conditions: [
-      {
-        property: 'type' as OutputRuleProperty,
-        operator: 'eq' as OutputRuleOperator,
-        value: 'movie'
-      }
-    ],
-    outputPath: ''
-  })
-
-  const openAddRuleModal = () => {
-    setEditingRuleIndex(-1)
-    setRuleDraft(createDefaultRule())
-    setRuleModalOpen(true)
-  }
-
-  const openEditRuleModal = (index: number) => {
-    setEditingRuleIndex(index)
-    setRuleDraft(JSON.parse(JSON.stringify(outputRules[index])) as OutputRule)
-    setRuleModalOpen(true)
-  }
-
-  const closeRuleModal = () => {
-    setRuleModalOpen(false)
-    setRuleDraft(undefined)
-  }
-
-  const saveRuleModal = () => {
-    if (ruleDraft === undefined) return
-    if (editingRuleIndex === -1) {
-      setOutputRules([...outputRules, ruleDraft])
-    } else {
-      setOutputRules(outputRules.map((r, i) => (i === editingRuleIndex ? ruleDraft : r)))
-    }
-    closeRuleModal()
-  }
-
-  const removeRule = (index: number) => {
-    setOutputRules(outputRules.filter((_, i) => i !== index))
-  }
-
-  const updateRuleEnabled = (index: number, enabled: boolean) => {
-    setOutputRules(outputRules.map((r, i) => (i === index ? { ...r, enabled } : r)))
-  }
-
-  const formatCondition = (condition: OutputRuleCondition): string => {
-    const valueText = Array.isArray(condition.value) ? condition.value.join(', ') : condition.value
-    return `${condition.property} ${getOperatorLabel(condition.operator)} ${valueText}`
-  }
-
-  const formatRuleAsText = (rule: OutputRule): string => {
-    if (rule.conditions.length === 0) return rule.outputPath
-    const conditionsText = rule.conditions.map(formatCondition).join(rule.match === 'all' ? ' && ' : ' || ')
-    if (rule.outputPath) return `${conditionsText} -> ${rule.outputPath}`
-    return conditionsText
-  }
-
   return (
     <>
       <Dialog modalType="modal" open={opened} onOpenChange={handleOpenChange}>
@@ -310,7 +211,13 @@ export const SettingsDialog = () => {
         </DialogTrigger>
         <DialogSurface
           aria-label={_('settings.aria_label', { defaultValue: 'Settings' })}
-          style={{ padding: '5px', minHeight: '500px', display: 'flex', flexFlow: 'column' }}
+          style={{
+            padding: '5px',
+            minHeight: '500px',
+            display: 'flex',
+            flexFlow: 'column',
+            maxWidth: '700px'
+          }}
         >
           <form
             style={{
@@ -462,56 +369,7 @@ export const SettingsDialog = () => {
                           onChange={handleFormInputChange.bind(null, setDefaultOutputPath)}
                         />
                       </div>
-                      <Divider style={{ flexGrow: '0' }}>
-                        {_('settings.output_rules.divider', { defaultValue: 'Output Rules' })}
-                      </Divider>
-                      <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                        {outputRules.map((rule, index) => (
-                          <div
-                            key={index}
-                            className="field"
-                            style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'auto minmax(200px, 1fr) auto auto',
-                              gap: '5px',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <Switch
-                              checked={rule.enabled}
-                              onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                updateRuleEnabled(index, ev.currentTarget.checked)
-                              }
-                            />
-                            <div
-                              style={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
-                              }}
-                            >
-                              {formatRuleAsText(rule)}
-                            </div>
-                            <Tooltip
-                              content={_('settings.output_rules.edit', { defaultValue: 'Edit' })}
-                              relationship="label"
-                            >
-                              <Button size="small" icon={<Edit20Regular />} onClick={() => openEditRuleModal(index)} />
-                            </Tooltip>
-                            <Tooltip
-                              content={_('settings.output_rules.remove', { defaultValue: 'Remove' })}
-                              relationship="label"
-                            >
-                              <Button size="small" icon={<Delete20Regular />} onClick={() => removeRule(index)} />
-                            </Tooltip>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="field">
-                        <Button size="small" onClick={openAddRuleModal}>
-                          {_('settings.output_rules.add', { defaultValue: 'Add Rule' })}
-                        </Button>
-                      </div>
+                      <OutputRulesField rules={outputRules} onChange={setOutputRules} language={language} />
                     </div>
                   )}
                   {selectedTab === 'filtering' && (
@@ -752,15 +610,6 @@ export const SettingsDialog = () => {
           </form>
         </DialogSurface>
       </Dialog>
-      <OutputRuleDialog
-        open={ruleModalOpen}
-        ruleDraft={ruleDraft}
-        setRuleDraft={setRuleDraft}
-        onSave={saveRuleModal}
-        onCancel={closeRuleModal}
-        getOperatorLabel={getOperatorLabel}
-        language={language}
-      />
     </>
   )
 }

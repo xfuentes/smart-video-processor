@@ -1,0 +1,42 @@
+app-id: __APP_ID__
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '24.08'
+separate-locales: false
+command: smart-video-processor
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --device=dri
+  - --share=network
+  - --filesystem=xdg-videos
+  - --filesystem=xdg-download
+  - --env=PATH=/app/bin:/app/main:/usr/bin
+modules:
+  - name: smart-video-processor
+    buildsystem: simple
+    build-commands:
+      - cp -r bundle/. /app/main/
+      - install -Dm755 run.sh /app/bin/smart-video-processor
+      - install -Dm644 __APP_ID__.desktop /app/share/applications/__APP_ID__.desktop
+      - install -Dm644 __APP_ID__.metainfo.xml /app/share/metainfo/__APP_ID__.metainfo.xml
+      - install -Dm644 icon.svg /app/share/icons/hicolor/scalable/apps/__APP_ID__.svg
+    sources:
+      - type: dir
+        path: ../dist/flatpak-app
+        dest: bundle
+      - type: file
+        path: __APP_ID__.desktop
+      - type: file
+        path: __APP_ID__.metainfo.xml
+      - type: file
+        path: ../resources/icon.svg
+        dest-filename: icon.svg
+      - type: script
+        dest-filename: run.sh
+        commands:
+          - zypak-wrapper.sh /app/main/smart-video-processor "$@"

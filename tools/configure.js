@@ -20,6 +20,8 @@ import * as path from 'path'
 
 import packageJSON from '../package.json' with { type: 'json' }
 
+const appId = packageJSON.appId ?? 'io.github.xfuentes.smart-video-processor'
+
 const args = process.argv.slice(2)
 const dirPath = args[0]
 
@@ -53,7 +55,11 @@ fs.readdir(resolvedDir, (err, files) => {
 
   inFiles.forEach((file) => {
     const source = path.join(resolvedDir, file)
-    const dest = path.join(resolvedDir, path.basename(file).replace('.in', ''))
+    const isFlatpak = path.basename(resolvedDir) === 'flatpak'
+    const fileName = path.basename(file)
+    const fileExtension = fileName.split('.in.').slice(1).join('.in.')
+    const destFileName = isFlatpak ? `${appId}.${fileExtension}` : fileName.replace('.in', '')
+    const dest = path.join(resolvedDir, destFileName)
 
     // Read .in file
     fs.readFile(source, 'utf8', (err, data) => {
@@ -67,6 +73,8 @@ fs.readdir(resolvedDir, (err, files) => {
       modifiedData = modifiedData.replace(/__DESCRIPTION__/g, packageJSON.description)
       modifiedData = modifiedData.replace(/__ARCH__/g, process.arch)
       modifiedData = modifiedData.replace(/__DEB_ARCH__/g, process.arch === 'arm64' ? 'arm64' : 'amd64')
+      modifiedData = modifiedData.replace(/__APP_ID__/g, appId)
+      modifiedData = modifiedData.replace(/__DATE__/g, new Date().toISOString().split('T')[0])
 
       // Write output file
       fs.writeFile(dest, modifiedData, 'utf8', (err) => {

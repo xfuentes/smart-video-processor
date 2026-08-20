@@ -64,7 +64,7 @@ export default {
   },
   linux: {
     artifactName: '${name}-${version}-${arch}.${ext}',
-    target: ['dir', 'AppImage'],
+    target: ['dir', 'AppImage', 'tar.gz'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@hotmail.com>',
     vendor: 'Xavier Fuentes',

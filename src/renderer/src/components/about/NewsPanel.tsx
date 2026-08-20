@@ -25,13 +25,26 @@ export const NewsPanel = (): React.JSX.Element => {
   return (
     <div
       style={{
+        backgroundColor: 'var(--colorNeutralBackground1)',
         height: '360px',
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '5px',
-        border: '1px solid #EBEBEB'
+        border: '1px solid var(--colorNeutralStroke1)',
+        boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.0' })}</h4>
+      <ul>
+        {_('about.news.version_1_9_0.items', {
+          defaultValue:
+            'Added Flatpak packaging with a host-filesystem permission banner\nReworked the Output Rules settings with an editable, drag-and-drop list and new matching operators\nAdded a Do not show again option and copy-to-clipboard command for permission warnings\nReorganized the Settings dialog into tabs for easier navigation'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.8.9' })}</h4>
       <ul>
         {_('about.news.version_1_8_9.items', {

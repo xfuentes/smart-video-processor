@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Tilføjet automatisk genregenkendelse af \"Spectacle\" for liveoptrædener (one-man show, stand-up comedy, teaterstykke, koncert, liveoptræden osv.) ved hentning af filmdetaljer fra TMDB\nDialogboksen Oprydningsstatus bruger nu oversatte meddelelser og det korrekte programikon",
   "about.news.version_1_8_7.items": "Tilføjet en dialogboks for oprydningsstatus, der viser sletningsstatus for midlertidige filer, når programmet lukkes.\nRettede escapede linjeskift i listen over nye linjer i version 1.8.5, så hvert element gengives som et separat punkt.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "For at kunne behandle filer fra hvor som helst på dit system, skal du aktivere adgang til værtsfilsystemet med denne kommando:",
+  "alert.copy": "Kopi",
+  "alert.copied": "Kopieret!",
+  "alert.do_not_show_again": "Vis ikke igen",
+  "about.news.version_1_9_0.items": "Tilføjet Flatpak-pakke med et tilladelsesbanner for værtsfilsystem\nOmarbejdede indstillingerne for outputregler med en redigerbar træk-og-slip-liste og nye matchende operatorer\nTilføjet en \"Vis ikke igen\"-indstilling og en \"Kopier til udklipsholder\"-kommando for tilladelsesadvarsler\nOmorganiserede dialogboksen Indstillinger i faner for nemmere navigation"
 }

@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Automatikus „Spectacle” műfajfelismerés hozzáadva élő előadásokhoz (egyszemélyes show, stand-up comedy, színházi darab, koncert, élő előadás stb.) a filmadatok TMDB-ből történő lekérésekor.\nA takarítási folyamat párbeszédpanel mostantól lefordított üzeneteket és a megfelelő alkalmazásikont használ.",
   "about.news.version_1_8_7.items": "Hozzáadott egy törlési folyamat párbeszédpanelt, amely az alkalmazás bezárásakor mutatja az ideiglenes fájlok törlésének folyamatát.\nKijavítottuk az új sorok karaktereit az Újdonságok listában az 1.8.5-ös verzióban, így minden elem külön felsorolásjelként jelent meg.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Ahhoz, hogy a rendszer bármely pontjáról fájlokat lehessen feldolgozni, engedélyezni kell a host fájlrendszer hozzáférését a következő paranccsal:",
+  "alert.copy": "Másolat",
+  "alert.copied": "Másolva!",
+  "alert.do_not_show_again": "Ne mutassa meg újra",
+  "about.news.version_1_9_0.items": "Hozzáadva a Flatpak csomagolás host-filesystem jogosultság bannerrel\nÁtdolgoztuk a Kimeneti szabályok beállításait egy szerkeszthető, drag-and-drop listával és új egyeztető operátorokkal.\nHozzáadott egy „Ne mutassa meg újra” opciót és egy „vágólapra másolás” parancsot az engedélyfigyelmeztetésekhez.\nA Beállítások párbeszédpanelt fülekre szerveztük át a könnyebb navigáció érdekében."
 }

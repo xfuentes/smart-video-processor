@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Lade till automatisk genreidentifiering av \"Spectacle\" för liveframträdanden (enmansshow, ståuppkomik, teaterpjäs, konsert, liveframträdande etc.) vid hämtning av filminformation från TMDB.\nDialogrutan för rensningsförlopp använder nu översatta meddelanden och korrekt programikon",
   "about.news.version_1_8_7.items": "Lade till en dialogruta för rensningsförlopp som visar borttagningsförloppet för temporära filer när programmet stängs.\nÅtgärdade escaped newlines i Nyhetslistan för version 1.8.5 så att varje objekt återges som en separat punkt.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "För att kunna bearbeta filer varifrån som helst på ditt system, aktivera åtkomst till värdfilsystemet med detta kommando:",
+  "alert.copy": "Kopiera",
+  "alert.copied": "Kopierad!",
+  "alert.do_not_show_again": "Visa inte igen",
+  "about.news.version_1_9_0.items": "Lade till Flatpak-paketering med en behörighetsbanner för värdfilsystem\nOmarbetade inställningarna för utdataregler med en redigerbar dra-och-släpp-lista och nya matchande operatorer\nLade till alternativet Visa inte igen och kommandot Kopiera till urklipp för behörighetsvarningar.\nOmorganiserade inställningsdialogrutan i flikar för enklare navigering"
 }

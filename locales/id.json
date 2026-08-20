@@ -673,5 +673,10 @@
   "about.news.version_1_8_8.items": "Menambahkan deteksi genre \"Pertunjukan\" otomatis untuk pertunjukan langsung (pertunjukan solo, komedi tunggal, drama teater, konser, pertunjukan langsung, dll.) saat mengambil detail film dari TMDB.\nDialog kemajuan pembersihan kini menggunakan pesan terjemahan dan ikon aplikasi yang benar.",
   "about.news.version_1_8_7.items": "Menambahkan dialog kemajuan pembersihan yang menunjukkan kemajuan penghapusan file sementara saat menutup aplikasi.\nMemperbaiki karakter escape untuk baris baru di daftar \"Yang Baru\" untuk versi 1.8.5 sehingga setiap item ditampilkan sebagai poin terpisah.",
   "cleanup.message": "Cleaning temporary files...",
-  "cleanup.progress": "Cleaning temporary files... ({current}/{total})"
+  "cleanup.progress": "Cleaning temporary files... ({current}/{total})",
+  "app.flatpak_permission_warning.body": "Untuk dapat memproses file dari mana saja di sistem Anda, aktifkan akses sistem file host dengan perintah ini:",
+  "alert.copy": "Menyalin",
+  "alert.copied": "Disalin!",
+  "alert.do_not_show_again": "Jangan tampilkan lagi",
+  "about.news.version_1_9_0.items": "Menambahkan pengemasan Flatpak dengan banner izin sistem file host.\nPengaturan Aturan Output telah diperbarui dengan daftar yang dapat diedit menggunakan fitur seret dan lepas, serta operator pencocokan baru.\nMenambahkan opsi \"Jangan tampilkan lagi\" dan perintah \"salin ke papan klip\" untuk peringatan izin.\nDialog Pengaturan telah ditata ulang ke dalam tab agar lebih mudah dinavigasi."
 }
