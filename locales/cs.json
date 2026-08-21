@@ -678,5 +678,6 @@
   "alert.copy": "Kopie",
   "alert.copied": "Zkopírováno!",
   "alert.do_not_show_again": "Nezobrazovat znovu",
-  "about.news.version_1_9_0.items": "Přidán balíček Flatpak s bannerem s oprávněními pro souborový systém hostitele.\nPřepracováno nastavení výstupních pravidel s upravitelným seznamem s funkcí drag-and-drop a novými operátory porovnávání.\nPřidána možnost „Nezobrazovat znovu“ a příkaz „kopírovat do schránky“ pro upozornění na oprávnění.\nDialogové okno Nastavení bylo přeuspořádáno do karet pro snazší navigaci"
+  "about.news.version_1_9_0.items": "Přidána podpora tmavého režimu systému s ikonami dle motivu\nPřidán balíček Flatpak s bannerem s oprávněními pro souborový systém hostitele.\nPřepracováno nastavení výstupních pravidel s upravitelným seznamem s funkcí drag-and-drop a novými operátory porovnávání.\nPřidána možnost „Nezobrazovat znovu“ a příkaz „kopírovat do schránky“ pro upozornění na oprávnění.\nDialogové okno Nastavení bylo přeuspořádáno do karet pro snazší navigaci",
+  "about.news.version_1_9_1.items": "Přidána ikona aplikace Flatpak a multi-arch balení pro x86_64 a aarch64\nVylepšen skript pro stahování binárních souborů, aby se přeskočily soubory, které se již nacházejí lokálně.\nAktualizována obrazovka načítání videa v přehrávači na černé pozadí s bílým textem\nOpraveny kategorie položek na ploše Flatpaku, typy MIME a formátování klíčových slov."
 }

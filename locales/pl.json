@@ -678,5 +678,6 @@
   "alert.copy": "Kopia",
   "alert.copied": "Skopiowano!",
   "alert.do_not_show_again": "Nie pokazuj ponownie",
-  "about.news.version_1_9_0.items": "Dodano pakiet Flatpak z banerem uprawnień hosta-systemu plików\nPrzeprojektowano ustawienia reguł wyjściowych, dodając edytowalną listę „przeciągnij i upuść” oraz nowe operatory dopasowania\nDodano opcję Nie pokazuj ponownie i polecenie kopiowania do schowka w przypadku ostrzeżeń dotyczących uprawnień\nZreorganizowano okno dialogowe Ustawienia, dzieląc je na karty, aby ułatwić nawigację"
+  "about.news.version_1_9_0.items": "Dodano obsługę ciemnego trybu systemu z ikonami uwzględniającymi motyw\nDodano pakiet Flatpak z banerem uprawnień hosta-systemu plików\nPrzeprojektowano ustawienia reguł wyjściowych, dodając edytowalną listę „przeciągnij i upuść” oraz nowe operatory dopasowania\nDodano opcję Nie pokazuj ponownie i polecenie kopiowania do schowka w przypadku ostrzeżeń dotyczących uprawnień\nZreorganizowano okno dialogowe Ustawienia, dzieląc je na karty, aby ułatwić nawigację",
+  "about.news.version_1_9_1.items": "Dodano ikonę aplikacji Flatpak i pakiet multi-arch dla x86_64 i aarch64\nUlepszono skrypt pobierania plików binarnych, aby pominąć pliki już obecne lokalnie\nZaktualizowano ekran ładowania odtwarzacza wideo, zmieniając tło na czarne z białym tekstem\nNaprawiono formatowanie kategorii wpisów na pulpicie Flatpak, typów MIME i słów kluczowych"
 }

@@ -678,5 +678,6 @@
   "alert.copy": "Másolat",
   "alert.copied": "Másolva!",
   "alert.do_not_show_again": "Ne mutassa meg újra",
-  "about.news.version_1_9_0.items": "Hozzáadva a Flatpak csomagolás host-filesystem jogosultság bannerrel\nÁtdolgoztuk a Kimeneti szabályok beállításait egy szerkeszthető, drag-and-drop listával és új egyeztető operátorokkal.\nHozzáadott egy „Ne mutassa meg újra” opciót és egy „vágólapra másolás” parancsot az engedélyfigyelmeztetésekhez.\nA Beállítások párbeszédpanelt fülekre szerveztük át a könnyebb navigáció érdekében."
+  "about.news.version_1_9_0.items": "Hozzáadott rendszer sötét mód támogatás témát felismerő ikonokkal\nHozzáadva a Flatpak csomagolás host-filesystem jogosultság bannerrel\nÁtdolgoztuk a Kimeneti szabályok beállításait egy szerkeszthető, drag-and-drop listával és új egyeztető operátorokkal.\nHozzáadott egy „Ne mutassa meg újra” opciót és egy „vágólapra másolás” parancsot az engedélyfigyelmeztetésekhez.\nA Beállítások párbeszédpanelt fülekre szerveztük át a könnyebb navigáció érdekében.",
+  "about.news.version_1_9_1.items": "Hozzáadva a Flatpak alkalmazás ikonja és a többarchitektúrás csomagolás x86_64 és aarch64 esetén\nTovábbfejlesztett bináris letöltési szkript, hogy kihagyja a helyben már meglévő fájlokat\nA videolejátszó betöltőképernyőjét fekete háttérre és fehér szövegre frissítettük.\nKijavították a Flatpak asztali bejegyzések kategóriáit, a MIME típusokat és a kulcsszavak formázását."
 }
