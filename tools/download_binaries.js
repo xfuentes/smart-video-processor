@@ -63,6 +63,12 @@ const getDownloadUrls = () => {
 }
 
 async function downloadFromMyFiles(urlToFile) {
+  const filePath = path.join(downloadDir, urlToFile.filename)
+  if (fs.existsSync(filePath)) {
+    console.log(`ℹ️  Skipping ${urlToFile.filename}, already exists locally`)
+    return filePath
+  }
+
   const res = await fetch('https://api.1fichier.com/v1/download/get_token.cgi', {
     method: 'POST',
     headers: {
@@ -74,8 +80,6 @@ async function downloadFromMyFiles(urlToFile) {
 
   const data = await res.json()
   if (data.status !== 'OK') throw new Error(data.message)
-
-  const filePath = path.join(downloadDir, urlToFile.filename)
 
   const fileRes = await fetch(data.url)
   if (!fileRes.ok) throw new Error(`Failed Download: ${urlToFile.url} -> ${urlToFile.filename}`)
