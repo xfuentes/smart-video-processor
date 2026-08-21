@@ -28,8 +28,8 @@ import { Files } from '../../src/main/util/files'
 import * as os from 'node:os'
 import * as path from 'node:path'
 
-export const changeListToMap = (changes: Change[]) => {
-  return changes.reduce((previousValue, currentValue) => {
+export const changeListToMap = (changes: Change[]): Record<string, Record<string, Change>> => {
+  return changes.reduce<Record<string, Record<string, Change>>>((previousValue, currentValue) => {
     const key = Change.sourceTypeTrackIDToSource(currentValue.sourceType, currentValue.trackId)
     const key2 = currentValue.changeType + (currentValue.property ? '_' + currentValue.property : '')
     return { ...previousValue, [key]: { ...(previousValue[key] ?? {}), [key2]: currentValue } }
@@ -63,7 +63,7 @@ export const recordJobStates = (job: Job<object | unknown>, stateChanges: JobSta
     const lastIdx = stateChanges.length - 1
     const lastChange = lastIdx >= 0 ? stateChanges[lastIdx] : undefined
     const newChange: JobStateChange = {}
-    if (j.getStatus() !== lastChange?.status || j.getProgression().progress !== lastChange?.progression.progress) {
+    if (j.getStatus() !== lastChange?.status || j.getProgression().progress !== lastChange?.progression?.progress) {
       newChange.status = j.getStatus()
       newChange.progression = j.getProgression()
       stateChanges.push(newChange)
@@ -76,27 +76,27 @@ export const recordJobStates = (job: Job<object | unknown>, stateChanges: JobSta
 }
 
 export const simulateMKVMergeProgression = () => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((...args: unknown[]) => void) | undefined = undefined
+  let closeListener: ((...args: unknown[]) => void) | undefined = undefined
 
   for (const ep of ['0%', '25%', '50%', '75%', '100%']) {
     setImmediate(() => {
-      dataListener(`Progress: ${ep}`)
+      dataListener?.(`Progress: ${ep}`)
     })
   }
   setImmediate(() => {
-    closeListener(0)
+    closeListener?.(0)
   })
 
   return {
     pid: 1234,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         if (event === 'data') {
           dataListener = listener
         }
@@ -172,12 +172,12 @@ export const simulateFFmpegProgression = (
   _args: readonly string[],
   _options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
 ): ChildProcessWithoutNullStreams => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((...args: unknown[]) => void) | undefined = undefined
+  let closeListener: ((...args: unknown[]) => void) | undefined = undefined
 
   for (let i = 0; i < 10; i++) {
     setImmediate(() => {
-      dataListener(
+      dataListener?.(
         'frame=0\n' +
           'fps=0.0\n' +
           'stream_0_0_q=0.0\n' +
@@ -194,22 +194,22 @@ export const simulateFFmpegProgression = (
 
   for (const rp of recordedProgresses) {
     setImmediate(() => {
-      dataListener(rp)
+      dataListener?.(rp)
     })
   }
   setImmediate(() => {
-    closeListener(0)
+    closeListener?.(0)
   })
 
   return {
     pid: 1234,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         if (event === 'data') {
           dataListener = listener
         }
@@ -219,25 +219,25 @@ export const simulateFFmpegProgression = (
 }
 
 export const simulateMKVmergeFailure = () => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((...args: unknown[]) => void) | undefined = undefined
+  let closeListener: ((...args: unknown[]) => void) | undefined = undefined
 
   setImmediate(() => {
-    dataListener("Error: The file '-P' could not be opened for reading: open file error.")
+    dataListener?.("Error: The file '-P' could not be opened for reading: open file error.")
   })
   setImmediate(() => {
-    closeListener(2)
+    closeListener?.(2)
   })
 
   return {
     pid: 12345,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         if (event === 'data') {
           dataListener = listener
         }
@@ -247,8 +247,8 @@ export const simulateMKVmergeFailure = () => {
 }
 
 export const simulateFFmpegFailure = () => {
-  let stderrListener = undefined
-  let closeListener = undefined
+  let stderrListener: ((...args: unknown[]) => void) | undefined = undefined
+  let closeListener: ((...args: unknown[]) => void) | undefined = undefined
 
   setImmediate(() => {
     if (stderrListener !== undefined) {
@@ -257,18 +257,18 @@ export const simulateFFmpegFailure = () => {
     }
   })
   setImmediate(() => {
-    closeListener(1)
+    closeListener?.(1)
   })
 
   return {
     pid: 12345,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stderr: {
-      on: (event, listener) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         if (event === 'data') {
           stderrListener = listener
         }
@@ -278,10 +278,10 @@ export const simulateFFmpegFailure = () => {
 }
 
 export const simulateProgramNotFound = (program: string, args: readonly string[]) => {
-  let errorListener = undefined
+  let errorListener: ((...args: unknown[]) => void) | undefined = undefined
 
   setImmediate(() => {
-    errorListener({
+    errorListener?.({
       errno: -4058,
       code: 'ENOENT',
       syscall: `spawn ${program}`,
@@ -292,7 +292,7 @@ export const simulateProgramNotFound = (program: string, args: readonly string[]
 
   return {
     pid: 12345,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'error') {
         errorListener = listener
       }
@@ -301,25 +301,25 @@ export const simulateProgramNotFound = (program: string, args: readonly string[]
 }
 
 export const simulateFileInfoResponse = (jsonFileName: string): ChildProcessWithoutNullStreams => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((...args: unknown[]) => void) | undefined = undefined
+  let closeListener: ((...args: unknown[]) => void) | undefined = undefined
   setImmediate(() => {
     const mkvMergeFileInfoResult = Files.loadTextFileSync('./tests/resources', jsonFileName)
-    dataListener(mkvMergeFileInfoResult)
+    dataListener?.(mkvMergeFileInfoResult)
   })
   setImmediate(() => {
-    closeListener(0)
+    closeListener?.(0)
   })
 
   return {
     pid: 1234,
-    on: (event, listener) => {
+    on: (event: string, listener: (...args: unknown[]) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         if (event === 'data') {
           dataListener = listener
         }

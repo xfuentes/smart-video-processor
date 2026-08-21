@@ -678,5 +678,6 @@
   "alert.copy": "Kopiere",
   "alert.copied": "Kopiert!",
   "alert.do_not_show_again": "Ikke vis igjen",
-  "about.news.version_1_9_0.items": "La til Flatpak-pakking med et tillatelsesbanner for vertsfilsystemet\nOmarbeidet innstillingene for utdataregler med en redigerbar dra-og-slipp-liste og nye samsvarende operatorer\nLa til et «Ikke vis igjen»-alternativ og en kommando for kopiering til utklippstavlen for tillatelsesvarsler.\nOmorganiserte Innstillinger-dialogboksen i faner for enklere navigering"
+  "about.news.version_1_9_0.items": "La til støtte for mørk modus i systemet med temabevisste ikoner\nLa til Flatpak-pakking med et tillatelsesbanner for vertsfilsystemet\nOmarbeidet innstillingene for utdataregler med en redigerbar dra-og-slipp-liste og nye samsvarende operatorer\nLa til et «Ikke vis igjen»-alternativ og en kommando for kopiering til utklippstavlen for tillatelsesvarsler.\nOmorganiserte Innstillinger-dialogboksen i faner for enklere navigering",
+  "about.news.version_1_9_1.items": "La til Flatpak-applikasjonsikonet og flerarkspakking for x86_64 og aarch64\nForbedret det binære nedlastingsskriptet for å hoppe over filer som allerede finnes lokalt\nOppdaterte lasteskjermen for videospilleren til svart bakgrunn med hvit tekst\nFikset kategoriene for skrivebordsoppføringer, MIME-typer og formatering av nøkkelord i Flatpak"
 }

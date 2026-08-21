@@ -678,5 +678,6 @@
   "alert.copy": "Kopioida",
   "alert.copied": "Kopioitu!",
   "alert.do_not_show_again": "Älä näytä uudelleen",
-  "about.news.version_1_9_0.items": "Lisätty Flatpak-pakkaus isäntätiedostojärjestelmän käyttöoikeusbannerilla\nTulostussääntöjen asetuksia on muokattu muokattavalla vedä ja pudota -luettelolla sekä uusilla vastaavuusoperaattoreilla.\nLisätty Älä näytä uudelleen -vaihtoehto ja kopioi leikepöydälle -komento käyttöoikeusvaroituksille\nAsetukset-valintaikkuna järjestettiin uudelleen välilehdiksi helpomman navigoinnin takaamiseksi"
+  "about.news.version_1_9_0.items": "Lisätty järjestelmän tumman tilan tuki teeman mukaisilla kuvakkeilla\nLisätty Flatpak-pakkaus isäntätiedostojärjestelmän käyttöoikeusbannerilla\nTulostussääntöjen asetuksia on muokattu muokattavalla vedä ja pudota -luettelolla sekä uusilla vastaavuusoperaattoreilla.\nLisätty Älä näytä uudelleen -vaihtoehto ja kopioi leikepöydälle -komento käyttöoikeusvaroituksille\nAsetukset-valintaikkuna järjestettiin uudelleen välilehdiksi helpomman navigoinnin takaamiseksi",
+  "about.news.version_1_9_1.items": "Lisätty Flatpak-sovelluskuvake ja usean arkkitehtuurin pakkaus x86_64:lle ja aarch64:lle\nParannettu binäärilatausskriptiä ohittamaan paikallisesti jo olevat tiedostot\nVideosoittimen latausnäyttö päivitettiin mustaan taustaan ja valkoiseen tekstiin.\nKorjattu Flatpakin työpöytämerkintöjen kategoriat, MIME-tyypit ja avainsanojen muotoilu"
 }

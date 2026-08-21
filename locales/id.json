@@ -678,5 +678,6 @@
   "alert.copy": "Menyalin",
   "alert.copied": "Disalin!",
   "alert.do_not_show_again": "Jangan tampilkan lagi",
-  "about.news.version_1_9_0.items": "Menambahkan pengemasan Flatpak dengan banner izin sistem file host.\nPengaturan Aturan Output telah diperbarui dengan daftar yang dapat diedit menggunakan fitur seret dan lepas, serta operator pencocokan baru.\nMenambahkan opsi \"Jangan tampilkan lagi\" dan perintah \"salin ke papan klip\" untuk peringatan izin.\nDialog Pengaturan telah ditata ulang ke dalam tab agar lebih mudah dinavigasi."
+  "about.news.version_1_9_0.items": "Menambahkan dukungan mode gelap sistem dengan ikon yang sesuai tema.\nMenambahkan pengemasan Flatpak dengan banner izin sistem file host.\nPengaturan Aturan Output telah diperbarui dengan daftar yang dapat diedit menggunakan fitur seret dan lepas, serta operator pencocokan baru.\nMenambahkan opsi \"Jangan tampilkan lagi\" dan perintah \"salin ke papan klip\" untuk peringatan izin.\nDialog Pengaturan telah ditata ulang ke dalam tab agar lebih mudah dinavigasi.",
+  "about.news.version_1_9_1.items": "Menambahkan ikon aplikasi Flatpak dan pengemasan multi-arsitektur untuk x86_64 dan aarch64.\nSkrip pengunduhan biner telah ditingkatkan untuk melewati file yang sudah ada secara lokal.\nLayar pemuatan pemutar video telah diperbarui menjadi latar belakang hitam dengan teks putih.\nMemperbaiki format kategori entri desktop Flatpak, tipe MIME, dan kata kunci."
 }

@@ -1,11 +1,11 @@
 app-id: __APP_ID__
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '24.08'
+base-version: '25.08'
 separate-locales: false
-command: smart-video-processor
+command: __APP_ID__
 finish-args:
   - --share=ipc
   - --socket=wayland
@@ -15,28 +15,49 @@ finish-args:
   - --share=network
   - --filesystem=xdg-videos
   - --filesystem=xdg-download
-  - --env=PATH=/app/bin:/app/main:/usr/bin
 modules:
-  - name: smart-video-processor
+  - name: __NAME__-x86_64
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
-      - cp -r bundle/. /app/main/
-      - install -Dm755 run.sh /app/bin/smart-video-processor
+      - mkdir -p /app/lib/__NAME__
+      - cp -r * /app/lib/__NAME__/
+      - cd /app/lib/__NAME__/resources/bin && ./mkvmerge --appimage-extract && rm mkvmerge && mkdir -p /app/lib/mkvmerge-libs && cp -P squashfs-root/usr/lib/* /app/lib/mkvmerge-libs/ && cp squashfs-root/usr/bin/mkvmerge mkvmerge.real && rm -rf squashfs-root && echo -e '#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib/mkvmerge-libs:$LD_LIBRARY_PATH\nexec /app/lib/__NAME__/resources/bin/mkvmerge.real "$@"' > mkvmerge && chmod +x mkvmerge mkvmerge.real
+    sources:
+      - type: archive
+        url: https://github.com/xfuentes/__NAME__/releases/download/v__VERSION__/__NAME__-__VERSION__-x64.tar.gz
+        sha256: f27620ad341d9864383d01a66e45152497fdbf74bbc9c6c6286199cfcb22581e
+
+  - name: __NAME__-aarch64
+    only-arches:
+      - aarch64
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/__NAME__
+      - cp -r * /app/lib/__NAME__/
+      - cd /app/lib/__NAME__/resources/bin && ./mkvmerge --appimage-extract && rm mkvmerge && mkdir -p /app/lib/mkvmerge-libs && cp -P squashfs-root/usr/lib/* /app/lib/mkvmerge-libs/ && cp squashfs-root/usr/bin/mkvmerge mkvmerge.real && rm -rf squashfs-root && echo -e '#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib/mkvmerge-libs:$LD_LIBRARY_PATH\nexec /app/lib/__NAME__/resources/bin/mkvmerge.real "$@"' > mkvmerge && chmod +x mkvmerge mkvmerge.real
+    sources:
+      - type: archive
+        url: https://github.com/xfuentes/__NAME__/releases/download/v__VERSION__/__NAME__-__VERSION__-arm64.tar.gz
+        sha256: e60f722c4c6490d5b8d63551baa1554a674c3034d4ef2d540861252e7e362c66
+
+  - name: __NAME__-metadata
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 run.sh /app/bin/__APP_ID__
       - install -Dm644 __APP_ID__.desktop /app/share/applications/__APP_ID__.desktop
       - install -Dm644 __APP_ID__.metainfo.xml /app/share/metainfo/__APP_ID__.metainfo.xml
       - install -Dm644 icon.svg /app/share/icons/hicolor/scalable/apps/__APP_ID__.svg
     sources:
-      - type: dir
-        path: ../dist/flatpak-app
-        dest: bundle
       - type: file
         path: __APP_ID__.desktop
       - type: file
         path: __APP_ID__.metainfo.xml
       - type: file
-        path: ../resources/icon.svg
+        path: icon.svg
         dest-filename: icon.svg
       - type: script
         dest-filename: run.sh
         commands:
-          - zypak-wrapper.sh /app/main/smart-video-processor "$@"
+          - zypak-wrapper.sh /app/lib/__NAME__/__NAME__ "$@"

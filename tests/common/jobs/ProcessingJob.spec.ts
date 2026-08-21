@@ -65,16 +65,18 @@ test('Processing Progression data', async () => {
   expect(job.finished).toBe(true)
   expect(job.success).toBe(true)
 
-  const spawnArgs = spawnSpy.mock.lastCall[1]
+  const spawnArgs = spawnSpy.mock.lastCall![1]
   const uiLangIdx = spawnArgs.indexOf('--ui-language')
   expect(uiLangIdx).toBeGreaterThanOrEqual(0)
   expect(spawnArgs[uiLangIdx + 1]).toBe(MKVMERGE_ENGLISH)
 
   const outputIdx = spawnArgs.indexOf('--output')
   expect(outputIdx).toBeGreaterThanOrEqual(0)
-  expect(spawnArgs[outputIdx + 1]).toBe(outputPath + path.sep + changesMap['Container']['Update_Filename'].newValue)
+  expect(spawnArgs[outputIdx + 1]).toBe(
+    outputPath + path.sep + (changesMap['Container']['Update_Filename'].newValue as string)
+  )
 
-  const progresses: number[] = stateChanges.map((c) => c.progression.progress)
+  const progresses: (number | undefined)[] = stateChanges.map((c) => c.progression?.progress)
   expect(progresses).toStrictEqual([undefined, undefined, 0, 0.25, 0.5, 0.75, 1, -1])
 })
 
@@ -120,7 +122,7 @@ test('Failing Processing Job', async () => {
   try {
     await job.queue()
   } catch (err) {
-    expect(err.message).toBe("The file '-P' could not be opened for reading: open file error.")
+    expect((err as Error).message).toBe("The file '-P' could not be opened for reading: open file error.")
   }
   //await expect(job.queue()).rejects.toThrowError("The file '-P' could not be opened for reading: open file error.")
   // await job.queue();

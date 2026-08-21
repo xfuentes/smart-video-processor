@@ -34,11 +34,22 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.1' })}</h4>
+      <ul>
+        {_('about.news.version_1_9_1.items', {
+          defaultValue:
+            'Added the Flatpak application icon and multi-arch packaging for x86_64 and aarch64\nImproved the binary download script to skip files already present locally\nUpdated the video player loading screen to a black background with white text\nFixed the Flatpak desktop entry categories, MIME types and keywords formatting'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.0' })}</h4>
       <ul>
         {_('about.news.version_1_9_0.items', {
           defaultValue:
-            'Added Flatpak packaging with a host-filesystem permission banner\nReworked the Output Rules settings with an editable, drag-and-drop list and new matching operators\nAdded a Do not show again option and copy-to-clipboard command for permission warnings\nReorganized the Settings dialog into tabs for easier navigation'
+            'Added system dark mode support with theme-aware icons\nAdded Flatpak packaging with a host-filesystem permission banner\nReworked the Output Rules settings with an editable, drag-and-drop list and new matching operators\nAdded a Do not show again option and copy-to-clipboard command for permission warnings\nReorganized the Settings dialog into tabs for easier navigation'
         })
           .split('\n')
           .map((item, i) => (

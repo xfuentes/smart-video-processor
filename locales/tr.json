@@ -678,5 +678,6 @@
   "alert.copy": "Kopyala",
   "alert.copied": "Kopyalandı!",
   "alert.do_not_show_again": "Bir daha gösterme",
-  "about.news.version_1_9_0.items": "Ana dosya sistemi izin başlığı içeren Flatpak paketleme eklendi.\nÇıktı Kuralları ayarları, düzenlenebilir, sürükle ve bırak özellikli bir liste ve yeni eşleştirme operatörleri ile yeniden düzenlendi.\nİzin uyarıları için \"Bir daha gösterme\" seçeneği ve panoya kopyala komutu eklendi.\nAyarlar iletişim kutusu, daha kolay gezinme için sekmeler halinde yeniden düzenlendi."
+  "about.news.version_1_9_0.items": "Tema uyumlu simgelerle sistem karanlık mod desteği eklendi.\nAna dosya sistemi izin başlığı içeren Flatpak paketleme eklendi.\nÇıktı Kuralları ayarları, düzenlenebilir, sürükle ve bırak özellikli bir liste ve yeni eşleştirme operatörleri ile yeniden düzenlendi.\nİzin uyarıları için \"Bir daha gösterme\" seçeneği ve panoya kopyala komutu eklendi.\nAyarlar iletişim kutusu, daha kolay gezinme için sekmeler halinde yeniden düzenlendi.",
+  "about.news.version_1_9_1.items": "Flatpak uygulama simgesi ve x86_64 ve aarch64 için çoklu mimari paketleme eklendi.\nİkili dosya indirme komut dosyası, yerel olarak zaten mevcut olan dosyaları atlayacak şekilde iyileştirildi.\nVideo oynatıcısının yükleme ekranı siyah arka plan ve beyaz metin olacak şekilde güncellendi.\nFlatpak masaüstü giriş kategorileri, MIME türleri ve anahtar kelime biçimlendirmesi düzeltildi."
 }
