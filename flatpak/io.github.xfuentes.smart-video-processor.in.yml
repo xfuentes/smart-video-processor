@@ -2,6 +2,13 @@ app-id: __APP_ID__
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node22
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    version: '25.08'
+    directory: lib/ffmpeg
+    add-ld-path: lib
 base: org.electronjs.Electron2.BaseApp
 base-version: '25.08'
 separate-locales: false
@@ -13,51 +20,63 @@ finish-args:
   - --socket=pulseaudio
   - --device=dri
   - --share=network
-  - --filesystem=xdg-videos
-  - --filesystem=xdg-download
+  - --filesystem=xdg-run/app
 modules:
-  - name: __NAME__-x86_64
+  - name: mkvtoolnix
+    buildsystem: simple
     only-arches:
       - x86_64
-    buildsystem: simple
     build-commands:
-      - mkdir -p /app/lib/__NAME__
-      - cp -r * /app/lib/__NAME__/
-      - cd /app/lib/__NAME__/resources/bin && ./mkvmerge --appimage-extract && rm mkvmerge && mkdir -p /app/lib/mkvmerge-libs && cp -P squashfs-root/usr/lib/* /app/lib/mkvmerge-libs/ && cp squashfs-root/usr/bin/mkvmerge mkvmerge.real && rm -rf squashfs-root && echo -e '#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib/mkvmerge-libs:$LD_LIBRARY_PATH\nexec /app/lib/__NAME__/resources/bin/mkvmerge.real "$@"' > mkvmerge && chmod +x mkvmerge mkvmerge.real
+      - chmod +x MKVToolNix_GUI-100.0-x86_64.AppImage
+      - ./MKVToolNix_GUI-100.0-x86_64.AppImage --appimage-extract >/dev/null
+      - install -Dm755 squashfs-root/usr/bin/mkvmerge /app/bin/mkvmerge
+      - |
+        set -e
+        install -d /app/lib
+        for lib in $(LD_LIBRARY_PATH=$(pwd)/squashfs-root/usr/lib ldd /app/bin/mkvmerge | awk '/=> \// {print $3}' | sort -u); do
+          case "$lib" in
+            */squashfs-root/usr/lib/*)
+              cp -L "$lib" /app/lib/ 2>/dev/null || true
+              ;;
+            /app/lib/*|*linux-vdso*|*ld-linux*|*libc.so*|*libm.so*|*libpthread.so*|*libdl.so*|*librt.so*|*libgcc_s.so*|*libstdc++.so*) ;;
+            *)
+              cp -L "$lib" /app/lib/ 2>/dev/null || true
+              ;;
+          esac
+        done
     sources:
-      - type: archive
-        url: https://github.com/xfuentes/__NAME__/releases/download/v__VERSION__/__NAME__-__VERSION__-x64.tar.gz
-        sha256: f27620ad341d9864383d01a66e45152497fdbf74bbc9c6c6286199cfcb22581e
+      - type: file
+        url: https://mkvtoolnix.download/appimage/MKVToolNix_GUI-100.0-x86_64.AppImage
+        sha256: 159f7a6eea5b9c042f248ae8a3b2a7e2311f22841a118c26d6250f17d32eb655
+        dest-filename: MKVToolNix_GUI-100.0-x86_64.AppImage
 
-  - name: __NAME__-aarch64
-    only-arches:
-      - aarch64
+  - name: __NAME__
     buildsystem: simple
-    build-commands:
-      - mkdir -p /app/lib/__NAME__
-      - cp -r * /app/lib/__NAME__/
-      - cd /app/lib/__NAME__/resources/bin && ./mkvmerge --appimage-extract && rm mkvmerge && mkdir -p /app/lib/mkvmerge-libs && cp -P squashfs-root/usr/lib/* /app/lib/mkvmerge-libs/ && cp squashfs-root/usr/bin/mkvmerge mkvmerge.real && rm -rf squashfs-root && echo -e '#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib/mkvmerge-libs:$LD_LIBRARY_PATH\nexec /app/lib/__NAME__/resources/bin/mkvmerge.real "$@"' > mkvmerge && chmod +x mkvmerge mkvmerge.real
-    sources:
-      - type: archive
-        url: https://github.com/xfuentes/__NAME__/releases/download/v__VERSION__/__NAME__-__VERSION__-arm64.tar.gz
-        sha256: e60f722c4c6490d5b8d63551baa1554a674c3034d4ef2d540861252e7e362c66
+    build-options:
+      append-path: /usr/lib/sdk/node22/bin
+      env:
+        npm_config_nodedir: /usr/lib/sdk/node22
 
-  - name: __NAME__-metadata
-    buildsystem: simple
     build-commands:
+      - mkdir -p native/uwp-activation/build/Release dist/bin
+      - yarn install --immutable --immutable-cache
+      - yarn build
+      - npx electron-builder --dir --publish never
+      - install -d /app/lib/__NAME__
+      - cp -r dist/linux*unpacked/* /app/lib/__NAME__/
+      - node tools/configure.js ./flatpak
+      - install -Dm644 flatpak/__APP_ID__.desktop /app/share/applications/__APP_ID__.desktop
+      - install -Dm644 flatpak/__APP_ID__.metainfo.xml /app/share/metainfo/__APP_ID__.metainfo.xml
+      - install -Dm644 resources/icon.svg /app/share/icons/hicolor/scalable/apps/__APP_ID__.svg
       - install -Dm755 run.sh /app/bin/__APP_ID__
-      - install -Dm644 __APP_ID__.desktop /app/share/applications/__APP_ID__.desktop
-      - install -Dm644 __APP_ID__.metainfo.xml /app/share/metainfo/__APP_ID__.metainfo.xml
-      - install -Dm644 icon.svg /app/share/icons/hicolor/scalable/apps/__APP_ID__.svg
     sources:
-      - type: file
-        path: __APP_ID__.desktop
-      - type: file
-        path: __APP_ID__.metainfo.xml
-      - type: file
-        path: icon.svg
-        dest-filename: icon.svg
+      - type: git
+        url: https://github.com/xfuentes/__NAME__.git
+        tag: v__VERSION__
+      - node-sources.json
       - type: script
         dest-filename: run.sh
         commands:
-          - zypak-wrapper.sh /app/lib/__NAME__/__NAME__ "$@"
+          - export PATH="/app/bin:/usr/bin:/app/lib/ffmpeg/bin:$PATH"
+          - export LD_LIBRARY_PATH="/app/lib:/app/lib/ffmpeg/lib:$LD_LIBRARY_PATH"
+          - exec zypak-wrapper.sh /app/lib/__NAME__/__NAME__ "$@"
