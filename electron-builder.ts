@@ -18,6 +18,8 @@
 
 import { Configuration } from 'electron-builder'
 
+const arch = process.arch === 'x64' ? 'x64' : 'arm64'
+
 export default {
   appId: 'XavierFuentes.SmartVideoProcessor',
   productName: 'Smart Video Processor',
@@ -33,7 +35,7 @@ export default {
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   extraResources: [
     {
-      from: 'dist/bin',
+      from: `bin/${process.platform}/${arch}`,
       to: 'bin',
       filter: ['*']
     },

@@ -35,7 +35,7 @@
     "build": "yarn run typecheck && electron-vite build",
     "postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",
     "package": "yarn build && electron-builder",
-    "prepare-package": "node ./tools/download_binaries.js && node ./tools/configure.js ./snap/ && node ./tools/configure.js ./flatpak/",
+    "prepare-package": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./flatpak/",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled",
     "build:native": "node-gyp rebuild --directory native/uwp-activation",

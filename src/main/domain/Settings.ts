@@ -50,30 +50,23 @@ const defaultLanguage = supportedLanguageCodes.has(systemLocale)
     : 'en'
 
 const getDefaultToolPath = (tool: 'ffmpeg' | 'ffprobe' | 'mkvmerge') => {
-  if (os.platform() === 'win32') {
-    if (process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1) {
-      return Path.join(process.resourcesPath, 'bin', `${tool}.exe`)
+  const arch = process.arch === 'x64' ? 'x64' : 'arm64'
+  const platform = os.platform()
+  const binary = platform === 'win32' ? `${tool}.exe` : tool
+
+  if (process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1) {
+    const toolPathFromResources = Path.join(process.resourcesPath, 'bin', binary)
+    if (isValidExecutable(toolPathFromResources)) {
+      return toolPathFromResources
     }
-    const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'dist', 'bin', `${tool}.exe`)
-    if (isValidExecutable(toolPathFromSources)) {
-      return toolPathFromSources
-    }
-    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
-  } else if (os.platform() === 'linux') {
-    if (process.resourcesPath && process.resourcesPath.indexOf('node_modules') === -1) {
-      const toolPathFromResources = Path.join(process.resourcesPath, 'bin', tool)
-      if (isValidExecutable(toolPathFromResources)) {
-        return toolPathFromResources
-      }
-    }
-    const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'dist', 'bin', tool)
-    if (isValidExecutable(toolPathFromSources)) {
-      return toolPathFromSources
-    }
-    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
-  } else {
-    return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
   }
+
+  const toolPathFromSources = Path.join(__dirname, '..', '..', '..', 'bin', platform, arch, binary)
+  if (isValidExecutable(toolPathFromSources)) {
+    return toolPathFromSources
+  }
+
+  return Processes?.findCommandSync ? Processes.findCommandSync(tool, tool) : tool
 }
 
 export const defaultSettings: Settings = {

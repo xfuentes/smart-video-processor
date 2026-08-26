@@ -24,31 +24,27 @@ finish-args:
 modules:
   - name: mkvtoolnix
     buildsystem: simple
-    only-arches:
-      - x86_64
     build-commands:
-      - chmod +x MKVToolNix_GUI-100.0-x86_64.AppImage
-      - ./MKVToolNix_GUI-100.0-x86_64.AppImage --appimage-extract >/dev/null
-      - install -Dm755 squashfs-root/usr/bin/mkvmerge /app/bin/mkvmerge
+      - ar x mkvtoolnix_101.0-1_${FLATPAK_ARCH}.deb data.tar.xz
+      - tar -xJf data.tar.xz
+      - install -D usr/bin/mkvmerge /app/bin/mkvmerge
       - |
-        set -e
-        install -d /app/lib
-        for lib in $(LD_LIBRARY_PATH=$(pwd)/squashfs-root/usr/lib ldd /app/bin/mkvmerge | awk '/=> \// {print $3}' | sort -u); do
-          case "$lib" in
-            */squashfs-root/usr/lib/*)
-              cp -L "$lib" /app/lib/ 2>/dev/null || true
-              ;;
-            /app/lib/*|*linux-vdso*|*ld-linux*|*libc.so*|*libm.so*|*libpthread.so*|*libdl.so*|*librt.so*|*libgcc_s.so*|*libstdc++.so*) ;;
-            *)
-              cp -L "$lib" /app/lib/ 2>/dev/null || true
-              ;;
-          esac
-        done
+        find usr/lib -type f -name '*.so*' -exec cp -t /app/lib {} +
+        find usr/lib -type l -name '*.so*' -exec cp -t /app/lib {} +
+      - rm -rf usr data.tar.xz
     sources:
       - type: file
-        url: https://mkvtoolnix.download/appimage/MKVToolNix_GUI-100.0-x86_64.AppImage
-        sha256: 159f7a6eea5b9c042f248ae8a3b2a7e2311f22841a118c26d6250f17d32eb655
-        dest-filename: MKVToolNix_GUI-100.0-x86_64.AppImage
+        url: http://deb.debian.org/debian/pool/main/m/mkvtoolnix/mkvtoolnix_101.0-1_amd64.deb
+        sha256: ed3ae53f73e7d1c4f71ddb517f5d4244e37f5ed5f3834fdc28f6e194080d12c1
+        dest-filename: mkvtoolnix_101.0-1_x86_64.deb
+        only-arches:
+          - x86_64
+      - type: file
+        url: http://deb.debian.org/debian/pool/main/m/mkvtoolnix/mkvtoolnix_101.0-1_arm64.deb
+        sha256: c6fe465313501f4ab245b1e483089db99e346cbccc6bd3b6065135dbddeea3d8
+        dest-filename: mkvtoolnix_101.0-1_aarch64.deb
+        only-arches:
+          - aarch64
 
   - name: __NAME__
     buildsystem: simple
@@ -56,12 +52,26 @@ modules:
       append-path: /usr/lib/sdk/node22/bin
       env:
         npm_config_nodedir: /usr/lib/sdk/node22
+        YARN_ENABLE_TELEMETRY: '0'
+        YARN_ENABLE_NETWORK: '0'
+        YARN_ENABLE_GLOBAL_CACHE: '0'
+        YARN_ENABLE_INLINE_BUILDS: '1'
+        YARN_GLOBAL_FOLDER: /run/build/__NAME__/flatpak-node/yarn-berry
+        YARN_CACHE_FOLDER: /run/build/__NAME__/flatpak-node/yarn-berry/cache
+        ELECTRON_CACHE: /run/build/__NAME__/flatpak-node/cache/electron
 
     build-commands:
-      - mkdir -p native/uwp-activation/build/Release dist/bin
-      - yarn install --immutable --immutable-cache
+      - mkdir -p native/uwp-activation/build/Release
+      - yarn config
+      - yarn plugin import $FLATPAK_BUILDER_BUILDDIR/flatpak-node/flatpak-yarn.js
+      - yarn convertToZip $(which yarn)
+      - yarn install --immutable
       - yarn build
-      - npx electron-builder --dir --publish never
+      - . flatpak-node/electron-builder-arch-args.sh
+      - npx electron-builder --linux $ELECTRON_BUILDER_ARCH_ARGS --dir --publish never
+      - rm -f dist/linux*unpacked/resources/bin/ffmpeg
+      - rm -f dist/linux*unpacked/resources/bin/ffprobe
+      - rm -f dist/linux*unpacked/resources/bin/mkvmerge
       - install -d /app/lib/__NAME__
       - cp -r dist/linux*unpacked/* /app/lib/__NAME__/
       - node tools/configure.js ./flatpak
@@ -72,8 +82,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xfuentes/__NAME__.git
-        tag: v__VERSION__
-      - node-sources.json
+        branch: main
+      - flatpak/generated-sources.json
       - type: script
         dest-filename: run.sh
         commands:
