@@ -17,6 +17,7 @@
  */
 
 import { Configuration } from 'electron-builder'
+import { homedir } from 'os'
 
 const arch = process.arch === 'x64' ? 'x64' : 'arm64'
 
@@ -33,6 +34,9 @@ export default {
   },
   files: ['build/**/*', 'resources/flags', 'locales/**'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
+  electronDownload: {
+    cache: process.env.XDG_CACHE_HOME ? `${process.env.XDG_CACHE_HOME}/electron` : `${homedir()}/.cache/electron`
+  },
   extraResources: [
     {
       from: `bin/${process.platform}/${arch}`,
