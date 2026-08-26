@@ -438,6 +438,7 @@ export const OutputRuleDialog = ({
                 </Label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '5px' }}>
                   <Input
+                    readOnly={window.api.main.isLimitedPermissions}
                     required
                     size="small"
                     type="text"

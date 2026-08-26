@@ -38,7 +38,7 @@ import {
   TabList,
   ToolbarButton
 } from '@fluentui/react-components'
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
@@ -103,12 +103,24 @@ export const SettingsDialog = () => {
     }
   }
 
-  const handleFormInputChange = (
-    setData: Dispatch<SetStateAction<string>>,
-    _ev: ChangeEvent<HTMLInputElement>,
-    data: InputOnChangeData
-  ) => {
-    setData(data.value)
+  const pickTmpFilesPath = async () => {
+    const selected = await window.api.main.openDirectoryExplorer(
+      _('settings.tmp_files_path.browse.title', { defaultValue: 'Select Temporary Files Directory' }),
+      tmpFilesPath
+    )
+    if (selected) {
+      setTmpFilesPath(selected)
+    }
+  }
+
+  const pickDefaultOutputPath = async () => {
+    const selected = await window.api.main.openDirectoryExplorer(
+      _('settings.default_output_path.browse.title', { defaultValue: 'Select Default Output Directory' }),
+      defaultOutputPath
+    )
+    if (selected) {
+      setDefaultOutputPath(selected)
+    }
   }
 
   const handleCancel = (_ev: React.FormEvent) => {
@@ -342,32 +354,44 @@ export const SettingsDialog = () => {
                       <div className="field">
                         <Label size="small" required htmlFor="tmpFilesPathInput">
                           {_('settings.tmp_files_path.label', {
-                            defaultValue: 'Temporary Files Path (Can be relative to source file path)'
+                            defaultValue: 'Temporary Files Path'
                           })}
                         </Label>
-                        <Input
-                          required
-                          size="small"
-                          type="text"
-                          id="tmpFilesPathInput"
-                          value={tmpFilesPath}
-                          onChange={handleFormInputChange.bind(null, setTmpFilesPath)}
-                        />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '5px' }}>
+                          <Input
+                            readOnly={window.api.main.isLimitedPermissions}
+                            required
+                            size="small"
+                            type="text"
+                            id="tmpFilesPathInput"
+                            value={tmpFilesPath}
+                            onChange={(_ev, data: InputOnChangeData) => setTmpFilesPath(data.value)}
+                          />
+                          <Button size="small" onClick={() => void pickTmpFilesPath()}>
+                            {_('settings.browse', { defaultValue: 'Browse' })}
+                          </Button>
+                        </div>
                       </div>
                       <div className="field">
                         <Label size="small" required htmlFor="defaultOutputPathInput">
                           {_('settings.default_output_path.label', {
-                            defaultValue: 'Default Output Path (Can be relative to source file path)'
+                            defaultValue: 'Default Output Path'
                           })}
                         </Label>
-                        <Input
-                          required
-                          size="small"
-                          type="text"
-                          id="defaultOutputPathInput"
-                          value={defaultOutputPath}
-                          onChange={handleFormInputChange.bind(null, setDefaultOutputPath)}
-                        />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '5px' }}>
+                          <Input
+                            readOnly={window.api.main.isLimitedPermissions}
+                            required
+                            size="small"
+                            type="text"
+                            id="defaultOutputPathInput"
+                            value={defaultOutputPath}
+                            onChange={(_ev, data: InputOnChangeData) => setDefaultOutputPath(data.value)}
+                          />
+                          <Button size="small" onClick={() => void pickDefaultOutputPath()}>
+                            {_('settings.browse', { defaultValue: 'Browse' })}
+                          </Button>
+                        </div>
                       </div>
                       <OutputRulesField rules={outputRules} onChange={setOutputRules} language={language} />
                     </div>

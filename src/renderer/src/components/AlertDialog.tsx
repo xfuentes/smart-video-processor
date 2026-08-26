@@ -18,7 +18,6 @@
 
 import {
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogBody,
@@ -32,42 +31,21 @@ import { DialogModalType } from '@fluentui/react-dialog'
 import { Checkmark24Filled, Copy24Regular } from '@fluentui/react-icons'
 import React from 'react'
 import { useI18n } from '../i18n'
-import { useSettings } from '@renderer/components/context/SettingsContext'
 
 type Props = {
   title: string
   children: React.ReactNode
   modalType?: DialogModalType
-  dismissKey?: string
   icon?: React.ReactNode
   copyCommand?: string
 }
 
-export const AlertDialog = ({
-  title,
-  children,
-  modalType,
-  dismissKey,
-  icon,
-  copyCommand
-}: Props): JSXElement | null => {
+export const AlertDialog = ({ title, children, modalType, icon, copyCommand }: Props): JSXElement | null => {
   const _ = useI18n()
-  const { settingsValidation, setSettingsValidation } = useSettings()
-  const [open, setOpen] = React.useState(dismissKey ? !settingsValidation.result.dismissedAlerts[dismissKey] : true)
-  const [doNotShowAgain, setDoNotShowAgain] = React.useState(false)
+  const [open, setOpen] = React.useState(true)
   const [copied, setCopied] = React.useState(false)
 
   const handleDismiss = () => {
-    if (dismissKey && doNotShowAgain) {
-      const newSettings = {
-        ...settingsValidation.result,
-        dismissedAlerts: {
-          ...settingsValidation.result.dismissedAlerts,
-          [dismissKey]: true
-        }
-      }
-      void window.api.main.saveSettings(newSettings).then(setSettingsValidation)
-    }
     setOpen(false)
   }
 
@@ -152,15 +130,6 @@ export const AlertDialog = ({
               boxSizing: 'border-box'
             }}
           >
-            {dismissKey && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: 'auto' }}>
-                <Checkbox
-                  label={_('alert.do_not_show_again', { defaultValue: 'Do not show again' })}
-                  checked={doNotShowAgain}
-                  onChange={(_, data) => setDoNotShowAgain(Boolean(data.checked))}
-                />
-              </div>
-            )}
             <Button
               size="small"
               appearance="secondary"

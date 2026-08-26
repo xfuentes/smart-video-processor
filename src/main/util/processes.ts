@@ -121,7 +121,7 @@ export class Processes {
   }
 
   static isLimitedPermissions = (): boolean => {
-    return getElectronApp()?.getPath('exe').includes('/snap/') || false
+    return this.isFlatpak() || this.isSnapStore()
   }
 
   static setPriority(pid: number, priority: ProcessesPriority) {
@@ -198,34 +198,8 @@ export class Processes {
     return process.platform === 'linux' && (process.env.FLATPAK_ID !== undefined || fs.existsSync('/.flatpak-info'))
   }
 
-  static hasHostFilesystemAccess = (): boolean => {
-    if (!this.isFlatpak()) {
-      return true
-    }
-    try {
-      const info = fs.readFileSync('/.flatpak-info', 'utf8')
-      const match = info.match(/\[Context\][\s\S]*?filesystems=([^\n]+)/)
-      if (!match) {
-        return false
-      }
-      return match[1]
-        .split(';')
-        .map((value) => value.trim())
-        .includes('host')
-    } catch {
-      return false
-    }
-  }
-
-  static hasRemovableMediaAccess() {
-    if (os.platform() === 'linux' && this.isLimitedPermissions()) {
-      try {
-        fs.readdirSync('/mnt')
-      } catch (err) {
-        return false
-      }
-    }
-    return true
+  static isFlathub = (): boolean => {
+    return this.isFlatpak() && process.env.FLATHUB === 'true'
   }
 
   private static cleanInput(s: string) {

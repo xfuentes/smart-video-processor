@@ -20,16 +20,7 @@ import { ProcessesPriority } from './processes'
 import { VideoCodec } from './Encoding'
 
 export type OutputRuleProperty = 'type' | 'language' | 'year' | 'genres' | 'quality' | 'country'
-export type OutputRuleOperator =
-  | 'eq'
-  | 'neq'
-  | 'lt'
-  | 'lte'
-  | 'gt'
-  | 'gte'
-  | 'in'
-  | 'containsAny'
-  | 'containsAll'
+export type OutputRuleOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'containsAny' | 'containsAll'
 export type OutputRuleCondition = {
   property: OutputRuleProperty
   operator: OutputRuleOperator
@@ -62,11 +53,11 @@ export type Settings = {
    */
   additionalTvSearchLanguages: string[]
   /**
-   * Output path where temporary files will be written (can be relative to the original file or absolute)
+   * Output path where temporary files will be written (absolute)
    */
   tmpFilesPath: string
   /**
-   * Default output path used when no output rule matches (can be relative to the original file or absolute)
+   * Default output path used when no output rule matches (absolute)
    */
   defaultOutputPath: string
   /**
@@ -129,8 +120,4 @@ export type Settings = {
    * ffprobe command full path.
    */
   ffprobePath: string
-  /**
-   * Map of alert keys the user has chosen not to show again.
-   */
-  dismissedAlerts: Record<string, boolean>
 }

@@ -40,10 +40,6 @@ export interface SvpAPI {
     fluentUIVersion: string
     viteVersion: string
     isLimitedPermissions: boolean
-    hasRemovableMediaAccess: boolean
-    isFlatpak: boolean
-    hasHostFilesystemAccess: boolean
-    flatpakOverrideCommand: string
     getLocaleBasePath: () => Promise<string>
     getLicenseText: (language: string) => Promise<string>
     getCurrentSettings: () => Promise<FormValidation<Settings>>

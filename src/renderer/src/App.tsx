@@ -1,6 +1,5 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Divider } from '@fluentui/react-components'
-import { Warning24Filled } from '@fluentui/react-icons'
 import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
 import { ListChangedListener, VideoChangedListener } from '../../preload/@types'
@@ -9,12 +8,7 @@ import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerPro
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
 import { MultiPreviewTabs } from '@renderer/components/preview/MultiPreviewTabs'
-import { useI18n } from './i18n'
-import { AlertDialog } from '@renderer/components/AlertDialog'
-
 export const App = (): React.JSX.Element => {
-  const _ = useI18n()
-
   const preventDefault = (e: SyntheticEvent) => {
     e.preventDefault()
   }
@@ -92,35 +86,6 @@ export const App = (): React.JSX.Element => {
         >
           <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <div className="vertical-stack">
-              {!window.api.main.hasRemovableMediaAccess && (
-                <AlertDialog
-                  title={_('app.permission_warning.title', { defaultValue: 'Permission Warning' })}
-                  dismissKey="svp.permission.snap"
-                  icon={<Warning24Filled />}
-                  copyCommand="snap connect smart-video-processor:removable-media"
-                >
-                  {_('app.permission_warning.body', {
-                    defaultValue:
-                      'To be able to process files from outside of your home directory, enable removable media access with this command: '
-                  })}
-                </AlertDialog>
-              )}
-              {window.api.main.isFlatpak && !window.api.main.hasHostFilesystemAccess && (
-                <AlertDialog
-                  title={_('app.permission_warning.title', { defaultValue: 'Permission Warning' })}
-                  dismissKey="svp.permission.flatpak"
-                  icon={<Warning24Filled />}
-                  copyCommand={
-                    window.api.main.flatpakOverrideCommand ||
-                    'flatpak override --user io.github.xfuentes.smart-video-processor --filesystem=host'
-                  }
-                >
-                  {_('app.flatpak_permission_warning.body', {
-                    defaultValue:
-                      'To be able to process files from anywhere on your system, enable host filesystem access with this command: '
-                  })}
-                </AlertDialog>
-              )}
               <ListOrVideoContainer
                 videos={videos}
                 selectedVideos={selectedVideos}

@@ -74,8 +74,8 @@ export const defaultSettings: Settings = {
   isAutoDeleteProcessedFilesEnabled: false,
   language: defaultLanguage,
   additionalTvSearchLanguages: ['en'],
-  tmpFilesPath: Path.join(os.tmpdir(), 'svp-tmp'),
-  defaultOutputPath: Path.join('.', 'Reworked'),
+  tmpFilesPath: Processes.isLimitedPermissions() ? '' : Path.join(os.tmpdir(), 'svp-tmp'),
+  defaultOutputPath: Processes.isLimitedPermissions() ? '' : Path.join('.', 'Reworked'),
   outputRules: [],
   isAutoStartEnabled: false,
   priority: 'BELOW_NORMAL',
@@ -90,8 +90,7 @@ export const defaultSettings: Settings = {
   audioEnforceCodec: false,
   mkvMergePath: 'mkvmerge',
   ffmpegPath: 'ffmpeg',
-  ffprobePath: 'ffprobe',
-  dismissedAlerts: {}
+  ffprobePath: 'ffprobe'
 }
 function migrateOutputRuleCondition(condition: unknown): OutputRuleCondition {
   const c = condition as Record<string, unknown>
@@ -183,12 +182,17 @@ export function loadSettings() {
   } else {
     currentSettings = defaultSettings
   }
-  currentSettings.tmpFilesPath = Processes.isLimitedPermissions()
-    ? Path.join('.', 'svp-tmp')
-    : Path.join(os.tmpdir(), 'svp-tmp')
   currentSettings.mkvMergePath = getDefaultToolPath('mkvmerge')
   currentSettings.ffmpegPath = getDefaultToolPath('ffmpeg')
   currentSettings.ffprobePath = getDefaultToolPath('ffprobe')
+  if (Processes.isLimitedPermissions()) {
+    if (!Path.isAbsolute(currentSettings.tmpFilesPath)) {
+      currentSettings.tmpFilesPath = ''
+    }
+    if (!Path.isAbsolute(currentSettings.defaultOutputPath)) {
+      currentSettings.defaultOutputPath = ''
+    }
+  }
 }
 
 export function saveSettings(settings: Settings) {
@@ -216,5 +220,12 @@ function isValidExecutable(path: string) {
 }
 
 export function validateSettings(settings: Settings) {
-  return new FormValidationBuilder<Settings>(settings).build()
+  const validation = new FormValidationBuilder<Settings>(settings)
+  if (settings.defaultOutputPath.trim() === '') {
+    validation.fieldValidation('defaultOutputPath', 'error', 'Default output path is required')
+  }
+  if (settings.tmpFilesPath.trim() === '') {
+    validation.fieldValidation('tmpFilesPath', 'error', 'Temporary files path is required')
+  }
+  return validation.build()
 }

@@ -17,7 +17,7 @@
  */
 
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
-import { extname, join } from 'path'
+import { dirname, extname, isAbsolute, join } from 'path'
 import fs from 'node:fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico?asset'
@@ -116,7 +116,37 @@ function addUwpActivationFiles() {
   }
 }
 
-const gotTheLock = app.requestSingleInstanceLock()
+function hasNewInstanceArgument(argv: string[] = process.argv): boolean {
+  return argv.slice(1).some((arg) => arg === '-n' || arg === '--new-instance')
+}
+
+function hasHelpArgument(argv: string[] = process.argv): boolean {
+  return argv.slice(1).some((arg) => arg === '-h' || arg === '--help')
+}
+
+function printUsage(): void {
+  const lines = [
+    `${packageJSON.name} ${packageJSON.version}`,
+    '',
+    packageJSON.description,
+    '',
+    'Usage:',
+    `  ${packageJSON.name} [options] [video files...]`,
+    '',
+    'Options:',
+    '  -n, --new-instance    Run a new application instance',
+    '  -h, --help            Show this help message and exit'
+  ]
+  console.log(lines.join('\n'))
+}
+
+if (hasHelpArgument()) {
+  printUsage()
+  app.exit(0)
+}
+
+const isNewInstance = hasNewInstanceArgument()
+const gotTheLock = isNewInstance || app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
   app.quit()
@@ -275,15 +305,8 @@ app.whenReady().then(async () => {
     }
   })
   ipcMain.handle('main:getInstallationStatus', async () => {
-    const isFlatpak = Processes.isFlatpak()
-    const hasHostFilesystemAccess = Processes.hasHostFilesystemAccess()
-    const flatpakAppId = process.env.FLATPAK_ID ?? 'io.github.xfuentes.smart-video-processor'
     return {
-      isLimitedPermissions: Processes.isLimitedPermissions(),
-      hasRemovableMediaAccess: Processes.hasRemovableMediaAccess(),
-      isFlatpak,
-      hasHostFilesystemAccess,
-      flatpakOverrideCommand: isFlatpak ? `flatpak override --user ${flatpakAppId} --filesystem=host` : ''
+      isLimitedPermissions: Processes.isLimitedPermissions()
     }
   })
   ipcMain.handle('main:getCurrentSettings', () => {
@@ -339,10 +362,32 @@ app.whenReady().then(async () => {
     validation.result = currentSettings
     return validation
   })
+  function resolveDefaultPath(defaultPath: string | undefined, type: 'file' | 'directory'): string | undefined {
+    if (!defaultPath || !isAbsolute(defaultPath)) {
+      return undefined
+    }
+    try {
+      const stat = fs.statSync(defaultPath)
+      if (type === 'directory') {
+        if (stat.isDirectory()) {
+          return defaultPath
+        }
+        if (stat.isFile()) {
+          return dirname(defaultPath)
+        }
+      } else if (stat.isFile() || stat.isDirectory()) {
+        return defaultPath
+      }
+    } catch {
+      /* ignored */
+    }
+    return undefined
+  }
+
   ipcMain.handle('main:openSingleFileExplorer', async (_event, title: string, defaultPath?: string) => {
     const result = await dialog.showOpenDialog(mainWindow!, {
       title,
-      defaultPath,
+      defaultPath: resolveDefaultPath(defaultPath, 'file'),
       properties: ['openFile', 'dontAddToRecent']
     })
     if (!result.canceled) {
@@ -353,7 +398,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('main:openDirectoryExplorer', async (_event, title: string, defaultPath?: string) => {
     const result = await dialog.showOpenDialog(mainWindow!, {
       title,
-      defaultPath,
+      defaultPath: resolveDefaultPath(defaultPath, 'directory'),
       properties: ['openDirectory', 'dontAddToRecent']
     })
     if (!result.canceled) {
