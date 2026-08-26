@@ -30,31 +30,31 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: yarn install --immutable
+        run: npm ci
 
       - name: build
-        run: yarn run build
+        run: npm run build
 
       - name: test
-        run: yarn run test
+        run: npm run test
 
       - name: prepare-package
-        run: yarn run prepare-package
+        run: npm run prepare-package
         env:
           MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
 
       - name: package arm64
         if: runner.arch == 'ARM64'
-        run: yarn run package --arm64
+        run: npm run package -- --arm64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: package x64
         if: runner.arch == 'X64'
-        run: yarn run package --x64
+        run: npm run package -- --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
