@@ -65,6 +65,7 @@ export default {
     artifactName: '${name}-${arch}.${ext}'
   },
   linux: {
+    executableName: 'smart-video-processor',
     artifactName: '${name}-${version}-${arch}.${ext}',
     target: ['dir', 'AppImage', 'tar.gz'],
     category: 'AudioVideo',

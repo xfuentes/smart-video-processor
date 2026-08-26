@@ -3,7 +3,7 @@
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "appId": "io.github.xfuentes.smart-video-processor",
-  "desktopName": "smart-video-processor",
+  "desktopName": "io.github.xfuentes.smart-video-processor.desktop",
   "private": true,
   "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
@@ -28,13 +28,13 @@
     "lint": "eslint --cache .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
-    "typecheck": "yarn run typecheck:node && yarn run typecheck:web",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "dev:file": "node -e \"const fs=require('fs'), os=require('os'), cp=require('child_process'); const file=process.argv[1]; const tmp=os.tmpdir()+'/svp-dev-open.json'; fs.writeFileSync(tmp, JSON.stringify({files:[file]})); console.log('[dev:file] wrote', tmp, file); cp.spawnSync('./node_modules/.bin/electron-vite', ['dev', '--noSandbox'], { stdio: 'inherit', env: process.env })\" --",
-    "build": "yarn run typecheck && electron-vite build",
+    "build": "npm run typecheck && electron-vite build",
     "postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",
-    "package": "yarn build && electron-builder",
+    "package": "npm run build && electron-builder",
     "prepare-package": "node ./tools/configure.js ./snap/ && node ./tools/configure.js ./flatpak/",
     "test": "vitest run",
     "coverage": "vitest --coverage.enabled",
@@ -101,6 +101,5 @@
   },
   "optionalDependencies": {
     "ntsuspend": "^1.0.2"
-  },
-  "packageManager": "yarn@4.18.0"
+  }
 }
