@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Added `-n` / `--new-instance` command-line argument to allow running a new app instance.
+- Added `-h` / `--help` command-line argument to display the version, description and accepted arguments.
+
 ## [1.9.1] - 2026-08-21
 
 ### Added

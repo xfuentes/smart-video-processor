@@ -63,6 +63,25 @@ tracks and attachments. If some needed metadata are missing the file will be ana
 
 ![Video List](./docs/img/02-VideoList.png)
 
+### Command-line arguments
+
+When starting Smart Video Processor from a terminal, you can pass the following arguments:
+
+```shell
+smart-video-processor [options] [video files...]
+```
+
+- `-n`, `--new-instance` — Run a new application instance instead of focusing the existing one.
+- `-h`, `--help` — Show the version, description and accepted arguments.
+- `[video files...]` — One or more video files to open automatically.
+
+Example:
+
+```shell
+smart-video-processor /path/to/movie.mkv
+smart-video-processor -n /path/to/movie.mkv
+```
+
 ## 4) Matching
 
 Using the filename of the video to process, guesses will be made to determine if the video is a movie or a TV Series
