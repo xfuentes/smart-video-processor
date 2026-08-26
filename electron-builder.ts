@@ -35,7 +35,8 @@ export default {
   files: ['build/**/*', 'resources/flags', 'locales/**'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   electronDownload: {
-    cache: process.env.XDG_CACHE_HOME ? `${process.env.XDG_CACHE_HOME}/electron` : `${homedir()}/.cache/electron`
+    cache: process.env.XDG_CACHE_HOME ? `${process.env.XDG_CACHE_HOME}/electron` : `${homedir()}/.cache/electron`,
+    isVerifyChecksum: false
   },
   extraResources: [
     {
