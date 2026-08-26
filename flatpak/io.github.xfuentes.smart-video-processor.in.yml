@@ -157,4 +157,4 @@ modules:
         commands:
           - export PATH="/app/bin:/usr/bin:/app/lib/ffmpeg/bin:$PATH"
           - export LD_LIBRARY_PATH="/app/lib:/app/lib/ffmpeg/lib:$LD_LIBRARY_PATH"
-          - exec zypak-wrapper /app/lib/__NAME__/__NAME__ "$@"
+          - exec zypak-wrapper /app/lib/__NAME__/__NAME__ --ozone-platform=x11 "$@"
