@@ -62,8 +62,6 @@ jobs:
 
       - name: prepare-package
         run: npm run prepare-package
-        env:
-          MY_FILES_API_KEY: ${{ secrets.MY_FILES_API_KEY }}
 
       - name: package arm64
         if: runner.arch == 'ARM64'

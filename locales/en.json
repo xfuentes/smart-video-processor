@@ -680,5 +680,6 @@
   "alert.do_not_show_again": "Do not show again",
   "about.news.version_1_9_0.items": "Added system dark mode support with theme-aware icons\nAdded Flatpak packaging with a host-filesystem permission banner\nReworked the Output Rules settings with an editable, drag-and-drop list and new matching operators\nAdded a Do not show again option and copy-to-clipboard command for permission warnings\nReorganized the Settings dialog into tabs for easier navigation",
   "about.news.version_1_9_1.items": "Added the Flatpak application icon and multi-arch packaging for x86_64 and aarch64\nImproved the binary download script to skip files already present locally\nUpdated the video player loading screen to a black background with white text\nFixed the Flatpak desktop entry categories, MIME types and keywords formatting",
-  "about.news.version_1_9_2.items": "Added -n/--new-instance command-line argument to allow running a new app instance\nAdded -h/--help command-line argument to display the version, description and accepted arguments"
+  "about.news.version_1_9_2.items": "Added -n/--new-instance command-line argument to allow running a new app instance\nAdded -h/--help command-line argument to display the version, description and accepted arguments",
+  "about.news.version_1_9_3.items": "Fixed Flathub builds by skipping Git LFS in the Flatpak manifest\nFixed AppStream validation by removing invalid content rating IDs"
 }

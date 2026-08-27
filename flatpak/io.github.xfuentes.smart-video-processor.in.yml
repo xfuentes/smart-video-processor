@@ -13,14 +13,12 @@ separate-locales: false
 command: __APP_ID__
 finish-args:
   - --share=ipc
-  - --socket=x11
+  - --socket=fallback-x11
   - --socket=pulseaudio
   - --device=dri
   - --share=network
   - --filesystem=xdg-run/app
   - --socket=wayland
-  - --talk-name=org.freedesktop.portal.Desktop
-  - --socket=session-bus
   - --env=LD_LIBRARY_PATH=/app/lib
   - --env=ELECTRON_TRASH=gio
   - --env=FLATHUB=true
@@ -152,6 +150,8 @@ modules:
       - type: git
         url: https://github.com/xfuentes/__NAME__.git
         tag: __TAG__
+        commit: __COMMIT__
+        disable-lfs: true
       - generated-sources.json
       - type: script
         dest-filename: run.sh

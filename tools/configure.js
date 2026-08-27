@@ -17,6 +17,7 @@
  */
 import * as fs from 'fs'
 import * as path from 'path'
+import { execSync } from 'child_process'
 
 import packageJSON from '../package.json' with { type: 'json' }
 
@@ -76,6 +77,12 @@ fs.readdir(resolvedDir, (err, files) => {
       modifiedData = modifiedData.replace(/__APP_ID__/g, appId)
       modifiedData = modifiedData.replace(/__DATE__/g, new Date().toISOString().split('T')[0])
       modifiedData = modifiedData.replace(/__TAG__/g, 'v' + packageJSON.version)
+
+      let commit = ''
+      try {
+        commit = execSync(`git rev-list -n 1 v${packageJSON.version}`, { encoding: 'utf8' }).trim()
+      } catch {}
+      modifiedData = modifiedData.replace(/__COMMIT__/g, commit)
 
       // Write output file
       fs.writeFile(dest, modifiedData, 'utf8', (err) => {

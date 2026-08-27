@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.3' })}</h4>
+      <ul>
+        {_('about.news.version_1_9_3.items', {
+          defaultValue:
+            'Fixed Flathub builds by skipping Git LFS in the Flatpak manifest\nFixed AppStream validation by removing invalid content rating IDs'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.2' })}</h4>
       <ul>
         {_('about.news.version_1_9_2.items', {

@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.9.3] - 2026-08-27
+
+### Fixed
+
+- Disabled Git LFS fetching in the Flatpak manifest so Flathub builds do not fail on missing LFS objects.
+- Removed invalid OARS 1.1 `content_attribute` IDs from the Flatpak metainfo to pass AppStream validation.
 
 ## [1.9.2] - 2026-08-27
 
