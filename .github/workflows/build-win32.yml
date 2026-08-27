@@ -34,5 +34,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+
+      - name: Install Electron binary
+        if: runner.os == 'Windows'
+        run: |
+          Remove-Item -Recurse -Force node_modules/electron/dist -ErrorAction SilentlyContinue
+          node node_modules/electron/install.js
+        shell: pwsh
+
       - run: npm run build
       - run: npm run test
