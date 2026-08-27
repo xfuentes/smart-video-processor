@@ -329,6 +329,12 @@ button:disabled.is-disabled.ms-Pivot-link {
   row-gap: 5px;
 }
 
+.field-error {
+  background-color: rgba(255, 192, 203, 0.35);
+  border-radius: 4px;
+  padding: 5px;
+}
+
 .component-horizontal-fill {
   display: flex;
   flex-direction: row;

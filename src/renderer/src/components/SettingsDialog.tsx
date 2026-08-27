@@ -43,6 +43,7 @@ import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
   DocumentSettings20Regular,
+  ErrorCircle12Regular,
   SearchSettings20Regular,
   Settings24Regular,
   VideoSettings20Regular
@@ -57,6 +58,7 @@ import {
   tvdbSupportedLanguageCodes
 } from '../../../common/TranslationSupportedLanguages'
 import { OutputRulesField } from './fields/OutputRulesField'
+import { FormValidationBuilder } from '../../../common/FormValidation'
 import i18n, { useI18n } from '../i18n'
 
 export const SettingsDialog = () => {
@@ -67,6 +69,9 @@ export const SettingsDialog = () => {
   const [opened, setOpened] = useState(settingsValidation.status !== 'success')
 
   const handleOpenChange = (_event, data) => {
+    if (!data.open && settingsValidation.status !== 'success') {
+      return
+    }
     setOpened(data.open)
   }
 
@@ -101,6 +106,7 @@ export const SettingsDialog = () => {
     if (validation.status != 'success') {
       throw new Error('Validation error')
     }
+    setOpened(false)
   }
 
   const pickTmpFilesPath = async () => {
@@ -213,6 +219,72 @@ export const SettingsDialog = () => {
   const [ffmpegPath, setFfmpegPath] = useState(settingsValidation?.result?.ffmpegPath ?? '')
   const [ffprobePath, setFfprobePath] = useState(settingsValidation?.result?.ffprobePath ?? '')
 
+  const fieldToTab: Record<string, string> = {
+    language: 'general',
+    additionalTvSearchLanguages: 'general',
+    isAutoStartEnabled: 'general',
+    priority: 'general',
+    isDebugEnabled: 'general',
+    isAutoDeleteProcessedFilesEnabled: 'general',
+    tmpFilesPath: 'output',
+    defaultOutputPath: 'output',
+    outputRules: 'output',
+    isTrackFilteringEnabled: 'filtering',
+    favoriteLanguages: 'filtering',
+    isKeepVOEnabled: 'filtering',
+    isTrackEncodingEnabled: 'encoding',
+    videoCodec: 'encoding',
+    videoSizeReduction: 'encoding',
+    videoEnforceCodec: 'encoding',
+    audioSizeReduction: 'encoding',
+    audioEnforceCodec: 'encoding',
+    mkvMergePath: 'encoding',
+    ffmpegPath: 'encoding',
+    ffprobePath: 'encoding'
+  }
+
+  const draftSettings = {
+    language,
+    additionalTvSearchLanguages,
+    tmpFilesPath,
+    defaultOutputPath,
+    outputRules,
+    isAutoStartEnabled,
+    priority,
+    isDebugEnabled,
+    isAutoDeleteProcessedFilesEnabled,
+    isTrackFilteringEnabled,
+    favoriteLanguages,
+    isKeepVOEnabled,
+    isTrackEncodingEnabled,
+    videoCodec,
+    videoSizeReduction,
+    videoEnforceCodec,
+    audioSizeReduction,
+    audioEnforceCodec,
+    mkvMergePath,
+    ffmpegPath,
+    ffprobePath
+  } as Settings
+
+  const liveValidation = (() => {
+    const v = new FormValidationBuilder<Settings>(draftSettings)
+    if (draftSettings.defaultOutputPath.trim() === '') {
+      v.fieldValidation('defaultOutputPath', 'error', 'Default output path is required')
+    }
+    if (draftSettings.tmpFilesPath.trim() === '') {
+      v.fieldValidation('tmpFilesPath', 'error', 'Temporary files path is required')
+    }
+    return v.build()
+  })()
+
+  const invalidTabs = new Set(
+    Object.entries(liveValidation.fields)
+      .filter(([_, f]) => f.status === 'error')
+      .map(([id]) => fieldToTab[id])
+      .filter(Boolean)
+  )
+
   return (
     <>
       <Dialog modalType="modal" open={opened} onOpenChange={handleOpenChange}>
@@ -248,16 +320,28 @@ export const SettingsDialog = () => {
                   onTabSelect={(_event: SelectTabEvent, data: SelectTabData) => setSelectedTab(data.value as string)}
                 >
                   <Tab value="general" icon={<DocumentSettings20Regular />}>
-                    {_('settings.tab.general', { defaultValue: 'General' })}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {_('settings.tab.general', { defaultValue: 'General' })}
+                      {invalidTabs.has('general') && <ErrorCircle12Regular style={{ color: 'red' }} />}
+                    </span>
                   </Tab>
                   <Tab value="output" icon={<ArchiveSettings20Regular />}>
-                    {_('settings.tab.output', { defaultValue: 'Output' })}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {_('settings.tab.output', { defaultValue: 'Output' })}
+                      {invalidTabs.has('output') && <ErrorCircle12Regular style={{ color: 'red' }} />}
+                    </span>
                   </Tab>
                   <Tab value="filtering" icon={<SearchSettings20Regular />}>
-                    {_('settings.tab.filtering', { defaultValue: 'Filtering' })}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {_('settings.tab.filtering', { defaultValue: 'Filtering' })}
+                      {invalidTabs.has('filtering') && <ErrorCircle12Regular style={{ color: 'red' }} />}
+                    </span>
                   </Tab>
                   <Tab value="encoding" icon={<VideoSettings20Regular />}>
-                    {_('settings.tab.encoding', { defaultValue: 'Encoding' })}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {_('settings.tab.encoding', { defaultValue: 'Encoding' })}
+                      {invalidTabs.has('encoding') && <ErrorCircle12Regular style={{ color: 'red' }} />}
+                    </span>
                   </Tab>
                 </TabList>
                 <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column' }}>
@@ -351,7 +435,11 @@ export const SettingsDialog = () => {
                   )}
                   {selectedTab === 'output' && (
                     <div className="settings-form">
-                      <div className="field">
+                      <div
+                        className={
+                          'field' + (liveValidation.fields['tmpFilesPath']?.status === 'error' ? ' field-error' : '')
+                        }
+                      >
                         <Label size="small" required htmlFor="tmpFilesPathInput">
                           {_('settings.tmp_files_path.label', {
                             defaultValue: 'Temporary Files Path'
@@ -372,7 +460,12 @@ export const SettingsDialog = () => {
                           </Button>
                         </div>
                       </div>
-                      <div className="field">
+                      <div
+                        className={
+                          'field' +
+                          (liveValidation.fields['defaultOutputPath']?.status === 'error' ? ' field-error' : '')
+                        }
+                      >
                         <Label size="small" required htmlFor="defaultOutputPathInput">
                           {_('settings.default_output_path.label', {
                             defaultValue: 'Default Output Path'
@@ -619,16 +712,21 @@ export const SettingsDialog = () => {
                 </div>
               </DialogContent>
               <DialogActions style={{ paddingTop: '10px' }}>
-                <DialogTrigger disableButtonEnhancement>
-                  <ProgressButton appearance="primary" execute={handleSubmit}>
-                    {_('settings.apply.label', { defaultValue: 'Apply' })}
-                  </ProgressButton>
-                </DialogTrigger>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button size="small" appearance="secondary" onClick={handleCancel}>
-                    {_('settings.cancel.label', { defaultValue: 'Cancel' })}
-                  </Button>
-                </DialogTrigger>
+                <ProgressButton
+                  appearance="primary"
+                  execute={handleSubmit}
+                  disabled={liveValidation.status !== 'success'}
+                >
+                  {_('settings.apply.label', { defaultValue: 'Apply' })}
+                </ProgressButton>
+                <Button
+                  size="small"
+                  appearance="secondary"
+                  onClick={handleCancel}
+                  disabled={settingsValidation.status !== 'success'}
+                >
+                  {_('settings.cancel.label', { defaultValue: 'Cancel' })}
+                </Button>
               </DialogActions>
             </DialogBody>
           </form>
