@@ -48,14 +48,9 @@ parts:
       install -D bin/linux/__ARCH__/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
       install -D bin/linux/__ARCH__/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
 
-      # mkvmerge is distributed as an AppImage, but AppImages do not work
-      # inside a strict snap. Extract the real binary + libraries and wrap it.
-      bin/linux/__ARCH__/mkvmerge --appimage-extract
+      # mkvmerge is now a static-pie binary; install it and wrap it for the snap.
       mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib
-      cp -P squashfs-root/usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin/mkvmerge.real
-      cp -P squashfs-root/usr/lib/* $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib/
-      rm -rf squashfs-root
+      install -D bin/linux/__ARCH__/mkvmerge $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin/mkvmerge.real
 
       APP_BIN="$SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/resources/bin"
       rm -f "$APP_BIN/mkvmerge"

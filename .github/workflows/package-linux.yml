@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v6
+        with:
+          lfs: true
 
       - name: Install Node.js
         uses: actions/setup-node@v6
