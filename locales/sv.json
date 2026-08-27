@@ -679,5 +679,6 @@
   "alert.copied": "Kopierad!",
   "alert.do_not_show_again": "Visa inte igen",
   "about.news.version_1_9_0.items": "Lade till stöd för mörkt läge i systemet med temamedvetna ikoner\nLade till Flatpak-paketering med en behörighetsbanner för värdfilsystem\nOmarbetade inställningarna för utdataregler med en redigerbar dra-och-släpp-lista och nya matchande operatorer\nLade till alternativet Visa inte igen och kommandot Kopiera till urklipp för behörighetsvarningar.\nOmorganiserade inställningsdialogrutan i flikar för enklare navigering",
-  "about.news.version_1_9_1.items": "Lade till Flatpak-applikationsikonen och multiarch-paketering för x86_64 och aarch64\nFörbättrade det binära nedladdningsskriptet för att hoppa över filer som redan finns lokalt\nUppdaterade videospelarens laddningsskärm till svart bakgrund med vit text\nÅtgärdade kategorier för skrivbordsposter i Flatpak, MIME-typer och formatering av nyckelord"
+  "about.news.version_1_9_1.items": "Lade till Flatpak-applikationsikonen och multiarch-paketering för x86_64 och aarch64\nFörbättrade det binära nedladdningsskriptet för att hoppa över filer som redan finns lokalt\nUppdaterade videospelarens laddningsskärm till svart bakgrund med vit text\nÅtgärdade kategorier för skrivbordsposter i Flatpak, MIME-typer och formatering av nyckelord",
+  "about.news.version_1_9_2.items": "Lade till kommandoradsargumentet -n/--new-instance för att tillåta att en ny appinstans körs\nLade till kommandoradsargumentet -h/--help för att visa version, beskrivning och accepterade argument."
 }
