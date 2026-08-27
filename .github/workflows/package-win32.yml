@@ -25,7 +25,12 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v6
         with:
-          lfs: true
+          lfs: false
+
+      - name: Fetch LFS objects
+        run: |
+          git lfs install
+          git lfs pull
 
       - name: Install Windows SDK
         if: runner.os == 'Windows'
