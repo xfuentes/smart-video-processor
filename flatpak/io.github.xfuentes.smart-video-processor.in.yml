@@ -151,7 +151,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/xfuentes/__NAME__.git
-        branch: main
+        tag: __TAG__
       - generated-sources.json
       - type: script
         dest-filename: run.sh

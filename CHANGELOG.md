@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.9.2] - 2026-08-27
+
 ### Added
 
 - Added `-n` / `--new-instance` command-line argument to allow running a new app instance.

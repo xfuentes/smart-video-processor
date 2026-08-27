@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.2' })}</h4>
+      <ul>
+        {_('about.news.version_1_9_2.items', {
+          defaultValue:
+            'Added -n/--new-instance command-line argument to allow running a new app instance\nAdded -h/--help command-line argument to display the version, description and accepted arguments'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.1' })}</h4>
       <ul>
         {_('about.news.version_1_9_1.items', {

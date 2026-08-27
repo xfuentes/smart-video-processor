@@ -75,6 +75,7 @@ fs.readdir(resolvedDir, (err, files) => {
       modifiedData = modifiedData.replace(/__DEB_ARCH__/g, process.arch === 'arm64' ? 'arm64' : 'amd64')
       modifiedData = modifiedData.replace(/__APP_ID__/g, appId)
       modifiedData = modifiedData.replace(/__DATE__/g, new Date().toISOString().split('T')[0])
+      modifiedData = modifiedData.replace(/__TAG__/g, 'v' + packageJSON.version)
 
       // Write output file
       fs.writeFile(dest, modifiedData, 'utf8', (err) => {
