@@ -40,7 +40,7 @@ export class FFmpeg extends CommandProgress {
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
 
   private constructor() {
-    super(currentSettings.ffmpegPath, [0], 255, ['-version'], /^ffmpeg\sversion\s(?:n)?(?<version>[\d.]+)/i)
+    super(currentSettings.ffmpegPath, [0], 255, ['-version'], /^ffmpeg\sversion\sn?(?<version>[\d.]+)/i)
   }
 
   public static getInstance(): FFmpeg {

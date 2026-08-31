@@ -22,11 +22,7 @@ import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { Processes } from '../../../src/main/util/processes'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
-import { Files } from '../../../src/main/util/files'
-import * as path from 'node:path'
 import { IVideo } from '../../../src/common/@types/Video'
-import { Track } from '../../../src/main/domain/Track'
-import { ITrack } from '../../../src/common/@types/Track'
 
 const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
