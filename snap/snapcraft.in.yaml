@@ -46,7 +46,8 @@ apps:
 parts:
   smart-video-processor:
     plugin: dump
-    source: dist/linux-unpacked/
+    source: dist/linux__ARCH_SUFFIX__-unpacked
+    source-type: local
     organize:
       '*': bin/app/
     override-prime: |

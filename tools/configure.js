@@ -22,6 +22,7 @@ import { execSync } from 'child_process'
 import packageJSON from '../package.json' with { type: 'json' }
 
 const appId = packageJSON.appId ?? 'io.github.xfuentes.smart-video-processor'
+const archSuffix = process.arch === 'x64' ? '' : `-${process.arch}`
 
 const args = process.argv.slice(2)
 const dirPath = args[0]
@@ -73,6 +74,7 @@ fs.readdir(resolvedDir, (err, files) => {
       modifiedData = modifiedData.replace(/__VERSION__/g, packageJSON.version)
       modifiedData = modifiedData.replace(/__DESCRIPTION__/g, packageJSON.description)
       modifiedData = modifiedData.replace(/__ARCH__/g, process.arch)
+      modifiedData = modifiedData.replace(/__ARCH_SUFFIX__/g, archSuffix)
       modifiedData = modifiedData.replace(/__DEB_ARCH__/g, process.arch === 'arm64' ? 'arm64' : 'amd64')
       modifiedData = modifiedData.replace(/__APP_ID__/g, appId)
       modifiedData = modifiedData.replace(/__DATE__/g, new Date().toISOString().split('T')[0])
