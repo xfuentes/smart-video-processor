@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Switched the Flatpak mkvmerge module to prebuilt Debian packages for both x86_64 and aarch64, including only their direct shared-library dependencies (resolving the required libraries with ldd).
 - Disabled Git LFS fetching in the Flatpak manifest so Flathub builds do not fail on missing LFS objects.
 - Removed invalid OARS 1.1 `content_attribute` IDs from the Flatpak metainfo to pass AppStream validation.
 

@@ -1,4 +1,0 @@
-#!/bin/bash
-export PATH="$SNAP/usr/bin:$PATH"
-
-exec "$SNAP/opt/smart-video-processor/smart-video-processor" "$@"

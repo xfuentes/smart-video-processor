@@ -66,8 +66,6 @@ jobs:
       - name: build linux snap
         uses: snapcore/action-build@v1
         id: build
-        with:
-          snapcraft-channel: '8.x'
 
       - name: publish to snap store
         uses: snapcore/action-publish@v1

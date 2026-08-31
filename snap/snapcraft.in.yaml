@@ -9,74 +9,71 @@ description: |
   and encode to H.264 or H.265—all in one place.
 
 license: GPL-3.0+
-contact: xfuentes-dev@hotmail.com
+contact: xfuentes-dev@serviam.cc
 issues: https://github.com/xfuentes/smart-video-processor/issues
 source-code: https://github.com/xfuentes/smart-video-processor
 website: https://github.com/xfuentes/smart-video-processor
 donation: https://paypal.me/xfuentesdev
-icon: snap/gui/smart-video-processor.png
 
 base: core24
 grade: stable
 confinement: strict
 compression: lzo
 
+package-repositories:
+  - type: apt
+    components: [main]
+    suites: [noble]
+    key-id: D9199745B0545F2E8197062B0F92290A445B9007
+    url: https://mkvtoolnix.download/ubuntu
+
 apps:
   smart-video-processor:
-    command: opt/smart-video-processor/smart-video-processor-launcher --no-sandbox
-    desktop: opt/smart-video-processor/smart-video-processor.desktop
+    command: bin/app/smart-video-processor --no-sandbox
     extensions:
       - gnome
     plugs:
+      - home
+      - shared-memory
       - network
       - removable-media
       - audio-playback
+      - ffmpeg-2404
     environment:
-      TMPDIR: $XDG_RUNTIME_DIR
+      PATH: $SNAP/ffmpeg-platform/usr/bin:$SNAP/usr/bin:$PATH
+      LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/vdpau:$SNAP/ffmpeg-platform/usr/lib:$LD_LIBRARY_PATH
 
 parts:
   smart-video-processor:
-    plugin: nil
-    source: .
-    override-build: |
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt
-      cp -rv ./dist/linux*unpacked $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
-      chmod a+rx $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor
-      install -D ./snap/bin/smart-video-processor-launcher $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor-launcher
-      install -D ./snap/gui/smart-video-processor.png $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.png
-      install -D ./snap/gui/smart-video-processor.desktop $SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/smart-video-processor.desktop
-      install -D bin/linux/__ARCH__/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin
-      install -D bin/linux/__ARCH__/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin
-
-      # mkvmerge is distributed as an AppImage, but AppImages do not work
-      # inside a strict snap. Extract the real binary + libraries and wrap it.
-      bin/linux/__ARCH__/mkvmerge --appimage-extract
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib
-      cp -P squashfs-root/usr/bin/mkvmerge $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/bin/mkvmerge.real
-      cp -P squashfs-root/usr/lib/* $SNAPCRAFT_PART_INSTALL/opt/mkvmerge/usr/lib/
-      rm -rf squashfs-root
-
-      APP_BIN="$SNAPCRAFT_PART_INSTALL/opt/smart-video-processor/resources/bin"
-      rm -f "$APP_BIN/mkvmerge"
-      printf '%s\n' '#!/bin/sh' 'export LD_LIBRARY_PATH="$SNAP/opt/mkvmerge/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"' 'exec "$SNAP/opt/mkvmerge/usr/bin/mkvmerge.real" "$@"' > "$APP_BIN/mkvmerge"
-      chmod +x "$APP_BIN/mkvmerge"
-
-      install -D "$APP_BIN/mkvmerge" $SNAPCRAFT_PART_INSTALL/usr/bin/mkvmerge
-    build-snaps:
-      - node/22/stable
-    build-packages:
-      - git
-      - unzip
-    stage-packages:
-      - libproxy1v5
-      - glib-networking
+    plugin: dump
+    source: dist/linux-unpacked/
     organize:
-      usr/lib/*-linux-gnu/blas/*: usr/lib/
-      usr/lib/*-linux-gnu/lapack/*.so*: usr/lib/
+      '*': bin/app/
+    override-prime: |
+      craftctl default
+      rm -f $CRAFT_PRIME/bin/app/libvulkan.so.1
+
+  mkvmerge:
+    plugin: nil
+    stage-packages:
+      - mkvtoolnix
+    override-prime: |
+      mkdir -p $CRAFT_PRIME/usr/bin $CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      cp -f $CRAFT_STAGE/usr/bin/mkvmerge $CRAFT_PRIME/usr/bin/
+      export LD_LIBRARY_PATH=$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib:$LD_LIBRARY_PATH
+      ldd $CRAFT_STAGE/usr/bin/mkvmerge | grep "=> $CRAFT_STAGE" | awk '{print $3}' | while read -r lib; do
+      if [ -f "$lib" ]; then
+        cp -Lf "$lib" $CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      fi
+      done || true
 
 plugs:
+  ffmpeg-2404:
+    interface: content
+    target: $SNAP/ffmpeg-platform
+    default-provider: ffmpeg-2404
   shared-memory:
     private: true
-  home:
-    interface: home
+  removable-media:
+    # Request to allow this by default so end users can process their removable medias
+    allow-auto-connection: true

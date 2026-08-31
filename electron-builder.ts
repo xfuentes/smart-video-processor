@@ -34,21 +34,22 @@ export default {
   },
   files: ['build/**/*', 'resources/flags', 'locales/**'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
+  electronDist: 'node_modules/electron/dist',
   electronDownload: {
     cache: process.env.XDG_CACHE_HOME ? `${process.env.XDG_CACHE_HOME}/electron` : `${homedir()}/.cache/electron`,
     isVerifyChecksum: false
   },
   extraResources: [
-    {
-      from: `bin/${process.platform}/${arch}`,
-      to: 'bin',
-      filter: ['*']
-    },
-    {
-      from: 'native/uwp-activation/build/Release',
-      to: 'native/uwp-activation/build/Release',
-      filter: ['*.node']
-    }
+    ...(process.platform === 'win32'
+      ? [
+          { from: `bin/${process.platform}/${arch}`, to: 'bin', filter: ['*'] as string[] },
+          {
+            from: 'native/uwp-activation/build/Release',
+            to: 'native/uwp-activation/build/Release',
+            filter: ['*.node'] as string[]
+          }
+        ]
+      : [])
   ],
   asar: true,
   fileAssociations: [
@@ -72,7 +73,7 @@ export default {
   linux: {
     executableName: 'smart-video-processor',
     artifactName: '${name}-${version}-${arch}.${ext}',
-    target: ['dir', 'AppImage', 'tar.gz'],
+    target: ['dir', 'tar.gz'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@hotmail.com>',
     vendor: 'Xavier Fuentes',

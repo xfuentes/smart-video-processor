@@ -68,8 +68,8 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
     duration: 6120,
     targetDuration: 30,
     tracks: []
-  } as IVideo
-  const progresses: number[] = []
+  } as unknown as IVideo
+  const progresses: (number | undefined)[] = []
   const result = await FFmpeg.getInstance().encodeFileInternal(
     video,
     '/tmp/',
@@ -87,14 +87,14 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
 test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   genSpawnSpyProgress()
-  const progresses: number[] = []
-  const xSpeeds: number[] = []
+  const progresses: (number | undefined)[] = []
+  const xSpeeds: (number | undefined)[] = []
   const video: IVideo = {
     sourcePath: 'C:\\Download\\something.mkv',
     duration: 6120,
     targetDuration: 30,
     tracks: []
-  } as IVideo
+  } as unknown as IVideo
   const result = await FFmpeg.getInstance().encodeFile(video, '/tmp', encoderSettings, ({ progress, xSpeed }) => {
     progresses.push(progress)
     xSpeeds.push(xSpeed)
@@ -394,27 +394,27 @@ const recordedMarcelinoProgresses = [
 ]
 
 export const simulateFFmpegProgressionMarcelino = (): ChildProcessWithoutNullStreams => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((data: unknown) => void) | undefined = undefined
+  let closeListener: ((code: number) => void) | undefined = undefined
 
   for (const rp of recordedMarcelinoProgresses) {
     setImmediate(() => {
-      dataListener(rp)
+      dataListener!(rp)
     })
   }
   setImmediate(() => {
-    closeListener(0)
+    closeListener!(0)
   })
 
   return {
     pid: 1234,
-    on: (event, listener) => {
+    on: (event: string, listener: (arg: unknown) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (arg: unknown) => void) => {
         if (event === 'data') {
           dataListener = listener
         }
@@ -437,13 +437,13 @@ const marcelinoEncoderSettings = [
 test('FFmpeg Marcelino audio progression', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgressionMarcelino)
-  const progresses: number[] = []
+  const progresses: (number | undefined)[] = []
   const video: IVideo = {
     sourcePath: 'C:\\Download\\something.mkv',
     duration: 4591.4,
     targetDuration: 30,
     tracks: []
-  } as IVideo
+  } as unknown as IVideo
   const result = await FFmpeg.getInstance().encodeFileInternal(
     video,
     '/tmp',
@@ -501,27 +501,27 @@ const recordedMarcelinoSnapshotProgresses = [
 ]
 
 export const simulateFFmpegSnapshotProgressionMarcelino = (): ChildProcessWithoutNullStreams => {
-  let dataListener = undefined
-  let closeListener = undefined
+  let dataListener: ((data: unknown) => void) | undefined = undefined
+  let closeListener: ((code: number) => void) | undefined = undefined
 
   for (const rp of recordedMarcelinoSnapshotProgresses) {
     setImmediate(() => {
-      dataListener(rp)
+      dataListener!(rp)
     })
   }
   setImmediate(() => {
-    closeListener(0)
+    closeListener!(0)
   })
 
   return {
     pid: 1234,
-    on: (event, listener) => {
+    on: (event: string, listener: (arg: unknown) => void) => {
       if (event === 'close') {
         closeListener = listener
       }
     },
     stdout: {
-      on: (event, listener) => {
+      on: (event: string, listener: (arg: unknown) => void) => {
         if (event === 'data') {
           dataListener = listener
         }
@@ -535,7 +535,7 @@ test('FFmpeg Snapshot Marcelino', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegSnapshotProgressionMarcelino)
   const sourceFullPath = '/home/xfuentes/Vidéos/Marcellino (1991).1080p.h264 {tmdb-103715}.mkv'
-  const progresses: number[] = []
+  const progresses: (number | undefined)[] = []
   const result = await FFmpeg.getInstance().generateSnapshots(
     sourceFullPath,
     '/tmp',
@@ -549,4 +549,35 @@ test('FFmpeg Snapshot Marcelino', async () => {
   )
   expect(progresses).toStrictEqual([undefined, 1])
   expect(result).toContain('snapshots2000x64.png')
+})
+
+test('FFmpeg version extraction strips the n prefix', async () => {
+  const versionLine =
+    'ffmpeg version n7.1.5 Copyright (c) 2000-2026 the FFmpeg developers\nbuilt with gcc 14 (Ubuntu 14.2.0-4ubuntu2)\n'
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Processes, 'spawn').mockImplementation(() => {
+    let dataListener: ((data: unknown) => void) | undefined = undefined
+    let closeListener: ((code: number) => void) | undefined = undefined
+    setImmediate(() => {
+      if (dataListener) dataListener(versionLine)
+      if (closeListener) closeListener(0)
+    })
+    return {
+      pid: 1234,
+      on: (event: string, listener: (arg: unknown) => void) => {
+        if (event === 'close') {
+          closeListener = listener
+        }
+      },
+      stdout: {
+        on: (event: string, listener: (arg: unknown) => void) => {
+          if (event === 'data') {
+            dataListener = listener
+          }
+        }
+      }
+    } as unknown as ChildProcessWithoutNullStreams
+  })
+  const version = await FFmpeg.getInstance().getVersion()
+  expect(version).toBe('7.1.5')
 })
