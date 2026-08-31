@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,8 +35,7 @@ type Props = {
   disabled?: boolean
 }
 
-export const Matching = ({
- video, disabled }: Props) => {
+export const Matching = ({ video, disabled }: Props) => {
   const _ = useI18n()
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
   const [type, setType] = useState<VideoType>(video.type)

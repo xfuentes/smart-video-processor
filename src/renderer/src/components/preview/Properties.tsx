@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,8 +138,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   newValue: { minWidth: 150, idealWidth: 400 }
 }
 
-export const Properties = ({
- video, disabled }: Props) => {
+export const Properties = ({ video, disabled }: Props) => {
   const _ = useI18n()
   const [source, setSource] = useState<string>('Container')
   const [type, setType] = useState<ChangeType>(ChangeType.UPDATE)

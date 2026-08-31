@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,8 +154,7 @@ const trackTypeEncodingSection = (
   )
 }
 
-export const MultiEncoding = ({
- videos, commonEncoderSettings, disabled }: Props) => {
+export const MultiEncoding = ({ videos, commonEncoderSettings, disabled }: Props) => {
   const _ = useI18n()
   return (
     <div className="encoding-main" style={{ flexGrow: '1' }}>

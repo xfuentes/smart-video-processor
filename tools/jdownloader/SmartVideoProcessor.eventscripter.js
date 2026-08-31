@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor - JDownloader Plugin
- * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  * Type : EventScripter script
  * Triggers : "A download stopped" and "Archive extracted"
  *

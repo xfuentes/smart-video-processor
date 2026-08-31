@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,25 @@ export class EncodingJob extends Job<string> {
     const progression = this.getProgression()
     const result: string[] = []
     if (progression.xSpeed !== undefined) {
-      result.push(_('job.encoding.speed', { defaultValue: 'Encoding at {speed}x.', speed: progression.xSpeed.toFixed(1) }))
+      result.push(
+        _('job.encoding.speed', { defaultValue: 'Encoding at {speed}x.', speed: progression.xSpeed.toFixed(1) })
+      )
     }
     if (progression.countdown !== undefined) {
       if (progression.pass === 1) {
-        result.push(_('job.encoding.first_pass_countdown', { defaultValue: 'Completion of first pass in {duration}.', duration: Strings.humanDuration(progression.countdown) }))
+        result.push(
+          _('job.encoding.first_pass_countdown', {
+            defaultValue: 'Completion of first pass in {duration}.',
+            duration: Strings.humanDuration(progression.countdown)
+          })
+        )
       } else {
-        result.push(_('job.encoding.countdown', { defaultValue: 'Completion in {duration}.', duration: Strings.humanDuration(progression.countdown) }))
+        result.push(
+          _('job.encoding.countdown', {
+            defaultValue: 'Completion in {duration}.',
+            duration: Strings.humanDuration(progression.countdown)
+          })
+        )
       }
     }
     return result.length > 0 ? result.join(' ') : this.title

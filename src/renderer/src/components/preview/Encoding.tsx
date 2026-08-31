@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,8 +124,7 @@ const trackTypeEncodingSection = (video: IVideo, type: TrackType, disabled: bool
   )
 }
 
-export const Encoding = ({
- video, disabled }: Props) => {
+export const Encoding = ({ video, disabled }: Props) => {
   const _ = useI18n()
   const progression = video.progression.progress
   let progressColor: 'brand' | 'success' | 'warning' | 'error' = 'brand'

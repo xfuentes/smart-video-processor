@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ const columns: TableColumnDefinition<SearchResult>[] = [
     compare: (a, b) => (a.year ? a.year : -1) - (b.year ? b.year : -1),
     renderHeaderCell: () => _('search_results.column.year.label', { defaultValue: 'Year' }),
     renderCell: (item) => (!item.year || isNaN(item.year) ? '' : item.year)
-  }),
+  })
 ]
 
 type Props = {
@@ -68,8 +68,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
 }
 
-export const SearchResultList = ({
- results, selectedID, onSelectionChange, disabled }: Props) => {
+export const SearchResultList = ({ results, selectedID, onSelectionChange, disabled }: Props) => {
   const _ = useI18n()
   const handleSelectionChange: DataGridProps['onSelectionChange'] = (_e, data) => {
     const selectedResult = results.find((result) => data.selectedItems.has(result.id))

@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -182,12 +182,7 @@ export class TMDBClient {
     const hasSpectacleKeyword = keywordNames.some((k) => spectacleKeywords.includes(k))
 
     const text = ((movieDetails.overview ?? '') + ' ' + (movieDetails.tagline ?? '')).toLowerCase()
-    const spectaclePhrases = [
-      'spectacle capté',
-      'enregistré en public',
-      'live at',
-      'stand-up special'
-    ]
+    const spectaclePhrases = ['spectacle capté', 'enregistré en public', 'live at', 'stand-up special']
     const hasSpectaclePhrase = spectaclePhrases.some((p) => text.includes(p))
 
     const isSpectacle = hasSpectacleKeyword || hasSpectaclePhrase

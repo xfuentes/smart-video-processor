@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,7 @@ type Props = {
   disabled: boolean
 }
 
-export const Processing = ({
- video, disabled = false }: Props) => {
+export const Processing = ({ video, disabled = false }: Props) => {
   const _ = useI18n()
   const handleDropPart = (files: File[]) => {
     if (files.length > 0) {
@@ -55,11 +54,15 @@ export const Processing = ({
       <DropZone onDropFiles={handleDropPart} style={{ padding: '5px', boxSizing: 'border-box', height: '100%' }}>
         <div className="processing-body">
           <div className="ruler">
-            <Divider style={{ flexGrow: '0' }}>{_('processing.main_video_file.label', { defaultValue: 'Main Video File' })}</Divider>
+            <Divider style={{ flexGrow: '0' }}>
+              {_('processing.main_video_file.label', { defaultValue: 'Main Video File' })}
+            </Divider>
             <VideoSectionSelectorField key={video.uuid} video={video} disabled={disabled} />
             {video.videoParts.map((part, i) => (
               <>
-                <Divider style={{ flexGrow: '0' }}>{_('processing.part.label', { defaultValue: 'Part {number}', number: i + 1 })}</Divider>
+                <Divider style={{ flexGrow: '0' }}>
+                  {_('processing.part.label', { defaultValue: 'Part {number}', number: i + 1 })}
+                </Divider>
                 <VideoSectionSelectorField
                   key={part.uuid}
                   mainVideoUuid={video.uuid}

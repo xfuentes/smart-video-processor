@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,7 @@ type Props = {
   video: IVideo
 }
 
-export const PreviewTabs = ({
- video }: Props) => {
+export const PreviewTabs = ({ video }: Props) => {
   const _ = useI18n()
   const { videoPlayerOpened, setVideoPlayerOpened } = useVideoPlayer()
   const [selectedTab, setSelectedTab] = useState('matching')
@@ -105,13 +104,16 @@ export const PreviewTabs = ({
           </Tab>
         )}
         <Tab value="properties" icon={<TaskListLtr20Regular />} disabled={!video.matched || hintMissing}>
-          {_('preview.tab.properties', { defaultValue: 'Properties' })} <CounterBadge color="informative" size="small" showZero count={changesCount} />
+          {_('preview.tab.properties', { defaultValue: 'Properties' })}{' '}
+          <CounterBadge color="informative" size="small" showZero count={changesCount} />
         </Tab>
         <Tab value="processing" icon={<DataUsageSettings20Regular />} disabled={!video.matched || hintMissing}>
-          {_('preview.tab.processing', { defaultValue: 'Processing' })} <CounterBadge color="informative" size="small" showZero count={partsCount} />
+          {_('preview.tab.processing', { defaultValue: 'Processing' })}{' '}
+          <CounterBadge color="informative" size="small" showZero count={partsCount} />
         </Tab>
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!video.matched || hintMissing}>
-          {_('preview.tab.encoding', { defaultValue: 'Encoding' })} <CounterBadge color="informative" size="small" showZero count={encodingCount} />
+          {_('preview.tab.encoding', { defaultValue: 'Encoding' })}{' '}
+          <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

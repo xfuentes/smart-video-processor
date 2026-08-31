@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,7 @@ type Props = {
   disabled?: boolean
 }
 
-export const Hints = ({
- video, disabled }: Props) => {
+export const Hints = ({ video, disabled }: Props) => {
   const _ = useI18n()
   const languageHints = video.hints.filter((h) => h.type === HintType.LANGUAGE)
   const subtitlesTypeHints = video.hints.filter((h) => h.type === HintType.SUBTITLES_TYPE)

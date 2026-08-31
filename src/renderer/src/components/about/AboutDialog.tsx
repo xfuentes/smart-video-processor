@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,9 +94,9 @@ export const AboutDialog = () => {
                 Copyright (c) 2025. Xavier Fuentes&nbsp;
                 <Link
                   style={{ fontSize: 'smaller' }}
-                  onClick={() => window.open('mailto://xfuentes-dev@hotmail.com', '_blank')}
+                  onClick={() => window.open('mailto://xfuentes-dev@serviam.cc', '_blank')}
                 >
-                  &lt;xfuentes-dev@hotmail.com&gt;
+                  &lt;xfuentes-dev@serviam.cc&gt;
                 </Link>
               </div>
               <br />

@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,8 +139,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 }
 }
 
-export const TrackList = ({
- video, disabled }: Props) => {
+export const TrackList = ({ video, disabled }: Props) => {
   useI18n()
   const handleSelectionChange: DataGridProps['onSelectionChange'] = async (
     _e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,

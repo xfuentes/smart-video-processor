@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,7 @@ type Props = {
   videos: IVideo[]
 }
 
-export const MultiPreviewTabs = ({
- videos }: Props) => {
+export const MultiPreviewTabs = ({ videos }: Props) => {
   const _ = useI18n()
   const { videoPlayerOpened, setVideoPlayerOpened } = useVideoPlayer()
   const [selectedTab, setSelectedTab] = useState('matching')
@@ -161,7 +160,8 @@ export const MultiPreviewTabs = ({
           </Tab>
         )}
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
-          {_('preview.tab.encoding', { defaultValue: 'Encoding' })} <CounterBadge color="informative" size="small" showZero count={encodingCount} />
+          {_('preview.tab.encoding', { defaultValue: 'Encoding' })}{' '}
+          <CounterBadge color="informative" size="small" showZero count={encodingCount} />
         </Tab>
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>

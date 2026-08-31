@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -285,7 +285,12 @@ export class TVDBClient {
       episodeNumber: order === 'absolute' ? (absoluteEpisodeNumber ?? 1) : (episodeNumber ?? 1)
     }
     try {
-      debug('log.tvdb.calling_episodes', { defaultValue: 'Calling /series/{tvdbId}/episodes/{order} with params: {params}', tvdbId, order, params: JSON.stringify(params) })
+      debug('log.tvdb.calling_episodes', {
+        defaultValue: 'Calling /series/{tvdbId}/episodes/{order} with params: {params}',
+        tvdbId,
+        order,
+        params: JSON.stringify(params)
+      })
       response = await tvdb.get<TVDBSeriesResponse>(`/series/${tvdbId}/episodes/${order}`, {
         params
       })

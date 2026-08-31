@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ export default {
     artifactName: '${name}-${version}-${arch}.${ext}',
     target: ['dir', 'tar.gz'],
     category: 'AudioVideo',
-    maintainer: 'Xavier Fuentes <xfuentes-dev@hotmail.com>',
+    maintainer: 'Xavier Fuentes <xfuentes-dev@serviam.cc>',
     vendor: 'Xavier Fuentes',
     icon: 'icons/',
     syncDesktopName: true

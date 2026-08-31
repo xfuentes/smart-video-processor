@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,7 @@ function requestKey(config: InternalAxiosRequestConfig): string {
 
 const defaultAdapter = getAdapter('http')
 
-export const recordedHttpAdapter: AxiosAdapter = async (
-  config: InternalAxiosRequestConfig
-): Promise<AxiosResponse> => {
+export const recordedHttpAdapter: AxiosAdapter = async (config: InternalAxiosRequestConfig): Promise<AxiosResponse> => {
   const key = requestKey(config)
   const file = path.join(RECORDINGS_DIR, `${key}.json`)
 

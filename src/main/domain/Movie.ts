@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,9 @@ export default class Movie implements IMovie {
     if (!this.tmdb) {
       throw new Error('TMDB ID is mandatory')
     }
-    this.video.showLoading('video.message.retrieving_movie_tmdb', { defaultValue: 'Retrieving movie details from TMDB.' })
+    this.video.showLoading('video.message.retrieving_movie_tmdb', {
+      defaultValue: 'Retrieving movie details from TMDB.'
+    })
     try {
       const movieData = await TMDBClient.getInstance().retrieveMovieDetails(this.tmdb)
       this.originalCountries = movieData.countries
@@ -150,7 +152,9 @@ export default class Movie implements IMovie {
 
       const fullPath = Path.join(tempDirectory, 'TMDB-' + this.tmdb + '-poster.jpg')
       if (this.posterURL) {
-        this.video.showLoading('video.message.downloading_poster_tmdb', { defaultValue: 'Downloading poster image from TMDB.' })
+        this.video.showLoading('video.message.downloading_poster_tmdb', {
+          defaultValue: 'Downloading poster image from TMDB.'
+        })
         this.poster = await Files.downloadFile(this.posterURL, fullPath)
         debug('log.movie.wrote_poster', { defaultValue: 'Wrote poster file://{poster}', poster: this.poster })
       }

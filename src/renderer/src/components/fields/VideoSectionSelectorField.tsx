@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@hotmail.com>
+ * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,8 +41,7 @@ type Props = {
   mainVideoUuid?: string
 }
 
-export const VideoSectionSelectorField = function ({
- video, mainVideoUuid = undefined }: Props) {
+export const VideoSectionSelectorField = function ({ video, mainVideoUuid = undefined }: Props) {
   const _ = useI18n()
   const {
     videoPlayed,
