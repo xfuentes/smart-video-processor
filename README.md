@@ -62,8 +62,7 @@ sudo apt install smart-video-processor
 
 Works the same way on Debian and Ubuntu (Debian 12+ / Ubuntu 22.04+
 recommended); subsequent `sudo apt upgrade` will pick up new versions as
-soon as they're released. See [deploy/apt-repo/README.md](deploy/apt-repo/README.md)
-for details on how this repository is maintained.
+soon as they're released.
 
 ### b) Windows 10 or later
 
