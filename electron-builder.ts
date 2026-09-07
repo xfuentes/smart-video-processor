@@ -73,7 +73,7 @@ export default {
   linux: {
     executableName: 'smart-video-processor',
     artifactName: '${name}-${version}-${arch}.${ext}',
-    target: ['dir', 'tar.gz'],
+    target: ['dir', 'tar.gz', 'deb'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@serviam.cc>',
     vendor: 'Xavier Fuentes',

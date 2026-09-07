@@ -28,6 +28,8 @@ All dependencies are packaged with it, just install and you will be ready to go.
 
 ### a) Linux
 
+#### Snap Store
+
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
 
 After installation from the Snap Store, you can optionally enable removable media write access with this command :
@@ -36,7 +38,32 @@ After installation from the Snap Store, you can optionally enable removable medi
   sudo snap connect smart-video-processor:removable-media
 ```
 
-Alternatively there is an APPIMAGE file available.
+#### Flathub
+
+<a href="https://flathub.org/apps/details/io.github.xfuentes.smart-video-processor">
+<img width="190" alt="Download on Flathub" src="https://flathub.org/api/badge?svg&locale=en"/>
+</a>
+
+```shell
+flatpak install flathub io.github.xfuentes.smart-video-processor
+```
+
+#### APT (Debian / Ubuntu)
+
+A personal APT repository is updated automatically whenever a new version
+is released:
+
+```shell
+curl -fsSL https://apt.serviam.cc/serviam-apt-repo.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/serviam-apt-repo.gpg
+echo "deb [signed-by=/usr/share/keyrings/serviam-apt-repo.gpg] https://apt.serviam.cc stable main" | sudo tee /etc/apt/sources.list.d/serviam-apt-repo.list
+sudo apt update
+sudo apt install smart-video-processor
+```
+
+Works the same way on Debian and Ubuntu (Debian 12+ / Ubuntu 22.04+
+recommended); subsequent `sudo apt upgrade` will pick up new versions as
+soon as they're released. See [deploy/apt-repo/README.md](deploy/apt-repo/README.md)
+for details on how this repository is maintained.
 
 ### b) Windows 10 or later
 
