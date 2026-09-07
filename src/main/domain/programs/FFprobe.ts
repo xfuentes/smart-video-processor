@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,11 @@ import { Numbers } from '../../util/numbers'
 import { CommandProgress } from './CommandProgress'
 import { Attachment } from '../../../common/Change'
 import { currentSettings } from '../Settings'
+import { TrackType } from '../../../common/@types/Track'
+
+// Subtitle codecs mkvmerge/ffprobe can read fine but that the Matroska muxer cannot store as-is,
+// so ffmpeg must convert them (e.g. to SRT) instead of stream-copying them.
+const MATROSKA_INCOMPATIBLE_SUBTITLE_CODECS = ['mov_text']
 
 export interface Container {
   type: string
@@ -64,6 +69,13 @@ export class FFprobe extends CommandProgress {
     probeInfo?.streams?.forEach((stream) => {
       const track = tracks.find((t) => t.id === stream.index)
       if (track) {
+        if (
+          track.type === TrackType.SUBTITLES &&
+          stream.codec_name &&
+          MATROSKA_INCOMPATIBLE_SUBTITLE_CODECS.includes(stream.codec_name)
+        ) {
+          track.unsupported = true
+        }
         if ((track.unsupported || !track.codec) && stream.codec_long_name) {
           track.codec = stream.codec_long_name
         }

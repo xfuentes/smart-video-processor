@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.4] - 2026-09-07
+
+### Added
+
+- Published on Flathub, and as a `.deb` package through a personal APT repository (`apt.serviam.cc`) for Debian/Ubuntu, updated automatically on every release.
+
+### Fixed
+
+- Fixed remuxing/encoding failing with "Subtitle codec 94213 is not supported" on files containing MP4 Timed Text (mov_text) subtitle tracks, by converting them to SRT instead of copying them as-is.
+
 ## [1.9.3] - 2026-08-27
 
 ### Fixed

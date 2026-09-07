@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -311,7 +311,13 @@ export class FFmpeg extends CommandProgress {
       } else if (track.type === TrackType.VIDEO) {
         ffOptions.push('-map', '0:v:' + videoIndex++)
       } else if (track.type === TrackType.SUBTITLES) {
-        ffOptions.push('-map', '0:s:' + subtitlesIndex++)
+        ffOptions.push('-map', '0:s:' + subtitlesIndex)
+        if (track.unsupported) {
+          // e.g. MP4 Timed Text/mov_text (codec id 94213): Matroska cannot store it as-is,
+          // so it must be converted instead of stream-copied.
+          ffOptions.push('-c:s:' + subtitlesIndex, 'srt')
+        }
+        subtitlesIndex++
       }
     }
     return ffOptions

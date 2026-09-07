@@ -1,6 +1,6 @@
 /*
  * Smart Video Processor
- * Copyright (c) 2025. Xavier Fuentes <xfuentes-dev@serviam.cc>
+ * Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import { Processes } from '../../../src/main/util/processes'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
 import { IVideo } from '../../../src/common/@types/Video'
+import { ITrack, TrackType } from '../../../src/common/@types/Track'
 
 const genSpawnSpyProgress = () => vi.spyOn(Processes, 'spawn').mockImplementation(simulateFFmpegProgression)
 
@@ -545,6 +546,28 @@ test('FFmpeg Snapshot Marcelino', async () => {
   )
   expect(progresses).toStrictEqual([undefined, 1])
   expect(result).toContain('snapshots2000x64.png')
+})
+
+test('FFmpeg maps unsupported subtitle codecs (e.g. mov_text) to srt instead of copy', () => {
+  const tracks: ITrack[] = [
+    { type: TrackType.VIDEO, unsupported: false } as ITrack,
+    { type: TrackType.AUDIO, unsupported: false } as ITrack,
+    { type: TrackType.SUBTITLES, unsupported: false } as ITrack,
+    { type: TrackType.SUBTITLES, unsupported: true } as ITrack
+  ]
+  const args = FFmpeg.getInstance().generateKeepAllMapping(tracks)
+  expect(args).toStrictEqual([
+    '-map',
+    '0:v:0',
+    '-map',
+    '0:a:0',
+    '-map',
+    '0:s:0',
+    '-map',
+    '0:s:1',
+    '-c:s:1',
+    'srt'
+  ])
 })
 
 test('FFmpeg version extraction strips the n prefix', async () => {

@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.4' })}</h4>
+      <ul>
+        {_('about.news.version_1_9_4.items', {
+          defaultValue:
+            'Published on Flathub, and as a .deb package through a personal APT repository for Debian/Ubuntu\nFixed remuxing/encoding failing on files with MP4 Timed Text (mov_text) subtitle tracks by converting them to SRT instead of failing'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.3' })}</h4>
       <ul>
         {_('about.news.version_1_9_3.items', {

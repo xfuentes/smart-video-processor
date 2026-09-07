@@ -23,6 +23,7 @@ bruno/
 !.yarn/cache
 .pnp.*
 .devin
+.claude
 
 /flatpak/io.github.xfuentes.smart-video-processor.yml
 /flatpak/io.github.xfuentes.smart-video-processor.metainfo.xml
