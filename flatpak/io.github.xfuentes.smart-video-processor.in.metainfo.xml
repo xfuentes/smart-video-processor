@@ -63,6 +63,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="__VERSION__" date="__DATE__" />
+    <release version="__VERSION__" date="__DATE__">
+      <description>
+        <ul>
+          <li>Published on Flathub, and as a .deb package through a personal APT repository for Debian/Ubuntu</li>
+          <li>Fixed remuxing/encoding failing with "Subtitle codec 94213 is not supported" on files containing MP4 Timed Text (mov_text) subtitle tracks, by converting them to SRT instead of copying them as-is</li>
+        </ul>
+      </description>
+    </release>
   </releases>
 </component>
