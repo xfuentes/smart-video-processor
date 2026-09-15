@@ -185,6 +185,17 @@ test('TV-Show with season and episode name but no episode number', () => {
   expect(video.searchBy).toBe(SearchBy.TITLE_EP_NAME)
 })
 
+test('TV-Show anime with absolute episode number uses absolute order', () => {
+  const video = new Video(getFakeAbsolutePath('Download', "Dragon Ball - E127 - Plus rapide que l'éclair.mkv"))
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.title).toBe('Dragon Ball')
+  expect(video.tvShow.season).toBeUndefined()
+  expect(video.tvShow.episode).toBeUndefined()
+  expect(video.tvShow.absoluteEpisode).toBe(127)
+  expect(video.tvShow.episodeTitle).toBe("Plus rapide que l'éclair")
+  expect(video.tvShow.order).toBe('absolute')
+})
+
 test('TV-Show with year range and release tags', () => {
   const video = new Video(
     getFakeAbsolutePath(

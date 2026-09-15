@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=smart-video-processor %F
+Exec=smart-video-processor --new-instance %F
 Icon=${SNAP}/meta/gui/smart-video-processor.png
 Type=Application
 Terminal=false

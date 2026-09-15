@@ -682,5 +682,10 @@
   "about.news.version_1_9_1.items": "Flatpak 애플리케이션 아이콘과 x86_64 및 aarch64용 멀티아키텍처 패키징을 추가했습니다.\n이미 로컬에 존재하는 파일은 건너뛰도록 바이너리 다운로드 스크립트를 개선했습니다.\n동영상 플레이어 로딩 화면을 검은색 배경에 흰색 텍스트로 업데이트했습니다.\nFlatpak 데스크톱 항목 범주, MIME 유형 및 키워드 서식을 수정했습니다.",
   "about.news.version_1_9_2.items": "새로운 앱 인스턴스를 실행할 수 있도록 명령줄 인수 -n/--new-instance를 추가했습니다.\n버전, 설명 및 허용되는 인수를 표시하는 -h/--help 명령줄 인수가 추가되었습니다.",
   "about.news.version_1_9_3.items": "Flatpak 매니페스트에서 Git LFS를 건너뛰도록 하여 Flathub 빌드 문제를 해결했습니다.\n유효하지 않은 콘텐츠 등급 ID를 제거하여 AppStream 유효성 검사 오류를 수정했습니다.",
-  "about.news.version_1_9_4.items": "Flathub에 게시되었으며, Debian/Ubuntu용 개인 APT 저장소를 통해 .deb 패키지로도 제공됩니다.\nMP4 Timed Text(mov_text) 자막 트랙이 있는 파일에서 리먹싱/인코딩이 실패하던 문제를 해결했습니다. 기존에는 실패했지만, 이제는 SRT로 변환하여 처리합니다."
+  "about.news.version_1_9_4.items": "Flathub에 게시되었으며, Debian/Ubuntu용 개인 APT 저장소를 통해 .deb 패키지로도 제공됩니다.\nMP4 Timed Text(mov_text) 자막 트랙이 있는 파일에서 리먹싱/인코딩이 실패하던 문제를 해결했습니다. 기존에는 실패했지만, 이제는 SRT로 변환하여 처리합니다.",
+  "settings.auto_add_path.label": "폴더 자동 추가",
+  "settings.auto_add_path.browse.title": "디렉터리 자동 추가를 선택하세요",
+  "log.auto_add.watch_error": "폴더 자동 추가 감시 오류: {error}",
+  "settings.auto_add.info": "선택한 폴더를 감시하고 새 비디오 파일이 완전히 저장되면(예: 다운로드가 완료되면) 자동으로 목록에 추가합니다. 다운로드 중인 파일은 크기 변화가 멈출 때까지 무시됩니다.",
+  "about.news.version_2_0_0.items": "일반 설정에 자동 추가 옵션을 추가하여 선택한 폴더를 감시하고 다운로드가 완료된 새 비디오 파일을 자동으로 처리 목록에 추가합니다.\n.deb 패키지에 명시적인 런타임 종속성을 추가하여 ffmpeg, mkvtoolnix 및 필요한 시스템 라이브러리가 자동으로 설치되도록 했습니다.\n파일 관리자 또는 바탕 화면 바로 가기에서 앱을 열면 이미 실행 중인 인스턴스를 재사용하는 대신 항상 새 인스턴스가 시작됩니다.\n패키지 앱에는 이제 지원되는 23개 언어 모두에 대한 Electron 네이티브 현지화가 포함되어 있어 OS 네이티브 대화 상자도 번역됩니다.\nJDownloader 통합 스크립트는 이제 설치 방법에 관계없이 Smart Video Processor 실행 파일 경로를 자동으로 감지합니다.\n절대 에피소드 번호(예: 시즌 없이 E127, 장기 방영 애니메이션에서 흔히 사용됨)가 인식되지 않던 문제를 수정했습니다."
 }

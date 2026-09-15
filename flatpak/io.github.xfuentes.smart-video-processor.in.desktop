@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=__APP_ID__ %F
+Exec=__APP_ID__ --new-instance %F
 Icon=__APP_ID__
 Type=Application
 Terminal=false

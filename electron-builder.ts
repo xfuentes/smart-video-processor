@@ -20,14 +20,40 @@ import { Configuration } from 'electron-builder'
 import { homedir } from 'os'
 
 const arch = process.arch === 'x64' ? 'x64' : 'arm64'
+const productName = 'Smart Video Processor'
+const linuxExecutableName = 'smart-video-processor'
 
 export default {
   appId: 'XavierFuentes.SmartVideoProcessor',
-  productName: 'Smart Video Processor',
-  copyright: 'Copyright (c) 2025. Xavier Fuentes',
+  productName,
+  copyright: 'Copyright (c) 2025-2026. Xavier Fuentes',
   removePackageScripts: true,
   compression: 'normal',
-  electronLanguages: ['en-US', 'fr'],
+  electronLanguages: [
+    'ar',
+    'cs',
+    'da',
+    'de',
+    'el',
+    'en-US',
+    'es',
+    'fi',
+    'fr',
+    'hu',
+    'id',
+    'it',
+    'ja',
+    'ko',
+    'nl',
+    'nb',
+    'pl',
+    'pt-PT',
+    'ru',
+    'sv',
+    'tr',
+    'uk',
+    'zh-CN'
+  ],
   directories: {
     output: 'dist',
     buildResources: 'assets'
@@ -71,14 +97,30 @@ export default {
     artifactName: '${name}-${arch}.${ext}'
   },
   linux: {
-    executableName: 'smart-video-processor',
+    executableName: linuxExecutableName,
     artifactName: '${name}-${version}-${arch}.${ext}',
     target: ['dir', 'tar.gz', 'deb'],
     category: 'AudioVideo',
     maintainer: 'Xavier Fuentes <xfuentes-dev@serviam.cc>',
     vendor: 'Xavier Fuentes',
     icon: 'icons/',
-    syncDesktopName: true
+    syncDesktopName: true,
+    executableArgs: ['--new-instance']
+  },
+  deb: {
+    depends: [
+      'libgtk-3-0',
+      'libnotify4',
+      'libnss3',
+      'libxss1',
+      'libxtst6',
+      'xdg-utils',
+      'libatspi2.0-0',
+      'libuuid1',
+      'libsecret-1-0',
+      'ffmpeg',
+      'mkvtoolnix'
+    ]
   },
   appx: {
     applicationId: 'XavierFuentes.SmartVideoProcessor',

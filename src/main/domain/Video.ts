@@ -1245,19 +1245,29 @@ export class Video implements IVideo {
 
     const parsed = parseFilename(filename)
 
-    if (parsed.season !== undefined || parsed.episode !== undefined || parsed.episodeTitle) {
+    if (
+      parsed.season !== undefined ||
+      parsed.episode !== undefined ||
+      parsed.absoluteEpisode !== undefined ||
+      parsed.episodeTitle
+    ) {
       this.type = VideoType.TV_SHOW
+      const hasPosition = parsed.episode !== undefined || parsed.absoluteEpisode !== undefined
       if (this.searchBy === SearchBy.TITLE) {
-        this.searchBy =
-          parsed.episode === undefined && parsed.episodeTitle ? SearchBy.TITLE_EP_NAME : SearchBy.TITLE_POSITION
-      } else if (this.searchBy === SearchBy.TVDB_POSITION && parsed.episode === undefined && parsed.episodeTitle) {
+        this.searchBy = !hasPosition && parsed.episodeTitle ? SearchBy.TITLE_EP_NAME : SearchBy.TITLE_POSITION
+      } else if (this.searchBy === SearchBy.TVDB_POSITION && !hasPosition && parsed.episodeTitle) {
         this.searchBy = SearchBy.TVDB_EP_NAME
       }
       this.tvShow.title = Files.megaTrim(parsed.title ?? '')
       this.tvShow.season = parsed.season
       this.tvShow.episode = parsed.episode
       this.tvShow.episodeTitle = parsed.episodeTitle ? Files.megaTrim(parsed.episodeTitle) : ''
-      this.tvShow.order = 'official'
+      if (parsed.absoluteEpisode !== undefined && parsed.season === undefined) {
+        this.tvShow.absoluteEpisode = parsed.absoluteEpisode
+        this.tvShow.order = 'absolute'
+      } else {
+        this.tvShow.order = 'official'
+      }
     } else if (parsed.year !== undefined && parsed.title) {
       this.type = VideoType.MOVIE
       this.movie.title = Files.megaTrim(parsed.title)

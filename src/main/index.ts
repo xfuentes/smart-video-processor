@@ -40,31 +40,10 @@ import * as os from 'node:os'
 import { Processes } from './util/processes'
 import { shutdownComputer } from './util/shutdown'
 import { error, getLogs, info } from './util/log'
+import { VIDEO_EXTENSIONS } from './util/videoExtensions'
+import { AutoAddWatcher } from './domain/AutoAddWatcher'
 
 if (electron_squirrel_startup) app.quit()
-
-const VIDEO_EXTENSIONS = new Set([
-  '.mkv',
-  '.mp4',
-  '.m4v',
-  '.avi',
-  '.mov',
-  '.qt',
-  '.webm',
-  '.flv',
-  '.wmv',
-  '.asf',
-  '.mpg',
-  '.mpeg',
-  '.ts',
-  '.m2ts',
-  '.mts',
-  '.vob',
-  '.ogv',
-  '.3gp',
-  '.rm',
-  '.rmvb'
-])
 
 function getCommandLineVideoFiles(argv: string[] = process.argv): string[] {
   return argv
@@ -235,6 +214,7 @@ app.whenReady().then(async () => {
   }
 
   loadSettings()
+  AutoAddWatcher.getInstance().settingsUpdated(currentSettings)
 
   let ffmpegVersion = '-'
   let mkvmergeVersion = '-'
@@ -358,6 +338,7 @@ app.whenReady().then(async () => {
       if (encoderSettingsUpdated) {
         VideoController.getInstance().encoderSettingsUpdated()
       }
+      AutoAddWatcher.getInstance().settingsUpdated(currentSettings)
     }
     validation.result = currentSettings
     return validation
@@ -440,6 +421,7 @@ app.on('before-quit', async (event) => {
   if (isQuitting) return
   event.preventDefault()
   isQuitting = true
+  await AutoAddWatcher.getInstance().stop()
   showCleanupDialog()
   try {
     await VideoController.getInstance().destroy((current, total) => {

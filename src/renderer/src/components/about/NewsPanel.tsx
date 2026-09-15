@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.0.0' })}</h4>
+      <ul>
+        {_('about.news.version_2_0_0.items', {
+          defaultValue:
+            "Added an Auto Add option in General settings that watches a chosen folder and automatically adds new, fully-downloaded video files to the processing list\nAdded explicit runtime dependencies to the .deb package so ffmpeg, mkvtoolnix and required system libraries install automatically\nOpening the app from a file manager or desktop shortcut now always starts a new instance instead of reusing an already-running one\nThe packaged app now bundles native Electron localizations for all 23 supported languages so OS-native dialogs are also translated\nThe JDownloader integration script now auto-detects the Smart Video Processor executable path across install methods\nFixed absolute episode numbering (e.g. E127 with no season, common for long-running anime) not being recognized"
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '1.9.4' })}</h4>
       <ul>
         {_('about.news.version_1_9_4.items', {

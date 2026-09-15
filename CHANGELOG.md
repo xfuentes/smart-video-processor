@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2026-09-15
+
+### Added
+
+- Added an "Auto Add" option in General settings that watches a chosen folder and automatically adds new, fully-downloaded video files to the processing list.
+- Added explicit runtime dependencies (ffmpeg, mkvtoolnix, and required system libraries) to the `.deb` package so they install automatically with `apt`.
+
+### Changed
+
+- Opening the app from a file manager or desktop shortcut now always starts a new instance instead of reusing an already-running one.
+- The packaged app now bundles native Electron localizations for all 23 supported languages instead of only English and French, so OS-native dialogs are also translated.
+- The JDownloader integration script now auto-detects the Smart Video Processor executable path across install methods (Snap, Flatpak, `.deb`, or user-local on Linux; Squirrel on Windows) instead of requiring manual configuration.
+
+### Fixed
+
+- Fixed absolute episode numbering (e.g. `E127` with no season, common for long-running anime) not being recognized: the episode number and episode title were dropped, and the show was always searched with official season/episode ordering instead of absolute ordering.
+
 ## [1.9.4] - 2026-09-07
 
 ### Added

@@ -78,6 +78,8 @@ export const defaultSettings: Settings = {
   defaultOutputPath: Processes?.isLimitedPermissions() ? '' : Path.join('.', 'Reworked'),
   outputRules: [],
   isAutoStartEnabled: false,
+  isAutoAddEnabled: false,
+  autoAddPath: '',
   priority: 'BELOW_NORMAL',
   isTrackFilteringEnabled: false,
   favoriteLanguages: [systemLocale],
@@ -226,6 +228,9 @@ export function validateSettings(settings: Settings) {
   }
   if (settings.tmpFilesPath.trim() === '') {
     validation.fieldValidation('tmpFilesPath', 'error', 'Temporary files path is required')
+  }
+  if (settings.isAutoAddEnabled && settings.autoAddPath.trim() === '') {
+    validation.fieldValidation('autoAddPath', 'error', 'Auto add path is required')
   }
   return validation.build()
 }

@@ -69,6 +69,7 @@ function resolveWindowsPath() {
 function resolveLinuxPath() {
   var home = getJavaSystemProperty('user.home')
   var candidates = [
+    '/usr/bin/smart-video-processor',
     '/snap/bin/smart-video-processor',
     home + '/.local/share/flatpak/exports/bin/io.github.xfuentes.SmartVideoProcessor',
     '/var/lib/flatpak/exports/bin/io.github.xfuentes.SmartVideoProcessor',

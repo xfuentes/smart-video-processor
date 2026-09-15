@@ -69,6 +69,14 @@ export type Settings = {
    */
   isAutoStartEnabled: boolean
   /**
+   * If enabled, watches autoAddPath for new fully-downloaded video files and adds them automatically.
+   */
+  isAutoAddEnabled: boolean
+  /**
+   * Directory watched for new video files when isAutoAddEnabled is true (absolute)
+   */
+  autoAddPath: string
+  /**
    * Process priority to use when merging or encoding
    */
   priority: keyof typeof ProcessesPriority

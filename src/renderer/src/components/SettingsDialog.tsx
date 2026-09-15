@@ -83,6 +83,8 @@ export const SettingsDialog = () => {
       tmpFilesPath,
       defaultOutputPath,
       outputRules,
+      isAutoAddEnabled,
+      autoAddPath,
       isAutoStartEnabled,
       priority,
       isDebugEnabled,
@@ -129,6 +131,16 @@ export const SettingsDialog = () => {
     }
   }
 
+  const pickAutoAddPath = async () => {
+    const selected = await window.api.main.openDirectoryExplorer(
+      _('settings.auto_add_path.browse.title', { defaultValue: 'Select Auto Add Directory' }),
+      autoAddPath
+    )
+    if (selected) {
+      setAutoAddPath(selected)
+    }
+  }
+
   const handleCancel = (_ev: React.FormEvent) => {
     if (settingsValidation.result) {
       setLanguage(settingsValidation.result.language)
@@ -136,6 +148,8 @@ export const SettingsDialog = () => {
       setTmpFilesPath(settingsValidation.result.tmpFilesPath)
       setDefaultOutputPath(settingsValidation.result.defaultOutputPath)
       setOutputRules(settingsValidation.result.outputRules)
+      setAutoAddEnabled(settingsValidation.result.isAutoAddEnabled)
+      setAutoAddPath(settingsValidation.result.autoAddPath)
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
       setPriority(settingsValidation.result.priority)
       setDebugEnabled(settingsValidation.result.isDebugEnabled)
@@ -197,6 +211,8 @@ export const SettingsDialog = () => {
   const [tmpFilesPath, setTmpFilesPath] = useState(settingsValidation?.result?.tmpFilesPath ?? '')
   const [defaultOutputPath, setDefaultOutputPath] = useState(settingsValidation?.result?.defaultOutputPath ?? '')
   const [outputRules, setOutputRules] = useState<OutputRule[]>(settingsValidation?.result?.outputRules ?? [])
+  const [isAutoAddEnabled, setAutoAddEnabled] = useState(settingsValidation?.result?.isAutoAddEnabled)
+  const [autoAddPath, setAutoAddPath] = useState(settingsValidation?.result?.autoAddPath ?? '')
   const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
   const [priority, setPriority] = useState(settingsValidation?.result?.priority)
   const priorityClass = 'priority-' + priority?.toLowerCase()
@@ -222,6 +238,8 @@ export const SettingsDialog = () => {
   const fieldToTab: Record<string, string> = {
     language: 'general',
     additionalTvSearchLanguages: 'general',
+    isAutoAddEnabled: 'general',
+    autoAddPath: 'general',
     isAutoStartEnabled: 'general',
     priority: 'general',
     isDebugEnabled: 'general',
@@ -249,6 +267,8 @@ export const SettingsDialog = () => {
     tmpFilesPath,
     defaultOutputPath,
     outputRules,
+    isAutoAddEnabled,
+    autoAddPath,
     isAutoStartEnabled,
     priority,
     isDebugEnabled,
@@ -275,6 +295,9 @@ export const SettingsDialog = () => {
     if (draftSettings.tmpFilesPath.trim() === '') {
       v.fieldValidation('tmpFilesPath', 'error', 'Temporary files path is required')
     }
+    if (draftSettings.isAutoAddEnabled && draftSettings.autoAddPath.trim() === '') {
+      v.fieldValidation('autoAddPath', 'error', 'Auto add path is required')
+    }
     return v.build()
   })()
 
@@ -297,7 +320,7 @@ export const SettingsDialog = () => {
           aria-label={_('settings.aria_label', { defaultValue: 'Settings' })}
           style={{
             padding: '5px',
-            minHeight: '500px',
+            minHeight: '510px',
             display: 'flex',
             flexFlow: 'column',
             maxWidth: '700px'
@@ -377,6 +400,57 @@ export const SettingsDialog = () => {
                           value={additionalTvSearchLanguages}
                           onChanges={(data) => setAdditionalTvSearchLanguages(data)}
                         />
+                      </div>
+                      <div
+                        className={
+                          'field' + (liveValidation.fields['autoAddPath']?.status === 'error' ? ' field-error' : '')
+                        }
+                      >
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'auto 1fr auto',
+                            gap: '5px',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <Switch
+                            label={
+                              <div>
+                                {_('settings.auto_add_path.label', { defaultValue: 'Auto Add Folder' })}
+                                <InfoLabel
+                                  info={
+                                    <div>
+                                      {_('settings.auto_add.info', {
+                                        defaultValue:
+                                          'Watches the selected folder and automatically adds new video files to the list once they are fully written (e.g. once a download completes). Files still being downloaded are ignored until their size stops changing.'
+                                      })}
+                                    </div>
+                                  }
+                                />
+                              </div>
+                            }
+                            checked={isAutoAddEnabled}
+                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                              setAutoAddEnabled(ev.currentTarget.checked)
+                            }
+                          />
+                          {isAutoAddEnabled && (
+                            <>
+                              <Input
+                                required
+                                size="small"
+                                type="text"
+                                id="autoAddPathInput"
+                                value={autoAddPath}
+                                onChange={(_ev, data: InputOnChangeData) => setAutoAddPath(data.value)}
+                              />
+                              <Button size="small" onClick={() => void pickAutoAddPath()}>
+                                {_('settings.browse', { defaultValue: 'Browse' })}
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </div>
                       <div className="field">
                         <Switch

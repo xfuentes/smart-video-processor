@@ -22,12 +22,15 @@ This folder contains an **EventScripter script** for [JDownloader](https://jdown
 5. Create a new script for downloaded files:
    - **Name**: `Smart Video Processor - Download stopped`
    - **Trigger**: `A download stopped`
+   - **Script type**: `JavaScript` (enables syntax highlighting in the editor)
+   - **Execution**: synchronous (no interval/delay)
 6. (Optional) Create a second new script for extracted archives:
    - **Name**: `Smart Video Processor - Archive extracted`
    - **Trigger**: `Archive extracted`
+   - **Script type**: `JavaScript`
+   - **Execution**: synchronous (no interval/delay)
 7. For each script, copy the contents of `SmartVideoProcessor.eventscripter.js` into the script field.
-8. Edit the `var SVP_PATH = ...` line at the top of each script to set the full path of `SmartVideoProcessor.exe` on your computer.
-   - In a JavaScript string, every `\` must be doubled: `C:\\Users\\...`.
+8. The script auto-detects the Smart Video Processor executable path (Snap, Flatpak, `.deb`/update-alternatives, or user-local install on Linux; Squirrel install on Windows). Only edit the fallback path in `resolveWindowsPath()`/`resolveLinuxPath()` if auto-detection doesn't find your installation.
 9. Save and enable the scripts.
 
 ## How to find the SmartVideoProcessor.exe path

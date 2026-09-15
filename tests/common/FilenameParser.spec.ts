@@ -55,6 +55,17 @@ test('parse movie filename with leading [Film] tag and dotted year', () => {
   })
 })
 
+test('parse anime filename with absolute episode number and episode title', () => {
+  const result = parseFilename("Dragon Ball - E127 - Plus rapide que l'éclair.mkv")
+  expect(result).toStrictEqual({
+    title: 'Dragon Ball',
+    season: undefined,
+    episode: undefined,
+    episodeTitle: "Plus rapide que l'éclair",
+    absoluteEpisode: 127
+  })
+})
+
 test('parse movie filename with bracketed release noise before year', () => {
   const result = parseFilename(
     'Le Septième Voyage De Sinbad [REMASTERED] (1958) VFF ENG 1080p MULTi AC3 5.1 @384Kbps.x264-RHT.mkv'

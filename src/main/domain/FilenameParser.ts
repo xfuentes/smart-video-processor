@@ -17,6 +17,7 @@
  */
 
 import { Files } from '../util/files'
+import { VIDEO_EXTENSIONS } from '../util/videoExtensions'
 
 export interface ParsedFilename {
   title?: string
@@ -58,7 +59,10 @@ function cleanupTitle(title: string): string {
 }
 
 function normalize(input: string): string {
-  return input.replace(/\s+/g, ' ').trim()
+  const dotIndex = input.lastIndexOf('.')
+  const withoutExtension =
+    dotIndex > 0 && VIDEO_EXTENSIONS.has(input.substring(dotIndex).toLowerCase()) ? input.substring(0, dotIndex) : input
+  return withoutExtension.replace(/\s+/g, ' ').trim()
 }
 
 const RELEASE_NOISE_PATTERN =
@@ -155,9 +159,13 @@ function tryPatterns(input: string): MatchResult {
   // Absolute episode: "Episode 123" or "E123"
   match = /^(?<title>.+?)[.\-_\s]+(?:[ée]pisode|ep)?\s*[Ee](?<episode>\d{2,4})\b/iu.exec(normalized)
   if (match?.groups) {
+    const rest = normalized.substring(match.index + match[0].length).trim()
+    const rawEpisodeTitle = rest.match(/^[-–]\s*(.+)$/)?.[1]
+    const episodeTitle = rawEpisodeTitle ? removeReleaseNoise(rawEpisodeTitle) : undefined
     return {
       title: cleanupTitle(match.groups.title),
-      episode: Number.parseInt(match.groups.episode, 10),
+      absoluteEpisode: Number.parseInt(match.groups.episode, 10),
+      episodeTitle: episodeTitle ? episodeTitle : undefined,
       markerIndex: match.index
     }
   }
