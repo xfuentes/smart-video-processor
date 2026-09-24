@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.0.1' })}</h4>
+      <ul>
+        {_('about.news.version_2_0_1.items', {
+          defaultValue:
+            'Fixed episode numbers being padded to a single digit (e.g. S01E5) instead of at least 2 digits (S01E05)\nFixed the generated filename keeping absolute numbering (e.g. E127) after switching the episode order from Absolute to Official post-search\nFixed the track selection mask not blocking clicks when the track list is disabled'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.0.0' })}</h4>
       <ul>
         {_('about.news.version_2_0_0.items', {

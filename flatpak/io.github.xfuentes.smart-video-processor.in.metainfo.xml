@@ -66,12 +66,9 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added an "Auto Add" option in General settings that watches a chosen folder and automatically adds new, fully-downloaded video files to the processing list</li>
-          <li>Added explicit runtime dependencies to the .deb package so ffmpeg, mkvtoolnix and required system libraries install automatically</li>
-          <li>Opening the app from a file manager or desktop shortcut now always starts a new instance instead of reusing an already-running one</li>
-          <li>The packaged app now bundles native Electron localizations for all 23 supported languages so OS-native dialogs are also translated</li>
-          <li>The JDownloader integration script now auto-detects the Smart Video Processor executable path across install methods</li>
-          <li>Fixed absolute episode numbering (e.g. E127 with no season, common for long-running anime) not being recognized</li>
+          <li>Fixed episode numbers being padded to a single digit (e.g. S01E5) when a season had fewer than 10 episodes; episode numbers are now always padded to at least 2 digits (S01E05)</li>
+          <li>Fixed the generated filename keeping the absolute numbering format (e.g. E127) after switching the episode order from "Absolute" to "Official" post-search; it is now recomputed to match the selected order</li>
+          <li>Fixed the track selection mask not blocking clicks when the track list is disabled</li>
         </ul>
       </description>
     </release>
