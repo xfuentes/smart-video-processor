@@ -106,7 +106,13 @@ export class Files {
   }
 
   static unlinkSync(inPath: PathLike) {
-    fs.unlinkSync(inPath)
+    try {
+      fs.unlinkSync(inPath)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        throw error
+      }
+    }
   }
 
   static removeSpecialCharsFromFilename(filename: string): string {
