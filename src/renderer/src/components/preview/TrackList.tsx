@@ -145,6 +145,7 @@ export const TrackList = ({ video, disabled }: Props) => {
     _e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,
     data: OnSelectionChangeData
   ) => {
+    if (disabled) return
     const changedItems = xor(Array.from(selectedItems), Array.from(data.selectedItems as Set<number>))
     await window.api.video.switchTrackSelection(video.uuid, changedItems)
   }

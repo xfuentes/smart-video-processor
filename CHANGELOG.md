@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed episode numbers being padded to a single digit (e.g. `S01E5`) when a season had fewer than 10 episodes; episode numbers are now always padded to at least 2 digits (`S01E05`).
+- Fixed the generated filename keeping the absolute numbering format (e.g. `E127`) after switching the episode order from "Absolute" to "Official" post-search; it is now recomputed to match the selected order.
+- Fixed the track selection mask not blocking clicks when the track list is disabled.
+
 ## [2.0.0] - 2026-09-15
 
 ### Added

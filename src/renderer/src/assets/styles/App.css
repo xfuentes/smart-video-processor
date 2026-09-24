@@ -113,7 +113,6 @@
 .mask-parent {
   position: relative;
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 
@@ -123,13 +122,12 @@
 }
 
 .mask-parent > div {
-  position: absolute;
   width: 100%;
-  height: 100%;
 }
 
 .mask-parent > .mask {
   position: absolute;
+  inset: 0;
   background-color: var(--colorNeutralBackground1);
   opacity: 50%;
   width: 100%;
