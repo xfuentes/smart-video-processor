@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a rare crash while cleaning up temporary files when one was removed concurrently (e.g. by a virus scanner) between being listed and deleted.
+
 ## [2.0.1] - 2026-09-24
 
 ### Fixed
