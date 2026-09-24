@@ -66,9 +66,6 @@ jobs:
       - name: build linux snap
         uses: snapcore/action-build@v1
         id: build
-        with:
-          # Avoids provisioning a fresh LXD container whose apt index can drift out of sync with the mirror.
-          snapcraft-args: --destructive-mode
 
       - name: publish to snap store
         uses: snapcore/action-publish@v1
