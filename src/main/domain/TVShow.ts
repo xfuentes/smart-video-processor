@@ -223,7 +223,7 @@ export class TVShow implements ITVShow {
         }
       }
       this.video.title = `${this.title}${position ? ' - ' + position : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
-      this.video.fireChangeEvent()
+      this.video.generateEncoderSettings(false)
     }
   }
 
@@ -239,8 +239,14 @@ export class TVShow implements ITVShow {
     this.imdb = newIMDB
   }
 
-  setOrder(order: EpisodeOrder) {
+  async setOrder(order: EpisodeOrder) {
+    if (this.order === order) {
+      return
+    }
     this.order = order
+    if (this.theTVDB && (this.episode !== undefined || this.absoluteEpisode !== undefined)) {
+      await this.loadSeries()
+    }
   }
 
   setSeason(newSeason: string) {

@@ -93,9 +93,9 @@ export class VideoController {
     this.getVideoByUuid(uuid).setSearchBy(searchBy)
   }
 
-  setMultiTvShowOrder(uuids: string[], order: EpisodeOrder) {
+  async setMultiTvShowOrder(uuids: string[], order: EpisodeOrder) {
     for (const uuid of uuids) {
-      this.getVideoByUuid(uuid).tvShow.setOrder(order)
+      await this.getVideoByUuid(uuid).tvShow.setOrder(order)
     }
     this.fireListChangeEvent()
   }

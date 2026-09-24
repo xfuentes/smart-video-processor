@@ -232,7 +232,7 @@ export class Strings {
   }
 
   static toLeadingZeroNumber(num: number, maxNum: number = 99): string {
-    return num.toString(10).padStart(('' + maxNum).length, '0')
+    return num.toString(10).padStart(Math.max(2, ('' + maxNum).length), '0')
   }
 
   static localeContains(search: string, base: string) {

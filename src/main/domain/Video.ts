@@ -424,7 +424,7 @@ export class Video implements IVideo {
       this.tvShow.setTitle(data.tvShowTitle)
       this.tvShow.setYear(data.tvShowYear)
       this.tvShow.setTheTVDB(data.tvShowTVDB)
-      this.tvShow.setOrder(data.tvShowOrder)
+      void this.tvShow.setOrder(data.tvShowOrder)
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
       this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
@@ -473,7 +473,7 @@ export class Video implements IVideo {
       if (data.tvShowTitle !== undefined) this.tvShow.setTitle(data.tvShowTitle)
       if (data.tvShowYear !== undefined) this.tvShow.setYear(data.tvShowYear)
       if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
-      if (data.tvShowOrder !== undefined) this.tvShow.setOrder(data.tvShowOrder)
+      if (data.tvShowOrder !== undefined) void this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
     }
   }
