@@ -54,8 +54,8 @@ A personal APT repository is updated automatically whenever a new version
 is released:
 
 ```shell
-curl -fsSL https://apt.serviam.cc/serviam-apt-repo.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/serviam-apt-repo.gpg
-echo "deb [signed-by=/usr/share/keyrings/serviam-apt-repo.gpg] https://apt.serviam.cc stable main" | sudo tee /etc/apt/sources.list.d/serviam-apt-repo.list
+curl -fsSL https://ppa.serviam.cc/serviam-apt-repo.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/serviam-apt-repo.gpg
+echo "deb [signed-by=/usr/share/keyrings/serviam-apt-repo.gpg] https://ppa.serviam.cc stable main" | sudo tee /etc/apt/sources.list.d/serviam-apt-repo.list
 sudo apt update
 sudo apt install smart-video-processor
 ```
