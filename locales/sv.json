@@ -541,7 +541,6 @@
   "video.message.trimming_video": "Klipper videon...",
   "video.message.tvdb_episode_not_found": "Avsnittet hittades inte. Kontrollera uppgifterna och försök igen.",
   "video.message.tvdb_episode_number_required": "Avsnittsnummer har inte angetts. Ange ett giltigt avsnittsnummer och försök igen.",
-  "video.message.tvdb_no_exact_match": "Det gick inte att hitta någon exakt träff på TheTVDB. Kontrollera uppgifterna och försök igen.",
   "video.message.waiting_for_hints": "Jag väntar på dina tips.",
   "video_list.aria_label.select_all_rows": "Markera alla rader",
   "video_list.aria_label.select_row": "Välj rad",
@@ -688,5 +687,13 @@
   "log.auto_add.watch_error": "Fel vid automatisk mapptillägg: {error}",
   "settings.auto_add.info": "Övervakar den valda mappen och lägger automatiskt till nya videofiler i listan när de är helt nedladdade (t.ex. när en nedladdning är klar). Filer som fortfarande laddas ner ignoreras tills deras storlek slutar ändras.",
   "about.news.version_2_0_0.items": "Lade till ett alternativ för automatisk tillägg i de allmänna inställningarna som övervakar en vald mapp och automatiskt lägger till nya, helt nedladdade videofiler i bearbetningslistan.\nLade till explicita runtime-beroenden i .deb-paketet så att ffmpeg, mkvtoolnix och nödvändiga systembibliotek installeras automatiskt.\nOm appen öppnas från en filhanterare eller skrivbordsgenväg startar det nu alltid en ny instans istället för att återanvända en redan körande.\nDen paketerade appen paketerar nu inbyggda Electron-lokaliseringar för alla 23 språk som stöds, så att OS-inbyggda dialogrutor också översätts.\nJDownloader-integrationsskriptet upptäcker nu automatiskt den körbara sökvägen för Smart Video Processor över installationsmetoder.\nÅtgärdade problemet med att absolut avsnittsnumrering (t.ex. E127 utan säsong, vanligt för långvarig anime) inte kändes igen.",
-  "about.news.version_2_0_1.items": "Åtgärdade felet att avsnittsnummer utfylldes till en enda siffra (t.ex. S01E5) istället för minst 2 siffror (S01E05)\nÅtgärdade problemet med att det genererade filnamnet behöll absolut numrering (t.ex. E127) efter att avsnittsordningen ändrats från Absolut till Officiell eftersökning\nÅtgärdade problemet med att spårvalsmasken inte blockerade klick när spårlistan var inaktiverad"
+  "about.news.version_2_0_1.items": "Åtgärdade felet att avsnittsnummer utfylldes till en enda siffra (t.ex. S01E5) istället för minst 2 siffror (S01E05)\nÅtgärdade problemet med att det genererade filnamnet behöll absolut numrering (t.ex. E127) efter att avsnittsordningen ändrats från Absolut till Officiell eftersökning\nÅtgärdade problemet med att spårvalsmasken inte blockerade klick när spårlistan var inaktiverad",
+  "settings.naming_convention.label": "Namngivningskonvention",
+  "video.message.searching_series_tmdb": "Söker efter serier på TheMovieDB",
+  "video.message.downloading_episode_tmdb": "Laddar ner avsnittsbild från TheMovieDB.",
+  "video.message.series_no_match": "Kunde inte hitta en exakt matchning på TheTVDB eller TheMovieDB. Kontrollera informationen och försök igen.",
+  "settings.tab.matching": "Motsvarande",
+  "settings.tv_show_matching_priority.label": "Databas med föredragna TV-program",
+  "search_by.tmdb_position.label": "TMDB-ID och position",
+  "about.news.version_2_1_0.items": "Lade till en inställning för \"Namngivningskonvention\" för att välja mellan fil-/mappnamn för Plex, Jellyfin och Kodi.\nTV-program utan matchning på TheTVDB söks nu automatiskt upp på TheMovieDB som reserv.\nLade till en flik för \"Matchning\" för att välja vilken databas (TheTVDB eller TheMovieDB) som testas först för TV-program, och för att söka efter ett TV-program via TMDB-ID.\nAtt lägga till filer accepterar nu även kataloger, både från knappen \"Öppna\" och genom att dra in en mapp, och rekursivt lägga till de videofiler de innehåller.\nAtt byta namn på/flytta en redan bearbetad fil utan andra väntande ändringar flyttar den nu direkt istället för en fullständig remux, när automatisk källradering är aktiverad.\nÅtgärdade batchredigering av en ledtråd (t.ex. ljud-/textningsspråk) över valda avsnitt som inte erbjuds när deras nuvarande värden redan skilde sig åt.\nÅtgärdade videodelning/sammanfogning som misslyckades när ett källfilnamn innehöll ett enkelt citattecken.\nÅtgärdade en sällsynt krasch vid rensning av tillfälliga filer som togs bort samtidigt av en annan process."
 }

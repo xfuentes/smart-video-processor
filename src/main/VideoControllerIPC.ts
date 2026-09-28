@@ -17,25 +17,43 @@
  */
 
 import { BrowserWindow, dialog, ipcMain } from 'electron'
+import * as fs from 'node:fs'
 import { closeCleanupDialog, showCleanupDialog, updateCleanupProgress } from './CleanupDialog'
 import { VideoController } from './controller/VideoController'
 import type { EpisodeOrder } from './domain/clients/TVDBClient'
 import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
+import { scanVideoFilesRecursive } from './util/videoExtensions'
+
+/**
+ * Resolves a mix of file and directory paths (e.g. from the open dialog or a drag & drop) into a flat list of
+ * video file paths, recursively scanning any directory for the video files it contains.
+ */
+const resolveVideoFilePaths = (paths: string[]): string[] => {
+  const filePaths: string[] = []
+  for (const selectedPath of paths) {
+    if (fs.statSync(selectedPath).isDirectory()) {
+      filePaths.push(...scanVideoFilesRecursive(selectedPath))
+    } else {
+      filePaths.push(selectedPath)
+    }
+  }
+  return filePaths
+}
 
 export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:openFileExplorer', async () => {
     const result = await dialog.showOpenDialog(mainWindow, {
-      title: 'Select video files',
-      properties: ['openFile', 'multiSelections', 'dontAddToRecent']
+      title: 'Select video files or directories',
+      properties: ['openFile', 'openDirectory', 'multiSelections', 'dontAddToRecent']
     })
     if (!result.canceled) {
-      void VideoController.getInstance().openFiles(result.filePaths)
+      void VideoController.getInstance().openFiles(resolveVideoFilePaths(result.filePaths))
     }
   })
   ipcMain.handle('video:openFiles', (_event, filePaths: string[]) => {
-    void VideoController.getInstance().openFiles(filePaths)
+    void VideoController.getInstance().openFiles(resolveVideoFilePaths(filePaths))
   })
   VideoController.getInstance().addListChangeListener((videos) => {
     mainWindow.webContents.send(

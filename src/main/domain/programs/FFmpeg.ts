@@ -339,10 +339,11 @@ export class FFmpeg extends CommandProgress {
         splitPaths.push(partPath)
       }
 
+      // A literal single quote in the path must be escaped as '\'' per the concat demuxer's file format.
       const concatFilePath = Files.writeFileSync(
         destinationPath,
         'concat.txt',
-        splitPaths.map((p) => `file '${p}'`).join('\n'),
+        splitPaths.map((p) => `file '${p.replace(/'/g, "'\\''")}'`).join('\n'),
         'utf8'
       )
 

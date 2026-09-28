@@ -87,6 +87,50 @@ interface TMDBLanguage {
   name: string
 }
 
+interface TMDBTVResult {
+  id: number
+  name: string
+  original_name: string
+  original_language: string
+  overview: string
+  poster_path: string
+  first_air_date: string
+}
+
+interface TMDBTVSearchResults {
+  page: number
+  total_results: number
+  total_pages: number
+  results: TMDBTVResult[]
+}
+
+interface TMDBTVDetails {
+  id: number
+  name: string
+  original_name: string
+  original_language: string
+  overview: string
+  poster_path: string
+  first_air_date: string
+  origin_country: string[]
+  genres: TMDBGenre[]
+}
+
+interface TMDBTVEpisode {
+  id: number
+  name: string
+  overview: string
+  episode_number: number
+  season_number: number
+  still_path: string | null
+}
+
+interface TMDBTVSeasonDetails {
+  id: number
+  season_number: number
+  episodes: TMDBTVEpisode[]
+}
+
 interface TMDBDetails {
   success?: boolean
   status_message: string

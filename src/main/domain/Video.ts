@@ -52,7 +52,7 @@ import { Progression } from '../../common/@types/processes'
 import { TrackType } from '../../common/@types/Track'
 import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
-import { OutputRule, OutputRuleCondition } from '../../common/@types/Settings'
+import { NamingConvention, OutputRule, OutputRuleCondition } from '../../common/@types/Settings'
 import {
   ISnapshots,
   IVideo,
@@ -424,6 +424,7 @@ export class Video implements IVideo {
       this.tvShow.setTitle(data.tvShowTitle)
       this.tvShow.setYear(data.tvShowYear)
       this.tvShow.setTheTVDB(data.tvShowTVDB)
+      this.tvShow.setTheMovieDB(data.tvShowTMDB)
       void this.tvShow.setOrder(data.tvShowOrder)
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
@@ -1162,7 +1163,20 @@ export class Video implements IVideo {
   private async merge(outputDirectory: string, extraDuration?: number) {
     const subDirs: string[] = []
     if (this.type === VideoType.TV_SHOW && this.tvShow.title !== undefined) {
-      subDirs.push(`${Files.removeSpecialCharsFromFilename(this.tvShow.title)} {tvdb-${this.tvShow.theTVDB}}`)
+      const cleanTitle = Files.removeSpecialCharsFromFilename(this.tvShow.title)
+      const yearPart = this.tvShow.year !== undefined ? ` (${this.tvShow.year})` : ''
+      // Falls back to the TheMovieDB id when the show could not be matched on TheTVDB.
+      const [jellyfinTag, otherTag] =
+        this.tvShow.theTVDB !== undefined
+          ? [`tvdbid-${this.tvShow.theTVDB}`, `tvdb-${this.tvShow.theTVDB}`]
+          : [`tmdbid-${this.tvShow.theMovieDB}`, `tmdb-${this.tvShow.theMovieDB}`]
+      if (currentSettings.namingConvention === NamingConvention.JELLYFIN) {
+        subDirs.push(`${cleanTitle}${yearPart} [${jellyfinTag}]`)
+      } else if (currentSettings.namingConvention === NamingConvention.KODI) {
+        subDirs.push(`${cleanTitle}${yearPart} {${otherTag}}`)
+      } else {
+        subDirs.push(`${cleanTitle} {${otherTag}}`)
+      }
       if (this.tvShow.season !== undefined && this.tvShow.order !== 'absolute') {
         subDirs.push('Season ' + Strings.toLeadingZeroNumber(this.tvShow.season))
       }
@@ -1175,6 +1189,14 @@ export class Video implements IVideo {
     if (this.encodedPath) {
       sourcePath = this.encodedPath
     }
+
+    if (currentSettings.isAutoDeleteProcessedFilesEnabled && sourcePath === this.sourcePath && this.isRenameOnly()) {
+      const finalOutputDirectory = path.join(outputDirectory, ...subDirs)
+      const finalPath = Files.computeOutputPath(path.basename(this.sourcePath), this.changes, finalOutputDirectory)
+      await Files.moveFile(sourcePath, finalPath)
+      return
+    }
+
     const mergeJob = this.attachJob(
       new ProcessingJob(
         path.basename(this.sourcePath),
@@ -1193,6 +1215,22 @@ export class Video implements IVideo {
     this.encodedPath = undefined
   }
 
+  /**
+   * True when the only pending change is the container filename and every track is kept as-is,
+   * meaning a plain file move can replace a full mkvmerge remux.
+   */
+  private isRenameOnly(): boolean {
+    const hasNonFilenameChange = this.changes.some(
+      (c) =>
+        !(
+          c.sourceType === ChangeSourceType.CONTAINER &&
+          c.changeType === ChangeType.UPDATE &&
+          c.property === ChangeProperty.FILENAME
+        )
+    )
+    return !hasNonFilenameChange && this.tracks.every((t) => t.copy)
+  }
+
   private extractInfosFromFilename() {
     try {
       const stats = fs.statSync(this.sourcePath)
@@ -1204,13 +1242,13 @@ export class Video implements IVideo {
     const filename = Files.cleanFilename(this.filename)
     this.type = VideoType.OTHER
 
-    const tvdbPattern = /\{tvdb-(?<tvdb>\d+)}/i
+    const tvdbPattern = /[{[]tvdb(?:id)?-(?<tvdb>\d+)[}\]]/i
     const tvdbMatches = tvdbPattern.exec(this.sourcePath)
-    const tmdbPattern = /\{tmdb-(?<tmdb>\d+)}/i
+    const tmdbPattern = /[{[]tmdb(?:id)?-(?<tmdb>\d+)[}\]]/i
     const tmdbMatches = tmdbPattern.exec(this.filename)
-    const imdbPattern = /\{tt(?<imdb>\d+)}/i
+    const imdbPattern = /[{[](?:imdbid-)?tt(?<imdb>\d+)[}\]]/i
     const imdbMatches = imdbPattern.exec(this.filename)
-    const editionPattern = /\{edition-(?<edition>[^}]+)}/i
+    const editionPattern = /[{[]edition-(?<edition>[^}\]]+)[}\]]/i
     const editionMatches = editionPattern.exec(this.filename)
 
     if (editionMatches?.groups) {
@@ -1226,6 +1264,14 @@ export class Video implements IVideo {
       }
     }
 
+    const parsed = parseFilename(filename)
+    const looksLikeTVShow =
+      tvdbMatches?.groups !== undefined ||
+      parsed.season !== undefined ||
+      parsed.episode !== undefined ||
+      parsed.absoluteEpisode !== undefined ||
+      !!parsed.episodeTitle
+
     if (tvdbMatches?.groups) {
       this.searchBy = SearchBy.TVDB_POSITION
       this.type = VideoType.TV_SHOW
@@ -1234,16 +1280,20 @@ export class Video implements IVideo {
 
     if (tmdbMatches?.groups) {
       this.searchBy = SearchBy.TMDB
-      this.type = VideoType.MOVIE
-      this.movie.setTMDB(tmdbMatches.groups.tmdb)
+      if (looksLikeTVShow) {
+        // A {tmdb-N}/[tmdbid-N] tag on a filename with season/episode markers is a TV show matched via the TMDB fallback.
+        this.type = VideoType.TV_SHOW
+        this.tvShow.setTheMovieDB(tmdbMatches.groups.tmdb)
+      } else {
+        this.type = VideoType.MOVIE
+        this.movie.setTMDB(tmdbMatches.groups.tmdb)
+      }
     }
 
     if (imdbMatches?.groups) {
       this.tvShow.imdb = this.movie.imdb = 'tt' + imdbMatches.groups.imdb
       this.searchBy = SearchBy.IMDB
     }
-
-    const parsed = parseFilename(filename)
 
     if (
       parsed.season !== undefined ||

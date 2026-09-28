@@ -55,16 +55,24 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
   const allEnabled = videos.find((video) => video.searching || video.queued || video.processing) === undefined
   const allMatched = videos.find((video) => !video.matched) === undefined
   let firstSet = true
-  let commonHints: IHint[] = []
+  // A hint is common as soon as every video has one for the same track/type, even if their values differ;
+  // mismatched values are reset to undefined so the batch editor starts blank instead of assuming one of them.
+  let commonHints: (IHint & { anyMissing?: boolean })[] = []
   videos.forEach((v) => {
     if (firstSet) {
-      commonHints = v.hints
+      commonHints = v.hints.map((h) => ({ ...h, anyMissing: !h.value }))
       firstSet = false
     } else {
-      const newCommonHints: IHint[] = []
+      const newCommonHints: (IHint & { anyMissing?: boolean })[] = []
       for (const commonHint of commonHints) {
         const hint = v.hints.find((h: IHint) => h.trackId === commonHint.trackId && h.type === commonHint.type)
-        if (hint !== undefined && commonHint.value === hint.value) {
+        if (hint !== undefined) {
+          if (!hint.value) {
+            commonHint.anyMissing = true
+          }
+          if (commonHint.value !== hint.value) {
+            commonHint.value = undefined
+          }
           newCommonHints.push(commonHint)
         }
       }
@@ -73,7 +81,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
   })
 
   const hintCount = commonHints.length
-  const hintMissing = commonHints.find((h) => !h.value) !== undefined
+  const hintMissing = commonHints.some((h) => h.anyMissing)
 
   firstSet = true
   let commonEncoderSettings: EncoderSettings[] = []

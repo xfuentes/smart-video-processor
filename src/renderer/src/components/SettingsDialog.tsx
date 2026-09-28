@@ -42,13 +42,14 @@ import React, { ChangeEvent, useState } from 'react'
 import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
+  DatabaseSearch20Regular,
   DocumentSettings20Regular,
   ErrorCircle12Regular,
   SearchSettings20Regular,
   Settings24Regular,
   VideoSettings20Regular
 } from '@fluentui/react-icons'
-import { OutputRule, Settings } from '../../../common/@types/Settings'
+import { NamingConvention, OutputRule, Settings, TVShowMatchingSource } from '../../../common/@types/Settings'
 import { ProcessesPriority } from '../../../common/@types/processes'
 import { VideoCodec } from '../../../common/@types/Encoding'
 import { ProgressButton } from '@renderer/components/ProgressButton'
@@ -80,9 +81,11 @@ export const SettingsDialog = () => {
       ...settingsValidation.result,
       language,
       additionalTvSearchLanguages,
+      tvShowMatchingPriority,
       tmpFilesPath,
       defaultOutputPath,
       outputRules,
+      namingConvention,
       isAutoAddEnabled,
       autoAddPath,
       isAutoStartEnabled,
@@ -145,9 +148,11 @@ export const SettingsDialog = () => {
     if (settingsValidation.result) {
       setLanguage(settingsValidation.result.language)
       setAdditionalTvSearchLanguages(settingsValidation.result.additionalTvSearchLanguages)
+      setTvShowMatchingPriority(settingsValidation.result.tvShowMatchingPriority)
       setTmpFilesPath(settingsValidation.result.tmpFilesPath)
       setDefaultOutputPath(settingsValidation.result.defaultOutputPath)
       setOutputRules(settingsValidation.result.outputRules)
+      setNamingConvention(settingsValidation.result.namingConvention)
       setAutoAddEnabled(settingsValidation.result.isAutoAddEnabled)
       setAutoAddPath(settingsValidation.result.autoAddPath)
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
@@ -208,9 +213,15 @@ export const SettingsDialog = () => {
   const [additionalTvSearchLanguages, setAdditionalTvSearchLanguages] = useState(
     settingsValidation?.result?.additionalTvSearchLanguages ?? ['en']
   )
+  const [tvShowMatchingPriority, setTvShowMatchingPriority] = useState(
+    settingsValidation?.result?.tvShowMatchingPriority ?? TVShowMatchingSource.TVDB
+  )
   const [tmpFilesPath, setTmpFilesPath] = useState(settingsValidation?.result?.tmpFilesPath ?? '')
   const [defaultOutputPath, setDefaultOutputPath] = useState(settingsValidation?.result?.defaultOutputPath ?? '')
   const [outputRules, setOutputRules] = useState<OutputRule[]>(settingsValidation?.result?.outputRules ?? [])
+  const [namingConvention, setNamingConvention] = useState(
+    settingsValidation?.result?.namingConvention ?? NamingConvention.PLEX
+  )
   const [isAutoAddEnabled, setAutoAddEnabled] = useState(settingsValidation?.result?.isAutoAddEnabled)
   const [autoAddPath, setAutoAddPath] = useState(settingsValidation?.result?.autoAddPath ?? '')
   const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
@@ -237,16 +248,18 @@ export const SettingsDialog = () => {
 
   const fieldToTab: Record<string, string> = {
     language: 'general',
-    additionalTvSearchLanguages: 'general',
     isAutoAddEnabled: 'general',
     autoAddPath: 'general',
     isAutoStartEnabled: 'general',
     priority: 'general',
     isDebugEnabled: 'general',
     isAutoDeleteProcessedFilesEnabled: 'general',
+    additionalTvSearchLanguages: 'matching',
+    tvShowMatchingPriority: 'matching',
     tmpFilesPath: 'output',
     defaultOutputPath: 'output',
     outputRules: 'output',
+    namingConvention: 'output',
     isTrackFilteringEnabled: 'filtering',
     favoriteLanguages: 'filtering',
     isKeepVOEnabled: 'filtering',
@@ -264,9 +277,11 @@ export const SettingsDialog = () => {
   const draftSettings = {
     language,
     additionalTvSearchLanguages,
+    tvShowMatchingPriority,
     tmpFilesPath,
     defaultOutputPath,
     outputRules,
+    namingConvention,
     isAutoAddEnabled,
     autoAddPath,
     isAutoStartEnabled,
@@ -348,6 +363,12 @@ export const SettingsDialog = () => {
                       {invalidTabs.has('general') && <ErrorCircle12Regular style={{ color: 'red' }} />}
                     </span>
                   </Tab>
+                  <Tab value="matching" icon={<DatabaseSearch20Regular />}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {_('settings.tab.matching', { defaultValue: 'Matching' })}
+                      {invalidTabs.has('matching') && <ErrorCircle12Regular style={{ color: 'red' }} />}
+                    </span>
+                  </Tab>
                   <Tab value="output" icon={<ArchiveSettings20Regular />}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       {_('settings.tab.output', { defaultValue: 'Output' })}
@@ -384,21 +405,6 @@ export const SettingsDialog = () => {
 
                           value={language}
                           onChange={(data) => setLanguage(data)}
-                        />
-                      </div>
-                      <div className="field">
-                        <Label size="small" htmlFor="additionalTvSearchLanguagesInput">
-                          {_('settings.additional_languages.label', {
-                            defaultValue: 'Additional TV Search Languages'
-                          })}
-                        </Label>
-                        <LanguageSelector
-                          multiselect
-                          size="small"
-                          id="additionalTvSearchLanguagesInput"
-                          allowedCodes={tvdbSupportedLanguageCodes}
-                          value={additionalTvSearchLanguages}
-                          onChanges={(data) => setAdditionalTvSearchLanguages(data)}
                         />
                       </div>
                       <div
@@ -507,6 +513,44 @@ export const SettingsDialog = () => {
                       </div>
                     </div>
                   )}
+                  {selectedTab === 'matching' && (
+                    <div className="settings-form">
+                      <div className="field">
+                        <Label size="small" htmlFor="tvShowMatchingPrioritySelection">
+                          {_('settings.tv_show_matching_priority.label', {
+                            defaultValue: 'Preferred TV Show Database'
+                          })}
+                        </Label>
+                        <Select
+                          size="small"
+                          id="tvShowMatchingPrioritySelection"
+                          value={tvShowMatchingPriority}
+                          onChange={(_ev, data) => setTvShowMatchingPriority(data.value as TVShowMatchingSource)}
+                        >
+                          {Object.values(TVShowMatchingSource).map((key) => (
+                            <option key={key} value={key}>
+                              {key}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                      <div className="field">
+                        <Label size="small" htmlFor="additionalTvSearchLanguagesInput">
+                          {_('settings.additional_languages.label', {
+                            defaultValue: 'Additional TV Search Languages'
+                          })}
+                        </Label>
+                        <LanguageSelector
+                          multiselect
+                          size="small"
+                          id="additionalTvSearchLanguagesInput"
+                          allowedCodes={tvdbSupportedLanguageCodes}
+                          value={additionalTvSearchLanguages}
+                          onChanges={(data) => setAdditionalTvSearchLanguages(data)}
+                        />
+                      </div>
+                    </div>
+                  )}
                   {selectedTab === 'output' && (
                     <div className="settings-form">
                       <div
@@ -559,6 +603,23 @@ export const SettingsDialog = () => {
                             {_('settings.browse', { defaultValue: 'Browse' })}
                           </Button>
                         </div>
+                      </div>
+                      <div className="field">
+                        <Label size="small" htmlFor="namingConventionSelection">
+                          {_('settings.naming_convention.label', { defaultValue: 'Naming Convention' })}
+                        </Label>
+                        <Select
+                          size="small"
+                          id="namingConventionSelection"
+                          value={namingConvention}
+                          onChange={(_ev, data) => setNamingConvention(data.value as NamingConvention)}
+                        >
+                          {Object.values(NamingConvention).map((key) => (
+                            <option key={key} value={key}>
+                              {key}
+                            </option>
+                          ))}
+                        </Select>
                       </div>
                       <OutputRulesField rules={outputRules} onChange={setOutputRules} language={language} />
                     </div>

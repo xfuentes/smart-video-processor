@@ -50,6 +50,7 @@ export const Matching = ({ video, disabled }: Props) => {
   const [tvShowTitle, setTvShowTitle] = useState<string>(video.tvShow?.title ?? '')
   const [tvShowYear, setTvShowYear] = useState<string>(video.tvShow?.year ? '' + video.tvShow.year : '')
   const [tvShowTVDB, setTvShowTVDB] = useState<string>(video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '')
+  const [tvShowTMDB, setTvShowTMDB] = useState<string>(video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '')
   const [tvShowOrder, setTvShowOrder] = useState<EpisodeOrder>(video.tvShow?.order ?? 'official')
   const [tvShowSeason, setTvShowSeason] = useState<string>(!video.tvShow?.season ? '' : '' + video.tvShow.season)
   const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
@@ -82,6 +83,8 @@ export const Matching = ({ video, disabled }: Props) => {
       setTvShowYear(video.tvShow?.year ? '' + video.tvShow.year : '')
     tvShowTVDB !== (video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '') &&
       setTvShowTVDB(video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '')
+    tvShowTMDB !== (video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '') &&
+      setTvShowTMDB(video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '')
     tvShowOrder !== (video.tvShow?.order ?? 'official') && setTvShowOrder(video.tvShow?.order ?? 'official')
     tvShowSeason !== (!video.tvShow?.season ? '' : '' + video.tvShow.season) &&
       setTvShowSeason(!video.tvShow?.season ? '' : '' + video.tvShow.season)
@@ -121,6 +124,7 @@ export const Matching = ({ video, disabled }: Props) => {
         tvShowTitle,
         tvShowYear,
         tvShowTVDB,
+        tvShowTMDB,
         tvShowOrder,
         tvShowSeason,
         tvShowEpisode,
@@ -320,6 +324,9 @@ export const Matching = ({ video, disabled }: Props) => {
                   <option key={SearchBy.TVDB_EP_NAME} value={SearchBy.TVDB_EP_NAME}>
                     {_('search_by.tvdb_ep_name.label', { defaultValue: 'TVDB ID & EP Name' })}
                   </option>
+                  <option key={SearchBy.TMDB} value={SearchBy.TMDB}>
+                    {_('search_by.tmdb_position.label', { defaultValue: 'TMDB ID & Position' })}
+                  </option>
                 </Select>
               </Field>
             </div>
@@ -376,6 +383,24 @@ export const Matching = ({ video, disabled }: Props) => {
                   </Field>
                 </div>
               </>
+            )}
+            {searchBy === SearchBy.TMDB && (
+              <div>
+                <Field
+                  size="small"
+                  label={_('matching.field.tmdb_id.label', { defaultValue: 'TMDB ID' })}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Input
+                    size="small"
+                    disabled={disabled}
+                    value={tvShowTMDB}
+                    type="number"
+                    onChange={(_ev, data) => setTvShowTMDB(data.value)}
+                  />
+                </Field>
+              </div>
             )}
             <div>
               <Field

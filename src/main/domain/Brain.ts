@@ -24,6 +24,7 @@ import { SubtitlesType, SubtitlesTypeUtil } from '../../common/SubtitlesType'
 import { Files } from '../util/files'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { currentSettings } from './Settings'
+import { NamingConvention } from '../../common/@types/Settings'
 import path from 'node:path'
 import { TrackType } from '../../common/@types/Track'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/Change'
@@ -159,15 +160,16 @@ export class Brain {
   ): Change | undefined {
     const currentFilename = path.basename(sourcePath)
 
+    const isJellyfin = currentSettings.namingConvention === NamingConvention.JELLYFIN
     let newFilename = title
     if (versions && versions.length > 0) {
       newFilename += `.${versions.join('.')}`
     }
     if (edition !== undefined && edition !== EditionType.THEATRICAL) {
-      newFilename += ` {edition-${edition}}`
+      newFilename += isJellyfin ? ` [edition-${edition}]` : ` {edition-${edition}}`
     }
     if (tmdb !== undefined) {
-      newFilename += ` {tmdb-${tmdb}}`
+      newFilename += isJellyfin ? ` [tmdbid-${tmdb}]` : ` {tmdb-${tmdb}}`
     }
     newFilename = Files.removeSpecialCharsFromFilename(newFilename + '.mkv')
     if (newFilename !== currentFilename) {

@@ -22,11 +22,13 @@ import { getConfigPath } from '../util/path'
 import * as Path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
+  NamingConvention,
   OutputRule,
   OutputRuleCondition,
   OutputRuleOperator,
   OutputRuleProperty,
-  Settings
+  Settings,
+  TVShowMatchingSource
 } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import {
@@ -74,9 +76,11 @@ export const defaultSettings: Settings = {
   isAutoDeleteProcessedFilesEnabled: false,
   language: defaultLanguage,
   additionalTvSearchLanguages: ['en'],
+  tvShowMatchingPriority: TVShowMatchingSource.TVDB,
   tmpFilesPath: Processes?.isLimitedPermissions() ? '' : Path.join(os.tmpdir(), 'svp-tmp'),
   defaultOutputPath: Processes?.isLimitedPermissions() ? '' : Path.join('.', 'Reworked'),
   outputRules: [],
+  namingConvention: NamingConvention.PLEX,
   isAutoStartEnabled: false,
   isAutoAddEnabled: false,
   autoAddPath: '',

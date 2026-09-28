@@ -24,6 +24,7 @@ import path from 'node:path'
 import * as https from 'node:https'
 import { globSync } from 'glob'
 import { MakeDirectoryOptions } from 'fs'
+import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/Change'
 
 export class Files {
   static loadTextFileSync(dir: string, name: string, encoding: BufferEncoding = 'utf8'): string | undefined {
@@ -238,5 +239,51 @@ export class Files {
 
   static mkdirSync(path: PathLike, options: MakeDirectoryOptions & { recursive: true }): string | undefined {
     return fs.mkdirSync(path, options)
+  }
+
+  /**
+   * Computes the final output file path a container change would produce, applying a pending
+   * FILENAME change if present and falling back to originalFilename otherwise.
+   */
+  static computeOutputPath(originalFilename: string, changes: Change[], outputDirectory: string): string {
+    let newFilename =
+      (changes.find(
+        (c) =>
+          c.sourceType === ChangeSourceType.CONTAINER &&
+          c.changeType === ChangeType.UPDATE &&
+          c.property === ChangeProperty.FILENAME
+      )?.newValue as string | undefined) ?? ''
+
+    if (path.isAbsolute(newFilename)) {
+      outputDirectory = path.dirname(newFilename)
+      newFilename = path.basename(newFilename)
+    }
+
+    if (!path.isAbsolute(outputDirectory)) {
+      throw Error('Invalid output Directory, it should be absolute: ' + outputDirectory)
+    }
+
+    if (!newFilename) {
+      newFilename = originalFilename
+    }
+    newFilename = Files.removeSpecialCharsFromFilename(newFilename)
+    return path.join(outputDirectory, newFilename)
+  }
+
+  /**
+   * Moves a file to destination, creating parent directories as needed.
+   * Falls back to copy+delete when source and destination are on different devices (EXDEV).
+   */
+  static async moveFile(source: string, destination: string): Promise<void> {
+    Files.mkdirSync(path.dirname(destination), { recursive: true })
+    try {
+      await fs.promises.rename(source, destination)
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code !== 'EXDEV') {
+        throw err
+      }
+      await fs.promises.copyFile(source, destination)
+      await fs.promises.unlink(source)
+    }
   }
 }

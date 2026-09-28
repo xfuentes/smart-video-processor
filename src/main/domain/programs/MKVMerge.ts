@@ -23,7 +23,6 @@ import { Languages } from '../../../common/LanguageIETF'
 import { Files } from '../../util/files'
 import { CommandProgress } from './CommandProgress'
 import { ChildProcess } from 'node:child_process'
-import path from 'node:path'
 import { TrackType } from '../../../common/@types/Track'
 import { ProgressNotifier } from '../../../common/@types/processes'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../common/Change'
@@ -181,28 +180,7 @@ export class MKVMerge extends CommandProgress {
   ): string[] {
     let mkOptions: string[] = []
 
-    let newFilename =
-      (changes.find(
-        (c) =>
-          c.sourceType === ChangeSourceType.CONTAINER &&
-          c.changeType === ChangeType.UPDATE &&
-          c.property === ChangeProperty.FILENAME
-      )?.newValue as string | undefined) ?? ''
-
-    if (path.isAbsolute(newFilename)) {
-      outputDirectory = path.dirname(newFilename)
-      newFilename = path.basename(newFilename)
-    }
-
-    if (!path.isAbsolute(outputDirectory)) {
-      throw Error('Invalid output Directory, it should be absolute: ' + outputDirectory)
-    }
-
-    if (!newFilename) {
-      newFilename = originalFilename
-    }
-    newFilename = Files.removeSpecialCharsFromFilename(newFilename)
-    newFilename = path.join(outputDirectory, newFilename)
+    const newFilename = Files.computeOutputPath(originalFilename, changes, outputDirectory)
 
     mkOptions.push('--ui-language', MKVMERGE_ENGLISH)
     if (newFilename) {

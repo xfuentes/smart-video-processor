@@ -23,9 +23,12 @@ import { Job } from '../../src/main/domain/jobs/Job'
 import { ProcessingJob } from '../../src/main/domain/jobs/ProcessingJob'
 import { getFakeAbsolutePath } from './testUtils'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
+import { NamingConvention } from '../../src/common/@types/Settings'
 import type { OutputRule } from '../../src/common/@types/Settings'
 import { Languages } from '../../src/common/LanguageIETF'
 import type { Country } from '../../src/common/Countries'
+import { Files } from '../../src/main/util/files'
+import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../src/common/Change'
 
 beforeAll(() => {
   currentSettings.favoriteLanguages = ['en']
@@ -57,6 +60,45 @@ test('TV-Show extracts tvdb ID', async () => {
   expect(video.tvShow.episode).toBe(1)
   expect(video.tvShow.theTVDB).toBe(427202)
   expect(video.tvShow.title).contain('The Ones Who Live')
+})
+
+test('TV-Show extracts tvdbid ID (Jellyfin format)', async () => {
+  const video = new Video(
+    getFakeAbsolutePath(
+      'out put',
+      'T.W.D.The.Ones.Who.Live.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl[tvdbid-427202].mkv'
+    )
+  )
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.theTVDB).toBe(427202)
+})
+
+test('Movie extracts tmdbid ID (Jellyfin format)', async () => {
+  const video = new Video(
+    "C'Est.Pas.Parce.Qu'On.A.Rien.À.Dire.Qu'Il.Faut.Fermer.Sa.Gueule.(1975).FRENCH.HDLight.1080p.AAC.x264-Notag[tmdbid-58652].mkv"
+  )
+  expect(video.type).toBe(VideoType.MOVIE)
+  expect(video.movie.tmdb).toBe(58652)
+})
+
+test('TV-Show extracts tmdb ID when no tvdb tag is present (TMDB fallback tag)', async () => {
+  const video = new Video(
+    getFakeAbsolutePath('out put', 'Some.Obscure.Show.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl{tmdb-12345}.mkv')
+  )
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.season).toBe(1)
+  expect(video.tvShow.episode).toBe(1)
+  expect(video.tvShow.theTVDB).toBeUndefined()
+  expect(video.tvShow.theMovieDB).toBe(12345)
+  expect(video.movie.tmdb).toBeUndefined()
+})
+
+test('TV-Show extracts tmdbid ID (Jellyfin format) when no tvdb tag is present (TMDB fallback tag)', async () => {
+  const video = new Video(
+    getFakeAbsolutePath('out put', 'Some.Obscure.Show.S01E01.MULTi.1080p.WEBRip.DDP5.1.HEVC-BATGirl[tmdbid-12345].mkv')
+  )
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.theMovieDB).toBe(12345)
 })
 
 test('TV-Show extracts imdb ID', async () => {
@@ -381,6 +423,10 @@ describe('Output directory rules', () => {
 })
 
 describe('TV show merge output subdirectories', () => {
+  afterEach(() => {
+    currentSettings.namingConvention = NamingConvention.PLEX
+  })
+
   test('official order creates a season subfolder', async () => {
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
@@ -414,6 +460,153 @@ describe('TV show merge output subdirectories', () => {
     const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
     expect(outputPath).toContain('One Piece {tvdb-81797}')
     expect(outputPath).not.toContain('Season 01')
+    video.destroy()
+  })
+
+  test('jellyfin convention creates a folder with year and [tvdbid-] tag', async () => {
+    currentSettings.namingConvention = NamingConvention.JELLYFIN
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'One Piece'
+    video.tvShow.theTVDB = 81797
+    video.tvShow.year = 1999
+    video.tvShow.order = 'official'
+    video.tvShow.season = 1
+    video.tvShow.episode = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('One Piece (1999) [tvdbid-81797]')
+    expect(outputPath).toContain('Season 01')
+    video.destroy()
+  })
+
+  test('kodi convention creates a folder with year and {tvdb-} tag', async () => {
+    currentSettings.namingConvention = NamingConvention.KODI
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'One Piece'
+    video.tvShow.theTVDB = 81797
+    video.tvShow.year = 1999
+    video.tvShow.order = 'official'
+    video.tvShow.season = 1
+    video.tvShow.episode = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('One Piece (1999) {tvdb-81797}')
+    expect(outputPath).toContain('Season 01')
+    video.destroy()
+  })
+
+  test('falls back to the tmdb tag when no TVDB match was found', async () => {
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'Some Obscure Show'
+    video.tvShow.theMovieDB = 12345
+    video.tvShow.order = 'official'
+    video.tvShow.season = 1
+    video.tvShow.episode = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('Some Obscure Show {tmdb-12345}')
+    expect(outputPath).toContain('Season 01')
+    video.destroy()
+  })
+
+  test('jellyfin convention falls back to the [tmdbid-] tag when no TVDB match was found', async () => {
+    currentSettings.namingConvention = NamingConvention.JELLYFIN
+    const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
+    video.type = VideoType.TV_SHOW
+    video.tvShow.title = 'Some Obscure Show'
+    video.tvShow.theMovieDB = 12345
+    video.tvShow.year = 2020
+    video.tvShow.order = 'official'
+    video.tvShow.season = 1
+    video.tvShow.episode = 1
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    const processingJob = video.job as unknown as ProcessingJob
+    const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
+    expect(outputPath).toContain('Some Obscure Show (2020) [tmdbid-12345]')
+    video.destroy()
+  })
+})
+
+describe('merge rename-only optimization', () => {
+  afterEach(() => {
+    currentSettings.isAutoDeleteProcessedFilesEnabled = false
+    vi.restoreAllMocks()
+  })
+
+  test('moves the file directly when only a filename change is pending and auto-delete is enabled', async () => {
+    currentSettings.isAutoDeleteProcessedFilesEnabled = true
+    const sourcePath = getFakeAbsolutePath('Download', 'movie.mkv')
+    const video = new Video(sourcePath)
+    video.type = VideoType.MOVIE
+    video.changes = [
+      new Change(
+        ChangeSourceType.CONTAINER,
+        ChangeType.UPDATE,
+        undefined,
+        ChangeProperty.FILENAME,
+        'movie.mkv',
+        'Movie Title (2024).mkv'
+      )
+    ]
+    const queueSpy = vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const moveFileSpy = vi.spyOn(Files, 'moveFile').mockImplementation(() => Promise.resolve())
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    expect(moveFileSpy).toHaveBeenCalledTimes(1)
+    expect(moveFileSpy.mock.calls[0][0]).toBe(sourcePath)
+    expect(moveFileSpy.mock.calls[0][1]).toContain('Movie Title (2024).mkv')
+    expect(queueSpy).not.toHaveBeenCalled()
+    expect(video.job).toBeUndefined()
+  })
+
+  test('falls back to the classic merge when auto-delete is disabled', async () => {
+    currentSettings.isAutoDeleteProcessedFilesEnabled = false
+    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    video.type = VideoType.MOVIE
+    video.changes = [
+      new Change(
+        ChangeSourceType.CONTAINER,
+        ChangeType.UPDATE,
+        undefined,
+        ChangeProperty.FILENAME,
+        'movie.mkv',
+        'Movie Title (2024).mkv'
+      )
+    ]
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const moveFileSpy = vi.spyOn(Files, 'moveFile').mockImplementation(() => Promise.resolve())
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    expect(moveFileSpy).not.toHaveBeenCalled()
+    expect(video.job).toBeInstanceOf(ProcessingJob)
+    video.destroy()
+  })
+
+  test('falls back to the classic merge when a track was modified', async () => {
+    currentSettings.isAutoDeleteProcessedFilesEnabled = true
+    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    video.type = VideoType.MOVIE
+    video.changes = [new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, 1, ChangeProperty.LANGUAGE, 'en', 'fr')]
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const moveFileSpy = vi.spyOn(Files, 'moveFile').mockImplementation(() => Promise.resolve())
+    const outputDir = getFakeAbsolutePath('Output')
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
+    expect(moveFileSpy).not.toHaveBeenCalled()
+    expect(video.job).toBeInstanceOf(ProcessingJob)
     video.destroy()
   })
 })

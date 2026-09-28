@@ -28,6 +28,17 @@ export type OutputRuleCondition = {
 }
 export type OutputRuleMatch = 'all' | 'any'
 
+export enum NamingConvention {
+  PLEX = 'Plex',
+  JELLYFIN = 'Jellyfin',
+  KODI = 'Kodi'
+}
+
+export enum TVShowMatchingSource {
+  TVDB = 'TheTVDB',
+  TMDB = 'TheMovieDB'
+}
+
 export type OutputRule = {
   enabled: boolean
   match: OutputRuleMatch
@@ -53,6 +64,10 @@ export type Settings = {
    */
   additionalTvSearchLanguages: string[]
   /**
+   * Database to try first when matching a TV show by title. The other one is used as a fallback when no match is found.
+   */
+  tvShowMatchingPriority: TVShowMatchingSource
+  /**
    * Output path where temporary files will be written (absolute)
    */
   tmpFilesPath: string
@@ -64,6 +79,10 @@ export type Settings = {
    * Ordered list of output rules evaluated to determine the output directory
    */
   outputRules: OutputRule[]
+  /**
+   * Media server naming convention used for generated file and folder names.
+   */
+  namingConvention: NamingConvention
   /**
    * if enabled automatically encode and/or process the files as soon as they are added (if no user input is requested)
    */

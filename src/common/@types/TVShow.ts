@@ -31,6 +31,7 @@ export interface ITVShow {
   poster: string
   posterURL?: string
   theTVDB?: number
+  theMovieDB?: number
   imdb?: string
   absoluteEpisode?: number
   episodePoster: string

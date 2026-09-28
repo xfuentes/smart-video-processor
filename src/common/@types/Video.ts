@@ -155,6 +155,7 @@ export type SearchInputData = {
   tvShowTitle: string
   tvShowYear: string
   tvShowTVDB: string
+  tvShowTMDB: string
   tvShowOrder: EpisodeOrder
   tvShowSeason: string
   tvShowEpisode: string

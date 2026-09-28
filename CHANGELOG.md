@@ -2,11 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.1.0] - 2026-09-28
+
+### Added
+
+- Added a "Naming Convention" option in Output settings to choose between Plex, Jellyfin, and Kodi file/folder naming. Jellyfin uses `Show Title (Year) [tvdbid-XXXXX]` folders and `[tmdbid-XXXXX]`/`[edition-XXXXX]` file tags; Kodi uses `Show Title (Year) {tvdb-XXXXX}` folders with the same movie tags as Plex; Plex keeps its existing `Show Title {tvdb-XXXXX}` folders and `{tmdb-XXXXX}`/`{edition-XXXXX}` file tags.
+- When a TV show has no match on TheTVDB, it is now automatically looked up on TheMovieDB as a fallback. If found there, the folder/file naming uses a `tmdb`/`tmdbid` tag instead of `tvdb`/`tvdbid`.
+- Added a "Matching" settings tab (next to "General") with a "Preferred TV Show Database" option to choose whether TheTVDB (default) or TheMovieDB is tried first when matching a TV show by title; the "Additional TV Search Languages" setting moved there from "General". When TheMovieDB is preferred, the per-video matching panel also lets you search a TV show by TMDB ID instead of TVDB ID.
+
+### Changed
+
+- Adding files now also accepts directories, both from the "Open" toolbar button and by dragging a folder into the list. Selecting or dropping a directory (e.g. a whole TV show folder with one subfolder per season) recursively adds only the video files it contains.
+- When "Delete processed source files" is enabled and a file only needs to be renamed/relocated (no track changes, no re-encoding), it is now moved directly to its destination (creating subfolders as needed for TV shows) instead of being fully remuxed and then deleted, which is faster and avoids a temporary disk space spike.
 
 ### Fixed
 
 - Fixed a rare crash while cleaning up temporary files when one was removed concurrently (e.g. by a virus scanner) between being listed and deleted.
+- When selecting several episodes of the same show, the "Hints" tab now offers to batch-edit a hint (e.g. audio/subtitle language) as soon as every selected episode has one for the same track and type, even if their current values differ. It previously only appeared when the values already matched.
+- Fixed video splitting/concatenation failing when a source filename contained a single quote (`'`), which broke the ffmpeg concat file's syntax.
 
 ## [2.0.1] - 2026-09-24
 

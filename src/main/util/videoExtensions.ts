@@ -16,6 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+
 export const VIDEO_EXTENSIONS = new Set([
   '.mkv',
   '.mp4',
@@ -38,3 +41,30 @@ export const VIDEO_EXTENSIONS = new Set([
   '.rm',
   '.rmvb'
 ])
+
+/**
+ * Recursively finds video files (matching VIDEO_EXTENSIONS) under rootDir, e.g. to import a whole TV show
+ * folder with one subfolder per season.
+ */
+export function scanVideoFilesRecursive(rootDir: string): string[] {
+  const result: string[] = []
+  const stack: string[] = [rootDir]
+  while (stack.length > 0) {
+    const currentDir = stack.pop() as string
+    let entries: fs.Dirent[]
+    try {
+      entries = fs.readdirSync(currentDir, { withFileTypes: true })
+    } catch {
+      continue
+    }
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name)
+      if (entry.isDirectory()) {
+        stack.push(fullPath)
+      } else if (entry.isFile() && VIDEO_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
+        result.push(fullPath)
+      }
+    }
+  }
+  return result
+}

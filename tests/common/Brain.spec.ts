@@ -24,6 +24,8 @@ import { Track } from '../../src/main/domain/Track'
 import { Brain } from '../../src/main/domain/Brain'
 import { Languages } from '../../src/common/LanguageIETF'
 import { currentSettings } from '../../src/main/domain/Settings'
+import { NamingConvention } from '../../src/common/@types/Settings'
+import { EditionType } from '../../src/common/@types/Movie'
 import { Countries, Country } from '../../src/common/Countries'
 import { HintType } from '../../src/common/@types/Hint'
 import { Hint } from '../../src/main/domain/Hint'
@@ -4129,4 +4131,29 @@ test('GUESS COUNTRY - hints match expected list with user hint Language 4 = fr',
   expect(hints['Language 5']).toBe('fr-CA')
   expect(hints['Language 6']).toBe('fr-CA')
   expect(hints['Language 7']).toBe('fr-CA')
+})
+
+test('generateFilenameChange - Plex naming convention', () => {
+  currentSettings.namingConvention = NamingConvention.PLEX
+  const change = Brain.getInstance().generateFilenameChange(
+    '/tmp/movie.mkv',
+    'Movie Title (2024)',
+    58652,
+    EditionType.EXTENDED,
+    undefined
+  )
+  expect(change?.newValue).toBe('Movie Title (2024) {edition-Extended} {tmdb-58652}.mkv')
+})
+
+test('generateFilenameChange - Jellyfin naming convention', () => {
+  currentSettings.namingConvention = NamingConvention.JELLYFIN
+  const change = Brain.getInstance().generateFilenameChange(
+    '/tmp/movie.mkv',
+    'Movie Title (2024)',
+    58652,
+    EditionType.EXTENDED,
+    undefined
+  )
+  expect(change?.newValue).toBe('Movie Title (2024) [edition-Extended] [tmdbid-58652].mkv')
+  currentSettings.namingConvention = NamingConvention.PLEX
 })

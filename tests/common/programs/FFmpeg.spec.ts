@@ -19,6 +19,9 @@
 import { expect, test, vi } from 'vitest'
 import { simulateFFmpegProgression } from '../testUtils'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
+import * as fs from 'node:fs'
+import * as os from 'node:os'
+import * as path from 'node:path'
 import { Processes } from '../../../src/main/util/processes'
 import { EncoderSettings } from '../../../src/common/@types/Encoding'
 import { FFmpeg } from '../../../src/main/domain/programs/FFmpeg'
@@ -79,6 +82,32 @@ test('FFmpeg Guadalupe mother of humanity progression', async () => {
   )
   expect(progresses).toStrictEqual([undefined, undefined, 0.1696, 0.4341333333333333, 0.7093333333333334, 0.9568, 1])
   expect(result).toContain('encoding-temp.mkv')
+})
+
+test('preProcessVideo escapes single quotes in concat file entries', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  genSpawnSpyProgress()
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'svp-ffmpeg-concat-test-'))
+  const video: IVideo = {
+    sourcePath: "/mnt/Arya/Au-delà du réel - L'aventure continue - S01E01.avi",
+    duration: 100,
+    targetDuration: 100,
+    tracks: [],
+    videoParts: [
+      {
+        sourcePath: "/mnt/Arya/Au-delà du réel - L'aventure continue - S01E02.avi",
+        duration: 100,
+        tracks: []
+      }
+    ]
+  } as unknown as IVideo
+
+  await FFmpeg.getInstance().preProcessVideo(video, tmpDir)
+
+  const concatContent = fs.readFileSync(path.join(tmpDir, 'concat.txt'), 'utf8')
+  expect(concatContent).toContain("file '/mnt/Arya/Au-delà du réel - L'\\''aventure continue - S01E01.avi'")
+  expect(concatContent).toContain("file '/mnt/Arya/Au-delà du réel - L'\\''aventure continue - S01E02.avi'")
+  fs.rmSync(tmpDir, { recursive: true, force: true })
 })
 
 test('FFmpeg Guadalupe mother of humanity progression two passes', async () => {

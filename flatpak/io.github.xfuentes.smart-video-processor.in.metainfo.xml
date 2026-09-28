@@ -66,9 +66,14 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Fixed episode numbers being padded to a single digit (e.g. S01E5) when a season had fewer than 10 episodes; episode numbers are now always padded to at least 2 digits (S01E05)</li>
-          <li>Fixed the generated filename keeping the absolute numbering format (e.g. E127) after switching the episode order from "Absolute" to "Official" post-search; it is now recomputed to match the selected order</li>
-          <li>Fixed the track selection mask not blocking clicks when the track list is disabled</li>
+          <li>Added a "Naming Convention" setting to choose between Plex, Jellyfin, and Kodi file/folder naming</li>
+          <li>TV shows with no match on TheTVDB are now automatically looked up on TheMovieDB as a fallback</li>
+          <li>Added a "Matching" settings tab to choose which database (TheTVDB or TheMovieDB) is tried first for TV shows, and to search a TV show by TMDB ID</li>
+          <li>Adding files now also accepts directories, both from the "Open" button and by dragging a folder in, recursively adding the video files they contain</li>
+          <li>Renaming/relocating an already-processed file with no other pending changes now moves it directly instead of a full remux, when automatic source deletion is enabled</li>
+          <li>Fixed batch-editing a hint (e.g. audio/subtitle language) across selected episodes not being offered when their current values already differed</li>
+          <li>Fixed video splitting/concatenation failing when a source filename contained a single quote</li>
+          <li>Fixed a rare crash while cleaning up temporary files removed concurrently by another process</li>
         </ul>
       </description>
     </release>

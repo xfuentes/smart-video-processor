@@ -541,7 +541,6 @@
   "video.message.trimming_video": "正在剪辑视频……",
   "video.message.tvdb_episode_not_found": "未找到该集。请检查所提供的信息，然后重试。",
   "video.message.tvdb_episode_number_required": "未指定集数。请提供有效的集数，然后重试。",
-  "video.message.tvdb_no_exact_match": "在TheTVDB上未找到完全匹配的结果。请检查所提供的信息，然后重试。",
   "video.message.waiting_for_hints": "期待您的提示。",
   "video_list.aria_label.select_all_rows": "全选所有行",
   "video_list.aria_label.select_row": "选择行",
@@ -688,5 +687,13 @@
   "log.auto_add.watch_error": "自动添加文件夹监视错误：{error}",
   "settings.auto_add.info": "监视选定文件夹，并在视频文件完全写入后（例如下载完成后）自动将其添加到列表中。仍在下载的文件将被忽略，直到其大小不再变化为止。",
   "about.news.version_2_0_0.items": "在“常规”设置中新增了“自动添加”选项，该选项会监视选定的文件夹，并将新下载的完整视频文件自动添加到处理列表中。\n为 .deb 包添加了显式运行时依赖项，以便自动安装 ffmpeg、mkvtoolnix 和所需的系统库。\n现在，从文件管理器或桌面快捷方式打开应用程序时，始终会启动一个新实例，而不是重用已运行的实例。\n打包的应用程序现在包含所有 23 种受支持语言的 Electron 原生本地化，因此操作系统原生对话框也会被翻译。\nJDownloader 集成脚本现在可以自动检测各种安装方法中的 Smart Video Processor 可执行文件路径。\n修复了无法识别绝对剧集编号（例如，没有季的 E127，常见于长篇动画）的问题。",
-  "about.news.version_2_0_1.items": "修复了剧集编号被填充为一位数（例如 S01E5）而不是至少两位数（S01E05）的问题。\n修复了在将剧集顺序从“绝对”切换到“官方”搜索后，生成的文件名仍然保留绝对编号（例如 E127）的问题。\n修复了禁用曲目列表时，曲目选择遮罩无法阻止点击的问题。"
+  "about.news.version_2_0_1.items": "修复了剧集编号被填充为一位数（例如 S01E5）而不是至少两位数（S01E05）的问题。\n修复了在将剧集顺序从“绝对”切换到“官方”搜索后，生成的文件名仍然保留绝对编号（例如 E127）的问题。\n修复了禁用曲目列表时，曲目选择遮罩无法阻止点击的问题。",
+  "settings.naming_convention.label": "命名规则",
+  "video.message.searching_series_tmdb": "在 TheMovieDB 上搜索系列",
+  "video.message.downloading_episode_tmdb": "从TheMovieDB下载剧集图片。",
+  "video.message.series_no_match": "在 TheTVDB 或 TheMovieDB 上找不到完全匹配的内容。请检查所提供的信息并重试。",
+  "settings.tab.matching": "匹配",
+  "settings.tv_show_matching_priority.label": "首选电视节目数据库",
+  "search_by.tmdb_position.label": "TMDB ID 和位置",
+  "about.news.version_2_1_0.items": "新增“命名规则”设置，可选择 Plex、Jellyfin 和 Kodi 的文件/文件夹命名规则。\n如果电视剧在 TheTVDB 上没有匹配项，系统现在会自动在 TheMovieDB 上查找作为备选。\n新增“匹配”设置选项卡，可选择电视剧首先尝试哪个数据库（TheTVDB 或 TheMovieDB），并可通过 TMDB ID 搜索电视剧。\n现在添加文件也支持目录，可以通过“打开”按钮或拖入文件夹的方式添加，并递归添加其中包含的视频文件。\n启用自动源删除后，重命名/移动已处理且无其他待处理更改的文件，现在会直接移动文件，而不是进行完整的重新封装。\n修复了当选定剧集的提示（例如音频/字幕语言）当前值已不同时，无法批量编辑提示的问题。\n修复了当源文件名包含单引号时，视频分割/拼接失败的问题。\n修复了清理被其他进程同时删除的临时文件时发生的罕见崩溃问题。"
 }

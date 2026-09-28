@@ -19,11 +19,19 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import { SearchResult } from '../SearchResult'
 import { MovieData } from '../MovieData'
+import { EpisodeData } from '../EpisodeData'
 import { RateLimiter } from './RateLimiter'
 import { currentSettings } from '../Settings'
 import { Languages } from '../../../common/LanguageIETF'
+import { Countries } from '../../../common/Countries'
 import { debug } from '../../util/log'
 import { simpleCachingAdapter } from './SimpleCachingAdapter'
+
+type TVSeriesEpisode = {
+  episodeData: EpisodeData | undefined
+  seriesData: SearchResult
+  episodeCount: number
+}
 
 const TMDB_TOKEN =
   'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMmVmODJlOTcwNmE4NjVjN2IzYmJjMTlkMzczNWUxYSIsIm5iZiI6MTU3NjA1MDI1MC41NTAwMDAyLCJzdWIiOiI1ZGYwOWU0YWVkYTRiNzAwMTUwNDMyM2YiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.dtLAYJZYn_skkO7fbp_fMF61QbbAlihCAJAkVR8BOVo'
@@ -202,6 +210,111 @@ export class TMDBClient {
       isAnimation,
       genres
     )
+  }
+
+  public async searchTVByNameYear(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
+    const tmdb = await this.getTMDBSession()
+    let response: AxiosResponse<TMDBTVSearchResults>
+    try {
+      response = await tmdb.get<TMDBTVSearchResults>('/search/tv', {
+        params: {
+          query: title,
+          ...(year ? { first_air_date_year: year } : {}),
+          language: currentSettings.favoriteLanguages[0] ?? 'en',
+          page: 1,
+          include_adult: false
+        }
+      })
+    } catch (error) {
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
+      const response = error as AxiosError<TMDBResponse>
+      throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
+    }
+    const results: SearchResult[] = []
+    for (const r of response.data.results) {
+      results.push(
+        new SearchResult(
+          r.id,
+          r.name,
+          r.first_air_date ? new Date(r.first_air_date).getFullYear() : undefined,
+          r.original_name,
+          r.overview,
+          r.poster_path ? TMDB_IMAGE_URL + r.poster_path : undefined,
+          Languages.getLanguageByCode(r.original_language)
+        )
+      )
+    }
+    if (year && results.length === 0) {
+      // Try without entering the year if no results found.
+      return await this.searchTVByNameYear(title)
+    }
+    return results
+  }
+
+  public async retrieveTVSeriesDetails(
+    tmdbId: number,
+    episodeNumber: number | undefined,
+    season: number | undefined
+  ): Promise<TVSeriesEpisode> {
+    const tmdb = await this.getTMDBSession()
+    let seriesResponse: AxiosResponse<TMDBTVDetails>
+    try {
+      seriesResponse = await tmdb.get<TMDBTVDetails>('/tv/' + tmdbId, {
+        params: currentSettings.favoriteLanguages[0] ? { language: currentSettings.favoriteLanguages[0] } : {}
+      })
+    } catch (error) {
+      debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
+      const response = error as AxiosError<TMDBResponse>
+      throw new Error('Unexpected TMDB API Error: ' + response.response?.data.status_message)
+    }
+    const seriesData = seriesResponse.data
+    const isAnimation = (seriesData.genres ?? []).some((g) => g.id === 16)
+    const genres = (seriesData.genres ?? []).map((g) => g.name)
+    const country = Countries.getCountryByCode(seriesData.origin_country?.[0])
+    const language = Languages.getLanguageByCode(seriesData.original_language)
+
+    let episodeData: EpisodeData | undefined
+    let episodeCount = 1
+    if (episodeNumber !== undefined) {
+      try {
+        const seasonResponse = await tmdb.get<TMDBTVSeasonDetails>(`/tv/${tmdbId}/season/${season ?? 1}`, {
+          params: currentSettings.favoriteLanguages[0] ? { language: currentSettings.favoriteLanguages[0] } : {}
+        })
+        episodeCount = seasonResponse.data.episodes.length
+        const episode = seasonResponse.data.episodes.find((e) => e.episode_number === episodeNumber)
+        if (episode) {
+          episodeData = new EpisodeData(
+            episode.id,
+            episode.episode_number,
+            episode.season_number,
+            0,
+            episode.name,
+            episode.still_path ? TMDB_IMAGE_URL + episode.still_path : '',
+            episode.overview ?? '',
+            episodeCount
+          )
+        }
+      } catch (error) {
+        debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
+      }
+    }
+
+    const searchResult = new SearchResult(
+      seriesData.id,
+      seriesData.name,
+      seriesData.first_air_date ? new Date(seriesData.first_air_date).getFullYear() : undefined,
+      seriesData.original_name,
+      seriesData.overview,
+      seriesData.poster_path ? TMDB_IMAGE_URL + seriesData.poster_path : undefined,
+      language,
+      country ? [country] : [],
+      undefined,
+      undefined,
+      isAnimation
+    )
+    searchResult.genres = genres
+
+    return { episodeData, seriesData: searchResult, episodeCount }
   }
 
   private async getTMDBSession(): Promise<AxiosInstance> {

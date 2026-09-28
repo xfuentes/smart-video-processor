@@ -541,7 +541,6 @@
   "video.message.trimming_video": "Sedang memotong video...",
   "video.message.tvdb_episode_not_found": "Episode tidak ditemukan. Silakan periksa informasi yang diberikan dan coba lagi.",
   "video.message.tvdb_episode_number_required": "Nomor episode tidak disebutkan. Silakan masukkan nomor episode yang valid, lalu coba lagi.",
-  "video.message.tvdb_no_exact_match": "Tidak ditemukan hasil yang persis sama di TheTVDB. Silakan periksa informasi yang diberikan dan coba lagi.",
   "video.message.waiting_for_hints": "Menunggu petunjuk dari kalian.",
   "video_list.aria_label.select_all_rows": "Pilih semua baris",
   "video_list.aria_label.select_row": "Pilih baris",
@@ -688,5 +687,13 @@
   "log.auto_add.watch_error": "Kesalahan pemantauan penambahan folder otomatis: {error}",
   "settings.auto_add.info": "Memantau folder yang dipilih dan secara otomatis menambahkan file video baru ke daftar setelah file tersebut selesai ditulis (misalnya, setelah unduhan selesai). File yang masih diunduh akan diabaikan sampai ukurannya berhenti berubah.",
   "about.news.version_2_0_0.items": "Menambahkan opsi Tambah Otomatis di pengaturan Umum yang memantau folder yang dipilih dan secara otomatis menambahkan file video baru yang telah diunduh sepenuhnya ke daftar pemrosesan\nMenambahkan dependensi runtime eksplisit ke paket .deb sehingga ffmpeg, mkvtoolnix, dan pustaka sistem yang diperlukan terinstal secara otomatis\nMembuka aplikasi dari pengelola file atau pintasan desktop sekarang selalu memulai instance baru alih-alih menggunakan kembali instance yang sudah berjalan\nAplikasi yang dikemas sekarang menyertakan lokalisasi Electron asli untuk semua 23 bahasa yang didukung sehingga dialog asli OS juga diterjemahkan\nSkrip integrasi JDownloader sekarang secara otomatis mendeteksi jalur eksekusi Smart Video Processor di berbagai metode instalasi\nMemperbaiki penomoran episode absolut (misalnya E127 tanpa musim, umum untuk anime yang berjalan lama) yang tidak dikenali",
-  "about.news.version_2_0_1.items": "Memperbaiki penomoran episode yang diisi dengan satu digit (misalnya S01E5) alih-alih minimal 2 digit (S01E05)\nMemperbaiki nama file yang dihasilkan agar tetap menggunakan penomoran absolut (misalnya E127) setelah mengubah urutan episode dari Absolut ke Resmi setelah pencarian\nMemperbaiki masker pemilihan trek yang tidak menghalangi klik saat daftar trek dinonaktifkan"
+  "about.news.version_2_0_1.items": "Memperbaiki penomoran episode yang diisi dengan satu digit (misalnya S01E5) alih-alih minimal 2 digit (S01E05)\nMemperbaiki nama file yang dihasilkan agar tetap menggunakan penomoran absolut (misalnya E127) setelah mengubah urutan episode dari Absolut ke Resmi setelah pencarian\nMemperbaiki masker pemilihan trek yang tidak menghalangi klik saat daftar trek dinonaktifkan",
+  "settings.naming_convention.label": "Konvensi Penamaan",
+  "video.message.searching_series_tmdb": "Mencari serial di TheMovieDB",
+  "video.message.downloading_episode_tmdb": "Mengunduh gambar episode dari TheMovieDB.",
+  "video.message.series_no_match": "Tidak dapat menemukan kecocokan persis di TheTVDB atau TheMovieDB. Harap periksa informasi yang diberikan dan coba lagi.",
+  "settings.tab.matching": "Cocok",
+  "settings.tv_show_matching_priority.label": "Basis Data Acara TV Pilihan",
+  "search_by.tmdb_position.label": "ID & Posisi TMDB",
+  "about.news.version_2_1_0.items": "Menambahkan pengaturan \"Konvensi Penamaan\" untuk memilih antara penamaan file/folder Plex, Jellyfin, dan Kodi\nAcara TV yang tidak cocok di TheTVDB sekarang secara otomatis dicari di TheMovieDB sebagai cadangan\nMenambahkan tab pengaturan \"Pencocokan\" untuk memilih basis data mana (TheTVDB atau TheMovieDB) yang dicoba terlebih dahulu untuk acara TV, dan untuk mencari acara TV berdasarkan ID TMDB\nMenambahkan file sekarang juga menerima direktori, baik dari tombol \"Buka\" maupun dengan menyeret folder, menambahkan file video yang dikandungnya secara rekursif\nMengganti nama/memindahkan file yang sudah diproses tanpa perubahan tertunda lainnya sekarang memindahkannya langsung alih-alih remux penuh, ketika penghapusan sumber otomatis diaktifkan\nMemperbaiki pengeditan massal petunjuk (misalnya bahasa audio/subtitle) di seluruh episode yang dipilih yang tidak ditawarkan ketika nilai saat ini sudah berbeda\nMemperbaiki pemisahan/penggabungan video yang gagal ketika nama file sumber berisi tanda kutip tunggal\nMemperbaiki kerusakan langka saat membersihkan file sementara yang dihapus secara bersamaan oleh proses lain"
 }
