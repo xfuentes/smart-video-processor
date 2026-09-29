@@ -63,7 +63,8 @@ export class VideoController {
   async openFiles(filePaths: string[]) {
     if (filePaths.length > 0) {
       const newVideos = [] as Video[]
-      for (const filePath of filePaths) {
+      const sortedFilePaths = [...filePaths].sort(new Intl.Collator(undefined, { numeric: true }).compare)
+      for (const filePath of sortedFilePaths) {
         if (!this.videos.find((video) => video.sourcePath === filePath)) {
           // Avoid inserting videos which were already added.
           const video = new Video(filePath)

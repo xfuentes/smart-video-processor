@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Files added in a single batch (open dialog, drag & drop, or a scanned directory) are now imported sorted by name, in natural order (e.g. `E2` before `E10`).
 - With several videos selected, the "Encoding" tab badge now shows the total number of tracks selected for encoding, and each track's tooltip shows "Selected for: N/total" with the size reduction for the selected files (or "If enabled for all" with the projected reduction when none is selected).
 
 ### Fixed
