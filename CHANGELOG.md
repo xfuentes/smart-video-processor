@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed the icon missing from the temporary files cleanup window in packaged builds.
+
 ## [2.1.0] - 2026-09-28
 
 ### Added
