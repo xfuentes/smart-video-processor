@@ -78,7 +78,6 @@
   "encoding.options": "Options {type}",
   "encoding.original": "Original",
   "encoding.process": "Traiter",
-  "encoding.selected_files": "Fichiers sélectionnés : {count}",
   "encoding.status_message": "{status} : {message}",
   "encoding.target": "Cible",
   "episode_order.absolute.label": "Absolu",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Correspondance",
   "settings.tv_show_matching_priority.label": "Base de données de séries télévisées préférées",
   "search_by.tmdb_position.label": "ID et position TMDB",
-  "about.news.version_2_1_0.items": "Ajout d'une option « Convention de nommage » pour choisir entre les conventions de nommage des fichiers et dossiers Plex, Jellyfin et Kodi.\nLes séries TV introuvables sur TheTVDB sont désormais automatiquement recherchées sur TheMovieDB.\nAjout d'un onglet « Correspondance » pour choisir la base de données à interroger en premier (TheTVDB ou TheMovieDB) et pour rechercher une série TV par son identifiant TMDB.\nL'ajout de fichiers accepte désormais les répertoires, via le bouton « Ouvrir » ou par glisser-déposer, ajoutant ainsi les fichiers vidéo qu'ils contiennent.\nRenommer ou déplacer un fichier déjà traité, sans autre modification en attente, le déplace directement au lieu d'effectuer un remuxage complet, lorsque la suppression automatique des sources est activée.\nCorrection d'un problème d'édition par lots d'une indication (langue audio/sous-titres, par exemple) sur des épisodes sélectionnés, lorsque leurs valeurs actuelles différaient déjà.\nCorrection d'un problème de fractionnement/concaténation vidéo lorsque le nom du fichier source contenait une apostrophe.\nCorrection d'un plantage rare lors du nettoyage de fichiers temporaires supprimés simultanément par un autre processus."
+  "about.news.version_2_1_0.items": "Ajout d'une option « Convention de nommage » pour choisir entre les conventions de nommage des fichiers et dossiers Plex, Jellyfin et Kodi.\nLes séries TV introuvables sur TheTVDB sont désormais automatiquement recherchées sur TheMovieDB.\nAjout d'un onglet « Correspondance » pour choisir la base de données à interroger en premier (TheTVDB ou TheMovieDB) et pour rechercher une série TV par son identifiant TMDB.\nL'ajout de fichiers accepte désormais les répertoires, via le bouton « Ouvrir » ou par glisser-déposer, ajoutant ainsi les fichiers vidéo qu'ils contiennent.\nRenommer ou déplacer un fichier déjà traité, sans autre modification en attente, le déplace directement au lieu d'effectuer un remuxage complet, lorsque la suppression automatique des sources est activée.\nCorrection d'un problème d'édition par lots d'une indication (langue audio/sous-titres, par exemple) sur des épisodes sélectionnés, lorsque leurs valeurs actuelles différaient déjà.\nCorrection d'un problème de fractionnement/concaténation vidéo lorsque le nom du fichier source contenait une apostrophe.\nCorrection d'un plantage rare lors du nettoyage de fichiers temporaires supprimés simultanément par un autre processus.",
+  "encoding.selected_for": "Sélectionné pour : {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Si activé pour tous"
 }

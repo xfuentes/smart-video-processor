@@ -78,7 +78,6 @@
   "encoding.options": "{type} Opties",
   "encoding.original": "Origineel",
   "encoding.process": "Proces",
-  "encoding.selected_files": "Geselecteerde bestanden: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Doel",
   "episode_order.absolute.label": "Absoluut",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Passend",
   "settings.tv_show_matching_priority.label": "Database met favoriete tv-programma's",
   "search_by.tmdb_position.label": "TMDB ID & Positie",
-  "about.news.version_2_1_0.items": "Een instelling \"Naamgevingsconventie\" toegevoegd om te kiezen tussen de bestands-/mapnaamgeving van Plex, Jellyfin en Kodi.\nTv-series die niet overeenkomen met TheTVDB worden nu automatisch opgezocht in TheMovieDB als alternatief.\nEen tabblad \"Overeenkomsten\" toegevoegd om te kiezen welke database (TheTVDB of TheMovieDB) als eerste wordt geprobeerd voor tv-series, en om te zoeken naar een tv-serie op TMDB-ID.\nHet toevoegen van bestanden accepteert nu ook mappen, zowel via de knop \"Openen\" als door een map erin te slepen, waarbij de videobestanden die ze bevatten recursief worden toegevoegd.\nHet hernoemen/verplaatsen van een reeds verwerkt bestand zonder andere openstaande wijzigingen verplaatst het nu direct in plaats van een volledige remux, wanneer automatische bronverwijdering is ingeschakeld.\nOpgelost dat het in batch bewerken van een hint (bijv. audio-/ondertitelings taal) voor geselecteerde afleveringen niet werd aangeboden wanneer de huidige waarden al verschilden.\nOpgelost dat het splitsen/samenvoegen van video's mislukte wanneer een bronbestandsnaam een enkele aanhalingsteken bevatte.\nOpgelost dat er een zeldzame crash optrad tijdens het opruimen van tijdelijke bestanden die gelijktijdig door een ander proces werden verwijderd."
+  "about.news.version_2_1_0.items": "Een instelling \"Naamgevingsconventie\" toegevoegd om te kiezen tussen de bestands-/mapnaamgeving van Plex, Jellyfin en Kodi.\nTv-series die niet overeenkomen met TheTVDB worden nu automatisch opgezocht in TheMovieDB als alternatief.\nEen tabblad \"Overeenkomsten\" toegevoegd om te kiezen welke database (TheTVDB of TheMovieDB) als eerste wordt geprobeerd voor tv-series, en om te zoeken naar een tv-serie op TMDB-ID.\nHet toevoegen van bestanden accepteert nu ook mappen, zowel via de knop \"Openen\" als door een map erin te slepen, waarbij de videobestanden die ze bevatten recursief worden toegevoegd.\nHet hernoemen/verplaatsen van een reeds verwerkt bestand zonder andere openstaande wijzigingen verplaatst het nu direct in plaats van een volledige remux, wanneer automatische bronverwijdering is ingeschakeld.\nOpgelost dat het in batch bewerken van een hint (bijv. audio-/ondertitelings taal) voor geselecteerde afleveringen niet werd aangeboden wanneer de huidige waarden al verschilden.\nOpgelost dat het splitsen/samenvoegen van video's mislukte wanneer een bronbestandsnaam een enkele aanhalingsteken bevatte.\nOpgelost dat er een zeldzame crash optrad tijdens het opruimen van tijdelijke bestanden die gelijktijdig door een ander proces werden verwijderd.",
+  "encoding.selected_for": "Geselecteerd voor: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Indien ingeschakeld voor alle"
 }

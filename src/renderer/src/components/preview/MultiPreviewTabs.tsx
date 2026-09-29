@@ -30,7 +30,7 @@ import { useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 import { IHint } from '../../../../common/@types/Hint'
-import { EncoderSettings } from '../../../../common/@types/Encoding'
+import { EncoderSettings, MultiEncoderSettings } from '../../../../common/@types/Encoding'
 import { MultiMatching } from '@renderer/components/preview/MultiMatching'
 import { MultiHints } from '@renderer/components/preview/MultiHints'
 import { MultiEncoding } from '@renderer/components/preview/MultiEncoding'
@@ -142,7 +142,32 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
     }
   }
 
-  const encodingCount = Object.values(commonEncoderSettings).filter((v) => v.encodingEnabled).length
+  const multiEncoderSettings: MultiEncoderSettings[] = commonEncoderSettings.map((ces) => {
+    let enabledCount = 0
+    let enabledOriginalSize = 0
+    let enabledTargetSize = 0
+    for (const v of videos) {
+      const es = v.encoderSettings.find(
+        (s: EncoderSettings) => s.trackId === ces.trackId && s.trackType === ces.trackType
+      )
+      if (es && (v.trackEncodingEnabled[es.trackType + ' ' + es.trackId] ?? es.encodingEnabled)) {
+        enabledCount++
+        enabledOriginalSize += es.originalSize ?? 0
+        enabledTargetSize += es.targetSize ?? 0
+      }
+    }
+    return {
+      ...ces,
+      enabledCount,
+      totalCount: videos.length,
+      enabledOriginalSize,
+      enabledTargetSize,
+      enabledCompressionPercent:
+        enabledOriginalSize > 0 ? Math.round((1 - enabledTargetSize / enabledOriginalSize) * 100) : undefined
+    }
+  })
+
+  const encodingCount = multiEncoderSettings.reduce((total, es) => total + es.enabledCount, 0)
   const matchingCount = videos[0].searchResults?.length ?? 0
 
   return (
@@ -176,7 +201,7 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
         {selectedTab === 'matching' && <MultiMatching disabled={!allEnabled} videos={videos} />}
         {selectedTab === 'hints' && <MultiHints disabled={!allEnabled} videos={videos} commonHints={commonHints} />}
         {selectedTab === 'encoding' && (
-          <MultiEncoding disabled={!allEnabled} videos={videos} commonEncoderSettings={commonEncoderSettings} />
+          <MultiEncoding disabled={!allEnabled} videos={videos} commonEncoderSettings={multiEncoderSettings} />
         )}
       </div>
     </div>

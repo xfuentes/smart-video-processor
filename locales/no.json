@@ -78,7 +78,6 @@
   "encoding.options": "{type} Alternativer",
   "encoding.original": "Original",
   "encoding.process": "Prosess",
-  "encoding.selected_files": "Valgte filer: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Mål",
   "episode_order.absolute.label": "Absolutt",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Matchende",
   "settings.tv_show_matching_priority.label": "Foretrukket database over TV-programmer",
   "search_by.tmdb_position.label": "TMDB-ID og -posisjon",
-  "about.news.version_2_1_0.items": "Lagt til en \"Naming Convention\"-innstilling for å velge mellom Plex, Jellyfin og Kodi fil-/mappenavn\nTV-serier uten treff på TheTVDB blir nå automatisk slått opp på TheMovieDB som en reserve\nLagt til en \"Matching\"-innstillingsfane for å velge hvilken database (TheTVDB eller TheMovieDB) som skal prøves først for TV-serier, og for å søke i et TV-program etter TMDB-ID\nÅ legge til filer godtar nå også mapper, både fra \"Åpne\"-knappen og ved å dra en mappe inn, og rekursivt legge til videofilene de inneholder\nÅ gi nytt navn til/flytte en allerede behandlet fil uten andre ventende endringer flytter den nå direkte i stedet for en full remux, når automatisk kildesletting er aktivert\nRettet batchredigering av et hint (f.eks. lyd-/tekstspråk) på tvers av valgte episoder som ikke ble tilbudt når deres nåværende verdier allerede var forskjellige\nRettet videodeling/sammenkobling som mislyktes når et kildefilnavn inneholdt et enkelt anførselstegn\nRettet et sjeldent krasj under opprydding av midlertidige filer som ble fjernet samtidig av en annen prosess"
+  "about.news.version_2_1_0.items": "Lagt til en \"Naming Convention\"-innstilling for å velge mellom Plex, Jellyfin og Kodi fil-/mappenavn\nTV-serier uten treff på TheTVDB blir nå automatisk slått opp på TheMovieDB som en reserve\nLagt til en \"Matching\"-innstillingsfane for å velge hvilken database (TheTVDB eller TheMovieDB) som skal prøves først for TV-serier, og for å søke i et TV-program etter TMDB-ID\nÅ legge til filer godtar nå også mapper, både fra \"Åpne\"-knappen og ved å dra en mappe inn, og rekursivt legge til videofilene de inneholder\nÅ gi nytt navn til/flytte en allerede behandlet fil uten andre ventende endringer flytter den nå direkte i stedet for en full remux, når automatisk kildesletting er aktivert\nRettet batchredigering av et hint (f.eks. lyd-/tekstspråk) på tvers av valgte episoder som ikke ble tilbudt når deres nåværende verdier allerede var forskjellige\nRettet videodeling/sammenkobling som mislyktes når et kildefilnavn inneholdt et enkelt anførselstegn\nRettet et sjeldent krasj under opprydding av midlertidige filer som ble fjernet samtidig av en annen prosess",
+  "encoding.selected_for": "Valgt for: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Hvis aktivert for alle"
 }

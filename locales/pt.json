@@ -78,7 +78,6 @@
   "encoding.options": "{type} Opções",
   "encoding.original": "Original",
   "encoding.process": "Processo",
-  "encoding.selected_files": "Ficheiros selecionados: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Alvo",
   "episode_order.absolute.label": "Absoluto",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Correspondência",
   "settings.tv_show_matching_priority.label": "Banco de dados de programas de TV preferidos",
   "search_by.tmdb_position.label": "ID e posição no TMDB",
-  "about.news.version_2_1_0.items": "Adicionada uma configuração de \"Convenção de Nomenclatura\" para escolher entre os padrões de nomenclatura de arquivos/pastas do Plex, Jellyfin e Kodi.\nSéries de TV sem correspondência no TheTVDB agora são automaticamente pesquisadas no TheMovieDB como alternativa.\nAdicionada uma aba de configurações \"Correspondência\" para escolher qual banco de dados (TheTVDB ou TheMovieDB) será usado primeiro para séries de TV e para pesquisar uma série de TV pelo ID do TMDB.\nA adição de arquivos agora também aceita diretórios, tanto pelo botão \"Abrir\" quanto arrastando uma pasta, adicionando recursivamente os arquivos de vídeo que ela contém.\nRenomear/realocar um arquivo já processado, sem outras alterações pendentes, agora o move diretamente em vez de uma remuxagem completa, quando a exclusão automática da fonte está ativada.\nCorrigido o problema em que a edição em lote de uma dica (por exemplo, idioma de áudio/legenda) em episódios selecionados não era oferecida quando seus valores atuais já eram diferentes.\nCorrigido o problema em que a divisão/concatenação de vídeo falhava quando o nome do arquivo de origem continha uma aspa simples.\nCorrigido um travamento raro durante a limpeza de arquivos temporários removidos simultaneamente por outro processo."
+  "about.news.version_2_1_0.items": "Adicionada uma configuração de \"Convenção de Nomenclatura\" para escolher entre os padrões de nomenclatura de arquivos/pastas do Plex, Jellyfin e Kodi.\nSéries de TV sem correspondência no TheTVDB agora são automaticamente pesquisadas no TheMovieDB como alternativa.\nAdicionada uma aba de configurações \"Correspondência\" para escolher qual banco de dados (TheTVDB ou TheMovieDB) será usado primeiro para séries de TV e para pesquisar uma série de TV pelo ID do TMDB.\nA adição de arquivos agora também aceita diretórios, tanto pelo botão \"Abrir\" quanto arrastando uma pasta, adicionando recursivamente os arquivos de vídeo que ela contém.\nRenomear/realocar um arquivo já processado, sem outras alterações pendentes, agora o move diretamente em vez de uma remuxagem completa, quando a exclusão automática da fonte está ativada.\nCorrigido o problema em que a edição em lote de uma dica (por exemplo, idioma de áudio/legenda) em episódios selecionados não era oferecida quando seus valores atuais já eram diferentes.\nCorrigido o problema em que a divisão/concatenação de vídeo falhava quando o nome do arquivo de origem continha uma aspa simples.\nCorrigido um travamento raro durante a limpeza de arquivos temporários removidos simultaneamente por outro processo.",
+  "encoding.selected_for": "Selecionado para: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Se ativado para todos"
 }

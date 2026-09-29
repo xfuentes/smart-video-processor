@@ -23,17 +23,17 @@ import { _, useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack, TrackType } from '../../../../common/@types/Track'
 import { Strings } from '../../../../common/Strings'
-import { EncoderSettings } from '../../../../common/@types/Encoding'
+import { MultiEncoderSettings } from '../../../../common/@types/Encoding'
 
 type Props = {
   videos: IVideo[]
-  commonEncoderSettings: EncoderSettings[]
+  commonEncoderSettings: MultiEncoderSettings[]
   disabled: boolean
 }
 
 const trackTypeEncodingSection = (
   videos: IVideo[],
-  commonEncoderSettings: EncoderSettings[],
+  commonEncoderSettings: MultiEncoderSettings[],
   type: TrackType,
   disabled: boolean,
   expand: boolean = false
@@ -81,15 +81,22 @@ const trackTypeEncodingSection = (
               )
               forceDisabled = true
             } else if (es && es.targetSize) {
+              const noneEnabled = es.enabledCount === 0
+              const compressionPercent = noneEnabled ? es.compressionPercent : es.enabledCompressionPercent
+              const originalSize = noneEnabled ? es.originalSize : es.enabledOriginalSize
+              const targetSize = noneEnabled ? es.targetSize : es.enabledTargetSize
               infoLabel = (
                 <InfoLabel
                   info={
                     <div style={{ whiteSpace: 'nowrap' }}>
                       <>
-                        {_('encoding.selected_files', {
-                          defaultValue: 'Selected files: {count}',
-                          count: videos.length
-                        })}
+                        {noneEnabled
+                          ? _('encoding.if_enabled_for_all', { defaultValue: 'If enabled for all' })
+                          : _('encoding.selected_for', {
+                              defaultValue: 'Selected for: {enabled}/{total}',
+                              enabled: es.enabledCount,
+                              total: es.totalCount
+                            })}
                         <br />
                       </>
                       {es.codec !== undefined && (
@@ -99,21 +106,21 @@ const trackTypeEncodingSection = (
                           <br />
                         </>
                       )}
-                      {es.compressionPercent !== undefined && (
+                      {compressionPercent !== undefined && (
                         <>
-                          {_('encoding.compression', { defaultValue: 'Compression' })}: {es.compressionPercent}%<br />
+                          {_('encoding.compression', { defaultValue: 'Compression' })}: {compressionPercent}%<br />
                         </>
                       )}
-                      {es.originalSize !== undefined && (
+                      {originalSize !== undefined && (
                         <>
                           {_('encoding.original', { defaultValue: 'Original' })}:{' '}
-                          {Strings.humanFileSize(es.originalSize, false)}
+                          {Strings.humanFileSize(originalSize, false)}
                           <br />
                         </>
                       )}
                       <>
                         {_('encoding.target', { defaultValue: 'Target' })}:{' '}
-                        {Strings.humanFileSize(es.targetSize, false)}
+                        {Strings.humanFileSize(targetSize ?? 0, false)}
                         <br />
                       </>
                     </div>

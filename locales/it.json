@@ -78,7 +78,6 @@
   "encoding.options": "{type} Opzioni",
   "encoding.original": "Originale",
   "encoding.process": "Processo",
-  "encoding.selected_files": "File selezionati: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Obiettivo",
   "episode_order.absolute.label": "Assoluto",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Corrispondenza",
   "settings.tv_show_matching_priority.label": "Database dei programmi TV preferiti",
   "search_by.tmdb_position.label": "ID e posizione TMDB",
-  "about.news.version_2_1_0.items": "Aggiunta un'impostazione \"Convenzione di denominazione\" per scegliere tra la denominazione di file/cartelle Plex, Jellyfin e Kodi\nLe serie TV senza corrispondenza su TheTVDB vengono ora cercate automaticamente su TheMovieDB come soluzione di ripiego\nAggiunta una scheda di impostazioni \"Corrispondenza\" per scegliere quale database (TheTVDB o TheMovieDB) viene provato per primo per le serie TV e per cercare una serie TV tramite ID TMDB\nL'aggiunta di file ora accetta anche directory, sia dal pulsante \"Apri\" che trascinando una cartella, aggiungendo ricorsivamente i file video in essa contenuti\nRinominare/spostare un file già elaborato senza altre modifiche in sospeso ora lo sposta direttamente invece di un remux completo, quando l'eliminazione automatica della sorgente è abilitata\nRisolto il problema per cui la modifica in batch di un suggerimento (ad esempio, lingua audio/sottotitoli) su episodi selezionati non veniva offerta quando i loro valori correnti erano già diversi\nRisolto il problema per cui la divisione/concatenazione video non riusciva quando un nome file sorgente conteneva un apostrofo singolo\nRisolto un raro arresto anomalo durante la pulizia dei file temporanei rimossi contemporaneamente da un altro processo"
+  "about.news.version_2_1_0.items": "Aggiunta un'impostazione \"Convenzione di denominazione\" per scegliere tra la denominazione di file/cartelle Plex, Jellyfin e Kodi\nLe serie TV senza corrispondenza su TheTVDB vengono ora cercate automaticamente su TheMovieDB come soluzione di ripiego\nAggiunta una scheda di impostazioni \"Corrispondenza\" per scegliere quale database (TheTVDB o TheMovieDB) viene provato per primo per le serie TV e per cercare una serie TV tramite ID TMDB\nL'aggiunta di file ora accetta anche directory, sia dal pulsante \"Apri\" che trascinando una cartella, aggiungendo ricorsivamente i file video in essa contenuti\nRinominare/spostare un file già elaborato senza altre modifiche in sospeso ora lo sposta direttamente invece di un remux completo, quando l'eliminazione automatica della sorgente è abilitata\nRisolto il problema per cui la modifica in batch di un suggerimento (ad esempio, lingua audio/sottotitoli) su episodi selezionati non veniva offerta quando i loro valori correnti erano già diversi\nRisolto il problema per cui la divisione/concatenazione video non riusciva quando un nome file sorgente conteneva un apostrofo singolo\nRisolto un raro arresto anomalo durante la pulizia dei file temporanei rimossi contemporaneamente da un altro processo",
+  "encoding.selected_for": "Selezionato per: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Se abilitato per tutti"
 }

@@ -32,6 +32,14 @@ export type EncoderSettings = {
   enforcingCodec?: boolean
 }
 
+export type MultiEncoderSettings = EncoderSettings & {
+  enabledCount: number
+  totalCount: number
+  enabledCompressionPercent?: number
+  enabledOriginalSize?: number
+  enabledTargetSize?: number
+}
+
 export enum VideoCodec {
   AUTO = 'Auto',
   H264 = 'H.264',

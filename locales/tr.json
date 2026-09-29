@@ -78,7 +78,6 @@
   "encoding.options": "{type} Seçenekler",
   "encoding.original": "Orijinal",
   "encoding.process": "Süreç",
-  "encoding.selected_files": "Seçilen dosyalar: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Hedef",
   "episode_order.absolute.label": "Mutlak",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Eşleştirme",
   "settings.tv_show_matching_priority.label": "Tercih Edilen TV Şovları Veritabanı",
   "search_by.tmdb_position.label": "TMDB Kimliği ve Konumu",
-  "about.news.version_2_1_0.items": "Plex, Jellyfin ve Kodi dosya/klasör adlandırma seçenekleri arasında seçim yapmak için \"Adlandırma Kuralları\" ayarı eklendi.\nTheTVDB'de eşleşmesi olmayan TV şovları artık otomatik olarak yedek olarak TheMovieDB'de aranıyor.\nTV şovları için hangi veritabanının (TheTVDB veya TheMovieDB) önce deneneceğini ve bir TV şovunu TMDB kimliğine göre aramayı seçmek için \"Eşleştirme\" ayarları sekmesi eklendi.\nDosya ekleme işlemi artık hem \"Aç\" düğmesinden hem de bir klasörü sürükleyerek dizinleri de kabul ediyor ve içerdikleri video dosyalarını yinelemeli olarak ekliyor.\nOtomatik kaynak silme etkinleştirildiğinde, başka bekleyen değişiklik olmayan, zaten işlenmiş bir dosyayı yeniden adlandırmak/taşımak artık tam bir yeniden birleştirme yerine doğrudan taşıyor.\nSeçili bölümler arasında bir ipucunun (örneğin ses/altyazı dili) toplu düzenlenmesinin, mevcut değerleri zaten farklı olduğunda sunulmaması sorunu düzeltildi.\nKaynak dosya adında tek tırnak işareti bulunduğunda video bölme/birleştirme işleminin başarısız olması sorunu düzeltildi.\nEş zamanlı olarak kaldırılan geçici dosyaları temizlerken nadir görülen bir çökme sorunu düzeltildi. başka bir işlemle"
+  "about.news.version_2_1_0.items": "Plex, Jellyfin ve Kodi dosya/klasör adlandırma seçenekleri arasında seçim yapmak için \"Adlandırma Kuralları\" ayarı eklendi.\nTheTVDB'de eşleşmesi olmayan TV şovları artık otomatik olarak yedek olarak TheMovieDB'de aranıyor.\nTV şovları için hangi veritabanının (TheTVDB veya TheMovieDB) önce deneneceğini ve bir TV şovunu TMDB kimliğine göre aramayı seçmek için \"Eşleştirme\" ayarları sekmesi eklendi.\nDosya ekleme işlemi artık hem \"Aç\" düğmesinden hem de bir klasörü sürükleyerek dizinleri de kabul ediyor ve içerdikleri video dosyalarını yinelemeli olarak ekliyor.\nOtomatik kaynak silme etkinleştirildiğinde, başka bekleyen değişiklik olmayan, zaten işlenmiş bir dosyayı yeniden adlandırmak/taşımak artık tam bir yeniden birleştirme yerine doğrudan taşıyor.\nSeçili bölümler arasında bir ipucunun (örneğin ses/altyazı dili) toplu düzenlenmesinin, mevcut değerleri zaten farklı olduğunda sunulmaması sorunu düzeltildi.\nKaynak dosya adında tek tırnak işareti bulunduğunda video bölme/birleştirme işleminin başarısız olması sorunu düzeltildi.\nEş zamanlı olarak kaldırılan geçici dosyaları temizlerken nadir görülen bir çökme sorunu düzeltildi. başka bir işlemle",
+  "encoding.selected_for": "Seçilenler: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Eğer tümü için etkinleştirilmişse"
 }

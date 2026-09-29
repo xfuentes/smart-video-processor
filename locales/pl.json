@@ -78,7 +78,6 @@
   "encoding.options": "{type} Opcje",
   "encoding.original": "Oryginał",
   "encoding.process": "Proces",
-  "encoding.selected_files": "Wybrane pliki: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Cel",
   "episode_order.absolute.label": "Absolutny",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Dopasowanie",
   "settings.tv_show_matching_priority.label": "Preferowana baza danych programów telewizyjnych",
   "search_by.tmdb_position.label": "Identyfikator i pozycja TMDB",
-  "about.news.version_2_1_0.items": "Dodano ustawienie „Konwencja nazewnictwa”, umożliwiające wybór między nazwami plików/folderów Plex, Jellyfin i Kodi.\nProgramy telewizyjne, dla których nie znaleziono odpowiedników w bazie TheTVDB, są teraz automatycznie wyszukiwane w bazie TheMovieDB jako rozwiązanie awaryjne.\nDodano zakładkę ustawień „Dopasowanie”, umożliwiającą wybór bazy danych (TheTVDB lub TheMovieDB) jako bazy danych, która ma być sprawdzana jako pierwsza, oraz wyszukiwanie programu telewizyjnego według identyfikatora TMDB.\nDodawanie plików obsługuje teraz również katalogi, zarówno za pomocą przycisku „Otwórz”, jak i poprzez przeciągnięcie folderu, rekurencyjnie dodając zawarte w nich pliki wideo.\nZmiana nazwy/przeniesienie już przetworzonego pliku bez żadnych innych oczekujących zmian powoduje teraz jego bezpośrednie przeniesienie, a nie pełne remuxowanie, gdy włączone jest automatyczne usuwanie źródła.\nNaprawiono błąd edycji wsadowej – podpowiedź (np. język ścieżki dźwiękowej/napisów) w wybranych odcinkach nie była wyświetlana, gdy ich bieżące wartości już się różniły.\nNaprawiono błąd dzielenia/łączenia wideo, który nie powiódł się, gdy nazwa pliku źródłowego zawierała pojedynczy cudzysłów.\nNaprawiono rzadki błąd powodujący awarię podczas czyszczenie plików tymczasowych usuniętych jednocześnie przez inny proces"
+  "about.news.version_2_1_0.items": "Dodano ustawienie „Konwencja nazewnictwa”, umożliwiające wybór między nazwami plików/folderów Plex, Jellyfin i Kodi.\nProgramy telewizyjne, dla których nie znaleziono odpowiedników w bazie TheTVDB, są teraz automatycznie wyszukiwane w bazie TheMovieDB jako rozwiązanie awaryjne.\nDodano zakładkę ustawień „Dopasowanie”, umożliwiającą wybór bazy danych (TheTVDB lub TheMovieDB) jako bazy danych, która ma być sprawdzana jako pierwsza, oraz wyszukiwanie programu telewizyjnego według identyfikatora TMDB.\nDodawanie plików obsługuje teraz również katalogi, zarówno za pomocą przycisku „Otwórz”, jak i poprzez przeciągnięcie folderu, rekurencyjnie dodając zawarte w nich pliki wideo.\nZmiana nazwy/przeniesienie już przetworzonego pliku bez żadnych innych oczekujących zmian powoduje teraz jego bezpośrednie przeniesienie, a nie pełne remuxowanie, gdy włączone jest automatyczne usuwanie źródła.\nNaprawiono błąd edycji wsadowej – podpowiedź (np. język ścieżki dźwiękowej/napisów) w wybranych odcinkach nie była wyświetlana, gdy ich bieżące wartości już się różniły.\nNaprawiono błąd dzielenia/łączenia wideo, który nie powiódł się, gdy nazwa pliku źródłowego zawierała pojedynczy cudzysłów.\nNaprawiono rzadki błąd powodujący awarię podczas czyszczenie plików tymczasowych usuniętych jednocześnie przez inny proces",
+  "encoding.selected_for": "Wybrano dla: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Jeśli włączone dla wszystkich"
 }

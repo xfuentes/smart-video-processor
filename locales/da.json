@@ -78,7 +78,6 @@
   "encoding.options": "{type} Indstillinger",
   "encoding.original": "Original",
   "encoding.process": "Process",
-  "encoding.selected_files": "Valgte filer: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Mål",
   "episode_order.absolute.label": "Absolut",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Matchende",
   "settings.tv_show_matching_priority.label": "Foretrukken tv-seriedatabase",
   "search_by.tmdb_position.label": "TMDB-ID og -position",
-  "about.news.version_2_1_0.items": "Tilføjet en \"Navngivningskonvention\"-indstilling for at vælge mellem Plex, Jellyfin og Kodi fil-/mappenavngivning\nTV-serier uden match på TheTVDB bliver nu automatisk slået op på TheMovieDB som en fallback\nTilføjet en \"Matching\"-indstillingsfane for at vælge, hvilken database (TheTVDB eller TheMovieDB) der prøves først for tv-serier, og for at søge i en tv-serie efter TMDB-ID\nTilføjelse af filer accepterer nu også mapper, både fra knappen \"Åbn\" og ved at trække en mappe ind, hvor de videofiler, de indeholder, rekursivt tilføjes\nOmdøbning/flytning af en allerede behandlet fil uden andre ventende ændringer flytter den nu direkte i stedet for en fuld remux, når automatisk kildesletning er aktiveret\nRettet batchredigering af et tip (f.eks. lyd-/undertekstsprog) på tværs af valgte episoder, der ikke blev tilbudt, når deres nuværende værdier allerede var forskellige\nRettet videoopdeling/sammenkædning, der mislykkedes, når et kildefilnavn indeholdt et enkelt anførselstegn\nRettet et sjældent nedbrud under oprydning af midlertidige filer, der blev fjernet samtidigt af en anden proces"
+  "about.news.version_2_1_0.items": "Tilføjet en \"Navngivningskonvention\"-indstilling for at vælge mellem Plex, Jellyfin og Kodi fil-/mappenavngivning\nTV-serier uden match på TheTVDB bliver nu automatisk slået op på TheMovieDB som en fallback\nTilføjet en \"Matching\"-indstillingsfane for at vælge, hvilken database (TheTVDB eller TheMovieDB) der prøves først for tv-serier, og for at søge i en tv-serie efter TMDB-ID\nTilføjelse af filer accepterer nu også mapper, både fra knappen \"Åbn\" og ved at trække en mappe ind, hvor de videofiler, de indeholder, rekursivt tilføjes\nOmdøbning/flytning af en allerede behandlet fil uden andre ventende ændringer flytter den nu direkte i stedet for en fuld remux, når automatisk kildesletning er aktiveret\nRettet batchredigering af et tip (f.eks. lyd-/undertekstsprog) på tværs af valgte episoder, der ikke blev tilbudt, når deres nuværende værdier allerede var forskellige\nRettet videoopdeling/sammenkædning, der mislykkedes, når et kildefilnavn indeholdt et enkelt anførselstegn\nRettet et sjældent nedbrud under oprydning af midlertidige filer, der blev fjernet samtidigt af en anden proces",
+  "encoding.selected_for": "Valgt til: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Hvis aktiveret for alle"
 }

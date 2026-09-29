@@ -78,7 +78,6 @@
   "encoding.options": "{type} Pilihan",
   "encoding.original": "Asli",
   "encoding.process": "Proses",
-  "encoding.selected_files": "File yang dipilih: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Target",
   "episode_order.absolute.label": "Mutlak",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Cocok",
   "settings.tv_show_matching_priority.label": "Basis Data Acara TV Pilihan",
   "search_by.tmdb_position.label": "ID & Posisi TMDB",
-  "about.news.version_2_1_0.items": "Menambahkan pengaturan \"Konvensi Penamaan\" untuk memilih antara penamaan file/folder Plex, Jellyfin, dan Kodi\nAcara TV yang tidak cocok di TheTVDB sekarang secara otomatis dicari di TheMovieDB sebagai cadangan\nMenambahkan tab pengaturan \"Pencocokan\" untuk memilih basis data mana (TheTVDB atau TheMovieDB) yang dicoba terlebih dahulu untuk acara TV, dan untuk mencari acara TV berdasarkan ID TMDB\nMenambahkan file sekarang juga menerima direktori, baik dari tombol \"Buka\" maupun dengan menyeret folder, menambahkan file video yang dikandungnya secara rekursif\nMengganti nama/memindahkan file yang sudah diproses tanpa perubahan tertunda lainnya sekarang memindahkannya langsung alih-alih remux penuh, ketika penghapusan sumber otomatis diaktifkan\nMemperbaiki pengeditan massal petunjuk (misalnya bahasa audio/subtitle) di seluruh episode yang dipilih yang tidak ditawarkan ketika nilai saat ini sudah berbeda\nMemperbaiki pemisahan/penggabungan video yang gagal ketika nama file sumber berisi tanda kutip tunggal\nMemperbaiki kerusakan langka saat membersihkan file sementara yang dihapus secara bersamaan oleh proses lain"
+  "about.news.version_2_1_0.items": "Menambahkan pengaturan \"Konvensi Penamaan\" untuk memilih antara penamaan file/folder Plex, Jellyfin, dan Kodi\nAcara TV yang tidak cocok di TheTVDB sekarang secara otomatis dicari di TheMovieDB sebagai cadangan\nMenambahkan tab pengaturan \"Pencocokan\" untuk memilih basis data mana (TheTVDB atau TheMovieDB) yang dicoba terlebih dahulu untuk acara TV, dan untuk mencari acara TV berdasarkan ID TMDB\nMenambahkan file sekarang juga menerima direktori, baik dari tombol \"Buka\" maupun dengan menyeret folder, menambahkan file video yang dikandungnya secara rekursif\nMengganti nama/memindahkan file yang sudah diproses tanpa perubahan tertunda lainnya sekarang memindahkannya langsung alih-alih remux penuh, ketika penghapusan sumber otomatis diaktifkan\nMemperbaiki pengeditan massal petunjuk (misalnya bahasa audio/subtitle) di seluruh episode yang dipilih yang tidak ditawarkan ketika nilai saat ini sudah berbeda\nMemperbaiki pemisahan/penggabungan video yang gagal ketika nama file sumber berisi tanda kutip tunggal\nMemperbaiki kerusakan langka saat membersihkan file sementara yang dihapus secara bersamaan oleh proses lain",
+  "encoding.selected_for": "Dipilih untuk: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Jika diaktifkan untuk semua"
 }

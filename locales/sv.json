@@ -78,7 +78,6 @@
   "encoding.options": "{type} Alternativ",
   "encoding.original": "Original",
   "encoding.process": "Process",
-  "encoding.selected_files": "Valda filer: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Mål",
   "episode_order.absolute.label": "Absolut",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Motsvarande",
   "settings.tv_show_matching_priority.label": "Databas med föredragna TV-program",
   "search_by.tmdb_position.label": "TMDB-ID och position",
-  "about.news.version_2_1_0.items": "Lade till en inställning för \"Namngivningskonvention\" för att välja mellan fil-/mappnamn för Plex, Jellyfin och Kodi.\nTV-program utan matchning på TheTVDB söks nu automatiskt upp på TheMovieDB som reserv.\nLade till en flik för \"Matchning\" för att välja vilken databas (TheTVDB eller TheMovieDB) som testas först för TV-program, och för att söka efter ett TV-program via TMDB-ID.\nAtt lägga till filer accepterar nu även kataloger, både från knappen \"Öppna\" och genom att dra in en mapp, och rekursivt lägga till de videofiler de innehåller.\nAtt byta namn på/flytta en redan bearbetad fil utan andra väntande ändringar flyttar den nu direkt istället för en fullständig remux, när automatisk källradering är aktiverad.\nÅtgärdade batchredigering av en ledtråd (t.ex. ljud-/textningsspråk) över valda avsnitt som inte erbjuds när deras nuvarande värden redan skilde sig åt.\nÅtgärdade videodelning/sammanfogning som misslyckades när ett källfilnamn innehöll ett enkelt citattecken.\nÅtgärdade en sällsynt krasch vid rensning av tillfälliga filer som togs bort samtidigt av en annan process."
+  "about.news.version_2_1_0.items": "Lade till en inställning för \"Namngivningskonvention\" för att välja mellan fil-/mappnamn för Plex, Jellyfin och Kodi.\nTV-program utan matchning på TheTVDB söks nu automatiskt upp på TheMovieDB som reserv.\nLade till en flik för \"Matchning\" för att välja vilken databas (TheTVDB eller TheMovieDB) som testas först för TV-program, och för att söka efter ett TV-program via TMDB-ID.\nAtt lägga till filer accepterar nu även kataloger, både från knappen \"Öppna\" och genom att dra in en mapp, och rekursivt lägga till de videofiler de innehåller.\nAtt byta namn på/flytta en redan bearbetad fil utan andra väntande ändringar flyttar den nu direkt istället för en fullständig remux, när automatisk källradering är aktiverad.\nÅtgärdade batchredigering av en ledtråd (t.ex. ljud-/textningsspråk) över valda avsnitt som inte erbjuds när deras nuvarande värden redan skilde sig åt.\nÅtgärdade videodelning/sammanfogning som misslyckades när ett källfilnamn innehöll ett enkelt citattecken.\nÅtgärdade en sällsynt krasch vid rensning av tillfälliga filer som togs bort samtidigt av en annan process.",
+  "encoding.selected_for": "Valt för: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Om aktiverat för alla"
 }

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- With several videos selected, the "Encoding" tab badge now shows the total number of tracks selected for encoding, and each track's tooltip shows "Selected for: N/total" with the size reduction for the selected files (or "If enabled for all" with the projected reduction when none is selected).
+
 ### Fixed
 
 - Fixed the icon missing from the temporary files cleanup window in packaged builds.

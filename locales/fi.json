@@ -78,7 +78,6 @@
   "encoding.options": "{type} Vaihtoehdot",
   "encoding.original": "Alkuperäinen",
   "encoding.process": "Prosessi",
-  "encoding.selected_files": "Valitut tiedostot: {count}",
   "encoding.status_message": "{status}: {message}",
   "encoding.target": "Kohde",
   "episode_order.absolute.label": "Absoluuttinen",
@@ -695,5 +694,7 @@
   "settings.tab.matching": "Vastaavat",
   "settings.tv_show_matching_priority.label": "Suositeltujen TV-ohjelmien tietokanta",
   "search_by.tmdb_position.label": "TMDB-tunnus ja sijainti",
-  "about.news.version_2_1_0.items": "Lisätty \"Nimeämiskäytäntö\"-asetus, jolla voi valita Plex-, Jellyfin- ja Kodi-tiedostojen/kansioiden nimeämisen välillä.\nTV-ohjelmat, joilla ei ole vastineita TheTVDB:ssä, haetaan nyt automaattisesti TheMovieDB:stä varajärjestelmänä.\nLisätty \"Vastaavuus\"-asetusvälilehti, jolla voi valita, mitä tietokantaa (TheTVDB tai TheMovieDB) kokeillaan ensin TV-ohjelmien etsimiseksi, ja TV-ohjelmaa voi hakea TMDB-tunnuksen perusteella.\nTiedostojen lisääminen hyväksyy nyt myös hakemistot sekä \"Avaa\"-painikkeesta että vetämällä kansio sisään, jolloin niiden sisältämät videotiedostot lisätään rekursiivisesti.\nJo käsitellyn tiedoston uudelleennimeäminen/siirtäminen ilman muita odottavia muutoksia siirtää sen nyt suoraan täyden remux-tiedoston sijaan, kun automaattinen lähteen poisto on käytössä.\nKorjattu erämuokkauksessa annettu vihje (esim. äänen/tekstityksen kieli) valituissa jaksoissa ei tarjottu, kun niiden nykyiset arvot jo erosivat toisistaan.\nKorjattu videon jakamisen/yhdistämisen epäonnistuminen, kun lähdetiedoston nimi sisälsi yhden lainausmerkin.\nKorjattu harvinainen kaatuminen toisen prosessin samanaikaisesti poistamien väliaikaisten tiedostojen siivoamisen yhteydessä."
+  "about.news.version_2_1_0.items": "Lisätty \"Nimeämiskäytäntö\"-asetus, jolla voi valita Plex-, Jellyfin- ja Kodi-tiedostojen/kansioiden nimeämisen välillä.\nTV-ohjelmat, joilla ei ole vastineita TheTVDB:ssä, haetaan nyt automaattisesti TheMovieDB:stä varajärjestelmänä.\nLisätty \"Vastaavuus\"-asetusvälilehti, jolla voi valita, mitä tietokantaa (TheTVDB tai TheMovieDB) kokeillaan ensin TV-ohjelmien etsimiseksi, ja TV-ohjelmaa voi hakea TMDB-tunnuksen perusteella.\nTiedostojen lisääminen hyväksyy nyt myös hakemistot sekä \"Avaa\"-painikkeesta että vetämällä kansio sisään, jolloin niiden sisältämät videotiedostot lisätään rekursiivisesti.\nJo käsitellyn tiedoston uudelleennimeäminen/siirtäminen ilman muita odottavia muutoksia siirtää sen nyt suoraan täyden remux-tiedoston sijaan, kun automaattinen lähteen poisto on käytössä.\nKorjattu erämuokkauksessa annettu vihje (esim. äänen/tekstityksen kieli) valituissa jaksoissa ei tarjottu, kun niiden nykyiset arvot jo erosivat toisistaan.\nKorjattu videon jakamisen/yhdistämisen epäonnistuminen, kun lähdetiedoston nimi sisälsi yhden lainausmerkin.\nKorjattu harvinainen kaatuminen toisen prosessin samanaikaisesti poistamien väliaikaisten tiedostojen siivoamisen yhteydessä.",
+  "encoding.selected_for": "Valittu kohteeseen: {enabled}/{total}",
+  "encoding.if_enabled_for_all": "Jos käytössä kaikille"
 }
