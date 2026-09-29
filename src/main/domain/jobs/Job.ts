@@ -215,6 +215,10 @@ export abstract class Job<T> implements IJob {
       debug('Abort !')
       this.progression.process.kill('SIGTERM')
       this.abortLaunched = true
+      // A stopped process never handles SIGTERM until it is resumed.
+      if (this.status === JobStatus.PAUSED) {
+        void Processes.resume(this.progression.process)
+      }
     } else {
       debug("Can't Abort no process !")
     }

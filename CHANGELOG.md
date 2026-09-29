@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fixed the icon missing from the temporary files cleanup window in packaged builds.
+- Fixed canceling a paused job having no effect until it was resumed.
 
 ## [2.1.0] - 2026-09-28
 
