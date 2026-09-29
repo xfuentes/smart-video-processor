@@ -66,14 +66,10 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added a "Naming Convention" setting to choose between Plex, Jellyfin, and Kodi file/folder naming</li>
-          <li>TV shows with no match on TheTVDB are now automatically looked up on TheMovieDB as a fallback</li>
-          <li>Added a "Matching" settings tab to choose which database (TheTVDB or TheMovieDB) is tried first for TV shows, and to search a TV show by TMDB ID</li>
-          <li>Adding files now also accepts directories, both from the "Open" button and by dragging a folder in, recursively adding the video files they contain</li>
-          <li>Renaming/relocating an already-processed file with no other pending changes now moves it directly instead of a full remux, when automatic source deletion is enabled</li>
-          <li>Fixed batch-editing a hint (e.g. audio/subtitle language) across selected episodes not being offered when their current values already differed</li>
-          <li>Fixed video splitting/concatenation failing when a source filename contained a single quote</li>
-          <li>Fixed a rare crash while cleaning up temporary files removed concurrently by another process</li>
+          <li>With several videos selected, the Encoding tab now shows the total number of tracks selected for encoding, and the tooltip of each track shows how many files it is selected for along with the resulting size reduction</li>
+          <li>Files added in one batch (Open, drag and drop, or a scanned directory) are now imported sorted by name in natural order</li>
+          <li>Fixed canceling a paused job having no effect until it was resumed</li>
+          <li>Fixed the icon missing from the temporary files cleanup window in packaged builds</li>
         </ul>
       </description>
     </release>

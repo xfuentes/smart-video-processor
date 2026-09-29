@@ -18,6 +18,7 @@
 
 import { Configuration } from 'electron-builder'
 import { homedir } from 'os'
+import { resolve } from 'path'
 
 const arch = process.arch === 'x64' ? 'x64' : 'arm64'
 const productName = 'Smart Video Processor'
@@ -108,6 +109,7 @@ export default {
     executableArgs: ['--new-instance']
   },
   deb: {
+    fpm: [`--deb-changelog=${resolve('dist', 'debian-changelog')}`],
     depends: [
       'libgtk-3-0',
       'libnotify4',

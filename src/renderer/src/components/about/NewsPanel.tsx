@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.2.0' })}</h4>
+      <ul>
+        {_('about.news.version_2_2_0.items', {
+          defaultValue:
+            'With several videos selected, the Encoding tab now shows the total number of tracks selected for encoding, and the tooltip of each track shows how many files it is selected for along with the resulting size reduction\nFiles added in one batch (Open, drag and drop, or a scanned directory) are now imported sorted by name in natural order\nFixed canceling a paused job having no effect until it was resumed\nFixed the icon missing from the temporary files cleanup window in packaged builds'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.1.0' })}</h4>
       <ul>
         {_('about.news.version_2_1_0.items', {
