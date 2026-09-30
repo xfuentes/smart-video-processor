@@ -4,8 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- The video list now selects whole rows: click selects a single video, Ctrl/Cmd+click toggles one, Shift+click selects a range, Ctrl/Cmd+A selects all and Escape clears the selection. The text in the list can no longer be selected.
+
 ### Fixed
 
+- Fixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once.
 - Fixed the icon missing from the temporary files cleanup window and the main window in the Linux `.deb` package.
 
 ## [2.2.0] - 2026-09-29

@@ -25,12 +25,16 @@ import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
 type VideoListChangeListener = (videos: Video[]) => void
 type VideoChangeListener = (video: Video) => void
+type VideosChangeListener = (videos: Video[]) => void
 
 export class VideoController {
   private static instance: VideoController
   private videos: Video[] = []
   private listChangeListeners: VideoListChangeListener[] = []
   private videoChangeListeners: VideoChangeListener[] = []
+  private videosChangeListeners: VideosChangeListener[] = []
+  private batchDepth = 0
+  private batchedVideos = new Set<Video>()
 
   static getInstance() {
     if (!VideoController.instance) {
@@ -40,12 +44,36 @@ export class VideoController {
   }
 
   handleVideoChange = (video: Video) => {
+    if (this.batchDepth > 0) {
+      this.batchedVideos.add(video)
+      return
+    }
     this.fireListChangeEvent()
     this.fireVideoChangeEvent(video)
   }
 
   addVideoChangeListener(listener: VideoChangeListener) {
     this.videoChangeListeners.push(listener)
+  }
+
+  addVideosChangeListener(listener: VideosChangeListener) {
+    this.videosChangeListeners.push(listener)
+  }
+
+  // Runs a bulk operation and emits a single list event and a single videos event instead of one pair per video.
+  private batchChanges(operation: () => void) {
+    this.batchDepth++
+    try {
+      operation()
+    } finally {
+      this.batchDepth--
+      if (this.batchDepth === 0 && this.batchedVideos.size > 0) {
+        const changedVideos = [...this.batchedVideos]
+        this.batchedVideos.clear()
+        this.fireListChangeEvent()
+        this.videosChangeListeners.forEach((listener) => listener(changedVideos))
+      }
+    }
   }
 
   fireVideoChangeEvent(video: Video) {
@@ -138,15 +166,19 @@ export class VideoController {
   }
 
   setMultiHint(uuids: string[], hint: IHint, value: string | undefined) {
-    for (const uuid of uuids) {
-      void this.getVideoByUuid(uuid).setHint(hint, value)
-    }
+    this.batchChanges(() => {
+      for (const uuid of uuids) {
+        void this.getVideoByUuid(uuid).setHint(hint, value)
+      }
+    })
   }
 
   setMultiTrackEncodingEnabled(uuids: string[], source: string, value: boolean) {
-    for (const uuid of uuids) {
-      void this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
-    }
+    this.batchChanges(() => {
+      for (const uuid of uuids) {
+        void this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
+      }
+    })
   }
 
   multiProcess(uuids: string[]) {

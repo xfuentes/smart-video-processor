@@ -61,6 +61,12 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       videos.map((video) => video.toJSON())
     )
   })
+  VideoController.getInstance().addVideosChangeListener((videos) => {
+    mainWindow.webContents.send(
+      'video:videosChanged',
+      videos.map((video) => video.toJSON())
+    )
+  })
   VideoController.getInstance().addVideoChangeListener((video) => {
     mainWindow.webContents.send('video:changed', video.toJSON())
   })

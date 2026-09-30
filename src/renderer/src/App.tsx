@@ -2,7 +2,7 @@ import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Divider } from '@fluentui/react-components'
 import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
-import { ListChangedListener, VideoChangedListener } from '../../preload/@types'
+import { ListChangedListener, VideoChangedListener, VideosChangedListener } from '../../preload/@types'
 import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerProvider'
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
@@ -65,12 +65,31 @@ export const App = (): React.JSX.Element => {
     }
   }
 
+  const videosChangedListener: VideosChangedListener = (changedVideos: IVideo[]) => {
+    if (selectedVideosRef.current.length > 0) {
+      setSelectedVideos((prevSelection) => {
+        let selectionChanged: boolean = false
+        const newSelection = prevSelection.map((prevVideo) => {
+          const changedVideo = changedVideos.find((v) => v.uuid === prevVideo.uuid)
+          if (changedVideo) {
+            selectionChanged = true
+            return changedVideo
+          }
+          return prevVideo
+        })
+        return selectionChanged ? newSelection : prevSelection
+      })
+    }
+  }
+
   useEffect(() => {
     const removeListChangedListener = window.api.video.addListChangedListener(listChangedListener)
     const removeVideoChangedListener = window.api.video.addVideoChangedListener(videoChangedListener)
+    const removeVideosChangedListener = window.api.video.addVideosChangedListener(videosChangedListener)
     return () => {
       removeListChangedListener()
       removeVideoChangedListener()
+      removeVideosChangedListener()
     }
   }, [])
 
