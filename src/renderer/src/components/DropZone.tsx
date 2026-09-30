@@ -22,9 +22,16 @@ interface MyComponentProps {
   onDropFiles: (files: File[]) => void
   style?: { [key: string]: unknown }
   onKeyUp?: (event: React.KeyboardEvent) => void
+  onKeyDown?: (event: React.KeyboardEvent) => void
 }
 
-export const DropZone = ({ children, onDropFiles, style, onKeyUp }: React.PropsWithChildren<MyComponentProps>) => {
+export const DropZone = ({
+  children,
+  onDropFiles,
+  style,
+  onKeyUp,
+  onKeyDown
+}: React.PropsWithChildren<MyComponentProps>) => {
   const [isDraggingOver, setDraggingOver] = React.useState(false)
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
@@ -81,6 +88,7 @@ export const DropZone = ({ children, onDropFiles, style, onKeyUp }: React.PropsW
       onDragEnd={handleDragEnd}
       style={style}
       onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
       role={'none'}
     >
       {children}

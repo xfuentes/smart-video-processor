@@ -31,8 +31,7 @@ import {
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import { progressRenderer, qualityRenderer, sizeRenderer, statusRenderer } from './preview/renderers'
-import React, { useEffect, useState } from 'react'
-import xor from 'lodash/xor'
+import React, { useMemo, useRef, useState } from 'react'
 import { Strings } from '../../../common/Strings'
 import { DropZone } from '@renderer/components/DropZone'
 import _ from 'lodash'
@@ -91,60 +90,102 @@ const columnSizingOptions: TableColumnSizingOptions = {
 }
 
 export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideos }: Props) => {
-  const [selectedItems, setSelectedItems] = useState(new Set<SelectionItemId>([]))
+  const [requestedItems, setSelectedItems] = useState(new Set<SelectionItemId>([]))
   const [videoListItems, setVideoListItems] = useState<IVideoListItem[]>([])
+  const [previousVideos, setPreviousVideos] = useState<IVideo[]>()
+  const [sortState, setSortState] = useState<DataGridProps['sortState']>()
+  const anchorId = useRef<SelectionItemId>()
 
-  useEffect(() => {
+  // The list items are derived while rendering, keeping the same array when nothing displayed has changed.
+  if (videos !== previousVideos) {
+    setPreviousVideos(videos)
     const newVideoListItems = videos.map((video) => _.pick(video, videoListItemKeys) as IVideoListItem)
-    setVideoListItems((prevVideoListItems) => {
-      return _.isEqual(newVideoListItems, prevVideoListItems) ? prevVideoListItems : newVideoListItems
-    })
-  }, [videos])
+    setVideoListItems((prevVideoListItems) =>
+      _.isEqual(newVideoListItems, prevVideoListItems) ? prevVideoListItems : newVideoListItems
+    )
+  }
 
+  // Videos removed from the list drop out of the selection, the parent prunes its own copy on list changes.
+  const selectedItems = useMemo(() => {
+    const videoIds = new Set(videos.map((video) => video.uuid))
+    const remaining = new Set([...requestedItems].filter((id) => videoIds.has(id as string)))
+    return remaining.size === requestedItems.size ? requestedItems : remaining
+  }, [requestedItems, videos])
+
+  const applySelection = (selItems: Set<SelectionItemId>) => {
+    setSelectedItems(selItems)
+    if (onSelectionChange !== undefined) {
+      onSelectionChange(videos.filter((video) => selItems.has(video.uuid)))
+    }
+  }
+
+  const getDisplayedIds = (): SelectionItemId[] => {
+    const sorted = [...videoListItems]
+    if (sortState) {
+      const column = columns.find((c) => c.columnId === sortState.sortColumn)
+      if (column) {
+        const direction = sortState.sortDirection === 'descending' ? -1 : 1
+        sorted.sort((a, b) => direction * column.compare(a, b))
+      }
+    }
+    return sorted.map((item) => item.uuid)
+  }
+
+  // Checkbox and select-all clicks are handled by the grid, row clicks by handleRowClick.
   const handleSelectionChange: DataGridProps['onSelectionChange'] = (
     e: React.KeyboardEvent | React.MouseEvent<Element, MouseEvent>,
     data: OnSelectionChangeData
   ) => {
-    const changedItems = xor(Array.from(selectedItems), Array.from(data.selectedItems))
-    let selItems: Set<SelectionItemId>
-    if ((e.target as Element).localName === 'input') {
-      selItems = data.selectedItems
-    } else {
-      selItems = new Set<SelectionItemId>(changedItems)
+    const isRowClick = e.type === 'click' && (e.target as Element).localName !== 'input'
+    if (!isRowClick) {
+      anchorId.current = undefined
+      applySelection(data.selectedItems)
     }
-    setSelectedItems(selItems)
-    const selectedVideos = videos.filter((video) => selItems.has(video.uuid))
-    if (onSelectionChange !== undefined) {
-      onSelectionChange(selectedVideos)
-    }
-  }
-  const handleShortcuts = (event: React.KeyboardEvent) => {
-    console.log(event)
   }
 
-  useEffect(() => {
-    const newSelectedItems: Set<SelectionItemId> = new Set()
-    for (const item of selectedItems) {
-      const video = videos.find((v) => v.uuid === item)
-      if (video != undefined) {
-        newSelectedItems.add(video.uuid)
+  const handleRowClick = (e: React.MouseEvent, rowId: SelectionItemId) => {
+    if ((e.target as Element).localName === 'input') {
+      return
+    }
+    const toggle = e.ctrlKey || e.metaKey
+    if (e.shiftKey && anchorId.current !== undefined) {
+      const ids = getDisplayedIds()
+      const from = ids.indexOf(anchorId.current)
+      const to = ids.indexOf(rowId)
+      if (from !== -1 && to !== -1) {
+        const range = ids.slice(Math.min(from, to), Math.max(from, to) + 1)
+        applySelection(new Set<SelectionItemId>(toggle ? [...selectedItems, ...range] : range))
+        return
       }
     }
-    if (newSelectedItems.size !== selectedItems.size) {
-      setSelectedItems(newSelectedItems)
-      const selectedVideos = videos.filter((video) => newSelectedItems.has(video.uuid))
-      if (onSelectionChange !== undefined) {
-        onSelectionChange(selectedVideos)
+    anchorId.current = rowId
+    if (toggle) {
+      const newSelection = new Set<SelectionItemId>(selectedItems)
+      if (!newSelection.delete(rowId)) {
+        newSelection.add(rowId)
       }
+      applySelection(newSelection)
+    } else {
+      applySelection(new Set<SelectionItemId>([rowId]))
     }
-  }, [selectedItems, videos, onSelectionChange])
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
+      event.preventDefault()
+      applySelection(new Set<SelectionItemId>(videoListItems.map((item) => item.uuid)))
+    } else if (event.key === 'Escape') {
+      applySelection(new Set<SelectionItemId>())
+    }
+  }
 
   return (
-    <DropZone onDropFiles={onImportVideos} style={{ minHeight: '100%' }} onKeyUp={handleShortcuts}>
+    <DropZone onDropFiles={onImportVideos} style={{ minHeight: '100%' }} onKeyDown={handleKeyDown}>
       <DataGrid
         items={videoListItems}
         columns={columns}
         sortable
+        onSortChange={(_e, state) => setSortState(state)}
         selectedItems={selectedItems}
         onSelectionChange={handleSelectionChange}
         selectionMode="multiselect"
@@ -153,6 +194,7 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
         resizableColumns
         columnSizingOptions={columnSizingOptions}
         size="extra-small"
+        style={{ userSelect: 'none' }}
       >
         <DataGridHeader>
           <DataGridRow
@@ -169,6 +211,7 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
           {({ item, rowId }) => (
             <DataGridRow<IVideoListItem>
               key={rowId}
+              onClick={(e: React.MouseEvent) => handleRowClick(e, rowId)}
               selectionCell={{
                 checkboxIndicator: {
                   'aria-label': t('video_list.aria_label.select_row', { defaultValue: 'Select row' })
