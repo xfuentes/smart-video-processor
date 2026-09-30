@@ -17,7 +17,7 @@
  */
 
 import { Button, Combobox, ComboboxProps, Option, Tooltip } from '@fluentui/react-components'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Dismiss12Regular } from '@fluentui/react-icons'
 import { searchAncestorsMatching } from '../../utils'
 import { LanguageIETF, Languages } from '../../../../common/LanguageIETF'
@@ -57,32 +57,29 @@ export const LanguageSelector = (props: Props) => {
     props.allowedCodes ? Languages.getList().filter((l) => props.allowedCodes!.includes(l.code)) : Languages.getList()
   ).sort((a, b) => getLanguageDisplay(a).localeCompare(getLanguageDisplay(b)))
   const selectedLanguage = !props.multiselect ? Languages.getLanguageByCode(props.value) : undefined
-  const [value, setValue] = React.useState(
-    !props.multiselect ? (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '') : ''
-  )
-
-  useEffect(() => {
-    if (props.multiselect) {
-      setValue('')
-    } else {
-      const selected = Languages.getLanguageByCode(props.value)
-      setValue(selected ? getLanguageDisplay(selected) : '')
-    }
-  }, [getLanguageDisplay, props.multiselect, props.value])
+  // The typed or just chosen text, shown until the selected value changes.
+  const [draft, setDraft] = React.useState<string>()
+  const currentValue = props.multiselect ? undefined : props.value
+  const [previousValue, setPreviousValue] = React.useState(currentValue)
+  if (currentValue !== previousValue) {
+    setPreviousValue(currentValue)
+    setDraft(undefined)
+  }
+  const value = draft ?? (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '')
 
   const handleSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
     // update selectedOptions
     if (props.multiselect) {
       props.onChanges(data.selectedOptions)
     } else {
-      setValue(data.optionText ?? '')
+      setDraft(data.optionText ?? '')
       props.onChange(data.optionValue ?? '')
     }
   }
 
   // Only for single selection
   const handleInput = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(ev.target.value)
+    setDraft(ev.target.value)
   }
 
   const onTagClick = (option: string, _index: number, _event: React.MouseEvent<HTMLButtonElement>) => {
@@ -125,7 +122,7 @@ export const LanguageSelector = (props: Props) => {
                     appearance="primary"
                     icon={<Dismiss12Regular />}
                     iconPosition="after"
-                    onClick={onTagClick.bind(null, code, i)}
+                    onClick={(event) => onTagClick(code, i, event)}
                     id={`${props.id}-remove-${code}`}
                     aria-labelledby={`${props.id}-remove ${props.id}-remove-${i}`}
                     style={{ textWrap: 'nowrap' }}
@@ -165,6 +162,7 @@ export const LanguageSelector = (props: Props) => {
             value={value}
             selectedOptions={[props.value]}
             onInput={handleInput}
+            input={{ onBlur: () => setDraft(undefined) }}
             onOptionSelect={handleSelect}
             style={{ minWidth: '200px' }}
             size={props.size}

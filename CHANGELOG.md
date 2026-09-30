@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Fixed the language selector briefly showing intermediate values before the chosen language.
 - Fixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once.
 - Fixed the icon missing from the temporary files cleanup window and the main window in the Linux `.deb` package.
 
