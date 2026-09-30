@@ -37,6 +37,7 @@ export const PaneSplitter = ({ value, onResize, onCommit }: Props) => {
   const _ = useI18n()
   const [active, setActive] = useState(false)
   const [hovered, setHovered] = useState(false)
+  const [keyboardFocused, setKeyboardFocused] = useState(false)
   const currentPercent = React.useRef(value)
 
   const percentFromPointer = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -104,6 +105,8 @@ export const PaneSplitter = ({ value, onResize, onCommit }: Props) => {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
       onKeyDown={handleKeyDown}
+      onFocus={(event) => setKeyboardFocused(event.currentTarget.matches(':focus-visible'))}
+      onBlur={() => setKeyboardFocused(false)}
       onDoubleClick={handleDoubleClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -115,6 +118,8 @@ export const PaneSplitter = ({ value, onResize, onCommit }: Props) => {
         gap: '3px',
         cursor: 'row-resize',
         touchAction: 'none',
+        outline: keyboardFocused ? '1px solid var(--colorNeutralStroke1)' : 'none',
+        outlineOffset: '-1px',
         userSelect: 'none',
         backgroundColor: active || hovered ? 'var(--colorBrandStroke1)' : 'var(--colorNeutralBackground1)',
         transition: active ? undefined : 'background-color 0.15s ease-in 0.2s'
