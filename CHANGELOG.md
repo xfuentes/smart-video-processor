@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed the icon missing from the temporary files cleanup window and the main window in the Linux `.deb` package.
+
 ## [2.2.0] - 2026-09-29
 
 ### Changed

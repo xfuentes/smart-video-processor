@@ -1,4 +1,4 @@
-import { pathToFileURL } from 'url'
+import { readFileSync } from 'fs'
 import { BrowserWindow } from 'electron'
 import { _ } from './i18n'
 import icon from '../../resources/icon.ico?asset'
@@ -44,7 +44,7 @@ export function showCleanupDialog() {
   cleanupWindow = new BrowserWindow({
     width: 500,
     height: 120,
-    icon,
+    icon: process.platform === 'win32' ? icon : iconPng,
     show: false,
     frame: false,
     resizable: false,
@@ -59,7 +59,7 @@ export function showCleanupDialog() {
       webSecurity: false
     }
   })
-  const iconUrl = pathToFileURL(iconPng).href.replace('file://', 'svp://')
+  const iconUrl = `data:image/png;base64,${readFileSync(iconPng).toString('base64')}`
   const message = _('cleanup.message', { defaultValue: 'Cleaning temporary files...' })
   const progressTemplate = _('cleanup.progress', { defaultValue: 'Cleaning temporary files... ({current}/{total})' })
   const html = getCleanupDialogHtml(iconUrl, message, progressTemplate)

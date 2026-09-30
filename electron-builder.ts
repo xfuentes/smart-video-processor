@@ -59,7 +59,7 @@ export default {
     output: 'dist',
     buildResources: 'assets'
   },
-  files: ['build/**/*', 'resources/flags', 'locales/**'],
+  files: ['build/**/*', 'resources/flags', 'resources/icon.png', 'resources/icon.ico', 'locales/**'],
   extraFiles: ['LICENSE', 'README.md', 'docs'],
   electronDist: 'node_modules/electron/dist',
   electronDownload: {
