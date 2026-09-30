@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.3.0' })}</h4>
+      <ul>
+        {_('about.news.version_2_3_0.items', {
+          defaultValue:
+            'Added a draggable splitter between the video list and the preview pane, with the height remembered between sessions\nThe video list now selects whole rows: click, Ctrl/Cmd+click, Shift+click, Ctrl/Cmd+A and Escape work as expected, and the text in the list can no longer be selected\nFixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mkv, keeping the release tags in the detected title\nFixed the language selector briefly showing intermediate values before the chosen language\nFixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once\nFixed the icon missing from the cleanup window and the main window in the Linux .deb package'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.2.0' })}</h4>
       <ul>
         {_('about.news.version_2_2_0.items', {

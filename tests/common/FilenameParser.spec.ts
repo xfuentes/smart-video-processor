@@ -79,3 +79,24 @@ test('parse movie filename with bracketed release noise before year', () => {
     absoluteEpisode: undefined
   })
 })
+
+test('parse movie filename without year by cutting the title at the first technical token', () => {
+  const result = parseFilename('La Nouvelle Guerre Des Boutons.1080p.HDLight.French.AAC.x264-noTag.mkv')
+  expect(result).toStrictEqual({
+    title: 'La Nouvelle Guerre Des Boutons',
+    season: undefined,
+    episode: undefined,
+    episodeTitle: undefined,
+    absoluteEpisode: undefined
+  })
+})
+
+test('parse movie filename without year and without dash before the technical tokens', () => {
+  const result = parseFilename('Le Grand Bleu 720p BluRay x264.mkv')
+  expect(result.title).toBe('Le Grand Bleu')
+})
+
+test('keep words like French in a title without technical tokens', () => {
+  const result = parseFilename('The French Dispatch.mkv')
+  expect(result.title).toBe('The French Dispatch')
+})

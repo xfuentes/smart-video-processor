@@ -76,6 +76,15 @@ function removeReleaseNoise(input: string): string {
   return Files.megaTrim(cleaned)
 }
 
+const TECHNICAL_TOKEN_PATTERN =
+  /\b(?:\d{3,4}p|x26[45]|h ?26[45]|hevc|blu ?ray|bdrip|brrip|web ?rip|web ?dl|hdrip|dvdrip|hdtv|hdlight|aac|ac3|dts|ddp5 1)\b/i
+
+// Cuts a title without year at the first unambiguous technical token, e.g. "Movie 1080p HDLight x264" -> "Movie".
+function stripTechnicalSuffix(title: string): string {
+  const index = title.search(TECHNICAL_TOKEN_PATTERN)
+  return index > 0 ? cleanupTitle(title.substring(0, index)) : title
+}
+
 function tryPatterns(input: string): MatchResult {
   const normalized = normalize(input)
 
@@ -221,6 +230,10 @@ export function parseFilename(filename: string): ParsedFilename {
 
   if (!result.title && !match.title) {
     result.title = cleanupTitle(normalized)
+  }
+
+  if (result.year === undefined && result.title) {
+    result.title = stripTechnicalSuffix(result.title)
   }
 
   return result

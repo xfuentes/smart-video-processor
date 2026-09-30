@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.3.0] - 2026-09-30
 
 ### Added
 
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Fixed movie filenames without a year, like `Title.1080p.HDLight.French.AAC.x264-Group.mkv`, keeping the release tags in the detected title.
 - Fixed the language selector briefly showing intermediate values before the chosen language.
 - Fixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once.
 - Fixed the icon missing from the temporary files cleanup window and the main window in the Linux `.deb` package.

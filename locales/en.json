@@ -698,5 +698,6 @@
   "encoding.selected_for": "Selected for: {enabled}/{total}",
   "encoding.if_enabled_for_all": "If enabled for all",
   "about.news.version_2_2_0.items": "With several videos selected, the Encoding tab now shows the total number of tracks selected for encoding, and the tooltip of each track shows how many files it is selected for along with the resulting size reduction\nFiles added in one batch (Open, drag and drop, or a scanned directory) are now imported sorted by name in natural order\nFixed canceling a paused job having no effect until it was resumed\nFixed the icon missing from the temporary files cleanup window in packaged builds",
-  "preview_splitter.aria_label": "Resize the preview pane"
+  "preview_splitter.aria_label": "Resize the preview pane",
+  "about.news.version_2_3_0.items": "Added a draggable splitter between the video list and the preview pane, with the height remembered between sessions\nThe video list now selects whole rows: click, Ctrl/Cmd+click, Shift+click, Ctrl/Cmd+A and Escape work as expected, and the text in the list can no longer be selected\nFixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mkv, keeping the release tags in the detected title\nFixed the language selector briefly showing intermediate values before the chosen language\nFixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once\nFixed the icon missing from the cleanup window and the main window in the Linux .deb package"
 }
