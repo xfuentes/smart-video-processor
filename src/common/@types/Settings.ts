@@ -19,6 +19,9 @@
 import { ProcessesPriority } from './processes'
 import { VideoCodec } from './Encoding'
 
+/** Limits and default of the preview pane height, in percent of the window height. */
+export const PREVIEW_PANE_HEIGHT = { min: 15, max: 80, default: 40 }
+
 export type OutputRuleProperty = 'type' | 'language' | 'year' | 'genres' | 'quality' | 'country'
 export type OutputRuleOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'containsAny' | 'containsAll'
 export type OutputRuleCondition = {
@@ -95,6 +98,10 @@ export type Settings = {
    * Directory watched for new video files when isAutoAddEnabled is true (absolute)
    */
   autoAddPath: string
+  /**
+   * Height of the preview pane below the video list, in percent of the window height.
+   */
+  previewPaneHeight: number
   /**
    * Process priority to use when merging or encoding
    */

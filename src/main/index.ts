@@ -21,7 +21,14 @@ import { dirname, extname, isAbsolute, join } from 'path'
 import fs from 'node:fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico?asset'
-import { currentSettings, defaultSettings, loadSettings, saveSettings, validateSettings } from './domain/Settings'
+import {
+  currentSettings,
+  defaultSettings,
+  loadSettings,
+  savePreviewPaneHeight,
+  saveSettings,
+  validateSettings
+} from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
 import { getUwpActivationFiles } from './uwpActivation'
@@ -320,6 +327,9 @@ app.whenReady().then(async () => {
     }
     return ''
   })
+  ipcMain.handle('main:setPreviewPaneHeight', (_event, percent: number) => {
+    savePreviewPaneHeight(percent)
+  })
   ipcMain.handle('main:saveSettings', async (_event, settings: Settings): Promise<FormValidation<Settings>> => {
     const priorityUpdated = currentSettings.priority !== settings.priority
     const encoderSettingsUpdated =
@@ -330,7 +340,8 @@ app.whenReady().then(async () => {
       currentSettings.audioSizeReduction !== settings.audioSizeReduction ||
       currentSettings.audioEnforceCodec !== settings.audioEnforceCodec
 
-    const validation = saveSettings(settings)
+    // The preview pane height is changed by resizing, not from the settings dialog.
+    const validation = saveSettings({ ...settings, previewPaneHeight: currentSettings.previewPaneHeight })
     if (validation.status === 'success') {
       if (priorityUpdated) {
         JobManager.getInstance().updatePriority()

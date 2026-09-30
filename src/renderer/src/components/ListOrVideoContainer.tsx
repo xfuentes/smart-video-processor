@@ -14,6 +14,7 @@ type props = {
 
 export const ListOrVideoContainer = ({ videos, selectedVideos, onSelectionChange, onImportVideos }: props) => {
   const { videoPlayerOpened } = useVideoPlayer()
+  const previewShown = selectedVideos.length > 0 && selectedVideos.find((sv) => sv.loading) === undefined
   return (
     <>
       {videoPlayerOpened ? (
@@ -30,7 +31,10 @@ export const ListOrVideoContainer = ({ videos, selectedVideos, onSelectionChange
             />
           </div>
           <Divider />
-          <div className="stack-item-grow">
+          <div
+            className="stack-item-grow"
+            style={previewShown ? { borderBottom: '1px solid var(--colorNeutralStroke2)' } : undefined}
+          >
             <div style={{ height: '100%' }}>
               <VideoList videos={videos} onSelectionChange={onSelectionChange} onImportVideos={onImportVideos} />
             </div>

@@ -48,6 +48,7 @@ const api: SvpAPI = {
     getLocaleBasePath: (): Promise<string> => ipcRenderer.invoke('main:getLocaleBasePath'),
     getLicenseText: (language: string): Promise<string> => ipcRenderer.invoke('main:getLicenseText', language),
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
+    setPreviewPaneHeight: (percent: number): Promise<void> => ipcRenderer.invoke('main:setPreviewPaneHeight', percent),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
     addInvalidSettingsListener: (callback: InvalidSettingsListener) =>

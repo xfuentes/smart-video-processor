@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Added a draggable splitter between the video list and the preview pane to resize the preview pane, with the height remembered between sessions. Double-click it to reset the height, or use the up and down arrow keys when it is focused.
+
 ### Changed
 
 - The video list now selects whole rows: click selects a single video, Ctrl/Cmd+click toggles one, Shift+click selects a range, Ctrl/Cmd+A selects all and Escape clears the selection. The text in the list can no longer be selected.

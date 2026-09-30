@@ -27,6 +27,7 @@ import {
   OutputRuleCondition,
   OutputRuleOperator,
   OutputRuleProperty,
+  PREVIEW_PANE_HEIGHT,
   Settings,
   TVShowMatchingSource
 } from '../../common/@types/Settings'
@@ -84,6 +85,7 @@ export const defaultSettings: Settings = {
   isAutoStartEnabled: false,
   isAutoAddEnabled: false,
   autoAddPath: '',
+  previewPaneHeight: PREVIEW_PANE_HEIGHT.default,
   priority: 'BELOW_NORMAL',
   isTrackFilteringEnabled: false,
   favoriteLanguages: [systemLocale],
@@ -208,6 +210,12 @@ export function saveSettings(settings: Settings) {
     Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
   }
   return validation
+}
+
+export function savePreviewPaneHeight(percent: number) {
+  const clamped = Math.min(PREVIEW_PANE_HEIGHT.max, Math.max(PREVIEW_PANE_HEIGHT.min, percent))
+  currentSettings = { ...currentSettings, previewPaneHeight: clamped }
+  Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
 }
 
 function isValidExecutable(path: string) {

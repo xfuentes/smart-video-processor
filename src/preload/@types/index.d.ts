@@ -44,6 +44,7 @@ export interface SvpAPI {
     getLocaleBasePath: () => Promise<string>
     getLicenseText: (language: string) => Promise<string>
     getCurrentSettings: () => Promise<FormValidation<Settings>>
+    setPreviewPaneHeight: (percent: number) => Promise<void>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
     switchPaused: () => Promise<boolean>
