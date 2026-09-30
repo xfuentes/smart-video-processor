@@ -7,7 +7,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Creates the draft release once, so the parallel packaging jobs (and the other workflow) all upload to the same draft.
+  draft-release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    concurrency:
+      group: draft-release-${{ github.ref_name }}
+      cancel-in-progress: false
+    steps:
+      - name: Create the draft release if it does not exist yet
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh api "repos/${{ github.repository }}/releases" --paginate --jq '.[] | select(.tag_name == "${{ github.ref_name }}") | .id' | head -n 1)
+          if [ -z "$existing" ]; then
+            gh release create "${{ github.ref_name }}" --repo "${{ github.repository }}" --draft --verify-tag --title "${GITHUB_REF_NAME#v}" --notes ""
+          else
+            echo "Release ${{ github.ref_name }} already exists (id $existing)"
+          fi
+
   release:
+    needs: draft-release
     permissions:
       contents: write
       discussions: write
