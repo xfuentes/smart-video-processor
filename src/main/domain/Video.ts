@@ -74,7 +74,8 @@ import { PreviewingJob } from './jobs/PreviewingJob'
 import { FFmpeg } from './programs/FFmpeg'
 import { FFprobe } from './programs/FFprobe'
 import { isEqual, omit } from 'lodash'
-import { parseFilename } from './FilenameParser'
+import { Numbers } from '../util/numbers'
+import { hasTechnicalToken, parseFilename } from './FilenameParser'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -466,7 +467,7 @@ export class Video implements IVideo {
     }
   }
 
-  prepareMultiSearch(data?: MultiSearchInputData) {
+  prepareMultiSearch(data?: MultiSearchInputData, episodeOffset = 0) {
     this.searching = true
     if (data && data.type === VideoType.TV_SHOW) {
       if (data.type !== undefined) this.setType(data.type)
@@ -476,6 +477,12 @@ export class Video implements IVideo {
       if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
       if (data.tvShowOrder !== undefined) void this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
+      const startEpisode = Numbers.toNumber(data.tvShowStartEpisode ?? '')
+      if (startEpisode !== undefined) {
+        // The first selected video gets the entered number, the following ones are numbered sequentially.
+        this.tvShow.setEpisode('' + (startEpisode + episodeOffset))
+        this.tvShow.setAbsoluteEpisode('' + (startEpisode + episodeOffset))
+      }
     }
   }
 
@@ -1322,6 +1329,10 @@ export class Video implements IVideo {
       this.type = VideoType.MOVIE
       this.movie.title = Files.megaTrim(parsed.title)
       this.movie.year = parsed.year
+    } else if (parsed.title && hasTechnicalToken(this.filename) && !/\b\d{2,4}\b/.test(parsed.title)) {
+      // A movie without year, e.g. "Title.1080p.x264-Group.mkv", must not fall through to the absolute episode pattern.
+      this.type = VideoType.MOVIE
+      this.movie.title = Files.megaTrim(parsed.title)
     }
 
     if (this.type === VideoType.OTHER) {

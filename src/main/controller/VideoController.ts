@@ -24,17 +24,19 @@ import { IHint } from '../../common/@types/Hint'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
 type VideoListChangeListener = (videos: Video[]) => void
-type VideoChangeListener = (video: Video) => void
 type VideosChangeListener = (videos: Video[]) => void
+
+const CHANGE_FLUSH_DELAY_MS = 100
 
 export class VideoController {
   private static instance: VideoController
   private videos: Video[] = []
   private listChangeListeners: VideoListChangeListener[] = []
-  private videoChangeListeners: VideoChangeListener[] = []
   private videosChangeListeners: VideosChangeListener[] = []
   private batchDepth = 0
   private batchedVideos = new Set<Video>()
+  private pendingVideos = new Set<Video>()
+  private flushTimer: NodeJS.Timeout | undefined
 
   static getInstance() {
     if (!VideoController.instance) {
@@ -48,12 +50,18 @@ export class VideoController {
       this.batchedVideos.add(video)
       return
     }
-    this.fireListChangeEvent()
-    this.fireVideoChangeEvent(video)
+    this.pendingVideos.add(video)
+    this.flushTimer ??= setTimeout(this.flushPendingChanges, CHANGE_FLUSH_DELAY_MS)
   }
 
-  addVideoChangeListener(listener: VideoChangeListener) {
-    this.videoChangeListeners.push(listener)
+  // Coalesces rapid changes (e.g. progress updates) into one event carrying only the videos that changed.
+  private flushPendingChanges = () => {
+    this.flushTimer = undefined
+    const changedVideos = [...this.pendingVideos].filter((video) => this.videos.includes(video))
+    this.pendingVideos.clear()
+    if (changedVideos.length > 0) {
+      this.videosChangeListeners.forEach((listener) => listener(changedVideos))
+    }
   }
 
   addVideosChangeListener(listener: VideosChangeListener) {
@@ -70,14 +78,9 @@ export class VideoController {
       if (this.batchDepth === 0 && this.batchedVideos.size > 0) {
         const changedVideos = [...this.batchedVideos]
         this.batchedVideos.clear()
-        this.fireListChangeEvent()
         this.videosChangeListeners.forEach((listener) => listener(changedVideos))
       }
     }
-  }
-
-  fireVideoChangeEvent(video: Video) {
-    this.videoChangeListeners.forEach((listener) => listener(video))
   }
 
   addListChangeListener(listener: VideoListChangeListener) {
@@ -147,8 +150,8 @@ export class VideoController {
 
   async multiSearch(uuids: string[], data: MultiSearchInputData | undefined) {
     const videos = uuids.map((uuid: string) => this.getVideoByUuid(uuid))
-    for (const video of videos) {
-      video.prepareMultiSearch(data)
+    for (const [index, video] of videos.entries()) {
+      video.prepareMultiSearch(data, index)
       video.autoModePossible = false
     }
     this.fireListChangeEvent()

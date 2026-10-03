@@ -15,32 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { EpisodeOrder } from './EpisodeOrder'
-import { LanguageIETF } from '../LanguageIETF'
-import { Country } from '../Countries'
-import { IDatabaseLink } from './DatabaseLink'
 
-export interface ITVShow {
-  title?: string
-  order?: EpisodeOrder
-  season?: number
-  episode?: number
-  episodeTitle: string
-  year?: number
-  overview?: string
-  episodeOverview?: string
-  poster: string
-  posterURL?: string
-  theTVDB?: number
-  theMovieDB?: number
-  imdb?: string
-  absoluteEpisode?: number
-  episodePoster: string
-  episodePosterURL: string
-  originalLanguage?: LanguageIETF
-  originalCountries: Country[]
-  episodeCount?: number
-  isAnimation?: boolean
-  genres?: string[]
-  database?: IDatabaseLink
+export interface IDatabaseLink {
+  name: string
+  url: string
+  kind: 'movie' | 'series' | 'episode'
 }

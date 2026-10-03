@@ -27,6 +27,7 @@ import { Numbers } from '../util/numbers'
 import { debug, info, warning } from '../util/log'
 import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
+import { IDatabaseLink } from '../../common/@types/DatabaseLink'
 import { currentSettings } from './Settings'
 import { TVShowMatchingSource } from '../../common/@types/Settings'
 import { LanguageIETF } from '../../common/LanguageIETF'
@@ -52,6 +53,7 @@ export class TVShow implements ITVShow {
   public absoluteEpisode?: number
   public episodePoster: string = ''
   public episodePosterURL: string = ''
+  private tvdbEpisodeId?: number
   public originalLanguage: LanguageIETF | undefined
   public originalCountries: Country[] = []
   public episodeCount?: number
@@ -126,6 +128,9 @@ export class TVShow implements ITVShow {
 
     this.video.message = _('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
     info('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
+    if (episodeSearchFailed) {
+      this.clearEpisodeDetails()
+    }
     const matchedSearchResult = this.video.searchResults?.find((r) => r.id === this.theTVDB)
     const { episodeData, seriesData, episodeCount } = await TVDBClient.getInstance().retrieveSeriesDetails(
       this.theTVDB,
@@ -156,8 +161,10 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
+    this.tvdbEpisodeId = undefined
     if (this.episode || this.absoluteEpisode) {
       if (episodeData) {
+        this.tvdbEpisodeId = episodeData.id
         if (this.order !== 'absolute') {
           this.season = episodeData.seasonNumber
           this.episode = episodeData.episodeNumber
@@ -476,9 +483,15 @@ export class TVShow implements ITVShow {
   }
 
   private clearEpisodeNumbers() {
-    this.setSeason('')
-    this.setEpisode('')
-    this.setAbsoluteEpisode('')
+    this.season = undefined
+    this.episode = undefined
+    this.absoluteEpisode = undefined
+  }
+
+  private clearEpisodeDetails() {
+    this.episodePosterURL = ''
+    this.episodePoster = ''
+    this.episodeOverview = undefined
   }
 
   getOriginalLanguage() {
@@ -487,6 +500,31 @@ export class TVShow implements ITVShow {
 
   getOriginalCountries() {
     return this.originalCountries
+  }
+
+  getDatabaseLink(): IDatabaseLink | undefined {
+    if (this.lastSearchSource === 'tmdb') {
+      if (!this.theMovieDB) {
+        return undefined
+      }
+      const seriesURL = `https://www.themoviedb.org/tv/${this.theMovieDB}`
+      const hasPosition = this.season !== undefined && this.episode !== undefined
+      return {
+        name: 'TheMovieDB',
+        url: hasPosition ? `${seriesURL}/season/${this.season}/episode/${this.episode}` : seriesURL,
+        kind: hasPosition ? 'episode' : 'series'
+      }
+    }
+    if (!this.theTVDB) {
+      return undefined
+    }
+    return {
+      name: 'TheTVDB',
+      kind: this.tvdbEpisodeId ? 'episode' : 'series',
+      url: this.tvdbEpisodeId
+        ? `https://thetvdb.com/dereferrer/episode/${this.tvdbEpisodeId}`
+        : `https://thetvdb.com/dereferrer/series/${this.theTVDB}`
+    }
   }
 
   toJSON(): ITVShow {
@@ -511,7 +549,8 @@ export class TVShow implements ITVShow {
       originalCountries: this.originalCountries,
       episodeCount: this.episodeCount,
       isAnimation: this.isAnimation,
-      genres: this.genres
+      genres: this.genres,
+      database: this.getDatabaseLink()
     }
   }
 }

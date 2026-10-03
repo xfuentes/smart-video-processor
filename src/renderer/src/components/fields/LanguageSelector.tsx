@@ -22,6 +22,7 @@ import { Dismiss12Regular } from '@fluentui/react-icons'
 import { searchAncestorsMatching } from '../../utils'
 import { LanguageIETF, Languages } from '../../../../common/LanguageIETF'
 import { useI18n } from '../../i18n'
+import { Strings } from '../../../../common/Strings'
 
 type MultipleProps = {
   multiselect: true
@@ -67,13 +68,31 @@ export const LanguageSelector = (props: Props) => {
   }
   const value = draft ?? (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '')
 
+  // Text typed in the multiple selection input.
+  const [query, setQuery] = React.useState('')
+
+  // The text typed by the user, ignored while it only shows the selected language.
+  const searchText = props.multiselect
+    ? query
+    : draft !== undefined && draft !== (selectedLanguage ? getLanguageDisplay(selectedLanguage) : '')
+      ? draft
+      : ''
+  const searchTokens = Strings.normalizeForComparison(searchText).split(' ').filter(Boolean)
+  const matchingOptions = languageOptions.filter((lang) => {
+    // Matches the displayed name, the English name or the code, ignoring case and accents.
+    const haystack = Strings.normalizeForComparison(`${getLanguageDisplay(lang)} ${lang.label} ${lang.code}`)
+    return searchTokens.every((token) => haystack.includes(token))
+  })
+
   const handleSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
     // update selectedOptions
     if (props.multiselect) {
+      setQuery('')
       props.onChanges(data.selectedOptions)
-    } else {
+    } else if (data.optionValue !== undefined) {
+      // Typing clears the selection in the combobox, which must not reset the typed text.
       setDraft(data.optionText ?? '')
-      props.onChange(data.optionValue ?? '')
+      props.onChange(data.optionValue)
     }
   }
 
@@ -143,12 +162,15 @@ export const LanguageSelector = (props: Props) => {
             multiselect={props.multiselect}
             placeholder={_('language_selector.placeholder.multiple', { defaultValue: 'Select one or more languages' })}
             selectedOptions={props.value}
+            value={query}
+            onInput={(ev: React.ChangeEvent<HTMLInputElement>) => setQuery(ev.target.value)}
+            input={{ onBlur: () => setQuery('') }}
             onOptionSelect={handleSelect}
             size={props.size}
             ref={comboboxInputRef}
             disabled={!!props.disabled}
           >
-            {languageOptions.map((lang) => (
+            {matchingOptions.map((lang) => (
               <Option key={lang.code} value={lang.code}>
                 {getLanguageDisplay(lang)}
               </Option>
@@ -169,7 +191,7 @@ export const LanguageSelector = (props: Props) => {
             ref={comboboxInputRef}
             disabled={!!props.disabled}
           >
-            {languageOptions.map((lang) => (
+            {matchingOptions.map((lang) => (
               <Option key={lang.code} value={lang.code} text={getLanguageDisplay(lang)}>
                 {getLanguageDisplay(lang)}
               </Option>

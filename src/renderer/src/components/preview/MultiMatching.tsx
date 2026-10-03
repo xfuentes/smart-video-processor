@@ -53,7 +53,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     .map((v): Country[] | undefined => v.tvShow?.originalCountries)
     .reduce(keepIfSameReducer)
   const initialTvShowSeason = videos
-    .map((v): string | undefined => (!v.tvShow?.season ? '' : '' + v.tvShow.season))
+    .map((v): string | undefined => (v.tvShow?.season === undefined ? '' : '' + v.tvShow.season))
     .reduce(keepIfSameReducer)
 
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
@@ -75,6 +75,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     initialTvShowOriginalCountries
   )
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
+  const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
 
   useEffect(() => {
     type !== initialType && setType(initialType)
@@ -106,7 +107,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
           tvShowYear,
           tvShowTVDB,
           tvShowOrder,
-          tvShowSeason
+          tvShowSeason,
+          tvShowStartEpisode
         } as MultiSearchInputData
       )
       .then(() => {
@@ -194,6 +196,11 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       size="small"
                       disabled={disabled}
                       value={tvShowTitle ?? ''}
+                      placeholder={
+                        initialTvShowTitle === undefined
+                          ? _('matching.multiple_values', { defaultValue: 'Multiple values' })
+                          : undefined
+                      }
                       onChange={(_ev, data) => setTvShowTitle(data.value)}
                     />
                   </Field>
@@ -209,6 +216,11 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       type="number"
                       disabled={disabled}
                       value={tvShowYear ?? ''}
+                      placeholder={
+                        initialTvShowYear === undefined
+                          ? _('matching.multiple_values', { defaultValue: 'Multiple values' })
+                          : undefined
+                      }
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowYear(data.value)}
                     />
@@ -283,12 +295,36 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       type="number"
                       disabled={disabled}
                       value={tvShowSeason ?? ''}
+                      placeholder={
+                        initialTvShowSeason === undefined
+                          ? _('matching.multiple_values', { defaultValue: 'Multiple values' })
+                          : undefined
+                      }
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowSeason(data.value)}
                     />
                   </Field>
                 </div>
               )}
+            {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TVDB_POSITION) && (
+              <div>
+                <Field
+                  size="small"
+                  label={_('matching.field.start_episode.label', { defaultValue: 'First Episode' })}
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Input
+                    size="small"
+                    type="number"
+                    disabled={disabled}
+                    value={tvShowStartEpisode}
+                    placeholder={_('matching.multiple_values', { defaultValue: 'Multiple values' })}
+                    style={{ minWidth: 1 }}
+                    onChange={(_ev, data) => setTvShowStartEpisode(data.value)}
+                  />
+                </Field>
+              </div>
+            )}
           </>
         )}
         <div className="buttons">

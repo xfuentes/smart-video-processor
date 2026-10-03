@@ -48,6 +48,20 @@ test('TV-Show extracts season and episode number', () => {
   expect(video.tvShow.title).toBe('One Piece')
 })
 
+test('Movie without year is not mistaken for an absolute episode number', () => {
+  const video = new Video(
+    getFakeAbsolutePath('out put', 'La Nouvelle Guerre Des Boutons.1080p.HDLight.French.AAC.x264-noTag.mp4')
+  )
+  expect(video.type).toBe(VideoType.MOVIE)
+  expect(video.movie.title).toBe('La Nouvelle Guerre Des Boutons')
+  expect(video.movie.year).toBeUndefined()
+})
+
+test('Anime episode with absolute number and technical tokens stays a TV-Show', () => {
+  const video = new Video(getFakeAbsolutePath('out put', 'Some Anime 045 1080p x264.mkv'))
+  expect(video.type).toBe(VideoType.TV_SHOW)
+})
+
 test('TV-Show extracts tvdb ID', async () => {
   const video = new Video(
     getFakeAbsolutePath(
@@ -609,4 +623,12 @@ describe('merge rename-only optimization', () => {
     expect(video.job).toBeInstanceOf(ProcessingJob)
     video.destroy()
   })
+})
+
+test('TV-Show with single digit season and episode', () => {
+  const video = new Video(getFakeAbsolutePath('out put', 'La Bible - S1E1 - French.mp4'))
+  expect(video.type).toBe(VideoType.TV_SHOW)
+  expect(video.tvShow.title).toBe('La Bible')
+  expect(video.tvShow.season).toBe(1)
+  expect(video.tvShow.episode).toBe(1)
 })

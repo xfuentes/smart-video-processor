@@ -43,7 +43,7 @@ export class EpisodeData {
     this.absoluteNumber = absoluteEpisode
     this.title =
       title ??
-      (season ? 'S' + Strings.toLeadingZeroNumber(season) : '') +
+      (season !== undefined ? 'S' + Strings.toLeadingZeroNumber(season) : '') +
         'E' +
         Strings.toLeadingZeroNumber(episodeNumber, episodeCount ?? 99)
     this.posterURL = posterURL

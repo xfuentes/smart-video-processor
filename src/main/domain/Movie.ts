@@ -233,7 +233,10 @@ export default class Movie implements IMovie {
       originalCountries: this.originalCountries,
       edition: this.edition,
       isAnimation: this.isAnimation,
-      genres: this.genres
+      genres: this.genres,
+      database: this.tmdb
+        ? { name: 'TheMovieDB', url: `https://www.themoviedb.org/movie/${this.tmdb}`, kind: 'movie' }
+        : undefined
     }
   }
 }

@@ -34,11 +34,11 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
-      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.3.0' })}</h4>
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.4.0' })}</h4>
       <ul>
-        {_('about.news.version_2_3_0.items', {
+        {_('about.news.version_2_4_0.items', {
           defaultValue:
-            'Added a draggable splitter between the video list and the preview pane, with the height remembered between sessions\nThe video list now selects whole rows: click, Ctrl/Cmd+click, Shift+click, Ctrl/Cmd+A and Escape work as expected, and the text in the list can no longer be selected\nFixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mkv, keeping the release tags in the detected title\nFixed the language selector briefly showing intermediate values before the chosen language\nFixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once\nFixed the icon missing from the cleanup window and the main window in the Linux .deb package'
+            'Added a link to the matched database (TheTVDB or TheMovieDB) under the title, shown as its logo\nPressing Delete or the Remove button now asks for confirmation when selected videos are queued or being processed, with the number of videos in each state\nAdded a First Episode field to number the episodes of several selected videos sequentially\nThe language selector now filters as you type, ignoring case and accents (typing france finds Français (France))\nThe video list is much faster with long lists of files\nFixed season 0 (TVDB specials) being cleared from the Season field\nFixed files named like Title - S1E1 - French.mp4 not being recognized as TV show episodes\nFixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mp4, not being recognized as movies\nFixed the Season, Title and Year fields showing an empty value instead of Multiple values when several videos are selected\nFixed the interface getting stuck on the episode image when a search by episode name finds nothing\nFixed tooltips on country flags closing immediately'
         })
           .split('\n')
           .map((item, i) => (

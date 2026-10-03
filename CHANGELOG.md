@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2026-10-03
+
+### Added
+
+- The language selector now filters its list as you type, ignoring case and accents, and matches the displayed name, the English name or the code (e.g. `france` finds `Français (France)`).
+- Added a link to the matched database (TheTVDB or TheMovieDB), shown as its logo at the right of the episode title or under the movie title.
+- Added a First Episode field when several videos are selected, numbering their episodes sequentially from the entered value and overwriting the existing ones.
+- Pressing Delete in the video list removes the selected videos, with a confirmation detailing how many are queued or being processed.
+
+### Fixed
+
+- Improved responsiveness with long file lists: a video change now sends only that video to the interface, in grouped updates, instead of the whole list, and only the rows that changed are rendered again.
+- Fixed the Season, Title and Year fields showing an empty value instead of Multiple values when several videos are selected.
+- Fixed the interface getting stuck on the episode image when a search by episode name finds nothing.
+- Fixed tooltips on country flags closing immediately.
+- Fixed season 0 (TVDB specials) being cleared from the Season field as soon as it was entered.
+- Fixed movie files without a year in their name, like `Title.1080p.HDLight.French.AAC.x264-Group.mp4`, not being recognized as movies.
+- Fixed TV show files with single digit episode numbers, like `Title - S1E1 - French.mp4`, not being recognized.
+
 ## [2.3.0] - 2026-09-30
 
 ### Added

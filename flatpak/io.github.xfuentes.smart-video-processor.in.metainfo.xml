@@ -66,12 +66,17 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added a draggable splitter between the video list and the preview pane, with the height remembered between sessions</li>
-          <li>The video list now selects whole rows: click, Ctrl/Cmd+click, Shift+click, Ctrl/Cmd+A and Escape work as expected, and the text in the list can no longer be selected</li>
-          <li>Fixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mkv, keeping the release tags in the detected title</li>
-          <li>Fixed the language selector briefly showing intermediate values before the chosen language</li>
-          <li>Fixed the UI freezing for a long time when editing a hint or an encoding option on many selected videos at once</li>
-          <li>Fixed the icon missing from the cleanup window and the main window in the Linux .deb package</li>
+          <li>Added a link to the matched database (TheTVDB or TheMovieDB) under the title, shown as its logo</li>
+          <li>Pressing Delete or the Remove button now asks for confirmation when selected videos are queued or being processed, with the number of videos in each state</li>
+          <li>Added a First Episode field to number the episodes of several selected videos sequentially</li>
+          <li>The language selector now filters as you type, ignoring case and accents (typing france finds Français (France))</li>
+          <li>The video list is much faster with long lists of files</li>
+          <li>Fixed season 0 (TVDB specials) being cleared from the Season field</li>
+          <li>Fixed files named like Title - S1E1 - French.mp4 not being recognized as TV show episodes</li>
+          <li>Fixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mp4, not being recognized as movies</li>
+          <li>Fixed the Season, Title and Year fields showing an empty value instead of Multiple values when several videos are selected</li>
+          <li>Fixed the interface getting stuck on the episode image when a search by episode name finds nothing</li>
+          <li>Fixed tooltips on country flags closing immediately</li>
         </ul>
       </description>
     </release>

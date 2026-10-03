@@ -17,6 +17,7 @@
  */
 import { LanguageIETF } from '../LanguageIETF'
 import { Country } from '../Countries'
+import { IDatabaseLink } from './DatabaseLink'
 
 export enum EditionType {
   THEATRICAL = 'Theatrical',
@@ -39,4 +40,5 @@ export interface IMovie {
   edition: EditionType
   isAnimation?: boolean
   genres?: string[]
+  database?: IDatabaseLink
 }

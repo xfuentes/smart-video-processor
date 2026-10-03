@@ -34,6 +34,7 @@ import { checkVideoProcessingEnabled, checkVideoProcessingSuccessful, IVideo } f
 import { AboutDialog } from '@renderer/components/about/AboutDialog'
 import { ShutdownDialog } from '@renderer/components/ShutdownDialog'
 import { useI18n } from '../i18n'
+import { useRemoveVideos } from './useRemoveVideos'
 
 type Props = {
   onOpen: () => void
@@ -43,6 +44,7 @@ type Props = {
 
 export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JSX.Element => {
   const _ = useI18n()
+  const { requestRemove, removeDialog } = useRemoveVideos()
   const [isPaused, setPaused] = React.useState(false)
   const [shutdownRequested, setShutdownRequested] = React.useState(false)
   const [shutdownDialogOpen, setShutdownDialogOpen] = React.useState(false)
@@ -89,10 +91,8 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
     }
   }
 
-  const handleRemove = async () => {
-    if (selectedVideos) {
-      await window.api.video.remove(selectedVideos.map((video) => video.uuid))
-    }
+  const handleRemove = () => {
+    requestRemove(selectedVideos ?? [])
   }
 
   const handleClear = async () => {
@@ -189,6 +189,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
           <AboutDialog />
         </ToolbarGroup>
       </Toolbar>
+      {removeDialog}
       <ShutdownDialog open={shutdownDialogOpen} onOpenChange={handleShutdownDialogChange} />
     </>
   )

@@ -67,9 +67,6 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       videos.map((video) => video.toJSON())
     )
   })
-  VideoController.getInstance().addVideoChangeListener((video) => {
-    mainWindow.webContents.send('video:changed', video.toJSON())
-  })
   ipcMain.handle('video:selectSearchResultID', (_event, uuid: string, searchResultID?: number) => {
     return VideoController.getInstance().selectSearchResultID(uuid, searchResultID)
   })

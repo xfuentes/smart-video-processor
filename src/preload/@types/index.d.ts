@@ -26,7 +26,6 @@ import { IHint } from '../../common/@types/Hint'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
-export type VideoChangedListener = (value: IVideo) => void
 export type VideosChangedListener = (value: IVideo[]) => void
 
 export { LogEntry, LogLevel } from '../../common/@types/Log'
@@ -58,7 +57,6 @@ export interface SvpAPI {
     openFileExplorer: () => Promise<void>
     openFiles: (files: File[]) => Promise<void>
     addListChangedListener: (callback: ListChangedListener) => () => void
-    addVideoChangedListener: (callback: VideoChangedListener) => () => void
     addVideosChangedListener: (callback: VideosChangedListener) => () => void
     selectSearchResultID: (uuid: string, searchResultID?: number) => Promise<void>
     search: (uuid: string, data: SearchInputData) => Promise<void>

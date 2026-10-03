@@ -16,9 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Image, RatingDisplay, Tooltip } from '@fluentui/react-components'
+import { Image, Link, RatingDisplay, Tooltip } from '@fluentui/react-components'
 import { useI18n } from '../../i18n'
 import { Country } from '../../../../common/Countries'
+import TMDBLogo from '../../assets/tmdb.svg'
+import TVDBLogo from '../../assets/tvdb.svg'
+import { IDatabaseLink } from '../../../../common/@types/DatabaseLink'
+
+const DATABASE_LOGOS: Record<string, { src: string; background: string }> = {
+  TheTVDB: { src: TVDBLogo, background: 'black' },
+  TheMovieDB: { src: TMDBLogo, background: 'rgb(3, 37, 65)' }
+}
 
 type Props = {
   poster: string | undefined
@@ -32,6 +40,7 @@ type Props = {
   countries?: Country[]
   rating?: number
   genres?: string[]
+  database?: IDatabaseLink
 }
 
 export const VideoPreview = ({
@@ -45,7 +54,8 @@ export const VideoPreview = ({
   position,
   countries,
   rating,
-  genres
+  genres,
+  database
 }: Props) => {
   const _ = useI18n()
   return (
@@ -107,7 +117,7 @@ export const VideoPreview = ({
               {countries &&
                 countries.map((country) => (
                   <div key={country.alpha3} style={{ flexShrink: 0, justifyContent: 'end', maxHeight: '24px' }}>
-                    <Tooltip content={country.label} relationship="description">
+                    <Tooltip content={country.label} relationship="description" positioning="below-end">
                       <Image alt={country.label} width="32px" src={country.flagURL.replace('file://', 'svp://')} />
                     </Tooltip>
                   </div>
@@ -122,9 +132,59 @@ export const VideoPreview = ({
             </div>
           )}
         </div>
-        {(overview || secondaryPoster) && (
-          <div style={{ columnGap: '5px', display: 'grid', flexGrow: 1, gridTemplateRows: '1fr 70px', height: 0 }}>
+        {(overview || secondaryPoster || database) && (
+          <div
+            style={{
+              columnGap: '5px',
+              display: 'grid',
+              flexGrow: 1,
+              gridTemplateColumns: '1fr auto',
+              gridTemplateRows: '1fr 70px',
+              height: 0
+            }}
+          >
             <div className="overview">{overview ? overview : ''}</div>
+            {database && (
+              <div
+                style={{
+                  // A series shows the link above the episode image, a movie in the image slot.
+                  gridRow: subTitle === undefined ? '2 / 2' : '1 / 1',
+                  gridColumn: '2 / 2',
+                  alignSelf: 'end',
+                  justifySelf: 'end'
+                }}
+              >
+                <Tooltip
+                  content={
+                    database.kind === 'movie'
+                      ? _('video_preview.database_link.movie', {
+                          defaultValue: 'Open this movie on {database}',
+                          database: database.name
+                        })
+                      : database.kind === 'episode'
+                        ? _('video_preview.database_link.episode', {
+                            defaultValue: 'Open this episode on {database}',
+                            database: database.name
+                          })
+                        : _('video_preview.database_link.series', {
+                            defaultValue: 'Open this series on {database}',
+                            database: database.name
+                          })
+                  }
+                  relationship="label"
+                  positioning="above-end"
+                >
+                  <Link href={database.url} target="_blank" rel="noreferrer" style={{ lineHeight: 0 }}>
+                    <img
+                      src={DATABASE_LOGOS[database.name]?.src}
+                      alt={database.name}
+                      height={20}
+                      style={{ backgroundColor: DATABASE_LOGOS[database.name]?.background, padding: '2px' }}
+                    />
+                  </Link>
+                </Tooltip>
+              </div>
+            )}
             {secondaryPoster && (
               <div style={{ gridRow: '2 / 2', gridColumn: '2 / 2' }}>
                 <Image

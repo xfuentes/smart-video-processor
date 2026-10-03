@@ -31,11 +31,12 @@ import {
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import { progressRenderer, qualityRenderer, sizeRenderer, statusRenderer } from './preview/renderers'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Strings } from '../../../common/Strings'
 import { DropZone } from '@renderer/components/DropZone'
 import _ from 'lodash'
 import { _ as t } from '../i18n'
+import { useRemoveVideos } from './useRemoveVideos'
 import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@types/Video'
 
 const columns: TableColumnDefinition<IVideoListItem>[] = [
@@ -76,6 +77,34 @@ const columns: TableColumnDefinition<IVideoListItem>[] = [
   })
 ]
 
+type RowProps = {
+  item: IVideoListItem
+  rowId: SelectionItemId
+  onRowClick: (e: React.MouseEvent, rowId: SelectionItemId) => void
+}
+
+// Rows outside of the viewport skip layout and painting, which keeps long lists responsive.
+const rowStyle: React.CSSProperties = { contentVisibility: 'auto', containIntrinsicSize: 'auto 28px' }
+
+const VideoRow = memo(({ item, rowId, onRowClick }: RowProps) => (
+  <DataGridRow<IVideoListItem>
+    style={rowStyle}
+    onClick={(e: React.MouseEvent) => onRowClick(e, rowId)}
+    selectionCell={{
+      checkboxIndicator: {
+        'aria-label': t('video_list.aria_label.select_row', { defaultValue: 'Select row' })
+      }
+    }}
+  >
+    {({ renderCell }) => (
+      <DataGridCell as={'div'} className={'cell'}>
+        {renderCell(item)}
+      </DataGridCell>
+    )}
+  </DataGridRow>
+))
+VideoRow.displayName = 'VideoRow'
+
 type Props = {
   videos: IVideo[]
   onSelectionChange?: (selection: IVideo[]) => void
@@ -94,15 +123,25 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
   const [videoListItems, setVideoListItems] = useState<IVideoListItem[]>([])
   const [previousVideos, setPreviousVideos] = useState<IVideo[]>()
   const [sortState, setSortState] = useState<DataGridProps['sortState']>()
+  const { requestRemove, removeDialog } = useRemoveVideos()
   const anchorId = useRef<SelectionItemId>()
 
   // The list items are derived while rendering, keeping the same array when nothing displayed has changed.
   if (videos !== previousVideos) {
     setPreviousVideos(videos)
     const newVideoListItems = videos.map((video) => _.pick(video, videoListItemKeys) as IVideoListItem)
-    setVideoListItems((prevVideoListItems) =>
-      _.isEqual(newVideoListItems, prevVideoListItems) ? prevVideoListItems : newVideoListItems
-    )
+    setVideoListItems((prevVideoListItems) => {
+      // Unchanged items keep their previous object so that their rows are not rendered again.
+      const previousByUuid = new Map(prevVideoListItems.map((item) => [item.uuid, item]))
+      const sharedItems = newVideoListItems.map((item) => {
+        const previous = previousByUuid.get(item.uuid)
+        return previous !== undefined && _.isEqual(previous, item) ? previous : item
+      })
+      const unchanged =
+        sharedItems.length === prevVideoListItems.length &&
+        sharedItems.every((item, index) => item === prevVideoListItems[index])
+      return unchanged ? prevVideoListItems : sharedItems
+    })
   }
 
   // Videos removed from the list drop out of the selection, the parent prunes its own copy on list changes.
@@ -170,6 +209,30 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
     }
   }
 
+  const rowClickHandler = useRef(handleRowClick)
+  useEffect(() => {
+    rowClickHandler.current = handleRowClick
+  })
+  const handleRowClickRef = useCallback(
+    (e: React.MouseEvent, rowId: SelectionItemId) => rowClickHandler.current(e, rowId),
+    []
+  )
+
+  // Delete works wherever the focus is, except in editable fields and dialogs.
+  useEffect(() => {
+    const handleDelete = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      const isEditable = target?.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]')
+      if (event.key !== 'Delete' || event.defaultPrevented || isEditable || selectedItems.size === 0) {
+        return
+      }
+      event.preventDefault()
+      requestRemove(videos.filter((video) => selectedItems.has(video.uuid)))
+    }
+    window.addEventListener('keydown', handleDelete)
+    return () => window.removeEventListener('keydown', handleDelete)
+  })
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
       event.preventDefault()
@@ -208,25 +271,10 @@ export const VideoList = ({ videos, onSelectionChange = undefined, onImportVideo
           </DataGridRow>
         </DataGridHeader>
         <DataGridBody<IVideoListItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<IVideoListItem>
-              key={rowId}
-              onClick={(e: React.MouseEvent) => handleRowClick(e, rowId)}
-              selectionCell={{
-                checkboxIndicator: {
-                  'aria-label': t('video_list.aria_label.select_row', { defaultValue: 'Select row' })
-                }
-              }}
-            >
-              {({ renderCell }) => (
-                <DataGridCell as={'div'} className={'cell'}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
-            </DataGridRow>
-          )}
+          {({ item, rowId }) => <VideoRow key={rowId} item={item} rowId={rowId} onRowClick={handleRowClickRef} />}
         </DataGridBody>
       </DataGrid>
+      {removeDialog}
     </DropZone>
   )
 }

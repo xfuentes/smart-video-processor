@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import './assets/styles/App.css'
 import { IVideo } from '../../common/@types/Video'
-import { ListChangedListener, VideoChangedListener, VideosChangedListener } from '../../preload/@types'
+import { ListChangedListener, VideosChangedListener } from '../../preload/@types'
 import { PreviewTabs } from '@renderer/components/preview/PreviewTabs'
 import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerProvider'
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
@@ -67,23 +67,11 @@ export const App = (): React.JSX.Element => {
     }
   }
 
-  const videoChangedListener: VideoChangedListener = (video: IVideo) => {
-    if (selectedVideosRef.current.length > 0) {
-      setSelectedVideos((prevSelection) => {
-        let selectionChanged: boolean = false
-        const newSelection = prevSelection.map((prevVideo) => {
-          if (prevVideo.uuid === video.uuid) {
-            selectionChanged = true
-            return video
-          }
-          return prevVideo
-        })
-        return selectionChanged ? newSelection : prevSelection
-      })
-    }
-  }
-
   const videosChangedListener: VideosChangedListener = (changedVideos: IVideo[]) => {
+    setVideos((prevVideos) => {
+      const changedByUuid = new Map(changedVideos.map((video) => [video.uuid, video]))
+      return prevVideos.map((video) => changedByUuid.get(video.uuid) ?? video)
+    })
     if (selectedVideosRef.current.length > 0) {
       setSelectedVideos((prevSelection) => {
         let selectionChanged: boolean = false
@@ -102,11 +90,9 @@ export const App = (): React.JSX.Element => {
 
   useEffect(() => {
     const removeListChangedListener = window.api.video.addListChangedListener(listChangedListener)
-    const removeVideoChangedListener = window.api.video.addVideoChangedListener(videoChangedListener)
     const removeVideosChangedListener = window.api.video.addVideosChangedListener(videosChangedListener)
     return () => {
       removeListChangedListener()
-      removeVideoChangedListener()
       removeVideosChangedListener()
     }
   }, [])

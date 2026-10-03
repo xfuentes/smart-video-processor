@@ -52,7 +52,9 @@ export const Matching = ({ video, disabled }: Props) => {
   const [tvShowTVDB, setTvShowTVDB] = useState<string>(video.tvShow?.theTVDB ? '' + video.tvShow.theTVDB : '')
   const [tvShowTMDB, setTvShowTMDB] = useState<string>(video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '')
   const [tvShowOrder, setTvShowOrder] = useState<EpisodeOrder>(video.tvShow?.order ?? 'official')
-  const [tvShowSeason, setTvShowSeason] = useState<string>(!video.tvShow?.season ? '' : '' + video.tvShow.season)
+  const [tvShowSeason, setTvShowSeason] = useState<string>(
+    video.tvShow?.season === undefined ? '' : '' + video.tvShow.season
+  )
   const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
   const [tvShowAbsoluteEpisode, setTvShowAbsoluteEpisode] = useState<string>(
     !video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode
@@ -86,8 +88,8 @@ export const Matching = ({ video, disabled }: Props) => {
     tvShowTMDB !== (video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '') &&
       setTvShowTMDB(video.tvShow?.theMovieDB ? '' + video.tvShow.theMovieDB : '')
     tvShowOrder !== (video.tvShow?.order ?? 'official') && setTvShowOrder(video.tvShow?.order ?? 'official')
-    tvShowSeason !== (!video.tvShow?.season ? '' : '' + video.tvShow.season) &&
-      setTvShowSeason(!video.tvShow?.season ? '' : '' + video.tvShow.season)
+    tvShowSeason !== (video.tvShow?.season === undefined ? '' : '' + video.tvShow.season) &&
+      setTvShowSeason(video.tvShow?.season === undefined ? '' : '' + video.tvShow.season)
     tvShowEpisode !== (!video.tvShow?.episode ? '' : '' + video.tvShow.episode) &&
       setTvShowEpisode(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
     tvShowAbsoluteEpisode !== (!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode) &&
@@ -671,6 +673,7 @@ export const Matching = ({ video, disabled }: Props) => {
                     year={video.movie?.year}
                     rating={video.movie?.rating}
                     genres={video.movie?.genres}
+                    database={video.movie?.database}
                   />
                 )}
                 {type === VideoType.TV_SHOW && (
@@ -687,6 +690,7 @@ export const Matching = ({ video, disabled }: Props) => {
                     countries={video.tvShow?.originalCountries}
                     secondaryPoster={video.tvShow?.episodePoster}
                     genres={video.tvShow?.genres}
+                    database={video.tvShow?.database}
                   />
                 )}
               </div>

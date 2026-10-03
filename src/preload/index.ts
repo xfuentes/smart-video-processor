@@ -26,14 +26,7 @@ import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
 import { preloadBindings } from 'i18next-electron-fs-backend'
-import {
-  InvalidSettingsListener,
-  ListChangedListener,
-  LogEntry,
-  SvpAPI,
-  VideoChangedListener,
-  VideosChangedListener
-} from './@types'
+import { InvalidSettingsListener, ListChangedListener, LogEntry, SvpAPI, VideosChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
 const version = await ipcRenderer.invoke('main:getVersion')
@@ -80,13 +73,6 @@ const api: SvpAPI = {
       ipcRenderer.send('video:requestList')
       return () => {
         ipcRenderer.off('video:listChanged', subscriber)
-      }
-    },
-    addVideoChangedListener: (callback: VideoChangedListener) => {
-      const subscriber = (_event: IpcRendererEvent, video: IVideo) => callback(video)
-      ipcRenderer.on('video:changed', subscriber)
-      return () => {
-        ipcRenderer.off('video:changed', subscriber)
       }
     },
     addVideosChangedListener: (callback: VideosChangedListener) => {

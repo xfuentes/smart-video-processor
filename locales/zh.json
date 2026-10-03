@@ -699,5 +699,14 @@
   "encoding.if_enabled_for_all": "如果对所有用户启用",
   "about.news.version_2_2_0.items": "选中多个视频后，“编码”选项卡现在会显示已选择进行编码的轨道总数，并且每个轨道的工具提示会显示已选择编码的文件数量以及由此产生的文件大小缩减量。\n一次性添加的文件（通过打开、拖放或扫描目录）现在会按名称自然顺序导入。\n修复了取消已暂停的作业后，直到作业恢复后才会生效的问题。\n修复了打包版本中临时文件清理窗口缺少图标的问题。",
   "preview_splitter.aria_label": "调整预览窗格大小",
-  "about.news.version_2_3_0.items": "在视频列表和预览窗格之间添加了一个可拖动的分隔条，分隔条的高度会在会话之间保留。\n视频列表现在可以选中整行：单击、Ctrl/Cmd+单击、Shift+单击、Ctrl/Cmd+A 和 Esc 键均可正常工作，列表中的文本不再能被选中。\n修复了缺少年份的电影文件名（例如 Title.1080p.HDLight.French.AAC.x264-Group.mkv）的问题，现在检测到的标题中会保留发行标签。\n修复了语言选择器在选择语言之前会短暂显示中间值的问题。\n修复了同时编辑多个选定视频的提示或编码选项时，用户界面长时间卡顿的问题。\n修复了 Linux .deb 包中清理窗口和主窗口中图标缺失的问题。"
+  "about.news.version_2_3_0.items": "在视频列表和预览窗格之间添加了一个可拖动的分隔条，分隔条的高度会在会话之间保留。\n视频列表现在可以选中整行：单击、Ctrl/Cmd+单击、Shift+单击、Ctrl/Cmd+A 和 Esc 键均可正常工作，列表中的文本不再能被选中。\n修复了缺少年份的电影文件名（例如 Title.1080p.HDLight.French.AAC.x264-Group.mkv）的问题，现在检测到的标题中会保留发行标签。\n修复了语言选择器在选择语言之前会短暂显示中间值的问题。\n修复了同时编辑多个选定视频的提示或编码选项时，用户界面长时间卡顿的问题。\n修复了 Linux .deb 包中清理窗口和主窗口中图标缺失的问题。",
+  "video_list.remove_dialog.title": "删除视频",
+  "video_list.remove_dialog.message": "已选视频：{total}。已排队：{queued}。正在编码或合并：{processing}。移除视频将取消处理。是否继续？",
+  "video_list.remove_dialog.confirm": "消除",
+  "video_list.remove_dialog.cancel": "取消",
+  "matching.field.start_episode.label": "第一集",
+  "video_preview.database_link.series": "在 {database} 上打开此系列",
+  "video_preview.database_link.episode": "在 {database} 上打开本集",
+  "video_preview.database_link.movie": "在 {database} 上打开此影片",
+  "about.news.version_2_4_0.items": "在标题下方添加了指向匹配数据库（TheTVDB 或 TheMovieDB）的链接，显示为数据库徽标。\n现在，当选定的视频已加入队列或正在处理时，按下“删除”或“移除”按钮会弹出确认提示，并显示每种状态下的视频数量。\n添加了“首集”字段，用于按顺序为多个选定视频的剧集编号。\n语言选择器现在会在您输入时自动筛选，忽略大小写和重音符号（例如，输入“france”会显示“Français (France)”）。\n视频列表在处理长列表时加载速度更快。\n修复了“季”字段中第 0 季（TVDB 特别篇）被清除的问题。\n修复了文件名类似“标题 - S1E1 - French.mp4”的文件无法被识别为电视剧集的问题。\n修复了文件名中缺少年份（例如“标题.1080p.HDLight.French.AAC.x264-Group.mp4”）的电影无法被识别的问题。\n修复了选择多个视频时，“季”、“标题”和“年份”字段显示为空值而不是“多个值”的问题。\n修复了界面问题。当按剧集名称搜索无结果时，页面会卡在剧集图片上\n修复了国家/地区旗帜图标提示立即关闭的问题"
 }

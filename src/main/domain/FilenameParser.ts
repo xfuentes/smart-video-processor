@@ -77,7 +77,11 @@ function removeReleaseNoise(input: string): string {
 }
 
 const TECHNICAL_TOKEN_PATTERN =
-  /\b(?:\d{3,4}p|x26[45]|h ?26[45]|hevc|blu ?ray|bdrip|brrip|web ?rip|web ?dl|hdrip|dvdrip|hdtv|hdlight|aac|ac3|dts|ddp5 1)\b/i
+  /\b(?:\d{3,4}p|x26[45]|h[ .]?26[45]|hevc|blu[ .-]?ray|bdrip|brrip|web[ .-]?rip|web[ .-]?dl|hdrip|dvdrip|hdtv|hdlight|aac|ac3|dts|ddp5[ .]1)\b/i
+
+export function hasTechnicalToken(text: string): boolean {
+  return TECHNICAL_TOKEN_PATTERN.test(text)
+}
 
 // Cuts a title without year at the first unambiguous technical token, e.g. "Movie 1080p HDLight x264" -> "Movie".
 function stripTechnicalSuffix(title: string): string {
@@ -101,7 +105,7 @@ function tryPatterns(input: string): MatchResult {
   }
 
   // Multi-episode: S01E01E02 or S01E01-E02
-  match = /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{2,4})(?:[Ee]\d{2,4})+/.exec(normalized)
+  match = /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{1,4})(?:[Ee]\d{1,4})+/.exec(normalized)
   if (match?.groups) {
     return {
       title: cleanupTitle(match.groups.title),
@@ -111,8 +115,8 @@ function tryPatterns(input: string): MatchResult {
     }
   }
 
-  // Standard SxxEyy with 2 to 4 episode digits (supports S12E003)
-  match = /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{2,4})\b/.exec(normalized)
+  // Standard SxxEyy with 1 to 4 episode digits (supports S12E003)
+  match = /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{1,4})\b/.exec(normalized)
   if (match?.groups) {
     const rest = normalized.substring(match.index + match[0].length).trim()
     const rawEpisodeTitle = rest.match(/^[-–]\s*(.+)$/)?.[1]
