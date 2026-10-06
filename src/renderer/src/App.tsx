@@ -7,6 +7,7 @@ import { VideoPlayerProvider } from '@renderer/components/context/VideoPlayerPro
 import { SettingsProvider } from '@renderer/components/context/SettingsProvider'
 import { ListOrVideoContainer } from '@renderer/components/ListOrVideoContainer'
 import { MultiPreviewTabs } from '@renderer/components/preview/MultiPreviewTabs'
+import { StatusBar } from './components/StatusBar'
 import { PaneSplitter } from '@renderer/components/PaneSplitter'
 import { PREVIEW_PANE_HEIGHT } from '../../common/@types/Settings'
 
@@ -107,40 +108,43 @@ export const App = (): React.JSX.Element => {
           role="application"
           style={{ width: '100%', height: '100%', overflow: 'hidden' }}
         >
-          <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-            <div className="vertical-stack">
-              <ListOrVideoContainer
-                videos={videos}
-                selectedVideos={selectedVideos}
-                onImportVideos={handleImportVideos}
-                onSelectionChange={handleSelectionChange}
-              ></ListOrVideoContainer>
-              {selectedVideos?.length > 0 && selectedVideos.find((sv) => sv.loading) === undefined && (
-                <>
-                  <PaneSplitter
-                    value={previewPaneHeight}
-                    onResize={applyPreviewPaneHeight}
-                    onCommit={commitPreviewPaneHeight}
-                  />
-                  <div
-                    ref={controlsAreaRef}
-                    className="controls-area"
-                    style={{
-                      minHeight: `${previewPaneHeight}%`,
-                      maxHeight: `${previewPaneHeight}%`,
-                      boxSizing: 'border-box',
-                      borderTop: '1px solid var(--colorNeutralStroke2)'
-                    }}
-                  >
-                    {selectedVideos.length > 1 ? (
-                      <MultiPreviewTabs videos={selectedVideos} />
-                    ) : (
-                      <PreviewTabs video={selectedVideos[0]} />
-                    )}
-                  </div>
-                </>
-              )}
+          <div style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <div className="vertical-stack">
+                <ListOrVideoContainer
+                  videos={videos}
+                  selectedVideos={selectedVideos}
+                  onImportVideos={handleImportVideos}
+                  onSelectionChange={handleSelectionChange}
+                ></ListOrVideoContainer>
+                {selectedVideos?.length > 0 && selectedVideos.find((sv) => sv.loading) === undefined && (
+                  <>
+                    <PaneSplitter
+                      value={previewPaneHeight}
+                      onResize={applyPreviewPaneHeight}
+                      onCommit={commitPreviewPaneHeight}
+                    />
+                    <div
+                      ref={controlsAreaRef}
+                      className="controls-area"
+                      style={{
+                        minHeight: `${previewPaneHeight}%`,
+                        maxHeight: `${previewPaneHeight}%`,
+                        boxSizing: 'border-box',
+                        borderTop: '1px solid var(--colorNeutralStroke2)'
+                      }}
+                    >
+                      {selectedVideos.length > 1 ? (
+                        <MultiPreviewTabs videos={selectedVideos} />
+                      ) : (
+                        <PreviewTabs video={selectedVideos[0]} />
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+            <StatusBar videos={videos} selectedVideos={selectedVideos} />
           </div>
         </div>
       </VideoPlayerProvider>

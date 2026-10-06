@@ -24,6 +24,8 @@ import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Ch
 import { FormValidation } from '../../common/FormValidation'
 import { IHint } from '../../common/@types/Hint'
 
+import { JobQueues } from '../../common/@types/Job'
+
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
 export type VideosChangedListener = (value: IVideo[]) => void
@@ -43,6 +45,8 @@ export interface SvpAPI {
     getLocaleBasePath: () => Promise<string>
     getLicenseText: (language: string) => Promise<string>
     getCurrentSettings: () => Promise<FormValidation<Settings>>
+    getJobQueues: () => Promise<JobQueues>
+    getDiskSpace: () => Promise<{ tmp?: number; output?: number }>
     setPreviewPaneHeight: (percent: number) => Promise<void>
     saveSettings: (settings: Settings) => Promise<FormValidation<Settings>>
     addInvalidSettingsListener: (callback: InvalidSettingsListener) => Promise<void>
@@ -54,7 +58,7 @@ export interface SvpAPI {
     shutdown: () => Promise<void>
   }
   video: {
-    openFileExplorer: () => Promise<void>
+    openFileExplorer: (directories?: boolean) => Promise<void>
     openFiles: (files: File[]) => Promise<void>
     addListChangedListener: (callback: ListChangedListener) => () => void
     addVideosChangedListener: (callback: VideosChangedListener) => () => void

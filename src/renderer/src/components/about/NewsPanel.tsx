@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.5.0' })}</h4>
+      <ul>
+        {_('about.news.version_2_5_0.items', {
+          defaultValue:
+            'Added a status bar showing the number of videos with their total size, how many are selected, queued, failed or successfully processed, and the free space of the temporary and output folders\nThe status bar also shows the encoding and merging activity with the number of videos waiting behind each one, a progress ring and, on hover, the current status message\nThe Open button is now a menu to choose between files and folders\nRedesigned the confirmation dialog shown when removing videos that are queued or being processed\nFixed the Open button only letting you choose folders on Linux and Windows'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.4.0' })}</h4>
       <ul>
         {_('about.news.version_2_4_0.items', {

@@ -26,6 +26,7 @@ import { IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
 import { preloadBindings } from 'i18next-electron-fs-backend'
+import { JobQueues } from '../common/@types/Job'
 import { InvalidSettingsListener, ListChangedListener, LogEntry, SvpAPI, VideosChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
@@ -41,6 +42,8 @@ const api: SvpAPI = {
     getLocaleBasePath: (): Promise<string> => ipcRenderer.invoke('main:getLocaleBasePath'),
     getLicenseText: (language: string): Promise<string> => ipcRenderer.invoke('main:getLicenseText', language),
     getCurrentSettings: (): Promise<FormValidation<Settings>> => ipcRenderer.invoke('main:getCurrentSettings'),
+    getJobQueues: (): Promise<JobQueues> => ipcRenderer.invoke('main:getJobQueues'),
+    getDiskSpace: (): Promise<{ tmp?: number; output?: number }> => ipcRenderer.invoke('main:getDiskSpace'),
     setPreviewPaneHeight: (percent: number): Promise<void> => ipcRenderer.invoke('main:setPreviewPaneHeight', percent),
     saveSettings: (settings: Settings): Promise<FormValidation<Settings>> =>
       ipcRenderer.invoke('main:saveSettings', settings),
@@ -62,7 +65,7 @@ const api: SvpAPI = {
     shutdown: (): Promise<void> => ipcRenderer.invoke('main:shutdown')
   },
   video: {
-    openFileExplorer: () => ipcRenderer.invoke('video:openFileExplorer'),
+    openFileExplorer: (directories?: boolean) => ipcRenderer.invoke('video:openFileExplorer', directories),
     openFiles: (files: File[]) => {
       const filePaths = files.map((f) => webUtils.getPathForFile(f))
       return ipcRenderer.invoke('video:openFiles', filePaths)

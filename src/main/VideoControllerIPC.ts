@@ -43,10 +43,11 @@ const resolveVideoFilePaths = (paths: string[]): string[] => {
 }
 
 export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
-  ipcMain.handle('video:openFileExplorer', async () => {
+  ipcMain.handle('video:openFileExplorer', async (_event, directories: boolean = false) => {
+    // Linux dialogs cannot select files and directories together, so they are offered separately.
     const result = await dialog.showOpenDialog(mainWindow, {
-      title: 'Select video files or directories',
-      properties: ['openFile', 'openDirectory', 'multiSelections', 'dontAddToRecent']
+      title: directories ? 'Select video directories' : 'Select video files',
+      properties: [directories ? 'openDirectory' : 'openFile', 'multiSelections', 'dontAddToRecent']
     })
     if (!result.canceled) {
       void VideoController.getInstance().openFiles(resolveVideoFilePaths(result.filePaths))

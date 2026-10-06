@@ -66,17 +66,11 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added a link to the matched database (TheTVDB or TheMovieDB) under the title, shown as its logo</li>
-          <li>Pressing Delete or the Remove button now asks for confirmation when selected videos are queued or being processed, with the number of videos in each state</li>
-          <li>Added a First Episode field to number the episodes of several selected videos sequentially</li>
-          <li>The language selector now filters as you type, ignoring case and accents (typing france finds Français (France))</li>
-          <li>The video list is much faster with long lists of files</li>
-          <li>Fixed season 0 (TVDB specials) being cleared from the Season field</li>
-          <li>Fixed files named like Title - S1E1 - French.mp4 not being recognized as TV show episodes</li>
-          <li>Fixed movie filenames without a year, like Title.1080p.HDLight.French.AAC.x264-Group.mp4, not being recognized as movies</li>
-          <li>Fixed the Season, Title and Year fields showing an empty value instead of Multiple values when several videos are selected</li>
-          <li>Fixed the interface getting stuck on the episode image when a search by episode name finds nothing</li>
-          <li>Fixed tooltips on country flags closing immediately</li>
+          <li>Added a status bar showing the number of videos with their total size, how many are selected, queued, failed or successfully processed, and the free space of the temporary and output folders</li>
+          <li>The status bar also shows the encoding and merging activity with the number of videos waiting behind each one, a progress ring and, on hover, the current status message</li>
+          <li>The Open button is now a menu to choose between files and folders</li>
+          <li>Redesigned the confirmation dialog shown when removing videos that are queued or being processed</li>
+          <li>Fixed the Open button only letting you choose folders on Linux and Windows</li>
         </ul>
       </description>
     </release>

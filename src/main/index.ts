@@ -31,6 +31,7 @@ import {
 } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
 import { JobManager } from './domain/jobs/JobManager'
+import { JobStatus } from '../common/@types/Job'
 import { getUwpActivationFiles } from './uwpActivation'
 import { Settings } from '../common/@types/Settings'
 import { initVideoControllerIPC } from './VideoControllerIPC'
@@ -326,6 +327,24 @@ app.whenReady().then(async () => {
       }
     }
     return ''
+  })
+  ipcMain.handle('main:getJobQueues', () => ({
+    encoding: JobManager.getInstance().getQueueInfo(JobStatus.ENCODING),
+    merging: JobManager.getInstance().getQueueInfo(JobStatus.MERGING)
+  }))
+  ipcMain.handle('main:getDiskSpace', async (): Promise<{ tmp?: number; output?: number }> => {
+    const freeSpace = async (path: string): Promise<number | undefined> => {
+      try {
+        const stats = await fs.promises.statfs(path)
+        return stats.bavail * stats.bsize
+      } catch {
+        return undefined
+      }
+    }
+    return {
+      tmp: await freeSpace(currentSettings.tmpFilesPath),
+      output: await freeSpace(currentSettings.defaultOutputPath)
+    }
   })
   ipcMain.handle('main:setPreviewPaneHeight', (_event, percent: number) => {
     savePreviewPaneHeight(percent)

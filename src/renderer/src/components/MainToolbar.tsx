@@ -17,10 +17,23 @@
  */
 
 import React, { useCallback, useEffect } from 'react'
-import { Toolbar, ToolbarButton, ToolbarGroup, Tooltip } from '@fluentui/react-components'
+import {
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Toolbar,
+  ToolbarButton,
+  ToolbarGroup,
+  Tooltip
+} from '@fluentui/react-components'
 import {
   BinRecycle24Regular,
   BinRecycleFull24Regular,
+  ChevronDown12Regular,
+  Document20Regular,
+  Folder20Regular,
   FolderOpen24Regular,
   Pause24Regular,
   Play24Regular,
@@ -37,7 +50,7 @@ import { useI18n } from '../i18n'
 import { useRemoveVideos } from './useRemoveVideos'
 
 type Props = {
-  onOpen: () => void
+  onOpen: (directories?: boolean) => void
   videos: IVideo[]
   selectedVideos: IVideo[] | undefined
 }
@@ -120,9 +133,34 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
         size="small"
       >
         <ToolbarGroup>
-          <ToolbarButton vertical icon={<FolderOpen24Regular />} onClick={onOpen}>
-            {_('main.toolbar.open', { defaultValue: 'Open' })}
-          </ToolbarButton>
+          <Menu>
+            <MenuTrigger disableButtonEnhancement>
+              <ToolbarButton vertical icon={<FolderOpen24Regular />}>
+                <span style={{ position: 'relative' }}>
+                  {_('main.toolbar.open', { defaultValue: 'Open' })}
+                  <ChevronDown12Regular
+                    style={{
+                      position: 'absolute',
+                      left: '100%',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      marginLeft: '4px'
+                    }}
+                  />
+                </span>
+              </ToolbarButton>
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                <MenuItem icon={<Document20Regular />} onClick={() => onOpen(false)}>
+                  {_('main.toolbar.open_files', { defaultValue: 'Files…' })}
+                </MenuItem>
+                <MenuItem icon={<Folder20Regular />} onClick={() => onOpen(true)}>
+                  {_('main.toolbar.open_folder', { defaultValue: 'Folders…' })}
+                </MenuItem>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
           <ToolbarButton
             vertical
             icon={<WrenchSettings20Regular />}

@@ -110,6 +110,14 @@ export class JobManager {
     }
   }
 
+  getQueueInfo(jobType: JobType): { running: boolean; queued: number; paused: boolean } {
+    return {
+      running: this.runningJobs[jobType] !== undefined,
+      queued: this.queues[jobType].length,
+      paused: this.isPaused(jobType)
+    }
+  }
+
   isPaused(jobType: JobType = JobStatus.ENCODING) {
     return (jobType === JobStatus.ENCODING || jobType === JobStatus.MERGING) && this.paused
   }

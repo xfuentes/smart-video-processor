@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-10-06
+
+### Added
+
+- Added a status bar at the bottom of the window showing the number of videos with their total size, how many are selected, queued, failed or successfully processed, and the free space of the temporary and output folders.
+- The status bar also shows the encoding and merging activity with the number of videos waiting behind each one, a progress ring and, on hover, the current status message.
+
+### Changed
+
+- The Open button is now a menu to choose between files and folders.
+- Redesigned the confirmation dialog shown when removing videos that are queued or being processed.
+
+### Fixed
+
+- Fixed the Open button only letting you choose folders on Linux and Windows, files can be selected again.
+
 ## [2.4.0] - 2026-10-03
 
 ### Added
