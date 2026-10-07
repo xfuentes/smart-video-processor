@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2026-10-07
+
+### Changed
+
+- The free space of the temporary and output folders in the status bar is now shown as an icon and a size, with the full description in a tooltip.
+
+### Fixed
+
+- Fixed the status bar not showing a tooltip with the full text when a cell is cut off.
+- Fixed the status bar cells being cut off too early on narrow windows.
+
 ## [2.5.0] - 2026-10-06
 
 ### Added

@@ -18,6 +18,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Tooltip, tokens } from '@fluentui/react-components'
+import { Clock16Regular, FolderArrowRight16Regular } from '@fluentui/react-icons'
 import { IVideo } from '../../../common/@types/Video'
 import { JobQueueInfo, JobQueues, JobStatus } from '../../../common/@types/Job'
 import { Strings } from '../../../common/Strings'
@@ -52,16 +53,26 @@ type StatusCellProps = {
   dim?: boolean
   hidden?: boolean
   always?: boolean
+  noShrink?: boolean
   color?: string
   tooltip?: string
   children: React.ReactNode
 }
 
 // The tooltip opens when the cell content is cut off, or always when requested.
-const StatusCell = ({ dim, hidden, always, color, tooltip, children }: StatusCellProps) => {
+const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, children }: StatusCellProps) => {
   const ref = useRef<HTMLSpanElement>(null)
   const [visible, setVisible] = useState(false)
-  const isTruncated = () => ref.current !== null && ref.current.scrollWidth > ref.current.clientWidth
+  // The text may be clipped by the cell itself or by a nested ellipsis element.
+  const isTruncated = () => {
+    const root = ref.current
+    if (root === null) {
+      return false
+    }
+    return [root, ...Array.from(root.querySelectorAll<HTMLElement>('*:not([aria-hidden])'))].some(
+      (el) => el.scrollWidth > el.clientWidth
+    )
+  }
   return (
     <Tooltip
       content={tooltip ?? ''}
@@ -77,7 +88,7 @@ const StatusCell = ({ dim, hidden, always, color, tooltip, children }: StatusCel
           alignItems: 'center',
           gap: '6px',
           boxSizing: 'border-box',
-          flexShrink: 1,
+          flexShrink: noShrink ? 0 : 1,
           minWidth: 0,
           padding: '0 12px',
           height: '100%',
@@ -154,13 +165,22 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
   const cell = (
     key: string,
     content: React.ReactNode,
-    options?: { dim?: boolean; hidden?: boolean; color?: string; tooltip?: string; always?: boolean; sizer?: string }
+    options?: {
+      dim?: boolean
+      hidden?: boolean
+      color?: string
+      tooltip?: string
+      always?: boolean
+      noShrink?: boolean
+      sizer?: string
+    }
   ) => (
     <StatusCell
       key={key}
       dim={options?.dim}
       hidden={options?.hidden}
       always={options?.always}
+      noShrink={options?.noShrink}
       color={options?.color}
       tooltip={options?.tooltip ?? (typeof content === 'string' ? content : undefined)}
     >
@@ -192,7 +212,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
           <ProgressRing value={known ? progress : undefined} />
         </span>
       </>,
-      { hidden: !active, tooltip: running?.message, always: true }
+      { hidden: !active, tooltip: running?.message, always: true, noShrink: true }
     )
   }
 
@@ -206,10 +226,15 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
         defaultValue: key === 'tmp' ? 'Temporary folder: {size} available' : 'Output folder: {size} available',
         size: Strings.humanFileSize(size)
       })
-    return cell(key, diskText(free), {
-      color: low ? tokens.colorPaletteRedForeground1 : undefined,
-      sizer: diskText(999.9e9)
-    })
+    const Icon = key === 'tmp' ? Clock16Regular : FolderArrowRight16Regular
+    return cell(
+      key,
+      <>
+        <Icon style={{ flexShrink: 0 }} />
+        <SizedText text={Strings.humanFileSize(free)} sizer={Strings.humanFileSize(999.9e9)} />
+      </>,
+      { color: low ? tokens.colorPaletteRedForeground1 : undefined, tooltip: diskText(free), always: true }
+    )
   }
 
   return (
@@ -230,21 +255,21 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
         cursor: 'default'
       }}
     >
-      {cell('total', totalText(videos.length, stats.totalSize), { sizer: totalText(9999, 999.9e9) })}
+      {cell('total', totalText(videos.length, stats.totalSize), { sizer: totalText(999, 999.9e9) })}
       {cell('selected', selectedText(selectedVideos.length), {
         dim: selectedVideos.length === 0,
-        sizer: selectedText(9999)
+        sizer: selectedText(999)
       })}
-      {cell('queued', queuedText(stats.queued), { dim: stats.queued === 0, sizer: queuedText(9999) })}
+      {cell('queued', queuedText(stats.queued), { dim: stats.queued === 0, sizer: queuedText(999) })}
       {cell('errors', errorsText(stats.errors), {
         dim: stats.errors === 0,
         color: stats.errors > 0 ? tokens.colorPaletteRedForeground1 : undefined,
-        sizer: errorsText(9999)
+        sizer: errorsText(999)
       })}
       {stats.succeeded > 0 &&
         cell('succeeded', succeededText(stats.succeeded), {
           color: tokens.colorPaletteGreenForeground1,
-          sizer: succeededText(9999)
+          sizer: succeededText(999)
         })}
       <span style={{ flex: 1 }} />
       {stageCell(JobStatus.ENCODING, queues.encoding)}

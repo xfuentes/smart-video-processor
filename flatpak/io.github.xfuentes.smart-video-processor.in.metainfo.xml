@@ -66,11 +66,9 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added a status bar showing the number of videos with their total size, how many are selected, queued, failed or successfully processed, and the free space of the temporary and output folders</li>
-          <li>The status bar also shows the encoding and merging activity with the number of videos waiting behind each one, a progress ring and, on hover, the current status message</li>
-          <li>The Open button is now a menu to choose between files and folders</li>
-          <li>Redesigned the confirmation dialog shown when removing videos that are queued or being processed</li>
-          <li>Fixed the Open button only letting you choose folders on Linux and Windows</li>
+          <li>The free space of the temporary and output folders in the status bar is now shown as an icon and a size, with the full description in a tooltip</li>
+          <li>Fixed the status bar not showing a tooltip with the full text when a cell is cut off</li>
+          <li>Fixed the status bar cells being cut off too early on narrow windows</li>
         </ul>
       </description>
     </release>

@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.5.1' })}</h4>
+      <ul>
+        {_('about.news.version_2_5_1.items', {
+          defaultValue:
+            'The free space of the temporary and output folders in the status bar is now shown as an icon and a size, with the full description in a tooltip\nFixed the status bar not showing a tooltip with the full text when a cell is cut off\nFixed the status bar cells being cut off too early on narrow windows'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.5.0' })}</h4>
       <ul>
         {_('about.news.version_2_5_0.items', {
