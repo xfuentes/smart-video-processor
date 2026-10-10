@@ -175,6 +175,7 @@ export type MultiSearchInputData = {
   tvShowTitle: string
   tvShowYear: string
   tvShowTVDB: string
+  tvShowTMDB: string
   tvShowOrder: EpisodeOrder
   tvShowSeason: string
   tvShowStartEpisode?: string

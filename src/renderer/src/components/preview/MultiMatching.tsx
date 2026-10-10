@@ -40,6 +40,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const initialTvShowTitle = videos.map((v): string | undefined => v.tvShow?.title).reduce(keepIfSameReducer)
   const initialTvShowYear = videos.map((v): number | undefined => v.tvShow?.year).reduce(keepIfSameReducer)
   const initialTvShowTVDB = videos.map((v): number | undefined => v.tvShow?.theTVDB).reduce(keepIfSameReducer)
+  const initialTvShowTMDB = videos.map((v): number | undefined => v.tvShow?.theMovieDB).reduce(keepIfSameReducer)
   const initialTvShowOrder = videos.map((v): EpisodeOrder | undefined => v.tvShow?.order).reduce(keepIfSameReducer)
   const initialSearchResults = videos.map((v): ISearchResult[] | undefined => v.searchResults).reduce(keepIfSameReducer)
   const initialTvShowPoster = videos
@@ -66,6 +67,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const [tvShowTVDB, setTvShowTVDB] = useState<string | undefined>(
     initialTvShowTVDB !== undefined ? '' + initialTvShowTVDB : undefined
   )
+  const [tvShowTMDB, setTvShowTMDB] = useState<string | undefined>(
+    initialTvShowTMDB !== undefined ? '' + initialTvShowTMDB : undefined
+  )
   const [tvShowOrder, setTvShowOrder] = useState<EpisodeOrder | undefined>(initialTvShowOrder)
   const [searchResults, setSearchResults] = useState<ISearchResult[] | undefined>(initialSearchResults)
   const [tvShowPoster, setTvShowPoster] = useState<string | undefined>(initialTvShowPoster)
@@ -87,6 +91,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
       setTvShowYear(initialTvShowYear !== undefined ? '' + initialTvShowYear : undefined)
     tvShowTVDB !== initialTvShowTVDB &&
       setTvShowTVDB(initialTvShowTVDB !== undefined ? '' + initialTvShowTVDB : undefined)
+    tvShowTMDB !== initialTvShowTMDB &&
+      setTvShowTMDB(initialTvShowTMDB !== undefined ? '' + initialTvShowTMDB : undefined)
     tvShowOrder !== initialTvShowOrder && setTvShowOrder(initialTvShowOrder)
 
     searchResults !== initialSearchResults && setSearchResults(initialSearchResults)
@@ -108,6 +114,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
           tvShowTitle,
           tvShowYear,
           tvShowTVDB,
+          tvShowTMDB,
           tvShowOrder,
           tvShowSeason,
           tvShowStartEpisode
@@ -182,6 +189,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   <option key={SearchBy.TVDB_POSITION} value={SearchBy.TVDB_POSITION}>
                     {_('search_by.tvdb_position.label', { defaultValue: 'TVDB ID & Position' })}
                   </option>
+                  <option key={SearchBy.TMDB} value={SearchBy.TMDB}>
+                    {_('search_by.tmdb_position.label', { defaultValue: 'TMDB ID & Position' })}
+                  </option>
                 </Select>
               </Field>
             </div>
@@ -249,6 +259,24 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </div>
               </>
             )}
+            {searchBy === SearchBy.TMDB && (
+              <div>
+                <Field
+                  size="small"
+                  label={_('matching.field.tmdb_id.label', { defaultValue: 'TMDB ID' })}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Input
+                    size="small"
+                    disabled={disabled}
+                    value={tvShowTMDB ?? ''}
+                    type="number"
+                    onChange={(_ev, data) => setTvShowTMDB(data.value)}
+                  />
+                </Field>
+              </div>
+            )}
             <div>
               <Field
                 size="small"
@@ -283,7 +311,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </Select>
               </Field>
             </div>
-            {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TVDB_POSITION) &&
+            {(searchBy === SearchBy.TITLE_POSITION ||
+              searchBy === SearchBy.TVDB_POSITION ||
+              searchBy === SearchBy.TMDB) &&
               tvShowOrder !== 'absolute' && (
                 <div>
                   <Field
@@ -308,7 +338,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   </Field>
                 </div>
               )}
-            {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TVDB_POSITION) && (
+            {(searchBy === SearchBy.TITLE_POSITION ||
+              searchBy === SearchBy.TVDB_POSITION ||
+              searchBy === SearchBy.TMDB) && (
               <div>
                 <Field
                   size="small"

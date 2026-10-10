@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] - 2026-10-10
+
+### Added
+
+- Added a TMDB ID & Position search to edit the matching of several TV show episodes at once.
+
 ## [3.0.0] - 2026-10-10
 
 ### Added

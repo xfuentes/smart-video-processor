@@ -198,7 +198,7 @@ test('No match for Spanish episode name when only French and English are enabled
   expect(video.tvShow.title).toBe('Dragon Ball')
   expect(video.matched).toBeFalsy()
   expect(video.status).toBe('Warning')
-  expect(video.message).toBe('Épisode non trouvé. Veuillez vérifier les informations fournies et réessayer.')
+  expect(video.message).toBe('Épisode introuvable. Veuillez vérifier les informations fournies et réessayer.')
   video.destroy()
 })
 

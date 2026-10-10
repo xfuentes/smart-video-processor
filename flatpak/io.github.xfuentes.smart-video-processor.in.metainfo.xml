@@ -66,6 +66,7 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
+          <li>Added a TMDB ID &amp; Position search to edit the matching of several TV show episodes at once</li>
           <li>Added an option in the output settings to put each movie in its own sub-folder named after the movie, as recommended by Plex, Jellyfin and Kodi</li>
           <li>Added Tracks, Properties and New hint to edit several videos at once, with the tracks similarity, the forced flag and the frames count to compare them</li>
           <li>Values that differ between videos now list every value in a tooltip when hovering Multiple values</li>

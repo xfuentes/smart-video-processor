@@ -490,6 +490,7 @@ export class Video implements IVideo {
       if (data.tvShowTitle !== undefined) this.tvShow.setTitle(data.tvShowTitle)
       if (data.tvShowYear !== undefined) this.tvShow.setYear(data.tvShowYear)
       if (data.tvShowTVDB !== undefined) this.tvShow.setTheTVDB(data.tvShowTVDB)
+      if (data.tvShowTMDB !== undefined) this.tvShow.setTheMovieDB(data.tvShowTMDB)
       if (data.tvShowOrder !== undefined) void this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
       const startEpisode = Numbers.toNumber(data.tvShowStartEpisode ?? '')

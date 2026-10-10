@@ -34,6 +34,16 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.1.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_1_0.items', {
+          defaultValue: 'Added a TMDB ID & Position search to edit the matching of several TV show episodes at once'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.0.0' })}</h4>
       <ul>
         {_('about.news.version_3_0_0.items', {
