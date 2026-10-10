@@ -33,7 +33,7 @@ export enum JobStatus {
 export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING | JobStatus.GRABBING
 
 export type JobQueueInfo = { running: boolean; queued: number; paused: boolean }
-export type JobQueues = { encoding: JobQueueInfo; merging: JobQueueInfo }
+export type JobQueues = { loading: JobQueueInfo; encoding: JobQueueInfo; merging: JobQueueInfo }
 
 export interface IJob {
   readonly uuid: string

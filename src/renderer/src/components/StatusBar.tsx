@@ -35,6 +35,7 @@ type DiskSpace = { tmp?: number; output?: number }
 const DISK_REFRESH_MS = 30000
 const QUEUES_REFRESH_MS = 1500
 const noQueues: JobQueues = {
+  loading: { running: false, queued: 0, paused: false },
   encoding: { running: false, queued: 0, paused: false },
   merging: { running: false, queued: 0, paused: false }
 }
@@ -56,11 +57,12 @@ type StatusCellProps = {
   noShrink?: boolean
   color?: string
   tooltip?: string
+  sizer?: string
   children: React.ReactNode
 }
 
 // The tooltip opens when the cell content is cut off, or always when requested.
-const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, children }: StatusCellProps) => {
+const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, sizer, children }: StatusCellProps) => {
   const ref = useRef<HTMLSpanElement>(null)
   const [visible, setVisible] = useState(false)
   // The text may be clipped by the cell itself or by a nested ellipsis element.
@@ -89,7 +91,9 @@ const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, children }:
           gap: '6px',
           boxSizing: 'border-box',
           flexShrink: noShrink ? 0 : 1,
-          minWidth: 0,
+          // The widest expected text is only a preferred width, the real text is the minimum.
+          flexBasis: sizer !== undefined ? `calc(${sizer.length * 1.2}ch + 24px)` : 'auto',
+          minWidth: sizer !== undefined ? 'min-content' : 0,
           padding: '0 12px',
           height: '100%',
           overflow: 'hidden',
@@ -183,24 +187,23 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
       noShrink={options?.noShrink}
       color={options?.color}
       tooltip={options?.tooltip ?? (typeof content === 'string' ? content : undefined)}
+      sizer={options?.sizer}
     >
-      {options?.sizer !== undefined && typeof content === 'string' ? (
-        <SizedText text={content} sizer={options.sizer} />
-      ) : (
-        content
-      )}
+      {content}
     </StatusCell>
   )
 
-  const stageCell = (status: JobStatus.ENCODING | JobStatus.MERGING, info: JobQueueInfo) => {
+  const stageCell = (status: JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING, info: JobQueueInfo) => {
     const active = info.running || info.queued > 0
     const running = videos.find((video) => video.status === status)
     const progress = running?.progression?.progress
     const known = progress !== undefined && progress >= 0
     const label =
-      status === JobStatus.ENCODING
-        ? t('status_bar.encoding', { defaultValue: 'Encoding' })
-        : t('status_bar.merging', { defaultValue: 'Merging' })
+      status === JobStatus.LOADING
+        ? t('status_bar.loading', { defaultValue: 'Loading' })
+        : status === JobStatus.ENCODING
+          ? t('status_bar.encoding', { defaultValue: 'Encoding' })
+          : t('status_bar.merging', { defaultValue: 'Merging' })
     return cell(
       status,
       <>
@@ -231,9 +234,14 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
       key,
       <>
         <Icon style={{ flexShrink: 0 }} />
-        <SizedText text={Strings.humanFileSize(free)} sizer={Strings.humanFileSize(999.9e9)} />
+        {Strings.humanFileSize(free)}
       </>,
-      { color: low ? tokens.colorPaletteRedForeground1 : undefined, tooltip: diskText(free), always: true }
+      {
+        color: low ? tokens.colorPaletteRedForeground1 : undefined,
+        tooltip: diskText(free),
+        always: true,
+        sizer: Strings.humanFileSize(999.9e9)
+      }
     )
   }
 
@@ -252,7 +260,8 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
         borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
         whiteSpace: 'nowrap',
         userSelect: 'none',
-        cursor: 'default'
+        cursor: 'default',
+        overflow: 'hidden'
       }}
     >
       {cell('total', totalText(videos.length, stats.totalSize), { sizer: totalText(999, 999.9e9) })}
@@ -272,6 +281,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
           sizer: succeededText(999)
         })}
       <span style={{ flex: 1 }} />
+      {stageCell(JobStatus.LOADING, queues.loading)}
       {stageCell(JobStatus.ENCODING, queues.encoding)}
       {stageCell(JobStatus.MERGING, queues.merging)}
       {diskCell('tmp', diskSpace.tmp)}

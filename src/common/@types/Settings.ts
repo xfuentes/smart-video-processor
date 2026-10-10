@@ -87,6 +87,10 @@ export type Settings = {
    */
   namingConvention: NamingConvention
   /**
+   * If enabled, each movie is written in its own sub-folder named after the movie, as recommended by media servers.
+   */
+  isMovieFolderEnabled: boolean
+  /**
    * if enabled automatically encode and/or process the files as soon as they are added (if no user input is requested)
    */
   isAutoStartEnabled: boolean

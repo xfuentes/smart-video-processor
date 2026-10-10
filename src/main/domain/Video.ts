@@ -33,6 +33,7 @@ import {
 import { Brain } from './Brain'
 import { Hint } from './Hint'
 import { Job } from './jobs/Job'
+import { CopyJob } from './jobs/CopyJob'
 import { ProcessingJob } from './jobs/ProcessingJob'
 import { FileInfoLoadingJob } from './jobs/FileInfoLoadingJob'
 import { Strings } from '../../common/Strings'
@@ -67,7 +68,8 @@ import {
 import { EditionType } from '../../common/@types/Movie'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
-import { IHint } from '../../common/@types/Hint'
+import { HintType, IHint } from '../../common/@types/Hint'
+import { SubtitlesType, SubtitlesTypeUtil } from '../../common/SubtitlesType'
 import Other from './Other'
 import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
@@ -139,6 +141,7 @@ export class Video implements IVideo {
    */
   public audioVersions: AudioVersion[] = []
   public title: string = ''
+  private finalOutputPath?: string
   public poster?: Attachment
   public searchBy: SearchBy = SearchBy.TITLE
   /*
@@ -342,10 +345,22 @@ export class Video implements IVideo {
   }
 
   async load(searchEnabled: boolean = true) {
-    this.progression.progress = undefined
-    this.status = JobStatus.LOADING
+    this.progression = { progress: -1 }
+    this.status = JobStatus.QUEUED
     this.fireChangeEvent()
     const fij = new FileInfoLoadingJob(this.sourcePath, this.getPreviewDirectory())
+    // Mirror the job state so the video shows Queued until the loading actually starts.
+    const listener = () => {
+      if (fij.finished) {
+        fij.removeChangeListener(listener)
+        return
+      }
+      this.status = fij.getStatus()
+      this.message = fij.getStatusMessage()
+      this.progression = fij.getProgression()
+      this.fireChangeEvent()
+    }
+    fij.addChangeListener(listener)
     const { tracks, container } = await fij.queue()
     this.tracks = tracks
     this.duration =
@@ -775,6 +790,35 @@ export class Video implements IVideo {
     this.searchBy = searchBy
   }
 
+  public async addHint(trackId: number, type: HintType, value?: string) {
+    const track = this.tracks.find((t) => t.id === trackId)
+    const isSupported =
+      track !== undefined &&
+      (type === HintType.LANGUAGE
+        ? track.type === TrackType.AUDIO || track.type === TrackType.SUBTITLES
+        : track.type === TrackType.SUBTITLES)
+    if (!isSupported || this.hints.some((h) => h.type === type && h.trackId === trackId)) {
+      return
+    }
+    const initialValue =
+      value ??
+      (type === HintType.LANGUAGE
+        ? (track.language ?? '')
+        : (SubtitlesTypeUtil.extract(track.name) ?? SubtitlesType.FULL))
+    this.hints.push(new Hint(trackId, type, initialValue, false))
+    track.copy = true
+    await this.analyse()
+  }
+
+  public async removeHint(trackId: number, type: HintType) {
+    const hint = this.hints.find((h) => h.type === type && h.trackId === trackId)
+    if (hint === undefined || hint.required) {
+      return
+    }
+    this.hints = this.hints.filter((h) => h !== hint)
+    await this.analyse()
+  }
+
   public async setHint(hint: IHint, value?: string) {
     const foundHint = this.hints.find((h) => h.type === hint.type && h.trackId === hint.trackId)
     if (foundHint !== undefined) {
@@ -885,7 +929,7 @@ export class Video implements IVideo {
     for (const part of this.videoParts) {
       await part.deleteSourceFiles()
     }
-    if (!fs.existsSync(this.sourcePath)) {
+    if (!fs.existsSync(this.sourcePath) || this.finalOutputPath === this.sourcePath) {
       return
     }
     try {
@@ -918,6 +962,14 @@ export class Video implements IVideo {
         }
       })
     void this.analyse()
+  }
+
+  setTrackSelection(trackType: TrackType, trackId: number, copy: boolean) {
+    const track = this.tracks.find((t) => t.type === trackType && t.id === trackId)
+    if (track === undefined || track.copy === copy) {
+      return
+    }
+    this.switchTrackSelection([trackId])
   }
 
   getSelectedTracks(): Track[] {
@@ -1189,6 +1241,17 @@ export class Video implements IVideo {
       }
     }
 
+    if (this.type === VideoType.MOVIE && currentSettings.isMovieFolderEnabled) {
+      let movieFolder = this.title
+      if (this.movie.tmdb !== undefined) {
+        movieFolder +=
+          currentSettings.namingConvention === NamingConvention.JELLYFIN
+            ? ` [tmdbid-${this.movie.tmdb}]`
+            : ` {tmdb-${this.movie.tmdb}}`
+      }
+      subDirs.push(Files.removeSpecialCharsFromFilename(movieFolder))
+    }
+
     let sourcePath = this.sourcePath
     if (this.preProcessPath) {
       sourcePath = this.preProcessPath
@@ -1197,10 +1260,22 @@ export class Video implements IVideo {
       sourcePath = this.encodedPath
     }
 
-    if (currentSettings.isAutoDeleteProcessedFilesEnabled && sourcePath === this.sourcePath && this.isRenameOnly()) {
-      const finalOutputDirectory = path.join(outputDirectory, ...subDirs)
-      const finalPath = Files.computeOutputPath(path.basename(this.sourcePath), this.changes, finalOutputDirectory)
-      await Files.moveFile(sourcePath, finalPath)
+    const finalOutputDirectory = path.join(outputDirectory, ...subDirs)
+    this.finalOutputPath = Files.computeOutputPath(path.basename(this.sourcePath), this.changes, finalOutputDirectory)
+
+    if (sourcePath === this.sourcePath && this.isRenameOnly()) {
+      if (this.finalOutputPath === this.sourcePath) {
+        this.status = JobStatus.SUCCESS
+        this.message = _('video.message.no_change_needed', { defaultValue: 'No modification was needed.' })
+        this.progression.progress = -1
+      } else if (currentSettings.isAutoDeleteProcessedFilesEnabled) {
+        await Files.moveFile(sourcePath, this.finalOutputPath)
+        this.status = JobStatus.SUCCESS
+        this.message = ''
+        this.progression.progress = -1
+      } else {
+        await this.attachJob(new CopyJob(sourcePath, this.finalOutputPath)).queue()
+      }
       return
     }
 

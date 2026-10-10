@@ -66,9 +66,14 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The free space of the temporary and output folders in the status bar is now shown as an icon and a size, with the full description in a tooltip</li>
-          <li>Fixed the status bar not showing a tooltip with the full text when a cell is cut off</li>
-          <li>Fixed the status bar cells being cut off too early on narrow windows</li>
+          <li>Added an option in the output settings to put each movie in its own sub-folder named after the movie, as recommended by Plex, Jellyfin and Kodi</li>
+          <li>Added Tracks, Properties and New hint to edit several videos at once, with the tracks similarity, the forced flag and the frames count to compare them</li>
+          <li>Values that differ between videos now list every value in a tooltip when hovering Multiple values</li>
+          <li>The movie database tag is now placed right after the title and year in generated filenames</li>
+          <li>Renaming or moving a file without any other change now copies it directly instead of remuxing it, with a precise progression</li>
+          <li>Videos waiting to be loaded now show Queued, and the loading message explains why a file is remuxed when its bitrate is missing</li>
+          <li>Text that is too long in the tables is now cut with an ellipsis and shown in full in a tooltip</li>
+          <li>Fixed several filename, hint and poster issues, including tracks named VO being given the wrong language</li>
         </ul>
       </description>
     </release>

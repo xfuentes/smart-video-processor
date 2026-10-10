@@ -34,6 +34,8 @@ import { ITrack } from '../../../../common/@types/Track'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { _, useI18n } from '../../i18n'
 
+import { EllipsisCell } from '../EllipsisCell'
+
 const columns: TableColumnDefinition<SearchResult>[] = [
   createTableColumn<SearchResult>({
     columnId: 'id',
@@ -45,7 +47,7 @@ const columns: TableColumnDefinition<SearchResult>[] = [
     columnId: 'title',
     compare: (a, b) => a.title.localeCompare(b.title),
     renderHeaderCell: () => _('search_results.column.title.label', { defaultValue: 'Title' }),
-    renderCell: (item) => <div className="overflow-safe">{item.title}</div>
+    renderCell: (item) => <EllipsisCell>{item.title}</EllipsisCell>
   }),
   createTableColumn<SearchResult>({
     columnId: 'year',
@@ -63,7 +65,7 @@ type Props = {
 }
 
 const columnSizingOptions: TableColumnSizingOptions = {
-  id: { defaultWidth: 45, minWidth: 45, idealWidth: 45 },
+  id: { defaultWidth: 55, minWidth: 55, idealWidth: 55 },
   title: { defaultWidth: 80, minWidth: 80, idealWidth: 600 },
   year: { defaultWidth: 50, minWidth: 50, idealWidth: 50 }
 }

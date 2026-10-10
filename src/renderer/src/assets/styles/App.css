@@ -268,20 +268,6 @@ button:disabled.is-disabled.ms-Pivot-link {
   color: lightgray;
 }
 
-.overflow-safe {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.overflow-safe:hover {
-  text-overflow: clip;
-  overflow: visible;
-  z-index: 1000;
-  background-color: var(--colorNeutralBackground2);
-  padding-right: 10px;
-}
-
 .encoding-main {
   display: flex;
   flex-flow: column nowrap;

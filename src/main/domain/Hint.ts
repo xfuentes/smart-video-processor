@@ -22,11 +22,13 @@ export class Hint implements IHint {
   trackId?: number
   type: HintType
   value?: string
+  required: boolean
 
-  constructor(trackId: number, type: HintType, value?: string) {
+  constructor(trackId: number, type: HintType, value?: string, required: boolean = true) {
     this.trackId = trackId
     this.type = type
     this.value = value
+    this.required = required
   }
 
   static retrieve(
@@ -42,7 +44,8 @@ export class Hint implements IHint {
     return {
       trackId: this.trackId,
       type: this.type,
-      value: this.value
+      value: this.value,
+      required: this.required
     }
   }
 }

@@ -30,11 +30,21 @@ import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../c
 export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Container }> {
   private readonly sourcePath: string
   private readonly destinationPath: string
+  private preProcessing: boolean = false
 
   constructor(path: string, destinationPath: string) {
     super(JobStatus.LOADING, _('job.title.loading_file_info', { defaultValue: 'Loading file information.' }))
     this.sourcePath = path
     this.destinationPath = destinationPath
+  }
+
+  getStatusMessage() {
+    if (this.preProcessing && this.status === JobStatus.LOADING) {
+      return _('job.loading.pre_processing', {
+        defaultValue: 'The video bitrate is missing from the file, remuxing it to a temporary file to measure it.'
+      })
+    }
+    return super.getStatusMessage()
   }
 
   protected async executeInternal(): Promise<{ tracks: Track[]; container: Container }> {
@@ -61,6 +71,8 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
             outputPath
           )
         ]
+        this.preProcessing = true
+        this.emitChangeEvent()
         await MKVMerge.getInstance().processFile(
           path.basename(outputPath),
           this.sourcePath,
@@ -69,6 +81,7 @@ export class FileInfoLoadingJob extends Job<{ tracks: Track[]; container: Contai
           [],
           this.setProgression.bind(this)
         )
+        this.preProcessing = false
         mkvMergeOut = await MKVMerge.getInstance().retrieveFileInformation(outputPath)
         Files.unlinkSync(outputPath)
       }

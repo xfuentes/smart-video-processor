@@ -22,11 +22,12 @@ import { ipcRenderer } from 'electron/renderer'
 import { Settings } from '../common/@types/Settings'
 import { IVideo, MultiSearchInputData, SearchInputData } from '../common/@types/Video'
 import type { EpisodeOrder } from '../common/@types/EpisodeOrder'
-import { IHint } from '../common/@types/Hint'
+import { HintType, IHint } from '../common/@types/Hint'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { FormValidation } from '../common/FormValidation'
 import { preloadBindings } from 'i18next-electron-fs-backend'
 import { JobQueues } from '../common/@types/Job'
+import { TrackType } from '../common/@types/Track'
 import { InvalidSettingsListener, ListChangedListener, LogEntry, SvpAPI, VideosChangedListener } from './@types'
 import IpcRendererEvent = Electron.IpcRendererEvent
 
@@ -98,8 +99,18 @@ const api: SvpAPI = {
       ipcRenderer.invoke('video:setMultiHint', uuids, hint, value),
     switchTrackSelection: (uuid: string, changedItems: number[]): Promise<void> =>
       ipcRenderer.invoke('video:switchTrackSelection', uuid, changedItems),
+    setMultiTrackSelection: (uuids: string[], trackType: TrackType, trackId: number, copy: boolean): Promise<void> =>
+      ipcRenderer.invoke('video:setMultiTrackSelection', uuids, trackType, trackId, copy),
     setHint: (uuid: string, hint: IHint, value?: string): Promise<void> =>
       ipcRenderer.invoke('video:setHint', uuid, hint, value),
+    addMultiHint: (
+      uuids: string[],
+      trackId: number,
+      type: HintType,
+      values?: Record<string, string | undefined>
+    ): Promise<void> => ipcRenderer.invoke('video:addMultiHint', uuids, trackId, type, values),
+    removeMultiHint: (uuids: string[], trackId: number, type: HintType): Promise<void> =>
+      ipcRenderer.invoke('video:removeMultiHint', uuids, trackId, type),
     setMultiTrackEncodingEnabled: (uuids: string[], source: string, value: boolean): Promise<void> =>
       ipcRenderer.invoke('video:setMultiTrackEncodingEnabled', uuids, source, value),
     multiProcess: (uuids: string[]): Promise<void> => ipcRenderer.invoke('video:multiProcess', uuids),

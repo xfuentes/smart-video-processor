@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-10-10
+
+### Added
+
+- Added an option in the output settings to put each movie in its own sub-folder named after the movie, as recommended by Plex, Jellyfin and Kodi.
+- Added a Tracks tab when editing several videos at once, to select or deselect a track in all of them and to see whether the tracks are similar.
+- Added a New hint button in the Hints tab, for one or several videos, to add a hint for the language or the subtitles type of a track that has none yet.
+- Added a Properties tab when editing several videos at once, listing the changes that will be applied to them with the number of videos concerned.
+- When editing several videos, the Tracks tab now also shows the track name, the forced flag with the number of videos having it, and the number of frames to compare subtitles tracks.
+- Values that differ between videos now show every value with its number of videos in a tooltip when hovering Multiple values.
+- When editing several videos, each hint now has a checkbox, partially checked when only some videos have it, to switch between the original selection, every video having the track and none, the last one being skipped when the hint is required.
+
+### Changed
+
+- The movie database tag is now placed right after the title and year in generated filenames, before the edition and the versions, so the movie folder name is a prefix of its files.
+- Renaming or moving a file without any other change now copies it directly instead of remuxing it, even when automatic deletion of processed files is disabled, with a precise progression that can be canceled.
+- Text that is too long in the tables is now cut with an ellipsis and shown in full in a tooltip when hovering it.
+- Videos waiting to be loaded now show Queued and only the one being read shows the loading indicator.
+- The loading message now explains why a video is being remuxed to a temporary file when its bitrate is missing.
+- The status bar now also shows an indeterminate indicator, with the number of waiting files, while file information is being loaded.
+
+### Fixed
+
+- Fixed the status of a video staying unchanged after it was only renamed or moved.
+- Fixed a track whose name contains VO, like a French subtitles track named Francais Pour La VO or an audio track named Français (VO) or VOF, being given the original language of the video as hint instead of its own language.
+- Fixed the Tracks tab of several videos reporting different properties for tracks displaying the same ones, like subtitles tracks.
+- Fixed the poster being planned for an update when the file already contains the same poster.
+
 ## [2.5.1] - 2026-10-07
 
 ### Changed

@@ -585,18 +585,7 @@ test('FFmpeg maps unsupported subtitle codecs (e.g. mov_text) to srt instead of 
     { type: TrackType.SUBTITLES, unsupported: true } as ITrack
   ]
   const args = FFmpeg.getInstance().generateKeepAllMapping(tracks)
-  expect(args).toStrictEqual([
-    '-map',
-    '0:v:0',
-    '-map',
-    '0:a:0',
-    '-map',
-    '0:s:0',
-    '-map',
-    '0:s:1',
-    '-c:s:1',
-    'srt'
-  ])
+  expect(args).toStrictEqual(['-map', '0:v:0', '-map', '0:a:0', '-map', '0:s:0', '-map', '0:s:1', '-c:s:1', 'srt'])
 })
 
 test('FFmpeg version extraction strips the n prefix', async () => {

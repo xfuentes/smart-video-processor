@@ -23,6 +23,9 @@ import { Job } from '../../src/main/domain/jobs/Job'
 import { ProcessingJob } from '../../src/main/domain/jobs/ProcessingJob'
 import { getFakeAbsolutePath } from './testUtils'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
+import path from 'node:path'
+import { CopyJob } from '../../src/main/domain/jobs/CopyJob'
+import { JobStatus } from '../../src/common/@types/Job'
 import { NamingConvention } from '../../src/common/@types/Settings'
 import type { OutputRule } from '../../src/common/@types/Settings'
 import { Languages } from '../../src/common/LanguageIETF'
@@ -444,6 +447,9 @@ describe('TV show merge output subdirectories', () => {
   test('official order creates a season subfolder', async () => {
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'One Piece'
     video.tvShow.theTVDB = 81797
     video.tvShow.order = 'official'
@@ -462,6 +468,9 @@ describe('TV show merge output subdirectories', () => {
   test('absolute order does not create a season subfolder even when season is known', async () => {
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'One Piece'
     video.tvShow.theTVDB = 81797
     video.tvShow.order = 'absolute'
@@ -481,6 +490,9 @@ describe('TV show merge output subdirectories', () => {
     currentSettings.namingConvention = NamingConvention.JELLYFIN
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'One Piece'
     video.tvShow.theTVDB = 81797
     video.tvShow.year = 1999
@@ -501,6 +513,9 @@ describe('TV show merge output subdirectories', () => {
     currentSettings.namingConvention = NamingConvention.KODI
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'One Piece'
     video.tvShow.theTVDB = 81797
     video.tvShow.year = 1999
@@ -520,6 +535,9 @@ describe('TV show merge output subdirectories', () => {
   test('falls back to the tmdb tag when no TVDB match was found', async () => {
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'Some Obscure Show'
     video.tvShow.theMovieDB = 12345
     video.tvShow.order = 'official'
@@ -539,6 +557,9 @@ describe('TV show merge output subdirectories', () => {
     currentSettings.namingConvention = NamingConvention.JELLYFIN
     const video = new Video(getFakeAbsolutePath('Download', 'test.mkv'))
     video.type = VideoType.TV_SHOW
+    video.changes = [
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
     video.tvShow.title = 'Some Obscure Show'
     video.tvShow.theMovieDB = 12345
     video.tvShow.year = 2020
@@ -552,6 +573,52 @@ describe('TV show merge output subdirectories', () => {
     const outputPath = (processingJob as unknown as { outputPath: string }).outputPath
     expect(outputPath).toContain('Some Obscure Show (2020) [tmdbid-12345]')
     video.destroy()
+  })
+})
+
+describe('movie folder', () => {
+  afterEach(() => {
+    currentSettings.namingConvention = NamingConvention.PLEX
+    currentSettings.isMovieFolderEnabled = false
+    vi.restoreAllMocks()
+  })
+
+  const folderOf = async (convention: NamingConvention, filename: string) => {
+    currentSettings.namingConvention = convention
+    currentSettings.isMovieFolderEnabled = true
+    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    video.type = VideoType.MOVIE
+    video.title = 'Scary Movie (2026)'
+    video.movie.tmdb = 1273221
+    video.changes = [
+      new Change(
+        ChangeSourceType.CONTAINER,
+        ChangeType.UPDATE,
+        undefined,
+        ChangeProperty.FILENAME,
+        'movie.mkv',
+        filename
+      ),
+      new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'Old', 'New')
+    ]
+    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(getFakeAbsolutePath('Output'))
+    const outputPath = (video.job as unknown as { outputPath: string }).outputPath
+    video.destroy()
+    return path.basename(outputPath)
+  }
+
+  test('jellyfin folder only has the title, year and id', async () => {
+    expect(await folderOf(NamingConvention.JELLYFIN, 'Scary Movie (2026).1080p.h264 [tmdbid-1273221].mkv')).toBe(
+      'Scary Movie (2026) [tmdbid-1273221]'
+    )
+  })
+
+  test('plex folder only has the title, year and id and is shared by all versions', async () => {
+    const hd = await folderOf(NamingConvention.PLEX, 'Scary Movie (2026).1080p.h264 {tmdb-1273221}.mkv')
+    const uhd = await folderOf(NamingConvention.PLEX, 'Scary Movie (2026).4k.h265 {tmdb-1273221}.mkv')
+    expect(hd).toBe('Scary Movie (2026) {tmdb-1273221}')
+    expect(uhd).toBe(hd)
   })
 })
 
@@ -585,11 +652,13 @@ describe('merge rename-only optimization', () => {
     expect(moveFileSpy.mock.calls[0][1]).toContain('Movie Title (2024).mkv')
     expect(queueSpy).not.toHaveBeenCalled()
     expect(video.job).toBeUndefined()
+    expect(video.status).toBe(JobStatus.SUCCESS)
   })
 
-  test('falls back to the classic merge when auto-delete is disabled', async () => {
+  test('copies the file when only a filename change is pending and auto-delete is disabled', async () => {
     currentSettings.isAutoDeleteProcessedFilesEnabled = false
-    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    const sourcePath = getFakeAbsolutePath('Download', 'movie.mkv')
+    const video = new Video(sourcePath)
     video.type = VideoType.MOVIE
     video.changes = [
       new Change(
@@ -601,13 +670,29 @@ describe('merge rename-only optimization', () => {
         'Movie Title (2024).mkv'
       )
     ]
-    vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const queueSpy = vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
     const moveFileSpy = vi.spyOn(Files, 'moveFile').mockImplementation(() => Promise.resolve())
     const outputDir = getFakeAbsolutePath('Output')
     await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(outputDir)
     expect(moveFileSpy).not.toHaveBeenCalled()
-    expect(video.job).toBeInstanceOf(ProcessingJob)
-    video.destroy()
+    expect(queueSpy).toHaveBeenCalledTimes(1)
+    expect(video.job).toBeInstanceOf(CopyJob)
+    expect((video.job as unknown as { destinationPath: string }).destinationPath).toContain('Movie Title (2024).mkv')
+  })
+
+  test('reports success without touching the file when the destination is the source', async () => {
+    currentSettings.isAutoDeleteProcessedFilesEnabled = true
+    const sourcePath = getFakeAbsolutePath('Download', 'movie.mkv')
+    const video = new Video(sourcePath)
+    video.type = VideoType.MOVIE
+    video.changes = []
+    const queueSpy = vi.spyOn(Job.prototype, 'queue').mockImplementation(() => Promise.resolve(undefined as never))
+    const moveFileSpy = vi.spyOn(Files, 'moveFile').mockImplementation(() => Promise.resolve())
+    await (video as unknown as { merge: (dir: string) => Promise<void> }).merge(getFakeAbsolutePath('Download'))
+    expect(moveFileSpy).not.toHaveBeenCalled()
+    expect(queueSpy).not.toHaveBeenCalled()
+    expect(video.status).toBe(JobStatus.SUCCESS)
+    expect(video.message).toBeTruthy()
   })
 
   test('falls back to the classic merge when a track was modified', async () => {

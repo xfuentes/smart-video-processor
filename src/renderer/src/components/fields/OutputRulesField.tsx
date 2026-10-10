@@ -17,7 +17,7 @@
  */
 
 import React, { useMemo, useState } from 'react'
-import { Button, Checkbox, CheckboxOnChangeData, Divider, Tooltip } from '@fluentui/react-components'
+import { Button, Checkbox, CheckboxOnChangeData, Tooltip } from '@fluentui/react-components'
 import { Edit20Regular, ReOrderDotsVertical20Regular } from '@fluentui/react-icons'
 import {
   DndContext,
@@ -216,12 +216,9 @@ export const OutputRulesField = ({ rules, onChange, language }: OutputRulesField
 
   return (
     <>
-      <Divider style={{ flexGrow: '0' }}>
-        {_('settings.output_rules.divider', { defaultValue: 'Output Rules' })}
-      </Divider>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={ruleIds} strategy={verticalListSortingStrategy}>
-          <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+          <div style={{ flex: '1 1 0', minHeight: '120px', overflowY: 'auto' }}>
             {rules.map((rule, index) => (
               <SortableRule
                 key={ruleIds[index]}

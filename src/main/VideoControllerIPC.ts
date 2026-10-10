@@ -22,7 +22,8 @@ import { closeCleanupDialog, showCleanupDialog, updateCleanupProgress } from './
 import { VideoController } from './controller/VideoController'
 import type { EpisodeOrder } from './domain/clients/TVDBClient'
 import { MultiSearchInputData, SearchInputData } from '../common/@types/Video'
-import { IHint } from '../common/@types/Hint'
+import { HintType, IHint } from '../common/@types/Hint'
+import { TrackType } from '../common/@types/Track'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../common/Change'
 import { scanVideoFilesRecursive } from './util/videoExtensions'
 
@@ -86,9 +87,24 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:setMultiHint', (_event, uuids: string[], hint: IHint, value?: string) => {
     VideoController.getInstance().setMultiHint(uuids, hint, value)
   })
+  ipcMain.handle(
+    'video:addMultiHint',
+    (_event, uuids: string[], trackId: number, type: HintType, values?: Record<string, string | undefined>) => {
+      VideoController.getInstance().addMultiHint(uuids, trackId, type, values)
+    }
+  )
+  ipcMain.handle('video:removeMultiHint', (_event, uuids: string[], trackId: number, type: HintType) => {
+    VideoController.getInstance().removeMultiHint(uuids, trackId, type)
+  })
   ipcMain.handle('video:setMultiTrackEncodingEnabled', (_event, uuids: string[], source: string, value: boolean) => {
     VideoController.getInstance().setMultiTrackEncodingEnabled(uuids, source, value)
   })
+  ipcMain.handle(
+    'video:setMultiTrackSelection',
+    (_event, uuids: string[], trackType: TrackType, trackId: number, copy: boolean) => {
+      VideoController.getInstance().setMultiTrackSelection(uuids, trackType, trackId, copy)
+    }
+  )
   ipcMain.handle('video:switchTrackSelection', (_event, uuid: string, changedItems: number[]) => {
     VideoController.getInstance().switchTrackSelection(uuid, changedItems)
   })

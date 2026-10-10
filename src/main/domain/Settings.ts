@@ -82,6 +82,7 @@ export const defaultSettings: Settings = {
   defaultOutputPath: Processes?.isLimitedPermissions() ? '' : Path.join('.', 'Reworked'),
   outputRules: [],
   namingConvention: NamingConvention.PLEX,
+  isMovieFolderEnabled: false,
   isAutoStartEnabled: false,
   isAutoAddEnabled: false,
   autoAddPath: '',

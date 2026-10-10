@@ -39,6 +39,8 @@ import { _ as t } from '../i18n'
 import { useRemoveVideos } from './useRemoveVideos'
 import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@types/Video'
 
+import { EllipsisCell } from './EllipsisCell'
+
 const columns: TableColumnDefinition<IVideoListItem>[] = [
   createTableColumn<IVideoListItem>({
     columnId: 'filename',
@@ -46,7 +48,7 @@ const columns: TableColumnDefinition<IVideoListItem>[] = [
     renderHeaderCell: () => t('video_list.column.filename', { defaultValue: 'File' }),
     renderCell: (item) => (
       <div style={{ width: '100%' }}>
-        <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{item.filename}</div>
+        <EllipsisCell>{item.filename}</EllipsisCell>
         {progressRenderer(item.status, item.progression)}
       </div>
     )

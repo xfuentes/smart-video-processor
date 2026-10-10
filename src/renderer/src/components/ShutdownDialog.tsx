@@ -32,12 +32,16 @@ export const ShutdownDialog = ({ open, onOpenChange }: Props): React.JSX.Element
   const _ = useI18n()
   const [remainingSeconds, setRemainingSeconds] = useState(SHUTDOWN_COUNTDOWN_SECONDS)
 
+  const [previousOpen, setPreviousOpen] = useState(open)
+  if (previousOpen !== open) {
+    setPreviousOpen(open)
+    setRemainingSeconds(SHUTDOWN_COUNTDOWN_SECONDS)
+  }
+
   useEffect(() => {
     if (!open) {
-      setRemainingSeconds(SHUTDOWN_COUNTDOWN_SECONDS)
       return
     }
-    setRemainingSeconds(SHUTDOWN_COUNTDOWN_SECONDS)
     const interval = setInterval(() => {
       setRemainingSeconds((previous) => {
         if (previous <= 1) {

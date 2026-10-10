@@ -38,6 +38,7 @@ import { useState } from 'react'
 import { _, useI18n } from '../../i18n'
 import { Checkbox } from '@fluentui/react'
 import { attachmentRenderer, booleanRenderer } from './renderers'
+import { EllipsisCell } from '../EllipsisCell'
 import {
   Attachment,
   Change,
@@ -57,7 +58,7 @@ import {
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
 
 const valueRenderer = (item: IChange, value: ChangePropertyValue | undefined) => {
-  let res = <div className="overflow-safe">{(value as string) ?? ''}</div>
+  let res = <EllipsisCell>{(value as string) ?? ''}</EllipsisCell>
   if (item.property !== undefined) {
     switch (propertyTypes[item.property]) {
       case 'boolean':
@@ -80,12 +81,12 @@ const columns: TableColumnDefinition<IChange>[] = [
       const source = item.sourceType
       const num = item.trackId !== undefined ? String(item.trackId) : undefined
       return (
-        <div style={{ whiteSpace: 'nowrap' }}>
+        <EllipsisCell>
           {_(`change_source.${source.toLowerCase()}.label_id`, {
             defaultValue: `${source} ${num ? ' {num}' : ''}`,
             num
           })}
-        </div>
+        </EllipsisCell>
       )
     }
   }),
@@ -94,9 +95,9 @@ const columns: TableColumnDefinition<IChange>[] = [
     compare: (a, b) => a.changeType.localeCompare(b.changeType),
     renderHeaderCell: () => <b>{_('properties.column.type.label', { defaultValue: 'Type' })}</b>,
     renderCell: (item) => (
-      <div style={{ whiteSpace: 'nowrap' }}>
+      <EllipsisCell>
         {_('change_type.' + item.changeType.toLowerCase() + '.label', { defaultValue: item.changeType })}
-      </div>
+      </EllipsisCell>
     )
   }),
   createTableColumn<IChange>({
@@ -104,13 +105,13 @@ const columns: TableColumnDefinition<IChange>[] = [
     compare: (a, b) => (a.property ?? '').localeCompare(b.property ?? ''),
     renderHeaderCell: () => <b>{_('properties.column.property.label', { defaultValue: 'Property' })}</b>,
     renderCell: (item) => (
-      <div style={{ whiteSpace: 'nowrap' }}>
+      <EllipsisCell>
         {item.property
           ? _('change_property.' + item.property.toLowerCase().replace(/ /g, '_') + '.label', {
               defaultValue: item.property
             })
           : ''}
-      </div>
+      </EllipsisCell>
     )
   }),
   createTableColumn<IChange>({

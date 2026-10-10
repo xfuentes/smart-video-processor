@@ -42,6 +42,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { LanguageSelector } from './fields/LanguageSelector'
 import {
   ArchiveSettings20Regular,
+  ArrowRouting20Regular,
   DatabaseSearch20Regular,
   DocumentSettings20Regular,
   ErrorCircle12Regular,
@@ -86,6 +87,7 @@ export const SettingsDialog = () => {
       defaultOutputPath,
       outputRules,
       namingConvention,
+      isMovieFolderEnabled,
       isAutoAddEnabled,
       autoAddPath,
       isAutoStartEnabled,
@@ -153,6 +155,7 @@ export const SettingsDialog = () => {
       setDefaultOutputPath(settingsValidation.result.defaultOutputPath)
       setOutputRules(settingsValidation.result.outputRules)
       setNamingConvention(settingsValidation.result.namingConvention)
+      setMovieFolderEnabled(settingsValidation.result.isMovieFolderEnabled)
       setAutoAddEnabled(settingsValidation.result.isAutoAddEnabled)
       setAutoAddPath(settingsValidation.result.autoAddPath)
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
@@ -222,6 +225,7 @@ export const SettingsDialog = () => {
   const [namingConvention, setNamingConvention] = useState(
     settingsValidation?.result?.namingConvention ?? NamingConvention.PLEX
   )
+  const [isMovieFolderEnabled, setMovieFolderEnabled] = useState(settingsValidation?.result?.isMovieFolderEnabled)
   const [isAutoAddEnabled, setAutoAddEnabled] = useState(settingsValidation?.result?.isAutoAddEnabled)
   const [autoAddPath, setAutoAddPath] = useState(settingsValidation?.result?.autoAddPath ?? '')
   const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
@@ -258,8 +262,9 @@ export const SettingsDialog = () => {
     tvShowMatchingPriority: 'matching',
     tmpFilesPath: 'output',
     defaultOutputPath: 'output',
-    outputRules: 'output',
+    outputRules: 'rules',
     namingConvention: 'output',
+    isMovieFolderEnabled: 'output',
     isTrackFilteringEnabled: 'filtering',
     favoriteLanguages: 'filtering',
     isKeepVOEnabled: 'filtering',
@@ -282,6 +287,7 @@ export const SettingsDialog = () => {
     defaultOutputPath,
     outputRules,
     namingConvention,
+    isMovieFolderEnabled,
     isAutoAddEnabled,
     autoAddPath,
     isAutoStartEnabled,
@@ -351,7 +357,10 @@ export const SettingsDialog = () => {
             }}
           >
             <DialogBody style={{ gap: 0, flexGrow: 1 }}>
-              <DialogContent className="settings-dialog">
+              <DialogContent
+                className="settings-dialog"
+                style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}
+              >
                 <TabList
                   selectedValue={selectedTab}
                   size="small"
@@ -374,6 +383,9 @@ export const SettingsDialog = () => {
                       {_('settings.tab.output', { defaultValue: 'Output' })}
                       {invalidTabs.has('output') && <ErrorCircle12Regular style={{ color: 'red' }} />}
                     </span>
+                  </Tab>
+                  <Tab value="rules" icon={<ArrowRouting20Regular />}>
+                    {_('settings.tab.output_rules', { defaultValue: 'Output Rules' })}
                   </Tab>
                   <Tab value="filtering" icon={<SearchSettings20Regular />}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -621,6 +633,21 @@ export const SettingsDialog = () => {
                           ))}
                         </Select>
                       </div>
+                      <div className="field">
+                        <Switch
+                          label={_('settings.movie_folder.label', {
+                            defaultValue: 'Put each movie in its own folder'
+                          })}
+                          checked={isMovieFolderEnabled}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                            setMovieFolderEnabled(ev.currentTarget.checked)
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {selectedTab === 'rules' && (
+                    <div className="settings-form" style={{ flexGrow: 1, minHeight: 0 }}>
                       <OutputRulesField rules={outputRules} onChange={setOutputRules} language={language} />
                     </div>
                   )}

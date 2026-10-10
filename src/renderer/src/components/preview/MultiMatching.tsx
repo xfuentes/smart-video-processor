@@ -18,7 +18,7 @@
 
 import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { IVideo, MultiSearchInputData, SearchBy, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
@@ -77,7 +77,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
   const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
 
-  useEffect(() => {
+  const [previousVideos, setPreviousVideos] = useState(videos)
+  if (previousVideos !== videos) {
+    setPreviousVideos(videos)
     type !== initialType && setType(initialType)
     searchBy !== initialSearchBy && setSearchBy(initialSearchBy)
     tvShowTitle !== initialTvShowTitle && setTvShowTitle(initialTvShowTitle)
@@ -94,7 +96,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     tvShowOriginalCountries !== initialTvShowOriginalCountries &&
       setTvShowOriginalCountries(initialTvShowOriginalCountries)
     tvShowSeason !== initialTvShowSeason && setTvShowSeason(initialTvShowSeason)
-  }, [videos]) // eslint-disable-line
+  }
 
   const search = async () => {
     await window.api.video

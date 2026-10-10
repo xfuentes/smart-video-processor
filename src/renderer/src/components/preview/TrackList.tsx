@@ -40,6 +40,7 @@ import {
   trackTypeRenderer
 } from './renderers'
 import React from 'react'
+import { EllipsisCell } from '../EllipsisCell'
 import xor from 'lodash/xor'
 import { ITrack } from '../../../../common/@types/Track'
 import { IVideo } from '../../../../common/@types/Video'
@@ -68,13 +69,13 @@ const columns: TableColumnDefinition<ITrack>[] = [
     columnId: 'name',
     compare: (a, b) => a.name.localeCompare(b.name),
     renderHeaderCell: () => _('track_list.column.name.label', { defaultValue: 'Name' }),
-    renderCell: (item) => <div className="overflow-safe">{item.name}</div>
+    renderCell: (item) => <EllipsisCell>{item.name}</EllipsisCell>
   }),
   createTableColumn<ITrack>({
     columnId: 'codec',
     compare: (a, b) => a.codec.localeCompare(b.codec),
     renderHeaderCell: () => _('track_list.column.codec.label', { defaultValue: 'Codec' }),
-    renderCell: (item) => <div className="overflow-safe">{codecRenderer(item.codec)}</div>
+    renderCell: (item) => <EllipsisCell>{codecRenderer(item.codec)}</EllipsisCell>
   }),
   createTableColumn<ITrack>({
     columnId: 'bitrate',
@@ -85,7 +86,7 @@ const columns: TableColumnDefinition<ITrack>[] = [
   createTableColumn<ITrack>({
     columnId: 'properties',
     renderHeaderCell: () => _('track_list.column.properties.label', { defaultValue: 'Properties' }),
-    renderCell: (item) => <div className="overflow-safe">{trackPropertiesRenderer(item.properties)}</div>
+    renderCell: (item) => <EllipsisCell>{trackPropertiesRenderer(item.properties)}</EllipsisCell>
   }),
   createTableColumn<ITrack>({
     columnId: 'default',

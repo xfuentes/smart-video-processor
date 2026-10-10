@@ -8,9 +8,7 @@ describe('shutdown', () => {
     })
 
     it('returns macOS shutdown command for darwin', () => {
-      expect(getShutdownCommand('darwin')).toBe(
-        'osascript -e \'tell application "System Events" to shut down\''
-      )
+      expect(getShutdownCommand('darwin')).toBe('osascript -e \'tell application "System Events" to shut down\'')
     })
 
     it('returns Linux shutdown command for other platforms', () => {

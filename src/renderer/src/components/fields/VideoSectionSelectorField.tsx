@@ -138,11 +138,14 @@ export const VideoSectionSelectorField = function ({ video, mainVideoUuid = unde
       />
     )
   }
-  useEffect(() => {
+  const playerSyncKey = `${videoPlayerCurrentTime}|${videoPlayed?.uuid}|${video.uuid}`
+  const [previousPlayerSyncKey, setPreviousPlayerSyncKey] = React.useState('')
+  if (previousPlayerSyncKey !== playerSyncKey) {
+    setPreviousPlayerSyncKey(playerSyncKey)
     if (videoPlayed?.uuid === video.uuid) {
       setCurrentTime(videoPlayerCurrentTime)
     }
-  }, [videoPlayerCurrentTime, videoPlayed?.uuid, video.uuid])
+  }
 
   useEffect(() => {
     if (video.uuid === videoPlayed?.uuid && videoPlayed !== video) {

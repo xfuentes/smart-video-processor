@@ -20,7 +20,8 @@ import { Video } from '../domain/Video'
 import { currentSettings } from '../domain/Settings'
 import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { EpisodeOrder } from '../domain/clients/TVDBClient'
-import { IHint } from '../../common/@types/Hint'
+import { HintType, IHint } from '../../common/@types/Hint'
+import { TrackType } from '../../common/@types/Track'
 import { Attachment, ChangeProperty, ChangeType } from '../../common/Change'
 
 type VideoListChangeListener = (videos: Video[]) => void
@@ -176,10 +177,34 @@ export class VideoController {
     })
   }
 
+  addMultiHint(uuids: string[], trackId: number, type: HintType, values?: Record<string, string | undefined>) {
+    this.batchChanges(() => {
+      for (const uuid of uuids) {
+        void this.getVideoByUuid(uuid).addHint(trackId, type, values?.[uuid])
+      }
+    })
+  }
+
+  removeMultiHint(uuids: string[], trackId: number, type: HintType) {
+    this.batchChanges(() => {
+      for (const uuid of uuids) {
+        void this.getVideoByUuid(uuid).removeHint(trackId, type)
+      }
+    })
+  }
+
   setMultiTrackEncodingEnabled(uuids: string[], source: string, value: boolean) {
     this.batchChanges(() => {
       for (const uuid of uuids) {
         void this.getVideoByUuid(uuid).setTrackEncodingEnabled(source, value)
+      }
+    })
+  }
+
+  setMultiTrackSelection(uuids: string[], trackType: TrackType, trackId: number, copy: boolean) {
+    this.batchChanges(() => {
+      for (const uuid of uuids) {
+        this.getVideoByUuid(uuid).setTrackSelection(trackType, trackId, copy)
       }
     })
   }

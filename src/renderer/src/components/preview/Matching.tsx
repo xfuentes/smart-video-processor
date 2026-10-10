@@ -18,7 +18,7 @@
 
 import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
@@ -68,8 +68,9 @@ export const Matching = ({ video, disabled }: Props) => {
   const [otherOriginalLanguage, setOtherOriginalLanguage] = useState<string>(video.other?.originalLanguage?.code || '')
   const [otherPosterPath, setOtherPosterPath] = useState<string>(video.other?.poster || '')
 
-  useEffect(() => {
-    console.log('movie ' + video.filename.substring(video.filename.lastIndexOf('/')) + ' updated!')
+  const [previousVideo, setPreviousVideo] = useState(video)
+  if (previousVideo !== video) {
+    setPreviousVideo(video)
     type !== video.type && setType(video.type)
     searchBy !== video.searchBy && setSearchBy(video.searchBy)
     movieTitle !== (video.movie?.title ?? '') && setMovieTitle(video.movie?.title ?? '')
@@ -105,7 +106,7 @@ export const Matching = ({ video, disabled }: Props) => {
     otherOriginalLanguage !== (video.other?.originalLanguage?.code || '') &&
       setOtherOriginalLanguage(video.other?.originalLanguage?.code || '')
     otherPosterPath !== (video.other?.poster || '') && setOtherPosterPath(video.other?.poster || '')
-  }, [video]) // eslint-disable-line
+  }
   const position = Strings.formatEpisodePosition(
     video.tvShow?.order,
     video.tvShow?.season,

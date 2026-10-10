@@ -32,6 +32,7 @@ import { Attachment } from '../../../../common/Change'
 import React from 'react'
 import { Progression } from '../../../../common/@types/processes'
 import { _ } from '../../i18n'
+import { EllipsisCell } from '../EllipsisCell'
 
 export function bitrateRenderer(bitrate?: number) {
   return bitrate ? <span>{Strings.humanBitrate(bitrate)} </span> : <span>-</span>
@@ -105,15 +106,12 @@ export function attachmentRenderer(value: Attachment) {
   if (value === undefined) {
     return <span />
   }
-  if (value.description) {
-    return (
-      <Tooltip content={value.description} relationship="description">
-        <span>{value.filename + ' (' + value.mimeType + ')'}</span>
-      </Tooltip>
-    )
-  } else {
-    return <span>{value.filename + ' (' + value.mimeType + ')'}</span>
-  }
+  const text = value.filename + ' (' + value.mimeType + ')'
+  return (
+    <EllipsisCell tooltip={value.description ? `${text} - ${value.description}` : text} always={!!value.description}>
+      {text}
+    </EllipsisCell>
+  )
 }
 
 export function statusRenderer(status: JobStatus, message: string | undefined, size: 'small' | 'large' = 'small') {

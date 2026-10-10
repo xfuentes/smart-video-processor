@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect } from 'react'
+import React from 'react'
 import {
   Menu,
   MenuItem,
@@ -62,21 +62,12 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   const [shutdownRequested, setShutdownRequested] = React.useState(false)
   const [shutdownDialogOpen, setShutdownDialogOpen] = React.useState(false)
   const isAnyProcessing = videos.some((video) => video.processing)
-  const checkIsRecyclable = useCallback(() => {
-    return videos !== undefined && videos.find((v) => checkVideoProcessingSuccessful(v)) !== undefined
-  }, [videos])
-  const [isRecyclable, setRecyclable] = React.useState(checkIsRecyclable())
+  const isRecyclable = videos.some((v) => checkVideoProcessingSuccessful(v))
 
-  useEffect(() => {
-    setRecyclable(checkIsRecyclable())
-  }, [checkIsRecyclable])
-
-  useEffect(() => {
-    if (shutdownRequested && !isAnyProcessing && !shutdownDialogOpen) {
-      setShutdownDialogOpen(true)
-      setShutdownRequested(false)
-    }
-  }, [shutdownRequested, isAnyProcessing, shutdownDialogOpen])
+  if (shutdownRequested && !isAnyProcessing && !shutdownDialogOpen) {
+    setShutdownDialogOpen(true)
+    setShutdownRequested(false)
+  }
 
   const processingEnabled =
     selectedVideos !== undefined && selectedVideos.find((v) => checkVideoProcessingEnabled(v)) !== undefined

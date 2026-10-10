@@ -41,6 +41,7 @@ import { Hints } from '@renderer/components/preview/Hints'
 import { Processing } from '@renderer/components/preview/Processing'
 import { Encoding } from '@renderer/components/preview/Encoding'
 import { Properties } from '@renderer/components/preview/Properties'
+import { getAddableHints } from '@renderer/components/preview/addableHints'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
 
 type Props = {
@@ -67,6 +68,7 @@ export const PreviewTabs = ({ video }: Props) => {
   const encodingCount = Object.values(video.trackEncodingEnabled).filter((v) => v).length
   const hintCount = video.hints.length
   const hintMissing = video.hints.find((h) => !h.value) !== undefined
+  const canAddHint = getAddableHints([video], video.hints).length > 0
   const disabled = video.queued || video.processing
 
   if (selectedTab === 'encoding' || selectedTab === 'processing' || selectedTab === 'properties') {
@@ -97,7 +99,7 @@ export const PreviewTabs = ({ video }: Props) => {
           {_('preview.tab.tracks', { defaultValue: 'Tracks' })}{' '}
           <CounterBadge color={tracksCount === 0 ? 'important' : 'informative'} size="small" count={tracksCount} />
         </Tab>
-        {hintCount > 0 && (
+        {(hintCount > 0 || canAddHint) && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
             {_('preview.tab.hints', { defaultValue: 'Hints' })}{' '}
             <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />

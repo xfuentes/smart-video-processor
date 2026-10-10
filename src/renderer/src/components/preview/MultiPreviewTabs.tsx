@@ -25,15 +25,25 @@ import {
   Tab,
   TabList
 } from '@fluentui/react-components'
-import { ResizeVideo20Regular, Search20Regular, SquareHintArrowBack20Regular } from '@fluentui/react-icons'
+import {
+  ResizeVideo20Regular,
+  Search20Regular,
+  SquareHintArrowBack20Regular,
+  TaskListLtr20Regular,
+  TextBulletList20Regular
+} from '@fluentui/react-icons'
 import { useI18n } from '../../i18n'
 import { IVideo } from '../../../../common/@types/Video'
 import { useVideoPlayer } from '@renderer/components/context/VideoPlayerContext'
-import { IHint } from '../../../../common/@types/Hint'
 import { EncoderSettings, MultiEncoderSettings } from '../../../../common/@types/Encoding'
 import { MultiMatching } from '@renderer/components/preview/MultiMatching'
 import { MultiHints } from '@renderer/components/preview/MultiHints'
 import { MultiEncoding } from '@renderer/components/preview/MultiEncoding'
+import { MultiProperties } from '@renderer/components/preview/MultiProperties'
+import { groupChanges } from '@renderer/components/preview/changeGroups'
+import { MultiTracks } from '@renderer/components/preview/MultiTracks'
+import { buildMultiHintGroups } from '@renderer/components/preview/multiHintGroups'
+import { groupTracks } from '@renderer/components/preview/trackGroups'
 
 type Props = {
   videos: IVideo[]
@@ -54,36 +64,16 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
 
   const allEnabled = videos.find((video) => video.searching || video.queued || video.processing) === undefined
   const allMatched = videos.find((video) => !video.matched) === undefined
+  const hintGroups = buildMultiHintGroups(videos)
+  const hintCount = hintGroups.filter((g) => g.present.length > 0).length
+  const canAddHint = hintGroups.some((g) => g.present.length === 0)
+  const hintMissing = hintGroups.some((g) => g.anyMissing)
+
+  if ((selectedTab === 'encoding' || selectedTab === 'properties') && (!allMatched || hintMissing)) {
+    setSelectedTab(allMatched ? 'hints' : 'matching')
+  }
+
   let firstSet = true
-  // A hint is common as soon as every video has one for the same track/type, even if their values differ;
-  // mismatched values are reset to undefined so the batch editor starts blank instead of assuming one of them.
-  let commonHints: (IHint & { anyMissing?: boolean })[] = []
-  videos.forEach((v) => {
-    if (firstSet) {
-      commonHints = v.hints.map((h) => ({ ...h, anyMissing: !h.value }))
-      firstSet = false
-    } else {
-      const newCommonHints: (IHint & { anyMissing?: boolean })[] = []
-      for (const commonHint of commonHints) {
-        const hint = v.hints.find((h: IHint) => h.trackId === commonHint.trackId && h.type === commonHint.type)
-        if (hint !== undefined) {
-          if (!hint.value) {
-            commonHint.anyMissing = true
-          }
-          if (commonHint.value !== hint.value) {
-            commonHint.value = undefined
-          }
-          newCommonHints.push(commonHint)
-        }
-      }
-      commonHints = newCommonHints
-    }
-  })
-
-  const hintCount = commonHints.length
-  const hintMissing = commonHints.some((h) => h.anyMissing)
-
-  firstSet = true
   let commonEncoderSettings: EncoderSettings[] = []
   videos.forEach((v) => {
     if (firstSet) {
@@ -169,6 +159,9 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
 
   const encodingCount = multiEncoderSettings.reduce((total, es) => total + es.enabledCount, 0)
   const matchingCount = videos[0].searchResults?.length ?? 0
+  const changeGroups = groupChanges(videos)
+  const trackGroups = groupTracks(videos)
+  const tracksDiffer = trackGroups.some((g) => g.differences.length > 0)
 
   return (
     <div
@@ -186,12 +179,25 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
           {_('preview.tab.matching', { defaultValue: 'Matching' })}{' '}
           <CounterBadge color={allMatched ? 'informative' : 'danger'} size="small" showZero count={matchingCount} />
         </Tab>
-        {hintCount > 0 && (
+        <Tab value="tracks" icon={<TextBulletList20Regular />}>
+          {_('preview.tab.tracks', { defaultValue: 'Tracks' })}{' '}
+          <CounterBadge
+            color={tracksDiffer ? 'important' : 'informative'}
+            size="small"
+            showZero
+            count={trackGroups.length}
+          />
+        </Tab>
+        {(hintCount > 0 || canAddHint) && (
           <Tab value="hints" icon={<SquareHintArrowBack20Regular />}>
             {_('preview.tab.hints', { defaultValue: 'Hints' })}{' '}
             <CounterBadge color={hintMissing ? 'danger' : 'informative'} size="small" showZero count={hintCount} />
           </Tab>
         )}
+        <Tab value="properties" icon={<TaskListLtr20Regular />} disabled={!allMatched || hintMissing}>
+          {_('preview.tab.properties', { defaultValue: 'Properties' })}{' '}
+          <CounterBadge color="informative" size="small" showZero count={changeGroups.length} />
+        </Tab>
         <Tab value="encoding" icon={<ResizeVideo20Regular />} disabled={!allMatched || hintMissing}>
           {_('preview.tab.encoding', { defaultValue: 'Encoding' })}{' '}
           <CounterBadge color="informative" size="small" showZero count={encodingCount} />
@@ -199,7 +205,9 @@ export const MultiPreviewTabs = ({ videos }: Props) => {
       </TabList>
       <div style={{ flexGrow: '1', overflow: 'auto', display: 'flex', flexFlow: 'column', padding: '2px' }}>
         {selectedTab === 'matching' && <MultiMatching disabled={!allEnabled} videos={videos} />}
-        {selectedTab === 'hints' && <MultiHints disabled={!allEnabled} videos={videos} commonHints={commonHints} />}
+        {selectedTab === 'tracks' && <MultiTracks disabled={!allEnabled} videos={videos} />}
+        {selectedTab === 'hints' && <MultiHints disabled={!allEnabled} videos={videos} groups={hintGroups} />}
+        {selectedTab === 'properties' && <MultiProperties videos={videos} />}
         {selectedTab === 'encoding' && (
           <MultiEncoding disabled={!allEnabled} videos={videos} commonEncoderSettings={multiEncoderSettings} />
         )}

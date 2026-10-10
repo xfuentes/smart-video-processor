@@ -1,12 +1,4 @@
-export type EpisodeOrder =
-  | 'default'
-  | 'official'
-  | 'dvd'
-  | 'absolute'
-  | 'alternate'
-  | 'regional'
-  | 'altdvd'
-  | 'alttwo'
+export type EpisodeOrder = 'default' | 'official' | 'dvd' | 'absolute' | 'alternate' | 'regional' | 'altdvd' | 'alttwo'
 
 export const EPISODE_ORDERS: EpisodeOrder[] = [
   'default',

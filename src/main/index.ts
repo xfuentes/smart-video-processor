@@ -329,6 +329,7 @@ app.whenReady().then(async () => {
     return ''
   })
   ipcMain.handle('main:getJobQueues', () => ({
+    loading: JobManager.getInstance().getQueueInfo(JobStatus.LOADING),
     encoding: JobManager.getInstance().getQueueInfo(JobStatus.ENCODING),
     merging: JobManager.getInstance().getQueueInfo(JobStatus.MERGING)
   }))

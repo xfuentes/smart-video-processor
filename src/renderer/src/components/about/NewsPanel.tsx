@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.0.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_0_0.items', {
+          defaultValue:
+            'Added an option in the output settings to put each movie in its own sub-folder named after the movie, as recommended by Plex, Jellyfin and Kodi\nAdded Tracks, Properties and New hint to edit several videos at once, with the tracks similarity, the forced flag and the frames count to compare them\nValues that differ between videos now list every value in a tooltip when hovering Multiple values\nThe movie database tag is now placed right after the title and year in generated filenames\nRenaming or moving a file without any other change now copies it directly instead of remuxing it, with a precise progression\nVideos waiting to be loaded now show Queued, and the loading message explains why a file is remuxed when its bitrate is missing\nText that is too long in the tables is now cut with an ellipsis and shown in full in a tooltip\nFixed several filename, hint and poster issues, including tracks named VO being given the wrong language'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '2.5.1' })}</h4>
       <ul>
         {_('about.news.version_2_5_1.items', {

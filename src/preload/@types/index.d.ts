@@ -22,9 +22,10 @@ import { IVideo, MultiSearchInputData, SearchInputData } from '../../common/@typ
 import { EpisodeOrder } from '../../common/@types/EpisodeOrder'
 import { ChangeProperty, ChangePropertyValue, ChangeType } from '../../common/Change'
 import { FormValidation } from '../../common/FormValidation'
-import { IHint } from '../../common/@types/Hint'
+import { HintType, IHint } from '../../common/@types/Hint'
 
 import { JobQueues } from '../../common/@types/Job'
+import { TrackType } from '../../common/@types/Track'
 
 export type InvalidSettingsListener = (validation: FormValidation<Settings>) => void
 export type ListChangedListener = (value: IVideo[]) => void
@@ -68,9 +69,17 @@ export interface SvpAPI {
     multiSelectSearchResultID: (uuids: string[], searchResultID?: number) => Promise<void>
     multiSearch: (uuids: string[], data: MultiSearchInputData) => Promise<void>
     setMultiHint: (uuids: string[], hint: IHint, value?: string) => Promise<void>
+    addMultiHint: (
+      uuids: string[],
+      trackId: number,
+      type: HintType,
+      values?: Record<string, string | undefined>
+    ) => Promise<void>
+    removeMultiHint: (uuids: string[], trackId: number, type: HintType) => Promise<void>
     setMultiTrackEncodingEnabled: (uuids: string[], source: string, value: boolean) => Promise<void>
     multiProcess: (uuids: string[]) => Promise<void>
     switchTrackSelection: (uuid: string, changedItems: number[]) => Promise<void>
+    setMultiTrackSelection: (uuids: string[], trackType: TrackType, trackId: number, copy: boolean) => Promise<void>
     setHint: (uuid: string, hint: IHint, value?: string) => Promise<void>
     addChange: (
       uuid: string,

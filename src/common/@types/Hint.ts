@@ -25,4 +25,8 @@ export interface IHint {
   trackId?: number
   type: HintType
   value?: string
+  /**
+   * True when the analysis needs this hint by itself, so it cannot be removed.
+   */
+  required?: boolean
 }
