@@ -128,7 +128,7 @@ export const MultiTracks = ({ videos, disabled }: Props) => {
           <TableHeaderCell style={{ width: '90px' }}>
             {_('track_list.column.frames.label', { defaultValue: 'Frames' })}
           </TableHeaderCell>
-          <TableHeaderCell style={{ width: '90px' }}>
+          <TableHeaderCell style={{ width: '180px' }}>
             {_('track_list.column.duration.label', { defaultValue: 'Duration' })}
           </TableHeaderCell>
           <TableHeaderCell style={{ width: '70px' }}>
