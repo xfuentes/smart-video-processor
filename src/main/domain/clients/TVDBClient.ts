@@ -425,7 +425,8 @@ export class TVDBClient {
         episodeData.name,
         episodeData.image,
         episodeData.overview,
-        episodeCount
+        episodeCount,
+        episodeData.runtime ?? seriesData.averageRuntime
       ),
       seriesData: new SearchResult(
         seriesData.id,

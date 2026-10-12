@@ -56,6 +56,7 @@ export const Matching = ({ video, disabled }: Props) => {
     video.tvShow?.season === undefined ? '' : '' + video.tvShow.season
   )
   const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
+  const [episodeCountEdited, setEpisodeCountEdited] = useState(false)
   const [tvShowEpisodeCount, setTvShowEpisodeCount] = useState<string>('' + (video.tvShow?.videoEpisodeCount ?? 1))
   const [tvShowAbsoluteEpisode, setTvShowAbsoluteEpisode] = useState<string>(
     !video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode
@@ -94,8 +95,10 @@ export const Matching = ({ video, disabled }: Props) => {
       setTvShowSeason(video.tvShow?.season === undefined ? '' : '' + video.tvShow.season)
     tvShowEpisode !== (!video.tvShow?.episode ? '' : '' + video.tvShow.episode) &&
       setTvShowEpisode(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
-    tvShowEpisodeCount !== '' + (video.tvShow?.videoEpisodeCount ?? 1) &&
+    if (tvShowEpisodeCount !== '' + (video.tvShow?.videoEpisodeCount ?? 1)) {
       setTvShowEpisodeCount('' + (video.tvShow?.videoEpisodeCount ?? 1))
+      setEpisodeCountEdited(false)
+    }
     tvShowAbsoluteEpisode !== (!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode) &&
       setTvShowAbsoluteEpisode(!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode)
     tvShowEpisodeTitle !== (video.tvShow?.episodeTitle ?? '') && setTvShowEpisodeTitle(video.tvShow?.episodeTitle ?? '')
@@ -135,7 +138,8 @@ export const Matching = ({ video, disabled }: Props) => {
         tvShowOrder,
         tvShowSeason,
         tvShowEpisode,
-        tvShowEpisodeCount,
+        // Left out when untouched so the count can still be guessed from the duration.
+        tvShowEpisodeCount: episodeCountEdited ? tvShowEpisodeCount : undefined,
         tvShowAbsoluteEpisode,
         tvShowEpisodeTitle,
         otherTitle,
@@ -521,7 +525,10 @@ export const Matching = ({ video, disabled }: Props) => {
                       min={1}
                       value={tvShowEpisodeCount}
                       style={{ minWidth: 1 }}
-                      onChange={(_ev, data) => setTvShowEpisodeCount(data.value)}
+                      onChange={(_ev, data) => {
+                        setTvShowEpisodeCount(data.value)
+                        setEpisodeCountEdited(true)
+                      }}
                     />
                   </Field>
                 </div>
@@ -702,7 +709,7 @@ export const Matching = ({ video, disabled }: Props) => {
                 {type === VideoType.TV_SHOW && (
                   <VideoPreview
                     title={video.tvShow?.title}
-                    subTitle={video.tvShow?.episodeTitle}
+                    subTitle={video.tvShow?.allEpisodeTitles}
                     position={
                       searchBy === SearchBy.TITLE_EP_NAME || searchBy === SearchBy.TVDB_EP_NAME ? position : undefined
                     }

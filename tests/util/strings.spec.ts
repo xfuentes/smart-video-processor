@@ -88,3 +88,11 @@ test('formatEpisodePosition with several episodes in the video', () => {
   expect(Strings.formatEpisodePosition('official', 9, 1, undefined, 26, 1)).toBe('S09E01')
   expect(Strings.formatEpisodePosition('absolute', undefined, undefined, 242, 500, 3)).toBe('E242-E244')
 })
+
+test('removeCommonPrefix', () => {
+  expect(Strings.removeCommonPrefix('Pups Save a Mermaid', 'Pups Save a Seal')).toBe('Seal')
+  expect(Strings.removeCommonPrefix('Pups Save the Parade', 'pups save a Pup')).toBe('a Pup')
+  expect(Strings.removeCommonPrefix('Pups Save a Seal', 'Pups Save a Seal')).toBe('Pups Save a Seal')
+  expect(Strings.removeCommonPrefix('The Cat', 'The Dog')).toBe('The Dog')
+  expect(Strings.removeCommonPrefix('Rescue Rubble', 'Sky Day')).toBe('Sky Day')
+})

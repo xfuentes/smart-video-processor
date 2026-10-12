@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added support for video files containing several consecutive episodes (e.g. `S09E01-E02`), matched on TheTVDB or TheMovieDB and named `Show - S09E01-E02 - Title 1 + Title 2`, with an Episodes in File field in the matching form and an Episodes per Video field to number several videos at once.
+- The number of episodes in a video is guessed from its duration and the episode runtime, and recalculated for each video when renumbering several videos. Clearing the field goes back to the automatic guess.
+- A prefix repeated in the titles of the following episodes is removed from the combined episode title.
 
 ## [3.1.0] - 2026-10-10
 

@@ -26,11 +26,13 @@ export class SearchingJob extends Job<void> {
 
   private readonly videos: Video[]
   private readonly searchVideo: (video: Video) => Promise<void>
+  private readonly sequential: boolean
 
-  constructor(videos: Video[], searchVideo: (video: Video) => Promise<void>) {
+  constructor(videos: Video[], searchVideo: (video: Video) => Promise<void>, sequential = false) {
     super(JobStatus.SEARCHING, _('job.title.searching', { defaultValue: 'Searching video information.' }))
     this.videos = videos
     this.searchVideo = searchVideo
+    this.sequential = sequential
   }
 
   // Videos loaded while a search is running are grouped in the next waiting job.
@@ -58,7 +60,11 @@ export class SearchingJob extends Job<void> {
     }
     this.setProgression({ progress: 0 })
     // The first search warms the clients cache so the others can run in parallel.
-    if (this.videos.length > 0) {
+    if (this.sequential) {
+      for (const video of this.videos) {
+        await run(video)
+      }
+    } else if (this.videos.length > 0) {
       await run(this.videos[0])
       await Promise.all(this.videos.slice(1).map(run))
     }

@@ -291,7 +291,8 @@ export class TMDBClient {
             episode.name,
             episode.still_path ? TMDB_IMAGE_URL + episode.still_path : '',
             episode.overview ?? '',
-            episodeCount
+            episodeCount,
+            episode.runtime
           )
         }
       } catch (error) {

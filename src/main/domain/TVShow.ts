@@ -43,6 +43,7 @@ export class TVShow implements ITVShow {
   public season?: number
   public episode?: number
   public videoEpisodeCount: number = 1
+  private videoEpisodeCountSource: 'auto' | 'filename' | 'manual' = 'auto'
   public episodeTitle: string = ''
   private followingEpisodeTitles: string[] = []
   public year?: number
@@ -163,28 +164,31 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
+    const detected = !!episodeData && this.detectVideoEpisodeCount(episodeData.runtime)
     const followingEpisodesFound =
       !episodeData ||
-      (await this.loadFollowingEpisodes((offset) =>
-        this.order === 'absolute'
-          ? TVDBClient.getInstance()
-              .retrieveSeriesDetails(
-                this.theTVDB!,
-                'absolute',
-                undefined,
-                (this.absoluteEpisode ?? 0) + offset,
-                undefined
-              )
-              .then((details) => details.episodeData)
-          : TVDBClient.getInstance()
-              .retrieveSeriesDetails(
-                this.theTVDB!,
-                this.order ?? 'official',
-                (this.episode ?? 0) + offset,
-                undefined,
-                episodeData.seasonNumber
-              )
-              .then((details) => details.episodeData)
+      (await this.loadFollowingEpisodes(
+        (offset) =>
+          this.order === 'absolute'
+            ? TVDBClient.getInstance()
+                .retrieveSeriesDetails(
+                  this.theTVDB!,
+                  'absolute',
+                  undefined,
+                  (this.absoluteEpisode ?? 0) + offset,
+                  undefined
+                )
+                .then((details) => details.episodeData)
+            : TVDBClient.getInstance()
+                .retrieveSeriesDetails(
+                  this.theTVDB!,
+                  this.order ?? 'official',
+                  (this.episode ?? 0) + offset,
+                  undefined,
+                  episodeData.seasonNumber
+                )
+                .then((details) => details.episodeData),
+        detected
       ))
 
     this.tvdbEpisodeId = undefined
@@ -324,12 +328,15 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
+    const detected = !!episodeData && this.detectVideoEpisodeCount(episodeData.runtime)
     const followingEpisodesFound =
       !episodeData ||
-      (await this.loadFollowingEpisodes((offset) =>
-        TMDBClient.getInstance()
-          .retrieveTVSeriesDetails(this.theMovieDB!, (this.episode ?? 0) + offset, episodeData.seasonNumber)
-          .then((details) => details.episodeData)
+      (await this.loadFollowingEpisodes(
+        (offset) =>
+          TMDBClient.getInstance()
+            .retrieveTVSeriesDetails(this.theMovieDB!, (this.episode ?? 0) + offset, episodeData.seasonNumber)
+            .then((details) => details.episodeData),
+        detected
       ))
 
     if (this.episode && episodeData) {
@@ -410,12 +417,37 @@ export class TVShow implements ITVShow {
     }
   }
 
+  // Guesses how many episodes the video contains from its duration and the episode runtime.
+  private detectVideoEpisodeCount(runtimeMinutes?: number) {
+    if (this.videoEpisodeCountSource !== 'auto') {
+      return false
+    }
+    // The previous guess belongs to the previous episode, so it starts again from one episode.
+    this.videoEpisodeCount = 1
+    if (!runtimeMinutes || !this.video.duration) {
+      return false
+    }
+    const ratio = this.video.duration / (runtimeMinutes * 60)
+    const count = Math.round(ratio)
+    if (count < 2 || Math.abs(ratio - count) > count * 0.15) {
+      return false
+    }
+    this.videoEpisodeCount = count
+    return true
+  }
+
   // Loads the episodes following the first one when the video contains several episodes.
-  private async loadFollowingEpisodes(load: (offset: number) => Promise<EpisodeData | undefined>) {
+  private async loadFollowingEpisodes(load: (offset: number) => Promise<EpisodeData | undefined>, detected = false) {
     this.followingEpisodeTitles = []
     for (let offset = 1; offset < this.videoEpisodeCount; offset++) {
       const data = await load(offset)
       if (!data) {
+        // A guessed count that does not match the database is dropped.
+        if (detected) {
+          this.videoEpisodeCount = 1
+          this.followingEpisodeTitles = []
+          return true
+        }
         return false
       }
       this.followingEpisodeTitles.push(data.title)
@@ -434,8 +466,18 @@ export class TVShow implements ITVShow {
     )
   }
 
+  // The titles of all the episodes of the video, without the prefix repeated in the following ones.
+  get allEpisodeTitles() {
+    return [
+      this.episodeTitle,
+      ...this.followingEpisodeTitles.map((title) => Strings.removeCommonPrefix(this.episodeTitle, title))
+    ]
+      .filter(Boolean)
+      .join(' + ')
+  }
+
   private formatVideoTitle(position: string) {
-    const episodeTitles = [this.episodeTitle, ...this.followingEpisodeTitles].filter(Boolean).join(' + ')
+    const episodeTitles = this.allEpisodeTitles
     return `${this.title}${position ? ' - ' + position : ''}${episodeTitles ? ' - ' + episodeTitles : ''}`
   }
 
@@ -470,7 +512,28 @@ export class TVShow implements ITVShow {
   }
 
   setEpisodeCount(newEpisodeCount: string) {
-    this.videoEpisodeCount = Math.max(Numbers.toNumber(newEpisodeCount) ?? 1, 1)
+    const count = Numbers.toNumber(newEpisodeCount)
+    // An empty value goes back to guessing the count from the video duration.
+    this.videoEpisodeCount = Math.max(count ?? 1, 1)
+    this.videoEpisodeCountSource = count !== undefined ? 'manual' : 'auto'
+  }
+
+  setEpisodeCountFromFilename(count: number) {
+    this.videoEpisodeCount = count
+    this.videoEpisodeCountSource = count > 1 ? 'filename' : 'auto'
+  }
+
+  // Forgets the previous count so it is guessed again from the video duration, unless it was set manually.
+  resetVideoEpisodeCount() {
+    if (this.videoEpisodeCountSource !== 'manual') {
+      this.videoEpisodeCount = 1
+      this.videoEpisodeCountSource = 'auto'
+    }
+  }
+
+  setPosition(position: number) {
+    this.setEpisode('' + position)
+    this.setAbsoluteEpisode('' + position)
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
@@ -593,6 +656,7 @@ export class TVShow implements ITVShow {
       episode: this.episode,
       videoEpisodeCount: this.videoEpisodeCount,
       episodeTitle: this.episodeTitle,
+      allEpisodeTitles: this.allEpisodeTitles,
       year: this.year,
       overview: this.overview,
       episodeOverview: this.episodeOverview,

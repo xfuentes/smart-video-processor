@@ -84,6 +84,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   )
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
   const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
+  const [episodesPerVideoEdited, setEpisodesPerVideoEdited] = useState(false)
   const [tvShowEpisodesPerVideo, setTvShowEpisodesPerVideo] = useState<string | undefined>(
     initialTvShowEpisodesPerVideo
   )
@@ -118,7 +119,10 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     changed('tvShowTMDB') && setTvShowTMDB(asText(initialTvShowTMDB))
     changed('tvShowOrder') && setTvShowOrder(initialTvShowOrder)
     changed('tvShowSeason') && setTvShowSeason(initialTvShowSeason)
-    changed('tvShowEpisodesPerVideo') && setTvShowEpisodesPerVideo(initialTvShowEpisodesPerVideo)
+    if (changed('tvShowEpisodesPerVideo')) {
+      setTvShowEpisodesPerVideo(initialTvShowEpisodesPerVideo)
+      setEpisodesPerVideoEdited(false)
+    }
 
     searchResults !== initialSearchResults && setSearchResults(initialSearchResults)
     tvShowPoster !== initialTvShowPoster && setTvShowPoster(initialTvShowPoster)
@@ -143,7 +147,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
           tvShowOrder,
           tvShowSeason,
           tvShowStartEpisode,
-          tvShowEpisodesPerVideo
+          // Left out when untouched so the counts are guessed again for each video.
+          tvShowEpisodesPerVideo: episodesPerVideoEdited ? tvShowEpisodesPerVideo : undefined
         } as MultiSearchInputData
       )
       .then(() => {
@@ -403,7 +408,10 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       value={tvShowEpisodesPerVideo ?? ''}
                       placeholder={_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                       style={{ minWidth: 1 }}
-                      onChange={(_ev, data) => setTvShowEpisodesPerVideo(data.value)}
+                      onChange={(_ev, data) => {
+                        setTvShowEpisodesPerVideo(data.value)
+                        setEpisodesPerVideoEdited(true)
+                      }}
                     />
                   </Field>
                 </div>

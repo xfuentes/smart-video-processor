@@ -446,7 +446,9 @@ export class Video implements IVideo {
       void this.tvShow.setOrder(data.tvShowOrder)
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
-      this.tvShow.setEpisodeCount(data.tvShowEpisodeCount)
+      if (data.tvShowEpisodeCount !== undefined) {
+        this.tvShow.setEpisodeCount(data.tvShowEpisodeCount)
+      }
       this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
       this.tvShow.setEpisodeTitle(data.tvShowEpisodeTitle)
       this.other.setTitle(data.otherTitle)
@@ -522,15 +524,19 @@ export class Video implements IVideo {
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
       const startEpisode = Numbers.toNumber(data.tvShowStartEpisode ?? '')
       const requestedPerVideo = Numbers.toNumber(data.tvShowEpisodesPerVideo ?? '')
-      const episodesPerVideo = Math.max(requestedPerVideo ?? 1, 1)
-      if (startEpisode !== undefined) {
-        // The first selected video gets the entered number, the following ones are numbered sequentially.
-        const firstEpisode = startEpisode + episodeOffset * episodesPerVideo
-        this.tvShow.setEpisode('' + firstEpisode)
-        this.tvShow.setAbsoluteEpisode('' + firstEpisode)
-      }
       if (requestedPerVideo !== undefined) {
+        const episodesPerVideo = Math.max(requestedPerVideo, 1)
+        if (startEpisode !== undefined) {
+          // The first selected video gets the entered number, the following ones are numbered sequentially.
+          this.tvShow.setPosition(startEpisode + episodeOffset * episodesPerVideo)
+        }
         this.tvShow.setEpisodeCount('' + episodesPerVideo)
+      } else if (data.tvShowEpisodesPerVideo !== undefined) {
+        this.tvShow.setEpisodeCount('')
+      }
+      if (requestedPerVideo === undefined && startEpisode !== undefined) {
+        // The count is guessed again once the new episode is known, see VideoController.multiSearch.
+        this.tvShow.resetVideoEpisodeCount()
       }
     }
   }
@@ -1427,8 +1433,9 @@ export class Video implements IVideo {
       this.tvShow.title = Files.megaTrim(parsed.title ?? '')
       this.tvShow.season = parsed.season
       this.tvShow.episode = parsed.episode
-      this.tvShow.videoEpisodeCount =
+      this.tvShow.setEpisodeCountFromFilename(
         parsed.episode !== undefined && parsed.episodeEnd !== undefined ? parsed.episodeEnd - parsed.episode + 1 : 1
+      )
       this.tvShow.episodeTitle = parsed.episodeTitle ? Files.megaTrim(parsed.episodeTitle) : ''
       if (parsed.absoluteEpisode !== undefined && parsed.season === undefined) {
         this.tvShow.absoluteEpisode = parsed.absoluteEpisode

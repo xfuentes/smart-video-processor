@@ -357,6 +357,25 @@ export class Strings {
     return normalized
   }
 
+  /** Removes the words that `title` shares at its start with `reference`, keeping `title` if nothing would remain. */
+  static removeCommonPrefix(reference: string, title: string): string {
+    if (reference.trim().toLowerCase() === title.trim().toLowerCase()) {
+      return title
+    }
+    const referenceWords = reference.trim().split(/\s+/)
+    const words = title.trim().split(/\s+/)
+    let shared = 0
+    while (
+      shared < words.length - 1 &&
+      shared < referenceWords.length &&
+      words[shared].toLowerCase() === referenceWords[shared].toLowerCase()
+    ) {
+      shared++
+    }
+    // Very short prefixes such as "The" are not worth removing.
+    return words.slice(0, shared).join(' ').length >= 4 ? words.slice(shared).join(' ') : title
+  }
+
   static formatEpisodePosition(
     order: EpisodeOrder | undefined,
     season: number | undefined,

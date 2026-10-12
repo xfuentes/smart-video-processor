@@ -26,6 +26,8 @@ export class EpisodeData {
   public title: string
   public posterURL: string
   public overview: string
+  /** Runtime of one episode in minutes, when known. */
+  public runtime?: number
 
   constructor(
     id: number,
@@ -35,7 +37,8 @@ export class EpisodeData {
     title: string,
     posterURL: string,
     overview: string,
-    episodeCount?: number
+    episodeCount?: number,
+    runtime?: number | null
   ) {
     this.id = id
     this.episodeNumber = episodeNumber
@@ -48,5 +51,6 @@ export class EpisodeData {
         Strings.toLeadingZeroNumber(episodeNumber, episodeCount ?? 99)
     this.posterURL = posterURL
     this.overview = overview
+    this.runtime = runtime || undefined
   }
 }

@@ -17,6 +17,7 @@
  */
 
 import { Video } from '../domain/Video'
+import { Numbers } from '../util/numbers'
 import { SearchingJob } from '../domain/jobs/SearchingJob'
 import { currentSettings } from '../domain/Settings'
 import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
@@ -161,6 +162,24 @@ export class VideoController {
       video.autoModePossible = false
     }
     this.fireListChangeEvent()
+    const startEpisode = Numbers.toNumber(data?.tvShowStartEpisode ?? '')
+    if (startEpisode !== undefined && Numbers.toNumber(data?.tvShowEpisodesPerVideo ?? '') === undefined) {
+      // Each video starts where the previous one ended, so its guessed episode count is known before the next one.
+      let nextEpisode = startEpisode
+      await new SearchingJob(
+        videos,
+        async (video) => {
+          video.tvShow.setPosition(nextEpisode)
+          try {
+            await video.search()
+          } finally {
+            nextEpisode += video.tvShow.videoEpisodeCount
+          }
+        },
+        true
+      ).queue()
+      return
+    }
     await new SearchingJob(videos, (video) => video.search()).queue()
   }
 

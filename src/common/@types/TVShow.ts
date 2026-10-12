@@ -27,6 +27,8 @@ export interface ITVShow {
   episode?: number
   videoEpisodeCount: number
   episodeTitle: string
+  /** The titles of every episode of the video joined together. */
+  allEpisodeTitles: string
   year?: number
   overview?: string
   episodeOverview?: string

@@ -123,6 +123,7 @@ interface TMDBTVEpisode {
   episode_number: number
   season_number: number
   still_path: string | null
+  runtime?: number | null
 }
 
 interface TMDBTVSeasonDetails {
