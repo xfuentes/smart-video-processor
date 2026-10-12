@@ -35,6 +35,11 @@ type Props = {
   disabled?: boolean
 }
 
+const episodeCountOf = (video: Props['video']) => {
+  const { episode, episodeEnd } = video.tvShow ?? {}
+  return episode !== undefined && episodeEnd !== undefined ? '' + (episodeEnd - episode + 1) : ''
+}
+
 export const Matching = ({ video, disabled }: Props) => {
   const _ = useI18n()
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
@@ -56,9 +61,7 @@ export const Matching = ({ video, disabled }: Props) => {
     video.tvShow?.season === undefined ? '' : '' + video.tvShow.season
   )
   const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
-  const [tvShowEpisodeEnd, setTvShowEpisodeEnd] = useState<string>(
-    !video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd
-  )
+  const [tvShowEpisodeCount, setTvShowEpisodeCount] = useState<string>(episodeCountOf(video))
   const [tvShowAbsoluteEpisode, setTvShowAbsoluteEpisode] = useState<string>(
     !video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode
   )
@@ -96,8 +99,7 @@ export const Matching = ({ video, disabled }: Props) => {
       setTvShowSeason(video.tvShow?.season === undefined ? '' : '' + video.tvShow.season)
     tvShowEpisode !== (!video.tvShow?.episode ? '' : '' + video.tvShow.episode) &&
       setTvShowEpisode(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
-    tvShowEpisodeEnd !== (!video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd) &&
-      setTvShowEpisodeEnd(!video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd)
+    tvShowEpisodeCount !== episodeCountOf(video) && setTvShowEpisodeCount(episodeCountOf(video))
     tvShowAbsoluteEpisode !== (!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode) &&
       setTvShowAbsoluteEpisode(!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode)
     tvShowEpisodeTitle !== (video.tvShow?.episodeTitle ?? '') && setTvShowEpisodeTitle(video.tvShow?.episodeTitle ?? '')
@@ -137,7 +139,7 @@ export const Matching = ({ video, disabled }: Props) => {
         tvShowOrder,
         tvShowSeason,
         tvShowEpisode,
-        tvShowEpisodeEnd,
+        tvShowEpisodeCount,
         tvShowAbsoluteEpisode,
         tvShowEpisodeTitle,
         otherTitle,
@@ -493,16 +495,17 @@ export const Matching = ({ video, disabled }: Props) => {
                     <div>
                       <Field
                         size="small"
-                        label={_('matching.field.episode_end.label', { defaultValue: 'Last Episode' })}
+                        label={_('matching.field.episode_count.label', { defaultValue: 'Episodes in File' })}
                         className={disabled ? 'disabled' : ''}
                       >
                         <Input
                           size="small"
                           type="number"
                           disabled={disabled}
-                          value={tvShowEpisodeEnd}
+                          min={1}
+                          value={tvShowEpisodeCount}
                           style={{ minWidth: 1 }}
-                          onChange={(_ev, data) => setTvShowEpisodeEnd(data.value)}
+                          onChange={(_ev, data) => setTvShowEpisodeCount(data.value)}
                         />
                       </Field>
                     </div>

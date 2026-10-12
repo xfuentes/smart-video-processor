@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "在 {total} 个视频中有 {count} 个为强制。",
   "status_bar.searching": "正在搜索",
   "job.title.searching": "正在搜索视频信息。",
-  "matching.field.episode_end.label": "结束集数"
+  "matching.field.episode_count.label": "文件中的剧集数",
+  "matching.field.episodes_per_video.label": "每个视频的剧集数"
 }

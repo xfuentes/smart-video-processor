@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Wymuszone w {count} z {total} wideo.",
   "status_bar.searching": "Wyszukiwanie",
   "job.title.searching": "Wyszukiwanie informacji o wideo.",
-  "matching.field.episode_end.label": "Ostatni odcinek"
+  "matching.field.episode_count.label": "Odcinki w pliku",
+  "matching.field.episodes_per_video.label": "Liczba odcinków na wideo"
 }

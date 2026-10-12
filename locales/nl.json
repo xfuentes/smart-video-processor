@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Geforceerd in {count} van {total} video's.",
   "status_bar.searching": "Zoeken",
   "job.title.searching": "Videogegevens zoeken.",
-  "matching.field.episode_end.label": "Laatste aflevering"
+  "matching.field.episode_count.label": "Afleveringen in bestand",
+  "matching.field.episodes_per_video.label": "Afleveringen per video"
 }

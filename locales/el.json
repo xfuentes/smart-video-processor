@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Αναγκαστικό σε {count} από {total} βίντεο.",
   "status_bar.searching": "Αναζήτηση",
   "job.title.searching": "Αναζήτηση πληροφοριών βίντεο.",
-  "matching.field.episode_end.label": "Τελευταίο επεισόδιο"
+  "matching.field.episode_count.label": "Επεισόδια στο αρχείο",
+  "matching.field.episodes_per_video.label": "Επεισόδια ανά βίντεο"
 }

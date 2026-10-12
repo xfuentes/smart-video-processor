@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Dipaksa di {count} dari {total} video.",
   "status_bar.searching": "Mencari",
   "job.title.searching": "Mencari informasi video.",
-  "matching.field.episode_end.label": "Episode Terakhir"
+  "matching.field.episode_count.label": "Episode dalam File",
+  "matching.field.episodes_per_video.label": "Episode per Video"
 }

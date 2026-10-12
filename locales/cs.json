@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Vynuceno v {count} z {total} videí.",
   "status_bar.searching": "Vyhledávání",
   "job.title.searching": "Vyhledávání informací o videu.",
-  "matching.field.episode_end.label": "Poslední epizoda"
+  "matching.field.episode_count.label": "Epizody v souboru",
+  "matching.field.episodes_per_video.label": "Počet epizod na video"
 }

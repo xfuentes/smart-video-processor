@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Примусова у {count} з {total} відео.",
   "status_bar.searching": "Пошук",
   "job.title.searching": "Пошук інформації про відео.",
-  "matching.field.episode_end.label": "Остання серія"
+  "matching.field.episode_count.label": "Епізодів у файлі",
+  "matching.field.episodes_per_video.label": "Епізодів на відео"
 }

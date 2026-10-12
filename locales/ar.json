@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "مُجبَر في {count} من أصل {total} من مقاطع الفيديو.",
   "status_bar.searching": "جارٍ البحث",
   "job.title.searching": "جارٍ البحث عن معلومات الفيديو.",
-  "matching.field.episode_end.label": "الحلقة الأخيرة"
+  "matching.field.episode_count.label": "عدد الحلقات في الملف",
+  "matching.field.episodes_per_video.label": "عدد الحلقات لكل فيديو"
 }

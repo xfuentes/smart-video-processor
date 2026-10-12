@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "{total}本中{count}本の動画で強制されています。",
   "status_bar.searching": "検索中",
   "job.title.searching": "動画情報を検索しています。",
-  "matching.field.episode_end.label": "最終エピソード"
+  "matching.field.episode_count.label": "ファイル内のエピソード数",
+  "matching.field.episodes_per_video.label": "動画あたりのエピソード数"
 }

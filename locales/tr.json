@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "{total} videodan {count} tanesinde zorunlu.",
   "status_bar.searching": "Aranıyor",
   "job.title.searching": "Video bilgileri aranıyor.",
-  "matching.field.episode_end.label": "Son Bölüm"
+  "matching.field.episode_count.label": "Dosyadaki Bölümler",
+  "matching.field.episodes_per_video.label": "Video Başına Bölüm Sayısı"
 }

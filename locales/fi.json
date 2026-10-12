@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Pakotettu {count}/{total} videossa.",
   "status_bar.searching": "Haetaan",
   "job.title.searching": "Haetaan videon tietoja.",
-  "matching.field.episode_end.label": "Viimeinen jakso"
+  "matching.field.episode_count.label": "Jaksoja tiedostossa",
+  "matching.field.episodes_per_video.label": "Jaksoja per video"
 }

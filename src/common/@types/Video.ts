@@ -159,7 +159,7 @@ export type SearchInputData = {
   tvShowOrder: EpisodeOrder
   tvShowSeason: string
   tvShowEpisode: string
-  tvShowEpisodeEnd: string
+  tvShowEpisodeCount: string
   tvShowAbsoluteEpisode: string
   tvShowEpisodeTitle: string
   otherTitle: string
@@ -180,6 +180,7 @@ export type MultiSearchInputData = {
   tvShowOrder: EpisodeOrder
   tvShowSeason: string
   tvShowStartEpisode?: string
+  tvShowEpisodesPerVideo?: string
 }
 
 export const retrieveChangePropertyValue = (

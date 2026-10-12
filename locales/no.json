@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Tvunget i {count} av {total} videoer.",
   "status_bar.searching": "Søker",
   "job.title.searching": "Søker etter videoinformasjon.",
-  "matching.field.episode_end.label": "Siste episode"
+  "matching.field.episode_count.label": "Episoder i filen",
+  "matching.field.episodes_per_video.label": "Episoder per video"
 }

@@ -81,6 +81,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   )
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
   const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
+  const [tvShowEpisodesPerVideo, setTvShowEpisodesPerVideo] = useState('')
 
   const initials = {
     type: initialType,
@@ -134,7 +135,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
           tvShowTMDB,
           tvShowOrder,
           tvShowSeason,
-          tvShowStartEpisode
+          tvShowStartEpisode,
+          tvShowEpisodesPerVideo
         } as MultiSearchInputData
       )
       .then(() => {
@@ -377,6 +379,29 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </Field>
               </div>
             )}
+            {(searchBy === SearchBy.TITLE_POSITION ||
+              searchBy === SearchBy.TVDB_POSITION ||
+              searchBy === SearchBy.TMDB) &&
+              tvShowOrder !== 'absolute' && (
+                <div>
+                  <Field
+                    size="small"
+                    label={_('matching.field.episodes_per_video.label', { defaultValue: 'Episodes per Video' })}
+                    className={disabled ? 'disabled' : ''}
+                  >
+                    <Input
+                      size="small"
+                      type="number"
+                      min={1}
+                      disabled={disabled}
+                      value={tvShowEpisodesPerVideo}
+                      placeholder={_('matching.multiple_values', { defaultValue: 'Multiple values' })}
+                      style={{ minWidth: 1 }}
+                      onChange={(_ev, data) => setTvShowEpisodesPerVideo(data.value)}
+                    />
+                  </Field>
+                </div>
+              )}
           </>
         )}
         <div className="buttons">

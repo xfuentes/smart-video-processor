@@ -446,7 +446,7 @@ export class Video implements IVideo {
       void this.tvShow.setOrder(data.tvShowOrder)
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
-      this.tvShow.setEpisodeEnd(data.tvShowEpisodeEnd)
+      this.tvShow.setEpisodeCount(data.tvShowEpisodeCount)
       this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
       this.tvShow.setEpisodeTitle(data.tvShowEpisodeTitle)
       this.other.setTitle(data.otherTitle)
@@ -521,11 +521,16 @@ export class Video implements IVideo {
       if (data.tvShowOrder !== undefined) void this.tvShow.setOrder(data.tvShowOrder)
       if (data.tvShowSeason !== undefined) this.tvShow.setSeason(data.tvShowSeason)
       const startEpisode = Numbers.toNumber(data.tvShowStartEpisode ?? '')
+      const requestedPerVideo = Numbers.toNumber(data.tvShowEpisodesPerVideo ?? '')
+      const episodesPerVideo = Math.max(requestedPerVideo ?? 1, 1)
       if (startEpisode !== undefined) {
         // The first selected video gets the entered number, the following ones are numbered sequentially.
-        this.tvShow.setEpisode('' + (startEpisode + episodeOffset))
-        this.tvShow.setEpisodeEnd('')
-        this.tvShow.setAbsoluteEpisode('' + (startEpisode + episodeOffset))
+        const firstEpisode = startEpisode + episodeOffset * episodesPerVideo
+        this.tvShow.setEpisode('' + firstEpisode)
+        this.tvShow.setAbsoluteEpisode('' + firstEpisode)
+      }
+      if (requestedPerVideo !== undefined) {
+        this.tvShow.setEpisodeCount('' + episodesPerVideo)
       }
     }
   }

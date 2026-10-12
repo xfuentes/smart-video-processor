@@ -463,8 +463,10 @@ export class TVShow implements ITVShow {
     this.episode = Numbers.toNumber(newEpisode)
   }
 
-  setEpisodeEnd(newEpisodeEnd: string) {
-    this.episodeEnd = Numbers.toNumber(newEpisodeEnd)
+  setEpisodeCount(newEpisodeCount: string) {
+    const count = Numbers.toNumber(newEpisodeCount)
+    this.episodeEnd =
+      this.episode !== undefined && count !== undefined && count > 1 ? this.episode + count - 1 : undefined
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {

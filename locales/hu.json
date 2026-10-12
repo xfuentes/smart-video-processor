@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Kényszerítve {total} videóból {count} esetében.",
   "status_bar.searching": "Keresés",
   "job.title.searching": "Videoinformációk keresése.",
-  "matching.field.episode_end.label": "Utolsó epizód"
+  "matching.field.episode_count.label": "Epizódok a fájlban",
+  "matching.field.episodes_per_video.label": "Epizódok videónként"
 }

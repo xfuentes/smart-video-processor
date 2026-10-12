@@ -754,5 +754,6 @@
   "multi_tracks.forced_tooltip": "Forced in {count} of {total} videos.",
   "status_bar.searching": "Searching",
   "job.title.searching": "Searching video information.",
-  "matching.field.episode_end.label": "Last Episode"
+  "matching.field.episode_count.label": "Episodes in File",
+  "matching.field.episodes_per_video.label": "Episodes per Video"
 }
