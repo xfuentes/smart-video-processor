@@ -35,9 +35,16 @@ import {
 import { EllipsisCell } from '../EllipsisCell'
 import { MultipleValuesCell } from '../MultipleValuesCell'
 import { useI18n } from '../../i18n'
+import { Strings } from '../../../../common/Strings'
 import { IVideo } from '../../../../common/@types/Video'
 import { ITrack } from '../../../../common/@types/Track'
-import { codecRenderer, framesRenderer, trackPropertiesRenderer, trackTypeRenderer } from './renderers'
+import {
+  codecRenderer,
+  durationRenderer,
+  framesRenderer,
+  trackPropertiesRenderer,
+  trackTypeRenderer
+} from './renderers'
 import { groupTracks, TrackGroup } from './trackGroups'
 
 type Props = {
@@ -69,6 +76,19 @@ export const MultiTracks = ({ videos, disabled }: Props) => {
       return framesRenderer(min)
     }
     return <MultipleValuesCell values={frames.map(String)} label={`${min}–${max}`} />
+  }
+  const durationCell = (group: TrackGroup) => {
+    const durations = group.tracks.map((t) => t.duration).filter((d): d is number => !!d)
+    if (durations.length === 0) {
+      return null
+    }
+    const shown = durations.map((d) => Strings.humanDuration(d))
+    const min = Strings.humanDuration(Math.min(...durations))
+    const max = Strings.humanDuration(Math.max(...durations))
+    if (min === max) {
+      return durationRenderer(durations[0])
+    }
+    return <MultipleValuesCell values={shown} label={`${min}–${max}`} />
   }
   const differenceLabel = (difference: TrackGroup['differences'][number]) => {
     switch (difference) {
@@ -107,6 +127,9 @@ export const MultiTracks = ({ videos, disabled }: Props) => {
           </TableHeaderCell>
           <TableHeaderCell style={{ width: '90px' }}>
             {_('track_list.column.frames.label', { defaultValue: 'Frames' })}
+          </TableHeaderCell>
+          <TableHeaderCell style={{ width: '90px' }}>
+            {_('track_list.column.duration.label', { defaultValue: 'Duration' })}
           </TableHeaderCell>
           <TableHeaderCell style={{ width: '70px' }}>
             {_('multi_tracks.column.videos', { defaultValue: 'Videos' })}
@@ -168,6 +191,7 @@ export const MultiTracks = ({ videos, disabled }: Props) => {
                 </Tooltip>
               </TableCell>
               <TableCell>{framesCell(group)}</TableCell>
+              <TableCell>{durationCell(group)}</TableCell>
               <TableCell>{`${group.tracks.length}/${videos.length}`}</TableCell>
               <TableCell>
                 <Tooltip
