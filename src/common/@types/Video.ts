@@ -159,6 +159,7 @@ export type SearchInputData = {
   tvShowOrder: EpisodeOrder
   tvShowSeason: string
   tvShowEpisode: string
+  tvShowEpisodeEnd: string
   tvShowAbsoluteEpisode: string
   tvShowEpisodeTitle: string
   otherTitle: string

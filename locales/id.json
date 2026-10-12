@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Bitrate video tidak ada di file, me-remux ke file sementara untuk mengukurnya.",
   "multi_tracks.forced_tooltip": "Dipaksa di {count} dari {total} video.",
   "status_bar.searching": "Mencari",
-  "job.title.searching": "Mencari informasi video."
+  "job.title.searching": "Mencari informasi video.",
+  "matching.field.episode_end.label": "Episode Terakhir"
 }

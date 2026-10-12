@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Added support for video files containing several consecutive episodes (e.g. `S09E01-E02`), matched on TheTVDB or TheMovieDB and named `Show - S09E01-E02 - Title 1 + Title 2`, with a new Last Episode field in the matching form.
+
 ## [3.1.0] - 2026-10-10
 
 ### Added

@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "У файлі відсутній бітрейт відео, тому виконується ремультиплексування в тимчасовий файл для його вимірювання.",
   "multi_tracks.forced_tooltip": "Примусова у {count} з {total} відео.",
   "status_bar.searching": "Пошук",
-  "job.title.searching": "Пошук інформації про відео."
+  "job.title.searching": "Пошук інформації про відео.",
+  "matching.field.episode_end.label": "Остання серія"
 }

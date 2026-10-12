@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "The video bitrate is missing from the file, remuxing it to a temporary file to measure it.",
   "multi_tracks.forced_tooltip": "Forced in {count} of {total} videos.",
   "status_bar.searching": "Searching",
-  "job.title.searching": "Searching video information."
+  "job.title.searching": "Searching video information.",
+  "matching.field.episode_end.label": "Last Episode"
 }

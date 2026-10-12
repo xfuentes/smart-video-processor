@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Die Video-Bitrate fehlt in der Datei; sie wird in eine temporäre Datei gemuxt, um sie zu messen.",
   "multi_tracks.forced_tooltip": "In {count} von {total} Videos erzwungen.",
   "status_bar.searching": "Suche läuft",
-  "job.title.searching": "Videoinformationen werden gesucht."
+  "job.title.searching": "Videoinformationen werden gesucht.",
+  "matching.field.episode_end.label": "Letzte Episode"
 }

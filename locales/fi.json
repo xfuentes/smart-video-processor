@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Videon bittinopeus puuttuu tiedostosta, joten se remuksoidaan väliaikaiseen tiedostoon bittinopeuden mittaamiseksi.",
   "multi_tracks.forced_tooltip": "Pakotettu {count}/{total} videossa.",
   "status_bar.searching": "Haetaan",
-  "job.title.searching": "Haetaan videon tietoja."
+  "job.title.searching": "Haetaan videon tietoja.",
+  "matching.field.episode_end.label": "Viimeinen jakso"
 }

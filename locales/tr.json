@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Videonun bit hızı dosyada bulunmuyor, ölçmek için geçici bir dosyaya remux ediliyor.",
   "multi_tracks.forced_tooltip": "{total} videodan {count} tanesinde zorunlu.",
   "status_bar.searching": "Aranıyor",
-  "job.title.searching": "Video bilgileri aranıyor."
+  "job.title.searching": "Video bilgileri aranıyor.",
+  "matching.field.episode_end.label": "Son Bölüm"
 }

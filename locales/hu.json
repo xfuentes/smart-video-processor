@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "A fájlból hiányzik a videó bitrátája, ezért egy ideiglenes fájlba remuxoljuk a méréséhez.",
   "multi_tracks.forced_tooltip": "Kényszerítve {total} videóból {count} esetében.",
   "status_bar.searching": "Keresés",
-  "job.title.searching": "Videoinformációk keresése."
+  "job.title.searching": "Videoinformációk keresése.",
+  "matching.field.episode_end.label": "Utolsó epizód"
 }

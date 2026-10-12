@@ -56,6 +56,9 @@ export const Matching = ({ video, disabled }: Props) => {
     video.tvShow?.season === undefined ? '' : '' + video.tvShow.season
   )
   const [tvShowEpisode, setTvShowEpisode] = useState<string>(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
+  const [tvShowEpisodeEnd, setTvShowEpisodeEnd] = useState<string>(
+    !video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd
+  )
   const [tvShowAbsoluteEpisode, setTvShowAbsoluteEpisode] = useState<string>(
     !video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode
   )
@@ -93,6 +96,8 @@ export const Matching = ({ video, disabled }: Props) => {
       setTvShowSeason(video.tvShow?.season === undefined ? '' : '' + video.tvShow.season)
     tvShowEpisode !== (!video.tvShow?.episode ? '' : '' + video.tvShow.episode) &&
       setTvShowEpisode(!video.tvShow?.episode ? '' : '' + video.tvShow.episode)
+    tvShowEpisodeEnd !== (!video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd) &&
+      setTvShowEpisodeEnd(!video.tvShow?.episodeEnd ? '' : '' + video.tvShow.episodeEnd)
     tvShowAbsoluteEpisode !== (!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode) &&
       setTvShowAbsoluteEpisode(!video.tvShow?.absoluteEpisode ? '' : '' + video.tvShow.absoluteEpisode)
     tvShowEpisodeTitle !== (video.tvShow?.episodeTitle ?? '') && setTvShowEpisodeTitle(video.tvShow?.episodeTitle ?? '')
@@ -112,7 +117,8 @@ export const Matching = ({ video, disabled }: Props) => {
     video.tvShow?.season,
     video.tvShow?.episode,
     video.tvShow?.absoluteEpisode,
-    video.tvShow?.episodeCount
+    video.tvShow?.episodeCount,
+    video.tvShow?.episodeEnd
   )
   const search = async () => {
     await window.api.video
@@ -131,6 +137,7 @@ export const Matching = ({ video, disabled }: Props) => {
         tvShowOrder,
         tvShowSeason,
         tvShowEpisode,
+        tvShowEpisodeEnd,
         tvShowAbsoluteEpisode,
         tvShowEpisodeTitle,
         otherTitle,
@@ -480,6 +487,22 @@ export const Matching = ({ video, disabled }: Props) => {
                           value={tvShowEpisode}
                           style={{ minWidth: 1 }}
                           onChange={(_ev, data) => setTvShowEpisode(data.value)}
+                        />
+                      </Field>
+                    </div>
+                    <div>
+                      <Field
+                        size="small"
+                        label={_('matching.field.episode_end.label', { defaultValue: 'Last Episode' })}
+                        className={disabled ? 'disabled' : ''}
+                      >
+                        <Input
+                          size="small"
+                          type="number"
+                          disabled={disabled}
+                          value={tvShowEpisodeEnd}
+                          style={{ minWidth: 1 }}
+                          onChange={(_ev, data) => setTvShowEpisodeEnd(data.value)}
                         />
                       </Field>
                     </div>

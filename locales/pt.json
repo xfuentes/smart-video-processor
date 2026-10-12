@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "O bitrate do vídeo não consta do ficheiro; a remuxar para um ficheiro temporário para o medir.",
   "multi_tracks.forced_tooltip": "Forçada em {count} de {total} vídeos.",
   "status_bar.searching": "A pesquisar",
-  "job.title.searching": "A procurar informações do vídeo."
+  "job.title.searching": "A procurar informações do vídeo.",
+  "matching.field.episode_end.label": "Último episódio"
 }

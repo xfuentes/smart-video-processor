@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Falta el bitrate del vídeo en el archivo; se remuxea a un archivo temporal para medirlo.",
   "multi_tracks.forced_tooltip": "Forzada en {count} de {total} vídeos.",
   "status_bar.searching": "Buscando",
-  "job.title.searching": "Buscando información del vídeo."
+  "job.title.searching": "Buscando información del vídeo.",
+  "matching.field.episode_end.label": "Último episodio"
 }

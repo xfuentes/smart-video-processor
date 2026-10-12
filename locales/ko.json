@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "파일에 비디오 비트레이트가 없어 측정하기 위해 임시 파일로 리먹싱하는 중입니다.",
   "multi_tracks.forced_tooltip": "비디오 {total}개 중 {count}개에서 강제됨.",
   "status_bar.searching": "검색 중",
-  "job.title.searching": "비디오 정보를 검색하는 중입니다."
+  "job.title.searching": "비디오 정보를 검색하는 중입니다.",
+  "matching.field.episode_end.label": "마지막 에피소드"
 }

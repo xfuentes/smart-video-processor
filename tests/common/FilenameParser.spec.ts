@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { expect, test } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { parseFilename } from '../../src/main/domain/FilenameParser'
 
 test('parse TV show filename with dotted title and year before season/episode', () => {
@@ -99,4 +99,21 @@ test('parse movie filename without year and without dash before the technical to
 test('keep words like French in a title without technical tokens', () => {
   const result = parseFilename('The French Dispatch.mkv')
   expect(result.title).toBe('The French Dispatch')
+})
+
+describe('multi-episode filenames', () => {
+  it.each(['Paw.Patrol.S09E01E02.1080p.mkv', 'Paw Patrol - S09E01-E02.mkv', 'Paw Patrol S09E01-02 1080p.mkv'])(
+    'detects an episode range in %s',
+    (filename) => {
+      const result = parseFilename(filename)
+      expect(result.title).toBe('Paw Patrol')
+      expect(result.season).toBe(9)
+      expect(result.episode).toBe(1)
+      expect(result.episodeEnd).toBe(2)
+    }
+  )
+
+  it('does not treat a resolution as an episode range', () => {
+    expect(parseFilename('Show.S01E01-1080p.mkv').episodeEnd).toBeUndefined()
+  })
 })

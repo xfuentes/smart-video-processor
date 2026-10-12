@@ -446,6 +446,7 @@ export class Video implements IVideo {
       void this.tvShow.setOrder(data.tvShowOrder)
       this.tvShow.setSeason(data.tvShowSeason)
       this.tvShow.setEpisode(data.tvShowEpisode)
+      this.tvShow.setEpisodeEnd(data.tvShowEpisodeEnd)
       this.tvShow.setAbsoluteEpisode(data.tvShowAbsoluteEpisode)
       this.tvShow.setEpisodeTitle(data.tvShowEpisodeTitle)
       this.other.setTitle(data.otherTitle)
@@ -523,6 +524,7 @@ export class Video implements IVideo {
       if (startEpisode !== undefined) {
         // The first selected video gets the entered number, the following ones are numbered sequentially.
         this.tvShow.setEpisode('' + (startEpisode + episodeOffset))
+        this.tvShow.setEpisodeEnd('')
         this.tvShow.setAbsoluteEpisode('' + (startEpisode + episodeOffset))
       }
     }
@@ -1420,6 +1422,7 @@ export class Video implements IVideo {
       this.tvShow.title = Files.megaTrim(parsed.title ?? '')
       this.tvShow.season = parsed.season
       this.tvShow.episode = parsed.episode
+      this.tvShow.episodeEnd = parsed.episodeEnd
       this.tvShow.episodeTitle = parsed.episodeTitle ? Files.megaTrim(parsed.episodeTitle) : ''
       if (parsed.absoluteEpisode !== undefined && parsed.season === undefined) {
         this.tvShow.absoluteEpisode = parsed.absoluteEpisode

@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "V souboru chybí bitrate videa, remuxuje se proto do dočasného souboru, aby se změřil.",
   "multi_tracks.forced_tooltip": "Vynuceno v {count} z {total} videí.",
   "status_bar.searching": "Vyhledávání",
-  "job.title.searching": "Vyhledávání informací o videu."
+  "job.title.searching": "Vyhledávání informací o videu.",
+  "matching.field.episode_end.label": "Poslední epizoda"
 }

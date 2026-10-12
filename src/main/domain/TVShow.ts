@@ -27,6 +27,7 @@ import { Numbers } from '../util/numbers'
 import { debug, info, warning } from '../util/log'
 import { SearchBy } from '../../common/@types/Video'
 import { ITVShow } from '../../common/@types/TVShow'
+import { EpisodeData } from './EpisodeData'
 import { IDatabaseLink } from '../../common/@types/DatabaseLink'
 import { currentSettings } from './Settings'
 import { TVShowMatchingSource } from '../../common/@types/Settings'
@@ -41,7 +42,9 @@ export class TVShow implements ITVShow {
   public order?: EpisodeOrder
   public season?: number
   public episode?: number
+  public episodeEnd?: number
   public episodeTitle: string = ''
+  private episodeEndTitle: string = ''
   public year?: number
   public overview?: string
   public episodeOverview?: string
@@ -160,6 +163,21 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
+    let episodeEndData: EpisodeData | undefined
+    this.episodeEndTitle = ''
+    if (this.hasEpisodeRange() && episodeData) {
+      episodeEndData = (
+        await TVDBClient.getInstance().retrieveSeriesDetails(
+          this.theTVDB,
+          'official',
+          this.episodeEnd,
+          undefined,
+          episodeData.seasonNumber
+        )
+      ).episodeData
+      this.episodeEndTitle = episodeEndData?.title ?? ''
+    }
+
     this.tvdbEpisodeId = undefined
     if (this.episode || this.absoluteEpisode) {
       if (episodeData) {
@@ -218,18 +236,12 @@ export class TVShow implements ITVShow {
           defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
         })
       }
-    } else if (!episodeData) {
+    } else if (!episodeData || (this.hasEpisodeRange() && !episodeEndData)) {
       this.video.showWarning('video.message.tvdb_episode_not_found', {
         defaultValue: 'Episode not found. Please check the information provided and try again.'
       })
     } else {
-      const position = Strings.formatEpisodePosition(
-        this.order,
-        this.season,
-        this.episode,
-        this.absoluteEpisode,
-        this.episodeCount
-      )
+      const position = this.formatPosition()
 
       if (this.episodePosterURL || this.poster) {
         if (!this.episodePosterURL && this.poster) {
@@ -265,7 +277,7 @@ export class TVShow implements ITVShow {
           }
         }
       }
-      this.video.title = `${this.title}${position ? ' - ' + position : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
+      this.video.title = this.formatVideoTitle(position)
       this.video.generateEncoderSettings(false)
     }
   }
@@ -303,6 +315,19 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
+    let episodeEndData: EpisodeData | undefined
+    this.episodeEndTitle = ''
+    if (this.hasEpisodeRange() && episodeData) {
+      episodeEndData = (
+        await TMDBClient.getInstance().retrieveTVSeriesDetails(
+          this.theMovieDB,
+          this.episodeEnd,
+          episodeData.seasonNumber
+        )
+      ).episodeData
+      this.episodeEndTitle = episodeEndData?.title ?? ''
+    }
+
     if (this.episode && episodeData) {
       this.season = episodeData.seasonNumber
       this.episode = episodeData.episodeNumber
@@ -335,18 +360,12 @@ export class TVShow implements ITVShow {
       this.video.showWarning('video.message.tvdb_episode_number_required', {
         defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
       })
-    } else if (!episodeData) {
+    } else if (!episodeData || (this.hasEpisodeRange() && !episodeEndData)) {
       this.video.showWarning('video.message.tvdb_episode_not_found', {
         defaultValue: 'Episode not found. Please check the information provided and try again.'
       })
     } else {
-      const position = Strings.formatEpisodePosition(
-        this.order,
-        this.season,
-        this.episode,
-        this.absoluteEpisode,
-        this.episodeCount
-      )
+      const position = this.formatPosition()
 
       if (this.episodePosterURL || this.poster) {
         if (!this.episodePosterURL && this.poster) {
@@ -382,9 +401,36 @@ export class TVShow implements ITVShow {
           }
         }
       }
-      this.video.title = `${this.title}${position ? ' - ' + position : ''}${this.episodeTitle ? ' - ' + this.episodeTitle : ''}`
+      this.video.title = this.formatVideoTitle(position)
       this.video.generateEncoderSettings(false)
     }
+  }
+
+  private hasEpisodeRange() {
+    return (
+      this.order !== 'absolute' &&
+      this.episode !== undefined &&
+      this.episodeEnd !== undefined &&
+      this.episodeEnd > this.episode
+    )
+  }
+
+  private formatPosition() {
+    return Strings.formatEpisodePosition(
+      this.order,
+      this.season,
+      this.episode,
+      this.absoluteEpisode,
+      this.episodeCount,
+      this.hasEpisodeRange() ? this.episodeEnd : undefined
+    )
+  }
+
+  private formatVideoTitle(position: string) {
+    const episodeTitles = [this.episodeTitle, this.hasEpisodeRange() ? this.episodeEndTitle : '']
+      .filter(Boolean)
+      .join(' + ')
+    return `${this.title}${position ? ' - ' + position : ''}${episodeTitles ? ' - ' + episodeTitles : ''}`
   }
 
   setTitle(newTitle: string) {
@@ -415,6 +461,10 @@ export class TVShow implements ITVShow {
 
   setEpisode(newEpisode: string) {
     this.episode = Numbers.toNumber(newEpisode)
+  }
+
+  setEpisodeEnd(newEpisodeEnd: string) {
+    this.episodeEnd = Numbers.toNumber(newEpisodeEnd)
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
@@ -487,6 +537,7 @@ export class TVShow implements ITVShow {
   private clearEpisodeNumbers() {
     this.season = undefined
     this.episode = undefined
+    this.episodeEnd = undefined
     this.absoluteEpisode = undefined
   }
 
@@ -535,6 +586,7 @@ export class TVShow implements ITVShow {
       order: this.order,
       season: this.season,
       episode: this.episode,
+      episodeEnd: this.hasEpisodeRange() ? this.episodeEnd : undefined,
       episodeTitle: this.episodeTitle,
       year: this.year,
       overview: this.overview,

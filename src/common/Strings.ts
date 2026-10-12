@@ -362,13 +362,17 @@ export class Strings {
     season: number | undefined,
     episode: number | undefined,
     absoluteEpisode: number | undefined,
-    episodeCount: number = 99
+    episodeCount: number = 99,
+    episodeEnd?: number
   ): string {
     if (order === 'absolute' && absoluteEpisode !== undefined) {
       return `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
     }
     if (season !== undefined && episode !== undefined) {
-      return `S${this.toLeadingZeroNumber(season, 99)}E${this.toLeadingZeroNumber(episode, episodeCount)}`
+      const start = `S${this.toLeadingZeroNumber(season, 99)}E${this.toLeadingZeroNumber(episode, episodeCount)}`
+      return episodeEnd !== undefined && episodeEnd > episode
+        ? `${start}-E${this.toLeadingZeroNumber(episodeEnd, episodeCount)}`
+        : start
     }
     return ''
   }

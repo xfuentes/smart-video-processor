@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "В файле отсутствует битрейт видео, выполняется ремукс во временный файл для его измерения.",
   "multi_tracks.forced_tooltip": "Принудительная в {count} из {total} видео.",
   "status_bar.searching": "Поиск",
-  "job.title.searching": "Поиск информации о видео."
+  "job.title.searching": "Поиск информации о видео.",
+  "matching.field.episode_end.label": "Последний эпизод"
 }

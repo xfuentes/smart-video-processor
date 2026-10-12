@@ -24,6 +24,7 @@ export interface ParsedFilename {
   year?: number
   season?: number
   episode?: number
+  episodeEnd?: number
   episodeTitle?: string
   absoluteEpisode?: number
 }
@@ -32,6 +33,7 @@ type MatchResult = {
   title?: string
   season?: number
   episode?: number
+  episodeEnd?: number
   episodeTitle?: string
   absoluteEpisode?: number
   markerIndex?: number
@@ -104,13 +106,19 @@ function tryPatterns(input: string): MatchResult {
     }
   }
 
-  // Multi-episode: S01E01E02 or S01E01-E02
-  match = /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{1,4})(?:[Ee]\d{1,4})+/.exec(normalized)
+  // Multi-episode: S01E01E02, S01E01-E02 or S01E01-02
+  match =
+    /^(?<title>.+?)[.\-_\s]+[Ss](?<season>\d{1,3})[Ee](?<episode>\d{1,4})(?<more>(?:-?[Ee]\d{1,4}|-\d{1,4}\b)+)/.exec(
+      normalized
+    )
   if (match?.groups) {
+    const episode = Number.parseInt(match.groups.episode, 10)
+    const lastEpisode = Number.parseInt(/\d+(?=\D*$)/.exec(match.groups.more)?.[0] ?? '', 10)
     return {
       title: cleanupTitle(match.groups.title),
       season: Number.parseInt(match.groups.season, 10),
-      episode: Number.parseInt(match.groups.episode, 10),
+      episode,
+      episodeEnd: lastEpisode > episode ? lastEpisode : undefined,
       markerIndex: match.index
     }
   }
@@ -208,6 +216,10 @@ export function parseFilename(filename: string): ParsedFilename {
     episode: match.episode,
     episodeTitle: match.episodeTitle,
     absoluteEpisode: match.absoluteEpisode
+  }
+
+  if (match.episodeEnd !== undefined) {
+    result.episodeEnd = match.episodeEnd
   }
 
   const yearSource = match.title ?? normalized

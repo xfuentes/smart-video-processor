@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "W pliku brakuje bitrate wideo, trwa remuksowanie do pliku tymczasowego w celu jego zmierzenia.",
   "multi_tracks.forced_tooltip": "Wymuszone w {count} z {total} wideo.",
   "status_bar.searching": "Wyszukiwanie",
-  "job.title.searching": "Wyszukiwanie informacji o wideo."
+  "job.title.searching": "Wyszukiwanie informacji o wideo.",
+  "matching.field.episode_end.label": "Ostatni odcinek"
 }

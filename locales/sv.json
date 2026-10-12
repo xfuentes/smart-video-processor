@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Videons bitrate saknas i filen, så den remuxas till en tillfällig fil för att mäta den.",
   "multi_tracks.forced_tooltip": "Tvingad i {count} av {total} videor.",
   "status_bar.searching": "Söker",
-  "job.title.searching": "Söker videoinformation."
+  "job.title.searching": "Söker videoinformation.",
+  "matching.field.episode_end.label": "Sista avsnitt"
 }

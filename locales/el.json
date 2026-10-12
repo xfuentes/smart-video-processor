@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Το bitrate του βίντεο λείπει από το αρχείο, γίνεται remux σε ένα προσωρινό αρχείο για τη μέτρησή του.",
   "multi_tracks.forced_tooltip": "Αναγκαστικό σε {count} από {total} βίντεο.",
   "status_bar.searching": "Αναζήτηση",
-  "job.title.searching": "Αναζήτηση πληροφοριών βίντεο."
+  "job.title.searching": "Αναζήτηση πληροφοριών βίντεο.",
+  "matching.field.episode_end.label": "Τελευταίο επεισόδιο"
 }

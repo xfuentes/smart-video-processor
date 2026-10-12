@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Videobitraten mangler i filen, så den remuxes til en midlertidig fil for å måle den.",
   "multi_tracks.forced_tooltip": "Tvunget i {count} av {total} videoer.",
   "status_bar.searching": "Søker",
-  "job.title.searching": "Søker etter videoinformasjon."
+  "job.title.searching": "Søker etter videoinformasjon.",
+  "matching.field.episode_end.label": "Siste episode"
 }

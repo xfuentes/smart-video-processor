@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "Il bitrate video manca nel file, ne eseguo il remux in un file temporaneo per misurarlo.",
   "multi_tracks.forced_tooltip": "Forzata in {count} video su {total}.",
   "status_bar.searching": "Ricerca in corso",
-  "job.title.searching": "Ricerca delle informazioni sul video."
+  "job.title.searching": "Ricerca delle informazioni sul video.",
+  "matching.field.episode_end.label": "Ultimo episodio"
 }

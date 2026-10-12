@@ -753,5 +753,6 @@
   "job.loading.pre_processing": "ファイルに動画のビットレートがないため、測定用に一時ファイルへリマックスしています。",
   "multi_tracks.forced_tooltip": "{total}本中{count}本の動画で強制されています。",
   "status_bar.searching": "検索中",
-  "job.title.searching": "動画情報を検索しています。"
+  "job.title.searching": "動画情報を検索しています。",
+  "matching.field.episode_end.label": "最終エピソード"
 }
