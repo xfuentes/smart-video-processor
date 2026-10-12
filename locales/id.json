@@ -755,5 +755,6 @@
   "status_bar.searching": "Mencari",
   "job.title.searching": "Mencari informasi video.",
   "matching.field.episode_count.label": "Episode dalam File",
-  "matching.field.episodes_per_video.label": "Episode per Video"
+  "matching.field.episodes_per_video.label": "Episode per Video",
+  "about.news.version_3_2_0.items": "Menambahkan dukungan untuk video yang berisi beberapa episode, dengan penamaan seperti Show - S09E01-E02 - Title 1 + Title 2, dan jumlah episode diperkirakan dari durasi video\nBeberapa video kini dapat dinomori ulang sekaligus dengan memperhitungkan jumlah episodenya\nMenambahkan durasi ke tab Trek saat mengedit beberapa video sekaligus\nPencarian berdasarkan nama episode kini juga berfungsi dengan TheMovieDB\nPencarian informasi video kini dimasukkan ke dalam antrean dengan progresnya ditampilkan di bilah status"
 }

@@ -755,5 +755,6 @@
   "status_bar.searching": "Vyhledávání",
   "job.title.searching": "Vyhledávání informací o videu.",
   "matching.field.episode_count.label": "Epizody v souboru",
-  "matching.field.episodes_per_video.label": "Počet epizod na video"
+  "matching.field.episodes_per_video.label": "Počet epizod na video",
+  "about.news.version_3_2_0.items": "Přidána podpora videí obsahujících více epizod s názvy ve tvaru Show - S09E01-E02 - Title 1 + Title 2, přičemž počet epizod se odhaduje podle délky videa\nVíce videí lze nyní přečíslovat najednou s ohledem na počet epizod v každém z nich\nNa kartu Stopy byla přidána délka při úpravě více videí\nVyhledávání podle názvu epizody nyní funguje také s TheMovieDB\nVyhledávání informací o videích se nyní řadí do fronty a jeho průběh se zobrazuje ve stavovém řádku"
 }

@@ -755,5 +755,6 @@
   "status_bar.searching": "Søker",
   "job.title.searching": "Søker etter videoinformasjon.",
   "matching.field.episode_count.label": "Episoder i filen",
-  "matching.field.episodes_per_video.label": "Episoder per video"
+  "matching.field.episodes_per_video.label": "Episoder per video",
+  "about.news.version_3_2_0.items": "Lagt til støtte for videoer som inneholder flere episoder, med navn som Show - S09E01-E02 - Title 1 + Title 2, der antall episoder gjettes ut fra videoens varighet\nFlere videoer kan nå nummereres på nytt samtidig, og antall episoder tas med i beregningen\nLagt til varighet i fanen Spor når flere videoer redigeres\nSøk etter episodenavn fungerer nå også med TheMovieDB\nSøk etter videoinformasjon legges nå i kø, og fremdriften vises i statuslinjen"
 }

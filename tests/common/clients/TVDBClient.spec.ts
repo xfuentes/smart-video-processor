@@ -68,6 +68,7 @@ test('Search Series', async () => {
 
 test('Retrieve Series Details', async () => {
   currentSettings.favoriteLanguages = ['en']
+  currentSettings.language = 'en'
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
   expect(episode.episodeData!.episodeNumber).toBe(10)
   expect(episode.episodeData!.seasonNumber).toBe(2)
@@ -88,6 +89,7 @@ test('Retrieve Series Details', async () => {
 
 test('Retrieve Series Captain Marleau', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(316274, 'official', 1, undefined, 4)
   expect(episode.episodeData!.episodeNumber).toBe(1)
   expect(episode.episodeData!.seasonNumber).toBe(4)
@@ -116,6 +118,7 @@ test('Retrieve Series Captain Marleau', async () => {
 
 test('Retrieve Series Details in French', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(79168, 'official', 10, undefined, 2)
   expect(episode.episodeData!.episodeNumber).toBe(10)
   expect(episode.episodeData!.seasonNumber).toBe(2)
@@ -204,6 +207,7 @@ test('Search Street Hawk', async () => {
 
 test('Retrieve Walking Dead Dead City Details in French', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(417549, 'official', 7, undefined, 2)
   expect(episode.episodeData!.episodeNumber).toBe(7)
   expect(episode.episodeData!.seasonNumber).toBe(2)
@@ -229,6 +233,7 @@ test('Retrieve Walking Dead Dead City Details in French', async () => {
 
 test('Shameless US Cleanup', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const episode = await TVDBClient.getInstance().retrieveSeriesDetails(161511, 'official', 1, undefined, 1)
   expect(episode.episodeData!.episodeNumber).toBe(1)
   expect(episode.episodeData!.seasonNumber).toBe(1)
@@ -296,6 +301,7 @@ test('Search Episode by Title - One Piece - Official en', async () => {
 
 test('Retrieve Series Details - One Piece - Absolute Order E242', async () => {
   currentSettings.favoriteLanguages = ['es']
+  currentSettings.language = 'es'
   const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'absolute', undefined, 242, undefined)
   expect(result.episodeData!.absoluteNumber).toBe(242)
   expect(result.episodeData!.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')
@@ -307,6 +313,7 @@ test('Retrieve Series Details - One Piece - Absolute Order E242', async () => {
 
 test('Retrieve Series Details - One Piece - Official Order E242', async () => {
   currentSettings.favoriteLanguages = ['es']
+  currentSettings.language = 'es'
   const result = await TVDBClient.getInstance().retrieveSeriesDetails(81797, 'official', 16, undefined, 11)
   expect(result.episodeData!.absoluteNumber).toBe(242)
   expect(result.episodeData!.title).toBe('¡La explosión es la señal! El CP9 empieza a moverse')

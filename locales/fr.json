@@ -755,5 +755,6 @@
   "status_bar.searching": "Recherche en cours",
   "job.title.searching": "Recherche des informations vidéo.",
   "matching.field.episode_count.label": "Épisodes dans le fichier",
-  "matching.field.episodes_per_video.label": "Épisodes par vidéo"
+  "matching.field.episodes_per_video.label": "Épisodes par vidéo",
+  "about.news.version_3_2_0.items": "Ajout de la prise en charge des vidéos contenant plusieurs épisodes, nommées comme Show - S09E01-E02 - Title 1 + Title 2, avec le nombre d''épisodes estimé à partir de la durée de la vidéo\nPlusieurs vidéos peuvent désormais être renumérotées en une seule fois, en tenant compte de leur nombre d''épisodes\nAjout de la durée dans l''onglet Pistes lors de la modification de plusieurs vidéos\nLa recherche par nom d''épisode fonctionne désormais aussi avec TheMovieDB\nLa recherche d''informations sur les vidéos est désormais mise en file d''attente, avec sa progression affichée dans la barre d''état"
 }

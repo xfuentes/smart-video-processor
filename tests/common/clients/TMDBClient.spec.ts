@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { afterEach, beforeAll, expect, test } from 'vitest'
+import { afterEach, beforeAll, expect, test, vi } from 'vitest'
 import '../recordedHttpClient'
 import { tmdbLanguages } from '../../../src/common/TMDBLanguages'
 import { TMDBClient } from '../../../src/main/domain/clients/TMDBClient'
@@ -51,6 +51,7 @@ test('Search by IMDB ID', async () => {
 
 test('Search by name', async () => {
   currentSettings.favoriteLanguages = ['en']
+  currentSettings.language = 'en'
   const movies = await TMDBClient.getInstance().searchMovieByNameYear('universal soldier', 1992)
   expect(movies.length).toBeGreaterThan(0)
   expect(movies[0].id).toBe(9349)
@@ -83,6 +84,7 @@ test('Search by name and year', async () => {
 
 test('Retrieve movie details', async () => {
   currentSettings.favoriteLanguages = ['en-US']
+  currentSettings.language = 'en-US'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(11687)
   expect(movie.tmdb).toBe(11687)
   expect(movie.title).toBe('The Visitors')
@@ -143,6 +145,7 @@ test('Rate limiter', async () => {
 
 test('Search pacifist cowboy', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movies = await TMDBClient.getInstance().searchMovieByNameYear('un cowboy pacifiste', 2025)
   expect(movies.length).toBeGreaterThan(0)
   expect(movies[0].id).toBe(1491487)
@@ -161,6 +164,7 @@ test('Search pacifist cowboy', async () => {
 
 test('Retrieve movie details french', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(11687)
   expect(movie.tmdb).toBe(11687)
   expect(movie.title).toBe('Les Visiteurs')
@@ -183,6 +187,7 @@ test('Retrieve movie details french', async () => {
 
 test('Retrieve movie details no french translations', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(431221)
   expect(movie.tmdb).toBe(431221)
   expect(movie.title).toBe('Amahl and the Night Visitors')
@@ -205,6 +210,7 @@ test('Retrieve movie details no french translations', async () => {
 
 test('Retrieve movie details eternam 2', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(994051)
   expect(movie.tmdb).toBe(994051)
   expect(movie.title).toBe('ETERNAM II : La promesse')
@@ -228,6 +234,7 @@ test('Retrieve movie details eternam 2', async () => {
 
 test('Retrieve movie details passion of the Christ', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(615)
   expect(movie.tmdb).toBe(615)
   expect(movie.title).toBe('La Passion du Christ')
@@ -242,6 +249,7 @@ test('Retrieve movie details passion of the Christ', async () => {
 
 test('Retrieve movie details le bon la brute... with duration', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(429)
   expect(movie.tmdb).toBe(429)
   expect(movie.title).toBe('Le Bon, la Brute et le Truand')
@@ -262,6 +270,7 @@ test('Retrieve movie details le bon la brute... with duration', async () => {
 
 test('Retrieve movie details ip man 3', async () => {
   currentSettings.favoriteLanguages = ['fr-FR']
+  currentSettings.language = 'fr-FR'
   const movie = await TMDBClient.getInstance().retrieveMovieDetails(365222)
   expect(movie.tmdb).toBe(365222)
   expect(movie.title).toBe('Ip Man 3')
@@ -294,4 +303,40 @@ test('Get Languages', async () => {
   const languages = await TMDBClient.getInstance().getLanguages()
   expect(languages.length).toBeGreaterThan(0)
   expect(languages.every((language) => language.iso_639_1 && language.english_name)).toBe(true)
+})
+
+test('Search TV episode by title', async () => {
+  currentSettings.language = 'en'
+  currentSettings.additionalTvSearchLanguages = []
+  const episode = (season: number, number: number, name: string) => ({
+    id: season * 100 + number,
+    season_number: season,
+    episode_number: number,
+    name
+  })
+  const get = vi.fn((url: string) => {
+    if (url === '/tv/1001') {
+      return Promise.resolve({ data: { seasons: [{ season_number: 4 }, { season_number: 5 }] } })
+    }
+    return Promise.resolve({
+      data: {
+        episodes:
+          url === '/tv/1001/season/5'
+            ? [episode(5, 25, 'Pups Save an Out of Control Mini Patrol'), episode(5, 26, 'Pups Save the Tigers')]
+            : [episode(4, 1, 'Pups Save a Hoot')]
+      }
+    })
+  })
+  const sessionSpy = vi
+    .spyOn(TMDBClient.getInstance() as unknown as { getTMDBSession: () => Promise<unknown> }, 'getTMDBSession')
+    .mockResolvedValue({ get })
+
+  expect(await TMDBClient.getInstance().searchEpisodeByTitle(1001, 'pups save the tigers')).toEqual({
+    season: 5,
+    episodeNumber: 26
+  })
+  await expect(TMDBClient.getInstance().searchEpisodeByTitle(1001, 'Something completely different')).rejects.toThrow(
+    'No episode found'
+  )
+  sessionSpy.mockRestore()
 })

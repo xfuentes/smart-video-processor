@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.2.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_2_0.items', {
+          defaultValue:
+            'Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration\nSeveral videos can now be renumbered at once with their number of episodes taken into account\nAdded the duration to the Tracks tab when editing several videos\nSearching by episode name now also works with TheMovieDB\nSearching video information is now queued with its progress shown in the status bar'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.1.0' })}</h4>
       <ul>
         {_('about.news.version_3_1_0.items', {

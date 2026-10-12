@@ -24,6 +24,7 @@ import { RateLimiter } from './RateLimiter'
 import { currentSettings } from '../Settings'
 import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
+import { Strings } from '../../../common/Strings'
 import { debug } from '../../util/log'
 import { createCachingAdapter } from './SimpleCachingAdapter'
 
@@ -316,6 +317,45 @@ export class TMDBClient {
     searchResult.genres = genres
 
     return { episodeData, seriesData: searchResult, episodeCount }
+  }
+
+  /**
+   * Finds the episode of a TV series whose name best matches the given title, in the preferred languages.
+   */
+  public async searchEpisodeByTitle(tmdbId: number, title: string): Promise<{ season: number; episodeNumber: number }> {
+    const tmdb = await this.getTMDBSession()
+    const threshold = 85
+    const normalizedTitle = Strings.normalizeForComparison(title)
+    let bestScore = 0
+    let bestMatch: { season: number; episodeNumber: number } | undefined
+
+    for (const language of [currentSettings.language, ...currentSettings.additionalTvSearchLanguages]) {
+      try {
+        const series = await tmdb.get<TMDBTVDetails>('/tv/' + tmdbId, { params: { language } })
+        for (const { season_number } of series.data.seasons ?? []) {
+          const season = await tmdb.get<TMDBTVSeasonDetails>(`/tv/${tmdbId}/season/${season_number}`, {
+            params: { language }
+          })
+          for (const episode of season.data.episodes) {
+            const score = Strings.getSimilarity(Strings.normalizeForComparison(episode.name ?? ''), normalizedTitle)
+            if (score > bestScore) {
+              bestScore = score
+              bestMatch = { season: episode.season_number, episodeNumber: episode.episode_number }
+            }
+          }
+        }
+      } catch (error) {
+        debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
+      }
+      if (bestScore >= threshold) {
+        break
+      }
+    }
+
+    if (!bestMatch || bestScore < threshold) {
+      throw new Error('TMDB: No episode found matching the title')
+    }
+    return bestMatch
   }
 
   private async getTMDBSession(): Promise<AxiosInstance> {

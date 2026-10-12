@@ -114,6 +114,7 @@ interface TMDBTVDetails {
   first_air_date: string
   origin_country: string[]
   genres: TMDBGenre[]
+  seasons?: { season_number: number }[]
 }
 
 interface TMDBTVEpisode {

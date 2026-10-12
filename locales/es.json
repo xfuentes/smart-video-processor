@@ -755,5 +755,6 @@
   "status_bar.searching": "Buscando",
   "job.title.searching": "Buscando información del vídeo.",
   "matching.field.episode_count.label": "Episodios en el archivo",
-  "matching.field.episodes_per_video.label": "Episodios por vídeo"
+  "matching.field.episodes_per_video.label": "Episodios por vídeo",
+  "about.news.version_3_2_0.items": "Se ha añadido compatibilidad con vídeos que contienen varios episodios, con nombres como Show - S09E01-E02 - Title 1 + Title 2, y con el número de episodios deducido a partir de la duración del vídeo\nAhora se pueden renumerar varios vídeos a la vez teniendo en cuenta su número de episodios\nSe ha añadido la duración a la pestaña Pistas al editar varios vídeos\nLa búsqueda por nombre de episodio ahora también funciona con TheMovieDB\nLa búsqueda de información de vídeos ahora se pone en cola y muestra su progreso en la barra de estado"
 }

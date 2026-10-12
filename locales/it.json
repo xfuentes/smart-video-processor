@@ -755,5 +755,6 @@
   "status_bar.searching": "Ricerca in corso",
   "job.title.searching": "Ricerca delle informazioni sul video.",
   "matching.field.episode_count.label": "Episodi nel file",
-  "matching.field.episodes_per_video.label": "Episodi per video"
+  "matching.field.episodes_per_video.label": "Episodi per video",
+  "about.news.version_3_2_0.items": "Aggiunto il supporto per i video contenenti più episodi, con nome del tipo Show - S09E01-E02 - Title 1 + Title 2, con il numero di episodi dedotto dalla durata del video\nOra è possibile rinumerare più video contemporaneamente tenendo conto del relativo numero di episodi\nAggiunta la durata alla scheda Tracce durante la modifica di più video\nLa ricerca per nome dell'episodio ora funziona anche con TheMovieDB\nLa ricerca delle informazioni sui video viene ora messa in coda, con l'avanzamento mostrato nella barra di stato"
 }

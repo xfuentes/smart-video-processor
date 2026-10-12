@@ -22,6 +22,7 @@ import { SearchBy, VideoType } from '../../src/common/@types/Video'
 import { currentSettings, defaultSettings } from '../../src/main/domain/Settings'
 import { TVDBClient } from '../../src/main/domain/clients/TVDBClient'
 import { TMDBClient } from '../../src/main/domain/clients/TMDBClient'
+import { EpisodeData } from '../../src/main/domain/EpisodeData'
 import { SearchResult } from '../../src/main/domain/SearchResult'
 import { TVShowMatchingSource } from '../../src/common/@types/Settings'
 
@@ -290,6 +291,63 @@ test('TV-Show search tries TheMovieDB first when it is the preferred database', 
   currentSettings.tvShowMatchingPriority = TVShowMatchingSource.TVDB
   tvdbSearchSpy.mockRestore()
   tmdbSearchSpy.mockRestore()
+  tmdbDetailsSpy.mockRestore()
+  video.destroy()
+})
+
+test('TV-Show search by Title and Episode Name on TheMovieDB', async () => {
+  const tmdbSearchResult = new SearchResult(1001, 'Paw Patrol', 2013, 'Paw Patrol', 'An overview.', undefined)
+  const episodeSearchSpy = vi
+    .spyOn(TMDBClient.getInstance(), 'searchEpisodeByTitle')
+    .mockResolvedValue({ season: 5, episodeNumber: 26 })
+  const tmdbDetailsSpy = vi.spyOn(TMDBClient.getInstance(), 'retrieveTVSeriesDetails').mockResolvedValue({
+    episodeData: new EpisodeData(1, 26, 5, 0, 'Ultimate Rescue: Pups Save the Tigers', '', 'An overview.', 26),
+    seriesData: tmdbSearchResult,
+    episodeCount: 26
+  })
+
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_EP_NAME
+  video.tvShow.setTheMovieDB(1001)
+  video.tvShow.setEpisodeTitle('Pups Save the Tigers')
+  await video.tvShow.selectTMDBSearchResultID(1001)
+
+  expect(episodeSearchSpy).toHaveBeenCalledWith(1001, 'Pups Save the Tigers')
+  expect(tmdbDetailsSpy).toHaveBeenCalledWith(1001, 26, 5)
+  expect(video.tvShow.season).toBe(5)
+  expect(video.tvShow.episode).toBe(26)
+  expect(video.tvShow.episodeTitle).toBe('Ultimate Rescue: Pups Save the Tigers')
+  expect(video.matched).toBeTruthy()
+
+  episodeSearchSpy.mockRestore()
+  tmdbDetailsSpy.mockRestore()
+  video.destroy()
+})
+
+test('TV-Show search by Title and Episode Name on TheMovieDB - Episode not found', async () => {
+  const tmdbSearchResult = new SearchResult(1001, 'Paw Patrol', 2013, 'Paw Patrol', 'An overview.', undefined)
+  const episodeSearchSpy = vi
+    .spyOn(TMDBClient.getInstance(), 'searchEpisodeByTitle')
+    .mockRejectedValue(new Error('TMDB: No episode found matching the title'))
+  const tmdbDetailsSpy = vi.spyOn(TMDBClient.getInstance(), 'retrieveTVSeriesDetails').mockResolvedValue({
+    episodeData: undefined,
+    seriesData: tmdbSearchResult,
+    episodeCount: 1
+  })
+
+  const video = new Video('c:\\test.mkv')
+  video.type = VideoType.TV_SHOW
+  video.searchBy = SearchBy.TITLE_EP_NAME
+  video.tvShow.setTheMovieDB(1001)
+  video.tvShow.setEpisodeTitle('Nonexistent Episode Title')
+  await video.tvShow.selectTMDBSearchResultID(1001)
+
+  expect(video.matched).toBeFalsy()
+  expect(video.status).toBe('Warning')
+  expect(video.message).toBe('Episode not found. Please check the information provided and try again.')
+
+  episodeSearchSpy.mockRestore()
   tmdbDetailsSpy.mockRestore()
   video.destroy()
 })

@@ -755,5 +755,6 @@
   "status_bar.searching": "Zoeken",
   "job.title.searching": "Videogegevens zoeken.",
   "matching.field.episode_count.label": "Afleveringen in bestand",
-  "matching.field.episodes_per_video.label": "Afleveringen per video"
+  "matching.field.episodes_per_video.label": "Afleveringen per video",
+  "about.news.version_3_2_0.items": "Ondersteuning toegevoegd voor video's met meerdere afleveringen, met namen zoals Show - S09E01-E02 - Title 1 + Title 2, waarbij het aantal afleveringen wordt geraden aan de hand van de duur van de video\nMeerdere video's kunnen nu in één keer opnieuw worden genummerd, waarbij rekening wordt gehouden met hun aantal afleveringen\nDe duur toegevoegd aan het tabblad Tracks bij het bewerken van meerdere video's\nZoeken op afleveringsnaam werkt nu ook met TheMovieDB\nHet zoeken naar video-informatie wordt nu in een wachtrij geplaatst, met de voortgang in de statusbalk"
 }

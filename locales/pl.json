@@ -755,5 +755,6 @@
   "status_bar.searching": "Wyszukiwanie",
   "job.title.searching": "Wyszukiwanie informacji o wideo.",
   "matching.field.episode_count.label": "Odcinki w pliku",
-  "matching.field.episodes_per_video.label": "Liczba odcinków na wideo"
+  "matching.field.episodes_per_video.label": "Liczba odcinków na wideo",
+  "about.news.version_3_2_0.items": "Dodano obsługę filmów zawierających kilka odcinków, nazwanych według wzoru Show - S09E01-E02 - Title 1 + Title 2, z liczbą odcinków odgadywaną na podstawie czasu trwania wideo\nMożna teraz zmieniać numerację kilku filmów jednocześnie, z uwzględnieniem liczby ich odcinków\nDodano czas trwania na karcie Ścieżki podczas edycji kilku filmów\nWyszukiwanie według nazwy odcinka działa teraz również z TheMovieDB\nWyszukiwanie informacji o filmach jest teraz kolejkowane, a jego postęp widać na pasku stanu"
 }

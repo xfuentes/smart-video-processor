@@ -755,5 +755,6 @@
   "status_bar.searching": "Keresés",
   "job.title.searching": "Videoinformációk keresése.",
   "matching.field.episode_count.label": "Epizódok a fájlban",
-  "matching.field.episodes_per_video.label": "Epizódok videónként"
+  "matching.field.episodes_per_video.label": "Epizódok videónként",
+  "about.news.version_3_2_0.items": "Támogatás több epizódot tartalmazó videókhoz, amelyek neve például így néz ki: Show - S09E01-E02 - Title 1 + Title 2; az epizódok számát a rendszer a videó hossza alapján becsüli meg\nTöbb videó egyszerre újraszámozható, az epizódok számának figyelembevételével\nA hossz megjelenik a Sávok lapon, ha egyszerre több videót szerkesztesz\nAz epizódnév szerinti keresés mostantól a TheMovieDB-vel is működik\nA videóinformációk keresése mostantól sorba kerül, és az előrehaladása megjelenik az állapotsoron"
 }

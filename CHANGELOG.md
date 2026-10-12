@@ -2,13 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.2.0] - 2026-10-12
 
 ### Added
 
 - Added support for video files containing several consecutive episodes (e.g. `S09E01-E02`), matched on TheTVDB or TheMovieDB and named `Show - S09E01-E02 - Title 1 + Title 2`, with an Episodes in File field in the matching form and an Episodes per Video field to number several videos at once.
 - The number of episodes in a video is guessed from its duration and the episode runtime, and recalculated for each video when renumbering several videos. Clearing the field goes back to the automatic guess.
 - A prefix repeated in the titles of the following episodes is removed from the combined episode title.
+- Added the duration to the Tracks tab when editing several videos.
+- Added a Searching stage to the status bar, with the progress of the video information searches.
+
+### Changed
+
+- Searching a TV show episode by its name now also works with TheMovieDB.
+- Video information searches are now queued, and requests to TheTVDB and TheMovieDB are rate limited only when they really reach the network.
+- Files detected by the automatic add folder close together are now added as a batch so they get sorted.
 
 ## [3.1.0] - 2026-10-10
 

@@ -298,7 +298,7 @@ export class TVShow implements ITVShow {
   /**
    * Loads series and episode details from TheMovieDB, used when the show could not be matched on TheTVDB.
    */
-  public async loadSeriesFromTMDB() {
+  public async loadSeriesFromTMDB(episodeSearchFailed = false) {
     if (!this.theMovieDB) {
       throw new Error('TMDB ID is mandatory.')
     }
@@ -367,7 +367,11 @@ export class TVShow implements ITVShow {
       debug('log.tmdb.series_poster', { defaultValue: 'Series poster file://{poster}', poster: this.poster })
     }
 
-    if (!this.episode) {
+    if (!this.episode && episodeSearchFailed) {
+      this.video.showWarning('video.message.tvdb_episode_not_found', {
+        defaultValue: 'Episode not found. Please check the information provided and try again.'
+      })
+    } else if (!this.episode) {
       this.video.showWarning('video.message.tvdb_episode_number_required', {
         defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
       })
@@ -600,7 +604,24 @@ export class TVShow implements ITVShow {
     this.lastSearchSource = 'tmdb'
     const idNum = id !== undefined ? Numbers.toNumber('' + id) : undefined
     this.setTheMovieDB(idNum)
-    await this.loadSeriesFromTMDB()
+
+    let episodeSearchFailed = false
+    if (this.video.searchBy === SearchBy.TITLE_EP_NAME && idNum !== undefined) {
+      try {
+        if (!this.episodeTitle) {
+          throw new Error('Episode title is mandatory')
+        }
+        const position = await TMDBClient.getInstance().searchEpisodeByTitle(idNum, this.episodeTitle)
+        this.setSeason('' + position.season)
+        this.setEpisode('' + position.episodeNumber)
+        this.video.fireChangeEvent()
+      } catch (e) {
+        this.clearEpisodeNumbers()
+        episodeSearchFailed = true
+      }
+    }
+
+    await this.loadSeriesFromTMDB(episodeSearchFailed)
   }
 
   private clearEpisodeNumbers() {

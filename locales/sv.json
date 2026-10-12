@@ -755,5 +755,6 @@
   "status_bar.searching": "Söker",
   "job.title.searching": "Söker videoinformation.",
   "matching.field.episode_count.label": "Avsnitt i filen",
-  "matching.field.episodes_per_video.label": "Avsnitt per video"
+  "matching.field.episodes_per_video.label": "Avsnitt per video",
+  "about.news.version_3_2_0.items": "Lade till stöd för videor som innehåller flera avsnitt, med namn som Show - S09E01-E02 - Title 1 + Title 2, där antalet avsnitt gissas utifrån videons längd\nFlera videor kan nu numreras om samtidigt med hänsyn till antalet avsnitt i varje video\nLade till längden på fliken Spår när flera videor redigeras\nSökning på avsnittsnamn fungerar nu även med TheMovieDB\nSökning efter videoinformation köas nu och förloppet visas i statusfältet"
 }

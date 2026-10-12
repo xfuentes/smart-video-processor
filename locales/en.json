@@ -755,5 +755,6 @@
   "status_bar.searching": "Searching",
   "job.title.searching": "Searching video information.",
   "matching.field.episode_count.label": "Episodes in File",
-  "matching.field.episodes_per_video.label": "Episodes per Video"
+  "matching.field.episodes_per_video.label": "Episodes per Video",
+  "about.news.version_3_2_0.items": "Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration\nSeveral videos can now be renumbered at once with their number of episodes taken into account\nAdded the duration to the Tracks tab when editing several videos\nSearching by episode name now also works with TheMovieDB\nSearching video information is now queued with its progress shown in the status bar"
 }

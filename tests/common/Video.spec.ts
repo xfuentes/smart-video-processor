@@ -35,6 +35,7 @@ import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../src/
 
 beforeAll(() => {
   currentSettings.favoriteLanguages = ['en']
+  currentSettings.language = 'en'
   currentSettings.tmpFilesPath = defaultSettings.tmpFilesPath
 })
 

@@ -755,5 +755,6 @@
   "status_bar.searching": "正在搜索",
   "job.title.searching": "正在搜索视频信息。",
   "matching.field.episode_count.label": "文件中的剧集数",
-  "matching.field.episodes_per_video.label": "每个视频的剧集数"
+  "matching.field.episodes_per_video.label": "每个视频的剧集数",
+  "about.news.version_3_2_0.items": "新增对包含多集内容的视频的支持,命名格式如 Show - S09E01-E02 - Title 1 + Title 2,集数会根据视频时长自动推测\n现在可以一次性对多个视频重新编号,并会考虑各视频的集数\n同时编辑多个视频时,轨道选项卡中新增了时长显示\n按剧集名称搜索现在也支持 TheMovieDB\n视频信息搜索现在会进入队列,并在状态栏中显示进度"
 }

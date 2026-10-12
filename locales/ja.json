@@ -755,5 +755,6 @@
   "status_bar.searching": "検索中",
   "job.title.searching": "動画情報を検索しています。",
   "matching.field.episode_count.label": "ファイル内のエピソード数",
-  "matching.field.episodes_per_video.label": "動画あたりのエピソード数"
+  "matching.field.episodes_per_video.label": "動画あたりのエピソード数",
+  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 のような名前で、複数のエピソードを含む動画に対応しました。エピソード数は動画の長さから推測されます\n複数の動画を、それぞれのエピソード数を考慮したうえで一括して番号を振り直せるようになりました\n複数の動画を編集する際の「トラック」タブに再生時間を追加しました\nエピソード名での検索が TheMovieDB でも使えるようになりました\n動画情報の検索がキューに追加され、進行状況がステータスバーに表示されるようになりました"
 }

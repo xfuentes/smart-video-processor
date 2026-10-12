@@ -755,5 +755,6 @@
   "status_bar.searching": "Haetaan",
   "job.title.searching": "Haetaan videon tietoja.",
   "matching.field.episode_count.label": "Jaksoja tiedostossa",
-  "matching.field.episodes_per_video.label": "Jaksoja per video"
+  "matching.field.episodes_per_video.label": "Jaksoja per video",
+  "about.news.version_3_2_0.items": "Lisätty tuki videoille, jotka sisältävät useita jaksoja ja jotka on nimetty muodossa Show - S09E01-E02 - Title 1 + Title 2, jolloin jaksojen määrä arvioidaan videon keston perusteella\nUseiden videoiden numerointi voidaan nyt uusia kerralla ottaen huomioon niiden jaksojen määrä\nLisätty kesto Raidat-välilehteen, kun muokataan useita videoita\nHaku jakson nimellä toimii nyt myös TheMovieDB:n kanssa\nVideotietojen haku asetetaan nyt jonoon, ja sen eteneminen näkyy tilapalkissa"
 }

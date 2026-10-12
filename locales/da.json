@@ -755,5 +755,6 @@
   "status_bar.searching": "Søger",
   "job.title.searching": "Søger efter videooplysninger.",
   "matching.field.episode_count.label": "Afsnit i filen",
-  "matching.field.episodes_per_video.label": "Afsnit pr. video"
+  "matching.field.episodes_per_video.label": "Afsnit pr. video",
+  "about.news.version_3_2_0.items": "Tilføjet understøttelse af videoer med flere afsnit, navngivet som Show - S09E01-E02 - Title 1 + Title 2, hvor antallet af afsnit gættes ud fra videoens varighed\nFlere videoer kan nu omnummereres på én gang, så der tages højde for deres antal afsnit\nTilføjet varighed på fanen Spor, når flere videoer redigeres\nSøgning efter afsnitsnavn virker nu også med TheMovieDB\nSøgning efter videooplysninger sættes nu i kø, og fremdriften vises i statuslinjen"
 }

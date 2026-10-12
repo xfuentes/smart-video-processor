@@ -755,5 +755,6 @@
   "status_bar.searching": "A pesquisar",
   "job.title.searching": "A procurar informações do vídeo.",
   "matching.field.episode_count.label": "Episódios no ficheiro",
-  "matching.field.episodes_per_video.label": "Episódios por vídeo"
+  "matching.field.episodes_per_video.label": "Episódios por vídeo",
+  "about.news.version_3_2_0.items": "Adicionado suporte para vídeos com vários episódios, nomeados como Show - S09E01-E02 - Title 1 + Title 2, com o número de episódios estimado a partir da duração do vídeo\nAgora é possível renumerar vários vídeos de uma só vez, tendo em conta o respetivo número de episódios\nAdicionada a duração ao separador Faixas ao editar vários vídeos\nA pesquisa por nome do episódio também funciona agora com o TheMovieDB\nA pesquisa de informações de vídeos passa a ser colocada em fila, com o progresso apresentado na barra de estado"
 }

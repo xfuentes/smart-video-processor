@@ -755,5 +755,6 @@
   "status_bar.searching": "검색 중",
   "job.title.searching": "비디오 정보를 검색하는 중입니다.",
   "matching.field.episode_count.label": "파일 내 에피소드 수",
-  "matching.field.episodes_per_video.label": "영상당 에피소드 수"
+  "matching.field.episodes_per_video.label": "영상당 에피소드 수",
+  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 형식의 이름으로 여러 에피소드가 담긴 영상을 지원하며, 에피소드 수는 영상 길이를 기준으로 추정합니다\n이제 여러 영상의 에피소드 수를 고려하여 한 번에 번호를 다시 매길 수 있습니다\n여러 영상을 편집할 때 트랙 탭에 길이가 추가되었습니다\n에피소드 이름으로 검색하는 기능이 이제 TheMovieDB에서도 작동합니다\n영상 정보 검색이 대기열에 추가되며 진행률이 상태 표시줄에 표시됩니다"
 }
