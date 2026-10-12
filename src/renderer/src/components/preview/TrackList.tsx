@@ -135,7 +135,7 @@ const columnSizingOptions: TableColumnSizingOptions = {
   properties: { defaultWidth: 250, minWidth: 110, idealWidth: 250 },
   default: { defaultWidth: 40, minWidth: 40, idealWidth: 40 },
   forced: { defaultWidth: 40, minWidth: 40, idealWidth: 40 },
-  duration: { defaultWidth: 80, minWidth: 50, idealWidth: 80 },
+  duration: { defaultWidth: 160, minWidth: 50, idealWidth: 160 },
   frames: { defaultWidth: 80, minWidth: 40, idealWidth: 80 },
   size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 }
 }
