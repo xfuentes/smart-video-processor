@@ -175,6 +175,7 @@ export abstract class Job<T> implements IJob {
       case JobStatus.ERROR:
         return this.error ?? _('job.status.error', { defaultValue: 'An unexpected error occurred' })
       case JobStatus.LOADING:
+      case JobStatus.SEARCHING:
       case JobStatus.MERGING:
       case JobStatus.ENCODING:
         return this.getTitle()

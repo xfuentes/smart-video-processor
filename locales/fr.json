@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Requis pour {count} vidéos, il ne peut pas être retiré.",
   "hints.checkbox.click": "Cliquez pour basculer entre la sélection d'origine, toutes les vidéos possédant cette piste et aucune.",
   "job.loading.pre_processing": "Le débit vidéo est absent du fichier, remuxage vers un fichier temporaire pour le mesurer.",
-  "multi_tracks.forced_tooltip": "Forcée dans {count} vidéos sur {total}."
+  "multi_tracks.forced_tooltip": "Forcée dans {count} vidéos sur {total}.",
+  "status_bar.searching": "Recherche en cours",
+  "job.title.searching": "Recherche des informations vidéo."
 }

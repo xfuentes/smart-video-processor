@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Diperlukan untuk {count} video, tidak dapat dihapus.",
   "hints.checkbox.click": "Klik untuk beralih antara pilihan asli, semua video yang memiliki trek ini, dan tidak ada.",
   "job.loading.pre_processing": "Bitrate video tidak ada di file, me-remux ke file sementara untuk mengukurnya.",
-  "multi_tracks.forced_tooltip": "Dipaksa di {count} dari {total} video."
+  "multi_tracks.forced_tooltip": "Dipaksa di {count} dari {total} video.",
+  "status_bar.searching": "Mencari",
+  "job.title.searching": "Mencari informasi video."
 }

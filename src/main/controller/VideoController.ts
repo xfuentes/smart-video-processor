@@ -17,6 +17,7 @@
  */
 
 import { Video } from '../domain/Video'
+import { SearchingJob } from '../domain/jobs/SearchingJob'
 import { currentSettings } from '../domain/Settings'
 import { MultiSearchInputData, SearchBy, SearchInputData, VideoType } from '../../common/@types/Video'
 import { EpisodeOrder } from '../domain/clients/TVDBClient'
@@ -127,10 +128,12 @@ export class VideoController {
   }
 
   async setMultiTvShowOrder(uuids: string[], order: EpisodeOrder) {
-    for (const uuid of uuids) {
-      await this.getVideoByUuid(uuid).tvShow.setOrder(order)
+    const videos = uuids.map((uuid) => this.getVideoByUuid(uuid))
+    for (const video of videos) {
+      video.searching = true
     }
     this.fireListChangeEvent()
+    await new SearchingJob(videos, (video) => video.changeTvShowOrder(order)).queue()
   }
 
   selectSearchResultID(uuid: string, searchResultID?: number) {
@@ -140,7 +143,9 @@ export class VideoController {
   search(uuid: string, data?: SearchInputData) {
     const video = this.getVideoByUuid(uuid)
     video.autoModePossible = false
-    return video.search(data)
+    video.searching = true
+    this.fireListChangeEvent()
+    return new SearchingJob([video], (v) => v.search(data)).queue()
   }
 
   async multiSelectSearchResultID(uuids: string[], searchResultID: number | undefined) {
@@ -156,17 +161,7 @@ export class VideoController {
       video.autoModePossible = false
     }
     this.fireListChangeEvent()
-    let firstError: unknown
-    for (const video of videos) {
-      try {
-        await video.search()
-      } catch (err) {
-        firstError = firstError ?? err
-      }
-    }
-    if (firstError !== undefined) {
-      throw firstError as Error
-    }
+    await new SearchingJob(videos, (video) => video.search()).queue()
   }
 
   setMultiHint(uuids: string[], hint: IHint, value: string | undefined) {

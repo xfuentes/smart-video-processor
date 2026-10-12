@@ -25,7 +25,7 @@ import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { _ } from '../../i18n'
 import { debug } from '../../util/log'
-import { simpleCachingAdapter } from './SimpleCachingAdapter'
+import { createCachingAdapter } from './SimpleCachingAdapter'
 import { Strings } from '../../../common/Strings'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
@@ -41,10 +41,13 @@ import type { EpisodeOrder } from '../../../common/@types/EpisodeOrder'
 
 export { type EpisodeOrder } from '../../../common/@types/EpisodeOrder'
 
+const TVDB_SESSION_DURATION_MS = 60 * 60 * 1000
+
 export class TVDBClient {
   private static instance: TVDBClient
   rateLimiter = new RateLimiter(10)
-  private readonly tvdb: AxiosInstance | undefined
+  private tvdb: AxiosInstance | undefined
+  private tvdbSessionTimestamp = 0
   private retrieveTokenPromise: Promise<AxiosResponse<TVDBLoginResponse>> | undefined
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -363,10 +366,10 @@ export class TVDBClient {
       const country = Countries.getCountryByCode(seriesData.originalCountry)
       const language = Languages.guessLanguageIETFFromCountries(seriesData.originalLanguage, country ? [country] : [])
       let name = this.cleanupSeriesTitle(seriesData.name)
-      const overview = seriesData.overview
+      let overview = seriesData.overview
 
       // Apply translation logic for favorite languages
-      let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
+      let langCode = currentSettings.language
       if (langCode.indexOf('-') != -1) {
         langCode = langCode.substring(0, langCode.indexOf('-'))
       }
@@ -380,6 +383,9 @@ export class TVDBClient {
           const seriesTranslation = await tvdb.get<TVDBTranslation>(`/series/${tvdbId}/translations/${trCode}`)
           if (seriesTranslation.data.data.name) {
             name = this.cleanupSeriesTitle(seriesTranslation.data.data.name)
+          }
+          if (seriesTranslation.data.data.overview) {
+            overview = seriesTranslation.data.data.overview
           }
         } catch (e) {
           debug('log.tvdb.translation_fallback', { defaultValue: 'Failed to fetch translation, using original name' })
@@ -437,7 +443,7 @@ export class TVDBClient {
       episodeCount
     }
     result.seriesData.genres = displayGenres
-    let langCode = currentSettings.favoriteLanguages[0] ?? 'en'
+    let langCode = currentSettings.language
     if (langCode.indexOf('-') != -1) {
       langCode = langCode.substring(0, langCode.indexOf('-'))
     }
@@ -510,13 +516,13 @@ export class TVDBClient {
 
   private async getTVDBSession(): Promise<AxiosInstance> {
     let tvdb: AxiosInstance
-    await this.rateLimiter.slows()
 
-    if (this.tvdb !== undefined) {
+    if (this.tvdb !== undefined && Date.now() - this.tvdbSessionTimestamp < TVDB_SESSION_DURATION_MS) {
       tvdb = this.tvdb
       return tvdb
     } else {
       if (this.retrieveTokenPromise === undefined) {
+        await this.rateLimiter.slows()
         this.retrieveTokenPromise = axios.post(`${THE_TVDB_API_URL}/login`, `{"apikey": "${THE_TVDB_API_KEY}"}`, {
           headers: {
             'Content-Type': 'application/json'
@@ -534,8 +540,10 @@ export class TVDBClient {
         this.retrieveTokenPromise = undefined
       }
       if (response) {
-        tvdb = axios.create({ baseURL: THE_TVDB_API_URL, adapter: simpleCachingAdapter })
+        tvdb = axios.create({ baseURL: THE_TVDB_API_URL, adapter: createCachingAdapter(this.rateLimiter) })
         tvdb.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`
+        this.tvdb = tvdb
+        this.tvdbSessionTimestamp = Date.now()
         return tvdb
       } else {
         debug('log.tvdb.no_response', { defaultValue: 'No response but no error either' })

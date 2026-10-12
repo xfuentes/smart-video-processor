@@ -751,5 +751,7 @@
   "hints.checkbox.required": "비디오 {count}개에 필요하므로 제거할 수 없습니다.",
   "hints.checkbox.click": "클릭하면 원래 선택, 이 트랙이 있는 모든 비디오, 선택 없음 순으로 전환됩니다.",
   "job.loading.pre_processing": "파일에 비디오 비트레이트가 없어 측정하기 위해 임시 파일로 리먹싱하는 중입니다.",
-  "multi_tracks.forced_tooltip": "비디오 {total}개 중 {count}개에서 강제됨."
+  "multi_tracks.forced_tooltip": "비디오 {total}개 중 {count}개에서 강제됨.",
+  "status_bar.searching": "검색 중",
+  "job.title.searching": "비디오 정보를 검색하는 중입니다."
 }

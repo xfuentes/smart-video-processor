@@ -751,5 +751,7 @@
   "hints.checkbox.required": "{count} 个视频需要此项，无法移除。",
   "hints.checkbox.click": "点击可在原始选择、所有含此轨道的视频和无之间切换。",
   "job.loading.pre_processing": "文件中缺少视频比特率，正在重新封装为临时文件以测量比特率。",
-  "multi_tracks.forced_tooltip": "在 {total} 个视频中有 {count} 个为强制。"
+  "multi_tracks.forced_tooltip": "在 {total} 个视频中有 {count} 个为强制。",
+  "status_bar.searching": "正在搜索",
+  "job.title.searching": "正在搜索视频信息。"
 }

@@ -751,5 +751,7 @@
   "hints.checkbox.required": "{count} videóhoz szükséges, nem távolítható el.",
   "hints.checkbox.click": "Kattintson az eredeti kijelölés, az összes ilyen sávval rendelkező videó és a nincs kijelölés közötti váltáshoz.",
   "job.loading.pre_processing": "A fájlból hiányzik a videó bitrátája, ezért egy ideiglenes fájlba remuxoljuk a méréséhez.",
-  "multi_tracks.forced_tooltip": "Kényszerítve {total} videóból {count} esetében."
+  "multi_tracks.forced_tooltip": "Kényszerítve {total} videóból {count} esetében.",
+  "status_bar.searching": "Keresés",
+  "job.title.searching": "Videoinformációk keresése."
 }

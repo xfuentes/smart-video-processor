@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Für {count} Videos erforderlich, kann nicht entfernt werden.",
   "hints.checkbox.click": "Klicken, um zwischen der ursprünglichen Auswahl, allen Videos mit diesem Track und keinem zu wechseln.",
   "job.loading.pre_processing": "Die Video-Bitrate fehlt in der Datei; sie wird in eine temporäre Datei gemuxt, um sie zu messen.",
-  "multi_tracks.forced_tooltip": "In {count} von {total} Videos erzwungen."
+  "multi_tracks.forced_tooltip": "In {count} von {total} Videos erzwungen.",
+  "status_bar.searching": "Suche läuft",
+  "job.title.searching": "Videoinformationen werden gesucht."
 }

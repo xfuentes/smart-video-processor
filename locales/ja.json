@@ -751,5 +751,7 @@
   "hints.checkbox.required": "{count}本の動画で必須のため、削除できません。",
   "hints.checkbox.click": "クリックすると、元の選択、このトラックを持つすべての動画、なしの順に切り替わります。",
   "job.loading.pre_processing": "ファイルに動画のビットレートがないため、測定用に一時ファイルへリマックスしています。",
-  "multi_tracks.forced_tooltip": "{total}本中{count}本の動画で強制されています。"
+  "multi_tracks.forced_tooltip": "{total}本中{count}本の動画で強制されています。",
+  "status_bar.searching": "検索中",
+  "job.title.searching": "動画情報を検索しています。"
 }

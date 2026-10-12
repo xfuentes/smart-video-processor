@@ -751,5 +751,7 @@
   "hints.checkbox.required": "مطلوب لـ {count} من مقاطع الفيديو، لا يمكن إزالته.",
   "hints.checkbox.click": "انقر للتبديل بين التحديد الأصلي، وكل مقطع فيديو يحتوي على هذا المسار، وبدون أي منها.",
   "job.loading.pre_processing": "معدل بت الفيديو غير موجود في الملف، تتم إعادة دمجه في ملف مؤقت لقياسه.",
-  "multi_tracks.forced_tooltip": "مُجبَر في {count} من أصل {total} من مقاطع الفيديو."
+  "multi_tracks.forced_tooltip": "مُجبَر في {count} من أصل {total} من مقاطع الفيديو.",
+  "status_bar.searching": "جارٍ البحث",
+  "job.title.searching": "جارٍ البحث عن معلومات الفيديو."
 }

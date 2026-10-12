@@ -25,7 +25,7 @@ import { currentSettings } from '../Settings'
 import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
 import { debug } from '../../util/log'
-import { simpleCachingAdapter } from './SimpleCachingAdapter'
+import { createCachingAdapter } from './SimpleCachingAdapter'
 
 type TVSeriesEpisode = {
   episodeData: EpisodeData | undefined
@@ -41,7 +41,7 @@ const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w1280'
 export class TMDBClient {
   private static instance: TMDBClient
   rateLimiter = new RateLimiter(10)
-  private readonly tmdb: AxiosInstance | undefined
+  private tmdb: AxiosInstance | undefined
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
@@ -106,7 +106,7 @@ export class TMDBClient {
         params: {
           query: title,
           ...(year ? { year } : {}),
-          language: currentSettings.favoriteLanguages[0] ?? 'en',
+          language: currentSettings.language,
           page: 1,
           include_adult: false
         }
@@ -142,9 +142,9 @@ export class TMDBClient {
     let response: AxiosResponse<TMDBDetails>
     try {
       response = await tmdb.get<TMDBDetails>('/movie/' + tmdbId, {
-        params: currentSettings.favoriteLanguages[0]
+        params: currentSettings.language
           ? {
-              language: currentSettings.favoriteLanguages[0],
+              language: currentSettings.language,
               append_to_response: 'keywords'
             }
           : { append_to_response: 'keywords' }
@@ -220,7 +220,7 @@ export class TMDBClient {
         params: {
           query: title,
           ...(year ? { first_air_date_year: year } : {}),
-          language: currentSettings.favoriteLanguages[0] ?? 'en',
+          language: currentSettings.language,
           page: 1,
           include_adult: false
         }
@@ -260,7 +260,7 @@ export class TMDBClient {
     let seriesResponse: AxiosResponse<TMDBTVDetails>
     try {
       seriesResponse = await tmdb.get<TMDBTVDetails>('/tv/' + tmdbId, {
-        params: currentSettings.favoriteLanguages[0] ? { language: currentSettings.favoriteLanguages[0] } : {}
+        params: currentSettings.language ? { language: currentSettings.language } : {}
       })
     } catch (error) {
       debug('log.tmdb.api_error', { defaultValue: 'TMDB API error: {message}', message: String(error) })
@@ -278,7 +278,7 @@ export class TMDBClient {
     if (episodeNumber !== undefined) {
       try {
         const seasonResponse = await tmdb.get<TMDBTVSeasonDetails>(`/tv/${tmdbId}/season/${season ?? 1}`, {
-          params: currentSettings.favoriteLanguages[0] ? { language: currentSettings.favoriteLanguages[0] } : {}
+          params: currentSettings.language ? { language: currentSettings.language } : {}
         })
         episodeCount = seasonResponse.data.episodes.length
         const episode = seasonResponse.data.episodes.find((e) => e.episode_number === episodeNumber)
@@ -319,14 +319,14 @@ export class TMDBClient {
 
   private async getTMDBSession(): Promise<AxiosInstance> {
     let tmdb: AxiosInstance
-    await this.rateLimiter.slows()
 
     if (this.tmdb !== undefined) {
       tmdb = this.tmdb
       return tmdb
     } else {
-      tmdb = axios.create({ baseURL: TMDB_API_URL, adapter: simpleCachingAdapter })
+      tmdb = axios.create({ baseURL: TMDB_API_URL, adapter: createCachingAdapter(this.rateLimiter) })
       tmdb.defaults.headers.common['Authorization'] = `Bearer ${TMDB_TOKEN}`
+      this.tmdb = tmdb
       return tmdb
     }
   }

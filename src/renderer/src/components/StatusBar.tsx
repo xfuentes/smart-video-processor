@@ -36,6 +36,7 @@ const DISK_REFRESH_MS = 30000
 const QUEUES_REFRESH_MS = 1500
 const noQueues: JobQueues = {
   loading: { running: false, queued: 0, paused: false },
+  searching: { running: false, queued: 0, paused: false },
   encoding: { running: false, queued: 0, paused: false },
   merging: { running: false, queued: 0, paused: false }
 }
@@ -193,17 +194,22 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
     </StatusCell>
   )
 
-  const stageCell = (status: JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING, info: JobQueueInfo) => {
+  const stageCell = (
+    status: JobStatus.LOADING | JobStatus.SEARCHING | JobStatus.ENCODING | JobStatus.MERGING,
+    info: JobQueueInfo
+  ) => {
     const active = info.running || info.queued > 0
     const running = videos.find((video) => video.status === status)
-    const progress = running?.progression?.progress
+    const progress = status === JobStatus.SEARCHING ? info.progress : running?.progression?.progress
     const known = progress !== undefined && progress >= 0
     const label =
       status === JobStatus.LOADING
         ? t('status_bar.loading', { defaultValue: 'Loading' })
-        : status === JobStatus.ENCODING
-          ? t('status_bar.encoding', { defaultValue: 'Encoding' })
-          : t('status_bar.merging', { defaultValue: 'Merging' })
+        : status === JobStatus.SEARCHING
+          ? t('status_bar.searching', { defaultValue: 'Searching' })
+          : status === JobStatus.ENCODING
+            ? t('status_bar.encoding', { defaultValue: 'Encoding' })
+            : t('status_bar.merging', { defaultValue: 'Merging' })
     return cell(
       status,
       <>
@@ -281,6 +287,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
           sizer: succeededText(999)
         })}
       <span style={{ flex: 1 }} />
+      {stageCell(JobStatus.SEARCHING, queues.searching)}
       {stageCell(JobStatus.LOADING, queues.loading)}
       {stageCell(JobStatus.ENCODING, queues.encoding)}
       {stageCell(JobStatus.MERGING, queues.merging)}

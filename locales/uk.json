@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Потрібно для відео: {count}, видалити неможливо.",
   "hints.checkbox.click": "Натисніть, щоб перемикатися між початковим вибором, усіма відео з цією доріжкою та жодним.",
   "job.loading.pre_processing": "У файлі відсутній бітрейт відео, тому виконується ремультиплексування в тимчасовий файл для його вимірювання.",
-  "multi_tracks.forced_tooltip": "Примусова у {count} з {total} відео."
+  "multi_tracks.forced_tooltip": "Примусова у {count} з {total} відео.",
+  "status_bar.searching": "Пошук",
+  "job.title.searching": "Пошук інформації про відео."
 }

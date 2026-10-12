@@ -57,6 +57,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     .map((v): string | undefined => (v.tvShow?.season === undefined ? '' : '' + v.tvShow.season))
     .reduce(keepIfSameReducer)
 
+  const [searching, setSearching] = useState(false)
   const [searchError, setSearchError] = useState<string | undefined>(undefined)
   const [type, setType] = useState<VideoType | undefined>(initialType)
   const [searchBy, setSearchBy] = useState<SearchBy | undefined>(initialSearchBy)
@@ -81,19 +82,35 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
   const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
 
+  const initials = {
+    type: initialType,
+    searchBy: initialSearchBy,
+    tvShowTitle: initialTvShowTitle,
+    tvShowYear: initialTvShowYear,
+    tvShowTVDB: initialTvShowTVDB,
+    tvShowTMDB: initialTvShowTMDB,
+    tvShowOrder: initialTvShowOrder,
+    tvShowSeason: initialTvShowSeason
+  }
   const [previousVideos, setPreviousVideos] = useState(videos)
+  const [previousInitials, setPreviousInitials] = useState(initials)
   if (previousVideos !== videos) {
     setPreviousVideos(videos)
-    type !== initialType && setType(initialType)
-    searchBy !== initialSearchBy && setSearchBy(initialSearchBy)
-    tvShowTitle !== initialTvShowTitle && setTvShowTitle(initialTvShowTitle)
-    tvShowYear !== initialTvShowYear &&
-      setTvShowYear(initialTvShowYear !== undefined ? '' + initialTvShowYear : undefined)
-    tvShowTVDB !== initialTvShowTVDB &&
-      setTvShowTVDB(initialTvShowTVDB !== undefined ? '' + initialTvShowTVDB : undefined)
-    tvShowTMDB !== initialTvShowTMDB &&
-      setTvShowTMDB(initialTvShowTMDB !== undefined ? '' + initialTvShowTMDB : undefined)
-    tvShowOrder !== initialTvShowOrder && setTvShowOrder(initialTvShowOrder)
+    setPreviousInitials(initials)
+    const sameSelection =
+      previousVideos.length === videos.length && previousVideos.every((v, i) => v.uuid === videos[i].uuid)
+    // Typed values are only replaced when the videos data changed or the selection is different.
+    const changed = <K extends keyof typeof initials>(key: K) =>
+      !sameSelection || previousInitials[key] !== initials[key]
+    const asText = (value: number | undefined) => (value !== undefined ? '' + value : undefined)
+    changed('type') && setType(initialType)
+    changed('searchBy') && setSearchBy(initialSearchBy)
+    changed('tvShowTitle') && setTvShowTitle(initialTvShowTitle)
+    changed('tvShowYear') && setTvShowYear(asText(initialTvShowYear))
+    changed('tvShowTVDB') && setTvShowTVDB(asText(initialTvShowTVDB))
+    changed('tvShowTMDB') && setTvShowTMDB(asText(initialTvShowTMDB))
+    changed('tvShowOrder') && setTvShowOrder(initialTvShowOrder)
+    changed('tvShowSeason') && setTvShowSeason(initialTvShowSeason)
 
     searchResults !== initialSearchResults && setSearchResults(initialSearchResults)
     tvShowPoster !== initialTvShowPoster && setTvShowPoster(initialTvShowPoster)
@@ -101,10 +118,10 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     tvShowOverview !== initialTvShowOverview && setTvShowOverview(initialTvShowOverview)
     tvShowOriginalCountries !== initialTvShowOriginalCountries &&
       setTvShowOriginalCountries(initialTvShowOriginalCountries)
-    tvShowSeason !== initialTvShowSeason && setTvShowSeason(initialTvShowSeason)
   }
 
   const search = async () => {
+    setSearching(true)
     await window.api.video
       .multiSearch(
         videos.map((v) => v.uuid),
@@ -124,6 +141,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
         setSearchError(undefined)
       })
       .catch((error) => setSearchError((error as Error).message))
+      .finally(() => setSearching(false))
   }
 
   return (
@@ -364,7 +382,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
         <div className="buttons">
           {type === VideoType.TV_SHOW && (
             <Button
-              disabled={disabled}
+              disabled={disabled || searching}
               size="small"
               appearance={'primary'}
               icon={<Search16Regular />}

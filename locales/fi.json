@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Vaaditaan {count} videolle, joten sitä ei voi poistaa.",
   "hints.checkbox.click": "Napsauta vaihtaaksesi alkuperäisen valinnan, kaikkien tämän raidan sisältävien videoiden ja ei minkään välillä.",
   "job.loading.pre_processing": "Videon bittinopeus puuttuu tiedostosta, joten se remuksoidaan väliaikaiseen tiedostoon bittinopeuden mittaamiseksi.",
-  "multi_tracks.forced_tooltip": "Pakotettu {count}/{total} videossa."
+  "multi_tracks.forced_tooltip": "Pakotettu {count}/{total} videossa.",
+  "status_bar.searching": "Haetaan",
+  "job.title.searching": "Haetaan videon tietoja."
 }

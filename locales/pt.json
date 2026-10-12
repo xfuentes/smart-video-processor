@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Necessário para {count} vídeos, não pode ser removido.",
   "hints.checkbox.click": "Clique para alternar entre a seleção original, todos os vídeos com esta faixa e nenhum.",
   "job.loading.pre_processing": "O bitrate do vídeo não consta do ficheiro; a remuxar para um ficheiro temporário para o medir.",
-  "multi_tracks.forced_tooltip": "Forçada em {count} de {total} vídeos."
+  "multi_tracks.forced_tooltip": "Forçada em {count} de {total} vídeos.",
+  "status_bar.searching": "A pesquisar",
+  "job.title.searching": "A procurar informações do vídeo."
 }

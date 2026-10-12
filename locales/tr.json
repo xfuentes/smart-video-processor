@@ -751,5 +751,7 @@
   "hints.checkbox.required": "{count} video için gerekli, kaldırılamaz.",
   "hints.checkbox.click": "Özgün seçim, bu parçaya sahip tüm videolar ve hiçbiri arasında geçiş yapmak için tıklayın.",
   "job.loading.pre_processing": "Videonun bit hızı dosyada bulunmuyor, ölçmek için geçici bir dosyaya remux ediliyor.",
-  "multi_tracks.forced_tooltip": "{total} videodan {count} tanesinde zorunlu."
+  "multi_tracks.forced_tooltip": "{total} videodan {count} tanesinde zorunlu.",
+  "status_bar.searching": "Aranıyor",
+  "job.title.searching": "Video bilgileri aranıyor."
 }

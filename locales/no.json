@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Påkrevd for {count} videoer, kan ikke fjernes.",
   "hints.checkbox.click": "Klikk for å bytte mellom det opprinnelige utvalget, alle videoer som har dette sporet, og ingen.",
   "job.loading.pre_processing": "Videobitraten mangler i filen, så den remuxes til en midlertidig fil for å måle den.",
-  "multi_tracks.forced_tooltip": "Tvunget i {count} av {total} videoer."
+  "multi_tracks.forced_tooltip": "Tvunget i {count} av {total} videoer.",
+  "status_bar.searching": "Søker",
+  "job.title.searching": "Søker etter videoinformasjon."
 }

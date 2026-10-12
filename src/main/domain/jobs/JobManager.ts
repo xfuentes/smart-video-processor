@@ -17,7 +17,7 @@
  */
 
 import { Job } from './Job'
-import { JobStatus, JobType } from '../../../common/@types/Job'
+import { JobQueueInfo, JobStatus, JobType } from '../../../common/@types/Job'
 import { info } from '../../util/log'
 
 export class JobManager {
@@ -26,12 +26,14 @@ export class JobManager {
 
   private runningJobs: { [K in JobType]: Job<object | unknown> | undefined } = {
     [JobStatus.LOADING]: undefined as Job<object | unknown> | undefined,
+    [JobStatus.SEARCHING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.ENCODING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.GRABBING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.MERGING]: undefined as Job<object | unknown> | undefined
   }
   private queues: { [K in JobType]: Job<object | unknown>[] } = {
     [JobStatus.LOADING]: [] as Job<object | unknown>[],
+    [JobStatus.SEARCHING]: [] as Job<object | unknown>[],
     [JobStatus.ENCODING]: [] as Job<object | unknown>[],
     [JobStatus.GRABBING]: [] as Job<object | unknown>[],
     [JobStatus.MERGING]: [] as Job<object | unknown>[]
@@ -110,11 +112,12 @@ export class JobManager {
     }
   }
 
-  getQueueInfo(jobType: JobType): { running: boolean; queued: number; paused: boolean } {
+  getQueueInfo(jobType: JobType): JobQueueInfo {
     return {
       running: this.runningJobs[jobType] !== undefined,
       queued: this.queues[jobType].length,
-      paused: this.isPaused(jobType)
+      paused: this.isPaused(jobType),
+      progress: this.runningJobs[jobType]?.getProgression().progress
     }
   }
 

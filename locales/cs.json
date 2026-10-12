@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Vyžadováno u {count} videí, nelze odebrat.",
   "hints.checkbox.click": "Kliknutím přepnete mezi původním výběrem, každým videem s touto stopou a žádným.",
   "job.loading.pre_processing": "V souboru chybí bitrate videa, remuxuje se proto do dočasného souboru, aby se změřil.",
-  "multi_tracks.forced_tooltip": "Vynuceno v {count} z {total} videí."
+  "multi_tracks.forced_tooltip": "Vynuceno v {count} z {total} videí.",
+  "status_bar.searching": "Vyhledávání",
+  "job.title.searching": "Vyhledávání informací o videu."
 }

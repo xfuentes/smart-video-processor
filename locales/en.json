@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Required for {count} videos, it cannot be removed.",
   "hints.checkbox.click": "Click to switch between the original selection, every video having this track and none.",
   "job.loading.pre_processing": "The video bitrate is missing from the file, remuxing it to a temporary file to measure it.",
-  "multi_tracks.forced_tooltip": "Forced in {count} of {total} videos."
+  "multi_tracks.forced_tooltip": "Forced in {count} of {total} videos.",
+  "status_bar.searching": "Searching",
+  "job.title.searching": "Searching video information."
 }

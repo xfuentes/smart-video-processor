@@ -20,6 +20,7 @@ export enum JobStatus {
   WAITING = 'Waiting',
   QUEUED = 'Queued',
   LOADING = 'Loading',
+  SEARCHING = 'Searching',
   GRABBING = 'Grabbing',
   ENCODING = 'Encoding',
   MERGING = 'Merging',
@@ -30,10 +31,16 @@ export enum JobStatus {
   PAUSED = 'Paused'
 }
 
-export type JobType = JobStatus.LOADING | JobStatus.ENCODING | JobStatus.MERGING | JobStatus.GRABBING
+export type JobType =
+  JobStatus.LOADING | JobStatus.SEARCHING | JobStatus.ENCODING | JobStatus.MERGING | JobStatus.GRABBING
 
-export type JobQueueInfo = { running: boolean; queued: number; paused: boolean }
-export type JobQueues = { loading: JobQueueInfo; encoding: JobQueueInfo; merging: JobQueueInfo }
+export type JobQueueInfo = { running: boolean; queued: number; paused: boolean; progress?: number }
+export type JobQueues = {
+  loading: JobQueueInfo
+  searching: JobQueueInfo
+  encoding: JobQueueInfo
+  merging: JobQueueInfo
+}
 
 export interface IJob {
   readonly uuid: string

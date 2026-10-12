@@ -35,7 +35,9 @@ import { Hint } from './Hint'
 import { Job } from './jobs/Job'
 import { CopyJob } from './jobs/CopyJob'
 import { ProcessingJob } from './jobs/ProcessingJob'
+import { EpisodeOrder } from '../../common/@types/EpisodeOrder'
 import { FileInfoLoadingJob } from './jobs/FileInfoLoadingJob'
+import { SearchingJob } from './jobs/SearchingJob'
 import { Strings } from '../../common/Strings'
 import { Encoding } from './Encoding'
 import { EncodingJob } from './jobs/EncodingJob'
@@ -376,7 +378,7 @@ export class Video implements IVideo {
 
     if (this.type !== VideoType.OTHER && searchEnabled) {
       // Only manual mode enabled for custom videos
-      await this.search()
+      await SearchingJob.queueAutoSearch(this)
     } else if (this.type === VideoType.OTHER) {
       this.showWarning('video.message.complete_required_info', {
         defaultValue: 'Please complete the required information for this custom video.'
@@ -482,8 +484,32 @@ export class Video implements IVideo {
     }
   }
 
+  async changeTvShowOrder(order: EpisodeOrder) {
+    this.searching = true
+    this.fireChangeEvent()
+    try {
+      const orderChanged = this.tvShow.order !== order
+      await this.tvShow.setOrder(order)
+      this.searching = false
+      if (orderChanged && this.status !== JobStatus.WARNING) {
+        await this.analyse()
+      }
+    } catch (err) {
+      this.showWarning('video.message.error_with_hint', {
+        defaultValue: '{error}. Please check the information provided and try again.',
+        error: (err as Error).message
+      })
+    } finally {
+      this.searching = false
+      this.fireChangeEvent()
+    }
+  }
+
   prepareMultiSearch(data?: MultiSearchInputData, episodeOffset = 0) {
     this.searching = true
+    this.status = JobStatus.QUEUED
+    this.message = ''
+    this.progression = { progress: -1 }
     if (data && data.type === VideoType.TV_SHOW) {
       if (data.type !== undefined) this.setType(data.type)
       if (data.searchBy !== undefined) this.setSearchBy(data.searchBy)

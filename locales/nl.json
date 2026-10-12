@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Vereist voor {count} video's, kan niet worden verwijderd.",
   "hints.checkbox.click": "Klik om te wisselen tussen de oorspronkelijke selectie, elke video met dit spoor en geen enkele.",
   "job.loading.pre_processing": "De videobitrate ontbreekt in het bestand, het wordt geremuxt naar een tijdelijk bestand om die te meten.",
-  "multi_tracks.forced_tooltip": "Geforceerd in {count} van {total} video's."
+  "multi_tracks.forced_tooltip": "Geforceerd in {count} van {total} video's.",
+  "status_bar.searching": "Zoeken",
+  "job.title.searching": "Videogegevens zoeken."
 }

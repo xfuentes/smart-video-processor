@@ -23,10 +23,14 @@ import { VideoController } from '../controller/VideoController'
 import { VIDEO_EXTENSIONS } from '../util/videoExtensions'
 import { error } from '../util/log'
 
+const FLUSH_DELAY_MS = 3000
+
 export class AutoAddWatcher {
   private static instance: AutoAddWatcher
   private watcher: FSWatcher | null = null
   private watchedPath: string | null = null
+  private pendingFiles = new Set<string>()
+  private flushTimer: NodeJS.Timeout | null = null
 
   static getInstance() {
     if (!AutoAddWatcher.instance) {
@@ -59,7 +63,8 @@ export class AutoAddWatcher {
     })
     this.watcher.on('add', (filePath) => {
       if (VIDEO_EXTENSIONS.has(extname(filePath).toLowerCase())) {
-        void VideoController.getInstance().openFiles([filePath])
+        this.pendingFiles.add(filePath)
+        this.scheduleFlush()
       }
     })
     this.watcher.on('error', (err) => {
@@ -67,8 +72,26 @@ export class AutoAddWatcher {
     })
   }
 
+  // Files detected close together are added as a batch so they get sorted.
+  private scheduleFlush() {
+    if (this.flushTimer) {
+      clearTimeout(this.flushTimer)
+    }
+    this.flushTimer = setTimeout(() => {
+      this.flushTimer = null
+      const files = [...this.pendingFiles]
+      this.pendingFiles.clear()
+      void VideoController.getInstance().openFiles(files)
+    }, FLUSH_DELAY_MS)
+  }
+
   async stop() {
     this.watchedPath = null
+    if (this.flushTimer) {
+      clearTimeout(this.flushTimer)
+      this.flushTimer = null
+    }
+    this.pendingFiles.clear()
     if (this.watcher) {
       const watcher = this.watcher
       this.watcher = null

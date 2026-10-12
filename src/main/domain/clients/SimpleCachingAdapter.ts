@@ -17,6 +17,7 @@
  */
 
 import axios, { AxiosAdapter, AxiosResponse, getAdapter, InternalAxiosRequestConfig } from 'axios'
+import { RateLimiter } from './RateLimiter'
 import { debug } from '../../util/log'
 
 const cache = new Map<string, Promise<AxiosResponse>>()
@@ -26,23 +27,25 @@ function generateKey(config: InternalAxiosRequestConfig): string {
   const baseUrl = config.baseURL || ''
   const params = new URLSearchParams(config.params).toString()
   const method = config.method || 'get'
-  return `${method}:${baseUrl}${url}?${params}`
+  const language = String(config.headers?.get?.('Accept-Language') ?? '')
+  return `${method}:${baseUrl}${url}?${params}:${language}`
 }
 
-export const simpleCachingAdapter: AxiosAdapter = async (
-  config: InternalAxiosRequestConfig
-): Promise<AxiosResponse> => {
-  const key = generateKey(config)
+// Only real network calls are slowed down, cached responses are returned immediately.
+export const createCachingAdapter =
+  (rateLimiter: RateLimiter): AxiosAdapter =>
+  async (config: InternalAxiosRequestConfig): Promise<AxiosResponse> => {
+    const key = generateKey(config)
 
-  if (cache.has(key)) {
-    debug('log.cache.reading', { defaultValue: '{key} -> READING FROM CACHE', key })
-    return cache.get(key)!
-  } else {
-    debug('log.cache.caching', { defaultValue: '{key} -> CACHING RESPONSE', key })
+    if (cache.has(key)) {
+      debug('log.cache.reading', { defaultValue: '{key} -> READING FROM CACHE', key })
+      return cache.get(key)!
+    } else {
+      debug('log.cache.caching', { defaultValue: '{key} -> CACHING RESPONSE', key })
+    }
+
+    const defaultAdapter = getAdapter(axios.defaults.adapter)
+    const response = rateLimiter.slows().then(() => defaultAdapter(config))
+    cache.set(key, response)
+    return response
   }
-
-  const defaultAdapter = getAdapter(axios.defaults.adapter)
-  const response = defaultAdapter(config)
-  cache.set(key, response)
-  return response
-}

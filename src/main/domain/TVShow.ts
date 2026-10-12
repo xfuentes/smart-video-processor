@@ -126,8 +126,7 @@ export class TVShow implements ITVShow {
       throw new Error('TVDB ID is mandatory.')
     }
 
-    this.video.message = _('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
-    info('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
+    this.video.showLoading('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
     if (episodeSearchFailed) {
       this.clearEpisodeDetails()
     }
@@ -251,7 +250,9 @@ export class TVShow implements ITVShow {
           const filename = `episode-${position}`
           fs.mkdirSync(tempDirectory, { recursive: true })
           const fullPath = Path.join(tempDirectory, 'TVDB-' + this.theTVDB + '-' + filename + '.jpg')
-          this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
+          this.episodePoster = Files.fileExistsAndIsReadable(fullPath)
+            ? fullPath
+            : await Files.downloadFile(this.episodePosterURL, fullPath)
           debug('log.tvdb.episode_image', {
             defaultValue: 'Wrote episode image file://{poster}',
             poster: this.episodePoster
@@ -277,8 +278,7 @@ export class TVShow implements ITVShow {
       throw new Error('TMDB ID is mandatory.')
     }
 
-    this.video.message = _('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
-    info('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
+    this.video.showLoading('video.message.retrieving_episode_details', { defaultValue: 'Retrieving episode details' })
     const matchedSearchResult = this.video.searchResults?.find((r) => r.id === this.theMovieDB)
     const { episodeData, seriesData, episodeCount } = await TMDBClient.getInstance().retrieveTVSeriesDetails(
       this.theMovieDB,
@@ -367,7 +367,9 @@ export class TVShow implements ITVShow {
           const filename = `episode-${position}`
           fs.mkdirSync(tempDirectory, { recursive: true })
           const fullPath = Path.join(tempDirectory, 'TMDB-' + this.theMovieDB + '-' + filename + '.jpg')
-          this.episodePoster = await Files.downloadFile(this.episodePosterURL, fullPath)
+          this.episodePoster = Files.fileExistsAndIsReadable(fullPath)
+            ? fullPath
+            : await Files.downloadFile(this.episodePosterURL, fullPath)
           debug('log.tmdb.episode_image', {
             defaultValue: 'Wrote episode image file://{poster}',
             poster: this.episodePoster

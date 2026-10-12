@@ -751,5 +751,7 @@
   "hints.checkbox.required": "Απαιτείται για {count} βίντεο, δεν μπορεί να αφαιρεθεί.",
   "hints.checkbox.click": "Κάντε κλικ για εναλλαγή μεταξύ της αρχικής επιλογής, όλων των βίντεο που έχουν αυτό το κομμάτι και κανενός.",
   "job.loading.pre_processing": "Το bitrate του βίντεο λείπει από το αρχείο, γίνεται remux σε ένα προσωρινό αρχείο για τη μέτρησή του.",
-  "multi_tracks.forced_tooltip": "Αναγκαστικό σε {count} από {total} βίντεο."
+  "multi_tracks.forced_tooltip": "Αναγκαστικό σε {count} από {total} βίντεο.",
+  "status_bar.searching": "Αναζήτηση",
+  "job.title.searching": "Αναζήτηση πληροφοριών βίντεο."
 }
