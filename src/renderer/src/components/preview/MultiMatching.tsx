@@ -333,31 +333,30 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
             </div>
             {(searchBy === SearchBy.TITLE_POSITION ||
               searchBy === SearchBy.TVDB_POSITION ||
-              searchBy === SearchBy.TMDB) &&
-              tvShowOrder !== 'absolute' && (
-                <div>
-                  <Field
+              searchBy === SearchBy.TMDB) && (
+              <div>
+                <Field
+                  size="small"
+                  label={_('matching.field.season.label', { defaultValue: 'Season' })}
+                  required
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Input
                     size="small"
-                    label={_('matching.field.season.label', { defaultValue: 'Season' })}
-                    required
-                    className={disabled ? 'disabled' : ''}
-                  >
-                    <Input
-                      size="small"
-                      type="number"
-                      disabled={disabled}
-                      value={tvShowSeason ?? ''}
-                      placeholder={
-                        initialTvShowSeason === undefined
-                          ? _('matching.multiple_values', { defaultValue: 'Multiple values' })
-                          : undefined
-                      }
-                      style={{ minWidth: 1 }}
-                      onChange={(_ev, data) => setTvShowSeason(data.value)}
-                    />
-                  </Field>
-                </div>
-              )}
+                    type="number"
+                    disabled={disabled}
+                    value={tvShowSeason ?? ''}
+                    placeholder={
+                      initialTvShowSeason === undefined
+                        ? _('matching.multiple_values', { defaultValue: 'Multiple values' })
+                        : undefined
+                    }
+                    style={{ minWidth: 1 }}
+                    onChange={(_ev, data) => setTvShowSeason(data.value)}
+                  />
+                </Field>
+              </div>
+            )}
             {(searchBy === SearchBy.TITLE_POSITION ||
               searchBy === SearchBy.TVDB_POSITION ||
               searchBy === SearchBy.TMDB) && (

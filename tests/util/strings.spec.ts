@@ -82,3 +82,9 @@ test('Matches Joyeux noel', () => {
   const goodScore = Strings.getMatchScoreByKeywords('Joyeux Noël', needle, true)
   expect(goodScore).toBe(8)
 })
+
+test('formatEpisodePosition with several episodes in the video', () => {
+  expect(Strings.formatEpisodePosition('official', 9, 1, undefined, 26, 2)).toBe('S09E01-E02')
+  expect(Strings.formatEpisodePosition('official', 9, 1, undefined, 26, 1)).toBe('S09E01')
+  expect(Strings.formatEpisodePosition('absolute', undefined, undefined, 242, 500, 3)).toBe('E242-E244')
+})

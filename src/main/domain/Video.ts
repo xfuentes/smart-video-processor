@@ -1427,7 +1427,8 @@ export class Video implements IVideo {
       this.tvShow.title = Files.megaTrim(parsed.title ?? '')
       this.tvShow.season = parsed.season
       this.tvShow.episode = parsed.episode
-      this.tvShow.episodeEnd = parsed.episodeEnd
+      this.tvShow.videoEpisodeCount =
+        parsed.episode !== undefined && parsed.episodeEnd !== undefined ? parsed.episodeEnd - parsed.episode + 1 : 1
       this.tvShow.episodeTitle = parsed.episodeTitle ? Files.megaTrim(parsed.episodeTitle) : ''
       if (parsed.absoluteEpisode !== undefined && parsed.season === undefined) {
         this.tvShow.absoluteEpisode = parsed.absoluteEpisode

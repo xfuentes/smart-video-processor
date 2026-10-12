@@ -363,15 +363,18 @@ export class Strings {
     episode: number | undefined,
     absoluteEpisode: number | undefined,
     episodeCount: number = 99,
-    episodeEnd?: number
+    videoEpisodeCount: number = 1
   ): string {
     if (order === 'absolute' && absoluteEpisode !== undefined) {
-      return `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
+      const start = `E${this.toLeadingZeroNumber(absoluteEpisode, episodeCount)}`
+      return videoEpisodeCount > 1
+        ? `${start}-E${this.toLeadingZeroNumber(absoluteEpisode + videoEpisodeCount - 1, episodeCount)}`
+        : start
     }
     if (season !== undefined && episode !== undefined) {
       const start = `S${this.toLeadingZeroNumber(season, 99)}E${this.toLeadingZeroNumber(episode, episodeCount)}`
-      return episodeEnd !== undefined && episodeEnd > episode
-        ? `${start}-E${this.toLeadingZeroNumber(episodeEnd, episodeCount)}`
+      return videoEpisodeCount > 1
+        ? `${start}-E${this.toLeadingZeroNumber(episode + videoEpisodeCount - 1, episodeCount)}`
         : start
     }
     return ''

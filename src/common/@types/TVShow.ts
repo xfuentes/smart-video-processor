@@ -25,7 +25,7 @@ export interface ITVShow {
   order?: EpisodeOrder
   season?: number
   episode?: number
-  episodeEnd?: number
+  videoEpisodeCount: number
   episodeTitle: string
   year?: number
   overview?: string

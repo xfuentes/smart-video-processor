@@ -42,9 +42,9 @@ export class TVShow implements ITVShow {
   public order?: EpisodeOrder
   public season?: number
   public episode?: number
-  public episodeEnd?: number
+  public videoEpisodeCount: number = 1
   public episodeTitle: string = ''
-  private episodeEndTitle: string = ''
+  private followingEpisodeTitles: string[] = []
   public year?: number
   public overview?: string
   public episodeOverview?: string
@@ -163,20 +163,29 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
-    let episodeEndData: EpisodeData | undefined
-    this.episodeEndTitle = ''
-    if (this.hasEpisodeRange() && episodeData) {
-      episodeEndData = (
-        await TVDBClient.getInstance().retrieveSeriesDetails(
-          this.theTVDB,
-          'official',
-          this.episodeEnd,
-          undefined,
-          episodeData.seasonNumber
-        )
-      ).episodeData
-      this.episodeEndTitle = episodeEndData?.title ?? ''
-    }
+    const followingEpisodesFound =
+      !episodeData ||
+      (await this.loadFollowingEpisodes((offset) =>
+        this.order === 'absolute'
+          ? TVDBClient.getInstance()
+              .retrieveSeriesDetails(
+                this.theTVDB!,
+                'absolute',
+                undefined,
+                (this.absoluteEpisode ?? 0) + offset,
+                undefined
+              )
+              .then((details) => details.episodeData)
+          : TVDBClient.getInstance()
+              .retrieveSeriesDetails(
+                this.theTVDB!,
+                this.order ?? 'official',
+                (this.episode ?? 0) + offset,
+                undefined,
+                episodeData.seasonNumber
+              )
+              .then((details) => details.episodeData)
+      ))
 
     this.tvdbEpisodeId = undefined
     if (this.episode || this.absoluteEpisode) {
@@ -236,7 +245,7 @@ export class TVShow implements ITVShow {
           defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
         })
       }
-    } else if (!episodeData || (this.hasEpisodeRange() && !episodeEndData)) {
+    } else if (!episodeData || !followingEpisodesFound) {
       this.video.showWarning('video.message.tvdb_episode_not_found', {
         defaultValue: 'Episode not found. Please check the information provided and try again.'
       })
@@ -315,18 +324,13 @@ export class TVShow implements ITVShow {
       this.year = seriesData.year
     }
 
-    let episodeEndData: EpisodeData | undefined
-    this.episodeEndTitle = ''
-    if (this.hasEpisodeRange() && episodeData) {
-      episodeEndData = (
-        await TMDBClient.getInstance().retrieveTVSeriesDetails(
-          this.theMovieDB,
-          this.episodeEnd,
-          episodeData.seasonNumber
-        )
-      ).episodeData
-      this.episodeEndTitle = episodeEndData?.title ?? ''
-    }
+    const followingEpisodesFound =
+      !episodeData ||
+      (await this.loadFollowingEpisodes((offset) =>
+        TMDBClient.getInstance()
+          .retrieveTVSeriesDetails(this.theMovieDB!, (this.episode ?? 0) + offset, episodeData.seasonNumber)
+          .then((details) => details.episodeData)
+      ))
 
     if (this.episode && episodeData) {
       this.season = episodeData.seasonNumber
@@ -360,7 +364,7 @@ export class TVShow implements ITVShow {
       this.video.showWarning('video.message.tvdb_episode_number_required', {
         defaultValue: 'Episode number not specified. Please provide a valid episode number and try again.'
       })
-    } else if (!episodeData || (this.hasEpisodeRange() && !episodeEndData)) {
+    } else if (!episodeData || !followingEpisodesFound) {
       this.video.showWarning('video.message.tvdb_episode_not_found', {
         defaultValue: 'Episode not found. Please check the information provided and try again.'
       })
@@ -406,13 +410,17 @@ export class TVShow implements ITVShow {
     }
   }
 
-  private hasEpisodeRange() {
-    return (
-      this.order !== 'absolute' &&
-      this.episode !== undefined &&
-      this.episodeEnd !== undefined &&
-      this.episodeEnd > this.episode
-    )
+  // Loads the episodes following the first one when the video contains several episodes.
+  private async loadFollowingEpisodes(load: (offset: number) => Promise<EpisodeData | undefined>) {
+    this.followingEpisodeTitles = []
+    for (let offset = 1; offset < this.videoEpisodeCount; offset++) {
+      const data = await load(offset)
+      if (!data) {
+        return false
+      }
+      this.followingEpisodeTitles.push(data.title)
+    }
+    return true
   }
 
   private formatPosition() {
@@ -422,14 +430,12 @@ export class TVShow implements ITVShow {
       this.episode,
       this.absoluteEpisode,
       this.episodeCount,
-      this.hasEpisodeRange() ? this.episodeEnd : undefined
+      this.videoEpisodeCount
     )
   }
 
   private formatVideoTitle(position: string) {
-    const episodeTitles = [this.episodeTitle, this.hasEpisodeRange() ? this.episodeEndTitle : '']
-      .filter(Boolean)
-      .join(' + ')
+    const episodeTitles = [this.episodeTitle, ...this.followingEpisodeTitles].filter(Boolean).join(' + ')
     return `${this.title}${position ? ' - ' + position : ''}${episodeTitles ? ' - ' + episodeTitles : ''}`
   }
 
@@ -464,9 +470,7 @@ export class TVShow implements ITVShow {
   }
 
   setEpisodeCount(newEpisodeCount: string) {
-    const count = Numbers.toNumber(newEpisodeCount)
-    this.episodeEnd =
-      this.episode !== undefined && count !== undefined && count > 1 ? this.episode + count - 1 : undefined
+    this.videoEpisodeCount = Math.max(Numbers.toNumber(newEpisodeCount) ?? 1, 1)
   }
 
   setAbsoluteEpisode(newAbsoluteEpisode: string) {
@@ -539,7 +543,6 @@ export class TVShow implements ITVShow {
   private clearEpisodeNumbers() {
     this.season = undefined
     this.episode = undefined
-    this.episodeEnd = undefined
     this.absoluteEpisode = undefined
   }
 
@@ -588,7 +591,7 @@ export class TVShow implements ITVShow {
       order: this.order,
       season: this.season,
       episode: this.episode,
-      episodeEnd: this.hasEpisodeRange() ? this.episodeEnd : undefined,
+      videoEpisodeCount: this.videoEpisodeCount,
       episodeTitle: this.episodeTitle,
       year: this.year,
       overview: this.overview,
