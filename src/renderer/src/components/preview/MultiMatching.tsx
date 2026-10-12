@@ -53,6 +53,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   const initialTvShowOriginalCountries = videos
     .map((v): Country[] | undefined => v.tvShow?.originalCountries)
     .reduce(keepIfSameReducer)
+  const initialTvShowEpisodesPerVideo = videos
+    .map((v): string | undefined => '' + (v.tvShow?.videoEpisodeCount ?? 1))
+    .reduce(keepIfSameReducer)
   const initialTvShowSeason = videos
     .map((v): string | undefined => (v.tvShow?.season === undefined ? '' : '' + v.tvShow.season))
     .reduce(keepIfSameReducer)
@@ -81,7 +84,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
   )
   const [tvShowSeason, setTvShowSeason] = useState<string | undefined>(initialTvShowSeason)
   const [tvShowStartEpisode, setTvShowStartEpisode] = useState('')
-  const [tvShowEpisodesPerVideo, setTvShowEpisodesPerVideo] = useState('')
+  const [tvShowEpisodesPerVideo, setTvShowEpisodesPerVideo] = useState<string | undefined>(
+    initialTvShowEpisodesPerVideo
+  )
 
   const initials = {
     type: initialType,
@@ -91,7 +96,8 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     tvShowTVDB: initialTvShowTVDB,
     tvShowTMDB: initialTvShowTMDB,
     tvShowOrder: initialTvShowOrder,
-    tvShowSeason: initialTvShowSeason
+    tvShowSeason: initialTvShowSeason,
+    tvShowEpisodesPerVideo: initialTvShowEpisodesPerVideo
   }
   const [previousVideos, setPreviousVideos] = useState(videos)
   const [previousInitials, setPreviousInitials] = useState(initials)
@@ -112,6 +118,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
     changed('tvShowTMDB') && setTvShowTMDB(asText(initialTvShowTMDB))
     changed('tvShowOrder') && setTvShowOrder(initialTvShowOrder)
     changed('tvShowSeason') && setTvShowSeason(initialTvShowSeason)
+    changed('tvShowEpisodesPerVideo') && setTvShowEpisodesPerVideo(initialTvShowEpisodesPerVideo)
 
     searchResults !== initialSearchResults && setSearchResults(initialSearchResults)
     tvShowPoster !== initialTvShowPoster && setTvShowPoster(initialTvShowPoster)
@@ -393,7 +400,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       type="number"
                       min={1}
                       disabled={disabled}
-                      value={tvShowEpisodesPerVideo}
+                      value={tvShowEpisodesPerVideo ?? ''}
                       placeholder={_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                       style={{ minWidth: 1 }}
                       onChange={(_ev, data) => setTvShowEpisodesPerVideo(data.value)}
