@@ -525,7 +525,7 @@ export class Video implements IVideo {
       const startEpisode = Numbers.toNumber(data.tvShowStartEpisode ?? '')
       const requestedPerVideo = Numbers.toNumber(data.tvShowEpisodesPerVideo ?? '')
       if (requestedPerVideo !== undefined) {
-        const episodesPerVideo = Math.max(requestedPerVideo, 1)
+        const episodesPerVideo = Math.min(Math.max(requestedPerVideo, 1), 2)
         if (startEpisode !== undefined) {
           // The first selected video gets the entered number, the following ones are numbered sequentially.
           this.tvShow.setPosition(startEpisode + episodeOffset * episodesPerVideo)
@@ -1301,6 +1301,9 @@ export class Video implements IVideo {
     }
 
     const finalOutputDirectory = path.join(outputDirectory, ...subDirs)
+    if (this.type === VideoType.TV_SHOW) {
+      this.writeSeriesDisplayOrder(path.join(outputDirectory, subDirs[0]))
+    }
     this.finalOutputPath = Files.computeOutputPath(path.basename(this.sourcePath), this.changes, finalOutputDirectory)
 
     if (sourcePath === this.sourcePath && this.isRenameOnly()) {
@@ -1335,6 +1338,53 @@ export class Video implements IVideo {
       Files.cleanupFiles(this.encodedPath)
     }
     this.encodedPath = undefined
+  }
+
+  // Tells Jellyfin which TheTVDB order the episodes are numbered with, since it uses the aired order by default.
+  private writeSeriesDisplayOrder(seriesDirectory: string) {
+    if (currentSettings.namingConvention !== NamingConvention.JELLYFIN || this.tvShow.theTVDB === undefined) {
+      return
+    }
+    const order = this.tvShow.order
+    const displayOrderPattern = /[ \t]*<displayorder>[^<]*<\/displayorder>[ \t]*\r?\n?/i
+    const nfoPath = path.join(seriesDirectory, 'tvshow.nfo')
+    try {
+      const exists = fs.existsSync(nfoPath)
+      const content = exists ? fs.readFileSync(nfoPath, 'utf-8') : ''
+      if (order === undefined || order === 'official') {
+        // The aired order is the default, so an order left by a previous match is removed.
+        if (!displayOrderPattern.test(content)) {
+          return
+        }
+        const cleaned = content.replace(displayOrderPattern, '')
+        if (/<tvshow>\s*<\/tvshow>/i.test(cleaned)) {
+          fs.rmSync(nfoPath)
+        } else {
+          fs.writeFileSync(nfoPath, cleaned)
+        }
+        return
+      }
+      const element = `<displayorder>${order}</displayorder>`
+      if (!exists) {
+        fs.mkdirSync(seriesDirectory, { recursive: true })
+        fs.writeFileSync(
+          nfoPath,
+          `<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n<tvshow>\n  ${element}\n</tvshow>\n`
+        )
+      } else if (displayOrderPattern.test(content)) {
+        fs.writeFileSync(
+          nfoPath,
+          content.replace(displayOrderPattern, (match) => match.replace(/<displayorder>.*<\/displayorder>/i, element))
+        )
+      } else if (content.includes('</tvshow>')) {
+        fs.writeFileSync(nfoPath, content.replace('</tvshow>', `  ${element}\n</tvshow>`))
+      }
+    } catch (e) {
+      warning('log.video.series_nfo_failed', {
+        defaultValue: 'Unable to write the series display order in tvshow.nfo: {message}',
+        message: String(e)
+      })
+    }
   }
 
   /**

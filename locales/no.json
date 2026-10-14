@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativ 2",
   "episode_order.default.label": "Standard",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Offisiell",
+  "episode_order.official.label": "Sendingsrekkefølge",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Bla gjennom",
   "file_selector.clear": "Tøm",
@@ -612,6 +612,7 @@
   "log.video.hints": "### TIPS ###",
   "log.video.preprocessing": "Forhåndsbehandler videodeler",
   "log.video.cleanup": "Rydder midlertidige filer for video [{filename}]...",
+  "log.video.series_nfo_failed": "Klarte ikke å skrive seriens visningsrekkefølge i tvshow.nfo: {message}",
   "log.files.loading": "Laster inn filen {filename}",
   "log.files.writing": "Skriver filen {filename}",
   "log.download.error": "Feil ved nedlasting av fil: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Tvunget i {count} av {total} videoer.",
   "status_bar.searching": "Søker",
   "job.title.searching": "Søker etter videoinformasjon.",
-  "matching.field.episode_count.label": "Episoder i filen",
-  "matching.field.episodes_per_video.label": "Episoder per video",
-  "about.news.version_3_2_0.items": "Lagt til støtte for videoer som inneholder flere episoder, med navn som Show - S09E01-E02 - Title 1 + Title 2, der antall episoder gjettes ut fra videoens varighet\nFlere videoer kan nå nummereres på nytt samtidig, og antall episoder tas med i beregningen\nLagt til varighet i fanen Spor når flere videoer redigeres\nSøk etter episodenavn fungerer nå også med TheMovieDB\nSøk etter videoinformasjon legges nå i kø, og fremdriften vises i statuslinjen"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Merk av når videoen inneholder to episoder.",
+  "about.news.version_3_2_0.items": "Lagt til støtte for videoer som inneholder flere episoder, med navn som Show - S09E01-E02 - Title 1 + Title 2, der antall episoder gjettes ut fra videoens varighet\nFlere videoer kan nå nummereres på nytt samtidig, og antall episoder tas med i beregningen\nLagt til varighet i fanen Spor når flere videoer redigeres\nSøk etter episodenavn fungerer nå også med TheMovieDB\nSøk etter videoinformasjon legges nå i kø, og fremdriften vises i statuslinjen",
+  "about.news.version_3_3_0.items": "Episoderekkefølgelisten viser nå bare rekkefølgene som er definert av TheTVDB for serien, med navnene TheTVDB gir dem, og Absolute er alltid tilgjengelig.\nDen offisielle episoderekkefølgen heter nå Sendt\nFeltene Episoder i fil og Episoder per video erstattes av en ×2-avmerkingsboks for videoer som inneholder to episoder.\nDobbelte episoder oppdages nå mer pålitelig fra videoens varighet\nMed navnekonvensjonen Jellyfin skrives seriens visningsrekkefølge nå til tvshow.nfo når en annen rekkefølge enn Aired brukes"
 }

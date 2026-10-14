@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "대체 순서 2",
   "episode_order.default.label": "기본",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "공식",
+  "episode_order.official.label": "방영순",
   "episode_order.regional.label": "지역별",
   "file_selector.browse": "찾아보기",
   "file_selector.clear": "지우기",
@@ -612,6 +612,7 @@
   "log.video.hints": "### 힌트 ###",
   "log.video.preprocessing": "비디오 파트 사전 처리 중",
   "log.video.cleanup": "비디오 [{filename}]의 임시 파일을 정리하는 중...",
+  "log.video.series_nfo_failed": "tvshow.nfo 파일에 시리즈 표시 순서를 기록할 수 없습니다: {message}",
   "log.files.loading": "파일 불러오는 중: {filename}",
   "log.files.writing": "파일 쓰는 중: {filename}",
   "log.download.error": "파일 다운로드 오류: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "비디오 {total}개 중 {count}개에서 강제됨.",
   "status_bar.searching": "검색 중",
   "job.title.searching": "비디오 정보를 검색하는 중입니다.",
-  "matching.field.episode_count.label": "파일 내 에피소드 수",
-  "matching.field.episodes_per_video.label": "영상당 에피소드 수",
-  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 형식의 이름으로 여러 에피소드가 담긴 영상을 지원하며, 에피소드 수는 영상 길이를 기준으로 추정합니다\n이제 여러 영상의 에피소드 수를 고려하여 한 번에 번호를 다시 매길 수 있습니다\n여러 영상을 편집할 때 트랙 탭에 길이가 추가되었습니다\n에피소드 이름으로 검색하는 기능이 이제 TheMovieDB에서도 작동합니다\n영상 정보 검색이 대기열에 추가되며 진행률이 상태 표시줄에 표시됩니다"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "동영상에 두 개의 에피소드가 들어 있으면 선택하세요.",
+  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 형식의 이름으로 여러 에피소드가 담긴 영상을 지원하며, 에피소드 수는 영상 길이를 기준으로 추정합니다\n이제 여러 영상의 에피소드 수를 고려하여 한 번에 번호를 다시 매길 수 있습니다\n여러 영상을 편집할 때 트랙 탭에 길이가 추가되었습니다\n에피소드 이름으로 검색하는 기능이 이제 TheMovieDB에서도 작동합니다\n영상 정보 검색이 대기열에 추가되며 진행률이 상태 표시줄에 표시됩니다",
+  "about.news.version_3_3_0.items": "이제 에피소드 순서 목록에는 TheTVDB에서 정의한 시리즈 순서와 TheTVDB에서 지정한 이름만 표시되며, Absolute는 항상 이용 가능합니다.\n이제 공식 에피소드 순서는 ''방영일''로 명명되었습니다.\n두 개의 에피소드가 포함된 비디오의 경우, ''파일 내 에피소드 수'' 및 ''비디오당 에피소드 수'' 필드가 ''×2'' 체크박스로 대체됩니다.\n이제 영상 길이를 통해 중복 에피소드를 더욱 정확하게 감지할 수 있습니다.\n젤리핀 명명 규칙에 따라, 방영 순서 이외의 순서가 사용될 경우 시리즈 표시 순서가 tvshow.nfo 파일에 기록됩니다."
 }

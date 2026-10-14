@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { EpisodeOrder } from './EpisodeOrder'
+import { EpisodeOrder, EpisodeOrderLabels } from './EpisodeOrder'
 import { LanguageIETF } from '../LanguageIETF'
 import { Country } from '../Countries'
 import { IDatabaseLink } from './DatabaseLink'
@@ -23,6 +23,10 @@ import { IDatabaseLink } from './DatabaseLink'
 export interface ITVShow {
   title?: string
   order?: EpisodeOrder
+  /** The episode orders defined by the database for this series. */
+  availableOrders?: EpisodeOrder[]
+  /** The names the database gives to the orders of this series, when it customises them. */
+  orderLabels?: EpisodeOrderLabels
   season?: number
   episode?: number
   videoEpisodeCount: number

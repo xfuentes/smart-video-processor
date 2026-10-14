@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.3.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_3_0.items', {
+          defaultValue:
+            'The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available\nThe Official episode order is now named Aired\nThe Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes\nDouble episodes are now detected more reliably from the video duration\nWith the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.2.0' })}</h4>
       <ul>
         {_('about.news.version_3_2_0.items', {

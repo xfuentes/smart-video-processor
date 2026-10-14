@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternatif 2",
   "episode_order.default.label": "Default",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Resmi",
+  "episode_order.official.label": "Tayang",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Telusuri",
   "file_selector.clear": "Hapus",
@@ -612,6 +612,7 @@
   "log.video.hints": "### PETUNJUK ###",
   "log.video.preprocessing": "Memproses awal bagian video",
   "log.video.cleanup": "Membersihkan file sementara untuk video [{filename}]...",
+  "log.video.series_nfo_failed": "Tidak dapat menulis urutan tampilan seri di tvshow.nfo: {message}",
   "log.files.loading": "Memuat file {filename}",
   "log.files.writing": "Menulis file {filename}",
   "log.download.error": "Kesalahan saat mengunduh file: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Dipaksa di {count} dari {total} video.",
   "status_bar.searching": "Mencari",
   "job.title.searching": "Mencari informasi video.",
-  "matching.field.episode_count.label": "Episode dalam File",
-  "matching.field.episodes_per_video.label": "Episode per Video",
-  "about.news.version_3_2_0.items": "Menambahkan dukungan untuk video yang berisi beberapa episode, dengan penamaan seperti Show - S09E01-E02 - Title 1 + Title 2, dan jumlah episode diperkirakan dari durasi video\nBeberapa video kini dapat dinomori ulang sekaligus dengan memperhitungkan jumlah episodenya\nMenambahkan durasi ke tab Trek saat mengedit beberapa video sekaligus\nPencarian berdasarkan nama episode kini juga berfungsi dengan TheMovieDB\nPencarian informasi video kini dimasukkan ke dalam antrean dengan progresnya ditampilkan di bilah status"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Centang jika video berisi dua episode.",
+  "about.news.version_3_2_0.items": "Menambahkan dukungan untuk video yang berisi beberapa episode, dengan penamaan seperti Show - S09E01-E02 - Title 1 + Title 2, dan jumlah episode diperkirakan dari durasi video\nBeberapa video kini dapat dinomori ulang sekaligus dengan memperhitungkan jumlah episodenya\nMenambahkan durasi ke tab Trek saat mengedit beberapa video sekaligus\nPencarian berdasarkan nama episode kini juga berfungsi dengan TheMovieDB\nPencarian informasi video kini dimasukkan ke dalam antrean dengan progresnya ditampilkan di bilah status",
+  "about.news.version_3_3_0.items": "Daftar urutan episode sekarang hanya menampilkan urutan yang ditentukan oleh TheTVDB untuk serial tersebut, dengan nama yang diberikan oleh TheTVDB, dan Absolute selalu tersedia.\nUrutan episode resmi sekarang diberi nama Ditayangkan\nKolom Episode dalam File dan Episode per Video diganti dengan kotak centang ×2 untuk video yang berisi dua episode.\nEpisode ganda kini dapat dideteksi dengan lebih andal berdasarkan durasi video.\nDengan konvensi penamaan Jellyfin, urutan tampilan seri sekarang ditulis ke tvshow.nfo ketika urutan selain \"Aired\" digunakan."
 }

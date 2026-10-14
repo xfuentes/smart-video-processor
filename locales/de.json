@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativ 2",
   "episode_order.default.label": "Standard",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Offiziell",
+  "episode_order.official.label": "Ausstrahlung",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Durchsuchen",
   "file_selector.clear": "Leeren",
@@ -612,6 +612,7 @@
   "log.video.hints": "### HINWEISE ###",
   "log.video.preprocessing": "Videoteile werden vorverarbeitet",
   "log.video.cleanup": "Temporäre Dateien für Video [{filename}] werden bereinigt...",
+  "log.video.series_nfo_failed": "Die Serienanzeigereihenfolge konnte nicht in tvshow.nfo geschrieben werden: {message}",
   "log.files.loading": "Datei {filename} wird geladen",
   "log.files.writing": "Datei {filename} wird geschrieben",
   "log.download.error": "Fehler beim Herunterladen der Datei: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "In {count} von {total} Videos erzwungen.",
   "status_bar.searching": "Suche läuft",
   "job.title.searching": "Videoinformationen werden gesucht.",
-  "matching.field.episode_count.label": "Episoden in der Datei",
-  "matching.field.episodes_per_video.label": "Episoden pro Video",
-  "about.news.version_3_2_0.items": "Unterstützung für Videos mit mehreren Episoden hinzugefügt, benannt nach dem Muster Show - S09E01-E02 - Title 1 + Title 2, wobei die Anzahl der Episoden anhand der Videodauer geschätzt wird\nMehrere Videos können jetzt gleichzeitig neu nummeriert werden, wobei ihre jeweilige Episodenanzahl berücksichtigt wird\nBeim Bearbeiten mehrerer Videos wird auf der Registerkarte „Spuren“ jetzt die Dauer angezeigt\nDie Suche nach Episodennamen funktioniert jetzt auch mit TheMovieDB\nDie Suche nach Videoinformationen wird jetzt in eine Warteschlange eingereiht, und der Fortschritt wird in der Statusleiste angezeigt"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Aktivieren, wenn das Video zwei Folgen enthält.",
+  "about.news.version_3_2_0.items": "Unterstützung für Videos mit mehreren Episoden hinzugefügt, benannt nach dem Muster Show - S09E01-E02 - Title 1 + Title 2, wobei die Anzahl der Episoden anhand der Videodauer geschätzt wird\nMehrere Videos können jetzt gleichzeitig neu nummeriert werden, wobei ihre jeweilige Episodenanzahl berücksichtigt wird\nBeim Bearbeiten mehrerer Videos wird auf der Registerkarte „Spuren“ jetzt die Dauer angezeigt\nDie Suche nach Episodennamen funktioniert jetzt auch mit TheMovieDB\nDie Suche nach Videoinformationen wird jetzt in eine Warteschlange eingereiht, und der Fortschritt wird in der Statusleiste angezeigt",
+  "about.news.version_3_3_0.items": "Die Episodenreihenfolge zeigt jetzt nur noch die von TheTVDB für die Serie definierten Reihenfolgen mit den von TheTVDB vergebenen Namen an, und Absolute ist immer verfügbar.\nDie offizielle Episodenreihenfolge heißt nun „Ausgestrahlt“.\nDie Felder „Episoden in der Datei“ und „Episoden pro Video“ werden für Videos mit zwei Episoden durch ein ×2-Kontrollkästchen ersetzt.\nDoppelfolgen werden nun anhand der Videodauer zuverlässiger erkannt.\nBei Verwendung der Jellyfin-Namenskonvention wird die Serienanzeigereihenfolge nun in die Datei tvshow.nfo geschrieben, wenn eine andere Reihenfolge als „Ausgestrahlt“ verwendet wird."
 }

@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "代替順 2",
   "episode_order.default.label": "デフォルト",
   "episode_order.dvd.label": "DVD順",
-  "episode_order.official.label": "公式順",
+  "episode_order.official.label": "放送順",
   "episode_order.regional.label": "地域別",
   "file_selector.browse": "参照",
   "file_selector.clear": "クリア",
@@ -612,6 +612,7 @@
   "log.video.hints": "### ヒント ###",
   "log.video.preprocessing": "ビデオパートを前処理しています",
   "log.video.cleanup": "ビデオ [{filename}] の一時ファイルを削除しています...",
+  "log.video.series_nfo_failed": "tvshow.nfo にシリーズ表示順序を書き込めません: {message}",
   "log.files.loading": "ファイル {filename} を読み込んでいます",
   "log.files.writing": "ファイル {filename} を書き込んでいます",
   "log.download.error": "ファイルのダウンロード中にエラーが発生しました: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "{total}本中{count}本の動画で強制されています。",
   "status_bar.searching": "検索中",
   "job.title.searching": "動画情報を検索しています。",
-  "matching.field.episode_count.label": "ファイル内のエピソード数",
-  "matching.field.episodes_per_video.label": "動画あたりのエピソード数",
-  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 のような名前で、複数のエピソードを含む動画に対応しました。エピソード数は動画の長さから推測されます\n複数の動画を、それぞれのエピソード数を考慮したうえで一括して番号を振り直せるようになりました\n複数の動画を編集する際の「トラック」タブに再生時間を追加しました\nエピソード名での検索が TheMovieDB でも使えるようになりました\n動画情報の検索がキューに追加され、進行状況がステータスバーに表示されるようになりました"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "動画に2話分が含まれている場合にチェックします。",
+  "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 のような名前で、複数のエピソードを含む動画に対応しました。エピソード数は動画の長さから推測されます\n複数の動画を、それぞれのエピソード数を考慮したうえで一括して番号を振り直せるようになりました\n複数の動画を編集する際の「トラック」タブに再生時間を追加しました\nエピソード名での検索が TheMovieDB でも使えるようになりました\n動画情報の検索がキューに追加され、進行状況がステータスバーに表示されるようになりました",
+  "about.news.version_3_3_0.items": "エピソード順序リストには、TheTVDBがシリーズ用に定義した順序と、TheTVDBが付けた名前のみが表示されるようになりました。Absoluteは常に利用可能です。\n公式エピソード順序は放送順になりました\n2つのエピソードを含む動画の場合、「ファイル内のエピソード数」と「動画あたりのエピソード数」のフィールドは「×2」チェックボックスに置き換えられます。\n動画の長さから、2話連続エピソードがより確実に検出されるようになりました。\nJellyfinの命名規則では、放送順以外の順序が使用されている場合、シリーズの表示順序がtvshow.nfoに書き込まれるようになりました。"
 }

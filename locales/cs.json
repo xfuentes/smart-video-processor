@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativní 2",
   "episode_order.default.label": "Výchozí",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Oficiální",
+  "episode_order.official.label": "Vysílací",
   "episode_order.regional.label": "Regionální",
   "file_selector.browse": "Procházet",
   "file_selector.clear": "Vymazat",
@@ -612,6 +612,7 @@
   "log.video.hints": "### NÁPOVĚDY ###",
   "log.video.preprocessing": "Předzpracování částí videa",
   "log.video.cleanup": "Mazání dočasných souborů videa [{filename}]...",
+  "log.video.series_nfo_failed": "Nelze zapsat pořadí zobrazení seriálů v souboru tvshow.nfo: {message}",
   "log.files.loading": "Načítání souboru {filename}",
   "log.files.writing": "Zápis souboru {filename}",
   "log.download.error": "Chyba při stahování souboru: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Vynuceno v {count} z {total} videí.",
   "status_bar.searching": "Vyhledávání",
   "job.title.searching": "Vyhledávání informací o videu.",
-  "matching.field.episode_count.label": "Epizody v souboru",
-  "matching.field.episodes_per_video.label": "Počet epizod na video",
-  "about.news.version_3_2_0.items": "Přidána podpora videí obsahujících více epizod s názvy ve tvaru Show - S09E01-E02 - Title 1 + Title 2, přičemž počet epizod se odhaduje podle délky videa\nVíce videí lze nyní přečíslovat najednou s ohledem na počet epizod v každém z nich\nNa kartu Stopy byla přidána délka při úpravě více videí\nVyhledávání podle názvu epizody nyní funguje také s TheMovieDB\nVyhledávání informací o videích se nyní řadí do fronty a jeho průběh se zobrazuje ve stavovém řádku"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Zaškrtněte, pokud video obsahuje dvě epizody.",
+  "about.news.version_3_2_0.items": "Přidána podpora videí obsahujících více epizod s názvy ve tvaru Show - S09E01-E02 - Title 1 + Title 2, přičemž počet epizod se odhaduje podle délky videa\nVíce videí lze nyní přečíslovat najednou s ohledem na počet epizod v každém z nich\nNa kartu Stopy byla přidána délka při úpravě více videí\nVyhledávání podle názvu epizody nyní funguje také s TheMovieDB\nVyhledávání informací o videích se nyní řadí do fronty a jeho průběh se zobrazuje ve stavovém řádku",
+  "about.news.version_3_3_0.items": "Seznam pořadí epizod nyní zobrazuje pouze pořadí definované TheTVDB pro seriál, s názvy, které jim TheTVDB přidělí, a možnost Absolute je vždy k dispozici.\nOficiální pořadí epizod se nyní jmenuje Vysíláno\nPole Epizody v souboru a Epizody na video jsou u videí obsahujících dvě epizody nahrazena zaškrtávacím políčkem ×2.\nDvojité epizody jsou nyní spolehlivěji detekovány na základě délky videa.\nDíky konvenci pojmenování Jellyfin se nyní pořadí zobrazení seriálů zapisuje do tvshow.nfo, pokud je použito jiné pořadí než „Vysíláno“."
 }

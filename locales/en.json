@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternate 2",
   "episode_order.default.label": "Default",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Official",
+  "episode_order.official.label": "Aired",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Browse",
   "file_selector.clear": "Clear",
@@ -612,6 +612,7 @@
   "log.video.hints": "### HINTS ###",
   "log.video.preprocessing": "Pre-processing video parts",
   "log.video.cleanup": "Cleaning temporary files for video [{filename}]...",
+  "log.video.series_nfo_failed": "Unable to write the series display order in tvshow.nfo: {message}",
   "log.files.loading": "Loading file {filename}",
   "log.files.writing": "Writing file {filename}",
   "log.download.error": "Error downloading file: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Forced in {count} of {total} videos.",
   "status_bar.searching": "Searching",
   "job.title.searching": "Searching video information.",
-  "matching.field.episode_count.label": "Episodes in File",
-  "matching.field.episodes_per_video.label": "Episodes per Video",
-  "about.news.version_3_2_0.items": "Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration\nSeveral videos can now be renumbered at once with their number of episodes taken into account\nAdded the duration to the Tracks tab when editing several videos\nSearching by episode name now also works with TheMovieDB\nSearching video information is now queued with its progress shown in the status bar"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Check when the video contains two episodes.",
+  "about.news.version_3_2_0.items": "Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration\nSeveral videos can now be renumbered at once with their number of episodes taken into account\nAdded the duration to the Tracks tab when editing several videos\nSearching by episode name now also works with TheMovieDB\nSearching video information is now queued with its progress shown in the status bar",
+  "about.news.version_3_3_0.items": "The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available\nThe Official episode order is now named Aired\nThe Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes\nDouble episodes are now detected more reliably from the video duration\nWith the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used"
 }

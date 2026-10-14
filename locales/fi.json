@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Vaihtoehtoinen 2",
   "episode_order.default.label": "Oletus",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Virallinen",
+  "episode_order.official.label": "Esitysjärjestys",
   "episode_order.regional.label": "Alueellinen",
   "file_selector.browse": "Selaa",
   "file_selector.clear": "Tyhjennä",
@@ -612,6 +612,7 @@
   "log.video.hints": "### VIHJEET ###",
   "log.video.preprocessing": "Esikäsitellään videon osia",
   "log.video.cleanup": "Siivotaan videon [{filename}] väliaikaisia tiedostoja...",
+  "log.video.series_nfo_failed": "Sarjan näyttöjärjestyksen kirjoittaminen tvshow.nfo-tiedostoon ei onnistu: {message}",
   "log.files.loading": "Ladataan tiedostoa {filename}",
   "log.files.writing": "Kirjoitetaan tiedostoa {filename}",
   "log.download.error": "Virhe tiedoston latauksessa: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Pakotettu {count}/{total} videossa.",
   "status_bar.searching": "Haetaan",
   "job.title.searching": "Haetaan videon tietoja.",
-  "matching.field.episode_count.label": "Jaksoja tiedostossa",
-  "matching.field.episodes_per_video.label": "Jaksoja per video",
-  "about.news.version_3_2_0.items": "Lisätty tuki videoille, jotka sisältävät useita jaksoja ja jotka on nimetty muodossa Show - S09E01-E02 - Title 1 + Title 2, jolloin jaksojen määrä arvioidaan videon keston perusteella\nUseiden videoiden numerointi voidaan nyt uusia kerralla ottaen huomioon niiden jaksojen määrä\nLisätty kesto Raidat-välilehteen, kun muokataan useita videoita\nHaku jakson nimellä toimii nyt myös TheMovieDB:n kanssa\nVideotietojen haku asetetaan nyt jonoon, ja sen eteneminen näkyy tilapalkissa"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Valitse, kun video sisältää kaksi jaksoa.",
+  "about.news.version_3_2_0.items": "Lisätty tuki videoille, jotka sisältävät useita jaksoja ja jotka on nimetty muodossa Show - S09E01-E02 - Title 1 + Title 2, jolloin jaksojen määrä arvioidaan videon keston perusteella\nUseiden videoiden numerointi voidaan nyt uusia kerralla ottaen huomioon niiden jaksojen määrä\nLisätty kesto Raidat-välilehteen, kun muokataan useita videoita\nHaku jakson nimellä toimii nyt myös TheMovieDB:n kanssa\nVideotietojen haku asetetaan nyt jonoon, ja sen eteneminen näkyy tilapalkissa",
+  "about.news.version_3_3_0.items": "Jaksojen järjestysluettelo näyttää nyt vain TheTVDB:n sarjalle määrittämät järjestykset TheTVDB:n niille antamilla nimillä, ja Absolute on aina saatavilla.\nVirallinen jaksojärjestys on nyt nimeltään Esitetty\nTiedostossa olevat jaksot- ja Jaksot videota kohden -kentät on korvattu ×2-valintaruudulla videoille, jotka sisältävät kaksi jaksoa.\nTuplajaksot tunnistetaan nyt luotettavammin videon keston perusteella.\nJellyfin-nimeämiskäytännön myötä sarjan näyttöjärjestys kirjoitetaan nyt tvshow.nfo-tiedostoon, kun käytetään muuta järjestystä kuin Esitetty."
 }

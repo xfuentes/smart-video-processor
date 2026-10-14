@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativo 2",
   "episode_order.default.label": "Predefinito",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Ufficiale",
+  "episode_order.official.label": "Messa in onda",
   "episode_order.regional.label": "Regionale",
   "file_selector.browse": "Sfoglia",
   "file_selector.clear": "Cancella",
@@ -612,6 +612,7 @@
   "log.video.hints": "### SUGGERIMENTI ###",
   "log.video.preprocessing": "Pre-elaborazione delle parti video",
   "log.video.cleanup": "Pulizia dei file temporanei per il video [{filename}]...",
+  "log.video.series_nfo_failed": "Impossibile scrivere l''ordine di visualizzazione della serie in tvshow.nfo: {message}",
   "log.files.loading": "Caricamento del file {filename}",
   "log.files.writing": "Scrittura del file {filename}",
   "log.download.error": "Errore durante il download del file: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Forzata in {count} video su {total}.",
   "status_bar.searching": "Ricerca in corso",
   "job.title.searching": "Ricerca delle informazioni sul video.",
-  "matching.field.episode_count.label": "Episodi nel file",
-  "matching.field.episodes_per_video.label": "Episodi per video",
-  "about.news.version_3_2_0.items": "Aggiunto il supporto per i video contenenti più episodi, con nome del tipo Show - S09E01-E02 - Title 1 + Title 2, con il numero di episodi dedotto dalla durata del video\nOra è possibile rinumerare più video contemporaneamente tenendo conto del relativo numero di episodi\nAggiunta la durata alla scheda Tracce durante la modifica di più video\nLa ricerca per nome dell'episodio ora funziona anche con TheMovieDB\nLa ricerca delle informazioni sui video viene ora messa in coda, con l'avanzamento mostrato nella barra di stato"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Selezionare quando il video contiene due episodi.",
+  "about.news.version_3_2_0.items": "Aggiunto il supporto per i video contenenti più episodi, con nome del tipo Show - S09E01-E02 - Title 1 + Title 2, con il numero di episodi dedotto dalla durata del video\nOra è possibile rinumerare più video contemporaneamente tenendo conto del relativo numero di episodi\nAggiunta la durata alla scheda Tracce durante la modifica di più video\nLa ricerca per nome dell'episodio ora funziona anche con TheMovieDB\nLa ricerca delle informazioni sui video viene ora messa in coda, con l'avanzamento mostrato nella barra di stato",
+  "about.news.version_3_3_0.items": "L''elenco degli episodi ora mostra solo gli ordini definiti da TheTVDB per la serie, con i nomi che TheTVDB assegna loro, e Absolute è sempre disponibile\nL''ordine ufficiale degli episodi è ora denominato Trasmesso\nI campi Episodi nel file ed Episodi per video vengono sostituiti da una casella di controllo ×2 per i video contenenti due episodi\nOra i doppi episodi vengono rilevati in modo più affidabile dalla durata del video\nCon la convenzione di denominazione Jellyfin, l''ordine di visualizzazione della serie viene ora scritto in tvshow.nfo quando viene utilizzato un ordine diverso da \"Trasmesso in onda\"."
 }

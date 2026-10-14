@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "备用顺序 2",
   "episode_order.default.label": "默认",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "官方",
+  "episode_order.official.label": "播出顺序",
   "episode_order.regional.label": "地区",
   "file_selector.browse": "浏览",
   "file_selector.clear": "清除",
@@ -612,6 +612,7 @@
   "log.video.hints": "### 提示 ###",
   "log.video.preprocessing": "正在预处理视频片段",
   "log.video.cleanup": "正在清理视频 [{filename}] 的临时文件...",
+  "log.video.series_nfo_failed": "无法在 tvshow.nfo 中写入剧集显示顺序：{message}",
   "log.files.loading": "正在加载文件 {filename}",
   "log.files.writing": "正在写入文件 {filename}",
   "log.download.error": "下载文件时出错:{message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "在 {total} 个视频中有 {count} 个为强制。",
   "status_bar.searching": "正在搜索",
   "job.title.searching": "正在搜索视频信息。",
-  "matching.field.episode_count.label": "文件中的剧集数",
-  "matching.field.episodes_per_video.label": "每个视频的剧集数",
-  "about.news.version_3_2_0.items": "新增对包含多集内容的视频的支持,命名格式如 Show - S09E01-E02 - Title 1 + Title 2,集数会根据视频时长自动推测\n现在可以一次性对多个视频重新编号,并会考虑各视频的集数\n同时编辑多个视频时,轨道选项卡中新增了时长显示\n按剧集名称搜索现在也支持 TheMovieDB\n视频信息搜索现在会进入队列,并在状态栏中显示进度"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "视频包含两集时勾选。",
+  "about.news.version_3_2_0.items": "新增对包含多集内容的视频的支持,命名格式如 Show - S09E01-E02 - Title 1 + Title 2,集数会根据视频时长自动推测\n现在可以一次性对多个视频重新编号,并会考虑各视频的集数\n同时编辑多个视频时,轨道选项卡中新增了时长显示\n按剧集名称搜索现在也支持 TheMovieDB\n视频信息搜索现在会进入队列,并在状态栏中显示进度",
+  "about.news.version_3_3_0.items": "现在剧集顺序列表仅显示 TheTVDB 为该剧集定义的顺序，并沿用 TheTVDB 给出的名称，而“绝对顺序”始终可用。\n官方剧集顺序现已命名为“播出”。\n对于包含两集的视频，“文件中的剧集数”和“每个视频的剧集数”字段将被“×2”复选框取代。\n现在可以根据视频时长更可靠地检测出重复播放的片段。\n根据 Jellyfin 的命名规则，当使用除“播出”以外的顺序时，剧集显示顺序现在会写入 tvshow.nfo 文件。"
 }

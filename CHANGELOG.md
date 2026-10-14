@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.0] - 2026-10-14
+
+### Added
+
+- With the Jellyfin naming convention, the TheTVDB episode order of a series is now written as `displayorder` in its `tvshow.nfo` when it is not the aired order, and removed from it when it goes back to the aired order.
+
+### Changed
+
+- The episode order list now only shows the orders defined by TheTVDB for the series, with the custom names TheTVDB gives them (e.g. Production, US Airing Order). Absolute is always available.
+- The Official episode order is now named Aired.
+- The Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes, the number of episodes being limited to one or two.
+
+### Fixed
+
+- Double episodes are now detected more reliably from the video duration, as TheTVDB often rounds episode runtimes down.
+
 ## [3.2.0] - 2026-10-12
 
 ### Added

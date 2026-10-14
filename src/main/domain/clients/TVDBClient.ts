@@ -37,9 +37,9 @@ type SeriesEpisode = {
   episodeCount: number
 }
 
-import type { EpisodeOrder } from '../../../common/@types/EpisodeOrder'
+import { EPISODE_ORDERS, type EpisodeOrder, type EpisodeOrderLabels } from '../../../common/@types/EpisodeOrder'
 
-export { type EpisodeOrder } from '../../../common/@types/EpisodeOrder'
+export { type EpisodeOrder, type EpisodeOrderLabels } from '../../../common/@types/EpisodeOrder'
 
 const TVDB_SESSION_DURATION_MS = 60 * 60 * 1000
 
@@ -307,9 +307,19 @@ export class TVDBClient {
     const seriesData = response.data.data.series
 
     let extendedGenres: string[] | undefined
+    let availableOrders: EpisodeOrder[] | undefined
+    const orderLabels: EpisodeOrderLabels = {}
     try {
       const extendedResponse = await tvdb.get<TVDBSeriesExtendedResponse>(`/series/${tvdbId}/extended`)
       const rawGenres = extendedResponse.data.data.genres
+      const seasonTypes = new Set<string>()
+      for (const season of extendedResponse.data.data.seasons ?? []) {
+        seasonTypes.add(season.type?.type)
+        if (season.type?.alternateName) {
+          orderLabels[season.type.type as EpisodeOrder] = season.type.alternateName
+        }
+      }
+      availableOrders = EPISODE_ORDERS.filter((o) => seasonTypes.has(o))
       if (rawGenres) {
         extendedGenres = rawGenres.map((g) => g.name)
       }
@@ -406,6 +416,8 @@ export class TVDBClient {
         seriesIsAnimation
       )
       searchResult.genres = displayGenres
+      searchResult.availableOrders = availableOrders
+      searchResult.orderLabels = orderLabels
       return {
         episodeData: undefined,
         seriesData: searchResult,
@@ -444,6 +456,8 @@ export class TVDBClient {
       episodeCount
     }
     result.seriesData.genres = displayGenres
+    result.seriesData.availableOrders = availableOrders
+    result.seriesData.orderLabels = orderLabels
     let langCode = currentSettings.language
     if (langCode.indexOf('-') != -1) {
       langCode = langCode.substring(0, langCode.indexOf('-'))

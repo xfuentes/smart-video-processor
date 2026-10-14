@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternatief 2",
   "episode_order.default.label": "Standaard",
   "episode_order.dvd.label": "Dvd",
-  "episode_order.official.label": "Officieel",
+  "episode_order.official.label": "Uitzendvolgorde",
   "episode_order.regional.label": "Regionaal",
   "file_selector.browse": "Bladeren",
   "file_selector.clear": "Wissen",
@@ -612,6 +612,7 @@
   "log.video.hints": "### HINTS ###",
   "log.video.preprocessing": "Videodelen voorbewerken",
   "log.video.cleanup": "Tijdelijke bestanden voor video [{filename}] opruimen...",
+  "log.video.series_nfo_failed": "Kan de weergavevolgorde van de serie niet schrijven in tvshow.nfo: {message}",
   "log.files.loading": "Bestand {filename} laden",
   "log.files.writing": "Bestand {filename} schrijven",
   "log.download.error": "Fout bij het downloaden van bestand: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Geforceerd in {count} van {total} video's.",
   "status_bar.searching": "Zoeken",
   "job.title.searching": "Videogegevens zoeken.",
-  "matching.field.episode_count.label": "Afleveringen in bestand",
-  "matching.field.episodes_per_video.label": "Afleveringen per video",
-  "about.news.version_3_2_0.items": "Ondersteuning toegevoegd voor video's met meerdere afleveringen, met namen zoals Show - S09E01-E02 - Title 1 + Title 2, waarbij het aantal afleveringen wordt geraden aan de hand van de duur van de video\nMeerdere video's kunnen nu in één keer opnieuw worden genummerd, waarbij rekening wordt gehouden met hun aantal afleveringen\nDe duur toegevoegd aan het tabblad Tracks bij het bewerken van meerdere video's\nZoeken op afleveringsnaam werkt nu ook met TheMovieDB\nHet zoeken naar video-informatie wordt nu in een wachtrij geplaatst, met de voortgang in de statusbalk"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Aanvinken wanneer de video twee afleveringen bevat.",
+  "about.news.version_3_2_0.items": "Ondersteuning toegevoegd voor video's met meerdere afleveringen, met namen zoals Show - S09E01-E02 - Title 1 + Title 2, waarbij het aantal afleveringen wordt geraden aan de hand van de duur van de video\nMeerdere video's kunnen nu in één keer opnieuw worden genummerd, waarbij rekening wordt gehouden met hun aantal afleveringen\nDe duur toegevoegd aan het tabblad Tracks bij het bewerken van meerdere video's\nZoeken op afleveringsnaam werkt nu ook met TheMovieDB\nHet zoeken naar video-informatie wordt nu in een wachtrij geplaatst, met de voortgang in de statusbalk",
+  "about.news.version_3_3_0.items": "De lijst met afleveringsvolgordes toont nu alleen de volgordes die TheTVDB voor de series heeft gedefinieerd, met de namen die TheTVDB eraan geeft, en Absolute is altijd beschikbaar.\nDe officiële afleveringsvolgorde heet nu Uitgezonden\nDe velden ''Afleveringen in bestand'' en ''Afleveringen per video'' worden vervangen door een ×2-selectievakje voor video''s die twee afleveringen bevatten.\nDubbele afleveringen worden nu betrouwbaarder gedetecteerd op basis van de videoduur.\nMet de Jellyfin-naamgevingsconventie wordt de weergavevolgorde van de serie nu naar tvshow.nfo geschreven wanneer een andere volgorde dan ''Uitgezonden'' wordt gebruikt."
 }

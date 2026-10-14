@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativ 2",
   "episode_order.default.label": "Standard",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Officiell",
+  "episode_order.official.label": "Sändningsordning",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Bläddra",
   "file_selector.clear": "Rensa",
@@ -612,6 +612,7 @@
   "log.video.hints": "### TIPS ###",
   "log.video.preprocessing": "Förbehandlar videodelar",
   "log.video.cleanup": "Rensar temporära filer för video [{filename}]...",
+  "log.video.series_nfo_failed": "Det gick inte att skriva seriens visningsordning i tvshow.nfo: {message}",
   "log.files.loading": "Läser in filen {filename}",
   "log.files.writing": "Skriver filen {filename}",
   "log.download.error": "Fel vid nedladdning av fil: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Tvingad i {count} av {total} videor.",
   "status_bar.searching": "Söker",
   "job.title.searching": "Söker videoinformation.",
-  "matching.field.episode_count.label": "Avsnitt i filen",
-  "matching.field.episodes_per_video.label": "Avsnitt per video",
-  "about.news.version_3_2_0.items": "Lade till stöd för videor som innehåller flera avsnitt, med namn som Show - S09E01-E02 - Title 1 + Title 2, där antalet avsnitt gissas utifrån videons längd\nFlera videor kan nu numreras om samtidigt med hänsyn till antalet avsnitt i varje video\nLade till längden på fliken Spår när flera videor redigeras\nSökning på avsnittsnamn fungerar nu även med TheMovieDB\nSökning efter videoinformation köas nu och förloppet visas i statusfältet"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Markera när videon innehåller två avsnitt.",
+  "about.news.version_3_2_0.items": "Lade till stöd för videor som innehåller flera avsnitt, med namn som Show - S09E01-E02 - Title 1 + Title 2, där antalet avsnitt gissas utifrån videons längd\nFlera videor kan nu numreras om samtidigt med hänsyn till antalet avsnitt i varje video\nLade till längden på fliken Spår när flera videor redigeras\nSökning på avsnittsnamn fungerar nu även med TheMovieDB\nSökning efter videoinformation köas nu och förloppet visas i statusfältet",
+  "about.news.version_3_3_0.items": "Avsnittsordningslistan visar nu bara de ordningar som TheTVDB har definierat för serien, med de namn som TheTVDB ger dem, och Absolute är alltid tillgängligt.\nDen officiella avsnittsordningen heter nu Sändes\nFälten Avsnitt i fil och Avsnitt per video ersätts av en kryssruta med ×2 för videor som innehåller två avsnitt.\nDubbelavsnitt detekteras nu mer tillförlitligt utifrån videons längd.\nMed Jellyfin-namnkonventionen skrivs seriens visningsordning nu till tvshow.nfo när en annan ordning än Aired används."
 }

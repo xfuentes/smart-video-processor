@@ -66,11 +66,11 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration</li>
-          <li>Several videos can now be renumbered at once with their number of episodes taken into account</li>
-          <li>Added the duration to the Tracks tab when editing several videos</li>
-          <li>Searching by episode name now also works with TheMovieDB</li>
-          <li>Searching video information is now queued with its progress shown in the status bar</li>
+          <li>The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available</li>
+          <li>The Official episode order is now named Aired</li>
+          <li>The Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes</li>
+          <li>Double episodes are now detected more reliably from the video duration</li>
+          <li>With the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used</li>
         </ul>
       </description>
     </release>

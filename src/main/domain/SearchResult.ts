@@ -17,6 +17,7 @@
  */
 
 import { Strings } from '../../common/Strings'
+import { EpisodeOrder, EpisodeOrderLabels } from '../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../common/@types/SearchResult'
 import { LanguageIETF } from '../../common/LanguageIETF'
 import { Country } from '../../common/Countries'
@@ -34,6 +35,8 @@ export class SearchResult implements ISearchResult {
   public note: number | undefined
   public isAnimation: boolean | undefined
   public genres?: string[]
+  public availableOrders?: EpisodeOrder[]
+  public orderLabels?: EpisodeOrderLabels
 
   constructor(
     id: number,

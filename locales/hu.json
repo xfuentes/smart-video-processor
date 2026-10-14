@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternatív 2",
   "episode_order.default.label": "Alapértelmezett",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Hivatalos",
+  "episode_order.official.label": "Adásban",
   "episode_order.regional.label": "Regionális",
   "file_selector.browse": "Tallózás",
   "file_selector.clear": "Törlés",
@@ -612,6 +612,7 @@
   "log.video.hints": "### TIPPEK ###",
   "log.video.preprocessing": "Videórészek előfeldolgozása",
   "log.video.cleanup": "Ideiglenes fájlok törlése a(z) [{filename}] videóhoz...",
+  "log.video.series_nfo_failed": "Nem sikerült a sorozatok megjelenítési sorrendjét beírni a tvshow.nfo fájlba: {message}",
   "log.files.loading": "Fájl betöltése: {filename}",
   "log.files.writing": "Fájl írása: {filename}",
   "log.download.error": "Hiba a fájl letöltésekor: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Kényszerítve {total} videóból {count} esetében.",
   "status_bar.searching": "Keresés",
   "job.title.searching": "Videoinformációk keresése.",
-  "matching.field.episode_count.label": "Epizódok a fájlban",
-  "matching.field.episodes_per_video.label": "Epizódok videónként",
-  "about.news.version_3_2_0.items": "Támogatás több epizódot tartalmazó videókhoz, amelyek neve például így néz ki: Show - S09E01-E02 - Title 1 + Title 2; az epizódok számát a rendszer a videó hossza alapján becsüli meg\nTöbb videó egyszerre újraszámozható, az epizódok számának figyelembevételével\nA hossz megjelenik a Sávok lapon, ha egyszerre több videót szerkesztesz\nAz epizódnév szerinti keresés mostantól a TheMovieDB-vel is működik\nA videóinformációk keresése mostantól sorba kerül, és az előrehaladása megjelenik az állapotsoron"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Jelölje be, ha a videó két epizódot tartalmaz.",
+  "about.news.version_3_2_0.items": "Támogatás több epizódot tartalmazó videókhoz, amelyek neve például így néz ki: Show - S09E01-E02 - Title 1 + Title 2; az epizódok számát a rendszer a videó hossza alapján becsüli meg\nTöbb videó egyszerre újraszámozható, az epizódok számának figyelembevételével\nA hossz megjelenik a Sávok lapon, ha egyszerre több videót szerkesztesz\nAz epizódnév szerinti keresés mostantól a TheMovieDB-vel is működik\nA videóinformációk keresése mostantól sorba kerül, és az előrehaladása megjelenik az állapotsoron",
+  "about.news.version_3_3_0.items": "Az epizódsorrendi lista mostantól csak a TheTVDB által a sorozathoz meghatározott sorrendeket mutatja, a TheTVDB által adott nevekkel, és az Absolute mindig elérhető.\nA hivatalos epizódsorrend mostantól Sugárzott néven fut.\nA két epizódot tartalmazó videóknál a fájlban lévő epizódok és az epizódok videónkénti száma mezőket egy ×2 jelölőnégyzet váltotta fel.\nA dupla epizódokat mostantól megbízhatóbban észleli a rendszer a videó időtartama alapján.\nA Jellyfin elnevezési konvenciónak köszönhetően a sorozatok megjelenítési sorrendje mostantól a tvshow.nfo fájlba kerül, ha az Adott sorrendtől eltérő sorrendet használunk."
 }

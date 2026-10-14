@@ -162,7 +162,7 @@ interface Companies {
  * season type record
  */
 interface SeasonType {
-  alternateName: string
+  alternateName: string | null
   id: number
   name: string
   type: string
@@ -287,7 +287,7 @@ interface TVDBSeriesResponse {
 }
 
 interface TVDBSeriesExtendedResponse {
-  data: Omit<SeriesBaseRecord, 'genres'> & { genres?: TVDBGenreDetail[] }
+  data: Omit<SeriesBaseRecord, 'genres'> & { genres?: TVDBGenreDetail[]; seasons?: SeasonBaseRecord[] }
   status: string
   message: string
 }

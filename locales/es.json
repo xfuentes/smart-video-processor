@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternativo 2",
   "episode_order.default.label": "Predeterminado",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Oficial",
+  "episode_order.official.label": "Emisión",
   "episode_order.regional.label": "Regional",
   "file_selector.browse": "Examinar",
   "file_selector.clear": "Borrar",
@@ -612,6 +612,7 @@
   "log.video.hints": "### SUGERENCIAS ###",
   "log.video.preprocessing": "Preprocesando las partes del vídeo",
   "log.video.cleanup": "Limpiando archivos temporales del vídeo [{filename}]...",
+  "log.video.series_nfo_failed": "No se puede escribir el orden de visualización de la serie en tvshow.nfo: {message}",
   "log.files.loading": "Cargando el archivo {filename}",
   "log.files.writing": "Escribiendo el archivo {filename}",
   "log.download.error": "Error al descargar el archivo: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "Forzada en {count} de {total} vídeos.",
   "status_bar.searching": "Buscando",
   "job.title.searching": "Buscando información del vídeo.",
-  "matching.field.episode_count.label": "Episodios en el archivo",
-  "matching.field.episodes_per_video.label": "Episodios por vídeo",
-  "about.news.version_3_2_0.items": "Se ha añadido compatibilidad con vídeos que contienen varios episodios, con nombres como Show - S09E01-E02 - Title 1 + Title 2, y con el número de episodios deducido a partir de la duración del vídeo\nAhora se pueden renumerar varios vídeos a la vez teniendo en cuenta su número de episodios\nSe ha añadido la duración a la pestaña Pistas al editar varios vídeos\nLa búsqueda por nombre de episodio ahora también funciona con TheMovieDB\nLa búsqueda de información de vídeos ahora se pone en cola y muestra su progreso en la barra de estado"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Marcar cuando el vídeo contiene dos episodios.",
+  "about.news.version_3_2_0.items": "Se ha añadido compatibilidad con vídeos que contienen varios episodios, con nombres como Show - S09E01-E02 - Title 1 + Title 2, y con el número de episodios deducido a partir de la duración del vídeo\nAhora se pueden renumerar varios vídeos a la vez teniendo en cuenta su número de episodios\nSe ha añadido la duración a la pestaña Pistas al editar varios vídeos\nLa búsqueda por nombre de episodio ahora también funciona con TheMovieDB\nLa búsqueda de información de vídeos ahora se pone en cola y muestra su progreso en la barra de estado",
+  "about.news.version_3_3_0.items": "La lista de orden de episodios ahora solo muestra los órdenes definidos por TheTVDB para la serie, con los nombres que TheTVDB les da, y Absolute siempre está disponible.\nEl orden oficial de los episodios ahora se llama Emitido\nLos campos Episodios en archivo y Episodios por vídeo se sustituyen por una casilla de verificación ×2 para los vídeos que contienen dos episodios.\nAhora se detectan episodios dobles de forma más fiable a partir de la duración del vídeo.\nCon la convención de nomenclatura de Jellyfin, el orden de visualización de la serie ahora se escribe en tvshow.nfo cuando se utiliza un orden distinto a Emitido."
 }

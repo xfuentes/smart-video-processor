@@ -20,7 +20,7 @@ import { Files } from '../util/files'
 import { Video } from './Video'
 import { SearchResult } from './SearchResult'
 import { _ } from '../i18n'
-import { EpisodeOrder, TVDBClient } from './clients/TVDBClient'
+import { EpisodeOrder, EpisodeOrderLabels, TVDBClient } from './clients/TVDBClient'
 import { TMDBClient } from './clients/TMDBClient'
 import { Strings } from '../../common/Strings'
 import { Numbers } from '../util/numbers'
@@ -40,6 +40,8 @@ export class TVShow implements ITVShow {
   public video: Video
   public title?: string
   public order?: EpisodeOrder
+  public availableOrders?: EpisodeOrder[]
+  public orderLabels?: EpisodeOrderLabels
   public season?: number
   public episode?: number
   public videoEpisodeCount: number = 1
@@ -160,6 +162,8 @@ export class TVShow implements ITVShow {
       matchedSearchResult.isAnimation = this.isAnimation
     }
     this.genres = seriesData.genres
+    this.availableOrders = seriesData.availableOrders
+    this.orderLabels = seriesData.orderLabels
     if (seriesData.year) {
       this.year = seriesData.year
     }
@@ -323,6 +327,8 @@ export class TVShow implements ITVShow {
     if (matchedSearchResult) {
       matchedSearchResult.isAnimation = this.isAnimation
     }
+    this.availableOrders = ['official']
+    this.orderLabels = undefined
     this.genres = seriesData.genres
     if (seriesData.year) {
       this.year = seriesData.year
@@ -432,11 +438,11 @@ export class TVShow implements ITVShow {
       return false
     }
     const ratio = this.video.duration / (runtimeMinutes * 60)
-    const count = Math.round(ratio)
-    if (count < 2 || Math.abs(ratio - count) > count * 0.15) {
+    // The database runtime is often rounded down, so the tolerance is wider above two episodes.
+    if (ratio < 1.7 || ratio > 2.5) {
       return false
     }
-    this.videoEpisodeCount = count
+    this.videoEpisodeCount = 2
     return true
   }
 
@@ -518,12 +524,12 @@ export class TVShow implements ITVShow {
   setEpisodeCount(newEpisodeCount: string) {
     const count = Numbers.toNumber(newEpisodeCount)
     // An empty value goes back to guessing the count from the video duration.
-    this.videoEpisodeCount = Math.max(count ?? 1, 1)
+    this.videoEpisodeCount = Math.min(Math.max(count ?? 1, 1), 2)
     this.videoEpisodeCountSource = count !== undefined ? 'manual' : 'auto'
   }
 
   setEpisodeCountFromFilename(count: number) {
-    this.videoEpisodeCount = count
+    this.videoEpisodeCount = Math.min(count, 2)
     this.videoEpisodeCountSource = count > 1 ? 'filename' : 'auto'
   }
 
@@ -673,6 +679,8 @@ export class TVShow implements ITVShow {
     return {
       title: this.title,
       order: this.order,
+      availableOrders: this.availableOrders,
+      orderLabels: this.orderLabels,
       season: this.season,
       episode: this.episode,
       videoEpisodeCount: this.videoEpisodeCount,

@@ -86,7 +86,7 @@
   "episode_order.alttwo.label": "Alternatif 2",
   "episode_order.default.label": "Varsayılan",
   "episode_order.dvd.label": "DVD",
-  "episode_order.official.label": "Resmi",
+  "episode_order.official.label": "Yayın",
   "episode_order.regional.label": "Bölgesel",
   "file_selector.browse": "Gözat",
   "file_selector.clear": "Temizle",
@@ -612,6 +612,7 @@
   "log.video.hints": "### İPUÇLARI ###",
   "log.video.preprocessing": "Video parçaları ön işleniyor",
   "log.video.cleanup": "[{filename}] videosu için geçici dosyalar temizleniyor...",
+  "log.video.series_nfo_failed": "tvshow.nfo dosyasında dizi görüntüleme sırasını yazmak mümkün değil: {message}",
   "log.files.loading": "Dosya yükleniyor: {filename}",
   "log.files.writing": "Dosya yazılıyor: {filename}",
   "log.download.error": "Dosya indirilirken hata oluştu: {message}",
@@ -754,7 +755,8 @@
   "multi_tracks.forced_tooltip": "{total} videodan {count} tanesinde zorunlu.",
   "status_bar.searching": "Aranıyor",
   "job.title.searching": "Video bilgileri aranıyor.",
-  "matching.field.episode_count.label": "Dosyadaki Bölümler",
-  "matching.field.episodes_per_video.label": "Video Başına Bölüm Sayısı",
-  "about.news.version_3_2_0.items": "Birden fazla bölüm içeren videolar için destek eklendi (adlandırma: Show - S09E01-E02 - Title 1 + Title 2); bölüm sayısı video süresine göre tahmin edilir\nBirden fazla video artık bölüm sayıları dikkate alınarak tek seferde yeniden numaralandırılabiliyor\nBirden fazla video düzenlenirken Parçalar sekmesine süre bilgisi eklendi\nBölüm adına göre arama artık TheMovieDB ile de çalışıyor\nVideo bilgisi arama işlemleri artık sıraya alınıyor ve ilerleme durumu durum çubuğunda gösteriliyor"
+  "matching.field.double_episode.label": "×2",
+  "matching.field.double_episode.tooltip": "Video iki bölüm içeriyorsa işaretleyin.",
+  "about.news.version_3_2_0.items": "Birden fazla bölüm içeren videolar için destek eklendi (adlandırma: Show - S09E01-E02 - Title 1 + Title 2); bölüm sayısı video süresine göre tahmin edilir\nBirden fazla video artık bölüm sayıları dikkate alınarak tek seferde yeniden numaralandırılabiliyor\nBirden fazla video düzenlenirken Parçalar sekmesine süre bilgisi eklendi\nBölüm adına göre arama artık TheMovieDB ile de çalışıyor\nVideo bilgisi arama işlemleri artık sıraya alınıyor ve ilerleme durumu durum çubuğunda gösteriliyor",
+  "about.news.version_3_3_0.items": "Bölüm sıralama listesi artık yalnızca TheTVDB tarafından dizi için tanımlanan sıralamaları, TheTVDB''nin verdiği adlarla gösteriyor ve Absolute her zaman kullanılabilir durumda.\nResmi bölüm sıralaması artık \"Yayınlanma Tarihi\" olarak adlandırılıyor.\n\"Dosyadaki Bölümler\" ve \"Videodaki Bölümler\" alanları, iki bölüm içeren videolar için ×2 onay kutusuyla değiştirilir.\nÇift bölümler artık video süresinden daha güvenilir bir şekilde tespit edilebiliyor.\nJellyfin adlandırma kuralıyla, \"Yayınlanma Tarihi\" dışında bir sıra kullanıldığında, dizinin yayınlanma sırası artık tvshow.nfo dosyasına yazılıyor."
 }

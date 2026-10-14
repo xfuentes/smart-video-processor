@@ -16,13 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
+import {
+  Button,
+  Checkbox,
+  Field,
+  Input,
+  MessageBar,
+  MessageBarGroup,
+  Select,
+  Tooltip
+} from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
 import { useState } from 'react'
 import { IVideo, MultiSearchInputData, SearchBy, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
-import { EPISODE_ORDER_LABELS, EPISODE_ORDERS, EpisodeOrder } from '../../../../common/@types/EpisodeOrder'
+import { EPISODE_ORDER_LABELS, EpisodeOrder, getSelectableEpisodeOrders } from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { useI18n } from '../../i18n'
 import { keepIfSameFilenameReducer, keepIfSameReducer } from '@renderer/utils'
@@ -335,9 +344,13 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                       {_('matching.multiple_values', { defaultValue: 'Multiple values' })}
                     </option>
                   )}
-                  {EPISODE_ORDERS.map((order) => (
+                  {getSelectableEpisodeOrders(
+                    videos.map((v) => v.tvShow?.availableOrders),
+                    tvShowOrder
+                  ).map((order) => (
                     <option key={order} value={order}>
-                      {_(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
+                      {videos.find((v) => v.tvShow?.orderLabels?.[order])?.tvShow?.orderLabels?.[order] ??
+                        _(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
                     </option>
                   ))}
                 </Select>
@@ -397,22 +410,26 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 <div>
                   <Field
                     size="small"
-                    label={_('matching.field.episodes_per_video.label', { defaultValue: 'Episodes per Video' })}
+                    label={_('matching.field.double_episode.label', { defaultValue: '×2' })}
                     className={disabled ? 'disabled' : ''}
                   >
-                    <Input
-                      size="small"
-                      type="number"
-                      min={1}
-                      disabled={disabled}
-                      value={tvShowEpisodesPerVideo ?? ''}
-                      placeholder={_('matching.multiple_values', { defaultValue: 'Multiple values' })}
-                      style={{ minWidth: 1 }}
-                      onChange={(_ev, data) => {
-                        setTvShowEpisodesPerVideo(data.value)
-                        setEpisodesPerVideoEdited(true)
-                      }}
-                    />
+                    <Tooltip
+                      content={_('matching.field.double_episode.tooltip', {
+                        defaultValue: 'Check when the video contains two episodes.'
+                      })}
+                      relationship="description"
+                    >
+                      <Checkbox
+                        indicator={{ style: { margin: '4px 0' } }}
+                        size="medium"
+                        disabled={disabled}
+                        checked={tvShowEpisodesPerVideo === undefined ? 'mixed' : tvShowEpisodesPerVideo === '2'}
+                        onChange={(_ev, data) => {
+                          setTvShowEpisodesPerVideo(data.checked === true ? '2' : '1')
+                          setEpisodesPerVideoEdited(true)
+                        }}
+                      />
+                    </Tooltip>
                   </Field>
                 </div>
               )}

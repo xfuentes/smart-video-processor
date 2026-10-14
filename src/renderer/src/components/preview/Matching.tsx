@@ -16,14 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Button, Field, Input, MessageBar, MessageBarGroup, Select } from '@fluentui/react-components'
+import {
+  Button,
+  Checkbox,
+  Field,
+  Input,
+  MessageBar,
+  MessageBarGroup,
+  Select,
+  Tooltip
+} from '@fluentui/react-components'
 import { Search16Regular } from '@fluentui/react-icons'
 import { useState } from 'react'
 import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
 import { EditionType } from '../../../../common/@types/Movie'
-import { EPISODE_ORDER_LABELS, EPISODE_ORDERS, EpisodeOrder } from '../../../../common/@types/EpisodeOrder'
+import { EPISODE_ORDER_LABELS, EpisodeOrder, getSelectableEpisodeOrders } from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
 import { LanguageSelector } from '@renderer/components/fields/LanguageSelector'
@@ -430,9 +439,10 @@ export const Matching = ({ video, disabled }: Props) => {
                     window.api.video.setMultiTvShowOrder([video.uuid], order)
                   }}
                 >
-                  {EPISODE_ORDERS.map((order) => (
+                  {getSelectableEpisodeOrders([video.tvShow?.availableOrders], tvShowOrder).map((order) => (
                     <option key={order} value={order}>
-                      {_(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
+                      {video.tvShow?.orderLabels?.[order] ??
+                        _(`episode_order.${order}.label`, { defaultValue: EPISODE_ORDER_LABELS[order] })}
                     </option>
                   ))}
                 </Select>
@@ -515,21 +525,26 @@ export const Matching = ({ video, disabled }: Props) => {
                 <div>
                   <Field
                     size="small"
-                    label={_('matching.field.episode_count.label', { defaultValue: 'Episodes in File' })}
+                    label={_('matching.field.double_episode.label', { defaultValue: '×2' })}
                     className={disabled ? 'disabled' : ''}
                   >
-                    <Input
-                      size="small"
-                      type="number"
-                      disabled={disabled}
-                      min={1}
-                      value={tvShowEpisodeCount}
-                      style={{ minWidth: 1 }}
-                      onChange={(_ev, data) => {
-                        setTvShowEpisodeCount(data.value)
-                        setEpisodeCountEdited(true)
-                      }}
-                    />
+                    <Tooltip
+                      content={_('matching.field.double_episode.tooltip', {
+                        defaultValue: 'Check when the video contains two episodes.'
+                      })}
+                      relationship="description"
+                    >
+                      <Checkbox
+                        indicator={{ style: { margin: '4px 0' } }}
+                        size="medium"
+                        disabled={disabled}
+                        checked={tvShowEpisodeCount === '2'}
+                        onChange={(_ev, data) => {
+                          setTvShowEpisodeCount(data.checked ? '2' : '1')
+                          setEpisodeCountEdited(true)
+                        }}
+                      />
+                    </Tooltip>
                   </Field>
                 </div>
               </>
