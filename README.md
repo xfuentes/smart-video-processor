@@ -30,7 +30,9 @@ All dependencies are packaged with it, just install and you will be ready to go.
 
 #### Snap Store
 
-[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/smart-video-processor)
+<a href="https://snapcraft.io/smart-video-processor">
+<img width="190" alt="Get it from the Snap Store" src="https://snapcraft.io/en/light/install.svg"/>
+</a>
 
 After installation from the Snap Store, you can optionally enable removable media write access with this command :
 
