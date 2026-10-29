@@ -5,7 +5,7 @@
   "appId": "io.github.xfuentes.smart-video-processor",
   "desktopName": "io.github.xfuentes.smart-video-processor.desktop",
   "private": true,
-  "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image. Works with Jellyfin.",
+  "description": "Video processing for Jellyfin. Re-Organize, Re-encode, adds metadata, images.",
   "main": "./build/main/index.js",
   "author": "Xavier Fuentes",
   "license": "GPL-3.0+",
