@@ -102,6 +102,7 @@ export interface SvpAPI {
     addPart: (uuid: string) => Promise<void>
     removePart: (uuid: string, partUuid: string) => Promise<void>
     process: (uuid: string) => Promise<void>
+    abortJobs: (uuids: string[]) => Promise<void>
     abortJob: (uuid: string) => Promise<void>
     remove: (videoUuidList: string[]) => Promise<void>
     clearCompleted: () => Promise<void>

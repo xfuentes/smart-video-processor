@@ -1,7 +1,7 @@
 {
   "about.aria_label": "About",
   "about.close": "Close",
-  "about.description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.",
+  "about.description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Jellyfin-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.",
   "about.features.audio_subtitle_management.description": "Detects and labels audio/subtitle languages; renames and reorders tracks.",
   "about.features.audio_subtitle_management.title": "Audio & Subtitle Track Management:",
   "about.features.automatic_media_recognition.description": "Identifies movies and TV shows using TheMovieDB or TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metadata Correction:",
   "about.features.poster_thumbnail_download.description": "Automatically downloads posters and thumbnails.",
   "about.features.poster_thumbnail_download.title": "Poster & Thumbnail Download:",
-  "about.features.smart_file_renaming.description": "Renames files using Plex/Kodi-friendly naming conventions",
+  "about.features.smart_file_renaming.description": "Renames files using Jellyfin/Kodi-friendly naming conventions",
   "about.features.smart_file_renaming.title": "Smart File Renaming:",
   "about.features.video_encoding.description": "Converts media to efficient formats with predefined presets.",
   "about.features.video_encoding.title": "Video Encoding (H.264 / H.265):",
@@ -690,9 +690,9 @@
   "about.news.version_2_0_1.items": "Fixed episode numbers being padded to a single digit (e.g. S01E5) instead of at least 2 digits (S01E05)\nFixed the generated filename keeping absolute numbering (e.g. E127) after switching the episode order from Absolute to Official post-search\nFixed the track selection mask not blocking clicks when the track list is disabled",
   "video.message.searching_series_tmdb": "Searching series on TheMovieDB",
   "video.message.downloading_episode_tmdb": "Downloading episode image from TheMovieDB.",
-  "video.message.series_no_match": "Unable to find an exact match on TheTVDB or TheMovieDB. Please check the information provided and try again.",
+  "video.message.series_no_match": "Unable to find an exact match on the selected database. Please check the information provided and try again.",
   "settings.tab.matching": "Matching",
-  "settings.tv_show_matching_priority.label": "Preferred TV Show Database",
+  "settings.tv_show_matching_priority.label": "TV Show Database",
   "search_by.tmdb_position.label": "TMDB ID & Position",
   "about.news.version_2_1_0.items": "Added a \"Naming Convention\" setting to choose between Plex, Jellyfin, and Kodi file/folder naming\nTV shows with no match on TheTVDB are now automatically looked up on TheMovieDB as a fallback\nAdded a \"Matching\" settings tab to choose which database (TheTVDB or TheMovieDB) is tried first for TV shows, and to search a TV show by TMDB ID\nAdding files now also accepts directories, both from the \"Open\" button and by dragging a folder in, recursively adding the video files they contain\nRenaming/relocating an already-processed file with no other pending changes now moves it directly instead of a full remux, when automatic source deletion is enabled\nFixed batch-editing a hint (e.g. audio/subtitle language) across selected episodes not being offered when their current values already differed\nFixed video splitting/concatenation failing when a source filename contained a single quote\nFixed a rare crash while cleaning up temporary files removed concurrently by another process",
   "encoding.selected_for": "Selected for: {enabled}/{total}",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Check when the video contains two episodes.",
   "about.news.version_3_2_0.items": "Added support for videos containing several episodes, named like Show - S09E01-E02 - Title 1 + Title 2, with the number of episodes guessed from the video duration\nSeveral videos can now be renumbered at once with their number of episodes taken into account\nAdded the duration to the Tracks tab when editing several videos\nSearching by episode name now also works with TheMovieDB\nSearching video information is now queued with its progress shown in the status bar",
-  "about.news.version_3_3_0.items": "The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available\nThe Official episode order is now named Aired\nThe Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes\nDouble episodes are now detected more reliably from the video duration\nWith the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used"
+  "about.news.version_3_3_0.items": "The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available\nThe Official episode order is now named Aired\nThe Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes\nDouble episodes are now detected more reliably from the video duration\nWith the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used",
+  "about.news.version_3_4_0.items": "Several videos can now be cancelled at once without starting the queued jobs that are still to be cancelled\nAdded the Title & EP Name and TVDB ID & EP Name searches when matching several videos at once\nTV shows are now matched only on the database chosen in the settings, with no fallback on the other one\nThe Preferred TV Show Database setting is now named TV Show Database\nThe application description now mentions Jellyfin"
 }

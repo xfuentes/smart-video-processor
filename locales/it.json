@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Informazioni",
   "about.close": "Chiudi",
-  "about.description": "Questo strumento identifica automaticamente i tuoi film e le tue serie TV usando database popolari, poi semplifica l'intero processo: rinomina i file con le convenzioni compatibili con Plex, allega le immagini, corregge i metadati (compresi lingua e tipo delle tracce), divide o unisce i file multimediali e codifica in H.264 o H.265, tutto in un unico posto.",
+  "about.description": "Questo strumento identifica automaticamente i tuoi film e le tue serie TV usando database popolari, poi semplifica l'intero processo: rinomina i file con le convenzioni compatibili con Jellyfin, allega le immagini, corregge i metadati (compresi lingua e tipo delle tracce), divide o unisce i file multimediali e codifica in H.264 o H.265, tutto in un unico posto.",
   "about.features.audio_subtitle_management.description": "Rileva ed etichetta le lingue di audio e sottotitoli; rinomina e riordina le tracce.",
   "about.features.audio_subtitle_management.title": "Gestione delle tracce audio e sottotitoli:",
   "about.features.automatic_media_recognition.description": "Identifica film e serie TV usando TheMovieDB o TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Correzione dei metadati:",
   "about.features.poster_thumbnail_download.description": "Scarica automaticamente locandine e miniature.",
   "about.features.poster_thumbnail_download.title": "Download di locandine e miniature:",
-  "about.features.smart_file_renaming.description": "Rinomina i file con convenzioni di denominazione compatibili con Plex/Kodi",
+  "about.features.smart_file_renaming.description": "Rinomina i file con convenzioni di denominazione compatibili con Jellyfin/Kodi",
   "about.features.smart_file_renaming.title": "Rinomina intelligente dei file:",
   "about.features.video_encoding.description": "Converte i contenuti in formati efficienti con preset predefiniti.",
   "about.features.video_encoding.title": "Codifica video (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Selezionare quando il video contiene due episodi.",
   "about.news.version_3_2_0.items": "Aggiunto il supporto per i video contenenti più episodi, con nome del tipo Show - S09E01-E02 - Title 1 + Title 2, con il numero di episodi dedotto dalla durata del video\nOra è possibile rinumerare più video contemporaneamente tenendo conto del relativo numero di episodi\nAggiunta la durata alla scheda Tracce durante la modifica di più video\nLa ricerca per nome dell'episodio ora funziona anche con TheMovieDB\nLa ricerca delle informazioni sui video viene ora messa in coda, con l'avanzamento mostrato nella barra di stato",
-  "about.news.version_3_3_0.items": "L''elenco degli episodi ora mostra solo gli ordini definiti da TheTVDB per la serie, con i nomi che TheTVDB assegna loro, e Absolute è sempre disponibile\nL''ordine ufficiale degli episodi è ora denominato Trasmesso\nI campi Episodi nel file ed Episodi per video vengono sostituiti da una casella di controllo ×2 per i video contenenti due episodi\nOra i doppi episodi vengono rilevati in modo più affidabile dalla durata del video\nCon la convenzione di denominazione Jellyfin, l''ordine di visualizzazione della serie viene ora scritto in tvshow.nfo quando viene utilizzato un ordine diverso da \"Trasmesso in onda\"."
+  "about.news.version_3_3_0.items": "L''elenco degli episodi ora mostra solo gli ordini definiti da TheTVDB per la serie, con i nomi che TheTVDB assegna loro, e Absolute è sempre disponibile\nL''ordine ufficiale degli episodi è ora denominato Trasmesso\nI campi Episodi nel file ed Episodi per video vengono sostituiti da una casella di controllo ×2 per i video contenenti due episodi\nOra i doppi episodi vengono rilevati in modo più affidabile dalla durata del video\nCon la convenzione di denominazione Jellyfin, l''ordine di visualizzazione della serie viene ora scritto in tvshow.nfo quando viene utilizzato un ordine diverso da \"Trasmesso in onda\".",
+  "about.news.version_3_4_0.items": "Ora è possibile annullare più video contemporaneamente senza avviare i processi in coda che devono ancora essere annullati.\nSono state aggiunte le ricerche Titolo e nome EP e ID TVDB e nome EP quando si abbinano più video contemporaneamente\nLe serie TV ora vengono abbinate solo in base al database scelto nelle impostazioni, senza possibilità di ricorrere all'altro.\nL'impostazione Database programmi TV preferiti ora si chiama Database programmi TV\nNella descrizione dell'applicazione ora si menziona Jellyfin."
 }

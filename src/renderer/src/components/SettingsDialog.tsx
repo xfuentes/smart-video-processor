@@ -530,7 +530,7 @@ export const SettingsDialog = () => {
                       <div className="field">
                         <Label size="small" htmlFor="tvShowMatchingPrioritySelection">
                           {_('settings.tv_show_matching_priority.label', {
-                            defaultValue: 'Preferred TV Show Database'
+                            defaultValue: 'TV Show Database'
                           })}
                         </Label>
                         <Select

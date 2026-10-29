@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Sobre",
   "about.close": "Fechar",
-  "about.description": "Esta ferramenta identifica automaticamente os seus filmes e séries de TV através de bases de dados populares e simplifica todo o processo: renomeia ficheiros segundo as convenções compatíveis com o Plex, anexa imagens, corrige metadados (incluindo o idioma e o tipo das faixas), divide ou junta ficheiros multimédia e codifica para H.264 ou H.265, tudo num só lugar.",
+  "about.description": "Esta ferramenta identifica automaticamente os seus filmes e séries de TV através de bases de dados populares e simplifica todo o processo: renomeia ficheiros segundo as convenções compatíveis com o Jellyfin, anexa imagens, corrige metadados (incluindo o idioma e o tipo das faixas), divide ou junta ficheiros multimédia e codifica para H.264 ou H.265, tudo num só lugar.",
   "about.features.audio_subtitle_management.description": "Deteta e identifica os idiomas das faixas de áudio e legendas; renomeia e reordena faixas.",
   "about.features.audio_subtitle_management.title": "Gestão de faixas de áudio e legendas:",
   "about.features.automatic_media_recognition.description": "Identifica filmes e séries de TV através do TheMovieDB ou do TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Correção de metadados:",
   "about.features.poster_thumbnail_download.description": "Transfere automaticamente cartazes e miniaturas.",
   "about.features.poster_thumbnail_download.title": "Transferência de cartazes e miniaturas:",
-  "about.features.smart_file_renaming.description": "Renomeia ficheiros segundo as convenções de nomenclatura compatíveis com Plex/Kodi",
+  "about.features.smart_file_renaming.description": "Renomeia ficheiros segundo as convenções de nomenclatura compatíveis com Jellyfin/Kodi",
   "about.features.smart_file_renaming.title": "Renomeação inteligente de ficheiros:",
   "about.features.video_encoding.description": "Converte multimédia para formatos eficientes com predefinições.",
   "about.features.video_encoding.title": "Codificação de vídeo (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Marque quando o vídeo contém dois episódios.",
   "about.news.version_3_2_0.items": "Adicionado suporte para vídeos com vários episódios, nomeados como Show - S09E01-E02 - Title 1 + Title 2, com o número de episódios estimado a partir da duração do vídeo\nAgora é possível renumerar vários vídeos de uma só vez, tendo em conta o respetivo número de episódios\nAdicionada a duração ao separador Faixas ao editar vários vídeos\nA pesquisa por nome do episódio também funciona agora com o TheMovieDB\nA pesquisa de informações de vídeos passa a ser colocada em fila, com o progresso apresentado na barra de estado",
-  "about.news.version_3_3_0.items": "A lista de ordem dos episódios agora mostra apenas as ordens definidas pelo TheTVDB para a série, com os nomes que o TheTVDB lhes atribui, e a ordem \"Absolute\" está sempre disponível.\nA ordem oficial dos episódios agora se chama \"Exibido\".\nOs campos \"Episódios no Arquivo\" e \"Episódios por Vídeo\" foram substituídos por uma caixa de seleção ×2 para vídeos que contêm dois episódios.\nAgora, episódios duplos são detectados de forma mais confiável a partir da duração do vídeo.\nCom a convenção de nomenclatura Jellyfin, a ordem de exibição da série agora é gravada no arquivo tvshow.nfo quando uma ordem diferente de \"Exibida\" é utilizada."
+  "about.news.version_3_3_0.items": "A lista de ordem dos episódios agora mostra apenas as ordens definidas pelo TheTVDB para a série, com os nomes que o TheTVDB lhes atribui, e a ordem \"Absolute\" está sempre disponível.\nA ordem oficial dos episódios agora se chama \"Exibido\".\nOs campos \"Episódios no Arquivo\" e \"Episódios por Vídeo\" foram substituídos por uma caixa de seleção ×2 para vídeos que contêm dois episódios.\nAgora, episódios duplos são detectados de forma mais confiável a partir da duração do vídeo.\nCom a convenção de nomenclatura Jellyfin, a ordem de exibição da série agora é gravada no arquivo tvshow.nfo quando uma ordem diferente de \"Exibida\" é utilizada.",
+  "about.news.version_3_4_0.items": "Agora é possível cancelar vários vídeos simultaneamente sem iniciar as tarefas enfileiradas que ainda precisam ser canceladas.\nAdicionadas as buscas por Título e Nome do Episódio e por ID do TVDB e Nome do Episódio ao encontrar vários vídeos simultaneamente.\nAgora, as séries de TV são correspondidas apenas com base no banco de dados escolhido nas configurações, sem nenhuma alternativa no outro banco de dados.\nA configuração \"Base de dados de programas de TV preferida\" agora se chama \"Base de dados de programas de TV\".\nA descrição do aplicativo agora menciona o Jellyfin."
 }

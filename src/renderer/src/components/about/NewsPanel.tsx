@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.4.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_4_0.items', {
+          defaultValue:
+            'Several videos can now be cancelled at once without starting the queued jobs that are still to be cancelled\nAdded the Title & EP Name and TVDB ID & EP Name searches when matching several videos at once\nTV shows are now matched only on the database chosen in the settings, with no fallback on the other one\nThe Preferred TV Show Database setting is now named TV Show Database\nThe application description now mentions Jellyfin'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.3.0' })}</h4>
       <ul>
         {_('about.news.version_3_3_0.items', {

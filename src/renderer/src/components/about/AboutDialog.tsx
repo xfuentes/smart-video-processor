@@ -83,7 +83,7 @@ export const AboutDialog = () => {
               <p style={{ fontSize: 'small' }}>
                 {_('about.description', {
                   defaultValue:
-                    'This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Plex-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.'
+                    'This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Jellyfin-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.'
                 })}
                 <br />
                 <Link onClick={() => window.open('https://github.com/xfuentes/smart-video-processor', '_blank')}>

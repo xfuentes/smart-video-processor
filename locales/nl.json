@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Over",
   "about.close": "Sluiten",
-  "about.description": "Deze tool herkent je films en tv-series automatisch met behulp van populaire databases en stroomlijnt vervolgens het hele proces: bestanden hernoemen volgens Plex-vriendelijke conventies, artwork toevoegen, metadata corrigeren (inclusief taal en type van sporen), mediabestanden splitsen of samenvoegen en coderen naar H.264 of H.265, alles op één plek.",
+  "about.description": "Deze tool herkent je films en tv-series automatisch met behulp van populaire databases en stroomlijnt vervolgens het hele proces: bestanden hernoemen volgens Jellyfin-vriendelijke conventies, artwork toevoegen, metadata corrigeren (inclusief taal en type van sporen), mediabestanden splitsen of samenvoegen en coderen naar H.264 of H.265, alles op één plek.",
   "about.features.audio_subtitle_management.description": "Detecteert en labelt audio- en ondertiteltalen; hernoemt sporen en wijzigt hun volgorde.",
   "about.features.audio_subtitle_management.title": "Beheer van audio- en ondertitelsporen:",
   "about.features.automatic_media_recognition.description": "Herkent films en tv-series via TheMovieDB of TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metadatacorrectie:",
   "about.features.poster_thumbnail_download.description": "Downloadt automatisch posters en miniaturen.",
   "about.features.poster_thumbnail_download.title": "Posters en miniaturen downloaden:",
-  "about.features.smart_file_renaming.description": "Hernoemt bestanden volgens Plex/Kodi-vriendelijke naamconventies",
+  "about.features.smart_file_renaming.description": "Hernoemt bestanden volgens Jellyfin/Kodi-vriendelijke naamconventies",
   "about.features.smart_file_renaming.title": "Slim bestanden hernoemen:",
   "about.features.video_encoding.description": "Zet media om naar efficiënte formaten met vooraf ingestelde presets.",
   "about.features.video_encoding.title": "Videocodering (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Aanvinken wanneer de video twee afleveringen bevat.",
   "about.news.version_3_2_0.items": "Ondersteuning toegevoegd voor video's met meerdere afleveringen, met namen zoals Show - S09E01-E02 - Title 1 + Title 2, waarbij het aantal afleveringen wordt geraden aan de hand van de duur van de video\nMeerdere video's kunnen nu in één keer opnieuw worden genummerd, waarbij rekening wordt gehouden met hun aantal afleveringen\nDe duur toegevoegd aan het tabblad Tracks bij het bewerken van meerdere video's\nZoeken op afleveringsnaam werkt nu ook met TheMovieDB\nHet zoeken naar video-informatie wordt nu in een wachtrij geplaatst, met de voortgang in de statusbalk",
-  "about.news.version_3_3_0.items": "De lijst met afleveringsvolgordes toont nu alleen de volgordes die TheTVDB voor de series heeft gedefinieerd, met de namen die TheTVDB eraan geeft, en Absolute is altijd beschikbaar.\nDe officiële afleveringsvolgorde heet nu Uitgezonden\nDe velden ''Afleveringen in bestand'' en ''Afleveringen per video'' worden vervangen door een ×2-selectievakje voor video''s die twee afleveringen bevatten.\nDubbele afleveringen worden nu betrouwbaarder gedetecteerd op basis van de videoduur.\nMet de Jellyfin-naamgevingsconventie wordt de weergavevolgorde van de serie nu naar tvshow.nfo geschreven wanneer een andere volgorde dan ''Uitgezonden'' wordt gebruikt."
+  "about.news.version_3_3_0.items": "De lijst met afleveringsvolgordes toont nu alleen de volgordes die TheTVDB voor de series heeft gedefinieerd, met de namen die TheTVDB eraan geeft, en Absolute is altijd beschikbaar.\nDe officiële afleveringsvolgorde heet nu Uitgezonden\nDe velden ''Afleveringen in bestand'' en ''Afleveringen per video'' worden vervangen door een ×2-selectievakje voor video''s die twee afleveringen bevatten.\nDubbele afleveringen worden nu betrouwbaarder gedetecteerd op basis van de videoduur.\nMet de Jellyfin-naamgevingsconventie wordt de weergavevolgorde van de serie nu naar tvshow.nfo geschreven wanneer een andere volgorde dan ''Uitgezonden'' wordt gebruikt.",
+  "about.news.version_3_4_0.items": "Het is nu mogelijk om meerdere video's tegelijk te annuleren zonder dat de in de wachtrij staande taken die nog geannuleerd moeten worden, worden gestart.\nDe zoekfuncties Titel & EP-naam en TVDB ID & EP-naam zijn toegevoegd voor het vinden van meerdere video's tegelijk.\nTv-programma's worden nu alleen nog vergeleken op basis van de database die in de instellingen is gekozen, zonder terugvaloptie naar de andere database.\nDe instelling voor de voorkeursdatabase met tv-programma's heet nu 'Tv-programmadatabase'.\nIn de applicatiebeschrijving wordt nu Jellyfin genoemd."
 }

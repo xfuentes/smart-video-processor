@@ -67,7 +67,7 @@ export type Settings = {
    */
   additionalTvSearchLanguages: string[]
   /**
-   * Database to try first when matching a TV show by title. The other one is used as a fallback when no match is found.
+   * Database used when matching a TV show by title.
    */
   tvShowMatchingPriority: TVShowMatchingSource
   /**

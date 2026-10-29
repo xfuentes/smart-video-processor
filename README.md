@@ -6,14 +6,14 @@
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
 
 This tool automatically identifies your movies and TV shows using popular databases,
-then streamlines the entire process: rename files using Plex-friendly conventions,
+then streamlines the entire process: rename files using Jellyfin-friendly conventions,
 attach artwork, correct metadata (including track language and type), split or join media files
 and encode to H.264 or H.265—all in one place.
 
 #### Core Features
 
 - **Automatic Media Recognition:** Identifies movies and TV shows using TheMovieDB or TVDB
-- **Smart File Renaming:** Renames files using Plex/Kodi-friendly naming conventions
+- **Smart File Renaming:** Renames files using Jellyfin/Kodi-friendly naming conventions
 - **Metadata Correction:** Fetches and corrects title, year, episode name...
 - **Audio & Subtitle Track Management:** Detects and labels audio/subtitle languages; renames and reorders tracks.
 - **Poster & Thumbnail Download:** Automatically downloads posters and thumbnails.

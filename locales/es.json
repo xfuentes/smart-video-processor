@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Acerca de",
   "about.close": "Cerrar",
-  "about.description": "Esta herramienta identifica automáticamente tus películas y series usando bases de datos populares y agiliza todo el proceso: renombra archivos con convenciones compatibles con Plex, adjunta carátulas, corrige metadatos (incluidos el idioma y el tipo de pista), divide o une archivos multimedia y codifica a H.264 o H.265, todo en un solo lugar.",
+  "about.description": "Esta herramienta identifica automáticamente tus películas y series usando bases de datos populares y agiliza todo el proceso: renombra archivos con convenciones compatibles con Jellyfin, adjunta carátulas, corrige metadatos (incluidos el idioma y el tipo de pista), divide o une archivos multimedia y codifica a H.264 o H.265, todo en un solo lugar.",
   "about.features.audio_subtitle_management.description": "Detecta y etiqueta los idiomas de audio y subtítulos; renombra y reordena las pistas.",
   "about.features.audio_subtitle_management.title": "Gestión de pistas de audio y subtítulos:",
   "about.features.automatic_media_recognition.description": "Identifica películas y series con TheMovieDB o TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Corrección de metadatos:",
   "about.features.poster_thumbnail_download.description": "Descarga automáticamente pósters y miniaturas.",
   "about.features.poster_thumbnail_download.title": "Descarga de pósters y miniaturas:",
-  "about.features.smart_file_renaming.description": "Renombra archivos con convenciones de nomenclatura compatibles con Plex/Kodi",
+  "about.features.smart_file_renaming.description": "Renombra archivos con convenciones de nomenclatura compatibles con Jellyfin/Kodi",
   "about.features.smart_file_renaming.title": "Renombrado inteligente de archivos:",
   "about.features.video_encoding.description": "Convierte el contenido a formatos eficientes con ajustes predefinidos.",
   "about.features.video_encoding.title": "Codificación de vídeo (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Marcar cuando el vídeo contiene dos episodios.",
   "about.news.version_3_2_0.items": "Se ha añadido compatibilidad con vídeos que contienen varios episodios, con nombres como Show - S09E01-E02 - Title 1 + Title 2, y con el número de episodios deducido a partir de la duración del vídeo\nAhora se pueden renumerar varios vídeos a la vez teniendo en cuenta su número de episodios\nSe ha añadido la duración a la pestaña Pistas al editar varios vídeos\nLa búsqueda por nombre de episodio ahora también funciona con TheMovieDB\nLa búsqueda de información de vídeos ahora se pone en cola y muestra su progreso en la barra de estado",
-  "about.news.version_3_3_0.items": "La lista de orden de episodios ahora solo muestra los órdenes definidos por TheTVDB para la serie, con los nombres que TheTVDB les da, y Absolute siempre está disponible.\nEl orden oficial de los episodios ahora se llama Emitido\nLos campos Episodios en archivo y Episodios por vídeo se sustituyen por una casilla de verificación ×2 para los vídeos que contienen dos episodios.\nAhora se detectan episodios dobles de forma más fiable a partir de la duración del vídeo.\nCon la convención de nomenclatura de Jellyfin, el orden de visualización de la serie ahora se escribe en tvshow.nfo cuando se utiliza un orden distinto a Emitido."
+  "about.news.version_3_3_0.items": "La lista de orden de episodios ahora solo muestra los órdenes definidos por TheTVDB para la serie, con los nombres que TheTVDB les da, y Absolute siempre está disponible.\nEl orden oficial de los episodios ahora se llama Emitido\nLos campos Episodios en archivo y Episodios por vídeo se sustituyen por una casilla de verificación ×2 para los vídeos que contienen dos episodios.\nAhora se detectan episodios dobles de forma más fiable a partir de la duración del vídeo.\nCon la convención de nomenclatura de Jellyfin, el orden de visualización de la serie ahora se escribe en tvshow.nfo cuando se utiliza un orden distinto a Emitido.",
+  "about.news.version_3_4_0.items": "Ahora se pueden cancelar varios vídeos a la vez sin iniciar los trabajos en cola que aún están pendientes de cancelación.\nSe agregaron las búsquedas de Título y Nombre del EP y de ID de TVDB y Nombre del EP cuando coinciden varios videos a la vez.\nLos programas de televisión ahora se comparan solo con la base de datos elegida en la configuración, sin ninguna alternativa en la otra.\nLa configuración de Base de datos de programas de TV preferidos ahora se llama Base de datos de programas de TV\nLa descripción de la aplicación ahora menciona a Jellyfin."
 }

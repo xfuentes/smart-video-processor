@@ -175,6 +175,9 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
   ipcMain.handle('video:abortJob', (_event, uuid: string) => {
     VideoController.getInstance().abortJob(uuid)
   })
+  ipcMain.handle('video:abortJobs', (_event, uuids: string[]) => {
+    VideoController.getInstance().abortJobs(uuids)
+  })
   ipcMain.handle('video:remove', (_event, videoUuidList: string[]) => {
     VideoController.getInstance().remove(videoUuidList)
   })

@@ -89,9 +89,7 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
 
   const handleCancel = async () => {
     if (selectedVideos) {
-      for (const video of selectedVideos) {
-        await window.api.video.abortJob(video.uuid)
-      }
+      await window.api.video.abortJobs(selectedVideos.map((video) => video.uuid))
     }
   }
 

@@ -1,7 +1,7 @@
 {
   "about.aria_label": "정보",
   "about.close": "닫기",
-  "about.description": "이 도구는 인기 데이터베이스를 사용해 영화와 TV 프로그램을 자동으로 식별한 다음, 전체 과정을 간소화합니다. Plex 친화적인 규칙으로 파일 이름 변경, 아트워크 첨부, 메타데이터 수정(트랙 언어 및 유형 포함), 미디어 파일 분할 또는 결합, H.264 또는 H.265로 인코딩까지 모두 한 곳에서 처리할 수 있습니다.",
+  "about.description": "이 도구는 인기 데이터베이스를 사용해 영화와 TV 프로그램을 자동으로 식별한 다음, 전체 과정을 간소화합니다. Jellyfin 친화적인 규칙으로 파일 이름 변경, 아트워크 첨부, 메타데이터 수정(트랙 언어 및 유형 포함), 미디어 파일 분할 또는 결합, H.264 또는 H.265로 인코딩까지 모두 한 곳에서 처리할 수 있습니다.",
   "about.features.audio_subtitle_management.description": "오디오/자막 언어를 감지하여 표시하고, 트랙 이름을 바꾸고 순서를 변경합니다.",
   "about.features.audio_subtitle_management.title": "오디오 및 자막 트랙 관리:",
   "about.features.automatic_media_recognition.description": "TheMovieDB 또는 TVDB를 사용하여 영화와 TV 프로그램을 식별합니다",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "메타데이터 수정:",
   "about.features.poster_thumbnail_download.description": "포스터와 썸네일을 자동으로 다운로드합니다.",
   "about.features.poster_thumbnail_download.title": "포스터 및 썸네일 다운로드:",
-  "about.features.smart_file_renaming.description": "Plex/Kodi 친화적인 명명 규칙으로 파일 이름을 변경합니다",
+  "about.features.smart_file_renaming.description": "Jellyfin/Kodi 친화적인 명명 규칙으로 파일 이름을 변경합니다",
   "about.features.smart_file_renaming.title": "스마트 파일 이름 변경:",
   "about.features.video_encoding.description": "미리 정의된 프리셋으로 미디어를 효율적인 형식으로 변환합니다.",
   "about.features.video_encoding.title": "비디오 인코딩(H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "동영상에 두 개의 에피소드가 들어 있으면 선택하세요.",
   "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 형식의 이름으로 여러 에피소드가 담긴 영상을 지원하며, 에피소드 수는 영상 길이를 기준으로 추정합니다\n이제 여러 영상의 에피소드 수를 고려하여 한 번에 번호를 다시 매길 수 있습니다\n여러 영상을 편집할 때 트랙 탭에 길이가 추가되었습니다\n에피소드 이름으로 검색하는 기능이 이제 TheMovieDB에서도 작동합니다\n영상 정보 검색이 대기열에 추가되며 진행률이 상태 표시줄에 표시됩니다",
-  "about.news.version_3_3_0.items": "이제 에피소드 순서 목록에는 TheTVDB에서 정의한 시리즈 순서와 TheTVDB에서 지정한 이름만 표시되며, Absolute는 항상 이용 가능합니다.\n이제 공식 에피소드 순서는 ''방영일''로 명명되었습니다.\n두 개의 에피소드가 포함된 비디오의 경우, ''파일 내 에피소드 수'' 및 ''비디오당 에피소드 수'' 필드가 ''×2'' 체크박스로 대체됩니다.\n이제 영상 길이를 통해 중복 에피소드를 더욱 정확하게 감지할 수 있습니다.\n젤리핀 명명 규칙에 따라, 방영 순서 이외의 순서가 사용될 경우 시리즈 표시 순서가 tvshow.nfo 파일에 기록됩니다."
+  "about.news.version_3_3_0.items": "이제 에피소드 순서 목록에는 TheTVDB에서 정의한 시리즈 순서와 TheTVDB에서 지정한 이름만 표시되며, Absolute는 항상 이용 가능합니다.\n이제 공식 에피소드 순서는 ''방영일''로 명명되었습니다.\n두 개의 에피소드가 포함된 비디오의 경우, ''파일 내 에피소드 수'' 및 ''비디오당 에피소드 수'' 필드가 ''×2'' 체크박스로 대체됩니다.\n이제 영상 길이를 통해 중복 에피소드를 더욱 정확하게 감지할 수 있습니다.\n젤리핀 명명 규칙에 따라, 방영 순서 이외의 순서가 사용될 경우 시리즈 표시 순서가 tvshow.nfo 파일에 기록됩니다.",
+  "about.news.version_3_4_0.items": "이제 대기 중인 다른 동영상 취소 작업을 시작하지 않고도 여러 동영상을 한 번에 취소할 수 있습니다.\n여러 영상을 한 번에 검색할 때 제목 및 EP 이름, TVDB ID 및 EP 이름 검색 기능을 추가했습니다.\n이제 TV 프로그램은 설정에서 선택한 데이터베이스에 따라서만 매칭되며, 다른 데이터베이스를 사용하는 대체 기능은 없습니다.\n'선호하는 TV 프로그램 데이터베이스' 설정 이름이 'TV 프로그램 데이터베이스'로 변경되었습니다.\n이제 애플리케이션 설명에 Jellyfin이 언급됩니다."
 }

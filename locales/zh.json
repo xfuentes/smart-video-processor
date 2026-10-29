@@ -1,7 +1,7 @@
 {
   "about.aria_label": "关于",
   "about.close": "关闭",
-  "about.description": "本工具可借助常用数据库自动识别您的电影和电视剧，并简化整个处理流程：按照 Plex 友好的命名规范重命名文件、添加海报图片、修正元数据（包括轨道语言和类型）、拆分或合并媒体文件，以及编码为 H.264 或 H.265——一站式完成。",
+  "about.description": "本工具可借助常用数据库自动识别您的电影和电视剧，并简化整个处理流程：按照 Jellyfin 友好的命名规范重命名文件、添加海报图片、修正元数据（包括轨道语言和类型）、拆分或合并媒体文件，以及编码为 H.264 或 H.265——一站式完成。",
   "about.features.audio_subtitle_management.description": "检测并标注音频/字幕语言；重命名并重新排序轨道。",
   "about.features.audio_subtitle_management.title": "音频和字幕轨道管理：",
   "about.features.automatic_media_recognition.description": "使用 TheMovieDB 或 TVDB 识别电影和电视剧",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "元数据修正：",
   "about.features.poster_thumbnail_download.description": "自动下载海报和缩略图。",
   "about.features.poster_thumbnail_download.title": "海报和缩略图下载：",
-  "about.features.smart_file_renaming.description": "使用 Plex/Kodi 友好的命名规范重命名文件",
+  "about.features.smart_file_renaming.description": "使用 Jellyfin/Kodi 友好的命名规范重命名文件",
   "about.features.smart_file_renaming.title": "智能文件重命名：",
   "about.features.video_encoding.description": "通过预设方案将媒体转换为高效格式。",
   "about.features.video_encoding.title": "视频编码（H.264 / H.265）：",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "视频包含两集时勾选。",
   "about.news.version_3_2_0.items": "新增对包含多集内容的视频的支持,命名格式如 Show - S09E01-E02 - Title 1 + Title 2,集数会根据视频时长自动推测\n现在可以一次性对多个视频重新编号,并会考虑各视频的集数\n同时编辑多个视频时,轨道选项卡中新增了时长显示\n按剧集名称搜索现在也支持 TheMovieDB\n视频信息搜索现在会进入队列,并在状态栏中显示进度",
-  "about.news.version_3_3_0.items": "现在剧集顺序列表仅显示 TheTVDB 为该剧集定义的顺序，并沿用 TheTVDB 给出的名称，而“绝对顺序”始终可用。\n官方剧集顺序现已命名为“播出”。\n对于包含两集的视频，“文件中的剧集数”和“每个视频的剧集数”字段将被“×2”复选框取代。\n现在可以根据视频时长更可靠地检测出重复播放的片段。\n根据 Jellyfin 的命名规则，当使用除“播出”以外的顺序时，剧集显示顺序现在会写入 tvshow.nfo 文件。"
+  "about.news.version_3_3_0.items": "现在剧集顺序列表仅显示 TheTVDB 为该剧集定义的顺序，并沿用 TheTVDB 给出的名称，而“绝对顺序”始终可用。\n官方剧集顺序现已命名为“播出”。\n对于包含两集的视频，“文件中的剧集数”和“每个视频的剧集数”字段将被“×2”复选框取代。\n现在可以根据视频时长更可靠地检测出重复播放的片段。\n根据 Jellyfin 的命名规则，当使用除“播出”以外的顺序时，剧集显示顺序现在会写入 tvshow.nfo 文件。",
+  "about.news.version_3_4_0.items": "现在可以一次性取消多个视频，而无需启动那些尚未取消的已排队任务。\n新增了同时匹配多个视频时按标题和剧集名称以及 TVDB ID 和剧集名称搜索的功能。\n现在电视节目仅根据设置中选择的数据库进行匹配，不会使用其他数据库作为备选方案。\n“首选电视节目数据库”设置现已更名为“电视节目数据库”。\n应用程序描述现在提到了 Jellyfin。"
 }

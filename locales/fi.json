@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Tietoja",
   "about.close": "Sulje",
-  "about.description": "Tämä työkalu tunnistaa elokuvasi ja TV-sarjasi automaattisesti suosittujen tietokantojen avulla ja sujuvoittaa sitten koko prosessin: nimeää tiedostot Plex-yhteensopivien käytäntöjen mukaan, liittää kansikuvat, korjaa metatiedot (mukaan lukien raidan kielen ja tyypin), jakaa tai yhdistää mediatiedostoja ja koodaa H.264- tai H.265-muotoon – kaikki yhdessä paikassa.",
+  "about.description": "Tämä työkalu tunnistaa elokuvasi ja TV-sarjasi automaattisesti suosittujen tietokantojen avulla ja sujuvoittaa sitten koko prosessin: nimeää tiedostot Jellyfin-yhteensopivien käytäntöjen mukaan, liittää kansikuvat, korjaa metatiedot (mukaan lukien raidan kielen ja tyypin), jakaa tai yhdistää mediatiedostoja ja koodaa H.264- tai H.265-muotoon – kaikki yhdessä paikassa.",
   "about.features.audio_subtitle_management.description": "Tunnistaa ja merkitsee ääni- ja tekstitysraitojen kielet sekä nimeää ja järjestää raidat uudelleen.",
   "about.features.audio_subtitle_management.title": "Ääni- ja tekstitysraitojen hallinta:",
   "about.features.automatic_media_recognition.description": "Tunnistaa elokuvat ja TV-sarjat TheMovieDB:n tai TVDB:n avulla",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metatietojen korjaus:",
   "about.features.poster_thumbnail_download.description": "Lataa julisteet ja pikkukuvat automaattisesti.",
   "about.features.poster_thumbnail_download.title": "Julisteiden ja pikkukuvien lataus:",
-  "about.features.smart_file_renaming.description": "Nimeää tiedostot Plex- ja Kodi-yhteensopivien nimeämiskäytäntöjen mukaan",
+  "about.features.smart_file_renaming.description": "Nimeää tiedostot Jellyfin- ja Kodi-yhteensopivien nimeämiskäytäntöjen mukaan",
   "about.features.smart_file_renaming.title": "Älykäs tiedostojen nimeäminen:",
   "about.features.video_encoding.description": "Muuntaa median tehokkaisiin muotoihin valmiiden esiasetusten avulla.",
   "about.features.video_encoding.title": "Videon koodaus (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Valitse, kun video sisältää kaksi jaksoa.",
   "about.news.version_3_2_0.items": "Lisätty tuki videoille, jotka sisältävät useita jaksoja ja jotka on nimetty muodossa Show - S09E01-E02 - Title 1 + Title 2, jolloin jaksojen määrä arvioidaan videon keston perusteella\nUseiden videoiden numerointi voidaan nyt uusia kerralla ottaen huomioon niiden jaksojen määrä\nLisätty kesto Raidat-välilehteen, kun muokataan useita videoita\nHaku jakson nimellä toimii nyt myös TheMovieDB:n kanssa\nVideotietojen haku asetetaan nyt jonoon, ja sen eteneminen näkyy tilapalkissa",
-  "about.news.version_3_3_0.items": "Jaksojen järjestysluettelo näyttää nyt vain TheTVDB:n sarjalle määrittämät järjestykset TheTVDB:n niille antamilla nimillä, ja Absolute on aina saatavilla.\nVirallinen jaksojärjestys on nyt nimeltään Esitetty\nTiedostossa olevat jaksot- ja Jaksot videota kohden -kentät on korvattu ×2-valintaruudulla videoille, jotka sisältävät kaksi jaksoa.\nTuplajaksot tunnistetaan nyt luotettavammin videon keston perusteella.\nJellyfin-nimeämiskäytännön myötä sarjan näyttöjärjestys kirjoitetaan nyt tvshow.nfo-tiedostoon, kun käytetään muuta järjestystä kuin Esitetty."
+  "about.news.version_3_3_0.items": "Jaksojen järjestysluettelo näyttää nyt vain TheTVDB:n sarjalle määrittämät järjestykset TheTVDB:n niille antamilla nimillä, ja Absolute on aina saatavilla.\nVirallinen jaksojärjestys on nyt nimeltään Esitetty\nTiedostossa olevat jaksot- ja Jaksot videota kohden -kentät on korvattu ×2-valintaruudulla videoille, jotka sisältävät kaksi jaksoa.\nTuplajaksot tunnistetaan nyt luotettavammin videon keston perusteella.\nJellyfin-nimeämiskäytännön myötä sarjan näyttöjärjestys kirjoitetaan nyt tvshow.nfo-tiedostoon, kun käytetään muuta järjestystä kuin Esitetty.",
+  "about.news.version_3_4_0.items": "Useita videoita voidaan nyt peruuttaa kerralla käynnistämättä jonossa olevia töitä, jotka on vielä peruutettava.\nLisätty otsikko- ja EP-nimen sekä TVDB-tunnuksen ja EP-nimen haut useiden videoiden samanaikaiseen hakuun.\nTV-ohjelmat yhdistetään nyt vain asetuksissa valitun tietokannan perusteella, eikä vaihtoehtoa löydy muualta.\nEnsisijainen TV-ohjelmatietokanta -asetuksen nimi on nyt TV-ohjelmatietokanta.\nSovelluksen kuvauksessa mainitaan nyt Jellyfin"
 }

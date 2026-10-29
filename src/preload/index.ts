@@ -145,6 +145,7 @@ const api: SvpAPI = {
       ipcRenderer.invoke('video:setStartFrom', uuid, value),
     setEndAt: (uuid: string, value?: number): Promise<void> => ipcRenderer.invoke('video:setEndAt', uuid, value),
     process: (uuid: string): Promise<void> => ipcRenderer.invoke('video:process', uuid),
+    abortJobs: (uuids: string[]): Promise<void> => ipcRenderer.invoke('video:abortJobs', uuids),
     abortJob: (uuid: string): Promise<void> => ipcRenderer.invoke('video:abortJob', uuid),
     remove: (videoUuidList: string[]): Promise<void> => ipcRenderer.invoke('video:remove', videoUuidList),
     clearCompleted: (): Promise<void> => ipcRenderer.invoke('video:clearCompleted'),

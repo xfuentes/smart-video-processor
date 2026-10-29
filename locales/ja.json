@@ -1,7 +1,7 @@
 {
   "about.aria_label": "バージョン情報",
   "about.close": "閉じる",
-  "about.description": "このツールは、人気のデータベースを使って映画やテレビ番組を自動的に識別し、作業全体を効率化します。Plex 向けの命名規則でファイル名を変更し、アートワークを添付し、メタデータ(トラックの言語や種類を含む)を修正し、メディアファイルを分割または結合し、H.264 または H.265 にエンコードする作業を、すべて 1 か所で行えます。",
+  "about.description": "このツールは、人気のデータベースを使って映画やテレビ番組を自動的に識別し、作業全体を効率化します。Jellyfin 向けの命名規則でファイル名を変更し、アートワークを添付し、メタデータ(トラックの言語や種類を含む)を修正し、メディアファイルを分割または結合し、H.264 または H.265 にエンコードする作業を、すべて 1 か所で行えます。",
   "about.features.audio_subtitle_management.description": "音声/字幕の言語を検出してラベルを付け、トラックの名前変更や並べ替えを行います。",
   "about.features.audio_subtitle_management.title": "音声・字幕トラック管理:",
   "about.features.automatic_media_recognition.description": "TheMovieDB または TVDB を使って映画やテレビ番組を識別します",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "メタデータの修正:",
   "about.features.poster_thumbnail_download.description": "ポスターやサムネイルを自動的にダウンロードします。",
   "about.features.poster_thumbnail_download.title": "ポスター・サムネイルのダウンロード:",
-  "about.features.smart_file_renaming.description": "Plex/Kodi 向けの命名規則でファイル名を変更します",
+  "about.features.smart_file_renaming.description": "Jellyfin/Kodi 向けの命名規則でファイル名を変更します",
   "about.features.smart_file_renaming.title": "スマートなファイル名変更:",
   "about.features.video_encoding.description": "定義済みのプリセットで、メディアを効率的な形式に変換します。",
   "about.features.video_encoding.title": "ビデオエンコード(H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "動画に2話分が含まれている場合にチェックします。",
   "about.news.version_3_2_0.items": "Show - S09E01-E02 - Title 1 + Title 2 のような名前で、複数のエピソードを含む動画に対応しました。エピソード数は動画の長さから推測されます\n複数の動画を、それぞれのエピソード数を考慮したうえで一括して番号を振り直せるようになりました\n複数の動画を編集する際の「トラック」タブに再生時間を追加しました\nエピソード名での検索が TheMovieDB でも使えるようになりました\n動画情報の検索がキューに追加され、進行状況がステータスバーに表示されるようになりました",
-  "about.news.version_3_3_0.items": "エピソード順序リストには、TheTVDBがシリーズ用に定義した順序と、TheTVDBが付けた名前のみが表示されるようになりました。Absoluteは常に利用可能です。\n公式エピソード順序は放送順になりました\n2つのエピソードを含む動画の場合、「ファイル内のエピソード数」と「動画あたりのエピソード数」のフィールドは「×2」チェックボックスに置き換えられます。\n動画の長さから、2話連続エピソードがより確実に検出されるようになりました。\nJellyfinの命名規則では、放送順以外の順序が使用されている場合、シリーズの表示順序がtvshow.nfoに書き込まれるようになりました。"
+  "about.news.version_3_3_0.items": "エピソード順序リストには、TheTVDBがシリーズ用に定義した順序と、TheTVDBが付けた名前のみが表示されるようになりました。Absoluteは常に利用可能です。\n公式エピソード順序は放送順になりました\n2つのエピソードを含む動画の場合、「ファイル内のエピソード数」と「動画あたりのエピソード数」のフィールドは「×2」チェックボックスに置き換えられます。\n動画の長さから、2話連続エピソードがより確実に検出されるようになりました。\nJellyfinの命名規則では、放送順以外の順序が使用されている場合、シリーズの表示順序がtvshow.nfoに書き込まれるようになりました。",
+  "about.news.version_3_4_0.items": "複数の動画を一度にキャンセルできるようになり、キャンセル待ちのジョブが開始されることもなくなりました。\n複数の動画を同時に照合する際に、タイトルとEP名、およびTVDB IDとEP名による検索機能を追加しました。\nテレビ番組は、設定で選択したデータベースのみに基づいてマッチングされるようになり、他のデータベースへのフォールバックは行われなくなりました。\n「優先テレビ番組データベース」の設定は、「テレビ番組データベース」という名称に変更されました。\nアプリケーションの説明にジェリーフィンについて記載されています。"
 }

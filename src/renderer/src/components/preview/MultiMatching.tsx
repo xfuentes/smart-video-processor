@@ -227,8 +227,14 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                   <option key={SearchBy.TITLE_POSITION} value={SearchBy.TITLE_POSITION}>
                     {_('search_by.title_position.label', { defaultValue: 'Title & Position' })}
                   </option>
+                  <option key={SearchBy.TITLE_EP_NAME} value={SearchBy.TITLE_EP_NAME}>
+                    {_('search_by.title_ep_name.label', { defaultValue: 'Title & EP Name' })}
+                  </option>
                   <option key={SearchBy.TVDB_POSITION} value={SearchBy.TVDB_POSITION}>
                     {_('search_by.tvdb_position.label', { defaultValue: 'TVDB ID & Position' })}
+                  </option>
+                  <option key={SearchBy.TVDB_EP_NAME} value={SearchBy.TVDB_EP_NAME}>
+                    {_('search_by.tvdb_ep_name.label', { defaultValue: 'TVDB ID & EP Name' })}
                   </option>
                   <option key={SearchBy.TMDB} value={SearchBy.TMDB}>
                     {_('search_by.tmdb_position.label', { defaultValue: 'TMDB ID & Position' })}
@@ -236,7 +242,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </Select>
               </Field>
             </div>
-            {searchBy === SearchBy.TITLE_POSITION && (
+            {(searchBy === SearchBy.TITLE_POSITION || searchBy === SearchBy.TITLE_EP_NAME) && (
               <>
                 <div>
                   <Field
@@ -281,7 +287,7 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
                 </div>
               </>
             )}
-            {searchBy === SearchBy.TVDB_POSITION && (
+            {(searchBy === SearchBy.TVDB_POSITION || searchBy === SearchBy.TVDB_EP_NAME) && (
               <>
                 <div>
                   <Field
@@ -357,7 +363,9 @@ export const MultiMatching = ({ videos, disabled }: Props) => {
               </Field>
             </div>
             {(searchBy === SearchBy.TITLE_POSITION ||
+              searchBy === SearchBy.TITLE_EP_NAME ||
               searchBy === SearchBy.TVDB_POSITION ||
+              searchBy === SearchBy.TVDB_EP_NAME ||
               searchBy === SearchBy.TMDB) && (
               <div>
                 <Field

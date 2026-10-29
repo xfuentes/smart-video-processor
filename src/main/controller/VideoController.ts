@@ -274,6 +274,13 @@ export class VideoController {
     return this.getVideoByUuid(uuid).abortJob()
   }
 
+  abortJobs(uuids: string[]) {
+    // Running jobs go last so that cancelling them does not start the queued jobs still to be cancelled.
+    const videos = uuids.map((uuid) => this.getVideoByUuid(uuid))
+    const isRunning = (video: Video) => (video.job?.started ? 1 : 0)
+    videos.sort((a, b) => isRunning(a) - isRunning(b)).forEach((video) => video.abortJob())
+  }
+
   remove(videoUuidList: string[]) {
     this.videos = this.videos.filter((v) => {
       if (videoUuidList.includes(v.uuid)) {

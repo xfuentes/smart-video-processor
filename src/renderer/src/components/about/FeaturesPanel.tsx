@@ -51,7 +51,7 @@ export const FeaturesPanel = (): React.JSX.Element => {
           <b>{_('about.features.smart_file_renaming.title', { defaultValue: 'Smart File Renaming:' })}</b>{' '}
           <small>
             {_('about.features.smart_file_renaming.description', {
-              defaultValue: 'Renames files using Plex/Kodi-friendly naming conventions'
+              defaultValue: 'Renames files using Jellyfin/Kodi-friendly naming conventions'
             })}
           </small>
         </li>

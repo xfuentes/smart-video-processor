@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Om",
   "about.close": "Lukk",
-  "about.description": "Dette verktøyet identifiserer filmene og TV-seriene dine automatisk ved hjelp av populære databaser, og forenkler deretter hele prosessen: gi filer nytt navn etter Plex-vennlige konvensjoner, legg ved omslagsbilder, korriger metadata (inkludert språk og type for spor), del eller slå sammen mediefiler og kod til H.264 eller H.265 – alt på ett sted.",
+  "about.description": "Dette verktøyet identifiserer filmene og TV-seriene dine automatisk ved hjelp av populære databaser, og forenkler deretter hele prosessen: gi filer nytt navn etter Jellyfin-vennlige konvensjoner, legg ved omslagsbilder, korriger metadata (inkludert språk og type for spor), del eller slå sammen mediefiler og kod til H.264 eller H.265 – alt på ett sted.",
   "about.features.audio_subtitle_management.description": "Oppdager og merker lyd- og undertekstspråk; gir spor nytt navn og endrer rekkefølgen.",
   "about.features.audio_subtitle_management.title": "Administrasjon av lyd- og undertekstspor:",
   "about.features.automatic_media_recognition.description": "Identifiserer filmer og TV-serier ved hjelp av TheMovieDB eller TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metadatakorrigering:",
   "about.features.poster_thumbnail_download.description": "Laster automatisk ned plakater og miniatyrbilder.",
   "about.features.poster_thumbnail_download.title": "Nedlasting av plakater og miniatyrbilder:",
-  "about.features.smart_file_renaming.description": "Gir filer nytt navn etter Plex/Kodi-vennlige navnekonvensjoner",
+  "about.features.smart_file_renaming.description": "Gir filer nytt navn etter Jellyfin/Kodi-vennlige navnekonvensjoner",
   "about.features.smart_file_renaming.title": "Smart omdøping av filer:",
   "about.features.video_encoding.description": "Konverterer medier til effektive formater med forhåndsdefinerte forhåndsinnstillinger.",
   "about.features.video_encoding.title": "Videokoding (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Merk av når videoen inneholder to episoder.",
   "about.news.version_3_2_0.items": "Lagt til støtte for videoer som inneholder flere episoder, med navn som Show - S09E01-E02 - Title 1 + Title 2, der antall episoder gjettes ut fra videoens varighet\nFlere videoer kan nå nummereres på nytt samtidig, og antall episoder tas med i beregningen\nLagt til varighet i fanen Spor når flere videoer redigeres\nSøk etter episodenavn fungerer nå også med TheMovieDB\nSøk etter videoinformasjon legges nå i kø, og fremdriften vises i statuslinjen",
-  "about.news.version_3_3_0.items": "Episoderekkefølgelisten viser nå bare rekkefølgene som er definert av TheTVDB for serien, med navnene TheTVDB gir dem, og Absolute er alltid tilgjengelig.\nDen offisielle episoderekkefølgen heter nå Sendt\nFeltene Episoder i fil og Episoder per video erstattes av en ×2-avmerkingsboks for videoer som inneholder to episoder.\nDobbelte episoder oppdages nå mer pålitelig fra videoens varighet\nMed navnekonvensjonen Jellyfin skrives seriens visningsrekkefølge nå til tvshow.nfo når en annen rekkefølge enn Aired brukes"
+  "about.news.version_3_3_0.items": "Episoderekkefølgelisten viser nå bare rekkefølgene som er definert av TheTVDB for serien, med navnene TheTVDB gir dem, og Absolute er alltid tilgjengelig.\nDen offisielle episoderekkefølgen heter nå Sendt\nFeltene Episoder i fil og Episoder per video erstattes av en ×2-avmerkingsboks for videoer som inneholder to episoder.\nDobbelte episoder oppdages nå mer pålitelig fra videoens varighet\nMed navnekonvensjonen Jellyfin skrives seriens visningsrekkefølge nå til tvshow.nfo når en annen rekkefølge enn Aired brukes",
+  "about.news.version_3_4_0.items": "Flere videoer kan nå avbrytes samtidig uten å starte jobbene i køen som fortsatt skal avbrytes.\nLa til søk etter tittel og EP-navn og TVDB ID og EP-navn når det ble funnet treff på flere videoer samtidig\nTV-programmer matches nå bare i databasen som er valgt i innstillingene, uten reserve på den andre.\nInnstillingen for databasen for foretrukket TV-program heter nå TV-programdatabase\nApplikasjonsbeskrivelsen nevner nå Jellyfin"
 }

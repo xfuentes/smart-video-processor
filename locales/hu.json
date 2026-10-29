@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Névjegy",
   "about.close": "Bezárás",
-  "about.description": "Ez az eszköz népszerű adatbázisok segítségével automatikusan azonosítja a filmjeit és sorozatait, majd leegyszerűsíti az egész folyamatot: átnevezi a fájlokat Plex-barát elnevezési szabályok szerint, csatolja a borítóképeket, javítja a metaadatokat (a sávok nyelvét és típusát is), szétvágja vagy összefűzi a médiafájlokat, és H.264 vagy H.265 formátumba kódolja őket – mindezt egy helyen.",
+  "about.description": "Ez az eszköz népszerű adatbázisok segítségével automatikusan azonosítja a filmjeit és sorozatait, majd leegyszerűsíti az egész folyamatot: átnevezi a fájlokat Jellyfin-barát elnevezési szabályok szerint, csatolja a borítóképeket, javítja a metaadatokat (a sávok nyelvét és típusát is), szétvágja vagy összefűzi a médiafájlokat, és H.264 vagy H.265 formátumba kódolja őket – mindezt egy helyen.",
   "about.features.audio_subtitle_management.description": "Felismeri és címkézi a hang- és feliratsávok nyelvét; átnevezi és átrendezi a sávokat.",
   "about.features.audio_subtitle_management.title": "Hang- és feliratsávok kezelése:",
   "about.features.automatic_media_recognition.description": "Filmeket és sorozatokat azonosít a TheMovieDB vagy a TVDB segítségével",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metaadatok javítása:",
   "about.features.poster_thumbnail_download.description": "Automatikusan letölti a plakátokat és az indexképeket.",
   "about.features.poster_thumbnail_download.title": "Plakátok és indexképek letöltése:",
-  "about.features.smart_file_renaming.description": "Plex/Kodi-barát elnevezési szabályok szerint nevezi át a fájlokat",
+  "about.features.smart_file_renaming.description": "Jellyfin/Kodi-barát elnevezési szabályok szerint nevezi át a fájlokat",
   "about.features.smart_file_renaming.title": "Intelligens fájlátnevezés:",
   "about.features.video_encoding.description": "Hatékony formátumokra konvertálja a médiát előre megadott előbeállításokkal.",
   "about.features.video_encoding.title": "Videókódolás (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Jelölje be, ha a videó két epizódot tartalmaz.",
   "about.news.version_3_2_0.items": "Támogatás több epizódot tartalmazó videókhoz, amelyek neve például így néz ki: Show - S09E01-E02 - Title 1 + Title 2; az epizódok számát a rendszer a videó hossza alapján becsüli meg\nTöbb videó egyszerre újraszámozható, az epizódok számának figyelembevételével\nA hossz megjelenik a Sávok lapon, ha egyszerre több videót szerkesztesz\nAz epizódnév szerinti keresés mostantól a TheMovieDB-vel is működik\nA videóinformációk keresése mostantól sorba kerül, és az előrehaladása megjelenik az állapotsoron",
-  "about.news.version_3_3_0.items": "Az epizódsorrendi lista mostantól csak a TheTVDB által a sorozathoz meghatározott sorrendeket mutatja, a TheTVDB által adott nevekkel, és az Absolute mindig elérhető.\nA hivatalos epizódsorrend mostantól Sugárzott néven fut.\nA két epizódot tartalmazó videóknál a fájlban lévő epizódok és az epizódok videónkénti száma mezőket egy ×2 jelölőnégyzet váltotta fel.\nA dupla epizódokat mostantól megbízhatóbban észleli a rendszer a videó időtartama alapján.\nA Jellyfin elnevezési konvenciónak köszönhetően a sorozatok megjelenítési sorrendje mostantól a tvshow.nfo fájlba kerül, ha az Adott sorrendtől eltérő sorrendet használunk."
+  "about.news.version_3_3_0.items": "Az epizódsorrendi lista mostantól csak a TheTVDB által a sorozathoz meghatározott sorrendeket mutatja, a TheTVDB által adott nevekkel, és az Absolute mindig elérhető.\nA hivatalos epizódsorrend mostantól Sugárzott néven fut.\nA két epizódot tartalmazó videóknál a fájlban lévő epizódok és az epizódok videónkénti száma mezőket egy ×2 jelölőnégyzet váltotta fel.\nA dupla epizódokat mostantól megbízhatóbban észleli a rendszer a videó időtartama alapján.\nA Jellyfin elnevezési konvenciónak köszönhetően a sorozatok megjelenítési sorrendje mostantól a tvshow.nfo fájlba kerül, ha az Adott sorrendtől eltérő sorrendet használunk.",
+  "about.news.version_3_4_0.items": "Több videó is egyszerre törölhető anélkül, hogy el kellene indítani a még megszakításra váró, sorban álló feladatokat.\nHozzáadva a cím és az EP címe, valamint a TVDB azonosító és az EP címe keresések több videó egyidejű találatánál.\nA tévéműsorok mostantól csak a beállításokban kiválasztott adatbázis alapján egyeznek, a másik adatbázis alapján nem lehet visszaállítani a keresést.\nA Preferált TV-műsor adatbázis beállítás neve mostantól TV-műsor adatbázis\nAz alkalmazás leírása mostantól említi a Jellyfint"
 }

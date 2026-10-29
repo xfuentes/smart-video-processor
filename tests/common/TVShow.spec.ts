@@ -203,7 +203,8 @@ test('No match for Spanish episode name when only French and English are enabled
   video.destroy()
 })
 
-test('TV-Show search falls back to TheMovieDB when no TVDB match is found', async () => {
+test('TV-Show search only uses TheMovieDB when it is the selected database', async () => {
+  currentSettings.tvShowMatchingPriority = TVShowMatchingSource.TMDB
   currentSettings.language = 'en'
   currentSettings.favoriteLanguages = ['en']
   const tvdbSearchSpy = vi.spyOn(TVDBClient.getInstance(), 'searchSeriesByTitle').mockResolvedValue([])
@@ -226,7 +227,7 @@ test('TV-Show search falls back to TheMovieDB when no TVDB match is found', asyn
   expect(video.type).toBe(VideoType.TV_SHOW)
   await video.search()
 
-  expect(tvdbSearchSpy).toHaveBeenCalled()
+  expect(tvdbSearchSpy).not.toHaveBeenCalled()
   expect(tmdbSearchSpy).toHaveBeenCalled()
   expect(tmdbDetailsSpy).toHaveBeenCalled()
   expect(video.tvShow.theTVDB).toBeUndefined()
@@ -236,10 +237,11 @@ test('TV-Show search falls back to TheMovieDB when no TVDB match is found', asyn
   tvdbSearchSpy.mockRestore()
   tmdbSearchSpy.mockRestore()
   tmdbDetailsSpy.mockRestore()
+  currentSettings.tvShowMatchingPriority = defaultSettings.tvShowMatchingPriority
   video.destroy()
 })
 
-test('TV-Show search shows a warning when neither TVDB nor TheMovieDB have a match', async () => {
+test('TV-Show search does not fall back on the other database when no match is found', async () => {
   currentSettings.language = 'en'
   currentSettings.favoriteLanguages = ['en']
   const tvdbSearchSpy = vi.spyOn(TVDBClient.getInstance(), 'searchSeriesByTitle').mockResolvedValue([])
@@ -248,11 +250,12 @@ test('TV-Show search shows a warning when neither TVDB nor TheMovieDB have a mat
   const video = new Video('c:\\Some.Completely.Unknown.Show.S01E01.mkv')
   await video.search()
 
+  expect(tmdbSearchSpy).not.toHaveBeenCalled()
   expect(video.tvShow.theTVDB).toBeUndefined()
   expect(video.tvShow.theMovieDB).toBeUndefined()
   expect(video.status).toBe('Warning')
   expect(video.message).toBe(
-    'Unable to find an exact match on TheTVDB or TheMovieDB. Please check the information provided and try again.'
+    'Unable to find an exact match on the selected database. Please check the information provided and try again.'
   )
 
   tvdbSearchSpy.mockRestore()

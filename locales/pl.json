@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Informacje",
   "about.close": "Zamknij",
-  "about.description": "To narzędzie automatycznie rozpoznaje Twoje filmy i seriale za pomocą popularnych baz danych, a następnie usprawnia cały proces: zmienia nazwy plików zgodnie z konwencjami zgodnymi z Plex, dołącza grafiki, poprawia metadane (w tym język i typ ścieżek), dzieli lub łączy pliki multimedialne oraz koduje do H.264 lub H.265 — wszystko w jednym miejscu.",
+  "about.description": "To narzędzie automatycznie rozpoznaje Twoje filmy i seriale za pomocą popularnych baz danych, a następnie usprawnia cały proces: zmienia nazwy plików zgodnie z konwencjami zgodnymi z Jellyfin, dołącza grafiki, poprawia metadane (w tym język i typ ścieżek), dzieli lub łączy pliki multimedialne oraz koduje do H.264 lub H.265 — wszystko w jednym miejscu.",
   "about.features.audio_subtitle_management.description": "Wykrywa i oznacza języki ścieżek audio i napisów; zmienia nazwy i kolejność ścieżek.",
   "about.features.audio_subtitle_management.title": "Zarządzanie ścieżkami audio i napisów:",
   "about.features.automatic_media_recognition.description": "Rozpoznaje filmy i seriale za pomocą TheMovieDB lub TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Poprawianie metadanych:",
   "about.features.poster_thumbnail_download.description": "Automatycznie pobiera plakaty i miniatury.",
   "about.features.poster_thumbnail_download.title": "Pobieranie plakatów i miniatur:",
-  "about.features.smart_file_renaming.description": "Zmienia nazwy plików zgodnie z konwencjami nazewnictwa zgodnymi z Plex/Kodi",
+  "about.features.smart_file_renaming.description": "Zmienia nazwy plików zgodnie z konwencjami nazewnictwa zgodnymi z Jellyfin/Kodi",
   "about.features.smart_file_renaming.title": "Inteligentna zmiana nazw plików:",
   "about.features.video_encoding.description": "Konwertuje multimedia do wydajnych formatów za pomocą gotowych profili.",
   "about.features.video_encoding.title": "Kodowanie wideo (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Zaznacz, gdy wideo zawiera dwa odcinki.",
   "about.news.version_3_2_0.items": "Dodano obsługę filmów zawierających kilka odcinków, nazwanych według wzoru Show - S09E01-E02 - Title 1 + Title 2, z liczbą odcinków odgadywaną na podstawie czasu trwania wideo\nMożna teraz zmieniać numerację kilku filmów jednocześnie, z uwzględnieniem liczby ich odcinków\nDodano czas trwania na karcie Ścieżki podczas edycji kilku filmów\nWyszukiwanie według nazwy odcinka działa teraz również z TheMovieDB\nWyszukiwanie informacji o filmach jest teraz kolejkowane, a jego postęp widać na pasku stanu",
-  "about.news.version_3_3_0.items": "Lista kolejności odcinków teraz wyświetla tylko kolejność zdefiniowaną przez TheTVDB dla danego serialu, z nazwami nadanymi przez TheTVDB, a Absolute jest zawsze dostępna\nOficjalna kolejność odcinków nazywa się teraz „Emisja”\nPola „Odcinki w pliku” i „Odcinki na wideo” są zastępowane polem wyboru ×2 w przypadku filmów zawierających dwa odcinki\nPodwójne odcinki są teraz wykrywane bardziej niezawodnie na podstawie czasu trwania filmu\nZgodnie z konwencją nazewnictwa Jellyfin kolejność wyświetlania serii jest teraz zapisywana w pliku tvshow.nfo, gdy używana jest inna kolejność niż „Emitowane”"
+  "about.news.version_3_3_0.items": "Lista kolejności odcinków teraz wyświetla tylko kolejność zdefiniowaną przez TheTVDB dla danego serialu, z nazwami nadanymi przez TheTVDB, a Absolute jest zawsze dostępna\nOficjalna kolejność odcinków nazywa się teraz „Emisja”\nPola „Odcinki w pliku” i „Odcinki na wideo” są zastępowane polem wyboru ×2 w przypadku filmów zawierających dwa odcinki\nPodwójne odcinki są teraz wykrywane bardziej niezawodnie na podstawie czasu trwania filmu\nZgodnie z konwencją nazewnictwa Jellyfin kolejność wyświetlania serii jest teraz zapisywana w pliku tvshow.nfo, gdy używana jest inna kolejność niż „Emitowane”",
+  "about.news.version_3_4_0.items": "Teraz można anulować kilka filmów jednocześnie, bez konieczności uruchamiania oczekujących na anulowanie zadań\nDodano wyszukiwanie według tytułu i nazwy EP oraz identyfikatora TVDB i nazwy EP w przypadku jednoczesnego dopasowywania kilku filmów\nProgramy telewizyjne są teraz dopasowywane wyłącznie do bazy danych wybranej w ustawieniach, bez możliwości powrotu do innej bazy\nUstawienie Preferowanej bazy danych programów telewizyjnych nazywa się teraz Baza danych programów telewizyjnych\nOpis aplikacji teraz wspomina o Jellyfin"
 }

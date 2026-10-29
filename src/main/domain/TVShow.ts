@@ -89,14 +89,13 @@ export class TVShow implements ITVShow {
       if (!this.title) {
         throw new Error('Series name is mandatory')
       }
-      // Tries the preferred database first (per settings), then falls back to the other one before giving up.
-      const primary = currentSettings.tvShowMatchingPriority === TVShowMatchingSource.TMDB ? 'tmdb' : 'tvdb'
-      const secondary = primary === 'tvdb' ? 'tmdb' : 'tvdb'
-      if (!(await this.searchTitleOn(primary, this.title)) && !(await this.searchTitleOn(secondary, this.title))) {
+      // Only the database chosen in the settings is searched.
+      const source = currentSettings.tvShowMatchingPriority === TVShowMatchingSource.TMDB ? 'tmdb' : 'tvdb'
+      if (!(await this.searchTitleOn(source, this.title))) {
         this.video.progression.progress = -1
         this.video.showWarning('video.message.series_no_match', {
           defaultValue:
-            'Unable to find an exact match on TheTVDB or TheMovieDB. Please check the information provided and try again.'
+            'Unable to find an exact match on the selected database. Please check the information provided and try again.'
         })
       }
     }

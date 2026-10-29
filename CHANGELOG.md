@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.0] - 2026-10-29
+
+### Added
+
+- Added the Title & EP Name and TVDB ID & EP Name searches to the matching of several videos at once.
+
+### Changed
+
+- TV shows are now matched only on the database chosen in the settings, with no fallback on the other one, and the Preferred TV Show Database setting is now named TV Show Database.
+- The application description and the file renaming feature now mention Jellyfin.
+
+### Fixed
+
+- Cancelling several videos at once no longer starts the queued jobs that are still to be cancelled.
+
 ## [3.3.0] - 2026-10-14
 
 ### Added

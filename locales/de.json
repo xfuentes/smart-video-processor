@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Über",
   "about.close": "Schließen",
-  "about.description": "Dieses Tool erkennt Ihre Filme und Serien automatisch anhand bekannter Datenbanken und vereinfacht anschließend den gesamten Ablauf: Dateien nach Plex-kompatiblen Konventionen umbenennen, Artwork anhängen, Metadaten korrigieren (einschließlich Sprache und Typ der Spuren), Mediendateien teilen oder zusammenfügen und in H.264 oder H.265 kodieren – alles an einem Ort.",
+  "about.description": "Dieses Tool erkennt Ihre Filme und Serien automatisch anhand bekannter Datenbanken und vereinfacht anschließend den gesamten Ablauf: Dateien nach Jellyfin-kompatiblen Konventionen umbenennen, Artwork anhängen, Metadaten korrigieren (einschließlich Sprache und Typ der Spuren), Mediendateien teilen oder zusammenfügen und in H.264 oder H.265 kodieren – alles an einem Ort.",
   "about.features.audio_subtitle_management.description": "Erkennt und kennzeichnet Audio-/Untertitelsprachen; benennt Spuren um und ordnet sie neu an.",
   "about.features.audio_subtitle_management.title": "Verwaltung von Audio- und Untertitelspuren:",
   "about.features.automatic_media_recognition.description": "Erkennt Filme und Serien mithilfe von TheMovieDB oder TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Metadatenkorrektur:",
   "about.features.poster_thumbnail_download.description": "Lädt Poster und Vorschaubilder automatisch herunter.",
   "about.features.poster_thumbnail_download.title": "Download von Postern und Vorschaubildern:",
-  "about.features.smart_file_renaming.description": "Benennt Dateien nach Plex-/Kodi-kompatiblen Namenskonventionen um",
+  "about.features.smart_file_renaming.description": "Benennt Dateien nach Jellyfin-/Kodi-kompatiblen Namenskonventionen um",
   "about.features.smart_file_renaming.title": "Intelligente Dateiumbenennung:",
   "about.features.video_encoding.description": "Konvertiert Medien mit vordefinierten Voreinstellungen in effiziente Formate.",
   "about.features.video_encoding.title": "Videokodierung (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Aktivieren, wenn das Video zwei Folgen enthält.",
   "about.news.version_3_2_0.items": "Unterstützung für Videos mit mehreren Episoden hinzugefügt, benannt nach dem Muster Show - S09E01-E02 - Title 1 + Title 2, wobei die Anzahl der Episoden anhand der Videodauer geschätzt wird\nMehrere Videos können jetzt gleichzeitig neu nummeriert werden, wobei ihre jeweilige Episodenanzahl berücksichtigt wird\nBeim Bearbeiten mehrerer Videos wird auf der Registerkarte „Spuren“ jetzt die Dauer angezeigt\nDie Suche nach Episodennamen funktioniert jetzt auch mit TheMovieDB\nDie Suche nach Videoinformationen wird jetzt in eine Warteschlange eingereiht, und der Fortschritt wird in der Statusleiste angezeigt",
-  "about.news.version_3_3_0.items": "Die Episodenreihenfolge zeigt jetzt nur noch die von TheTVDB für die Serie definierten Reihenfolgen mit den von TheTVDB vergebenen Namen an, und Absolute ist immer verfügbar.\nDie offizielle Episodenreihenfolge heißt nun „Ausgestrahlt“.\nDie Felder „Episoden in der Datei“ und „Episoden pro Video“ werden für Videos mit zwei Episoden durch ein ×2-Kontrollkästchen ersetzt.\nDoppelfolgen werden nun anhand der Videodauer zuverlässiger erkannt.\nBei Verwendung der Jellyfin-Namenskonvention wird die Serienanzeigereihenfolge nun in die Datei tvshow.nfo geschrieben, wenn eine andere Reihenfolge als „Ausgestrahlt“ verwendet wird."
+  "about.news.version_3_3_0.items": "Die Episodenreihenfolge zeigt jetzt nur noch die von TheTVDB für die Serie definierten Reihenfolgen mit den von TheTVDB vergebenen Namen an, und Absolute ist immer verfügbar.\nDie offizielle Episodenreihenfolge heißt nun „Ausgestrahlt“.\nDie Felder „Episoden in der Datei“ und „Episoden pro Video“ werden für Videos mit zwei Episoden durch ein ×2-Kontrollkästchen ersetzt.\nDoppelfolgen werden nun anhand der Videodauer zuverlässiger erkannt.\nBei Verwendung der Jellyfin-Namenskonvention wird die Serienanzeigereihenfolge nun in die Datei tvshow.nfo geschrieben, wenn eine andere Reihenfolge als „Ausgestrahlt“ verwendet wird.",
+  "about.news.version_3_4_0.items": "Mehrere Videos können nun gleichzeitig abgebrochen werden, ohne dass die noch abzubrechenden Aufträge in der Warteschlange gestartet werden müssen.\nDie Suche nach Titel & EP-Name und TVDB-ID & EP-Name wurde hinzugefügt, wenn mehrere Videos gleichzeitig gefunden werden.\nFernsehsendungen werden jetzt nur noch anhand der in den Einstellungen ausgewählten Datenbank abgeglichen, ohne Ausweichmöglichkeit auf die andere.\nDie Einstellung „Bevorzugte TV-Seriendatenbank“ heißt jetzt „TV-Seriendatenbank“.\nIn der Anwendungsbeschreibung wird nun Jellyfin erwähnt."
 }

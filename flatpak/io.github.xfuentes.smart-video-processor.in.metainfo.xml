@@ -43,7 +43,7 @@
   <description>
     <p>
       This tool automatically identifies your movies and TV shows using popular databases,
-      then streamlines the entire process: rename files using Plex-friendly conventions,
+      then streamlines the entire process: rename files using Jellyfin-friendly conventions,
       attach artwork, correct metadata (including track language and type), split or join media files
       and encode to H.264 or H.265—all in one place.
     </p>
@@ -66,11 +66,11 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The episode order list now only shows the orders defined by TheTVDB for the series, with the names TheTVDB gives them, and Absolute is always available</li>
-          <li>The Official episode order is now named Aired</li>
-          <li>The Episodes in File and Episodes per Video fields are replaced by a ×2 checkbox for videos containing two episodes</li>
-          <li>Double episodes are now detected more reliably from the video duration</li>
-          <li>With the Jellyfin naming convention, the series display order is now written to tvshow.nfo when an order other than Aired is used</li>
+          <li>Several videos can now be cancelled at once without starting the queued jobs that are still to be cancelled</li>
+          <li>Added the Title &amp; EP Name and TVDB ID &amp; EP Name searches when matching several videos at once</li>
+          <li>TV shows are now matched only on the database chosen in the settings, with no fallback on the other one</li>
+          <li>The Preferred TV Show Database setting is now named TV Show Database</li>
+          <li>The application description now mentions Jellyfin</li>
         </ul>
       </description>
     </release>

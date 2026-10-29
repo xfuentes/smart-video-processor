@@ -1,7 +1,7 @@
 {
   "about.aria_label": "Tentang",
   "about.close": "Tutup",
-  "about.description": "Alat ini secara otomatis mengidentifikasi film dan acara TV Anda menggunakan basis data populer, lalu menyederhanakan seluruh prosesnya: mengganti nama file dengan konvensi yang ramah Plex, melampirkan gambar sampul, memperbaiki metadata (termasuk bahasa dan jenis trek), memisahkan atau menggabungkan file media, dan melakukan encoding ke H.264 atau H.265—semuanya di satu tempat.",
+  "about.description": "Alat ini secara otomatis mengidentifikasi film dan acara TV Anda menggunakan basis data populer, lalu menyederhanakan seluruh prosesnya: mengganti nama file dengan konvensi yang ramah Jellyfin, melampirkan gambar sampul, memperbaiki metadata (termasuk bahasa dan jenis trek), memisahkan atau menggabungkan file media, dan melakukan encoding ke H.264 atau H.265—semuanya di satu tempat.",
   "about.features.audio_subtitle_management.description": "Mendeteksi dan memberi label bahasa audio/subtitle; mengganti nama dan mengurutkan ulang trek.",
   "about.features.audio_subtitle_management.title": "Manajemen Trek Audio & Subtitle:",
   "about.features.automatic_media_recognition.description": "Mengidentifikasi film dan acara TV menggunakan TheMovieDB atau TVDB",
@@ -14,7 +14,7 @@
   "about.features.metadata_correction.title": "Koreksi Metadata:",
   "about.features.poster_thumbnail_download.description": "Mengunduh poster dan thumbnail secara otomatis.",
   "about.features.poster_thumbnail_download.title": "Unduhan Poster & Thumbnail:",
-  "about.features.smart_file_renaming.description": "Mengganti nama file dengan konvensi penamaan yang ramah Plex/Kodi",
+  "about.features.smart_file_renaming.description": "Mengganti nama file dengan konvensi penamaan yang ramah Jellyfin/Kodi",
   "about.features.smart_file_renaming.title": "Penggantian Nama File Cerdas:",
   "about.features.video_encoding.description": "Mengonversi media ke format efisien dengan preset yang telah ditentukan.",
   "about.features.video_encoding.title": "Encoding Video (H.264 / H.265):",
@@ -758,5 +758,6 @@
   "matching.field.double_episode.label": "×2",
   "matching.field.double_episode.tooltip": "Centang jika video berisi dua episode.",
   "about.news.version_3_2_0.items": "Menambahkan dukungan untuk video yang berisi beberapa episode, dengan penamaan seperti Show - S09E01-E02 - Title 1 + Title 2, dan jumlah episode diperkirakan dari durasi video\nBeberapa video kini dapat dinomori ulang sekaligus dengan memperhitungkan jumlah episodenya\nMenambahkan durasi ke tab Trek saat mengedit beberapa video sekaligus\nPencarian berdasarkan nama episode kini juga berfungsi dengan TheMovieDB\nPencarian informasi video kini dimasukkan ke dalam antrean dengan progresnya ditampilkan di bilah status",
-  "about.news.version_3_3_0.items": "Daftar urutan episode sekarang hanya menampilkan urutan yang ditentukan oleh TheTVDB untuk serial tersebut, dengan nama yang diberikan oleh TheTVDB, dan Absolute selalu tersedia.\nUrutan episode resmi sekarang diberi nama Ditayangkan\nKolom Episode dalam File dan Episode per Video diganti dengan kotak centang ×2 untuk video yang berisi dua episode.\nEpisode ganda kini dapat dideteksi dengan lebih andal berdasarkan durasi video.\nDengan konvensi penamaan Jellyfin, urutan tampilan seri sekarang ditulis ke tvshow.nfo ketika urutan selain \"Aired\" digunakan."
+  "about.news.version_3_3_0.items": "Daftar urutan episode sekarang hanya menampilkan urutan yang ditentukan oleh TheTVDB untuk serial tersebut, dengan nama yang diberikan oleh TheTVDB, dan Absolute selalu tersedia.\nUrutan episode resmi sekarang diberi nama Ditayangkan\nKolom Episode dalam File dan Episode per Video diganti dengan kotak centang ×2 untuk video yang berisi dua episode.\nEpisode ganda kini dapat dideteksi dengan lebih andal berdasarkan durasi video.\nDengan konvensi penamaan Jellyfin, urutan tampilan seri sekarang ditulis ke tvshow.nfo ketika urutan selain \"Aired\" digunakan.",
+  "about.news.version_3_4_0.items": "Beberapa video kini dapat dibatalkan sekaligus tanpa memulai pekerjaan yang masih antri untuk dibatalkan.\nMenambahkan pencarian Judul & Nama EP dan ID TVDB & Nama EP saat mencocokkan beberapa video sekaligus.\nAcara TV sekarang hanya dicocokkan dengan basis data yang dipilih di pengaturan, tanpa menggunakan basis data lain sebagai alternatif.\nPengaturan Basis Data Acara TV Pilihan sekarang bernama Basis Data Acara TV.\nDeskripsi aplikasi sekarang menyebutkan Jellyfin."
 }
