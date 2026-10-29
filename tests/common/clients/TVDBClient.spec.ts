@@ -66,6 +66,13 @@ test('Search Series', async () => {
   expect(series[0].imdb).toContain('tt0108778')
 })
 
+test('Search Series retries without stop words when TheTVDB finds nothing', async () => {
+  currentSettings.language = 'fr-FR'
+  currentSettings.additionalTvSearchLanguages = ['en', 'fr']
+  const series = await TVDBClient.getInstance().searchSeriesByTitle('The Falcon and the Winter Soldier')
+  expect(series.map((r) => r.id)).toContain(362496)
+})
+
 test('Retrieve Series Details', async () => {
   currentSettings.favoriteLanguages = ['en']
   currentSettings.language = 'en'

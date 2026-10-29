@@ -1,0 +1,199 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "objectID": "series-362496",
+      "aliases": [
+        "TFATWS",
+        "Falcon and Winter Soldier",
+        "Marvel Studios' The Falcon and The Winter Soldier",
+        "Marvel's The Falcon and The Winter Soldier",
+        "Falcon Y El Soldado Del Invierno",
+        "Marvel's The Falcon and The Winter Soldier",
+        "Şahin ve Kış Askeri"
+      ],
+      "country": "usa",
+      "id": "series-362496",
+      "image_url": "https://artworks.thetvdb.com/banners/series/362496/posters/60271980c8a0a.jpg",
+      "name": "The Falcon and The Winter Soldier",
+      "first_air_time": "2021-03-19",
+      "overview": "Sam Wilson aka The Falcon and Bucky Barnes aka The Winter Soldier, who came together in the final moments of 'Avengers: Endgame', team up on a global adventure that tests their abilities—and their patience.",
+      "primary_language": "eng",
+      "primary_type": "series",
+      "status": "Ended",
+      "type": "series",
+      "tvdb_id": "362496",
+      "year": "2021",
+      "slug": "the-falcon-and-the-winter-soldier",
+      "overviews": {
+        "ara": "بعد أحداث \"الافنجرز: نهاية اللعبه\" وسام ويلسون \"فالكون\" وجندي الشتاء، يتعاون باكي برانز في مغامرة عالمية تختبر قدراتهم وصبرهم.",
+        "ces": "Dva hrdinové - Sam Wilson alias Falcon a Bucky Barnes alias Winter Soldier, kteří se poznali v závěrečných momentech filmu Avengers: Endgame, spojí síly a vydávají se za dobrodružstvím po celém světě. Společná cesta prověří jejich schopnosti i jejich vzájemnou trpělivost.",
+        "deu": "Marvel präsentiert \"The Falcon and the Winter Soldier \" mit Anthony Mackie als Sam Wilson alias Falcon Knud Sebastian Stan als Bucky Barnes alias Winter Soldier in den Hauptrollen. Die zwei, die erst und en letzten Momenten von \"Avengers: Endgame\" zusammenfanden, begeben sich gemeinsam auf ein globales Abenteuer, das ihre Fähigkeiten - und ihre Geduld - auf die Probe stellt.",
+        "ell": "Ύστερα από τα γεγονότα του Avengers: Endgame, ο Sam Wilson/Falcon (Anthony Mackie) και ο Bucky Barnes/Winter Soldier (Sebastian Stan), ενώνουν τις δυνάμεις τους σε μια παγκόσμια περιπέτεια, που θα δοκιμάσει τις δυνάμεις τους και την υπομονή τους.",
+        "eng": "Sam Wilson aka The Falcon and Bucky Barnes aka The Winter Soldier, who came together in the final moments of 'Avengers: Endgame', team up on a global adventure that tests their abilities—and their patience.",
+        "fin": "Sarjan tähtinä ovat Anthony Mackie ja Sebastian Stan. Pari, joka yhdisti voimansa elokuvan “Avengers: Endgame” loppuhetkillä, lyöttäytyy yhteen maailmanlaajuisessa seikkailussa, joka koettelee heidän kykyjään ja kärsivällisyyttään. Kuusiosaisen sarjan on ohjannut Kari Skogland Malcolm Spellmanin toimiessa pääkäsikirjoittajana.",
+        "fra": "Après les évènements de “Avengers: Endgame”, Sam Wilson, le Faucon, et Bucky Barnes, le Soldat de l’hiver, décident de joindre leurs forces dans une aventure qui finira par tester les limites de leurs pouvoirs – et de leur patience.",
+        "hun": "A történet ott veszi majd fel a fonalat, hogy Amerika Kapitány átadja pajzsát a Sólyomnak, és az ezt követő bonyodalmakat, illetve politikai helyzeteket fogja boncolgatni majd a sztori.",
+        "ita": "\"The Falcon and The Winter Soldier\" dei Marvel Studios vede protagonisti Anthony Mackie nei panni di Sam Wilson/Falcon e Sebastian Stan nei panni di Bucky Barnes/Il Soldato d'Inverno. I due, che si sono uniti nei momenti finali di \"Avengers: Endgame\", si alleano in un'avventura intorno al mondo che mette alla prova le loro abilità e la loro pazienza.",
+        "jpn": "英雄を超えろ――。正義の象徴を失った世界を救う、＜希望の星＞とは…？ファルコンとウィンター・ソルジャーの新たな戦いを描くクライム・アクション開幕！ これは、新たな”キャプテン・アメリカ”誕生を巡る物語。",
+        "nld": "Na de gebeurtenissen van 'Avengers: Endgame', de Falcon, Sam Wilson en de Winter Soldier, Bucky Barnes werken samen in een wereldwijd avontuur dat hun capaciteiten en hun geduld op de proef stelt.",
+        "pol": "Sam Wilson i Bucky Barnes łączą siły we wspólnej walce, podczas której poddawane próbie są ich zdolności, jak również cierpliwość.",
+        "por": "A dupla Sam Wilson (Falcão) e Bucky Barnes (Soldado do Inverno), que se juntou no final de \"Vingadores: Endgame\", une esforços numa aventura global que testará as suas capacidades – e a sua paciência.",
+        "pt": "Após os eventos de \"Avengers: Ultimato\", Sam Wilson/Falcão e Bucky Barnes/Soldado Invernal se unem em uma aventura que testa suas habilidades - e a paciência - em \"O Falcão e o Soldado Invernal”.",
+        "ron": "În urma evenimentelor din „Avengers: Endgame”, Falcon, Sam Wilson și Soldatul de iarnă, Bucky Barnes fac echipă într-o aventură globală care le testează abilitățile și răbdarea.",
+        "rus": "Сэм Уилсон примерит костюм нового Капитана Америка и попытается справиться с миссией, возложенной на него Стивом Роджерсом. Баки, в свою очередь, готов вновь стать частью общества и поближе познакомиться со всем, что предлагает современный мир.",
+        "spa": "Después de los eventos de “Avengers: Endgame”, Falcon, Sam Wilson y Winter Soldier, Bucky Barnes se unen en una aventura global que pone a prueba sus habilidades y su paciencia.",
+        "tur": "Sam Wilson ve Bucky Barnes, yeteneklerini ve sabırlarını test eden küresel bir macerada bir araya geliyor.",
+        "ukr": "Сем Вілсон, відомий як Сокіл, і Бакі Барнс, відомий як Зимовий Солдат, які об'єдналися в фінальних моментах фільму «Месники: Завершення», вирушають у глобальну пригоду, що випробовує їхні здібності — та їхнє терпіння.",
+        "zho": "继《复仇者联盟4：终局之战》之后，猎鹰（山姆·威尔逊）和冬兵（巴基·巴恩斯）在一场考验他们能力和耐心的全球冒险中开始了结伴同行之旅。",
+        "zhtw": "故事接續電影《復仇者聯盟4：終局之戰》的情節，描述獵鷹和酷寒戰士聯手展開跨國的冒險，這場旅程將考驗他們兩人的能力 — 以及耐心極限。"
+      },
+      "translations": {
+        "ara": "الصقر وجندي الشتاء",
+        "ces": "Falcon a Winter Soldier",
+        "deu": "The Falcon and the Winter Soldier",
+        "ell": "The Falcon and the Winter Soldier",
+        "eng": "The Falcon and The Winter Soldier",
+        "fin": "The Falcon and The Winter Soldier",
+        "fra": "Falcon et le Soldat de l'hiver",
+        "heb": "פלקון וחייל החורף",
+        "hun": "A Sólyom és a Tél Katonája",
+        "ita": "The Falcon and The Winter Soldier",
+        "jpn": "ファルコン&ウィンター・ソルジャー",
+        "kor": "팔콘 & 윈터솔져",
+        "nld": "The Falcon and the Winter Soldier",
+        "pol": "Falcon i Zimowy Żołnierz",
+        "por": "O Falcão e o Soldado do Inverno",
+        "pt": "Falcão e o Soldado Invernal",
+        "ron": "Șoimul și Soldatul Iernii",
+        "rus": "Сокол и Зимний солдат",
+        "spa": "Falcon y el Soldado de Invierno",
+        "tur": "Falcon ve Kış Askeri",
+        "ukr": "Сокіл та Зимовий солдат",
+        "zho": "猎鹰和冬兵",
+        "zhtw": "獵鷹與酷寒戰士"
+      },
+      "network": "Disney+",
+      "remote_ids": [
+        {
+          "id": "10.5240/E54F-B589-20B9-2BFE-C106-C",
+          "type": 13,
+          "sourceName": "EIDR"
+        },
+        {
+          "id": "tt9208876",
+          "type": 2,
+          "sourceName": "IMDB"
+        },
+        {
+          "id": "https://www.disneyplus.com/series/WP/4gglDBMx8icA",
+          "type": 4,
+          "sourceName": "Official Website"
+        },
+        {
+          "id": "88396",
+          "type": 12,
+          "sourceName": "TheMovieDB.com"
+        }
+      ],
+      "thumbnail": "https://artworks.thetvdb.com/banners/series/362496/posters/60271980c8a0a_t.jpg"
+    },
+    {
+      "objectID": "series-396948",
+      "aliases": [
+        "Assembled",
+        "The Making of WandaVision",
+        "The Making of The Falcon and The Winter Soldier",
+        "The Making of Loki",
+        "The Making of Black Widow",
+        "The Making of What If...?",
+        "The Making of Shang-Chi and The Legend of The Ten Rings",
+        "The Making of Hawkeye",
+        "The Making of Eternals",
+        "The Making of Moon Knight",
+        "The Making of Doctor Strange in the Multiverse of Madness",
+        "The Making of Ms. Marvel",
+        "The Making of Thor: Love and Thunder",
+        "The Making of She-Hulk: Attorney at Law",
+        "The Making of Black Panther: Wakanda Forever",
+        "The Making of Ant-Man and the Wasp: Quantumania",
+        "The Making of Guardians of the Galaxy Vol. 3",
+        "The Making of Secret Invasion",
+        "The Making of Loki Season 2",
+        "The Making of Echo",
+        "The Making of The Marvels",
+        "The Making of X-Men '97",
+        "The Making of Deadpool & Wolverine",
+        "The Making of Agatha All Along",
+        "Marvel Studios: Unidos"
+      ],
+      "country": "usa",
+      "id": "series-396948",
+      "image_url": "https://artworks.thetvdb.com/banners/v4/series/396948/posters/60f82bda296be.jpg",
+      "name": "Marvel Studios: Assembled",
+      "first_air_time": "2021-03-12",
+      "overview": "Go behind the scenes of the shows and movies of the Marvel Cinematic Universe, following the filmmakers, cast and crew, and Marvel heroes every step of the way.",
+      "primary_language": "eng",
+      "primary_type": "series",
+      "status": "Continuing",
+      "type": "series",
+      "tvdb_id": "396948",
+      "year": "2021",
+      "slug": "marvel-studios-assembled",
+      "overviews": {
+        "deu": "GEMEINSAM UNBESIEGBAR ist eine umfassende Doku-Serie auf Disney+, die den Entstehungsprozess der neusten spannenden Serien- und Kinoformate der Marvel Studios begleitet. Hier bekommen Sie einen exklusiven Blick hinter die Kulissen von Produktionen wie \"WandaVision\", \"The Falcon and the Winter Soldier\" und \"Loki\". Stars wie Scarlett Johansson und Jeremy Renner gewähren einen Einblick in die Dreharbeiten des neuen Black Widow-Films sowie der Hawkeye-Serie. GEMEINSAM UNBESIEGBAR bietet eine mitreißende und ausührliche Perspektive auf die nächste Phase des Marvel Cinematic Universe.",
+        "eng": "Go behind the scenes of the shows and movies of the Marvel Cinematic Universe, following the filmmakers, cast and crew, and Marvel heroes every step of the way.",
+        "fra": "Rassemblement est une série documentaire qui nous plonge dans la création des nouveaux et palpitants films et séries des Studios Marvel.",
+        "hun": "A dokumentumfim a Marvel stúdió legújabb sorozatainak és filmjeinek kulisszái mögé enged betekintést. Megtudhatjuk, hogyan készül az MCU következő szakasza.",
+        "ita": "ASSEMBLED è una serie completa di documentari in streaming su Disney+ che racconta la creazione delle entusiasmanti nuove serie e uscite cinematografiche dei Marvel Studios. Esplora il dietro le quinte di produzioni come WandaVision, The Falcon and The Winter Soldier e Loki attraverso filmati esclusivi girati sul set. Ascolta registi e star come Scarlett Johansson e Jeremy Renner descrivere dettagliatamente la genesi del film Black Widow e della serie Hawkeye. ASSEMBLED un'analisi stimolante e approfondita della prossima fase del Marvel Cinematic Universe.",
+        "nld": "Neem een kijkje achter de schermen van de series en films van het Marvel Cinematic Universe en volg de filmmakers, cast, crew en Marvel-helden bij elke stap.",
+        "pol": "ASSEMBLED to opowieść o nowych produkcjach filmowych związanych z uniwersum Marvela.",
+        "por": "UNIDOS é uma série envolvente de documentários especiais transmitidos pela Disney+ que narra a criação dos emocionantes novos programas e lançamentos teatrais da Marvel Studios. Viaje pelos bastidores de produções, tal como WandaVision, O Falcão e o Soldado do Inverno e, através da Loki, das filmagens exclusivas no local. Junte-se a cineastas e estrelas como a Scarlett Johansson e o Jeremy Renner quando explicam a génese do filme Viúva Negra e da série Hawkeye. UNIDOS é uma análise imersiva e pormenorizada da próxima fase do Marvel Cinematic Universe.",
+        "pt": "MARVEL STUDIOS AVANTE é uma série documental imersiva examinando a criação das novas e emocionantes séries e filmes da Marvel Studios.",
+        "rus": "Документальный мини-сериал, созданный для сервиса потокового вещания Disney+. Каждый выпуск посвящён созданию фильмов и телесериалов киновселенной Marvel и включает закадровые интервью актёров, режиссёров и продюсеров, раскрывая процесс создания проектов.",
+        "spa": "Serie inmersiva de especiales de tipo documental que examina la creación de los emocionantes estrenos de cine y nuevas series de Marvel Studios.",
+        "zho": "漫威新纪录剧集《集结》聚焦漫威影视剧的幕后制作过程，第一期主题为《旺达幻视》，3月12日Disney+上线。"
+      },
+      "translations": {
+        "deu": "Marvel Studios: Gemeinsam Unbesiegbar",
+        "eng": "Marvel Studios: Assembled",
+        "fra": "Marvel Studios Rassemblement",
+        "hun": "Marvel Studios: Betekintés",
+        "ita": "Marvel Studios: Assembled",
+        "nld": "Marvel Studios: Assembled",
+        "pol": "Marvel Studios Assembled",
+        "por": "Marvel Studios UNIDOS",
+        "pt": "Marvel Studios Avante",
+        "rus": "Студия Marvel: Общий сбор",
+        "spa": "Marvel Studios: Reunidos",
+        "zho": "集结"
+      },
+      "network": "Disney+",
+      "remote_ids": [
+        {
+          "id": "tt14094206",
+          "type": 2,
+          "sourceName": "IMDB"
+        },
+        {
+          "id": "https://www.disneyplus.com/series/wp/3RUQKboZV3FF",
+          "type": 4,
+          "sourceName": "Official Website"
+        },
+        {
+          "id": "118924",
+          "type": 12,
+          "sourceName": "TheMovieDB.com"
+        }
+      ],
+      "thumbnail": "https://artworks.thetvdb.com/banners/v4/series/396948/posters/60f82bda296be_t.jpg"
+    }
+  ],
+  "links": {
+    "prev": null,
+    "self": "https://api4.thetvdb.com/v4/search?query=Falcon Winter Soldier&type=series&limit=20&page=0",
+    "next": null,
+    "total_items": 2,
+    "page_size": 20
+  }
+}

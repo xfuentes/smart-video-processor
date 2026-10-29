@@ -29,6 +29,22 @@ import { createCachingAdapter } from './SimpleCachingAdapter'
 import { Strings } from '../../../common/Strings'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
+const SEARCH_STOP_WORDS = new Set([
+  'the',
+  'a',
+  'an',
+  'and',
+  'of',
+  'le',
+  'la',
+  'les',
+  'un',
+  'une',
+  'et',
+  'de',
+  'du',
+  'des'
+])
 const THE_TVDB_API_URL = 'https://api4.thetvdb.com/v4'
 
 type SeriesEpisode = {
@@ -73,13 +89,12 @@ export class TVDBClient {
     return response.data.data
   }
 
-  public async searchSeriesByTitle(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
+  private async searchSeriesRaw(query: string, year: number | undefined) {
     const tvdb = await this.getTVDBSession()
-    let response
     try {
-      response = await tvdb.get<TVDBSearchResponses>('/search', {
+      return await tvdb.get<TVDBSearchResponses>('/search', {
         params: {
-          query: title,
+          query,
           ...(year ? { year } : {}),
           type: 'series',
           offset: 0,
@@ -90,6 +105,20 @@ export class TVDBClient {
       debug('log.tvdb.api_error', { defaultValue: 'TVDB API error: {message}', message: String(error) })
       const response = error as AxiosError<TVDBSeriesResponse>
       throw new Error('Unexpected TVDB API Error: ' + response.response?.data.message)
+    }
+  }
+
+  public async searchSeriesByTitle(title: string, year: number | undefined = undefined): Promise<SearchResult[]> {
+    let response = await this.searchSeriesRaw(title, year)
+    if (response.data.data.length === 0) {
+      // TheTVDB sometimes returns nothing for a full title, but finds it without the stop words.
+      const withoutStopWords = title
+        .split(/\s+/)
+        .filter((w) => !SEARCH_STOP_WORDS.has(w.toLowerCase()))
+        .join(' ')
+      if (withoutStopWords !== '' && withoutStopWords !== title) {
+        response = await this.searchSeriesRaw(withoutStopWords, year)
+      }
     }
     const results: SearchResult[] = []
     for (const r of response.data.data) {
