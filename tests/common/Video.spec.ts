@@ -718,3 +718,10 @@ test('TV-Show with single digit season and episode', () => {
   expect(video.tvShow.season).toBe(1)
   expect(video.tvShow.episode).toBe(1)
 })
+
+test('A FRENCH filename gives the fr audio version', () => {
+  const video = new Video(
+    getFakeAbsolutePath('downloads', '[ OxTorrent.cc ] WandaVision.S01E01.FRENCH.WEBRip.Xvid-EXTREME.avi')
+  )
+  expect(video.audioVersions.map((v) => v.ietf)).toStrictEqual(['fr'])
+})

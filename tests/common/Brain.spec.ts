@@ -4429,7 +4429,7 @@ describe('WandaVision - S01E01 FRENCH file with an audio track without language'
     Brain.getInstance().analyse(
       [
         new Track(0, undefined, TrackType.VIDEO, 'MPEG-4p2', 'und', {}, true, false, 1, 1),
-        new Track(1, undefined, TrackType.AUDIO, 'MP3', 'und', { audioChannels: 2 }, true, false, 1, 1)
+        new Track(1, undefined, TrackType.AUDIO, 'MP3', undefined, { audioChannels: 2 }, true, false, 1, 1)
       ],
       getFakeAbsolutePath('downloads', filename),
       'WandaVision - S01E01',
