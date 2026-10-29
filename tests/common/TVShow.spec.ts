@@ -237,7 +237,7 @@ test('TV-Show search only uses TheMovieDB when it is the selected database', asy
   tvdbSearchSpy.mockRestore()
   tmdbSearchSpy.mockRestore()
   tmdbDetailsSpy.mockRestore()
-  currentSettings.tvShowMatchingPriority = defaultSettings.tvShowMatchingPriority
+  currentSettings.tvShowMatchingPriority = TVShowMatchingSource.TVDB
   video.destroy()
 })
 
