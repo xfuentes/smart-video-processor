@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { SubtitlesType } from '../../src/common/SubtitlesType'
-import { changeListToMap, getFakeAbsolutePath, hintListToMap } from './testUtils'
+import { changeListToMap, getFakeAbsolutePath, hintListToMap, simulateFileInfoResponse } from './testUtils'
 import { Attachment, ChangeProperty } from '../../src/common/Change'
 import { Track } from '../../src/main/domain/Track'
 import { TrackType } from '../../src/common/@types/Track'
@@ -30,6 +30,10 @@ import { EditionType } from '../../src/common/@types/Movie'
 import { Countries, Country } from '../../src/common/Countries'
 import { HintType } from '../../src/common/@types/Hint'
 import { Hint } from '../../src/main/domain/Hint'
+import { AudioVersions } from '../../src/main/domain/AudioVersions'
+import { MKVMerge } from '../../src/main/domain/programs/MKVMerge'
+import { Processes } from '../../src/main/util/processes'
+import { ChildProcessWithoutNullStreams } from 'node:child_process'
 
 const defaultPoster1: Attachment = {
   filename: 'cover.jpg',
@@ -4389,4 +4393,64 @@ test('Les Chevaliers du Zodiaque - S05E07 French subtitles named Francais Pour L
   const changes = changeListToMap(results.changes)
   expect(changes['Subtitles 2']?.['Update_Language']).toBeUndefined()
   expect(results.hints.find((h) => h.trackId === 1 && h.type === HintType.LANGUAGE)?.value).toBe('fr')
+})
+
+describe('WandaVision - S01E07 TRUEFRENCH file with an audio track tagged fre', () => {
+  test('the audio track gets fr-FR from the TRUEFRENCH filename', async () => {
+    const spy = vi
+      .spyOn(Processes, 'spawn')
+      .mockImplementation((): ChildProcessWithoutNullStreams =>
+        simulateFileInfoResponse('mkvMergeInfoWandaVision.json')
+      )
+    const filename = '[ OxTorrent.ws ] WandaVision.S01E07.TRUEFRENCH.WEBRip.x264-FRATERNiTY.mkv'
+    const { tracks } = await MKVMerge.getInstance().retrieveFileInformation(getFakeAbsolutePath('downloads', filename))
+    spy.mockRestore()
+    const results = Brain.getInstance().analyse(
+      tracks,
+      getFakeAbsolutePath('downloads', filename),
+      'WandaVision - S01E07',
+      undefined,
+      undefined,
+      [],
+      0,
+      Languages.getLanguageByCode('en'),
+      [Countries.getCountryByCode('US')!],
+      AudioVersions.extractVersions(filename),
+      []
+    )
+    const hint = results.hints.find((h) => h.trackId === 1 && h.type === HintType.LANGUAGE)
+    expect(hint?.value).toBe('fr-FR')
+  })
+})
+
+describe('WandaVision - S01E01 FRENCH file with an audio track without language', () => {
+  const filename = '[ OxTorrent.cc ] WandaVision.S01E01.FRENCH.WEBRip.Xvid-EXTREME.avi'
+  const analyseFrench = () =>
+    Brain.getInstance().analyse(
+      [
+        new Track(0, undefined, TrackType.VIDEO, 'MPEG-4p2', 'und', {}, true, false, 1, 1),
+        new Track(1, undefined, TrackType.AUDIO, 'MP3', 'und', { audioChannels: 2 }, true, false, 1, 1)
+      ],
+      getFakeAbsolutePath('downloads', filename),
+      'WandaVision - S01E01',
+      undefined,
+      undefined,
+      [],
+      0,
+      Languages.getLanguageByCode('en-US'),
+      [Countries.getCountryByCode('US')!],
+      AudioVersions.extractVersionsFromFilename(filename),
+      []
+    )
+
+  test('the audio track gets fr-FR from the FRENCH filename (no region)', () => {
+    const results = analyseFrench()
+    const hint = results.hints.find((h) => h.trackId === 1 && h.type === HintType.LANGUAGE)
+    expect(hint?.value).toBe('fr')
+  })
+
+  test('the audio track is not named AD', () => {
+    const changes = changeListToMap(analyseFrench().changes)
+    expect(changes['Audio 1']?.['Update_Name']?.newValue).toBe('VFI 2.0')
+  })
 })

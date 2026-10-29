@@ -1538,6 +1538,6 @@ export class Video implements IVideo {
       this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
     }
 
-    this.audioVersions = AudioVersions.extractVersions(filename)
+    this.audioVersions = AudioVersions.extractVersionsFromFilename(filename)
   }
 }

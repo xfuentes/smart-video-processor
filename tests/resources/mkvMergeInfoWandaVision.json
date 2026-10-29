@@ -1,0 +1,91 @@
+{
+  "attachments": [],
+  "chapters": [],
+  "container": {
+    "properties": {
+      "container_type": 17,
+      "date_local": "2021-02-19T10:03:12+01:00",
+      "date_utc": "2021-02-19T09:03:12Z",
+      "duration": 2081237000000,
+      "is_providing_timestamps": true,
+      "muxing_application": "libebml v1.4.1 + libmatroska v1.6.2",
+      "segment_uid": "d7e05225c3f11fd1ea34052b2ecfbd35",
+      "timestamp_scale": 1000000,
+      "title": "WandaVision.S01E07.TRUEFRENCH.WEBRip.x264-FRATERNiTY",
+      "writing_application": "mkvmerge v53.0.0 ('Fool's Gold') 64-bit"
+    },
+    "recognized": true,
+    "supported": true,
+    "type": "Matroska"
+  },
+  "errors": [],
+  "file_name": "/home/data/downloads/[ OxTorrent.ws ] WandaVision.S01E07.TRUEFRENCH.WEBRip.x264-FRATERNiTY.mkv",
+  "global_tags": [],
+  "identification_format_version": 20,
+  "track_tags": [],
+  "tracks": [
+    {
+      "codec": "AVC/H.264/MPEG-4p10",
+      "id": 0,
+      "properties": {
+        "codec_id": "V_MPEG4/ISO/AVC",
+        "codec_private_data": "0164001fffe1001d6764001fac56240b435f9b016a020202800001f480005dc0478c18c4c001000668e88e1f2c8b",
+        "codec_private_length": 46,
+        "default_duration": 41708333,
+        "default_track": true,
+        "display_dimensions": "720x406",
+        "display_unit": 0,
+        "enabled_track": true,
+        "forced_track": false,
+        "language": "und",
+        "language_ietf": "und",
+        "minimum_timestamp": 13000000,
+        "num_index_entries": 593,
+        "number": 1,
+        "packetizer": "mpeg4_p10_video",
+        "pixel_dimensions": "720x406",
+        "tag__statistics_tags": "BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES",
+        "tag__statistics_writing_app": "mkvmerge v53.0.0 ('Fool's Gold') 64-bit",
+        "tag__statistics_writing_date_utc": "2021-02-19 09:03:12",
+        "tag_bps": "1015937",
+        "tag_duration": "00:34:41.204000000",
+        "tag_number_of_bytes": "264296632",
+        "tag_number_of_frames": "49899",
+        "track_name": "WandaVision.S01E07.TRUEFRENCH.WEBRip.x264-FRATERNiTY",
+        "uid": 1
+      },
+      "type": "video"
+    },
+    {
+      "codec": "AAC",
+      "id": 1,
+      "properties": {
+        "audio_channels": 2,
+        "audio_sampling_frequency": 48000,
+        "codec_id": "A_AAC",
+        "codec_private_data": "119056e500",
+        "codec_private_length": 5,
+        "default_duration": 21333333,
+        "default_track": true,
+        "enabled_track": true,
+        "forced_track": false,
+        "language": "fre",
+        "language_ietf": "fr",
+        "minimum_timestamp": 0,
+        "num_index_entries": 0,
+        "number": 2,
+        "tag__statistics_tags": "BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES",
+        "tag__statistics_writing_app": "mkvmerge v53.0.0 ('Fool's Gold') 64-bit",
+        "tag__statistics_writing_date_utc": "2021-02-19 09:03:12",
+        "tag_bps": "160487",
+        "tag_duration": "00:34:41.237000000",
+        "tag_number_of_bytes": "41751631",
+        "tag_number_of_frames": "97558",
+        "track_name": "VFF",
+        "uid": 2
+      },
+      "type": "audio"
+    }
+  ],
+  "warnings": []
+}

@@ -43,6 +43,14 @@ export class AudioVersions {
     return versions
   }
 
+  static extractVersionsFromFilename(filename: string) {
+    const versions = this.extractVersions(filename)
+    if (versions.length === 0 && /\bFRENCH\b/i.test(filename)) {
+      versions.push(audioVersions.find((v) => v.key === 'VFI')!)
+    }
+    return versions
+  }
+
   static extractVersionsIncluding(line: string, including: string[]) {
     const versions: AudioVersion[] = []
     audioVersions.forEach((version) => {
@@ -66,6 +74,6 @@ export class AudioVersions {
   }
 
   static findByLanguageIETF(languageIETF: string | undefined) {
-    return audioVersions.find((v) => v.ietf === languageIETF)
+    return languageIETF === undefined ? undefined : audioVersions.find((v) => v.ietf === languageIETF)
   }
 }
