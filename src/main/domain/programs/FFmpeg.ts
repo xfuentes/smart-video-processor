@@ -33,6 +33,9 @@ import fs from 'node:fs'
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
 
+// The countdown is computed from the average of the last speeds to avoid jumps.
+const COUNTDOWN_SPEED_SAMPLES = 10
+
 export class FFmpeg extends CommandProgress {
   private static instance: FFmpeg
   private readonly timePattern: RegExp = /out_time_ms\s*=\s*(?<time>\d+)/i
@@ -373,6 +376,7 @@ export class FFmpeg extends CommandProgress {
     durationSeconds: number,
     progressNotifier?: ProgressNotifier
   ) {
+    const recentSpeeds: number[] = []
     return (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = outputFilePath
       let error: string | undefined = undefined
@@ -397,7 +401,15 @@ export class FFmpeg extends CommandProgress {
             } else if (currentTimeSeconds > 0) {
               progress = currentTimeSeconds / durationSeconds
               const secondsLeft = (1 - progress) * durationSeconds
-              const countdown = xSpeed !== undefined && xSpeed != 0 ? secondsLeft / xSpeed : undefined
+              if (xSpeed > 0) {
+                recentSpeeds.push(xSpeed)
+                if (recentSpeeds.length > COUNTDOWN_SPEED_SAMPLES) {
+                  recentSpeeds.shift()
+                }
+              }
+              const averageSpeed =
+                recentSpeeds.length > 0 ? recentSpeeds.reduce((a, b) => a + b, 0) / recentSpeeds.length : 0
+              const countdown = averageSpeed > 0 ? secondsLeft / averageSpeed : undefined
               progressNotifier({ progress, xSpeed, countdown, process })
             }
           }

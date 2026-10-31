@@ -618,3 +618,24 @@ test('FFmpeg version extraction strips the n prefix', async () => {
   const version = await FFmpeg.getInstance().getVersion()
   expect(version).toBe('7.1.5')
 })
+
+test('The encoding countdown uses the average speed instead of the instant one', () => {
+  const countdowns: (number | undefined)[] = []
+  const interpreter = (
+    FFmpeg.getInstance() as unknown as {
+      ffmpegProgressInterpreterBuild: (
+        output: string,
+        duration: number,
+        notifier: (p: { countdown?: number }) => void
+      ) => (stdout: string) => void
+    }
+  ).ffmpegProgressInterpreterBuild('/tmp/out.mkv', 1000, ({ countdown }) => countdowns.push(countdown))
+  const chunk = (seconds: number, speed: number) => `out_time_ms=${seconds * 1000000}\nspeed=${speed}x\n`
+  interpreter(chunk(10, 0.01))
+  interpreter(chunk(20, 1))
+  interpreter(chunk(30, 1))
+  interpreter(chunk(40, 1))
+  // The first chunk is slowed down by the startup, the countdown must not stay stuck on it.
+  expect(countdowns[0]).toBeCloseTo(990 / 0.01)
+  expect(countdowns[3]).toBeCloseTo(960 / ((0.01 + 1 + 1 + 1) / 4))
+})

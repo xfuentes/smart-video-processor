@@ -49,6 +49,14 @@ export type OutputRule = {
   outputPath: string
 }
 
+export type WindowState = {
+  x?: number
+  y?: number
+  width: number
+  height: number
+  maximized: boolean
+}
+
 export type Settings = {
   /**
    * Enable this for detailed output for debugging.
@@ -106,6 +114,10 @@ export type Settings = {
    * Height of the preview pane below the video list, in percent of the window height.
    */
   previewPaneHeight: number
+  /**
+   * Size, position and maximized state of the main window, restored at the next start.
+   */
+  windowState?: WindowState
   /**
    * Process priority to use when merging or encoding
    */

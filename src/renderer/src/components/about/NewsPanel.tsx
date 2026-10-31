@@ -34,11 +34,11 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
-      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.4.1' })}</h4>
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.0' })}</h4>
       <ul>
-        {_('about.news.version_3_4_1.items', {
+        {_('about.news.version_3_5_0.items', {
           defaultValue:
-            'Files with FRENCH in their name now get the French audio language preselected\nAudio tracks with an unknown language are no longer named AD\nThe TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier\nTheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely'
+            'The window size and position are now remembered between sessions\nThe application has a new icon\nFiles with FRENCH in their name now get the French audio language preselected\nAudio tracks with an unknown language are no longer named AD\nThe TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier\nTheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely'
         })
           .split('\n')
           .map((item, i) => (

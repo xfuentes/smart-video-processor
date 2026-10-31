@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.4.1] - 2026-10-31
+## [3.5.0] - 2026-10-31
+
+### Added
+
+- The window size, position and maximized state are now remembered between sessions.
+
+### Changed
+
+- New application icon on a rounded background, and a clearer summary, description and screenshots in the Flathub listing.
 
 ### Fixed
 

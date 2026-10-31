@@ -1,11 +1,11 @@
 {
-  "version": "3.4.1",
+  "version": "3.5.0",
   "msstoreCliAppId": "9PG7L9JR8K6M",
   "name": "smart-video-processor",
   "appId": "io.github.xfuentes.smart-video-processor",
   "desktopName": "io.github.xfuentes.smart-video-processor.desktop",
   "private": true,
-  "description": "Video processing for Jellyfin. Re-Organize, Re-encode, adds metadata, images.",
+  "description": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
   "main": "./build/main/index.js",
   "author": "Xavier Fuentes",
   "license": "GPL-3.0+",

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, screen, shell } from 'electron'
 import { dirname, extname, isAbsolute, join } from 'path'
 import fs from 'node:fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
@@ -27,6 +27,7 @@ import {
   loadSettings,
   savePreviewPaneHeight,
   saveSettings,
+  saveWindowState,
   validateSettings
 } from './domain/Settings'
 import { VideoController } from './controller/VideoController'
@@ -50,6 +51,10 @@ import { shutdownComputer } from './util/shutdown'
 import { error, getLogs, info } from './util/log'
 import { VIDEO_EXTENSIONS } from './util/videoExtensions'
 import { AutoAddWatcher } from './domain/AutoAddWatcher'
+import { restoreWindowBounds } from './windowState'
+
+const DEFAULT_WINDOW_SIZE = { width: 900, height: 670 }
+const MINIMUM_WINDOW_SIZE = { width: 925, height: 568 }
 
 if (electron_squirrel_startup) app.quit()
 
@@ -155,9 +160,14 @@ if (os.platform() === 'win32' && !process.windowsStore) {
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
+  const bounds = restoreWindowBounds(
+    currentSettings.windowState,
+    screen.getAllDisplays().map((d) => d.workArea),
+    DEFAULT_WINDOW_SIZE,
+    MINIMUM_WINDOW_SIZE
+  )
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    ...bounds,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform !== 'darwin' ? { icon } : {}),
@@ -167,8 +177,30 @@ function createWindow(): BrowserWindow {
     }
   })
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setMinimumSize(925, 568)
+    mainWindow.setMinimumSize(MINIMUM_WINDOW_SIZE.width, MINIMUM_WINDOW_SIZE.height)
+    if (currentSettings.windowState?.maximized) {
+      mainWindow.maximize()
+    }
     mainWindow.show()
+  })
+
+  let saveWindowStateTimeout: NodeJS.Timeout | undefined
+  const persistWindowState = () => {
+    if (mainWindow.isDestroyed() || mainWindow.isMinimized()) return
+    const { x, y, width, height } = mainWindow.getNormalBounds()
+    saveWindowState({ x, y, width, height, maximized: mainWindow.isMaximized() })
+  }
+  const schedulePersistWindowState = () => {
+    clearTimeout(saveWindowStateTimeout)
+    saveWindowStateTimeout = setTimeout(persistWindowState, 500)
+  }
+  mainWindow.on('resize', schedulePersistWindowState)
+  mainWindow.on('move', schedulePersistWindowState)
+  mainWindow.on('maximize', schedulePersistWindowState)
+  mainWindow.on('unmaximize', schedulePersistWindowState)
+  mainWindow.on('close', () => {
+    clearTimeout(saveWindowStateTimeout)
+    persistWindowState()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -361,8 +393,12 @@ app.whenReady().then(async () => {
       currentSettings.audioSizeReduction !== settings.audioSizeReduction ||
       currentSettings.audioEnforceCodec !== settings.audioEnforceCodec
 
-    // The preview pane height is changed by resizing, not from the settings dialog.
-    const validation = saveSettings({ ...settings, previewPaneHeight: currentSettings.previewPaneHeight })
+    // The preview pane height and the window state are changed by resizing, not from the settings dialog.
+    const validation = saveSettings({
+      ...settings,
+      previewPaneHeight: currentSettings.previewPaneHeight,
+      windowState: currentSettings.windowState
+    })
     if (validation.status === 'success') {
       if (priorityUpdated) {
         JobManager.getInstance().updatePriority()

@@ -6,7 +6,11 @@
   <developer id="io.github.xfuentes">
     <name>Xavier Fuentes</name>
   </developer>
-  <summary>__DESCRIPTION__</summary>
+  <summary>Rename and convert your videos</summary>
+  <branding>
+    <color type="primary" scheme_preference="light">#d9c9ec</color>
+    <color type="primary" scheme_preference="dark">#4a2468</color>
+  </branding>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <content_rating type="oars-1.1">
@@ -42,30 +46,32 @@
   <url type="bugtracker">https://github.com/xfuentes/smart-video-processor/issues</url>
   <description>
     <p>
-      This tool automatically identifies your movies and TV shows using popular databases,
-      then streamlines the entire process: rename files using Jellyfin-friendly conventions,
-      attach artwork, correct metadata (including track language and type), split or join media files
-      and encode to H.264 or H.265—all in one place.
+      Smart Video Processor tidies up your movie and TV show collection. It recognizes each video
+      using online databases, then renames the files so that media servers such as Jellyfin find them,
+      adds posters and details, fixes the language of audio and subtitle tracks, joins or splits files
+      and converts them to a lighter format, all in one place.
     </p>
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/08-Processing.png</image>
-      <caption>Settings panel</caption>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/03-Movie.png</image>
+      <caption>Identify a movie</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/04-TVShow.png</image>
-      <caption>Movie details</caption>
+      <caption>Identify a TV show episode</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/13-OutputRules.png</image>
-      <caption>Processing queue</caption>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/07-Properties.png</image>
+      <caption>Review the changes before processing</caption>
     </screenshot>
   </screenshots>
   <releases>
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
+          <li>The window size and position are now remembered between sessions</li>
+          <li>New application icon</li>
           <li>Files with FRENCH in their name now get the French audio language preselected</li>
           <li>Audio tracks with an unknown language are no longer named AD</li>
           <li>The TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier</li>

@@ -29,7 +29,8 @@ import {
   OutputRuleProperty,
   PREVIEW_PANE_HEIGHT,
   Settings,
-  TVShowMatchingSource
+  TVShowMatchingSource,
+  WindowState
 } from '../../common/@types/Settings'
 import { VideoCodec } from '../../common/@types/Encoding'
 import {
@@ -216,6 +217,11 @@ export function saveSettings(settings: Settings) {
 export function savePreviewPaneHeight(percent: number) {
   const clamped = Math.min(PREVIEW_PANE_HEIGHT.max, Math.max(PREVIEW_PANE_HEIGHT.min, percent))
   currentSettings = { ...currentSettings, previewPaneHeight: clamped }
+  Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
+}
+
+export function saveWindowState(windowState: WindowState) {
+  currentSettings = { ...currentSettings, windowState }
   Files.writeFileSync(getConfigPath(), 'settings.json', JSON.stringify(currentSettings, null, 2))
 }
 
