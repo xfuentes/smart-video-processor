@@ -66,11 +66,10 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Several videos can now be cancelled at once without starting the queued jobs that are still to be cancelled</li>
-          <li>Added the Title &amp; EP Name and TVDB ID &amp; EP Name searches when matching several videos at once</li>
-          <li>TV shows are now matched only on the database chosen in the settings, with no fallback on the other one</li>
-          <li>The Preferred TV Show Database setting is now named TV Show Database</li>
-          <li>The application description now mentions Jellyfin</li>
+          <li>Files with FRENCH in their name now get the French audio language preselected</li>
+          <li>Audio tracks with an unknown language are no longer named AD</li>
+          <li>The TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier</li>
+          <li>TheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely</li>
         </ul>
       </description>
     </release>

@@ -26,7 +26,7 @@ import { Languages } from '../../../common/LanguageIETF'
 import { Countries } from '../../../common/Countries'
 import { Strings } from '../../../common/Strings'
 import { debug } from '../../util/log'
-import { createCachingAdapter } from './SimpleCachingAdapter'
+import { createCachingAdapter, HTTP_TIMEOUT_MS } from './SimpleCachingAdapter'
 
 type TVSeriesEpisode = {
   episodeData: EpisodeData | undefined
@@ -365,7 +365,11 @@ export class TMDBClient {
       tmdb = this.tmdb
       return tmdb
     } else {
-      tmdb = axios.create({ baseURL: TMDB_API_URL, adapter: createCachingAdapter(this.rateLimiter) })
+      tmdb = axios.create({
+        baseURL: TMDB_API_URL,
+        timeout: HTTP_TIMEOUT_MS,
+        adapter: createCachingAdapter(this.rateLimiter)
+      })
       tmdb.defaults.headers.common['Authorization'] = `Bearer ${TMDB_TOKEN}`
       this.tmdb = tmdb
       return tmdb

@@ -25,7 +25,7 @@ import { Countries } from '../../../common/Countries'
 import { currentSettings } from '../Settings'
 import { _ } from '../../i18n'
 import { debug } from '../../util/log'
-import { createCachingAdapter } from './SimpleCachingAdapter'
+import { createCachingAdapter, HTTP_TIMEOUT_MS } from './SimpleCachingAdapter'
 import { Strings } from '../../../common/Strings'
 
 const THE_TVDB_API_KEY = 'f8389a4c-1ad6-4193-b7c1-b74943ef2dcf'
@@ -568,6 +568,7 @@ export class TVDBClient {
       if (this.retrieveTokenPromise === undefined) {
         await this.rateLimiter.slows()
         this.retrieveTokenPromise = axios.post(`${THE_TVDB_API_URL}/login`, `{"apikey": "${THE_TVDB_API_KEY}"}`, {
+          timeout: HTTP_TIMEOUT_MS,
           headers: {
             'Content-Type': 'application/json'
           }
@@ -584,7 +585,11 @@ export class TVDBClient {
         this.retrieveTokenPromise = undefined
       }
       if (response) {
-        tvdb = axios.create({ baseURL: THE_TVDB_API_URL, adapter: createCachingAdapter(this.rateLimiter) })
+        tvdb = axios.create({
+          baseURL: THE_TVDB_API_URL,
+          timeout: HTTP_TIMEOUT_MS,
+          adapter: createCachingAdapter(this.rateLimiter)
+        })
         tvdb.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`
         this.tvdb = tvdb
         this.tvdbSessionTimestamp = Date.now()

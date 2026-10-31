@@ -31,6 +31,8 @@ function generateKey(config: InternalAxiosRequestConfig): string {
   return `${method}:${baseUrl}${url}?${params}:${language}`
 }
 
+export const HTTP_TIMEOUT_MS = 30000
+
 // Only real network calls are slowed down, cached responses are returned immediately.
 export const createCachingAdapter =
   (rateLimiter: RateLimiter): AxiosAdapter =>
@@ -47,5 +49,7 @@ export const createCachingAdapter =
     const defaultAdapter = getAdapter(axios.defaults.adapter)
     const response = rateLimiter.slows().then(() => defaultAdapter(config))
     cache.set(key, response)
+    // A failed request must not stay cached, otherwise every retry fails the same way.
+    response.catch(() => cache.delete(key))
     return response
   }

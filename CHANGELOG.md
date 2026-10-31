@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.1] - 2026-10-31
+
+### Fixed
+
+- Files with FRENCH in their name now get the French audio language preselected.
+- Audio tracks with an unknown language are no longer named AD.
+- The TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier.
+- TheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely.
+
 ## [3.4.0] - 2026-10-29
 
 ### Added
