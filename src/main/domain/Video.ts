@@ -594,7 +594,8 @@ export class Video implements IVideo {
       if (this.autoModePossible && currentSettings.isAutoStartEnabled) {
         this.loading = false
         this.fireChangeEvent()
-        await this.process()
+        // Not awaited, otherwise the search job stays busy until the whole processing is done and blocks the other videos.
+        void this.process()
       }
     }
   }

@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.1' })}</h4>
+      <ul>
+        {_('about.news.version_3_5_1.items', {
+          defaultValue:
+            'With Auto Start enabled, the videos loaded together are no longer blocked until the first one is completely processed\nThe application icon was redrawn in the GNOME style'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.0' })}</h4>
       <ul>
         {_('about.news.version_3_5_0.items', {

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.1] - 2026-11-01
+
+### Changed
+
+- The application icon is redrawn in the GNOME style, and the screenshots now come in light and dark styles with a smaller window.
+- The summary of the Flathub and Snap listings is now "Organize your movies and shows".
+
+### Fixed
+
+- With Auto Start enabled, the videos loaded together are no longer blocked until the first one is completely processed, and the first one no longer shows as loading while it is merging or encoding.
+
 ## [3.5.0] - 2026-10-31
 
 ### Added

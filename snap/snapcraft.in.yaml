@@ -1,7 +1,7 @@
 name: __NAME__
 title: Smart Video Processor
 version: __VERSION__
-summary: Rename and convert your videos
+summary: Organize your movies and shows
 description: |
   Smart Video Processor tidies up your movie and TV show collection. It recognizes each video
   using online databases, then renames the files so that media servers such as Jellyfin find them,

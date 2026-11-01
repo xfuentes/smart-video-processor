@@ -6,7 +6,7 @@
   <developer id="io.github.xfuentes">
     <name>Xavier Fuentes</name>
   </developer>
-  <summary>Rename and convert your videos</summary>
+  <summary>Organize your movies and shows</summary>
   <branding>
     <color type="primary" scheme_preference="light">#d9c9ec</color>
     <color type="primary" scheme_preference="dark">#4a2468</color>
@@ -58,24 +58,24 @@
       <caption>Identify a movie</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/04-TVShow.png</image>
-      <caption>Identify a TV show episode</caption>
-    </screenshot>
-    <screenshot>
       <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/07-Properties.png</image>
       <caption>Review the changes before processing</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/04-TVShow.png</image>
+      <caption>Identify a TV show episode in the dark style</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/xfuentes/smart-video-processor/v__VERSION__/docs/img/08-Processing.png</image>
+      <caption>Preview, split and join video parts in the dark style</caption>
     </screenshot>
   </screenshots>
   <releases>
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The window size and position are now remembered between sessions</li>
-          <li>New application icon</li>
-          <li>Files with FRENCH in their name now get the French audio language preselected</li>
-          <li>Audio tracks with an unknown language are no longer named AD</li>
-          <li>The TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier</li>
-          <li>TheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely</li>
+          <li>With Auto Start enabled, the videos loaded together are no longer blocked until the first one is completely processed</li>
+          <li>The application icon was redrawn in the GNOME style</li>
         </ul>
       </description>
     </release>

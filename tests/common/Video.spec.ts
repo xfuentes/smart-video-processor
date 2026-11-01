@@ -32,6 +32,9 @@ import { Languages } from '../../src/common/LanguageIETF'
 import type { Country } from '../../src/common/Countries'
 import { Files } from '../../src/main/util/files'
 import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../src/common/Change'
+import { Brain } from '../../src/main/domain/Brain'
+import { Track } from '../../src/main/domain/Track'
+import { TrackType } from '../../src/common/@types/Track'
 
 beforeAll(() => {
   currentSettings.favoriteLanguages = ['en']
@@ -724,4 +727,31 @@ test('A FRENCH filename gives the fr audio version', () => {
     getFakeAbsolutePath('downloads', '[ OxTorrent.cc ] WandaVision.S01E01.FRENCH.WEBRip.Xvid-EXTREME.avi')
   )
   expect(video.audioVersions.map((v) => v.ietf)).toStrictEqual(['fr'])
+})
+
+describe('Automatic start', () => {
+  afterEach(() => {
+    currentSettings.isAutoStartEnabled = false
+    vi.restoreAllMocks()
+  })
+
+  test('the analysis ends without waiting for the processing so the search job is released', async () => {
+    currentSettings.isAutoStartEnabled = true
+    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    video.type = VideoType.MOVIE
+    video.matched = true
+    video.tracks = [new Track(0, undefined, TrackType.VIDEO, 'AVC/H.264/MPEG-4p10', 'en', {}, true, false, 1, 1)]
+    vi.spyOn(Brain.getInstance(), 'analyse').mockReturnValue({
+      changes: [new Change(ChangeSourceType.CONTAINER, ChangeType.UPDATE, undefined, ChangeProperty.TITLE, 'a', 'b')],
+      hints: []
+    })
+    const processSpy = vi.spyOn(video, 'process').mockImplementation(() => new Promise<void>(() => undefined))
+    const outcome = await Promise.race([
+      video.analyse().then(() => 'analysed'),
+      new Promise<string>((resolve) => setTimeout(() => resolve('blocked'), 1000))
+    ])
+    expect(outcome).toBe('analysed')
+    expect(processSpy).toHaveBeenCalledTimes(1)
+    video.destroy()
+  })
 })
