@@ -35,11 +35,15 @@ const SECOND_PASS_TIME_PERCENT = 766 / 936
 
 // The countdown is computed from the average of the last speeds to avoid jumps.
 const COUNTDOWN_SPEED_SAMPLES = 10
+// The encoding speed is measured over the last seconds, ffmpeg only gives the average since the start.
+const ENCODING_SPEED_WINDOW_MS = 30000
+const ENCODING_SPEED_MIN_ELAPSED_MS = 2000
 
 export class FFmpeg extends CommandProgress {
   private static instance: FFmpeg
   private readonly timePattern: RegExp = /out_time_ms\s*=\s*(?<time>\d+)/i
   private readonly speedPattern: RegExp = /speed\s*=\s*(?<speed>[\d.]+)x/i
+  private readonly framePattern: RegExp = /frame\s*=\s*(?<frame>\d+)/i
   private readonly endPattern: RegExp = /progress\s*=\s*end/i
 
   private constructor() {
@@ -142,10 +146,17 @@ export class FFmpeg extends CommandProgress {
     const encodedPath = pass === 1 ? undefined : path.join(destinationPath, 'encoding-temp.mkv')
     const args = this.generateEncodingArguments(video, encodedPath, settings, pass, statFile)
 
+    const videoTrack = video.tracks.find((t) => t.type === TrackType.VIDEO)
+    const frames = videoTrack?.properties.frames
+    const framesPerSecond =
+      frames !== undefined && videoTrack?.duration !== undefined && videoTrack.duration > 0 && frames > 0
+        ? frames / videoTrack.duration
+        : undefined
     const versionOutputInterpreter = this.ffmpegProgressInterpreterBuild(
       encodedPath ?? statFile ?? '',
       video.targetDuration,
-      progressNotifier
+      progressNotifier,
+      framesPerSecond
     )
 
     // const errorPattern: RegExp = /Error: (?<message>.*)/i;
@@ -371,35 +382,62 @@ export class FFmpeg extends CommandProgress {
     }
   }
 
+  // A chunk can hold several progress blocks, the last one is the most recent.
+  private lastGroup(pattern: RegExp, text: string, group: string): string | undefined {
+    let last: string | undefined
+    for (const match of text.matchAll(new RegExp(pattern.source, 'gi'))) {
+      last = match.groups?.[group]
+    }
+    return last
+  }
+
+  // With the frame rate, the progress follows the encoded frames, because the output time is held back by sparse subtitle tracks.
   private ffmpegProgressInterpreterBuild(
     outputFilePath: string,
     durationSeconds: number,
-    progressNotifier?: ProgressNotifier
+    progressNotifier?: ProgressNotifier,
+    framesPerSecond?: number
   ) {
     const recentSpeeds: number[] = []
+    const speedSamples: { at: number; mediaSeconds: number }[] = []
     return (stdout?: string, stderr?: string, process?: ChildProcess) => {
       const response = outputFilePath
       let error: string | undefined = undefined
       if (progressNotifier != undefined) {
         if (stdout != undefined) {
-          const timeMatches = this.timePattern.exec(stdout)
-          const speedMatches = this.speedPattern.exec(stdout)
+          const time = this.lastGroup(this.timePattern, stdout, 'time')
+          const speed = this.lastGroup(this.speedPattern, stdout, 'speed')
+          const frame = this.lastGroup(this.framePattern, stdout, 'frame')
           const endMatches = this.endPattern.exec(stdout)
-          let xSpeed = 0
-          if (speedMatches?.groups) {
-            xSpeed = Number.parseFloat(speedMatches.groups.speed)
+          let xSpeed = speed !== undefined ? Number.parseFloat(speed) : 0
+
+          let currentTimeSeconds: number | undefined
+          if (framesPerSecond !== undefined && frame !== undefined) {
+            currentTimeSeconds = Number(frame) / framesPerSecond
+          } else if (time !== undefined) {
+            currentTimeSeconds = Number(time) / 1000000
           }
 
           if (endMatches) {
             progressNotifier({ progress: 1, xSpeed, countdown: 0, process })
-          } else if (timeMatches?.groups) {
-            const currentTimeSeconds = Number(timeMatches.groups.time) / 1000000
+          } else if (currentTimeSeconds !== undefined) {
             let progress: number | undefined = 0
             if (!durationSeconds) {
               progress = undefined
               progressNotifier({ progress, xSpeed, process })
             } else if (currentTimeSeconds > 0) {
               progress = currentTimeSeconds / durationSeconds
+              if (framesPerSecond !== undefined && frame !== undefined) {
+                const now = Date.now()
+                speedSamples.push({ at: now, mediaSeconds: currentTimeSeconds })
+                while (speedSamples.length > 2 && now - speedSamples[1].at >= ENCODING_SPEED_WINDOW_MS) {
+                  speedSamples.shift()
+                }
+                const oldest = speedSamples[0]
+                if (now - oldest.at >= ENCODING_SPEED_MIN_ELAPSED_MS) {
+                  xSpeed = (currentTimeSeconds - oldest.mediaSeconds) / ((now - oldest.at) / 1000)
+                }
+              }
               const secondsLeft = (1 - progress) * durationSeconds
               if (xSpeed > 0) {
                 recentSpeeds.push(xSpeed)

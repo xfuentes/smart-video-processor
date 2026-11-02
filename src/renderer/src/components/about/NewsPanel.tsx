@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.2' })}</h4>
+      <ul>
+        {_('about.news.version_3_5_2.items', {
+          defaultValue:
+            'Hovering the status bar cells now displays a tooltip with the video title, season and episode and the details of the job\nThe encoding speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.1' })}</h4>
       <ul>
         {_('about.news.version_3_5_1.items', {

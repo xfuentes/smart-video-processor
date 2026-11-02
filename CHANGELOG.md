@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.2] - 2026-11-02
+
+### Changed
+
+- The tooltip of the Loading, Searching, Encoding and Merging cells of the status bar now gives the title (with season and episode for a series) and the details of the job, like the status column of the video list.
+
+### Fixed
+
+- The tooltips of the status bar cells were never displayed because the clipped cells hid them, they now open when hovering the cells.
+- The encoding progress, speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks, they now follow the encoded frames and the speed of the last seconds.
+
 ## [3.5.1] - 2026-11-01
 
 ### Changed

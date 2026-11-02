@@ -78,18 +78,16 @@ const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, sizer, chil
   }
   return (
     <Tooltip
-      content={tooltip ?? ''}
+      content={<span style={{ whiteSpace: 'pre-line' }}>{tooltip ?? ''}</span>}
       relationship="description"
       withArrow
       visible={visible && tooltip !== undefined}
       onVisibleChange={(_event, data) => setVisible(data.visible && (always === true || isTruncated()))}
     >
       <span
-        ref={ref}
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
           boxSizing: 'border-box',
           flexShrink: noShrink ? 0 : 1,
           // The widest expected text is only a preferred width, the real text is the minimum.
@@ -97,8 +95,6 @@ const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, sizer, chil
           minWidth: sizer !== undefined ? 'min-content' : 0,
           padding: '0 12px',
           height: '100%',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
           borderLeft: `1px solid ${tokens.colorNeutralStroke2}`,
           fontVariantNumeric: 'tabular-nums',
           opacity: dim ? 0.5 : 1,
@@ -106,10 +102,41 @@ const StatusCell = ({ dim, hidden, always, noShrink, color, tooltip, sizer, chil
           color
         }}
       >
-        {children}
+        {/* The content is clipped inside, a clipping ancestor of the tooltip target would hide the tooltip. */}
+        <span
+          ref={ref}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            width: '100%',
+            minWidth: 0,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {children}
+        </span>
       </span>
     </Tooltip>
   )
+}
+
+const videoLabel = (video: IVideo): string => {
+  const { tvShow, movie, other } = video
+  if (tvShow?.title) {
+    const position = Strings.formatEpisodePosition(
+      tvShow.order,
+      tvShow.season,
+      tvShow.episode,
+      tvShow.absoluteEpisode,
+      tvShow.episodeCount,
+      tvShow.videoEpisodeCount
+    )
+    return position ? `${tvShow.title} ${position}` : tvShow.title
+  }
+  const title = movie?.title ?? other?.title
+  return title ?? video.sourcePath.split(/[\\/]/).pop() ?? ''
 }
 
 export const StatusBar = ({ videos, selectedVideos }: Props) => {
@@ -200,6 +227,18 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
   ) => {
     const active = info.running || info.queued > 0
     const running = videos.find((video) => video.status === status)
+    // The tooltip gives the file and the details of the job, like the status column of the list.
+    const runningDetails =
+      running === undefined
+        ? undefined
+        : `${videoLabel(running)}\n` +
+          (running.message
+            ? t('encoding.status_message', {
+                defaultValue: '{status}: {message}',
+                status: t(`job.status.${status.toLowerCase()}.short`, { defaultValue: status }),
+                message: running.message
+              })
+            : t(`job.status.${status.toLowerCase()}.short`, { defaultValue: status }))
     const progress = status === JobStatus.SEARCHING ? info.progress : running?.progression?.progress
     const known = progress !== undefined && progress >= 0
     const label =
@@ -221,7 +260,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
           <ProgressRing value={known ? progress : undefined} />
         </span>
       </>,
-      { hidden: !active, tooltip: running?.message, always: true, noShrink: true }
+      { hidden: !active, tooltip: runningDetails, always: true, noShrink: true }
     )
   }
 
@@ -266,8 +305,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
         borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
         whiteSpace: 'nowrap',
         userSelect: 'none',
-        cursor: 'default',
-        overflow: 'hidden'
+        cursor: 'default'
       }}
     >
       {cell('total', totalText(videos.length, stats.totalSize), { sizer: totalText(999, 999.9e9) })}

@@ -639,3 +639,30 @@ test('The encoding countdown uses the average speed instead of the instant one',
   expect(countdowns[0]).toBeCloseTo(990 / 0.01)
   expect(countdowns[3]).toBeCloseTo(960 / ((0.01 + 1 + 1 + 1) / 4))
 })
+
+test('The encoding progress and speed follow the frames when the output time is held back by a subtitle track', () => {
+  vi.useFakeTimers()
+  vi.setSystemTime(0)
+  const updates: { progress?: number; xSpeed?: number }[] = []
+  const interpreter = (
+    FFmpeg.getInstance() as unknown as {
+      ffmpegProgressInterpreterBuild: (
+        output: string,
+        duration: number,
+        notifier: (p: { progress?: number; xSpeed?: number }) => void,
+        framesPerSecond: number
+      ) => (stdout: string) => void
+    }
+  ).ffmpegProgressInterpreterBuild('/tmp/out.mkv', 1000, (p) => updates.push(p), 25)
+  // The output time stays at 10.5 s and the speed given by ffmpeg falls because it is averaged since the start.
+  const chunk = (frame: number, speed: number) =>
+    `frame=${frame}\nout_time_ms=10500000\nspeed=${speed}x\nprogress=continue\n`
+  interpreter(chunk(250, 2.1))
+  vi.setSystemTime(5000)
+  interpreter(chunk(1250, 1.0))
+  vi.setSystemTime(10000)
+  interpreter(chunk(2250, 0.6))
+  vi.useRealTimers()
+  expect(updates[2].progress).toBeCloseTo(90 / 1000)
+  expect(updates[2].xSpeed).toBeCloseTo(8)
+})
