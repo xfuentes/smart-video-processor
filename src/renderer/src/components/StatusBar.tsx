@@ -24,6 +24,7 @@ import { JobQueueInfo, JobQueues, JobStatus } from '../../../common/@types/Job'
 import { Strings } from '../../../common/Strings'
 import { _ as t } from '../i18n'
 import { ProgressRing } from './ProgressRing'
+import { statusText } from './preview/renderers'
 
 type Props = {
   videos: IVideo[]
@@ -227,18 +228,9 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
   ) => {
     const active = info.running || info.queued > 0
     const running = videos.find((video) => video.status === status)
-    // The tooltip gives the file and the details of the job, like the status column of the list.
+    // The tooltip gives the video and the status text of the job, like the status column of the list.
     const runningDetails =
-      running === undefined
-        ? undefined
-        : `${videoLabel(running)}\n` +
-          (running.message
-            ? t('encoding.status_message', {
-                defaultValue: '{status}: {message}',
-                status: t(`job.status.${status.toLowerCase()}.short`, { defaultValue: status }),
-                message: running.message
-              })
-            : t(`job.status.${status.toLowerCase()}.short`, { defaultValue: status }))
+      running === undefined ? undefined : `${videoLabel(running)}\n` + statusText(status, running.message)
     const progress = status === JobStatus.SEARCHING ? info.progress : running?.progression?.progress
     const known = progress !== undefined && progress >= 0
     const label =

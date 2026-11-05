@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.3' })}</h4>
+      <ul>
+        {_('about.news.version_3_5_3.items', {
+          defaultValue:
+            'The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.2' })}</h4>
       <ul>
         {_('about.news.version_3_5_2.items', {

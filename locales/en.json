@@ -78,7 +78,6 @@
   "encoding.options": "{type} Options",
   "encoding.original": "Original",
   "encoding.process": "Process",
-  "encoding.status_message": "{status}: {message}",
   "encoding.target": "Target",
   "episode_order.absolute.label": "Absolute",
   "episode_order.altdvd.label": "Alternate DVD",
@@ -762,5 +761,6 @@
   "about.news.version_3_4_0.items": "Several videos can now be cancelled at once without starting the queued jobs that are still to be cancelled\nAdded the Title & EP Name and TVDB ID & EP Name searches when matching several videos at once\nTV shows are now matched only on the database chosen in the settings, with no fallback on the other one\nThe Preferred TV Show Database setting is now named TV Show Database\nThe application description now mentions Jellyfin",
   "about.news.version_3_5_0.items": "The window size and position are now remembered between sessions\nThe application has a new icon\nFiles with FRENCH in their name now get the French audio language preselected\nAudio tracks with an unknown language are no longer named AD\nThe TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier\nTheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely",
   "about.news.version_3_5_1.items": "With Auto Start enabled, the videos loaded together are no longer blocked until the first one is completely processed\nThe application icon was redrawn in the GNOME style",
-  "about.news.version_3_5_2.items": "Hovering the status bar cells now displays a tooltip with the video title, season and episode and the details of the job\nThe encoding speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks"
+  "about.news.version_3_5_2.items": "Hovering the status bar cells now displays a tooltip with the video title, season and episode and the details of the job\nThe encoding speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks",
+  "about.news.version_3_5_3.items": "The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x"
 }

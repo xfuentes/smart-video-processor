@@ -74,8 +74,7 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>Hovering the status bar cells now displays a tooltip with the video title, season and episode and the details of the job</li>
-          <li>The encoding speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks</li>
+          <li>The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x</li>
         </ul>
       </description>
     </release>

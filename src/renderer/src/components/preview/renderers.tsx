@@ -114,11 +114,13 @@ export function attachmentRenderer(value: Attachment) {
   )
 }
 
+// The status itself is already shown by the cell or the label, so only the message is given when there is one.
+export function statusText(status: JobStatus, message: string | undefined): string {
+  return message || _(`job.status.${status.toLowerCase()}.short`, { defaultValue: status })
+}
+
 export function statusRenderer(status: JobStatus, message: string | undefined, size: 'small' | 'large' = 'small') {
-  const statusI18n = _(`job.status.${status.toLowerCase()}.short`, { defaultValue: status })
-  const messageI18n = message
-    ? _('encoding.status_message', { defaultValue: '{status}: {message}', status: statusI18n, message })
-    : statusI18n
+  const messageI18n = statusText(status, message)
   let intent: MessageBarIntent
   switch (status) {
     case JobStatus.ERROR:

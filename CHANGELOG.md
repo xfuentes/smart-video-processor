@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.3] - 2026-11-05
+
+### Fixed
+
+- The tooltip of the status column and of the status bar cells no longer starts with the status, e.g. Encoding: Encoding at 3.0x, since the status is already shown by the cell.
+
 ## [3.5.2] - 2026-11-02
 
 ### Changed
