@@ -1,0 +1,77 @@
+name: flathub
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to send to Flathub, e.g. v3.5.3
+        required: true
+
+jobs:
+  flathub-sync:
+    timeout-minutes: 30
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - name: Generate Flatpak manifest
+        run: node tools/configure.js ./flatpak
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+
+      - name: Install flatpak-node-generator
+        run: pip install "git+https://github.com/flatpak/flatpak-builder-tools.git#subdirectory=node"
+
+      - name: Regenerate generated-sources.json
+        run: flatpak-node-generator npm package-lock.json -o generated-sources.json
+
+      - name: Open update PR on the Flathub repo
+        env:
+          GH_TOKEN: ${{ secrets.FLATHUB_PUSH_TOKEN }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -e
+          BRANCH="update-${TAG}"
+          MANIFEST=io.github.xfuentes.smart-video-processor.yml
+
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/flathub/io.github.xfuentes.smart-video-processor.git" flathub-repo
+          cd flathub-repo
+
+          EXISTING=$(gh pr list --repo flathub/io.github.xfuentes.smart-video-processor --head "$BRANCH" --state open --json number --jq 'length')
+          if [ "$EXISTING" != "0" ]; then
+            echo "A PR for $BRANCH is already open, skipping"
+            exit 0
+          fi
+
+          git checkout -b "$BRANCH"
+          cp "../flatpak/$MANIFEST" "./$MANIFEST"
+          cp ../generated-sources.json ./generated-sources.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$MANIFEST" generated-sources.json
+
+          if git diff --cached --quiet; then
+            echo "Manifest and sources already up to date, nothing to publish"
+            exit 0
+          fi
+
+          git commit -m "smart-video-processor: update to ${TAG}"
+          git push origin "$BRANCH"
+
+          gh pr create --repo flathub/io.github.xfuentes.smart-video-processor \
+            --base master --head "$BRANCH" \
+            --title "smart-video-processor: update to ${TAG}" \
+            --body "Automated update to ${TAG}: bumps the app source tag and regenerates generated-sources.json to match this release's package-lock.json."
