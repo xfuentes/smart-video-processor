@@ -85,18 +85,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: build linux snap
-        uses: snapcore/action-build@v1
-        id: build
-
-      - name: publish to snap store
-        uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          release: stable
-
   flathub-sync:
     needs: release
     runs-on: ubuntu-24.04

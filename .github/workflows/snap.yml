@@ -1,0 +1,88 @@
+name: snap
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the built snaps to the Snap Store
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            arch: amd64
+          - os: ubuntu-24.04-arm
+            arch: arm64
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Force Node.js 24 for all actions
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+        with:
+          lfs: false
+
+      - name: Fetch LFS objects
+        run: |
+          git lfs install
+          git lfs pull
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - name: Generate snapcraft.yaml
+        run: node ./tools/configure.js ./snap/
+
+      - name: build linux snap
+        uses: snapcore/action-build@v1
+        id: build
+
+      - name: Upload the snap
+        uses: actions/upload-artifact@v4
+        with:
+          name: snap-${{ matrix.arch }}
+          path: ${{ steps.build.outputs.snap }}
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Download the snap
+        uses: actions/download-artifact@v4
+        with:
+          name: snap-${{ matrix.arch }}
+
+      - name: Find the snap
+        id: find
+        run: echo "snap=$(ls *.snap | head -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: publish to snap store
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
+        with:
+          snap: ${{ steps.find.outputs.snap }}
+          release: stable
