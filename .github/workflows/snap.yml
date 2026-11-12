@@ -43,9 +43,16 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.x
+          cache: 'npm'
 
-      - name: Generate snapcraft.yaml
-        run: node ./tools/configure.js ./snap/
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: prepare-package
+        run: npm run prepare-package
+
+      - name: Build the unpacked application
+        run: npm run package -- --${{ matrix.arch == 'amd64' && 'x64' || 'arm64' }} --dir --publish never
 
       - name: build linux snap
         uses: snapcore/action-build@v1
