@@ -728,6 +728,7 @@
   "settings.movie_folder.label": "Put each movie in its own folder",
   "settings.tab.output_rules": "Output Rules",
   "job.title.copying": "Copying file",
+  "video.message.final_size": "Final size: {size}.",
   "video.message.no_change_needed": "No modification was needed.",
   "status_bar.loading": "Loading",
   "multi_tracks.column.videos": "Videos",
@@ -762,5 +763,6 @@
   "about.news.version_3_5_0.items": "The window size and position are now remembered between sessions\nThe application has a new icon\nFiles with FRENCH in their name now get the French audio language preselected\nAudio tracks with an unknown language are no longer named AD\nThe TheTVDB series search is now retried without stop words when a full title returns nothing, e.g. The Falcon and the Winter Soldier\nTheTVDB and TheMovieDB requests now time out after 30 seconds and failed requests are no longer cached, so a temporary network problem no longer leaves videos loading indefinitely",
   "about.news.version_3_5_1.items": "With Auto Start enabled, the videos loaded together are no longer blocked until the first one is completely processed\nThe application icon was redrawn in the GNOME style",
   "about.news.version_3_5_2.items": "Hovering the status bar cells now displays a tooltip with the video title, season and episode and the details of the job\nThe encoding speed and remaining time no longer stall near 0.0x with a huge countdown on files with sparse subtitle tracks",
-  "about.news.version_3_5_3.items": "The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x"
+  "about.news.version_3_5_3.items": "The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x",
+  "about.news.version_3_5_4.items": "With Turn Off enabled, the temporary files are now cleaned before the shutdown countdown is displayed\nOn Linux, the computer is now turned off even when an application of the session denies a plain shutdown\nThe tooltip of a processed video now also gives the final size of the file when a track was re-encoded, a part of the video was removed or a part was added"
 }

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.4] - 2026-11-12
+
+### Added
+
+- The tooltip of a processed video now also gives the final size of the file when a track was re-encoded, a part of the video was removed or a part was added.
+
+### Fixed
+
+- With Turn Off enabled, the temporary files are now cleaned before the shutdown countdown is displayed, so the cleanup is no longer cut short when the computer halts.
+- On Linux, the computer is now turned off even when an application of the session denies a plain shutdown, by falling back on the session manager and then on systemctl.
+
 ## [3.5.3] - 2026-11-05
 
 ### Fixed

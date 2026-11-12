@@ -32,11 +32,32 @@ export const getShutdownCommand = (platform: string = process.platform): string 
   }
 }
 
+// On Linux the fallbacks ignore the inhibitors that deny a plain shutdown, e.g. a file manager or a running session.
+export const getShutdownFallbackCommands = (platform: string = process.platform): string[] => {
+  if (platform === 'win32' || platform === 'darwin') {
+    return []
+  }
+  return ['gnome-session-quit --power-off --no-prompt --force', 'systemctl poweroff -i']
+}
+
 export const shutdownComputer = (platform: string = process.platform): void => {
-  const command = getShutdownCommand(platform)
-  exec(command, (err) => {
-    if (err) {
-      error('log.shutdown.failed', { defaultValue: 'Failed to shut down the computer: {detail}', detail: String(err) })
-    }
-  })
+  const commands = [getShutdownCommand(platform), ...getShutdownFallbackCommands(platform)]
+  const errors: string[] = []
+  const run = (index: number): void => {
+    exec(commands[index], (err) => {
+      if (!err) {
+        return
+      }
+      errors.push(String(err))
+      if (index + 1 < commands.length) {
+        run(index + 1)
+      } else {
+        error('log.shutdown.failed', {
+          defaultValue: 'Failed to shut down the computer: {detail}',
+          detail: errors.join(' | ')
+        })
+      }
+    })
+  }
+  run(0)
 }

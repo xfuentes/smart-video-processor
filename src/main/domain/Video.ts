@@ -687,9 +687,37 @@ export class Video implements IVideo {
       }
       throw error
     }
+    if (this.changesTheSize(encodingRequired)) {
+      this.appendFinalSize()
+    }
     this.queued = false
     this.processed = true
     this.fireChangeEvent()
+  }
+
+  // The size changes when a track is re-encoded, a part of the video is removed or a part is added.
+  private changesTheSize(encodingRequired: boolean): boolean {
+    return (
+      encodingRequired ||
+      !!this.startFrom ||
+      (!!this.endAt && this.endAt != this.duration) ||
+      this.videoParts.length > 0
+    )
+  }
+
+  private appendFinalSize() {
+    if (this.finalOutputPath === undefined || this.status !== JobStatus.SUCCESS) {
+      return
+    }
+    try {
+      const size = fs.statSync(this.finalOutputPath).size
+      this.message = `${this.message} ${_('video.message.final_size', {
+        defaultValue: 'Final size: {size}.',
+        size: Strings.humanFileSize(size)
+      })}`.trim()
+    } catch (e) {
+      // The final size is only informative.
+    }
   }
 
   getFinalEncoderSettings() {

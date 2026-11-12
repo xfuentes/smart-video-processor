@@ -74,7 +74,9 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The tooltips of the status column and of the status bar cells no longer start with the status, e.g. Encoding: Encoding at 3.0x</li>
+          <li>With Turn Off enabled, the temporary files are now cleaned before the shutdown countdown is displayed</li>
+          <li>On Linux, the computer is now turned off even when an application of the session denies a plain shutdown</li>
+          <li>The tooltip of a processed video now also gives the final size of the file when a track was re-encoded, a part of the video was removed or a part was added</li>
         </ul>
       </description>
     </release>

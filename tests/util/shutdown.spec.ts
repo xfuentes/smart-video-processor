@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getShutdownCommand } from '../../src/main/util/shutdown'
+import { getShutdownCommand, getShutdownFallbackCommands } from '../../src/main/util/shutdown'
 
 describe('shutdown', () => {
   describe('getShutdownCommand', () => {
@@ -14,6 +14,20 @@ describe('shutdown', () => {
     it('returns Linux shutdown command for other platforms', () => {
       expect(getShutdownCommand('linux')).toBe('shutdown -h now')
       expect(getShutdownCommand('freebsd')).toBe('shutdown -h now')
+    })
+  })
+
+  describe('getShutdownFallbackCommands', () => {
+    it('returns no fallback for win32 and darwin', () => {
+      expect(getShutdownFallbackCommands('win32')).toEqual([])
+      expect(getShutdownFallbackCommands('darwin')).toEqual([])
+    })
+
+    it('returns fallbacks that ignore the inhibitors on Linux', () => {
+      expect(getShutdownFallbackCommands('linux')).toEqual([
+        'gnome-session-quit --power-off --no-prompt --force',
+        'systemctl poweroff -i'
+      ])
     })
   })
 })

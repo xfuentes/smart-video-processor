@@ -64,10 +64,18 @@ export const MainToolbar = ({ onOpen, videos, selectedVideos }: Props): React.JS
   const isAnyProcessing = videos.some((video) => video.processing)
   const isRecyclable = videos.some((v) => checkVideoProcessingSuccessful(v))
 
-  if (shutdownRequested && !isAnyProcessing && !shutdownDialogOpen) {
-    setShutdownDialogOpen(true)
-    setShutdownRequested(false)
-  }
+  const shutdownReady = shutdownRequested && !isAnyProcessing && !shutdownDialogOpen
+
+  React.useEffect(() => {
+    if (!shutdownReady) {
+      return
+    }
+    // The temporary files are cleaned before the countdown dialog is shown.
+    void window.api.video.clearCompleted().finally(() => {
+      setShutdownRequested(false)
+      setShutdownDialogOpen(true)
+    })
+  }, [shutdownReady])
 
   const processingEnabled =
     selectedVideos !== undefined && selectedVideos.find((v) => checkVideoProcessingEnabled(v)) !== undefined

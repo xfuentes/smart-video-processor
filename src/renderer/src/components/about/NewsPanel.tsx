@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.4' })}</h4>
+      <ul>
+        {_('about.news.version_3_5_4.items', {
+          defaultValue:
+            'With Turn Off enabled, the temporary files are now cleaned before the shutdown countdown is displayed\nOn Linux, the computer is now turned off even when an application of the session denies a plain shutdown\nThe tooltip of a processed video now also gives the final size of the file when a track was re-encoded, a part of the video was removed or a part was added'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.3' })}</h4>
       <ul>
         {_('about.news.version_3_5_3.items', {
