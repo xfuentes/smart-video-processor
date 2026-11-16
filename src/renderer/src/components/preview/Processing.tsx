@@ -18,7 +18,7 @@
 
 import { IVideo } from '../../../../common/@types/Video'
 import { useI18n } from '../../i18n'
-import { Button, Divider } from '@fluentui/react-components'
+import { Button, Divider, Tooltip } from '@fluentui/react-components'
 import { VideoSectionSelectorField } from '@renderer/components/fields/VideoSectionSelectorField'
 import { MoviesAndTvRegular } from '@fluentui/react-icons'
 import { ProgressButton } from '@renderer/components/ProgressButton'
@@ -31,8 +31,21 @@ type Props = {
 
 export const Processing = ({ video, disabled = false }: Props) => {
   const _ = useI18n()
+  // Video parts cannot be combined with tracks imported from another file.
+  const hasImportedTracks = video.externalSources.length > 0
+  const addPartButton = (
+    <Button
+      size="small"
+      appearance="secondary"
+      icon={<MoviesAndTvRegular />}
+      disabled={disabled || hasImportedTracks}
+      onClick={() => void window.api.video.addPart(video.uuid)}
+    >
+      {_('processing.add_video_part.label', { defaultValue: 'Add Video Part' })}
+    </Button>
+  )
   const handleDropPart = (files: File[]) => {
-    if (files.length > 0) {
+    if (files.length > 0 && !hasImportedTracks) {
       void window.api.video.addParts(video.uuid, files)
     }
   }
@@ -77,15 +90,19 @@ export const Processing = ({ video, disabled = false }: Props) => {
       <Divider style={{ flexGrow: '0' }} />
       <div className="preview-buttons">
         <div className="button">
-          <Button
-            size="small"
-            appearance="secondary"
-            icon={<MoviesAndTvRegular />}
-            disabled={disabled}
-            onClick={() => void window.api.video.addPart(video.uuid)}
-          >
-            {_('processing.add_video_part.label', { defaultValue: 'Add Video Part' })}
-          </Button>
+          {hasImportedTracks ? (
+            <Tooltip
+              content={_('processing.add_video_part.imported_tracks_tooltip', {
+                defaultValue: 'Not available when tracks are imported from another file.'
+              })}
+              relationship="description"
+              withArrow
+            >
+              <span>{addPartButton}</span>
+            </Tooltip>
+          ) : (
+            addPartButton
+          )}
         </div>
       </div>
     </>

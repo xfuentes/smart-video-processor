@@ -139,6 +139,15 @@ const api: SvpAPI = {
       return ipcRenderer.invoke('video:addParts', uuid, filePaths)
     },
     addPart: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addPart', uuid),
+    addExternalSource: (uuid: string): Promise<void> => ipcRenderer.invoke('video:addExternalSource', uuid),
+    addExternalSources: (uuid: string, files: File[]): Promise<void> => {
+      const filePaths = files.map((f) => webUtils.getPathForFile(f))
+      return ipcRenderer.invoke('video:addExternalSources', uuid, filePaths)
+    },
+    removeExternalSource: (uuid: string, sourceUuid: string): Promise<void> =>
+      ipcRenderer.invoke('video:removeExternalSource', uuid, sourceUuid),
+    setExternalSourceDelay: (uuid: string, sourceUuid: string, delayMs: number): Promise<void> =>
+      ipcRenderer.invoke('video:setExternalSourceDelay', uuid, sourceUuid, delayMs),
     removePart: (uuid: string, partUuid: string): Promise<void> =>
       ipcRenderer.invoke('video:removePart', uuid, partUuid),
     setStartFrom: (uuid: string, value?: number): Promise<void> =>

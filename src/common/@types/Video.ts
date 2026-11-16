@@ -71,6 +71,24 @@ export interface ISnapshots {
   totalWidth: number
 }
 
+export type AudioSyncStatus = 'synced' | 'drift' | 'unknown'
+
+export interface IExternalSource {
+  uuid: string
+  path: string
+  filename: string
+  analysing: boolean
+  syncStatus?: AudioSyncStatus
+  // Factor between the speed of the file and the speed of the main video.
+  speedRatio?: number
+  // Delay in milliseconds applied to the tracks imported from the file.
+  delayMs: number
+}
+
+// The delay of the imported tracks is counted from the start kept of the main video.
+export const effectiveExternalDelayMs = (video: { startFrom?: number }, source: { delayMs: number }): number =>
+  source.delayMs - Math.round((video.startFrom ?? 0) * 1000)
+
 export interface IVideo {
   uuid: string
   filename: string
@@ -81,6 +99,7 @@ export interface IVideo {
   type: VideoType
   container?: Container
   tracks: ITrack[]
+  externalSources: IExternalSource[]
   changes: IChange[]
   hints: IHint[]
   videoParts: IVideo[]
@@ -94,6 +113,8 @@ export interface IVideo {
   matched: boolean
   queued: boolean
   processed: boolean
+  processedFilename?: string
+  processedSize?: number
   status: JobStatus
   message?: string
   progression: Progression
@@ -117,6 +138,8 @@ export interface IVideoListItem {
   uuid: string
   filename: string
   size: number
+  processedFilename?: string
+  processedSize?: number
   pixels?: string
   status: JobStatus
   message?: string
@@ -132,6 +155,8 @@ export const videoListItemKeys = [
   'uuid',
   'filename',
   'size',
+  'processedFilename',
+  'processedSize',
   'pixels',
   'status',
   'message',

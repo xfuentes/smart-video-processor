@@ -39,6 +39,16 @@ export interface Container {
   durationSeconds: number
 }
 
+export interface ExternalInput {
+  uuid: string
+  path: string
+  delayMs: number
+  // Subtitles that Matroska cannot store as they are, converted to separate files beforehand.
+  convertedSubtitles?: { trackId: number; path: string }[]
+  // Identifiers of the tracks inside the file, when it is a trimmed copy of the original one.
+  fileTrackIds?: { [trackId: number]: number }
+}
+
 export class MKVMerge extends CommandProgress {
   private static instance: MKVMerge
 
@@ -133,9 +143,17 @@ export class MKVMerge extends CommandProgress {
     outputDirectory: string,
     changes: Change[],
     tracks: Track[] = [],
-    progressNotifier?: ProgressNotifier
+    progressNotifier?: ProgressNotifier,
+    externalInputs: ExternalInput[] = []
   ): Promise<string> {
-    const args = this.generateProcessingArguments(originalFilename, path, outputDirectory, changes, tracks)
+    const args = this.generateProcessingArguments(
+      originalFilename,
+      path,
+      outputDirectory,
+      changes,
+      tracks,
+      externalInputs
+    )
     Files.mkdirSync(outputDirectory, { recursive: true })
     const progressionPattern: RegExp = /Progress: (?<progress>\d+)%/i
     const errorPattern: RegExp = /Error: (?<message>.*)/i
@@ -176,9 +194,13 @@ export class MKVMerge extends CommandProgress {
     sourcePath: string,
     outputDirectory: string,
     changes: Change[],
-    tracks: Track[]
+    tracks: Track[],
+    externalInputs: ExternalInput[]
   ): string[] {
     let mkOptions: string[] = []
+    const externalTrackIds = tracks.filter((t) => t.externalSourceUuid !== undefined).map((t) => t.id)
+    const mainTracks = tracks.filter((t) => t.externalSourceUuid === undefined)
+    const mainChanges = changes.filter((c) => c.trackId == undefined || !externalTrackIds.includes(c.trackId))
 
     const newFilename = Files.computeOutputPath(originalFilename, changes, outputDirectory)
 
@@ -189,9 +211,50 @@ export class MKVMerge extends CommandProgress {
 
     mkOptions = mkOptions.concat(this.generateGlobalArguments(changes))
     mkOptions = mkOptions.concat(this.generateAttachmentArguments(changes))
-    mkOptions = mkOptions.concat(this.generateTracksArguments(tracks, changes))
+    mkOptions = mkOptions.concat(this.generateTracksArguments(mainTracks, mainChanges))
+    mkOptions = mkOptions.concat(['(', sourcePath, ')'])
+    for (const input of externalInputs) {
+      mkOptions = mkOptions.concat(this.generateExternalInputArguments(input, tracks, changes))
+    }
+    return mkOptions
+  }
 
-    return mkOptions.concat(['(', sourcePath, ')'])
+  // The tracks imported from another file are read from it, delayed to match the main video.
+  private generateExternalInputArguments(input: ExternalInput, tracks: Track[], changes: Change[]): string[] {
+    const converted = input.convertedSubtitles ?? []
+    const convertedArgs = converted.flatMap((subtitle) => {
+      const track = tracks.filter((t) => t.id === subtitle.trackId)
+      const trackChanges = changes.filter((c) => c.trackId === subtitle.trackId)
+      const syncArgs = input.delayMs !== 0 ? ['--sync', `0:${input.delayMs}`] : []
+      const updateArgs = this.generateTrackUpdateArguments(track, trackChanges, () => 0)
+      return [...syncArgs, ...updateArgs, '(', subtitle.path, ')']
+    })
+    const selected = tracks.filter(
+      (t) => t.externalSourceUuid === input.uuid && t.copy && !converted.some((c) => c.trackId === t.id)
+    )
+    if (selected.length === 0) {
+      return convertedArgs
+    }
+    const sourceIds = new Map(selected.map((t) => [t.id, input.fileTrackIds?.[t.id] ?? t.sourceTrackId ?? t.id]))
+    const sourceId = (id: number) => sourceIds.get(id) ?? id
+    const mkOptions = ['--no-video', '--no-attachments', '--no-chapters', '--no-global-tags', '--no-track-tags']
+    const idsOfType = (type: TrackType) =>
+      selected
+        .filter((t) => t.type === type)
+        .map((t) => sourceId(t.id))
+        .join(',')
+    const audios = idsOfType(TrackType.AUDIO)
+    mkOptions.push(...(audios ? ['--audio-tracks', audios] : ['--no-audio']))
+    const subtitles = idsOfType(TrackType.SUBTITLES)
+    mkOptions.push(...(subtitles ? ['--subtitle-tracks', subtitles] : ['--no-subtitles']))
+    if (input.delayMs !== 0) {
+      for (const track of selected) {
+        mkOptions.push('--sync', `${sourceId(track.id)}:${input.delayMs}`)
+      }
+    }
+    const inputChanges = changes.filter((c) => c.trackId != undefined && sourceIds.has(c.trackId))
+    mkOptions.push(...this.generateTrackUpdateArguments(selected, inputChanges, sourceId))
+    return mkOptions.concat(['(', input.path, ')'], convertedArgs)
   }
 
   private generateGlobalArguments(changes: Change[]): string[] {
@@ -243,7 +306,11 @@ export class MKVMerge extends CommandProgress {
     return mkOptions
   }
 
-  private generateTracksArguments(tracks: Track[], changes: Change[]): string[] {
+  private generateTrackUpdateArguments(
+    tracks: Track[],
+    changes: Change[],
+    fileTrackId: (id: number) => number
+  ): string[] {
     const mkOptions: string[] = []
 
     const updatedTrackLanguages: number[] = []
@@ -254,18 +321,24 @@ export class MKVMerge extends CommandProgress {
         case ChangeProperty.LANGUAGE:
           mkOptions.push(
             '--language',
-            `${uChange.trackId}:${(uChange.newValue === undefined ? 'und' : uChange.newValue) as string}`
+            `${fileTrackId(uChange.trackId as number)}:${(uChange.newValue === undefined ? 'und' : uChange.newValue) as string}`
           )
           updatedTrackLanguages.push(uChange.trackId as number)
           break
         case ChangeProperty.NAME:
-          mkOptions.push('--track-name', `${uChange.trackId}:${uChange.newValue as string}`)
+          mkOptions.push('--track-name', `${fileTrackId(uChange.trackId as number)}:${uChange.newValue as string}`)
           break
         case ChangeProperty.DEFAULT:
-          mkOptions.push('--default-track', `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`)
+          mkOptions.push(
+            '--default-track',
+            `${fileTrackId(uChange.trackId as number)}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`
+          )
           break
         case ChangeProperty.FORCED:
-          mkOptions.push('--forced-track', `${uChange.trackId}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`)
+          mkOptions.push(
+            '--forced-track',
+            `${fileTrackId(uChange.trackId as number)}:${(uChange.newValue as boolean) ? 'yes' : 'no'}`
+          )
           break
       }
     }
@@ -274,9 +347,17 @@ export class MKVMerge extends CommandProgress {
       if (track.copy && !updatedTrackLanguages.includes(track.id)) {
         // If the track is to be copied and language was not updated,
         // we preserve the original track language IETF because ffmpeg removes them.
-        mkOptions.push('--language', `${track.id}:${track.language === undefined ? 'und' : track.language}`)
+        mkOptions.push(
+          '--language',
+          `${fileTrackId(track.id)}:${track.language === undefined ? 'und' : track.language}`
+        )
       }
     }
+    return mkOptions
+  }
+
+  private generateTracksArguments(tracks: Track[], changes: Change[]): string[] {
+    const mkOptions = this.generateTrackUpdateArguments(tracks, changes, (id) => id)
 
     const videosToRemove = tracks
       .filter((t) => !t.copy && t.type === TrackType.VIDEO)

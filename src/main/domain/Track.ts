@@ -33,6 +33,9 @@ export class Track implements ITrack {
   public copy: boolean
   // if true the tracks needs to be re-encoded.
   public unsupported: boolean
+  public externalSourceUuid?: string
+  public sourceTrackId?: number
+  public sourceTypeIndex?: number
 
   constructor(
     id: number,
@@ -83,7 +86,10 @@ export class Track implements ITrack {
       duration: this.duration,
       size: this.size,
       copy: this.copy,
-      unsupported: this.unsupported
+      unsupported: this.unsupported,
+      externalSourceUuid: this.externalSourceUuid,
+      sourceTrackId: this.sourceTrackId,
+      sourceTypeIndex: this.sourceTypeIndex
     }
   }
 }

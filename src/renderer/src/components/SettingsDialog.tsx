@@ -88,6 +88,7 @@ export const SettingsDialog = () => {
       outputRules,
       namingConvention,
       isMovieFolderEnabled,
+      isVideoCodecInFilenameEnabled,
       isAutoAddEnabled,
       autoAddPath,
       isAutoStartEnabled,
@@ -156,6 +157,7 @@ export const SettingsDialog = () => {
       setOutputRules(settingsValidation.result.outputRules)
       setNamingConvention(settingsValidation.result.namingConvention)
       setMovieFolderEnabled(settingsValidation.result.isMovieFolderEnabled)
+      setVideoCodecInFilenameEnabled(settingsValidation.result.isVideoCodecInFilenameEnabled)
       setAutoAddEnabled(settingsValidation.result.isAutoAddEnabled)
       setAutoAddPath(settingsValidation.result.autoAddPath)
       setAutoStartEnabled(settingsValidation.result.isAutoStartEnabled)
@@ -226,6 +228,9 @@ export const SettingsDialog = () => {
     settingsValidation?.result?.namingConvention ?? NamingConvention.PLEX
   )
   const [isMovieFolderEnabled, setMovieFolderEnabled] = useState(settingsValidation?.result?.isMovieFolderEnabled)
+  const [isVideoCodecInFilenameEnabled, setVideoCodecInFilenameEnabled] = useState(
+    settingsValidation?.result?.isVideoCodecInFilenameEnabled ?? true
+  )
   const [isAutoAddEnabled, setAutoAddEnabled] = useState(settingsValidation?.result?.isAutoAddEnabled)
   const [autoAddPath, setAutoAddPath] = useState(settingsValidation?.result?.autoAddPath ?? '')
   const [isAutoStartEnabled, setAutoStartEnabled] = useState(settingsValidation?.result?.isAutoStartEnabled)
@@ -265,6 +270,7 @@ export const SettingsDialog = () => {
     outputRules: 'rules',
     namingConvention: 'output',
     isMovieFolderEnabled: 'output',
+    isVideoCodecInFilenameEnabled: 'output',
     isTrackFilteringEnabled: 'filtering',
     favoriteLanguages: 'filtering',
     isKeepVOEnabled: 'filtering',
@@ -288,6 +294,7 @@ export const SettingsDialog = () => {
     outputRules,
     namingConvention,
     isMovieFolderEnabled,
+    isVideoCodecInFilenameEnabled,
     isAutoAddEnabled,
     autoAddPath,
     isAutoStartEnabled,
@@ -641,6 +648,17 @@ export const SettingsDialog = () => {
                           checked={isMovieFolderEnabled}
                           onChange={(ev: ChangeEvent<HTMLInputElement>) =>
                             setMovieFolderEnabled(ev.currentTarget.checked)
+                          }
+                        />
+                      </div>
+                      <div className="field">
+                        <Switch
+                          label={_('settings.video_codec_in_filename.label', {
+                            defaultValue: 'Add the video codec to the movie file names'
+                          })}
+                          checked={isVideoCodecInFilenameEnabled}
+                          onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                            setVideoCodecInFilenameEnabled(ev.currentTarget.checked)
                           }
                         />
                       </div>

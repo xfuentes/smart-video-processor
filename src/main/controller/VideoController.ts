@@ -322,6 +322,18 @@ export class VideoController {
     return this.getVideoByUuid(uuid).addPart(partPath)
   }
 
+  addExternalSource(uuid: string, sourcePath: string) {
+    return this.getVideoByUuid(uuid).addExternalSource(sourcePath)
+  }
+
+  removeExternalSource(uuid: string, sourceUuid: string) {
+    return this.getVideoByUuid(uuid).removeExternalSource(sourceUuid)
+  }
+
+  setExternalSourceDelay(uuid: string, sourceUuid: string, delayMs: number) {
+    this.getVideoByUuid(uuid).setExternalSourceDelay(sourceUuid, delayMs)
+  }
+
   removePart(uuid: string, partUuid: string) {
     return this.getVideoByUuid(uuid).removePart(partUuid)
   }

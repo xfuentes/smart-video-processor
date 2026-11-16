@@ -17,6 +17,7 @@
  */
 
 import {
+  Button,
   createTableColumn,
   DataGrid,
   DataGridBody,
@@ -25,10 +26,16 @@ import {
   DataGridHeaderCell,
   DataGridProps,
   DataGridRow,
+  Divider,
+  Input,
   OnSelectionChangeData,
+  Spinner,
   TableColumnDefinition,
-  TableColumnSizingOptions
+  TableColumnSizingOptions,
+  Text,
+  Tooltip
 } from '@fluentui/react-components'
+import { DismissRegular, DocumentAddRegular } from '@fluentui/react-icons'
 import {
   bitrateRenderer,
   booleanRenderer,
@@ -43,8 +50,9 @@ import React from 'react'
 import { EllipsisCell } from '../EllipsisCell'
 import xor from 'lodash/xor'
 import { ITrack } from '../../../../common/@types/Track'
-import { IVideo } from '../../../../common/@types/Video'
+import { IExternalSource, IVideo } from '../../../../common/@types/Video'
 import { _, useI18n } from '../../i18n'
+import { DropZone } from '@renderer/components/DropZone'
 
 const columns: TableColumnDefinition<ITrack>[] = [
   createTableColumn<ITrack>({
@@ -125,6 +133,93 @@ type Props = {
   disabled?: boolean
 }
 
+const sourceColumn = (video: IVideo) =>
+  createTableColumn<ITrack>({
+    columnId: 'source',
+    renderHeaderCell: () => _('track_list.column.source.label', { defaultValue: 'Source' }),
+    renderCell: (item) => (
+      <EllipsisCell>
+        {video.externalSources.find((source) => source.uuid === item.externalSourceUuid)?.filename ?? ''}
+      </EllipsisCell>
+    )
+  })
+
+const externalSourceStatus = (video: IVideo, source: IExternalSource) => {
+  if (source.analysing) {
+    return (
+      <Spinner
+        size="extra-tiny"
+        label={_('track_list.external.measuring', { defaultValue: 'Measuring the audio offset...' })}
+      />
+    )
+  }
+  if (!video.tracks.some((t) => t.externalSourceUuid === source.uuid)) {
+    return _('track_list.external.no_tracks', {
+      defaultValue: 'No audio or subtitle track could be imported from this file.'
+    })
+  }
+  if (source.syncStatus === 'synced') {
+    return _('track_list.external.synced', { defaultValue: 'The offset was measured automatically.' })
+  }
+  if (source.syncStatus === 'drift') {
+    return _('track_list.external.drift', {
+      defaultValue:
+        'This file plays at a different speed ({percent}%): its tracks will drift out of sync, this is not corrected yet.',
+      percent: (((source.speedRatio ?? 1) - 1) * 100).toFixed(2)
+    })
+  }
+  return _('track_list.external.unknown', { defaultValue: 'The offset could not be measured, set it manually.' })
+}
+
+type ExternalSourceRowProps = {
+  video: IVideo
+  source: IExternalSource
+  disabled?: boolean
+}
+
+const ExternalSourceRow = ({ video, source, disabled }: ExternalSourceRowProps) => {
+  const commitDelay = (value: string) => {
+    const delayMs = Number(value)
+    if (value.trim() !== '' && Number.isFinite(delayMs) && delayMs !== source.delayMs) {
+      void window.api.video.setExternalSourceDelay(video.uuid, source.uuid, delayMs)
+    }
+  }
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', columnGap: '8px', padding: '2px 5px' }}>
+      <div style={{ minWidth: '60px', flex: '1 1 0' }}>
+        <EllipsisCell>{source.filename}</EllipsisCell>
+      </div>
+      <Text size={200} style={{ flex: '2 1 0' }}>
+        {externalSourceStatus(video, source)}
+      </Text>
+      <Text size={200}>{_('track_list.external.delay.label', { defaultValue: 'Delay (ms)' })}</Text>
+      <Input
+        key={source.delayMs}
+        size="small"
+        type="number"
+        style={{ width: '100px' }}
+        disabled={disabled || source.analysing}
+        defaultValue={'' + source.delayMs}
+        onBlur={(e) => commitDelay(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            commitDelay((e.target as HTMLInputElement).value)
+          }
+        }}
+      />
+      <Button
+        size="small"
+        appearance="subtle"
+        icon={<DismissRegular />}
+        disabled={disabled}
+        aria-label={_('track_list.external.remove', { defaultValue: 'Remove this file and its tracks' })}
+        title={_('track_list.external.remove', { defaultValue: 'Remove this file and its tracks' })}
+        onClick={() => void window.api.video.removeExternalSource(video.uuid, source.uuid)}
+      />
+    </div>
+  )
+}
+
 const columnSizingOptions: TableColumnSizingOptions = {
   id: { defaultWidth: 18, minWidth: 18, idealWidth: 18 },
   type: { defaultWidth: 22, minWidth: 22, idealWidth: 22 },
@@ -133,11 +228,12 @@ const columnSizingOptions: TableColumnSizingOptions = {
   codec: { defaultWidth: 450, minWidth: 120, idealWidth: 250 },
   bitrate: { defaultWidth: 100, minWidth: 70, idealWidth: 100 },
   properties: { defaultWidth: 250, minWidth: 110, idealWidth: 250 },
-  default: { defaultWidth: 40, minWidth: 40, idealWidth: 40 },
-  forced: { defaultWidth: 40, minWidth: 40, idealWidth: 40 },
+  default: { defaultWidth: 80, minWidth: 80, idealWidth: 80 },
+  forced: { defaultWidth: 60, minWidth: 60, idealWidth: 60 },
   duration: { defaultWidth: 80, minWidth: 50, idealWidth: 80 },
   frames: { defaultWidth: 80, minWidth: 40, idealWidth: 80 },
-  size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 }
+  size: { defaultWidth: 100, minWidth: 70, idealWidth: 100 },
+  source: { defaultWidth: 150, minWidth: 60, idealWidth: 150 }
 }
 
 export const TrackList = ({ video, disabled }: Props) => {
@@ -152,41 +248,101 @@ export const TrackList = ({ video, disabled }: Props) => {
   }
 
   const selectedItems = new Set<number>(video.tracks.filter((t) => t.copy).map((t) => t.id))
+  const displayedColumns = video.externalSources.length > 0 ? [...columns, sourceColumn(video)] : columns
+
+  // Tracks imported from another file cannot be combined with video parts.
+  const hasVideoParts = video.videoParts.length > 0
+  // Files dropped on the tab provide additional tracks.
+  const handleDropFiles = (files: File[]) => {
+    if (!disabled && !hasVideoParts && files.length > 0) {
+      void window.api.video.addExternalSources(video.uuid, files)
+    }
+  }
 
   return (
-    <div className="mask-parent">
-      <div>
-        <DataGrid
-          items={video.tracks}
-          columns={columns}
-          getRowId={(item: ITrack) => item.id}
-          focusMode="composite"
-          resizableColumns
-          columnSizingOptions={columnSizingOptions}
-          size="extra-small"
-          selectionMode="multiselect"
-          selectedItems={selectedItems}
-          onSelectionChange={handleSelectionChange}
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody<IVideo>>
-            {({ item, rowId }) => (
-              <DataGridRow<IVideo> key={rowId}>
-                {({ renderCell }) => (
-                  <DataGridCell as={'div'} className={'cell'}>
-                    {renderCell(item)}
-                  </DataGridCell>
+    <DropZone
+      onDropFiles={handleDropFiles}
+      style={{
+        flexGrow: 1,
+        minHeight: 0,
+        display: 'flex',
+        flexFlow: 'column nowrap',
+        padding: '5px',
+        boxSizing: 'border-box'
+      }}
+    >
+      <div style={{ flexGrow: 1, minHeight: 0, overflow: 'auto' }}>
+        <div className="mask-parent">
+          <div>
+            <DataGrid
+              key={displayedColumns.length}
+              items={video.tracks}
+              columns={displayedColumns}
+              getRowId={(item: ITrack) => item.id}
+              focusMode="composite"
+              resizableColumns
+              columnSizingOptions={columnSizingOptions}
+              size="extra-small"
+              selectionMode="multiselect"
+              selectedItems={selectedItems}
+              onSelectionChange={handleSelectionChange}
+            >
+              <DataGridHeader>
+                <DataGridRow>
+                  {({ renderHeaderCell }) => (
+                    <DataGridHeaderCell>
+                      <span style={{ whiteSpace: 'nowrap' }}>{renderHeaderCell()}</span>
+                    </DataGridHeaderCell>
+                  )}
+                </DataGridRow>
+              </DataGridHeader>
+              <DataGridBody<IVideo>>
+                {({ item, rowId }) => (
+                  <DataGridRow<IVideo> key={rowId}>
+                    {({ renderCell }) => (
+                      <DataGridCell as={'div'} className={'cell'}>
+                        {renderCell(item)}
+                      </DataGridCell>
+                    )}
+                  </DataGridRow>
                 )}
-              </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
+              </DataGridBody>
+            </DataGrid>
+          </div>
+          {disabled === true && <div className="mask" />}
+        </div>
       </div>
-      {disabled === true && <div className="mask" />}
-    </div>
+      <Divider style={{ flexGrow: '0' }} />
+      {video.externalSources.map((source) => (
+        <ExternalSourceRow key={source.uuid} video={video} source={source} disabled={disabled} />
+      ))}
+      <div className="preview-buttons">
+        <div className="button">
+          <Tooltip
+            content={
+              hasVideoParts
+                ? _('track_list.external.video_parts_tooltip', {
+                    defaultValue: 'Not available when the video has additional parts.'
+                  })
+                : _('track_list.external.add_tooltip', { defaultValue: 'Add tracks from another file' })
+            }
+            relationship="description"
+            withArrow
+          >
+            <span>
+              <Button
+                size="small"
+                appearance="secondary"
+                icon={<DocumentAddRegular />}
+                disabled={disabled || hasVideoParts}
+                onClick={() => void window.api.video.addExternalSource(video.uuid)}
+              >
+                {_('track_list.external.add_button', { defaultValue: 'Add Tracks' })}
+              </Button>
+            </span>
+          </Tooltip>
+        </div>
+      </div>
+    </DropZone>
   )
 }

@@ -27,8 +27,9 @@ import { ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
 import path, * as Path from 'node:path'
 import { Strings } from '../../../common/Strings'
-import { IVideo } from '../../../common/@types/Video'
+import { effectiveExternalDelayMs, IVideo } from '../../../common/@types/Video'
 import fs from 'node:fs'
+import { SYNC_SAMPLE_RATE } from '../AudioSync'
 
 const FIRST_PASS_TIME_PERCENT = 170 / 936
 const SECOND_PASS_TIME_PERCENT = 766 / 936
@@ -38,6 +39,9 @@ const COUNTDOWN_SPEED_SAMPLES = 10
 // The encoding speed is measured over the last seconds, ffmpeg only gives the average since the start.
 const ENCODING_SPEED_WINDOW_MS = 30000
 const ENCODING_SPEED_MIN_ELAPSED_MS = 2000
+
+// The edit lists of these files are ignored, as mkvmerge does not apply them either when merging.
+const MP4_FAMILY_PATTERN = /\.(mp4|m4v|m4a|mov|3gp|3g2)$/i
 
 export class FFmpeg extends CommandProgress {
   private static instance: FFmpeg
@@ -55,6 +59,68 @@ export class FFmpeg extends CommandProgress {
       FFmpeg.instance = new FFmpeg()
     }
     return FFmpeg.instance
+  }
+
+  // Decodes a part of an audio track to mono samples at the audio synchronisation rate.
+  public readAudioWindow = (
+    sourcePath: string,
+    audioIndex: number,
+    startSeconds: number,
+    durationSeconds: number
+  ): Promise<Float32Array> => {
+    const editListArgs = MP4_FAMILY_PATTERN.test(sourcePath) ? ['-ignore_editlist', '1'] : []
+    const args = [
+      '-v',
+      'error',
+      ...editListArgs,
+      '-ss',
+      startSeconds.toFixed(3),
+      '-t',
+      durationSeconds.toFixed(3),
+      '-i',
+      sourcePath,
+      '-map',
+      '0:a:' + audioIndex,
+      '-ac',
+      '1',
+      '-af',
+      'aresample=async=1:first_pts=0,aresample=' + SYNC_SAMPLE_RATE,
+      '-f',
+      'f32le',
+      'pipe:1'
+    ]
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = []
+      const process = Processes.spawn(this.command, args, { stdio: ['pipe', 'pipe', 'pipe'] })
+      process.stdout.on('data', (data: Buffer) => chunks.push(data))
+      process.stderr.on('data', () => undefined)
+      process.on('error', (err: Error) => reject(err))
+      process.on('close', (code: number) => {
+        if (code !== 0) {
+          reject(new Error('Unable to read the audio track.'))
+          return
+        }
+        const buffer = Buffer.concat(chunks)
+        const length = Math.floor(buffer.length / 4)
+        resolve(new Float32Array(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + length * 4)))
+      })
+    })
+  }
+
+  // Converts a subtitle track to a SubRip file, for the formats that Matroska cannot store.
+  public async convertSubtitleToSrt(
+    sourcePath: string,
+    subtitleIndex: number,
+    destinationPath: string
+  ): Promise<string> {
+    fs.mkdirSync(path.dirname(destinationPath), { recursive: true })
+    const args = ['-y', '-loglevel', '16', '-i', sourcePath, '-map', '0:s:' + subtitleIndex, '-c:s', 'srt']
+    const outputInterpreter = (_stdout?: string, stderr?: string) => ({
+      response: destinationPath,
+      error: stderr?.split('\n')[0]
+    })
+    await super.execute([...args, destinationPath], outputInterpreter)
+    return destinationPath
   }
 
   public isTwoPassesRequired(settings: EncoderSettings[]): boolean {
@@ -314,18 +380,74 @@ export class FFmpeg extends CommandProgress {
     }
   }
 
-  generateKeepAllMapping = (tracks: ITrack[]) => {
+  // A file providing imported tracks is delayed, or cut at its start, to match the main video.
+  private generateExternalInputArguments(sourcePath: string, delayMs: number, mainDuration: number): string[] {
+    const ffOptions: string[] = []
+    if (MP4_FAMILY_PATTERN.test(sourcePath)) {
+      ffOptions.push('-ignore_editlist', '1')
+    }
+    const delay = delayMs / 1000
+    if (delay > 0) {
+      ffOptions.push('-itsoffset', delay.toFixed(3))
+    } else if (delay < 0) {
+      ffOptions.push('-ss', (-delay).toFixed(3))
+    }
+    // The imported tracks must not last longer than the main video.
+    const keptDuration = delay > 0 ? mainDuration - delay : mainDuration
+    if (mainDuration > 0 && keptDuration > 0) {
+      ffOptions.push('-t', keptDuration.toFixed(3))
+    }
+    return ffOptions.concat(['-i', sourcePath])
+  }
+
+  // Copies the given tracks of a file to a new one, cut at the given duration.
+  public async trimTracks(
+    sourcePath: string,
+    tracks: ITrack[],
+    durationSeconds: number,
+    destinationPath: string
+  ): Promise<string> {
+    fs.mkdirSync(path.dirname(destinationPath), { recursive: true })
+    const args = ['-y', '-loglevel', '16']
+    if (MP4_FAMILY_PATTERN.test(sourcePath)) {
+      args.push('-ignore_editlist', '1')
+    }
+    args.push('-i', sourcePath, '-c', 'copy')
+    args.push(...this.generateKeepAllMapping(tracks, new Map(tracks.map((t) => [t.externalSourceUuid ?? '', 0]))))
+    // The limit is set on the output, as a limit on the input does not cut the subtitles.
+    args.push('-t', durationSeconds.toFixed(3))
+    const outputInterpreter = (_stdout?: string, stderr?: string) => ({
+      response: destinationPath,
+      error: stderr?.split('\n')[0]
+    })
+    await super.execute([...args, destinationPath], outputInterpreter)
+    return destinationPath
+  }
+
+  generateKeepAllMapping = (tracks: ITrack[], externalInputIndexes: Map<string, number> = new Map()) => {
     const ffOptions: string[] = []
     let videoIndex = 0
     let audioIndex = 0
     let subtitlesIndex = 0
+    let mainAudioIndex = 0
+    let mainSubtitlesIndex = 0
+    // The tracks imported from another file are read from its own input.
+    const inputStream = (track: ITrack, letter: string, mainIndex: number) => {
+      const externalInput =
+        track.externalSourceUuid !== undefined ? externalInputIndexes.get(track.externalSourceUuid) : undefined
+      return externalInput !== undefined
+        ? `${externalInput}:${letter}:${track.sourceTypeIndex ?? 0}`
+        : `0:${letter}:${mainIndex}`
+    }
     for (const track of tracks) {
+      const external = track.externalSourceUuid !== undefined
       if (track.type === TrackType.AUDIO) {
-        ffOptions.push('-map', '0:a:' + audioIndex++)
+        ffOptions.push('-map', inputStream(track, 'a', external ? 0 : mainAudioIndex++))
+        audioIndex++
       } else if (track.type === TrackType.VIDEO) {
         ffOptions.push('-map', '0:v:' + videoIndex++)
       } else if (track.type === TrackType.SUBTITLES) {
-        ffOptions.push('-map', '0:s:' + subtitlesIndex)
+        ffOptions.push('-map', inputStream(track, 's', external ? 0 : mainSubtitlesIndex++))
         if (track.unsupported) {
           // e.g. MP4 Timed Text/mov_text (codec id 94213): Matroska cannot store it as-is,
           // so it must be converted instead of stream-copied.
@@ -489,9 +611,26 @@ export class FFmpeg extends CommandProgress {
     } else {
       ffOptions.push('-i', video.sourcePath)
     }
+    const externalInputIndexes = new Map<string, number>()
+    for (const source of video.externalSources ?? []) {
+      if (video.tracks.some((t) => t.externalSourceUuid === source.uuid)) {
+        externalInputIndexes.set(source.uuid, externalInputIndexes.size + 1)
+        ffOptions.push(
+          ...this.generateExternalInputArguments(
+            source.path,
+            effectiveExternalDelayMs(video, source),
+            video.targetDuration
+          )
+        )
+      }
+    }
     //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
     ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-    ffOptions.push(...this.generateKeepAllMapping(video.tracks))
+    ffOptions.push(...this.generateKeepAllMapping(video.tracks, externalInputIndexes))
+    if (externalInputIndexes.size > 0 && video.targetDuration > 0) {
+      // The imported subtitles are not cut by the limit set on their input.
+      ffOptions.push('-t', (video.targetDuration + 0.5).toFixed(3))
+    }
 
     let videoIndex = 0
     let audioIndex = 0

@@ -41,23 +41,64 @@ import { IVideo, IVideoListItem, videoListItemKeys } from '../../../common/@type
 
 import { EllipsisCell } from './EllipsisCell'
 
+const displayedFilename = (item: IVideoListItem) => item.processedFilename ?? item.filename
+const displayedSize = (item: IVideoListItem) => item.processedSize ?? item.size
+
+const filenameRenderer = (item: IVideoListItem) => {
+  if (item.processedFilename === undefined || item.processedFilename === item.filename) {
+    return <EllipsisCell>{item.filename}</EllipsisCell>
+  }
+  const tooltip = (
+    <>
+      <div>{item.processedFilename}</div>
+      <div>
+        {t('video_list.tooltip.original_filename', {
+          defaultValue: 'Original name: {filename}',
+          filename: item.filename
+        })}
+      </div>
+    </>
+  )
+  return (
+    <EllipsisCell tooltip={tooltip} always>
+      {item.processedFilename}
+    </EllipsisCell>
+  )
+}
+
+const processedSizeRenderer = (item: IVideoListItem) => {
+  const originalSize = Strings.humanFileSize(item.size)
+  if (item.processedSize === undefined || Strings.humanFileSize(item.processedSize) === originalSize) {
+    return sizeRenderer(item.size)
+  }
+  const tooltip = t('video_list.tooltip.original_size', {
+    defaultValue: 'Original size: {size}',
+    size: originalSize
+  })
+  return (
+    <EllipsisCell tooltip={tooltip} always>
+      {sizeRenderer(item.processedSize)}
+    </EllipsisCell>
+  )
+}
+
 const columns: TableColumnDefinition<IVideoListItem>[] = [
   createTableColumn<IVideoListItem>({
     columnId: 'filename',
-    compare: (a, b) => a.filename.localeCompare(b.filename),
+    compare: (a, b) => displayedFilename(a).localeCompare(displayedFilename(b)),
     renderHeaderCell: () => t('video_list.column.filename', { defaultValue: 'File' }),
     renderCell: (item) => (
       <div style={{ width: '100%' }}>
-        <EllipsisCell>{item.filename}</EllipsisCell>
+        {filenameRenderer(item)}
         {progressRenderer(item.status, item.progression)}
       </div>
     )
   }),
   createTableColumn<IVideoListItem>({
     columnId: 'size',
-    compare: (a, b) => a.size - b.size,
+    compare: (a, b) => displayedSize(a) - displayedSize(b),
     renderHeaderCell: () => t('video_list.column.size', { defaultValue: 'Size' }),
-    renderCell: (item) => sizeRenderer(item.size)
+    renderCell: processedSizeRenderer
   }),
   createTableColumn<IVideoListItem>({
     columnId: 'quality',

@@ -100,6 +100,10 @@ export interface SvpAPI {
     setTrackEncodingEnabled: (uuid: string, source: string, value: boolean) => Promise<void>
     addParts: (uuid: string, files: File[]) => Promise<void>
     addPart: (uuid: string) => Promise<void>
+    addExternalSource: (uuid: string) => Promise<void>
+    addExternalSources: (uuid: string, files: File[]) => Promise<void>
+    removeExternalSource: (uuid: string, sourceUuid: string) => Promise<void>
+    setExternalSourceDelay: (uuid: string, sourceUuid: string, delayMs: number) => Promise<void>
     removePart: (uuid: string, partUuid: string) => Promise<void>
     process: (uuid: string) => Promise<void>
     abortJobs: (uuids: string[]) => Promise<void>

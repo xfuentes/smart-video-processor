@@ -99,6 +99,10 @@ export type Settings = {
    */
   isMovieFolderEnabled: boolean
   /**
+   * If enabled, the video codec (h264, h265) is added to the name of the movie files.
+   */
+  isVideoCodecInFilenameEnabled: boolean
+  /**
    * if enabled automatically encode and/or process the files as soon as they are added (if no user input is requested)
    */
   isAutoStartEnabled: boolean

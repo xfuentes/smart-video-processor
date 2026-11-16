@@ -755,3 +755,38 @@ describe('Automatic start', () => {
     video.destroy()
   })
 })
+
+describe('video codec in the file name', () => {
+  afterEach(() => {
+    currentSettings.isVideoCodecInFilenameEnabled = true
+  })
+
+  const versionsOf = (enabled: boolean) => {
+    currentSettings.isVideoCodecInFilenameEnabled = enabled
+    const video = new Video(getFakeAbsolutePath('Download', 'movie.mkv'))
+    video.type = VideoType.MOVIE
+    video.tracks = [
+      new Track(
+        0,
+        '',
+        TrackType.VIDEO,
+        'AVC/H.264/MPEG-4p10',
+        'en',
+        { videoDimensions: '1920x1080' },
+        true,
+        false,
+        undefined,
+        undefined
+      )
+    ]
+    return video.computeVersions()
+  }
+
+  test('adds the video codec by default', () => {
+    expect(versionsOf(true)).toStrictEqual(['1080p', 'h264'])
+  })
+
+  test('leaves the video codec out when the option is disabled', () => {
+    expect(versionsOf(false)).toStrictEqual(['1080p'])
+  })
+})

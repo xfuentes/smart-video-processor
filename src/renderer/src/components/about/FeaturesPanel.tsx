@@ -77,6 +77,19 @@ export const FeaturesPanel = (): React.JSX.Element => {
         </li>
         <li>
           <b>
+            {_('about.features.track_import.title', {
+              defaultValue: 'Track Import With Automatic Sync:'
+            })}
+          </b>{' '}
+          <small>
+            {_('about.features.track_import.description', {
+              defaultValue:
+                'Adds audio and subtitle tracks from another version of the same video, automatically aligned with it.'
+            })}
+          </small>
+        </li>
+        <li>
+          <b>
             {_('about.features.poster_thumbnail_download.title', {
               defaultValue: 'Poster & Thumbnail Download:'
             })}

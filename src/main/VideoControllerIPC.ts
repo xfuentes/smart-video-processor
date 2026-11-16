@@ -157,6 +157,26 @@ export const initVideoControllerIPC = (mainWindow: BrowserWindow) => {
       void VideoController.getInstance().addPart(uuid, result.filePaths[0])
     }
   })
+  ipcMain.handle('video:addExternalSource', async (_event, uuid: string) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select the file providing the tracks',
+      properties: ['openFile', 'dontAddToRecent']
+    })
+    if (!result.canceled && result.filePaths.length >= 1) {
+      void VideoController.getInstance().addExternalSource(uuid, result.filePaths[0])
+    }
+  })
+  ipcMain.handle('video:addExternalSources', async (_event, uuid: string, filePaths: string[]) => {
+    for (const filePath of filePaths) {
+      void VideoController.getInstance().addExternalSource(uuid, filePath)
+    }
+  })
+  ipcMain.handle('video:removeExternalSource', async (_event, uuid: string, sourceUuid: string) => {
+    void VideoController.getInstance().removeExternalSource(uuid, sourceUuid)
+  })
+  ipcMain.handle('video:setExternalSourceDelay', (_event, uuid: string, sourceUuid: string, delayMs: number) => {
+    VideoController.getInstance().setExternalSourceDelay(uuid, sourceUuid, delayMs)
+  })
   ipcMain.handle('video:removePart', async (_event, uuid: string, partUuid: string) => {
     void VideoController.getInstance().removePart(uuid, partUuid)
   })

@@ -16,6 +16,7 @@ and encode to H.264 or H.265—all in one place.
 - **Smart File Renaming:** Renames files using Jellyfin/Kodi-friendly naming conventions
 - **Metadata Correction:** Fetches and corrects title, year, episode name...
 - **Audio & Subtitle Track Management:** Detects and labels audio/subtitle languages; renames and reorders tracks.
+- **Track Import With Automatic Sync:** Adds audio and subtitle tracks from another version of the same video, automatically aligned with it.
 - **Poster & Thumbnail Download:** Automatically downloads posters and thumbnails.
 - **Media File Splitting & Joining:** Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
 - **Video Encoding (H.264 / H.265):** Converts media to efficient formats with predefined presets.

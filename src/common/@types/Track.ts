@@ -51,4 +51,10 @@ export interface ITrack {
   copy: boolean
   // if true the tracks needs to be re-encoded.
   unsupported: boolean
+  // Identifier of the other file the track is imported from.
+  externalSourceUuid?: string
+  // Identifier of the track inside the file it is imported from.
+  sourceTrackId?: number
+  // Position of the track among the tracks of its type inside the file it is imported from.
+  sourceTypeIndex?: number
 }

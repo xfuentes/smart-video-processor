@@ -666,3 +666,64 @@ test('The encoding progress and speed follow the frames when the output time is 
   expect(updates[2].progress).toBeCloseTo(90 / 1000)
   expect(updates[2].xSpeed).toBeCloseTo(8)
 })
+
+test('FFmpeg reads the tracks imported from another file when encoding', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  const spy = genSpawnSpyProgress()
+  const track = (id: number, type: TrackType, extra: Partial<ITrack> = {}) =>
+    ({ id, type, copy: true, properties: {}, unsupported: false, ...extra }) as ITrack
+  const video: IVideo = {
+    sourcePath: '/Download/something.mkv',
+    duration: 6120,
+    targetDuration: 6120,
+    externalSources: [
+      { uuid: 'late', path: '/Download/late.mp4', filename: 'late.mp4', analysing: false, delayMs: 959 },
+      { uuid: 'early', path: '/Download/early.mkv', filename: 'early.mkv', analysing: false, delayMs: -1500 }
+    ],
+    tracks: [
+      track(0, TrackType.VIDEO),
+      track(1, TrackType.AUDIO),
+      track(2, TrackType.SUBTITLES),
+      track(3, TrackType.AUDIO, { externalSourceUuid: 'late', sourceTypeIndex: 1 }),
+      track(4, TrackType.SUBTITLES, { externalSourceUuid: 'late', sourceTypeIndex: 0, unsupported: true }),
+      track(5, TrackType.AUDIO, { externalSourceUuid: 'early', sourceTypeIndex: 0 })
+    ]
+  } as unknown as IVideo
+  const settings = [{ trackId: 3, trackType: TrackType.AUDIO, bitrate: 96000 }] as EncoderSettings[]
+
+  await FFmpeg.getInstance().encodeFileInternal(video, '/tmp', settings)
+
+  const args = (spy.mock.lastCall?.[1] as string[]).join(' ')
+  expect(args).toContain(
+    '-i /Download/something.mkv -ignore_editlist 1 -itsoffset 0.959 -t 6119.041 -i /Download/late.mp4 -ss 1.500 -t 6120.000 -i /Download/early.mkv -c copy'
+  )
+  expect(args).toContain('-map 0:v:0 -map 0:a:0 -map 0:s:0 -map 1:a:1 -map 1:s:0 -c:s:1 srt -map 2:a:0')
+  expect(args).toContain('-map 2:a:0 -t 6120.500')
+  expect(args).toContain('-c:a:1 aac -b:a:1 96k')
+})
+
+test('FFmpeg shifts the imported tracks when the start of the video is removed', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  const spy = genSpawnSpyProgress()
+  const video: IVideo = {
+    sourcePath: '/Download/something.mkv',
+    preProcessPath: '/tmp/part0.mkv',
+    duration: 6120,
+    startFrom: 600,
+    endAt: 900,
+    targetDuration: 300,
+    externalSources: [
+      { uuid: 'other', path: '/Download/other.mkv', filename: 'other.mkv', analysing: false, delayMs: 959 }
+    ],
+    tracks: [
+      { id: 0, type: TrackType.VIDEO, copy: true, properties: {} },
+      { id: 1, type: TrackType.AUDIO, copy: true, properties: {}, externalSourceUuid: 'other', sourceTypeIndex: 0 }
+    ]
+  } as unknown as IVideo
+
+  await FFmpeg.getInstance().encodeFileInternal(video, '/tmp', [])
+
+  const args = (spy.mock.lastCall?.[1] as string[]).join(' ')
+  expect(args).toContain('-i /tmp/part0.mkv -ss 599.041 -t 300.000 -i /Download/other.mkv -c copy')
+  expect(args).toContain('-map 0:v:0 -map 1:a:0 -t 300.500')
+})

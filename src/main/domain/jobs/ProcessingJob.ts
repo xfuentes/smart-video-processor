@@ -18,7 +18,7 @@
 
 import { _ } from '../../i18n'
 import { Job } from './Job'
-import { MKVMerge } from '../programs/MKVMerge'
+import { ExternalInput, MKVMerge } from '../programs/MKVMerge'
 import { Track } from '../Track'
 import path from 'node:path'
 import { JobStatus } from '../../../common/@types/Job'
@@ -30,6 +30,7 @@ export class ProcessingJob extends Job<string> {
   private readonly changes: Change[]
   private readonly outputPath: string
   private readonly tracks: Track[]
+  private readonly externalInputs: ExternalInput[]
 
   constructor(
     originalFilename: string,
@@ -38,7 +39,8 @@ export class ProcessingJob extends Job<string> {
     tracks: Track[],
     outputFullPath: string,
     subDirectories: string[] = [],
-    extraDuration?: number
+    extraDuration?: number,
+    externalInputs: ExternalInput[] = []
   ) {
     super(JobStatus.MERGING, _('job.title.merging', { defaultValue: 'Generating matroska file' }), extraDuration)
     this.originalFilename = originalFilename
@@ -46,6 +48,7 @@ export class ProcessingJob extends Job<string> {
     this.changes = changes
     this.outputPath = path.join(outputFullPath, ...subDirectories)
     this.tracks = tracks
+    this.externalInputs = externalInputs
   }
 
   protected executeInternal(): Promise<string> {
@@ -55,7 +58,8 @@ export class ProcessingJob extends Job<string> {
       this.outputPath,
       this.changes,
       this.tracks,
-      this.setProgression.bind(this)
+      this.setProgression.bind(this),
+      this.externalInputs
     )
   }
 }

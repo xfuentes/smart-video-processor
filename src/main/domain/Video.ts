@@ -21,7 +21,8 @@ import { AudioVersion, AudioVersions } from './AudioVersions'
 import { TVShow } from './TVShow'
 import { Files } from '../util/files'
 import { v4 as UUIDv4 } from 'uuid'
-import { Container } from './programs/MKVMerge'
+import { Container, ExternalInput, MKVMerge } from './programs/MKVMerge'
+import { measureAudioSync } from './AudioSync'
 import {
   Attachment,
   Change,
@@ -57,6 +58,8 @@ import { JobStatus } from '../../common/@types/Job'
 import { EncoderSettings } from '../../common/@types/Encoding'
 import { NamingConvention, OutputRule, OutputRuleCondition } from '../../common/@types/Settings'
 import {
+  effectiveExternalDelayMs,
+  IExternalSource,
   ISnapshots,
   IVideo,
   MultiSearchInputData,
@@ -102,6 +105,8 @@ export class Video implements IVideo {
   public changeListeners: VideoChangeListener[] = []
   public container?: Container
   public tracks: Track[] = []
+  public externalSources: IExternalSource[] = []
+  private externalSourceLoads: Promise<void>[] = []
   public pixels?: string
   public changes: Change[] = []
   public hints: Hint[] = []
@@ -144,6 +149,8 @@ export class Video implements IVideo {
   public audioVersions: AudioVersion[] = []
   public title: string = ''
   private finalOutputPath?: string
+  public processedFilename?: string
+  public processedSize?: number
   public poster?: Attachment
   public searchBy: SearchBy = SearchBy.TITLE
   /*
@@ -195,7 +202,7 @@ export class Video implements IVideo {
       if (dimensions) {
         versions.push(dimensions)
       }
-      if (videoCodec) {
+      if (videoCodec && currentSettings.isVideoCodecInFilenameEnabled) {
         let codec: string | undefined = undefined
         if (videoCodec.indexOf('h.264') !== -1) {
           codec = 'h264'
@@ -600,10 +607,11 @@ export class Video implements IVideo {
     }
   }
 
-  unselectBrainDeletedTracks() {
+  unselectBrainDeletedTracks(onlyTrackIds?: number[]) {
     const trackDeletionList: number[] = this.changes
       .filter((c) => c.changeType === ChangeType.DELETE && c.trackId != undefined)
       .map((c) => c.trackId as number)
+      .filter((id) => onlyTrackIds === undefined || onlyTrackIds.includes(id))
     this.changes = this.changes.filter((c) => !trackDeletionList.includes(c.trackId as number))
     this.hints = this.hints.filter((h) => !trackDeletionList.includes(h.trackId as number))
     this.tracks
@@ -637,6 +645,13 @@ export class Video implements IVideo {
   }
 
   async process() {
+    await Promise.all(this.externalSourceLoads)
+    if (this.getExternalInputs().length > 0 && this.videoParts.length > 0) {
+      this.showError('video.message.external_tracks_with_parts', {
+        defaultValue: 'Tracks imported from another file cannot be combined with additional video parts.'
+      })
+      return
+    }
     if (this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
       // Need to launch preprocessing
       info('log.video.preprocessing', { defaultValue: 'Pre-processing video parts' })
@@ -651,7 +666,10 @@ export class Video implements IVideo {
       }
       this.fireChangeEvent()
       try {
-        this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(this.toJSON(), this.getPreviewDirectory())
+        this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(
+          this.toMainFileJSON(),
+          this.getPreviewDirectory()
+        )
       } catch (e) {
         this.showError('video.message.ffmpeg_error', {
           defaultValue: '{error}',
@@ -687,6 +705,7 @@ export class Video implements IVideo {
       }
       throw error
     }
+    this.recordProcessedFile()
     if (this.changesTheSize(encodingRequired)) {
       this.appendFinalSize()
     }
@@ -699,25 +718,36 @@ export class Video implements IVideo {
   private changesTheSize(encodingRequired: boolean): boolean {
     return (
       encodingRequired ||
+      this.getExternalInputs().length > 0 ||
       !!this.startFrom ||
       (!!this.endAt && this.endAt != this.duration) ||
       this.videoParts.length > 0
     )
   }
 
-  private appendFinalSize() {
+  // The name and the size of the produced file are kept to be displayed in the video list.
+  private recordProcessedFile() {
+    this.processedFilename = undefined
+    this.processedSize = undefined
     if (this.finalOutputPath === undefined || this.status !== JobStatus.SUCCESS) {
       return
     }
+    this.processedFilename = path.basename(this.finalOutputPath)
     try {
-      const size = fs.statSync(this.finalOutputPath).size
-      this.message = `${this.message} ${_('video.message.final_size', {
-        defaultValue: 'Final size: {size}.',
-        size: Strings.humanFileSize(size)
-      })}`.trim()
+      this.processedSize = fs.statSync(this.finalOutputPath).size
     } catch (e) {
       // The final size is only informative.
     }
+  }
+
+  private appendFinalSize() {
+    if (this.processedSize === undefined) {
+      return
+    }
+    this.message = `${this.message} ${_('video.message.final_size', {
+      defaultValue: 'Final size: {size}.',
+      size: Strings.humanFileSize(this.processedSize)
+    })}`.trim()
   }
 
   getFinalEncoderSettings() {
@@ -998,23 +1028,31 @@ export class Video implements IVideo {
     for (const part of this.videoParts) {
       await part.deleteSourceFiles()
     }
-    if (!fs.existsSync(this.sourcePath) || this.finalOutputPath === this.sourcePath) {
+    // The files that provided imported tracks are deleted with the main one.
+    const sourcePaths = [this.sourcePath, ...this.getExternalInputs().map((input) => input.path)]
+    for (const sourcePath of sourcePaths) {
+      await this.deleteSourceFile(sourcePath)
+    }
+  }
+
+  private async deleteSourceFile(sourcePath: string) {
+    if (!fs.existsSync(sourcePath) || this.finalOutputPath === sourcePath) {
       return
     }
     try {
-      await shell.trashItem(this.sourcePath)
+      await shell.trashItem(sourcePath)
     } catch (e) {
       warning('log.video.delete_source_failed', {
         defaultValue: 'Failed to move source file {path} to trash, deleting permanently: {error}',
-        path: this.sourcePath,
+        path: sourcePath,
         error: String(e)
       })
       try {
-        await fs.promises.unlink(this.sourcePath)
+        await fs.promises.unlink(sourcePath)
       } catch (unlinkError) {
         error('log.video.delete_source_failed', {
           defaultValue: 'Failed to delete source file {path}: {error}',
-          path: this.sourcePath,
+          path: sourcePath,
           error: String(unlinkError)
         })
       }
@@ -1039,6 +1077,191 @@ export class Video implements IVideo {
       return
     }
     this.switchTrackSelection([trackId])
+  }
+
+  getMainTracks(): Track[] {
+    return this.tracks.filter((t) => t.externalSourceUuid === undefined)
+  }
+
+  // The intermediate files are built from the main file only, without the tracks imported from other files.
+  toMainFileJSON(): IVideo {
+    return { ...this.toJSON(), tracks: this.getMainTracks().map((t) => t.toJSON()) }
+  }
+
+  getExternalInputs(): ExternalInput[] {
+    return this.externalSources
+      .filter((source) => this.tracks.some((t) => t.externalSourceUuid === source.uuid && t.copy))
+      .map((source) => ({ uuid: source.uuid, path: source.path, delayMs: effectiveExternalDelayMs(this, source) }))
+  }
+
+  // The imported subtitles that Matroska cannot store are converted to SubRip files first.
+  private async prepareExternalInputs(): Promise<ExternalInput[]> {
+    const inputs = this.getExternalInputs()
+    for (const input of inputs) {
+      const selected = this.tracks.filter((t) => t.externalSourceUuid === input.uuid && t.copy)
+      const keptDuration = this.targetDuration - input.delayMs / 1000
+      const tooLong = selected.some((t) => t.duration === undefined || t.duration > keptDuration + 0.5)
+      if (this.targetDuration > 0 && keptDuration > 0 && tooLong) {
+        // The tracks lasting longer than the main video are cut, which also converts the subtitles.
+        const trimmedPath = path.join(this.getTempDirectory(), `imported-${input.uuid}.mkv`)
+        await FFmpeg.getInstance().trimTracks(
+          input.path,
+          selected.map((t) => t.toJSON()),
+          keptDuration,
+          trimmedPath
+        )
+        input.path = trimmedPath
+        input.fileTrackIds = Object.fromEntries(selected.map((t, index) => [t.id, index]))
+        continue
+      }
+      input.convertedSubtitles = []
+      const toConvert = selected.filter((t) => t.unsupported)
+      for (const track of toConvert) {
+        const srtPath = path.join(this.getTempDirectory(), `imported-${track.id}.srt`)
+        await FFmpeg.getInstance().convertSubtitleToSrt(input.path, track.sourceTypeIndex ?? 0, srtPath)
+        input.convertedSubtitles.push({ trackId: track.id, path: srtPath })
+      }
+    }
+    return inputs
+  }
+
+  addExternalSource(sourcePath: string): Promise<void> {
+    const known = sourcePath === this.sourcePath || this.externalSources.some((source) => source.path === sourcePath)
+    // Tracks imported from another file cannot be combined with video parts.
+    if (known || this.videoParts.length > 0) {
+      return Promise.resolve()
+    }
+    const source: IExternalSource = {
+      uuid: UUIDv4(),
+      path: sourcePath,
+      filename: path.basename(sourcePath),
+      analysing: true,
+      delayMs: 0
+    }
+    this.externalSources.push(source)
+    // Importing tracks is a manual choice, the processing must not start by itself.
+    this.autoModePossible = false
+    this.fireChangeEvent()
+    const load = this.loadExternalSource(source)
+    this.externalSourceLoads.push(load)
+    return load
+  }
+
+  private async loadExternalSource(source: IExternalSource) {
+    const isRemoved = () => !this.externalSources.includes(source)
+    let importedIds: number[] = []
+    let restoreStatus = () => {}
+    try {
+      const { tracks, container } = await MKVMerge.getInstance().retrieveFileInformation(source.path)
+      await FFprobe.getInstance().completeFileInformation(source.path, tracks, container)
+      if (isRemoved()) {
+        return
+      }
+      const pair = this.pickSyncAudioPair(tracks)
+      let nextId = Math.max(-1, ...this.tracks.map((t) => t.id)) + 1
+      const imported = tracks.filter((t) => t.type !== TrackType.VIDEO)
+      for (const track of imported) {
+        track.sourceTypeIndex = tracks.filter((t) => t.type === track.type).indexOf(track)
+        track.sourceTrackId = track.id
+        track.id = nextId++
+        track.externalSourceUuid = source.uuid
+      }
+      importedIds = imported.map((t) => t.id)
+      this.tracks = this.tracks.concat(imported)
+      this.fireChangeEvent()
+      if (pair !== undefined && imported.length > 0) {
+        const measuringMessage = _('video.message.measuring_audio_offset', {
+          defaultValue: 'Measuring the audio offset of [{filename}]...',
+          filename: source.filename
+        })
+        restoreStatus = this.showTemporaryLoading(measuringMessage)
+        const otherDuration = Math.max(container.durationSeconds ?? 0, ...tracks.map((t) => t.duration ?? 0))
+        const result = await measureAudioSync(
+          FFmpeg.getInstance().readAudioWindow,
+          { path: this.sourcePath, audioIndex: pair.mainIndex, duration: this.duration },
+          { path: source.path, audioIndex: pair.otherIndex, duration: otherDuration },
+          isRemoved
+        )
+        source.syncStatus = result.status
+        source.speedRatio = result.speedRatio
+        source.delayMs = result.status === 'synced' ? result.delayMs : 0
+      } else {
+        source.syncStatus = 'unknown'
+      }
+    } catch (e) {
+      source.syncStatus = 'unknown'
+      warning('log.video.external_source_failed', {
+        defaultValue: 'Unable to analyse the file [{filename}]: {error}',
+        filename: source.filename,
+        error: (e as Error).message
+      })
+    }
+    restoreStatus()
+    source.analysing = false
+    if (isRemoved()) {
+      return
+    }
+    if (this.matched && importedIds.length > 0) {
+      await this.analyse()
+      this.unselectBrainDeletedTracks(importedIds)
+    }
+    this.fireChangeEvent()
+  }
+
+  // Shows a loading message and returns a function putting the previous status back if nothing else changed it.
+  private showTemporaryLoading(message: string): () => void {
+    const previousStatus = this.status
+    const previousMessage = this.message
+    this.status = JobStatus.LOADING
+    this.message = message
+    this.progression.progress = undefined
+    this.fireChangeEvent()
+    return () => {
+      if (this.message === message) {
+        this.status = previousStatus
+        this.message = previousMessage
+        this.progression.progress = -1
+        this.fireChangeEvent()
+      }
+    }
+  }
+
+  // The audio tracks compared are in the same language when possible, as they share the same dialogues.
+  private pickSyncAudioPair(otherTracks: Track[]): { mainIndex: number; otherIndex: number } | undefined {
+    const mainAudios = this.getMainTracks().filter((t) => t.type === TrackType.AUDIO)
+    const otherAudios = otherTracks.filter((t) => t.type === TrackType.AUDIO)
+    if (mainAudios.length === 0 || otherAudios.length === 0) {
+      return undefined
+    }
+    const baseLanguage = (t: Track) => t.language?.split('-')[0]
+    for (let mainIndex = 0; mainIndex < mainAudios.length; mainIndex++) {
+      const language = baseLanguage(mainAudios[mainIndex])
+      const otherIndex = otherAudios.findIndex((t) => language !== undefined && baseLanguage(t) === language)
+      if (otherIndex !== -1) {
+        return { mainIndex, otherIndex }
+      }
+    }
+    return { mainIndex: 0, otherIndex: 0 }
+  }
+
+  async removeExternalSource(sourceUuid: string) {
+    const removedIds = this.tracks.filter((t) => t.externalSourceUuid === sourceUuid).map((t) => t.id)
+    this.externalSources = this.externalSources.filter((source) => source.uuid !== sourceUuid)
+    this.tracks = this.tracks.filter((t) => t.externalSourceUuid !== sourceUuid)
+    this.changes = this.changes.filter((c) => c.trackId == undefined || !removedIds.includes(c.trackId))
+    this.hints = this.hints.filter((h) => h.trackId == undefined || !removedIds.includes(h.trackId))
+    if (this.matched && removedIds.length > 0) {
+      await this.analyse()
+    }
+    this.fireChangeEvent()
+  }
+
+  setExternalSourceDelay(sourceUuid: string, delayMs: number) {
+    const source = this.externalSources.find((s) => s.uuid === sourceUuid)
+    if (source !== undefined && Number.isFinite(delayMs)) {
+      source.delayMs = Math.round(delayMs)
+      this.fireChangeEvent()
+    }
   }
 
   getSelectedTracks(): Track[] {
@@ -1080,6 +1303,7 @@ export class Video implements IVideo {
       type: this.type,
       container: this.container,
       tracks: this.tracks.map((t) => t.toJSON()),
+      externalSources: this.externalSources.map((source) => ({ ...source })),
       changes: this.changes.map((c) => c.toJSON()),
       hints: this.hints.map((h) => h.toJSON()),
       keyFrames: this.keyFrames,
@@ -1095,6 +1319,8 @@ export class Video implements IVideo {
       matched: this.matched,
       queued: this.queued,
       processed: this.processed,
+      processedFilename: this.isProcessed() ? this.processedFilename : undefined,
+      processedSize: this.isProcessed() ? this.processedSize : undefined,
       searchBy: this.searchBy,
       searchResults: this.searchResults.map((sr) => sr.toJSON()),
       selectedSearchResultID: this.selectedSearchResultID,
@@ -1118,6 +1344,10 @@ export class Video implements IVideo {
   }
 
   async addPart(partPath: string) {
+    if (this.externalSources.length > 0) {
+      // Video parts cannot be combined with tracks imported from another file.
+      return
+    }
     if (this.sourcePath !== partPath && !this.videoParts.find((video) => video.sourcePath === partPath)) {
       // Avoid inserting part which were already added or if same as main video.
       const videoPart = new Video(partPath)
@@ -1263,7 +1493,9 @@ export class Video implements IVideo {
   }
 
   async preparePreview(): Promise<string> {
-    this.previewJob = this.attachPreviewJob(new PreviewingJob(this.toJSON(), this.getPreviewDirectory(), this.duration))
+    this.previewJob = this.attachPreviewJob(
+      new PreviewingJob(this.toMainFileJSON(), this.getPreviewDirectory(), this.duration)
+    )
     this.previewPath = await this.previewJob.queue()
     this.fireChangeEvent()
     return this.previewPath
@@ -1351,15 +1583,24 @@ export class Video implements IVideo {
       return
     }
 
+    // The encoded file already contains the imported tracks, delayed to match the main video.
+    const importedByEncoding = this.encodedPath !== undefined
+    const tracks = importedByEncoding
+      ? this.tracks.map((t) =>
+          Object.assign(Object.create(Track.prototype) as Track, t, { externalSourceUuid: undefined })
+        )
+      : this.tracks
+    const externalInputs = importedByEncoding ? [] : await this.prepareExternalInputs()
     const mergeJob = this.attachJob(
       new ProcessingJob(
         path.basename(this.sourcePath),
         sourcePath,
         this.changes,
-        this.tracks,
+        tracks,
         outputDirectory,
         subDirs,
-        extraDuration
+        extraDuration,
+        externalInputs
       )
     )
     await mergeJob.queue()
@@ -1429,7 +1670,7 @@ export class Video implements IVideo {
           c.property === ChangeProperty.FILENAME
         )
     )
-    return !hasNonFilenameChange && this.tracks.every((t) => t.copy)
+    return !hasNonFilenameChange && this.getMainTracks().every((t) => t.copy) && this.getExternalInputs().length === 0
   }
 
   private extractInfosFromFilename() {

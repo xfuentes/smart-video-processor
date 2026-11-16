@@ -17,7 +17,7 @@
  */
 
 import { afterEach, expect, test, vi } from 'vitest'
-import { Change } from '../../../src/common/Change'
+import { Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../../src/common/Change'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
 import {
@@ -1034,4 +1034,125 @@ test('Track Removed', async () => {
   const subtitlesTracksOptionIdx = spawnArgs.indexOf('--subtitle-tracks')
   expect(subtitlesTracksOptionIdx, 'no --subtitle-tracks option').toBeGreaterThanOrEqual(0)
   expect(spawnArgs[subtitlesTracksOptionIdx + 1]).toBe('!2')
+})
+
+test('MKVMerge tracks imported from another file', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
+  const spy = genSpawnSpy()
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const otherPath = getFakeAbsolutePath('Download', 'other.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  const importedTrack = (id: number, sourceTrackId: number, type: TrackType, language: string) => {
+    const track = new Track(id, '', type, 'AAC', language, {}, false, false, undefined, undefined)
+    track.externalSourceUuid = 'other-uuid'
+    track.sourceTrackId = sourceTrackId
+    return track
+  }
+  const unselected = importedTrack(4, 2, TrackType.AUDIO, 'de')
+  unselected.copy = false
+  const tracks = [
+    new Track(0, '', TrackType.VIDEO, 'AVC', 'en', {}, true, false, undefined, undefined),
+    new Track(1, '', TrackType.AUDIO, 'AC-3', 'en', {}, true, false, undefined, undefined),
+    importedTrack(2, 1, TrackType.AUDIO, 'fr'),
+    importedTrack(3, 3, TrackType.SUBTITLES, 'fr'),
+    unselected
+  ]
+  const changes = [
+    new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, 2, ChangeProperty.NAME, '', 'VFF'),
+    new Change(ChangeSourceType.AUDIO, ChangeType.UPDATE, 1, ChangeProperty.NAME, '', 'VO')
+  ]
+
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes, tracks, undefined, [
+    { uuid: 'other-uuid', path: otherPath, delayMs: 960 }
+  ])
+
+  const spawnArgs = spy.mock.lastCall[1] as string[]
+  const mainEnd = spawnArgs.indexOf(')')
+  const mainArgs = spawnArgs.slice(0, mainEnd + 1)
+  const otherArgs = spawnArgs.slice(mainEnd + 1)
+  expect(mainArgs.slice(-3)).toStrictEqual(['(', fullPath, ')'])
+  expect(mainArgs).toContain('1:VO')
+  expect(mainArgs).not.toContain('2:VFF')
+  expect(mainArgs.filter((arg) => arg === '--language').length).toBe(2)
+  expect(otherArgs).toStrictEqual([
+    '--no-video',
+    '--no-attachments',
+    '--no-chapters',
+    '--no-global-tags',
+    '--no-track-tags',
+    '--audio-tracks',
+    '1',
+    '--subtitle-tracks',
+    '3',
+    '--sync',
+    '1:960',
+    '--sync',
+    '3:960',
+    '--track-name',
+    '1:VFF',
+    '--language',
+    '1:fr',
+    '--language',
+    '3:fr',
+    '(',
+    otherPath,
+    ')'
+  ])
+})
+
+test('MKVMerge subtitles imported from another file after a conversion', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
+  const spy = genSpawnSpy()
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const otherPath = getFakeAbsolutePath('Download', 'other.mp4')
+  const srtPath = getFakeAbsolutePath('Temp', 'imported-2.srt')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  const audio = new Track(1, '', TrackType.AUDIO, 'AAC', 'fr', {}, false, false, undefined, undefined)
+  audio.externalSourceUuid = 'other-uuid'
+  audio.sourceTrackId = 1
+  const subtitles = new Track(2, '', TrackType.SUBTITLES, 'Timed Text', 'fr', {}, false, false, undefined, undefined)
+  subtitles.externalSourceUuid = 'other-uuid'
+  subtitles.sourceTrackId = 3
+  subtitles.unsupported = true
+  const tracks = [
+    new Track(0, '', TrackType.VIDEO, 'AVC', 'en', {}, true, false, undefined, undefined),
+    audio,
+    subtitles
+  ]
+  const changes = [new Change(ChangeSourceType.SUBTITLES, ChangeType.UPDATE, 2, ChangeProperty.NAME, '', 'Full')]
+
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, changes, tracks, undefined, [
+    { uuid: 'other-uuid', path: otherPath, delayMs: 959, convertedSubtitles: [{ trackId: 2, path: srtPath }] }
+  ])
+
+  const spawnArgs = spy.mock.lastCall[1] as string[]
+  const otherArgs = spawnArgs.slice(spawnArgs.indexOf(')') + 1)
+  expect(otherArgs).toStrictEqual([
+    '--no-video',
+    '--no-attachments',
+    '--no-chapters',
+    '--no-global-tags',
+    '--no-track-tags',
+    '--audio-tracks',
+    '1',
+    '--no-subtitles',
+    '--sync',
+    '1:959',
+    '--language',
+    '1:fr',
+    '(',
+    otherPath,
+    ')',
+    '--sync',
+    '0:959',
+    '--track-name',
+    '0:Full',
+    '--language',
+    '0:fr',
+    '(',
+    srtPath,
+    ')'
+  ])
 })

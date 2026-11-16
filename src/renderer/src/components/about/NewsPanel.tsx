@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.6.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_6_0.items', {
+          defaultValue:
+            'Audio and subtitle tracks can now be imported from another file of the same video, from the Tracks tab or by dropping the file on it\nThe offset of the imported tracks with the main video is measured automatically from the audio and can be adjusted by hand\nA file playing at a different speed, such as a PAL version, is detected when importing its tracks and reported\nA new setting, enabled by default, tells whether the video codec (h264, h265) is added to the movie file names\nThe video list now shows the new file name and the new size of the processed videos, the original name and size remain available in a tooltip'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.5.4' })}</h4>
       <ul>
         {_('about.news.version_3_5_4.items', {

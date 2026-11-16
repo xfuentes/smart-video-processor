@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.0] - 2026-11-16
+
+### Added
+
+- Audio and subtitle tracks can now be imported from another file of the same video, from the Tracks tab; their offset with the main video is measured automatically from the audio and can be adjusted by hand.
+- A file playing at a different speed, such as a PAL version, is detected when importing its tracks and reported, as its tracks would drift out of sync.
+- A new setting, enabled by default, tells whether the video codec (h264, h265) is added to the movie file names.
+
+### Changed
+
+- The video list now shows the new file name and the new size of the processed videos, the original name and size remain available in a tooltip.
+
 ## [3.5.4] - 2026-11-12
 
 ### Added

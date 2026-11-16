@@ -22,7 +22,7 @@ import { Tooltip } from '@fluentui/react-components'
 type Props = {
   children: React.ReactNode
   /** Tooltip text, defaults to the text content of the cell. */
-  tooltip?: string
+  tooltip?: string | JSX.Element
   /** Show the tooltip even when the text is not cut off. */
   always?: boolean
 }
@@ -31,7 +31,7 @@ type Props = {
 export const EllipsisCell = ({ children, tooltip, always }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState<string | JSX.Element>('')
   return (
     <Tooltip
       content={content}

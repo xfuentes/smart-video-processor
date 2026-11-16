@@ -84,6 +84,7 @@ export const defaultSettings: Settings = {
   outputRules: [],
   namingConvention: NamingConvention.PLEX,
   isMovieFolderEnabled: false,
+  isVideoCodecInFilenameEnabled: true,
   isAutoStartEnabled: false,
   isAutoAddEnabled: false,
   autoAddPath: '',
