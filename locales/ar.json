@@ -773,7 +773,7 @@
   "track_list.external.measuring": "جارٍ قياس إزاحة الصوت...",
   "track_list.external.no_tracks": "تعذّر استيراد أي مسار صوتي أو مسار ترجمة من هذا الملف.",
   "track_list.external.synced": "تم قياس الإزاحة تلقائيًا.",
-  "track_list.external.drift": "يُشغَّل هذا الملف بسرعة مختلفة ({percent}%)، لذلك ستفقد مساراته التزامنها تدريجيًا، ولم يتم تصحيح ذلك بعد.",
+  "track_list.external.drift": "يتم تشغيل هذا الملف بسرعة مختلفة ({percent}%): يتم تمديد مساراته للحفاظ على التزامن.",
   "track_list.external.unknown": "تعذّر قياس الإزاحة، يرجى ضبطها يدويًا.",
   "track_list.external.delay.label": "التأخير (مللي ثانية)",
   "track_list.external.remove": "إزالة هذا الملف ومساراته",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "يضيف مسارات الصوت والترجمة من نسخة أخرى من الفيديو نفسه، مع مواءمتها تلقائيًا معه.",
   "processing.add_video_part.imported_tracks_tooltip": "غير متاح عند استيراد المسارات من ملف آخر.",
   "track_list.external.video_parts_tooltip": "غير متاح عندما يحتوي الفيديو على أجزاء إضافية.",
-  "settings.video_codec_in_filename.label": "إضافة ترميز الفيديو إلى أسماء ملفات الأفلام"
+  "settings.video_codec_in_filename.label": "إضافة ترميز الفيديو إلى أسماء ملفات الأفلام",
+  "video.message.loading_external_source": "جارٍ تحميل [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "جارٍ قياس إزاحة الصوت للملف [{filename}]: الجزء {current}/{total} بنسبة سرعة {ratio}...",
+  "video.message.preparing_imported_tracks": "جارٍ تجهيز المسارات المستوردة...",
+  "video.message.preparing_imported_tracks_progress": "جارٍ تحضير المسارات المستوردة: {percent}%...",
+  "video.message.trimming_video_progress": "جارٍ قص الفيديو: {percent}%...",
+  "video.message.cutting_part_progress": "جارٍ قص الجزء {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "جارٍ دمج الأجزاء: {percent}%...",
+  "job.status.muxing.short": "جارٍ الدمج",
+  "status_bar.muxing": "جارٍ الدمج",
+  "video.message.preparing_imported_file": "جارٍ تجهيز مسارات الملف المستورد {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "جارٍ تحضير مسارات الملف المستورد {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "أصبحت المسارات المستوردة من ملف يعمل بسرعة مختلفة، مثل نسخة PAL، متزامنة الآن: تتم إعادة تشكيل عينات الصوت (resampling) لتطابق سرعة الفيديو الرئيسي مع الحفاظ على درجة الصوت، ويتم تمديد الترجمات\nيعرض الفيديو الآن حالة «جارٍ التحميل» مع التفاصيل والتقدم أثناء تحميل الملف وقياس إزاحة الصوت فيه، بدلاً من مؤشر دوّار في المسارات\nتتولى قائمة انتظار جديدة باسم «قائمة انتظار الدمج»، تظهر في شريط الحالة، تجهيز المسارات المستوردة وقص أجزاء الفيديو وضمّها، مع عرض تقدمها\nأصبحت المسارات المستوردة تحصل الآن على إعدادات الضغط الخاصة بها مثل باقي المسارات\nيتم الآن عرض الخطأ الذي يحدث أثناء معالجة فيديو بدلاً من عدم حدوث أي شيء، ولم يعد من الممكن استخدام زر «معالجة» مرة ثانية أثناء تتابع الخطوات"
 }

@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Mengukur offset audio...",
   "track_list.external.no_tracks": "Tidak ada trek audio atau subtitel yang dapat diimpor dari file ini.",
   "track_list.external.synced": "Offset telah diukur secara otomatis.",
-  "track_list.external.drift": "File ini diputar dengan kecepatan yang berbeda ({percent}%): trek-treknya akan tidak sinkron, hal ini belum dikoreksi.",
+  "track_list.external.drift": "File ini diputar dengan kecepatan yang berbeda ({percent}%): trek-nya diregangkan agar tetap sinkron.",
   "track_list.external.unknown": "Offset tidak dapat diukur, atur secara manual.",
   "track_list.external.delay.label": "Penundaan (ms)",
   "track_list.external.remove": "Hapus file ini beserta trek-treknya",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Menambahkan trek audio dan subtitel dari versi lain video yang sama, lalu menyelaraskannya secara otomatis.",
   "processing.add_video_part.imported_tracks_tooltip": "Tidak tersedia saat trek diimpor dari file lain.",
   "track_list.external.video_parts_tooltip": "Tidak tersedia saat video memiliki bagian tambahan.",
-  "settings.video_codec_in_filename.label": "Tambahkan codec video ke nama file film"
+  "settings.video_codec_in_filename.label": "Tambahkan codec video ke nama file film",
+  "video.message.loading_external_source": "Memuat [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Mengukur offset audio dari [{filename}]: bagian {current}/{total} dengan rasio kecepatan {ratio}...",
+  "video.message.preparing_imported_tracks": "Menyiapkan trek yang diimpor...",
+  "video.message.preparing_imported_tracks_progress": "Menyiapkan trek yang diimpor: {percent}%...",
+  "video.message.trimming_video_progress": "Memangkas video: {percent}%...",
+  "video.message.cutting_part_progress": "Memotong bagian {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Menggabungkan bagian: {percent}%...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Menyiapkan trek dari file yang diimpor {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Menyiapkan track dari file yang diimpor {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "File yang diputar dengan kecepatan berbeda, seperti versi PAL, kini menjaga trek yang diimpor tetap sinkron: audio di-resample ke kecepatan video utama, termasuk pitch-nya, dan subtitel diregangkan\nVideo menampilkan status Memuat beserta detail dan progresnya saat file dimuat dan offset audionya diukur, bukan lagi spinner di dalam trek\nAntrean Muxing baru, yang ditampilkan di bilah status, menangani persiapan trek yang diimpor serta pemotongan dan penggabungan bagian video, lengkap dengan progresnya\nTrek yang diimpor kini mendapatkan pengaturan kompresi seperti trek lainnya\nError yang terjadi saat memproses video kini ditampilkan, tidak lagi tanpa respons, dan tombol Proses tidak bisa lagi digunakan untuk kedua kalinya selagi langkah-langkahnya berjalan berurutan"
 }

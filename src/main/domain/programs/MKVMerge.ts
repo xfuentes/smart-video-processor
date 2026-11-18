@@ -43,6 +43,10 @@ export interface ExternalInput {
   uuid: string
   path: string
   delayMs: number
+  // Factor applied to the timestamps of the file to follow the speed of the main video.
+  speedRatio?: number
+  // Audio tracks resampled to the speed of the main video, read from a file of their own.
+  resampledAudio?: { path: string; fileTrackIds: { [trackId: number]: number } }
   // Subtitles that Matroska cannot store as they are, converted to separate files beforehand.
   convertedSubtitles?: { trackId: number; path: string }[]
   // Identifiers of the tracks inside the file, when it is a trimmed copy of the original one.
@@ -222,21 +226,62 @@ export class MKVMerge extends CommandProgress {
   // The tracks imported from another file are read from it, delayed to match the main video.
   private generateExternalInputArguments(input: ExternalInput, tracks: Track[], changes: Change[]): string[] {
     const converted = input.convertedSubtitles ?? []
+    const speedRatio = input.speedRatio ?? 1
+    const syncValue = (ratio: number) => (ratio !== 1 ? `${input.delayMs},${ratio.toFixed(9)}` : `${input.delayMs}`)
     const convertedArgs = converted.flatMap((subtitle) => {
       const track = tracks.filter((t) => t.id === subtitle.trackId)
       const trackChanges = changes.filter((c) => c.trackId === subtitle.trackId)
-      const syncArgs = input.delayMs !== 0 ? ['--sync', `0:${input.delayMs}`] : []
+      const needsSync = input.delayMs !== 0 || speedRatio !== 1
+      const syncArgs = needsSync ? ['--sync', `0:${syncValue(speedRatio)}`] : []
       const updateArgs = this.generateTrackUpdateArguments(track, trackChanges, () => 0)
       return [...syncArgs, ...updateArgs, '(', subtitle.path, ')']
     })
+    const resampled = input.resampledAudio
+    const resampledArgs =
+      resampled === undefined
+        ? []
+        : this.generateImportedBlock(
+            resampled.path,
+            tracks.filter((t) => t.externalSourceUuid === input.uuid && t.copy && t.id in resampled.fileTrackIds),
+            changes,
+            (id) => resampled.fileTrackIds[id],
+            input.delayMs,
+            1
+          )
     const selected = tracks.filter(
-      (t) => t.externalSourceUuid === input.uuid && t.copy && !converted.some((c) => c.trackId === t.id)
+      (t) =>
+        t.externalSourceUuid === input.uuid &&
+        t.copy &&
+        !converted.some((c) => c.trackId === t.id) &&
+        !(resampled !== undefined && t.id in resampled.fileTrackIds)
     )
     if (selected.length === 0) {
-      return convertedArgs
+      return [...resampledArgs, ...convertedArgs]
     }
     const sourceIds = new Map(selected.map((t) => [t.id, input.fileTrackIds?.[t.id] ?? t.sourceTrackId ?? t.id]))
-    const sourceId = (id: number) => sourceIds.get(id) ?? id
+    const block = this.generateImportedBlock(
+      input.path,
+      selected,
+      changes,
+      (id) => sourceIds.get(id) ?? id,
+      input.delayMs,
+      speedRatio
+    )
+    return [...resampledArgs, ...block, ...convertedArgs]
+  }
+
+  // Reads the selected tracks of a file, delayed and stretched to match the main video.
+  private generateImportedBlock(
+    filePath: string,
+    selected: Track[],
+    changes: Change[],
+    sourceId: (id: number) => number,
+    delayMs: number,
+    speedRatio: number
+  ): string[] {
+    if (selected.length === 0) {
+      return []
+    }
     const mkOptions = ['--no-video', '--no-attachments', '--no-chapters', '--no-global-tags', '--no-track-tags']
     const idsOfType = (type: TrackType) =>
       selected
@@ -247,14 +292,16 @@ export class MKVMerge extends CommandProgress {
     mkOptions.push(...(audios ? ['--audio-tracks', audios] : ['--no-audio']))
     const subtitles = idsOfType(TrackType.SUBTITLES)
     mkOptions.push(...(subtitles ? ['--subtitle-tracks', subtitles] : ['--no-subtitles']))
-    if (input.delayMs !== 0) {
+    if (delayMs !== 0 || speedRatio !== 1) {
+      const value = speedRatio !== 1 ? `${delayMs},${speedRatio.toFixed(9)}` : `${delayMs}`
       for (const track of selected) {
-        mkOptions.push('--sync', `${sourceId(track.id)}:${input.delayMs}`)
+        mkOptions.push('--sync', `${sourceId(track.id)}:${value}`)
       }
     }
-    const inputChanges = changes.filter((c) => c.trackId != undefined && sourceIds.has(c.trackId))
+    const ids = new Set(selected.map((t) => t.id))
+    const inputChanges = changes.filter((c) => c.trackId != undefined && ids.has(c.trackId))
     mkOptions.push(...this.generateTrackUpdateArguments(selected, inputChanges, sourceId))
-    return mkOptions.concat(['(', input.path, ')'], convertedArgs)
+    return mkOptions.concat(['(', filePath, ')'])
   }
 
   private generateGlobalArguments(changes: Change[]): string[] {

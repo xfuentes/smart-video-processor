@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.0] - 2026-11-18
+
+### Added
+
+- The tracks imported from a file playing at a different speed, such as a PAL version, are now kept in sync: the audio is resampled to the speed of the main video, pitch included, and the subtitles are stretched.
+- A new Muxing queue, shown in the status bar, handles the preparation of the imported tracks and the cutting and joining of the video parts, with a detailed message and the progress.
+- The progress of the audio offset measure is shown in the status of the video, with the part measured and the speed ratio tried.
+
+### Changed
+
+- Loading a file to import its tracks and measuring its offset now put the video in the Loading status instead of showing a spinner in the tracks.
+- The imported files are told by their number rather than their name in the preparation messages when there are several.
+
+### Fixed
+
+- The tracks imported from another file now get the compression settings of the other tracks.
+- An error occurring while processing a video is now displayed instead of nothing happening.
+- The Process button can no longer be used a second time while the steps of a processing follow each other.
+- The measured speed ratio now snaps to the usual film speed ratios, which removes a drift of about a tenth of a second over a whole film.
+
 ## [3.6.0] - 2026-11-16
 
 ### Added

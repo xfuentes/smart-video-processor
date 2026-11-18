@@ -78,7 +78,8 @@ import { SubtitlesType, SubtitlesTypeUtil } from '../../common/SubtitlesType'
 import Other from './Other'
 import { SnapshottingJob } from './jobs/SnapshottingJob'
 import { PreviewingJob } from './jobs/PreviewingJob'
-import { FFmpeg } from './programs/FFmpeg'
+import { FFmpeg, PreProcessStep } from './programs/FFmpeg'
+import { MuxingJob, MuxingReporter } from './jobs/MuxingJob'
 import { FFprobe } from './programs/FFprobe'
 import { isEqual, omit } from 'lodash'
 import { Numbers } from '../util/numbers'
@@ -122,6 +123,8 @@ export class Video implements IVideo {
   public status: JobStatus
   public message: string | undefined
   public progression: Progression
+  // True while the steps of a processing follow each other, so that the video stays queued between two jobs.
+  private pipelineActive: boolean = false
   // Eventual preview progression
   public previewProgression?: Progression
   public searchResults: SearchResult[] = []
@@ -284,7 +287,7 @@ export class Video implements IVideo {
           if (this.job === job) {
             this.job = undefined
           }
-          if (this.queued) {
+          if (this.queued && !this.pipelineActive) {
             newIndicator = true
             this.queued = false
           }
@@ -402,11 +405,13 @@ export class Video implements IVideo {
       this.trackEncodingEnabled = {}
     }
     this.encoderSettings = Encoding.getInstance().analyse(this.tracks, this.targetDuration)
-    if (init) {
-      this.encoderSettings.forEach(
-        (s) => (this.trackEncodingEnabled[s.trackType + ' ' + s.trackId] = s.encodingEnabled ?? false)
-      )
-    }
+    // The tracks imported since the last analysis get their proposed choice, the others keep theirs.
+    this.encoderSettings.forEach((s) => {
+      const key = s.trackType + ' ' + s.trackId
+      if (init || this.trackEncodingEnabled[key] === undefined) {
+        this.trackEncodingEnabled[key] = s.encodingEnabled ?? false
+      }
+    })
     debug('log.video.encoder_settings', { defaultValue: '### ENCODER SETTINGS ###' })
     debug('log.debug_data', { defaultValue: '{value}', value: JSON.stringify(this.encoderSettings) })
 
@@ -645,8 +650,28 @@ export class Video implements IVideo {
   }
 
   async process() {
+    this.pipelineActive = true
+    try {
+      await this.runProcess()
+    } catch (e) {
+      if (e instanceof Error && e.message === 'Aborted') {
+        return
+      }
+      this.showError('video.message.ffmpeg_error', { defaultValue: '{error}', error: (e as Error).message })
+    } finally {
+      this.pipelineActive = false
+      this.queued = false
+      this.fireChangeEvent()
+    }
+  }
+
+  private async runProcess() {
+    // The video is queued right away so that the process cannot be started a second time.
+    this.queued = true
+    this.fireChangeEvent()
     await Promise.all(this.externalSourceLoads)
     if (this.getExternalInputs().length > 0 && this.videoParts.length > 0) {
+      this.queued = false
       this.showError('video.message.external_tracks_with_parts', {
         defaultValue: 'Tracks imported from another file cannot be combined with additional video parts.'
       })
@@ -655,28 +680,27 @@ export class Video implements IVideo {
     if (this.startFrom || (this.endAt && this.endAt != this.duration) || this.videoParts.length > 0) {
       // Need to launch preprocessing
       info('log.video.preprocessing', { defaultValue: 'Pre-processing video parts' })
-      this.progression.progress = undefined
-      this.status = JobStatus.ENCODING
+      let title: string
       if (this.videoParts.length > 0) {
-        this.message = _('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
+        title = _('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
         info('video.message.processing_video_parts', { defaultValue: 'Processing video parts...' })
       } else {
-        this.message = _('video.message.trimming_video', { defaultValue: 'Trimming video...' })
+        title = _('video.message.trimming_video', { defaultValue: 'Trimming video...' })
         info('video.message.trimming_video', { defaultValue: 'Trimming video...' })
       }
-      this.fireChangeEvent()
-      try {
-        this.preProcessPath = await FFmpeg.getInstance().preProcessVideo(
-          this.toMainFileJSON(),
-          this.getPreviewDirectory()
+      const mainFile = this.toMainFileJSON()
+      const preProcessJob = this.attachJob(
+        new MuxingJob(title, ({ setMessage, setProgression }) =>
+          FFmpeg.getInstance().preProcessVideo(mainFile, this.getPreviewDirectory(), (step, progression) => {
+            const message = this.preProcessStepMessage(step, progression.progress)
+            if (message !== undefined) {
+              setMessage(message)
+            }
+            setProgression(progression)
+          })
         )
-      } catch (e) {
-        this.showError('video.message.ffmpeg_error', {
-          defaultValue: '{error}',
-          error: (e as Error).message
-        })
-        return
-      }
+      )
+      this.preProcessPath = await preProcessJob.queue()
     }
     let encodingRequired = false
     let encodingJob: Job<string> | undefined = undefined
@@ -712,6 +736,32 @@ export class Video implements IVideo {
     this.queued = false
     this.processed = true
     this.fireChangeEvent()
+  }
+
+  // Tells which step of the cut and join of the video is in progress.
+  private preProcessStepMessage(step: PreProcessStep, progress?: number): string | undefined {
+    if (progress === undefined || progress < 0) {
+      return undefined
+    }
+    const percent = Math.floor(progress * 100)
+    if (step.kind === 'join') {
+      return _('video.message.joining_parts_progress', {
+        defaultValue: 'Joining the parts: {percent}%...',
+        percent
+      })
+    }
+    if (step.kind === 'cut') {
+      return _('video.message.cutting_part_progress', {
+        defaultValue: 'Cutting the part {current}/{total}: {percent}%...',
+        current: step.current,
+        total: step.total,
+        percent
+      })
+    }
+    return _('video.message.trimming_video_progress', {
+      defaultValue: 'Trimming the video: {percent}%...',
+      percent
+    })
   }
 
   // The size changes when a track is re-encoded, a part of the video is removed or a part is added.
@@ -1091,19 +1141,103 @@ export class Video implements IVideo {
   getExternalInputs(): ExternalInput[] {
     return this.externalSources
       .filter((source) => this.tracks.some((t) => t.externalSourceUuid === source.uuid && t.copy))
-      .map((source) => ({ uuid: source.uuid, path: source.path, delayMs: effectiveExternalDelayMs(this, source) }))
+      .map((source) => ({
+        uuid: source.uuid,
+        path: source.path,
+        delayMs: effectiveExternalDelayMs(this, source),
+        speedRatio: source.speedRatio ?? 1
+      }))
+  }
+
+  // The imported file is told by its number when there are several, as its name would be too long to read.
+  private externalPreparationMessage(number: number, total: number, percent?: number): string {
+    if (total > 1) {
+      return percent === undefined
+        ? _('video.message.preparing_imported_file', {
+            defaultValue: 'Preparing the tracks of the imported file {number}/{total}...',
+            number,
+            total
+          })
+        : _('video.message.preparing_imported_file_progress', {
+            defaultValue: 'Preparing the tracks of the imported file {number}/{total}: {percent}%...',
+            number,
+            total,
+            percent
+          })
+    }
+    return percent === undefined
+      ? _('video.message.preparing_imported_tracks', { defaultValue: 'Preparing the imported tracks...' })
+      : _('video.message.preparing_imported_tracks_progress', {
+          defaultValue: 'Preparing the imported tracks: {percent}%...',
+          percent
+        })
+  }
+
+  // Tells whether an imported file must be resampled, cut or converted before the merge.
+  private externalInputNeedsPreparation(input: ExternalInput): boolean {
+    const selected = this.tracks.filter((t) => t.externalSourceUuid === input.uuid && t.copy)
+    const speedRatio = input.speedRatio ?? 1
+    if (speedRatio !== 1 && selected.some((t) => t.type === TrackType.AUDIO)) {
+      return true
+    }
+    const kept = speedRatio !== 1 ? selected.filter((t) => t.type !== TrackType.AUDIO) : selected
+    const keptDuration = (this.targetDuration - input.delayMs / 1000) / speedRatio
+    const tooLong = kept.some((t) => t.duration === undefined || t.duration > keptDuration + 0.5)
+    return (this.targetDuration > 0 && keptDuration > 0 && tooLong) || kept.some((t) => t.unsupported)
+  }
+
+  // The imported files are prepared by a job of the muxing queue, as it can be long.
+  private async prepareExternalInputs(): Promise<ExternalInput[]> {
+    const inputs = this.getExternalInputs()
+    const pending = inputs.filter((input) => this.externalInputNeedsPreparation(input))
+    if (pending.length === 0) {
+      return inputs
+    }
+    const title = this.externalPreparationMessage(inputs.indexOf(pending[0]) + 1, inputs.length)
+    const job = this.attachJob(new MuxingJob(title, (reporter) => this.prepareExternalInputsNow(inputs, reporter)))
+    return await job.queue()
   }
 
   // The imported subtitles that Matroska cannot store are converted to SubRip files first.
-  private async prepareExternalInputs(): Promise<ExternalInput[]> {
-    const inputs = this.getExternalInputs()
+  private async prepareExternalInputsNow(inputs: ExternalInput[], reporter: MuxingReporter): Promise<ExternalInput[]> {
+    const showStep = (number: number) => reporter.setMessage(this.externalPreparationMessage(number, inputs.length))
     for (const input of inputs) {
-      const selected = this.tracks.filter((t) => t.externalSourceUuid === input.uuid && t.copy)
-      const keptDuration = this.targetDuration - input.delayMs / 1000
+      const number = inputs.indexOf(input) + 1
+      let selected = this.tracks.filter((t) => t.externalSourceUuid === input.uuid && t.copy)
+      const speedRatio = input.speedRatio ?? 1
+      const audios = selected.filter((t) => t.type === TrackType.AUDIO)
+      if (speedRatio !== 1 && audios.length > 0) {
+        // The audio of a file playing at another speed is resampled, as stretching its timestamps would cut it.
+        const resampledPath = path.join(this.getTempDirectory(), `imported-audio-${input.uuid}.mkv`)
+        const keptAudioDuration = this.targetDuration > 0 ? this.targetDuration - Math.max(input.delayMs, 0) / 1000 : 0
+        showStep(number)
+        await FFmpeg.getInstance().resampleAudioTracks(
+          input.path,
+          audios.map((t) => t.toJSON()),
+          speedRatio,
+          keptAudioDuration,
+          resampledPath,
+          (progression) => {
+            if (progression.progress !== undefined && progression.progress >= 0) {
+              reporter.setMessage(
+                this.externalPreparationMessage(number, inputs.length, Math.floor(progression.progress * 100))
+              )
+            }
+            reporter.setProgression(progression)
+          }
+        )
+        input.resampledAudio = {
+          path: resampledPath,
+          fileTrackIds: Object.fromEntries(audios.map((t, index) => [t.id, index]))
+        }
+        selected = selected.filter((t) => t.type !== TrackType.AUDIO)
+      }
+      const keptDuration = (this.targetDuration - input.delayMs / 1000) / speedRatio
       const tooLong = selected.some((t) => t.duration === undefined || t.duration > keptDuration + 0.5)
       if (this.targetDuration > 0 && keptDuration > 0 && tooLong) {
         // The tracks lasting longer than the main video are cut, which also converts the subtitles.
         const trimmedPath = path.join(this.getTempDirectory(), `imported-${input.uuid}.mkv`)
+        showStep(number)
         await FFmpeg.getInstance().trimTracks(
           input.path,
           selected.map((t) => t.toJSON()),
@@ -1116,6 +1250,9 @@ export class Video implements IVideo {
       }
       input.convertedSubtitles = []
       const toConvert = selected.filter((t) => t.unsupported)
+      if (toConvert.length > 0) {
+        showStep(number)
+      }
       for (const track of toConvert) {
         const srtPath = path.join(this.getTempDirectory(), `imported-${track.id}.srt`)
         await FFmpeg.getInstance().convertSubtitleToSrt(input.path, track.sourceTypeIndex ?? 0, srtPath)
@@ -1150,8 +1287,14 @@ export class Video implements IVideo {
   private async loadExternalSource(source: IExternalSource) {
     const isRemoved = () => !this.externalSources.includes(source)
     let importedIds: number[] = []
-    let restoreStatus = () => {}
+    let loading: ReturnType<typeof this.showTemporaryLoading> | undefined = undefined
     try {
+      loading = this.showTemporaryLoading(
+        _('video.message.loading_external_source', {
+          defaultValue: 'Loading [{filename}]...',
+          filename: source.filename
+        })
+      )
       const { tracks, container } = await MKVMerge.getInstance().retrieveFileInformation(source.path)
       await FFprobe.getInstance().completeFileInformation(source.path, tracks, container)
       if (isRemoved()) {
@@ -1170,21 +1313,34 @@ export class Video implements IVideo {
       this.tracks = this.tracks.concat(imported)
       this.fireChangeEvent()
       if (pair !== undefined && imported.length > 0) {
-        const measuringMessage = _('video.message.measuring_audio_offset', {
-          defaultValue: 'Measuring the audio offset of [{filename}]...',
-          filename: source.filename
-        })
-        restoreStatus = this.showTemporaryLoading(measuringMessage)
+        loading.update(
+          _('video.message.measuring_audio_offset', {
+            defaultValue: 'Measuring the audio offset of [{filename}]...',
+            filename: source.filename
+          })
+        )
         const otherDuration = Math.max(container.durationSeconds ?? 0, ...tracks.map((t) => t.duration ?? 0))
         const result = await measureAudioSync(
           FFmpeg.getInstance().readAudioWindow,
           { path: this.sourcePath, audioIndex: pair.mainIndex, duration: this.duration },
           { path: source.path, audioIndex: pair.otherIndex, duration: otherDuration },
-          isRemoved
+          isRemoved,
+          ({ ratio, window, windowCount }) =>
+            loading?.update(
+              _('video.message.measuring_audio_offset_progress', {
+                defaultValue:
+                  'Measuring the audio offset of [{filename}]: part {current}/{total} at speed ratio {ratio}...',
+                filename: source.filename,
+                current: window,
+                total: windowCount,
+                ratio: ratio.toFixed(4)
+              }),
+              (window - 1) / windowCount
+            )
         )
         source.syncStatus = result.status
         source.speedRatio = result.speedRatio
-        source.delayMs = result.status === 'synced' ? result.delayMs : 0
+        source.delayMs = result.status === 'unknown' ? 0 : result.delayMs
       } else {
         source.syncStatus = 'unknown'
       }
@@ -1196,7 +1352,7 @@ export class Video implements IVideo {
         error: (e as Error).message
       })
     }
-    restoreStatus()
+    loading?.restore()
     source.analysing = false
     if (isRemoved()) {
       return
@@ -1205,23 +1361,36 @@ export class Video implements IVideo {
       await this.analyse()
       this.unselectBrainDeletedTracks(importedIds)
     }
+    this.generateEncoderSettings(false)
     this.fireChangeEvent()
   }
 
-  // Shows a loading message and returns a function putting the previous status back if nothing else changed it.
-  private showTemporaryLoading(message: string): () => void {
+  // Shows a loading message, updated while the work goes on, and puts the previous status back at the end.
+  private showTemporaryLoading(message: string) {
     const previousStatus = this.status
     const previousMessage = this.message
-    this.status = JobStatus.LOADING
-    this.message = message
-    this.progression.progress = undefined
-    this.fireChangeEvent()
-    return () => {
-      if (this.message === message) {
-        this.status = previousStatus
-        this.message = previousMessage
-        this.progression.progress = -1
-        this.fireChangeEvent()
+    let current = message
+    const display = (text: string, progress?: number) => {
+      current = text
+      this.status = JobStatus.LOADING
+      this.message = text
+      this.progression = { progress }
+      this.fireChangeEvent()
+    }
+    display(message)
+    return {
+      update: (text: string, progress?: number) => {
+        if (this.message === current) {
+          display(text, progress)
+        }
+      },
+      restore: () => {
+        if (this.message === current) {
+          this.status = previousStatus
+          this.message = previousMessage
+          this.progression = { progress: -1 }
+          this.fireChangeEvent()
+        }
       }
     }
   }
@@ -1253,6 +1422,7 @@ export class Video implements IVideo {
     if (this.matched && removedIds.length > 0) {
       await this.analyse()
     }
+    this.generateEncoderSettings(false)
     this.fireChangeEvent()
   }
 

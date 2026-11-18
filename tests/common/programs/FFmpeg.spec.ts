@@ -667,6 +667,62 @@ test('The encoding progress and speed follow the frames when the output time is 
   expect(updates[2].xSpeed).toBeCloseTo(8)
 })
 
+test('FFmpeg stretches the tracks imported from a file playing at another speed', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  const spy = genSpawnSpyProgress()
+  const track = (id: number, type: TrackType, extra: Partial<ITrack> = {}) =>
+    ({ id, type, copy: true, properties: {}, unsupported: false, ...extra }) as ITrack
+  const video: IVideo = {
+    sourcePath: '/Download/something.mkv',
+    duration: 6000,
+    targetDuration: 6000,
+    externalSources: [
+      { uuid: 'pal', path: '/Download/pal.mkv', filename: 'pal.mkv', analysing: false, delayMs: 1000, speedRatio: 1.25 }
+    ],
+    tracks: [
+      track(0, TrackType.VIDEO),
+      track(1, TrackType.AUDIO, { externalSourceUuid: 'pal', sourceTypeIndex: 0 }),
+      track(2, TrackType.SUBTITLES, { externalSourceUuid: 'pal', sourceTypeIndex: 0 })
+    ]
+  } as unknown as IVideo
+
+  await FFmpeg.getInstance().encodeFileInternal(video, '/tmp', [])
+
+  const args = (spy.mock.lastCall?.[1] as string[]).join(' ')
+  expect(args).toContain('-itsscale 1.250000000 -itsoffset 0.800 -t 4799.200 -i /Download/pal.mkv')
+  expect(args).toContain('-itsoffset 1.000 -t 5999.000 -i /Download/pal.mkv')
+  expect(args).toContain('-map 2:a:0')
+  expect(args).toContain('-filter:a:0 atempo=0.800000000 -c:a:0 aac -b:a:0 192k')
+})
+
+test('FFmpeg lowers the pitch of the imported audio back with its sampling frequency', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  const spy = genSpawnSpyProgress()
+  const track = (id: number, type: TrackType, extra: Partial<ITrack> = {}) =>
+    ({ id, type, copy: true, properties: {}, unsupported: false, ...extra }) as ITrack
+  const video: IVideo = {
+    sourcePath: '/Download/something.mkv',
+    duration: 6000,
+    targetDuration: 6000,
+    externalSources: [
+      { uuid: 'pal', path: '/Download/pal.mkv', filename: 'pal.mkv', analysing: false, delayMs: 0, speedRatio: 1.25 }
+    ],
+    tracks: [
+      track(0, TrackType.VIDEO),
+      track(1, TrackType.AUDIO, {
+        externalSourceUuid: 'pal',
+        sourceTypeIndex: 0,
+        properties: { audioSamplingFrequency: 48000 }
+      })
+    ]
+  } as unknown as IVideo
+
+  await FFmpeg.getInstance().encodeFileInternal(video, '/tmp', [])
+
+  const args = (spy.mock.lastCall?.[1] as string[]).join(' ')
+  expect(args).toContain('-filter:a:0 aresample=384000,asetrate=307200,aresample=48000')
+})
+
 test('FFmpeg reads the tracks imported from another file when encoding', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   const spy = genSpawnSpyProgress()

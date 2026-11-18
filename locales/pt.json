@@ -773,7 +773,7 @@
   "track_list.external.measuring": "A medir o desfasamento do áudio...",
   "track_list.external.no_tracks": "Não foi possível importar nenhuma faixa de áudio ou de legendas deste ficheiro.",
   "track_list.external.synced": "O desfasamento foi medido automaticamente.",
-  "track_list.external.drift": "Este ficheiro é reproduzido a uma velocidade diferente ({percent}%): as suas faixas ficarão dessincronizadas, o que ainda não é corrigido.",
+  "track_list.external.drift": "Este arquivo é reproduzido a uma velocidade diferente ({percent}%): as faixas são esticadas para manter a sincronização.",
   "track_list.external.unknown": "Não foi possível medir o desfasamento, defina-o manualmente.",
   "track_list.external.delay.label": "Atraso (ms)",
   "track_list.external.remove": "Remover este ficheiro e as suas faixas",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Adiciona faixas de áudio e legendas de outra versão do mesmo vídeo, alinhadas automaticamente com ele.",
   "processing.add_video_part.imported_tracks_tooltip": "Não disponível quando as faixas são importadas de outro ficheiro.",
   "track_list.external.video_parts_tooltip": "Não disponível quando o vídeo tem partes adicionais.",
-  "settings.video_codec_in_filename.label": "Adicionar o codec de vídeo aos nomes dos arquivos de filmes"
+  "settings.video_codec_in_filename.label": "Adicionar o codec de vídeo aos nomes dos arquivos de filmes",
+  "video.message.loading_external_source": "A carregar [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "A medir o desfasamento do áudio de [{filename}]: parte {current}/{total} com razão de velocidade {ratio}...",
+  "video.message.preparing_imported_tracks": "A preparar as faixas importadas...",
+  "video.message.preparing_imported_tracks_progress": "A preparar as faixas importadas: {percent}%...",
+  "video.message.trimming_video_progress": "A cortar o vídeo: {percent}%...",
+  "video.message.cutting_part_progress": "A cortar a parte {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "A juntar as partes: {percent}%...",
+  "job.status.muxing.short": "Multiplexação",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "A preparar as faixas do ficheiro importado {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "A preparar as faixas do ficheiro importado {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "Um ficheiro reproduzido a uma velocidade diferente, como uma versão PAL, passa a manter as faixas importadas sincronizadas: o áudio é reamostrado para a velocidade do vídeo principal, incluindo o tom, e as legendas são esticadas\nO vídeo mostra um estado de Carregamento com os detalhes e o progresso enquanto um ficheiro é carregado e o seu desfasamento de áudio é medido, em vez de um indicador de atividade nas faixas\nUma nova fila de Muxing, apresentada na barra de estado, trata da preparação das faixas importadas e do corte e junção das partes do vídeo, com o respetivo progresso\nAs faixas importadas passam a ter as suas definições de compressão, tal como as outras faixas\nUm erro que ocorra durante o processamento de um vídeo passa a ser apresentado, em vez de não acontecer nada, e o botão Processar já não pode ser utilizado uma segunda vez enquanto as etapas se sucedem"
 }

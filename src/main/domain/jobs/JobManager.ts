@@ -20,6 +20,8 @@ import { Job } from './Job'
 import { JobQueueInfo, JobStatus, JobType } from '../../../common/@types/Job'
 import { info } from '../../util/log'
 
+const PAUSABLE_TYPES: JobType[] = [JobStatus.ENCODING, JobStatus.MUXING, JobStatus.MERGING]
+
 export class JobManager {
   private static instance: JobManager
   private paused: boolean = false
@@ -29,6 +31,7 @@ export class JobManager {
     [JobStatus.SEARCHING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.ENCODING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.GRABBING]: undefined as Job<object | unknown> | undefined,
+    [JobStatus.MUXING]: undefined as Job<object | unknown> | undefined,
     [JobStatus.MERGING]: undefined as Job<object | unknown> | undefined
   }
   private queues: { [K in JobType]: Job<object | unknown>[] } = {
@@ -36,6 +39,7 @@ export class JobManager {
     [JobStatus.SEARCHING]: [] as Job<object | unknown>[],
     [JobStatus.ENCODING]: [] as Job<object | unknown>[],
     [JobStatus.GRABBING]: [] as Job<object | unknown>[],
+    [JobStatus.MUXING]: [] as Job<object | unknown>[],
     [JobStatus.MERGING]: [] as Job<object | unknown>[]
   }
 
@@ -122,38 +126,26 @@ export class JobManager {
   }
 
   isPaused(jobType: JobType = JobStatus.ENCODING) {
-    return (jobType === JobStatus.ENCODING || jobType === JobStatus.MERGING) && this.paused
+    return PAUSABLE_TYPES.includes(jobType) && this.paused
   }
 
   switchPaused() {
     this.paused = !this.paused
-    if (this.paused) {
-      if (this.runningJobs[JobStatus.ENCODING] !== undefined) {
-        this.runningJobs[JobStatus.ENCODING]?.pause()
+    for (const type of PAUSABLE_TYPES) {
+      if (this.paused) {
+        this.runningJobs[type]?.pause()
+      } else {
+        this.runningJobs[type]?.resume()
       }
-      if (this.runningJobs[JobStatus.MERGING]) {
-        this.runningJobs[JobStatus.MERGING]?.pause()
-      }
-    } else {
-      if (this.runningJobs[JobStatus.ENCODING] !== undefined) {
-        this.runningJobs[JobStatus.ENCODING]?.resume()
-      }
-      if (this.runningJobs[JobStatus.MERGING] !== undefined) {
-        this.runningJobs[JobStatus.MERGING]?.resume()
-      }
-      this.handleQueueUpdated(JobStatus.ENCODING)
-      this.handleQueueUpdated(JobStatus.MERGING)
+    }
+    if (!this.paused) {
+      PAUSABLE_TYPES.forEach((type) => this.handleQueueUpdated(type))
     }
     return this.paused
   }
 
   updatePriority() {
-    if (this.runningJobs[JobStatus.ENCODING] !== undefined) {
-      this.runningJobs[JobStatus.ENCODING]?.updatePriority()
-    }
-    if (this.runningJobs[JobStatus.MERGING]) {
-      this.runningJobs[JobStatus.MERGING]?.updatePriority()
-    }
+    PAUSABLE_TYPES.forEach((type) => this.runningJobs[type]?.updatePriority())
   }
 
   removeFromQueueAndAbort(job: Job<object | unknown>) {

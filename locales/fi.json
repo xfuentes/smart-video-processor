@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Mitataan äänen viivettä...",
   "track_list.external.no_tracks": "Tästä tiedostosta ei voitu tuoda ääni- tai tekstitysraitoja.",
   "track_list.external.synced": "Viive mitattiin automaattisesti.",
-  "track_list.external.drift": "Tämä tiedosto toistuu eri nopeudella ({percent} %): sen raidat menevät epäsynkroniin, eikä tätä korjata vielä.",
+  "track_list.external.drift": "Tämä tiedosto toistuu eri nopeudella ({percent} %): sen raitoja venytetään, jotta ne pysyvät synkronoituina.",
   "track_list.external.unknown": "Viivettä ei voitu mitata, aseta se manuaalisesti.",
   "track_list.external.delay.label": "Viive (ms)",
   "track_list.external.remove": "Poista tämä tiedosto ja sen raidat",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Lisää ääni- ja tekstitysraidat saman videon toisesta versiosta ja kohdistaa ne automaattisesti videoon.",
   "processing.add_video_part.imported_tracks_tooltip": "Ei käytettävissä, kun raidat tuodaan toisesta tiedostosta.",
   "track_list.external.video_parts_tooltip": "Ei käytettävissä, kun videolla on lisäosia.",
-  "settings.video_codec_in_filename.label": "Lisää videokoodekki elokuvatiedostojen nimiin"
+  "settings.video_codec_in_filename.label": "Lisää videokoodekki elokuvatiedostojen nimiin",
+  "video.message.loading_external_source": "Ladataan [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Mitataan tiedoston [{filename}] äänen siirtymää: osa {current}/{total}, nopeussuhde {ratio}...",
+  "video.message.preparing_imported_tracks": "Valmistellaan tuotuja raitoja...",
+  "video.message.preparing_imported_tracks_progress": "Valmistellaan tuotuja raitoja: {percent} %...",
+  "video.message.trimming_video_progress": "Videota leikataan: {percent} %...",
+  "video.message.cutting_part_progress": "Leikataan osaa {current}/{total}: {percent} %...",
+  "video.message.joining_parts_progress": "Yhdistetään osia: {percent} %...",
+  "job.status.muxing.short": "Muxaus",
+  "status_bar.muxing": "Muxataan",
+  "video.message.preparing_imported_file": "Valmistellaan tuodun tiedoston {number}/{total} raitoja...",
+  "video.message.preparing_imported_file_progress": "Valmistellaan tuodun tiedoston raitoja {number}/{total}: {percent} %...",
+  "about.news.version_3_7_0.items": "Tiedosto, joka toistuu eri nopeudella (esimerkiksi PAL-versio), pitää nyt tuodut raidat synkronoituna: ääni muunnetaan pääkuvan nopeuteen äänenkorkeus mukaan lukien, ja tekstitykset venytetään\nVideossa näkyy Ladataan-tila, jossa on tiedot ja edistyminen, kun tiedostoa ladataan ja sen äänen siirtymää mitataan. Aiemmin raidoissa näkyi vain pyörivä latauskuvake\nUusi Muxing-jono, joka näkyy tilapalkissa, hoitaa tuotujen raitojen valmistelun sekä videon osien leikkaamisen ja yhdistämisen edistymisen kanssa\nTuodut raidat saavat nyt pakkausasetuksensa kuten muutkin raidat\nVideon käsittelyn aikana tapahtunut virhe näytetään nyt sen sijaan, että mitään ei tapahtuisi, eikä Käsittele-painiketta voi enää käyttää toista kertaa, kun vaiheet seuraavat toisiaan"
 }

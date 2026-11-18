@@ -773,7 +773,7 @@
   "track_list.external.measuring": "正在测量音频偏移…",
   "track_list.external.no_tracks": "无法从此文件导入音频或字幕轨道。",
   "track_list.external.synced": "已自动测量偏移。",
-  "track_list.external.drift": "此文件的播放速度不同({percent}%):其轨道将出现不同步的漂移,目前尚未支持校正。",
+  "track_list.external.drift": "此文件的播放速度不同({percent}%):其轨道已被拉伸以保持同步。",
   "track_list.external.unknown": "无法测量偏移,请手动设置。",
   "track_list.external.delay.label": "延迟(毫秒)",
   "track_list.external.remove": "移除此文件及其轨道",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "从同一视频的其他版本中添加音频和字幕轨道,并自动与当前视频对齐。",
   "processing.add_video_part.imported_tracks_tooltip": "从其他文件导入轨道时不可用。",
   "track_list.external.video_parts_tooltip": "视频包含附加部分时不可用。",
-  "settings.video_codec_in_filename.label": "在电影文件名中添加视频编码"
+  "settings.video_codec_in_filename.label": "在电影文件名中添加视频编码",
+  "video.message.loading_external_source": "正在加载 [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "正在测量 [{filename}] 的音频偏移:第 {current}/{total} 部分,速度比 {ratio}...",
+  "video.message.preparing_imported_tracks": "正在准备导入的轨道...",
+  "video.message.preparing_imported_tracks_progress": "正在准备导入的轨道:{percent}%...",
+  "video.message.trimming_video_progress": "正在剪切视频:{percent}%...",
+  "video.message.cutting_part_progress": "正在剪切第 {current}/{total} 部分:{percent}%...",
+  "video.message.joining_parts_progress": "正在合并分段:{percent}%...",
+  "job.status.muxing.short": "混流中",
+  "status_bar.muxing": "正在混流",
+  "video.message.preparing_imported_file": "正在准备导入文件 {number}/{total} 的轨道...",
+  "video.message.preparing_imported_file_progress": "正在准备导入文件 {number}/{total} 的轨道:{percent}%...",
+  "about.news.version_3_7_0.items": "以不同速度播放的文件（例如 PAL 版本），其导入的轨道现在可保持同步：音频会重新采样到主视频的速度（包括音调），字幕则会相应拉伸\n加载文件并测量其音频偏移时，视频会显示“正在加载”状态及详细信息和进度，而不再在轨道中显示转圈图标\n状态栏中新增“混流队列”，负责准备导入的轨道以及剪切和合并视频片段，并显示其进度\n导入的轨道现在也拥有与其他轨道相同的压缩设置\n处理视频时发生的错误现在会显示出来，而不是毫无反应；在各步骤依次执行期间，“处理”按钮也不能再被重复点击"
 }

@@ -23,7 +23,7 @@ import { currentSettings } from '../Settings'
 import { debug } from '../../util/log'
 import { EncoderSettings, VideoCodec } from '../../../common/@types/Encoding'
 import { ITrack, TrackType } from '../../../common/@types/Track'
-import { ProgressNotifier } from '../../../common/@types/processes'
+import { Progression, ProgressNotifier } from '../../../common/@types/processes'
 import { Files } from '../../util/files'
 import path, * as Path from 'node:path'
 import { Strings } from '../../../common/Strings'
@@ -42,6 +42,10 @@ const ENCODING_SPEED_MIN_ELAPSED_MS = 2000
 
 // The edit lists of these files are ignored, as mkvmerge does not apply them either when merging.
 const MP4_FAMILY_PATTERN = /\.(mp4|m4v|m4a|mov|3gp|3g2)$/i
+
+export type PreProcessStep = { kind: 'trim' | 'cut' | 'join'; current: number; total: number }
+
+const IMPORTED_AUDIO_BITRATE = '192k'
 
 export class FFmpeg extends CommandProgress {
   private static instance: FFmpeg
@@ -346,7 +350,12 @@ export class FFmpeg extends CommandProgress {
     return await super.execute(ffOptions, ffmpegOutputInterpreter)
   }
 
-  public async preProcessVideoPart(number: number, video: IVideo, destinationPath: string): Promise<string> {
+  public async preProcessVideoPart(
+    number: number,
+    video: IVideo,
+    destinationPath: string,
+    progressNotifier?: ProgressNotifier
+  ): Promise<string> {
     const ffOptions: string[] = []
     fs.mkdirSync(destinationPath, { recursive: true })
     const preProcessPath = path.join(destinationPath, `part${number}.mkv`)
@@ -373,31 +382,91 @@ export class FFmpeg extends CommandProgress {
     ffOptions.push(preProcessPath)
 
     if (needProcessing) {
-      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, durationSeconds)
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(
+        preProcessPath,
+        durationSeconds,
+        progressNotifier
+      )
       return await super.execute(ffOptions, ffmpegOutputInterpreter)
     } else {
       return video.sourcePath
     }
   }
 
-  // A file providing imported tracks is delayed, or cut at its start, to match the main video.
-  private generateExternalInputArguments(sourcePath: string, delayMs: number, mainDuration: number): string[] {
+  // A file providing imported tracks is stretched, delayed or cut at its start to match the main video.
+  private generateExternalInputArguments(
+    sourcePath: string,
+    delayMs: number,
+    speedRatio: number,
+    mainDuration: number,
+    resampledAudio: boolean = false
+  ): string[] {
     const ffOptions: string[] = []
     if (MP4_FAMILY_PATTERN.test(sourcePath)) {
       ffOptions.push('-ignore_editlist', '1')
     }
-    const delay = delayMs / 1000
+    if (speedRatio !== 1 && !resampledAudio) {
+      ffOptions.push('-itsscale', speedRatio.toFixed(9))
+    }
+    // The offset is applied before the scale, so it is expressed in the time of the imported file.
+    const delay = delayMs / 1000 / (resampledAudio ? 1 : speedRatio)
     if (delay > 0) {
       ffOptions.push('-itsoffset', delay.toFixed(3))
     } else if (delay < 0) {
-      ffOptions.push('-ss', (-delay).toFixed(3))
+      ffOptions.push('-ss', (resampledAudio ? -delayMs / 1000 / speedRatio : -delay).toFixed(3))
     }
     // The imported tracks must not last longer than the main video.
-    const keptDuration = delay > 0 ? mainDuration - delay : mainDuration
+    const keptDuration = resampledAudio
+      ? mainDuration - Math.max(delay, 0)
+      : delay > 0
+        ? mainDuration / speedRatio - delay
+        : mainDuration / speedRatio
     if (mainDuration > 0 && keptDuration > 0) {
       ffOptions.push('-t', keptDuration.toFixed(3))
     }
     return ffOptions.concat(['-i', sourcePath])
+  }
+
+  // Resamples the audio tracks of a file so that they last ratio times longer, without a gap between the frames.
+  public async resampleAudioTracks(
+    sourcePath: string,
+    tracks: ITrack[],
+    speedRatio: number,
+    durationSeconds: number,
+    destinationPath: string,
+    progressNotifier?: ProgressNotifier
+  ): Promise<string> {
+    fs.mkdirSync(path.dirname(destinationPath), { recursive: true })
+    const args = ['-y', '-progress', 'pipe:1', '-loglevel', '16']
+    if (MP4_FAMILY_PATTERN.test(sourcePath)) {
+      args.push('-ignore_editlist', '1')
+    }
+    args.push('-i', sourcePath)
+    for (const track of tracks) {
+      args.push('-map', `0:a:${track.sourceTypeIndex ?? 0}`)
+    }
+    args.push('-c:a', 'aac', '-b:a', IMPORTED_AUDIO_BITRATE)
+    tracks.forEach((track, index) => {
+      args.push(`-filter:a:${index}`, this.resampleFilter(speedRatio, track.properties?.audioSamplingFrequency))
+    })
+    if (durationSeconds > 0) {
+      args.push('-t', durationSeconds.toFixed(3))
+    }
+    await super.execute(
+      [...args, destinationPath],
+      this.ffmpegProgressInterpreterBuild(destinationPath, durationSeconds, progressNotifier)
+    )
+    return destinationPath
+  }
+
+  // The audio is played slower, which also lowers its pitch back to the one of the original speed.
+  private resampleFilter(speedRatio: number, sampleRate: number | undefined): string {
+    if (sampleRate === undefined) {
+      return `atempo=${(1 / speedRatio).toFixed(9)}`
+    }
+    // The rate is raised first so that rounding the slowed rate to an integer stays below a millisecond.
+    const raised = sampleRate * 8
+    return `aresample=${raised},asetrate=${Math.round(raised / speedRatio)},aresample=${sampleRate}`
   }
 
   // Copies the given tracks of a file to a new one, cut at the given duration.
@@ -424,7 +493,11 @@ export class FFmpeg extends CommandProgress {
     return destinationPath
   }
 
-  generateKeepAllMapping = (tracks: ITrack[], externalInputIndexes: Map<string, number> = new Map()) => {
+  generateKeepAllMapping = (
+    tracks: ITrack[],
+    externalInputIndexes: Map<string, number> = new Map(),
+    externalAudioInputIndexes: Map<string, number> = new Map()
+  ) => {
     const ffOptions: string[] = []
     let videoIndex = 0
     let audioIndex = 0
@@ -434,7 +507,10 @@ export class FFmpeg extends CommandProgress {
     // The tracks imported from another file are read from its own input.
     const inputStream = (track: ITrack, letter: string, mainIndex: number) => {
       const externalInput =
-        track.externalSourceUuid !== undefined ? externalInputIndexes.get(track.externalSourceUuid) : undefined
+        track.externalSourceUuid === undefined
+          ? undefined
+          : ((letter === 'a' ? externalAudioInputIndexes.get(track.externalSourceUuid) : undefined) ??
+            externalInputIndexes.get(track.externalSourceUuid))
       return externalInput !== undefined
         ? `${externalInput}:${letter}:${track.sourceTypeIndex ?? 0}`
         : `0:${letter}:${mainIndex}`
@@ -459,10 +535,30 @@ export class FFmpeg extends CommandProgress {
     return ffOptions
   }
 
-  public async preProcessVideo(video: IVideo, destinationPath: string): Promise<string> {
+  // Cuts the main video and its parts, then joins them, reporting the progress of the step in progress.
+  public async preProcessVideo(
+    video: IVideo,
+    destinationPath: string,
+    onProgress?: (step: PreProcessStep, progression: Progression) => void
+  ): Promise<string> {
     const ffOptions: string[] = []
 
-    const videoPath = await this.preProcessVideoPart(0, video, destinationPath)
+    const cutTotal = 1 + video.videoParts.length
+    const stageCount = video.videoParts.length > 0 ? cutTotal + 1 : 1
+    const notifierOf = (stage: number, step: PreProcessStep): ProgressNotifier | undefined =>
+      onProgress === undefined
+        ? undefined
+        : (progression) => {
+            const progress = progression.progress
+            const overall = progress === undefined || progress < 0 ? progress : (stage + progress) / stageCount
+            onProgress(step, { ...progression, progress: overall })
+          }
+    const videoPath = await this.preProcessVideoPart(
+      0,
+      video,
+      destinationPath,
+      notifierOf(0, { kind: video.videoParts.length > 0 ? 'cut' : 'trim', current: 1, total: cutTotal })
+    )
 
     if (video.videoParts.length === 0) {
       return videoPath
@@ -471,7 +567,13 @@ export class FFmpeg extends CommandProgress {
       splitPaths.push(videoPath)
       let num = 1
       for (const part of video.videoParts) {
-        const partPath = await this.preProcessVideoPart(num++, part, destinationPath)
+        const partPath = await this.preProcessVideoPart(
+          num,
+          part,
+          destinationPath,
+          notifierOf(num, { kind: 'cut', current: num + 1, total: cutTotal })
+        )
+        num++
         splitPaths.push(partPath)
       }
 
@@ -498,7 +600,11 @@ export class FFmpeg extends CommandProgress {
       const preProcessPath = path.join(destinationPath, `final-concat.mkv`)
       ffOptions.push(preProcessPath)
 
-      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(preProcessPath, video.targetDuration)
+      const ffmpegOutputInterpreter = this.ffmpegProgressInterpreterBuild(
+        preProcessPath,
+        video.targetDuration,
+        notifierOf(cutTotal, { kind: 'join', current: 1, total: 1 })
+      )
       await super.execute(ffOptions, ffmpegOutputInterpreter)
       return preProcessPath
     }
@@ -612,21 +718,34 @@ export class FFmpeg extends CommandProgress {
       ffOptions.push('-i', video.sourcePath)
     }
     const externalInputIndexes = new Map<string, number>()
+    const externalAudioInputIndexes = new Map<string, number>()
+    let inputCount = 1
     for (const source of video.externalSources ?? []) {
       if (video.tracks.some((t) => t.externalSourceUuid === source.uuid)) {
-        externalInputIndexes.set(source.uuid, externalInputIndexes.size + 1)
-        ffOptions.push(
-          ...this.generateExternalInputArguments(
-            source.path,
-            effectiveExternalDelayMs(video, source),
-            video.targetDuration
-          )
+        const delayMs = effectiveExternalDelayMs(video, source)
+        const speedRatio = source.speedRatio ?? 1
+        const resampled =
+          speedRatio !== 1 &&
+          video.tracks.some((t) => t.externalSourceUuid === source.uuid && t.type === TrackType.AUDIO)
+        const hasOtherTracks = video.tracks.some(
+          (t) => t.externalSourceUuid === source.uuid && (!resampled || t.type !== TrackType.AUDIO)
         )
+        if (hasOtherTracks) {
+          externalInputIndexes.set(source.uuid, inputCount++)
+          ffOptions.push(...this.generateExternalInputArguments(source.path, delayMs, speedRatio, video.targetDuration))
+        }
+        if (resampled) {
+          // The audio is read without the scale of the timestamps, as it is resampled instead.
+          externalAudioInputIndexes.set(source.uuid, inputCount++)
+          ffOptions.push(
+            ...this.generateExternalInputArguments(source.path, delayMs, speedRatio, video.targetDuration, true)
+          )
+        }
       }
     }
     //ffOptions.push("-vf", "scale=1920:1080") // Downscale to 1080p
     ffOptions.push('-c', 'copy') // Just copy by default (no encode)
-    ffOptions.push(...this.generateKeepAllMapping(video.tracks, externalInputIndexes))
+    ffOptions.push(...this.generateKeepAllMapping(video.tracks, externalInputIndexes, externalAudioInputIndexes))
     if (externalInputIndexes.size > 0 && video.targetDuration > 0) {
       // The imported subtitles are not cut by the limit set on their input.
       ffOptions.push('-t', (video.targetDuration + 0.5).toFixed(3))
@@ -664,6 +783,21 @@ export class FFmpeg extends CommandProgress {
         } else if (setting.trackType === TrackType.AUDIO && setting.bitrate !== undefined && pass !== 1) {
           ffOptions.push('-c:a:' + audioIndex, 'aac')
           ffOptions.push('-b:a:' + audioIndex, setting.bitrate / 1000 + 'k')
+        }
+      }
+      const resampledRatio =
+        track.type === TrackType.AUDIO &&
+        track.externalSourceUuid !== undefined &&
+        externalAudioInputIndexes.has(track.externalSourceUuid)
+          ? (video.externalSources.find((s) => s.uuid === track.externalSourceUuid)?.speedRatio ?? 1)
+          : 1
+      if (resampledRatio !== 1 && pass !== 1) {
+        ffOptions.push(
+          '-filter:a:' + audioIndex,
+          this.resampleFilter(resampledRatio, track.properties?.audioSamplingFrequency)
+        )
+        if (setting?.bitrate === undefined) {
+          ffOptions.push('-c:a:' + audioIndex, 'aac', '-b:a:' + audioIndex, IMPORTED_AUDIO_BITRATE)
         }
       }
       if (track.type === TrackType.VIDEO) {

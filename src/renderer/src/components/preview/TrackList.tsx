@@ -29,7 +29,6 @@ import {
   Divider,
   Input,
   OnSelectionChangeData,
-  Spinner,
   TableColumnDefinition,
   TableColumnSizingOptions,
   Text,
@@ -146,12 +145,8 @@ const sourceColumn = (video: IVideo) =>
 
 const externalSourceStatus = (video: IVideo, source: IExternalSource) => {
   if (source.analysing) {
-    return (
-      <Spinner
-        size="extra-tiny"
-        label={_('track_list.external.measuring', { defaultValue: 'Measuring the audio offset...' })}
-      />
-    )
+    // The progress is shown in the status of the video.
+    return ''
   }
   if (!video.tracks.some((t) => t.externalSourceUuid === source.uuid)) {
     return _('track_list.external.no_tracks', {
@@ -163,8 +158,7 @@ const externalSourceStatus = (video: IVideo, source: IExternalSource) => {
   }
   if (source.syncStatus === 'drift') {
     return _('track_list.external.drift', {
-      defaultValue:
-        'This file plays at a different speed ({percent}%): its tracks will drift out of sync, this is not corrected yet.',
+      defaultValue: 'This file plays at a different speed ({percent}%): its tracks are stretched to stay in sync.',
       percent: (((source.speedRatio ?? 1) - 1) * 100).toFixed(2)
     })
   }

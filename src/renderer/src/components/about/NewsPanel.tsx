@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.7.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_7_0.items', {
+          defaultValue:
+            'A file playing at a different speed, such as a PAL version, now has its imported tracks kept in sync: the audio is resampled to the speed of the main video, pitch included, and the subtitles are stretched\nThe video shows a Loading status with the details and the progress while a file is loaded and its audio offset measured, instead of a spinner in the tracks\nA new Muxing queue, shown in the status bar, handles the preparation of the imported tracks and the cutting and joining of the video parts, with their progress\nThe imported tracks now get their compression settings like the other tracks\nAn error occurring while processing a video is now displayed instead of nothing happening, and the Process button can no longer be used a second time while the steps follow each other'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.6.0' })}</h4>
       <ul>
         {_('about.news.version_3_6_0.items', {

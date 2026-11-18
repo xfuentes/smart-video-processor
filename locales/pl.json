@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Pomiar przesunięcia dźwięku...",
   "track_list.external.no_tracks": "Z tego pliku nie można zaimportować żadnej ścieżki audio ani napisów.",
   "track_list.external.synced": "Przesunięcie zostało zmierzone automatycznie.",
-  "track_list.external.drift": "Ten plik jest odtwarzany z inną prędkością ({percent}%): jego ścieżki będą się rozsynchronizowywać, a to nie jest jeszcze korygowane.",
+  "track_list.external.drift": "Ten plik jest odtwarzany z inną prędkością ({percent}%): jego ścieżki są rozciągane, aby pozostały zsynchronizowane.",
   "track_list.external.unknown": "Nie udało się zmierzyć przesunięcia, ustaw je ręcznie.",
   "track_list.external.delay.label": "Opóźnienie (ms)",
   "track_list.external.remove": "Usuń ten plik i jego ścieżki",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Dodaje ścieżki audio i napisów z innej wersji tego samego wideo, automatycznie dopasowując je do obrazu.",
   "processing.add_video_part.imported_tracks_tooltip": "Niedostępne, gdy ścieżki są importowane z innego pliku.",
   "track_list.external.video_parts_tooltip": "Niedostępne, gdy wideo ma dodatkowe części.",
-  "settings.video_codec_in_filename.label": "Dodawaj kodek wideo do nazw plików filmów"
+  "settings.video_codec_in_filename.label": "Dodawaj kodek wideo do nazw plików filmów",
+  "video.message.loading_external_source": "Wczytywanie [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Pomiar przesunięcia dźwięku w [{filename}]: część {current}/{total}, współczynnik prędkości {ratio}...",
+  "video.message.preparing_imported_tracks": "Przygotowywanie zaimportowanych ścieżek...",
+  "video.message.preparing_imported_tracks_progress": "Przygotowywanie zaimportowanych ścieżek: {percent}%...",
+  "video.message.trimming_video_progress": "Przycinanie wideo: {percent}%...",
+  "video.message.cutting_part_progress": "Wycinanie części {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Łączenie części: {percent}%...",
+  "job.status.muxing.short": "Muxowanie",
+  "status_bar.muxing": "Muxowanie",
+  "video.message.preparing_imported_file": "Przygotowywanie ścieżek zaimportowanego pliku {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Przygotowywanie ścieżek zaimportowanego pliku {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "Plik odtwarzany z inną prędkością, na przykład wersja PAL, ma teraz zaimportowane ścieżki zachowane w synchronizacji: dźwięk jest resamplowany do prędkości głównego wideo, wraz z wysokością tonu, a napisy są rozciągane\nWideo wyświetla stan Wczytywanie ze szczegółami i postępem podczas wczytywania pliku i pomiaru przesunięcia dźwięku, zamiast wskaźnika ładowania w ścieżkach\nNowa kolejka muxowania, widoczna na pasku stanu, obsługuje przygotowanie zaimportowanych ścieżek oraz wycinanie i łączenie części wideo, wraz z ich postępem\nZaimportowane ścieżki mają teraz własne ustawienia kompresji, tak jak pozostałe ścieżki\nBłąd występujący podczas przetwarzania wideo jest teraz wyświetlany, zamiast braku jakiejkolwiek reakcji, a przycisku Przetwarzaj nie można już użyć drugi raz, gdy kolejne etapy następują po sobie"
 }

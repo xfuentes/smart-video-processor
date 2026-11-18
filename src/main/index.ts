@@ -364,6 +364,7 @@ app.whenReady().then(async () => {
     loading: JobManager.getInstance().getQueueInfo(JobStatus.LOADING),
     searching: JobManager.getInstance().getQueueInfo(JobStatus.SEARCHING),
     encoding: JobManager.getInstance().getQueueInfo(JobStatus.ENCODING),
+    muxing: JobManager.getInstance().getQueueInfo(JobStatus.MUXING),
     merging: JobManager.getInstance().getQueueInfo(JobStatus.MERGING)
   }))
   ipcMain.handle('main:getDiskSpace', async (): Promise<{ tmp?: number; output?: number }> => {

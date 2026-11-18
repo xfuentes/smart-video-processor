@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Audio-Versatz wird gemessen...",
   "track_list.external.no_tracks": "Aus dieser Datei konnte keine Audio- oder Untertitelspur importiert werden.",
   "track_list.external.synced": "Der Versatz wurde automatisch gemessen.",
-  "track_list.external.drift": "Diese Datei wird mit einer anderen Geschwindigkeit abgespielt ({percent}%): Ihre Spuren laufen asynchron, dies wird noch nicht korrigiert.",
+  "track_list.external.drift": "Diese Datei wird mit einer anderen Geschwindigkeit abgespielt ({percent} %): Ihre Spuren werden gedehnt, damit sie synchron bleiben.",
   "track_list.external.unknown": "Der Versatz konnte nicht gemessen werden, bitte manuell einstellen.",
   "track_list.external.delay.label": "Verzögerung (ms)",
   "track_list.external.remove": "Diese Datei und ihre Spuren entfernen",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Fügt Audio- und Untertitelspuren aus einer anderen Version desselben Videos hinzu und gleicht sie automatisch daran an.",
   "processing.add_video_part.imported_tracks_tooltip": "Nicht verfügbar, wenn Spuren aus einer anderen Datei importiert werden.",
   "track_list.external.video_parts_tooltip": "Nicht verfügbar, wenn das Video zusätzliche Teile enthält.",
-  "settings.video_codec_in_filename.label": "Videocodec zu den Dateinamen von Filmen hinzufügen"
+  "settings.video_codec_in_filename.label": "Videocodec zu den Dateinamen von Filmen hinzufügen",
+  "video.message.loading_external_source": "[{filename}] wird geladen...",
+  "video.message.measuring_audio_offset_progress": "Audioversatz von [{filename}] wird gemessen: Teil {current}/{total} bei Geschwindigkeitsverhältnis {ratio}...",
+  "video.message.preparing_imported_tracks": "Importierte Spuren werden vorbereitet...",
+  "video.message.preparing_imported_tracks_progress": "Importierte Spuren werden vorbereitet: {percent} %...",
+  "video.message.trimming_video_progress": "Video wird zugeschnitten: {percent} %...",
+  "video.message.cutting_part_progress": "Teil {current}/{total} wird geschnitten: {percent} %...",
+  "video.message.joining_parts_progress": "Teile werden zusammengefügt: {percent} %...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Spuren der importierten Datei {number}/{total} werden vorbereitet...",
+  "video.message.preparing_imported_file_progress": "Spuren der importierten Datei {number}/{total} werden vorbereitet: {percent} %...",
+  "about.news.version_3_7_0.items": "Bei einer Datei, die mit einer anderen Geschwindigkeit abgespielt wird, z. B. einer PAL-Version, bleiben die importierten Spuren jetzt synchron: Das Audio wird auf die Geschwindigkeit des Hauptvideos resampelt, einschließlich der Tonhöhe, und die Untertitel werden gedehnt\nWährend eine Datei geladen und ihr Audio-Offset gemessen wird, zeigt das Video einen Lade-Status mit den Details und dem Fortschritt an, statt eines Spinners in den Spuren\nEine neue Muxing-Warteschlange, die in der Statusleiste angezeigt wird, übernimmt die Vorbereitung der importierten Spuren sowie das Schneiden und Zusammenfügen der Videoteile, inklusive Fortschrittsanzeige\nDie importierten Spuren erhalten jetzt wie die anderen Spuren ihre Komprimierungseinstellungen\nTritt bei der Verarbeitung eines Videos ein Fehler auf, wird dieser jetzt angezeigt, anstatt dass nichts passiert, und die Schaltfläche „Verarbeiten“ kann nicht mehr ein zweites Mal verwendet werden, solange die Schritte aufeinander folgen"
 }

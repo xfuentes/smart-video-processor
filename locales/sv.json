@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Mäter ljudförskjutningen...",
   "track_list.external.no_tracks": "Inget ljud- eller undertextspår kunde importeras från den här filen.",
   "track_list.external.synced": "Förskjutningen mättes automatiskt.",
-  "track_list.external.drift": "Den här filen spelas upp med en annan hastighet ({percent} %): dess spår kommer att hamna ur synk, detta korrigeras ännu inte.",
+  "track_list.external.drift": "Den här filen spelas upp med en annan hastighet ({percent} %): dess spår sträcks ut för att hålla synkroniseringen.",
   "track_list.external.unknown": "Förskjutningen kunde inte mätas, ställ in den manuellt.",
   "track_list.external.delay.label": "Fördröjning (ms)",
   "track_list.external.remove": "Ta bort den här filen och dess spår",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Lägger till ljud- och undertextspår från en annan version av samma video och justerar dem automatiskt så att de matchar.",
   "processing.add_video_part.imported_tracks_tooltip": "Inte tillgängligt när spår importeras från en annan fil.",
   "track_list.external.video_parts_tooltip": "Inte tillgängligt när videon har ytterligare delar.",
-  "settings.video_codec_in_filename.label": "Lägg till videokodeken i filmfilernas namn"
+  "settings.video_codec_in_filename.label": "Lägg till videokodeken i filmfilernas namn",
+  "video.message.loading_external_source": "Läser in [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Mäter ljudförskjutningen för [{filename}]: del {current}/{total} med hastighetsförhållandet {ratio}...",
+  "video.message.preparing_imported_tracks": "Förbereder de importerade spåren...",
+  "video.message.preparing_imported_tracks_progress": "Förbereder de importerade spåren: {percent}%...",
+  "video.message.trimming_video_progress": "Klipper videon: {percent}%...",
+  "video.message.cutting_part_progress": "Klipper del {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Sammanfogar delarna: {percent}%...",
+  "job.status.muxing.short": "Muxar",
+  "status_bar.muxing": "Muxar",
+  "video.message.preparing_imported_file": "Förbereder spåren i den importerade filen {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Förbereder spåren i den importerade filen {number}/{total}: {percent} %...",
+  "about.news.version_3_7_0.items": "En fil som spelas upp i en annan hastighet, till exempel en PAL-version, får nu sina importerade spår synkade: ljudet omsamplas till huvudvideons hastighet, tonhöjden inkluderad, och undertexterna sträcks ut\nVideon visar statusen Laddar med detaljer och förlopp medan en fil läses in och dess ljudförskjutning mäts, i stället för en snurra i spåren\nEn ny Muxningskö, som visas i statusfältet, hanterar förberedelsen av de importerade spåren samt klippning och sammanfogning av videodelarna, med deras förlopp\nDe importerade spåren får nu sina komprimeringsinställningar precis som de andra spåren\nEtt fel som uppstår när en video bearbetas visas nu i stället för att ingenting händer, och knappen Bearbeta kan inte längre användas en andra gång medan stegen följer på varandra"
 }

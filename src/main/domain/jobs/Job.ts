@@ -177,6 +177,7 @@ export abstract class Job<T> implements IJob {
       case JobStatus.LOADING:
       case JobStatus.SEARCHING:
       case JobStatus.MERGING:
+      case JobStatus.MUXING:
       case JobStatus.ENCODING:
         return this.getTitle()
 
@@ -239,7 +240,10 @@ export abstract class Job<T> implements IJob {
   private setStatus(status: JobStatus): void {
     this.status = status
     this.processingOrPaused =
-      this.status === JobStatus.MERGING || this.status === JobStatus.ENCODING || this.status === JobStatus.PAUSED
+      this.status === JobStatus.MERGING ||
+      this.status === JobStatus.MUXING ||
+      this.status === JobStatus.ENCODING ||
+      this.status === JobStatus.PAUSED
     this.finished =
       this.status === JobStatus.ABORTED || this.status === JobStatus.ERROR || this.status === JobStatus.SUCCESS
     this.success = this.status === JobStatus.SUCCESS

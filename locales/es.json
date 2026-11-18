@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Midiendo el desfase del audio...",
   "track_list.external.no_tracks": "No se pudo importar ninguna pista de audio ni de subtítulos de este archivo.",
   "track_list.external.synced": "El desfase se midió automáticamente.",
-  "track_list.external.drift": "Este archivo se reproduce a una velocidad distinta ({percent}%): sus pistas se desincronizarán progresivamente y esto aún no se corrige.",
+  "track_list.external.drift": "Este archivo se reproduce a una velocidad distinta ({percent} %): sus pistas se estiran para mantenerse sincronizadas.",
   "track_list.external.unknown": "No se pudo medir el desfase, configúralo manualmente.",
   "track_list.external.delay.label": "Retraso (ms)",
   "track_list.external.remove": "Quitar este archivo y sus pistas",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Añade pistas de audio y subtítulos de otra versión del mismo vídeo, alineadas automáticamente con él.",
   "processing.add_video_part.imported_tracks_tooltip": "No disponible cuando las pistas se importan de otro archivo.",
   "track_list.external.video_parts_tooltip": "No disponible cuando el vídeo tiene partes adicionales.",
-  "settings.video_codec_in_filename.label": "Añadir el códec de vídeo a los nombres de archivo de las películas"
+  "settings.video_codec_in_filename.label": "Añadir el códec de vídeo a los nombres de archivo de las películas",
+  "video.message.loading_external_source": "Cargando [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Midiendo el desfase del audio de [{filename}]: parte {current}/{total} con relación de velocidad {ratio}...",
+  "video.message.preparing_imported_tracks": "Preparando las pistas importadas...",
+  "video.message.preparing_imported_tracks_progress": "Preparando las pistas importadas: {percent} %...",
+  "video.message.trimming_video_progress": "Recortando el vídeo: {percent} %...",
+  "video.message.cutting_part_progress": "Cortando la parte {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Uniendo las partes: {percent} %...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Preparando las pistas del archivo importado {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Preparando las pistas del archivo importado {number}/{total}: {percent} %...",
+  "about.news.version_3_7_0.items": "Un archivo que se reproduce a una velocidad distinta, como una versión PAL, ahora mantiene sincronizadas sus pistas importadas: el audio se remuestrea a la velocidad del vídeo principal, manteniendo el tono, y los subtítulos se estiran\nEl vídeo muestra un estado de carga con los detalles y el progreso mientras se carga un archivo y se mide el desfase de su audio, en lugar de un indicador giratorio en las pistas\nUna nueva cola de muxing, que se muestra en la barra de estado, se encarga de la preparación de las pistas importadas y del corte y la unión de las partes del vídeo, con su progreso\nLas pistas importadas ahora reciben sus ajustes de compresión como las demás pistas\nUn error que se produce al procesar un vídeo ahora se muestra en lugar de que no ocurra nada, y el botón Procesar ya no se puede usar por segunda vez mientras se encadenan los pasos"
 }

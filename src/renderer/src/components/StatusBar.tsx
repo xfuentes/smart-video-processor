@@ -39,6 +39,7 @@ const noQueues: JobQueues = {
   loading: { running: false, queued: 0, paused: false },
   searching: { running: false, queued: 0, paused: false },
   encoding: { running: false, queued: 0, paused: false },
+  muxing: { running: false, queued: 0, paused: false },
   merging: { running: false, queued: 0, paused: false }
 }
 
@@ -223,7 +224,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
   )
 
   const stageCell = (
-    status: JobStatus.LOADING | JobStatus.SEARCHING | JobStatus.ENCODING | JobStatus.MERGING,
+    status: JobStatus.LOADING | JobStatus.SEARCHING | JobStatus.ENCODING | JobStatus.MUXING | JobStatus.MERGING,
     info: JobQueueInfo
   ) => {
     const active = info.running || info.queued > 0
@@ -240,7 +241,9 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
           ? t('status_bar.searching', { defaultValue: 'Searching' })
           : status === JobStatus.ENCODING
             ? t('status_bar.encoding', { defaultValue: 'Encoding' })
-            : t('status_bar.merging', { defaultValue: 'Merging' })
+            : status === JobStatus.MUXING
+              ? t('status_bar.muxing', { defaultValue: 'Muxing' })
+              : t('status_bar.merging', { defaultValue: 'Merging' })
     return cell(
       status,
       <>
@@ -320,6 +323,7 @@ export const StatusBar = ({ videos, selectedVideos }: Props) => {
       {stageCell(JobStatus.SEARCHING, queues.searching)}
       {stageCell(JobStatus.LOADING, queues.loading)}
       {stageCell(JobStatus.ENCODING, queues.encoding)}
+      {stageCell(JobStatus.MUXING, queues.muxing)}
       {stageCell(JobStatus.MERGING, queues.merging)}
       {diskCell('tmp', diskSpace.tmp)}
       {diskCell('output', diskSpace.output)}

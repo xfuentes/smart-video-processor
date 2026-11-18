@@ -773,7 +773,7 @@
   "track_list.external.measuring": "오디오 오프셋을 측정하는 중...",
   "track_list.external.no_tracks": "이 파일에서 가져올 수 있는 오디오 또는 자막 트랙이 없습니다.",
   "track_list.external.synced": "오프셋이 자동으로 측정되었습니다.",
-  "track_list.external.drift": "이 파일은 재생 속도가 다릅니다({percent}%). 트랙의 싱크가 점점 어긋나며, 아직 보정되지 않습니다.",
+  "track_list.external.drift": "이 파일은 재생 속도가 다릅니다({percent}%). 싱크를 맞추기 위해 트랙이 늘어나거나 줄어듭니다.",
   "track_list.external.unknown": "오프셋을 측정할 수 없습니다. 수동으로 설정하세요.",
   "track_list.external.delay.label": "지연(ms)",
   "track_list.external.remove": "이 파일과 해당 트랙 제거",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "같은 영상의 다른 버전에서 오디오 및 자막 트랙을 추가하고, 자동으로 싱크를 맞춥니다.",
   "processing.add_video_part.imported_tracks_tooltip": "다른 파일에서 트랙을 가져온 경우에는 사용할 수 없습니다.",
   "track_list.external.video_parts_tooltip": "비디오에 추가 파트가 있는 경우에는 사용할 수 없습니다.",
-  "settings.video_codec_in_filename.label": "영화 파일 이름에 비디오 코덱 추가"
+  "settings.video_codec_in_filename.label": "영화 파일 이름에 비디오 코덱 추가",
+  "video.message.loading_external_source": "[{filename}] 불러오는 중...",
+  "video.message.measuring_audio_offset_progress": "[{filename}]의 오디오 오프셋 측정 중: {current}/{total}번째 구간, 속도 비율 {ratio}...",
+  "video.message.preparing_imported_tracks": "가져온 트랙을 준비하는 중...",
+  "video.message.preparing_imported_tracks_progress": "가져온 트랙을 준비하는 중: {percent}%...",
+  "video.message.trimming_video_progress": "비디오 자르는 중: {percent}%...",
+  "video.message.cutting_part_progress": "{current}/{total} 파트 자르는 중: {percent}%...",
+  "video.message.joining_parts_progress": "파트를 병합하는 중: {percent}%...",
+  "job.status.muxing.short": "먹싱 중",
+  "status_bar.muxing": "먹싱 중",
+  "video.message.preparing_imported_file": "가져온 파일 {number}/{total}의 트랙을 준비하는 중...",
+  "video.message.preparing_imported_file_progress": "가져온 파일 {number}/{total}의 트랙 준비 중: {percent}%...",
+  "about.news.version_3_7_0.items": "PAL 버전처럼 재생 속도가 다른 파일에서 가져온 트랙의 싱크가 이제 유지됩니다. 오디오는 음높이를 포함해 메인 비디오의 속도에 맞게 리샘플링되고, 자막은 늘려서 맞춥니다.\n파일을 불러와 오디오 오프셋을 측정하는 동안, 트랙에 스피너가 표시되는 대신 비디오에 세부 정보와 진행률이 담긴 로드 중 상태가 표시됩니다.\n상태 표시줄에 표시되는 새로운 먹싱 대기열이 가져온 트랙의 준비 작업과 비디오 파트의 자르기 및 결합 작업을 진행률과 함께 처리합니다.\n가져온 트랙에도 이제 다른 트랙과 같은 압축 설정이 적용됩니다.\n비디오 처리 중 오류가 발생하면 아무 반응이 없는 대신 오류가 표시되며, 단계가 이어서 진행되는 동안에는 처리 버튼을 다시 누를 수 없습니다."
 }

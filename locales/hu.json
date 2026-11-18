@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Az audio eltolásának mérése...",
   "track_list.external.no_tracks": "Ebből a fájlból nem importálható hang- vagy feliratsáv.",
   "track_list.external.synced": "Az eltolást automatikusan megmértük.",
-  "track_list.external.drift": "Ez a fájl eltérő sebességgel játszódik le ({percent}%): a sávjai elcsúsznak a szinkronból, ez egyelőre nincs korrigálva.",
+  "track_list.external.drift": "Ez a fájl eltérő sebességgel játszódik le ({percent}%): a sávjai megnyújtásra kerülnek, hogy szinkronban maradjanak.",
   "track_list.external.unknown": "Az eltolást nem sikerült megmérni, állítsa be manuálisan.",
   "track_list.external.delay.label": "Késleltetés (ms)",
   "track_list.external.remove": "Fájl és sávjainak eltávolítása",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Hang- és feliratsávokat ad hozzá ugyanannak a videónak egy másik verziójából, automatikusan igazítva azokat.",
   "processing.add_video_part.imported_tracks_tooltip": "Nem érhető el, ha a sávok egy másik fájlból vannak importálva.",
   "track_list.external.video_parts_tooltip": "Nem érhető el, ha a videó további részekből áll.",
-  "settings.video_codec_in_filename.label": "Videokodek hozzáadása a filmfájlok nevéhez"
+  "settings.video_codec_in_filename.label": "Videokodek hozzáadása a filmfájlok nevéhez",
+  "video.message.loading_external_source": "[{filename}] betöltése...",
+  "video.message.measuring_audio_offset_progress": "A(z) [{filename}] hangeltolódásának mérése: {current}/{total}. rész, sebességarány: {ratio}...",
+  "video.message.preparing_imported_tracks": "Az importált sávok előkészítése...",
+  "video.message.preparing_imported_tracks_progress": "Az importált sávok előkészítése: {percent}%...",
+  "video.message.trimming_video_progress": "Videó vágása: {percent}%...",
+  "video.message.cutting_part_progress": "{current}/{total}. rész vágása: {percent}%...",
+  "video.message.joining_parts_progress": "Részek egyesítése: {percent}%...",
+  "job.status.muxing.short": "Muxolás",
+  "status_bar.muxing": "Muxolás",
+  "video.message.preparing_imported_file": "Az importált fájl sávjainak előkészítése: {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Az importált fájl sávjainak előkészítése {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "A más sebességgel lejátszott fájl (például egy PAL-változat) importált sávjai mostantól szinkronban maradnak: a hangot a rendszer a fő videó sebességére mintavételezi újra, a hangmagasságot is beleértve, a feliratokat pedig széthúzza\nA videó „Betöltés” állapotot jelenít meg a részletekkel és a folyamattal, amíg egy fájl betöltődik, és a hangeltolását megmérik, a sávokban látható forgó jelző helyett\nAz állapotsorban megjelenő új Muxolási sor kezeli az importált sávok előkészítését, valamint a videórészek vágását és összefűzését, a folyamat megjelenítésével\nAz importált sávok mostantól a többi sávhoz hasonlóan kapnak tömörítési beállításokat\nA videó feldolgozása közben fellépő hibát a program mostantól megjeleníti ahelyett, hogy semmi sem történne, és a Feldolgozás gomb már nem használható másodszor, amíg a lépések egymást követik"
 }

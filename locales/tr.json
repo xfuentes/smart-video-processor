@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Ses gecikmesi ölçülüyor...",
   "track_list.external.no_tracks": "Bu dosyadan hiçbir ses veya altyazı parçası içe aktarılamadı.",
   "track_list.external.synced": "Gecikme otomatik olarak ölçüldü.",
-  "track_list.external.drift": "Bu dosya farklı bir hızda oynatılıyor (%{percent}): parçaları senkronizasyondan çıkacak, bu henüz düzeltilmiyor.",
+  "track_list.external.drift": "Bu dosya farklı bir hızda oynatılıyor (%{percent}): senkronun korunması için parçaları esnetiliyor.",
   "track_list.external.unknown": "Gecikme ölçülemedi, elle ayarlayın.",
   "track_list.external.delay.label": "Gecikme (ms)",
   "track_list.external.remove": "Bu dosyayı ve parçalarını kaldır",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Aynı videonun başka bir sürümünden ses ve altyazı parçalarını ekler ve bunları otomatik olarak videoyla hizalar.",
   "processing.add_video_part.imported_tracks_tooltip": "Parçalar başka bir dosyadan içe aktarıldığında kullanılamaz.",
   "track_list.external.video_parts_tooltip": "Videoda ek bölümler olduğunda kullanılamaz.",
-  "settings.video_codec_in_filename.label": "Film dosya adlarına video codec bileşenini ekle"
+  "settings.video_codec_in_filename.label": "Film dosya adlarına video codec bileşenini ekle",
+  "video.message.loading_external_source": "[{filename}] yükleniyor...",
+  "video.message.measuring_audio_offset_progress": "[{filename}] dosyasının ses kaymasını ölçüyor: {current}/{total}. bölüm, hız oranı {ratio}...",
+  "video.message.preparing_imported_tracks": "İçe aktarılan parçalar hazırlanıyor...",
+  "video.message.preparing_imported_tracks_progress": "İçe aktarılan parçalar hazırlanıyor: %{percent}...",
+  "video.message.trimming_video_progress": "Video kırpılıyor: %{percent}...",
+  "video.message.cutting_part_progress": "{current}/{total}. bölüm kesiliyor: %{percent}...",
+  "video.message.joining_parts_progress": "Parçalar birleştiriliyor: %{percent}...",
+  "job.status.muxing.short": "Birleştiriliyor",
+  "status_bar.muxing": "Muxing yapılıyor",
+  "video.message.preparing_imported_file": "İçe aktarılan dosyanın parçaları hazırlanıyor {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "İçe aktarılan dosyanın parçaları hazırlanıyor {number}/{total}: %{percent}...",
+  "about.news.version_3_7_0.items": "PAL sürümü gibi farklı bir hızda oynatılan bir dosyanın içe aktarılan kanalları artık senkronize tutuluyor: ses, ana videonun hızına göre yeniden örnekleniyor (perde dahil) ve altyazılar uzatılıyor\nBir dosya yüklenirken ve ses ofseti ölçülürken video, kanallarda bir yükleniyor simgesi yerine ayrıntıları ve ilerlemeyi içeren bir Yükleniyor durumu gösteriyor\nDurum çubuğunda gösterilen yeni bir Muxing kuyruğu, içe aktarılan kanalların hazırlanmasını ve video parçalarının kesilip birleştirilmesini ilerlemeleriyle birlikte yönetiyor\nİçe aktarılan kanallar artık diğer kanallar gibi sıkıştırma ayarlarına sahip oluyor\nBir videoyu işlerken oluşan hata artık hiçbir şey olmuyormuş gibi bırakılmak yerine görüntüleniyor ve adımlar birbirini takip ederken İşle düğmesi artık ikinci kez kullanılamıyor"
 }

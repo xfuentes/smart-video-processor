@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Вимірювання зсуву аудіо...",
   "track_list.external.no_tracks": "З цього файлу не вдалося імпортувати жодної аудіо- чи субтитрової доріжки.",
   "track_list.external.synced": "Зсув виміряно автоматично.",
-  "track_list.external.drift": "Цей файл відтворюється з іншою швидкістю ({percent}%): його доріжки поступово розсинхронізуються, поки що це не виправляється.",
+  "track_list.external.drift": "Цей файл відтворюється з іншою швидкістю ({percent}%): його доріжки розтягуються, щоб залишатися синхронізованими.",
   "track_list.external.unknown": "Не вдалося виміряти зсув, налаштуйте його вручну.",
   "track_list.external.delay.label": "Затримка (мс)",
   "track_list.external.remove": "Видалити цей файл і його доріжки",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Додає аудіо- та субтитрові доріжки з іншої версії того самого відео та автоматично синхронізує їх із ним.",
   "processing.add_video_part.imported_tracks_tooltip": "Недоступно, коли доріжки імпортуються з іншого файлу.",
   "track_list.external.video_parts_tooltip": "Недоступно, коли відео має додаткові частини.",
-  "settings.video_codec_in_filename.label": "Додавати відеокодек до назв файлів фільмів"
+  "settings.video_codec_in_filename.label": "Додавати відеокодек до назв файлів фільмів",
+  "video.message.loading_external_source": "Завантаження [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Вимірювання зсуву аудіо для [{filename}]: частина {current}/{total} зі співвідношенням швидкості {ratio}...",
+  "video.message.preparing_imported_tracks": "Підготовка імпортованих доріжок...",
+  "video.message.preparing_imported_tracks_progress": "Підготовка імпортованих доріжок: {percent}%...",
+  "video.message.trimming_video_progress": "Обрізання відео: {percent}%...",
+  "video.message.cutting_part_progress": "Вирізання частини {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Об’єднання частин: {percent}%...",
+  "job.status.muxing.short": "Муксинг",
+  "status_bar.muxing": "Муксинг",
+  "video.message.preparing_imported_file": "Підготовка доріжок імпортованого файлу {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Підготовка доріжок імпортованого файлу {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "Файл, що відтворюється з іншою швидкістю, наприклад PAL-версія, тепер зберігає синхронізацію імпортованих доріжок: аудіо перетворюється на швидкість основного відео разом із висотою тону, а субтитри розтягуються\nЗамість індикатора завантаження в доріжках відео тепер показує статус «Завантаження» з деталями та прогресом, поки файл завантажується і вимірюється зсув його аудіо\nНова черга муксингу, яку видно в рядку стану, керує підготовкою імпортованих доріжок, а також нарізанням і склеюванням частин відео та показує їхній прогрес\nІмпортовані доріжки тепер отримують налаштування стиснення, як і інші доріжки\nПомилка під час обробки відео тепер відображається, а не залишається непоміченою, а кнопку «Обробити» більше не можна натиснути вдруге, поки виконуються послідовні кроки"
 }

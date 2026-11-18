@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Měření posunu zvuku...",
   "track_list.external.no_tracks": "Z tohoto souboru nelze importovat žádnou zvukovou stopu ani stopu titulků.",
   "track_list.external.synced": "Posun byl změřen automaticky.",
-  "track_list.external.drift": "Tento soubor se přehrává jinou rychlostí ({percent} %): jeho stopy se rozejdou se zbytkem videa, což zatím není opraveno.",
+  "track_list.external.drift": "Tento soubor se přehrává jinou rychlostí ({percent} %): jeho stopy jsou roztaženy, aby zůstaly synchronizované.",
   "track_list.external.unknown": "Posun se nepodařilo změřit, nastavte jej ručně.",
   "track_list.external.delay.label": "Zpoždění (ms)",
   "track_list.external.remove": "Odebrat tento soubor a jeho stopy",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Přidá zvukové stopy a stopy titulků z jiné verze stejného videa a automaticky je s ním zarovná.",
   "processing.add_video_part.imported_tracks_tooltip": "Není k dispozici, když jsou stopy importovány z jiného souboru.",
   "track_list.external.video_parts_tooltip": "Není k dispozici, když video obsahuje další části.",
-  "settings.video_codec_in_filename.label": "Přidat videokodek do názvů souborů filmů"
+  "settings.video_codec_in_filename.label": "Přidat videokodek do názvů souborů filmů",
+  "video.message.loading_external_source": "Načítání [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Měření posunu zvuku u [{filename}]: část {current}/{total} při poměru rychlosti {ratio}...",
+  "video.message.preparing_imported_tracks": "Připravují se importované stopy...",
+  "video.message.preparing_imported_tracks_progress": "Příprava importovaných stop: {percent} %...",
+  "video.message.trimming_video_progress": "Ořezávání videa: {percent} %...",
+  "video.message.cutting_part_progress": "Stříhání části {current}/{total}: {percent} %...",
+  "video.message.joining_parts_progress": "Spojování částí: {percent} %...",
+  "job.status.muxing.short": "Muxování",
+  "status_bar.muxing": "Muxování",
+  "video.message.preparing_imported_file": "Příprava stop importovaného souboru {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Příprava stop importovaného souboru {number}/{total}: {percent} %...",
+  "about.news.version_3_7_0.items": "U souboru, který se přehrává jinou rychlostí (například u verze PAL), zůstávají importované stopy nyní synchronizované: zvuk se převzorkuje na rychlost hlavního videa včetně výšky tónu a titulky se natáhnou\nBěhem načítání souboru a měření posunu jeho zvuku zobrazuje video stav Načítání s podrobnostmi a průběhem, místo indikátoru načítání ve stopách\nNová fronta muxování, zobrazená ve stavovém řádku, zajišťuje přípravu importovaných stop a stříhání a spojování částí videa a ukazuje jejich průběh\nImportované stopy nyní dostávají nastavení komprese stejně jako ostatní stopy\nChyba, ke které dojde při zpracování videa, se nyní zobrazí, místo aby se nestalo nic, a tlačítko Zpracovat už nelze použít podruhé, zatímco jednotlivé kroky na sebe navazují"
 }

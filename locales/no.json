@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Måler lydforskyvningen …",
   "track_list.external.no_tracks": "Ingen lyd- eller undertekstspor kunne importeres fra denne filen.",
   "track_list.external.synced": "Forskyvningen ble målt automatisk.",
-  "track_list.external.drift": "Denne filen spilles av med en annen hastighet ({percent} %): sporene vil gå ut av synk, og dette korrigeres ikke ennå.",
+  "track_list.external.drift": "Denne filen spilles av med en annen hastighet ({percent} %): sporene strekkes for å holde seg synkronisert.",
   "track_list.external.unknown": "Forskyvningen kunne ikke måles. Angi den manuelt.",
   "track_list.external.delay.label": "Forsinkelse (ms)",
   "track_list.external.remove": "Fjern denne filen og sporene fra den",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Legger til lyd- og undertekstspor fra en annen versjon av den samme videoen, automatisk justert etter den.",
   "processing.add_video_part.imported_tracks_tooltip": "Ikke tilgjengelig når spor er importert fra en annen fil.",
   "track_list.external.video_parts_tooltip": "Ikke tilgjengelig når videoen har flere deler.",
-  "settings.video_codec_in_filename.label": "Legg til videokodeken i filnavnene på filmene"
+  "settings.video_codec_in_filename.label": "Legg til videokodeken i filnavnene på filmene",
+  "video.message.loading_external_source": "Laster inn [{filename}] ...",
+  "video.message.measuring_audio_offset_progress": "Måler lydforskyvningen for [{filename}]: del {current}/{total} med hastighetsforhold {ratio} ...",
+  "video.message.preparing_imported_tracks": "Forbereder de importerte sporene...",
+  "video.message.preparing_imported_tracks_progress": "Forbereder de importerte sporene: {percent} %...",
+  "video.message.trimming_video_progress": "Klipper videoen: {percent} %...",
+  "video.message.cutting_part_progress": "Klipper del {current}/{total}: {percent} %...",
+  "video.message.joining_parts_progress": "Slår sammen delene: {percent} %...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Forbereder sporene i den importerte filen {number}/{total} ...",
+  "video.message.preparing_imported_file_progress": "Forbereder sporene i den importerte filen {number}/{total}: {percent} %...",
+  "about.news.version_3_7_0.items": "En fil som spilles av med en annen hastighet, for eksempel en PAL-versjon, får nå de importerte sporene holdt synkronisert: lyden resamples til hastigheten på hovedvideoen, tonehøyde inkludert, og undertekstene strekkes\nVideoen viser statusen Laster med detaljer og fremdrift mens en fil lastes og lydforskyvningen måles, i stedet for en spinner i sporene\nEn ny Muxing-kø, vist i statuslinjen, håndterer klargjøringen av de importerte sporene samt klipping og sammenføyning av videodelene, med fremdrift\nDe importerte sporene får nå sine komprimeringsinnstillinger på samme måte som de andre sporene\nEn feil som oppstår under behandling av en video, vises nå i stedet for at ingenting skjer, og Behandle-knappen kan ikke lenger brukes en ekstra gang mens trinnene pågår etter hverandre"
 }

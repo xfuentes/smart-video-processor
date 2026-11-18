@@ -96,6 +96,22 @@ test('A PAL speed-up is reported as a drift with its speed ratio', async () => {
   expect(Math.abs(result.delayMs + 500)).toBeLessThanOrEqual(5)
 })
 
+test('The progress of the measure is reported window by window', async () => {
+  const film = sampleAt(noise(DURATION, 7))
+  const reader = readerOf({ main: film, other: film })
+  const windows: number[] = []
+  await measureAudioSync(
+    reader,
+    { path: 'main', audioIndex: 0, duration: DURATION },
+    { path: 'other', audioIndex: 0, duration: DURATION },
+    () => false,
+    ({ window, windowCount }) => windows.push(window / windowCount)
+  )
+  expect(windows.length).toBeGreaterThan(0)
+  expect(windows[0]).toBeCloseTo(1 / 12)
+  expect(Math.max(...windows)).toBe(1)
+})
+
 test('Unrelated files are reported as unknown', async () => {
   const reader = readerOf({ main: sampleAt(noise(DURATION, 5)), other: sampleAt(noise(DURATION, 6)) })
   const result = await measureAudioSync(

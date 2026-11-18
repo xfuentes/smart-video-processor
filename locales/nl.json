@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Audio-offset wordt gemeten...",
   "track_list.external.no_tracks": "Uit dit bestand kon geen audio- of ondertitelspoor worden geïmporteerd.",
   "track_list.external.synced": "De offset is automatisch gemeten.",
-  "track_list.external.drift": "Dit bestand wordt met een andere snelheid afgespeeld ({percent}%): de tracks lopen niet meer synchroon. Dit wordt nog niet gecorrigeerd.",
+  "track_list.external.drift": "Dit bestand wordt met een andere snelheid afgespeeld ({percent}%): de tracks worden uitgerekt om synchroon te blijven.",
   "track_list.external.unknown": "De offset kon niet worden gemeten, stel deze handmatig in.",
   "track_list.external.delay.label": "Vertraging (ms)",
   "track_list.external.remove": "Dit bestand en de bijbehorende tracks verwijderen",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Voegt audio- en ondertitelsporen uit een andere versie van dezelfde video toe, automatisch daarop uitgelijnd.",
   "processing.add_video_part.imported_tracks_tooltip": "Niet beschikbaar wanneer tracks uit een ander bestand zijn geïmporteerd.",
   "track_list.external.video_parts_tooltip": "Niet beschikbaar wanneer de video extra delen heeft.",
-  "settings.video_codec_in_filename.label": "Videocodec toevoegen aan de bestandsnamen van films"
+  "settings.video_codec_in_filename.label": "Videocodec toevoegen aan de bestandsnamen van films",
+  "video.message.loading_external_source": "[{filename}] laden...",
+  "video.message.measuring_audio_offset_progress": "Audio-offset van [{filename}] meten: deel {current}/{total} met snelheidsverhouding {ratio}...",
+  "video.message.preparing_imported_tracks": "De geïmporteerde tracks worden voorbereid...",
+  "video.message.preparing_imported_tracks_progress": "Geïmporteerde tracks voorbereiden: {percent}%...",
+  "video.message.trimming_video_progress": "Video bijsnijden: {percent}%...",
+  "video.message.cutting_part_progress": "Deel {current}/{total} wordt geknipt: {percent}%...",
+  "video.message.joining_parts_progress": "Delen samenvoegen: {percent}%...",
+  "job.status.muxing.short": "Muxen",
+  "status_bar.muxing": "Muxen",
+  "video.message.preparing_imported_file": "Sporen van het geïmporteerde bestand {number}/{total} voorbereiden...",
+  "video.message.preparing_imported_file_progress": "Sporen van het geïmporteerde bestand {number}/{total} voorbereiden: {percent}%...",
+  "about.news.version_3_7_0.items": "Een bestand dat met een andere snelheid wordt afgespeeld, zoals een PAL-versie, houdt nu de geïmporteerde tracks synchroon: de audio wordt opnieuw gesampled naar de snelheid van de hoofdvideo, inclusief toonhoogte, en de ondertitels worden uitgerekt\nDe video toont een status Laden met de details en de voortgang terwijl een bestand wordt geladen en de audio-offset ervan wordt gemeten, in plaats van een spinner in de tracks\nEen nieuwe Muxwachtrij, weergegeven in de statusbalk, verzorgt de voorbereiding van de geïmporteerde tracks en het knippen en samenvoegen van de videodelen, inclusief de voortgang ervan\nDe geïmporteerde tracks krijgen nu hun compressie-instellingen net als de andere tracks\nEen fout tijdens het verwerken van een video wordt nu weergegeven in plaats van dat er niets gebeurt, en de knop Verwerken kan niet meer een tweede keer worden gebruikt terwijl de stappen op elkaar volgen"
 }

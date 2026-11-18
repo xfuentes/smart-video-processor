@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Misurazione dello sfasamento audio...",
   "track_list.external.no_tracks": "Non è stato possibile importare alcuna traccia audio o dei sottotitoli da questo file.",
   "track_list.external.synced": "Lo sfasamento è stato misurato automaticamente.",
-  "track_list.external.drift": "Questo file viene riprodotto a una velocità diversa ({percent}%): le sue tracce andranno progressivamente fuori sincronia e questo non viene ancora corretto.",
+  "track_list.external.drift": "Questo file viene riprodotto a una velocità diversa ({percent}%): le sue tracce vengono adattate per restare sincronizzate.",
   "track_list.external.unknown": "Non è stato possibile misurare lo sfasamento, impostalo manualmente.",
   "track_list.external.delay.label": "Ritardo (ms)",
   "track_list.external.remove": "Rimuovi questo file e le sue tracce",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Aggiunge tracce audio e sottotitoli da un'altra versione dello stesso video, allineandole automaticamente.",
   "processing.add_video_part.imported_tracks_tooltip": "Non disponibile quando le tracce vengono importate da un altro file.",
   "track_list.external.video_parts_tooltip": "Non disponibile quando il video ha parti aggiuntive.",
-  "settings.video_codec_in_filename.label": "Aggiungi il codec video ai nomi dei file dei film"
+  "settings.video_codec_in_filename.label": "Aggiungi il codec video ai nomi dei file dei film",
+  "video.message.loading_external_source": "Caricamento di [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Misurazione dello sfasamento audio di [{filename}]: parte {current}/{total} con rapporto di velocità {ratio}...",
+  "video.message.preparing_imported_tracks": "Preparazione delle tracce importate...",
+  "video.message.preparing_imported_tracks_progress": "Preparazione delle tracce importate: {percent}%...",
+  "video.message.trimming_video_progress": "Taglio del video in corso: {percent}%...",
+  "video.message.cutting_part_progress": "Taglio della parte {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Unione delle parti: {percent}%...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Preparazione delle tracce del file importato {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Preparazione delle tracce del file importato {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "Un file riprodotto a una velocità diversa, ad esempio una versione PAL, ora mantiene sincronizzate le tracce importate: l'audio viene ricampionato alla velocità del video principale, intonazione compresa, e i sottotitoli vengono allungati\nIl video mostra uno stato di caricamento con i dettagli e l'avanzamento mentre un file viene caricato e il suo sfasamento audio viene misurato, al posto di un indicatore di caricamento nelle tracce\nUna nuova coda di muxing, mostrata nella barra di stato, gestisce la preparazione delle tracce importate e il taglio e l'unione delle parti del video, con il relativo avanzamento\nLe tracce importate ora ricevono le impostazioni di compressione come le altre tracce\nUn errore che si verifica durante l'elaborazione di un video ora viene mostrato invece di non succedere nulla, e il pulsante Elabora non può più essere usato una seconda volta mentre le fasi si susseguono"
 }

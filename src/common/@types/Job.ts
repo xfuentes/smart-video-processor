@@ -24,6 +24,7 @@ export enum JobStatus {
   GRABBING = 'Grabbing',
   ENCODING = 'Encoding',
   MERGING = 'Merging',
+  MUXING = 'Muxing',
   SUCCESS = 'Success',
   WARNING = 'Warning',
   ERROR = 'Error',
@@ -32,13 +33,19 @@ export enum JobStatus {
 }
 
 export type JobType =
-  JobStatus.LOADING | JobStatus.SEARCHING | JobStatus.ENCODING | JobStatus.MERGING | JobStatus.GRABBING
+  | JobStatus.LOADING
+  | JobStatus.SEARCHING
+  | JobStatus.ENCODING
+  | JobStatus.MUXING
+  | JobStatus.MERGING
+  | JobStatus.GRABBING
 
 export type JobQueueInfo = { running: boolean; queued: number; paused: boolean; progress?: number }
 export type JobQueues = {
   loading: JobQueueInfo
   searching: JobQueueInfo
   encoding: JobQueueInfo
+  muxing: JobQueueInfo
   merging: JobQueueInfo
 }
 

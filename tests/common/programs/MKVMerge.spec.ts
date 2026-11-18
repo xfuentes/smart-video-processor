@@ -1101,6 +1101,72 @@ test('MKVMerge tracks imported from another file', async () => {
   ])
 })
 
+test('MKVMerge stretches the tracks imported from a file playing at another speed', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
+  const spy = genSpawnSpy()
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const otherPath = getFakeAbsolutePath('Download', 'other.avi')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  const imported = new Track(1, '', TrackType.AUDIO, 'MP3', 'fr', {}, false, false, undefined, undefined)
+  imported.externalSourceUuid = 'other-uuid'
+  imported.sourceTrackId = 1
+  const tracks = [new Track(0, '', TrackType.VIDEO, 'AVC', 'en', {}, true, false, undefined, undefined), imported]
+
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [], tracks, undefined, [
+    { uuid: 'other-uuid', path: otherPath, delayMs: -120, speedRatio: 25 / 23.976 }
+  ])
+
+  const spawnArgs = spy.mock.lastCall[1] as string[]
+  const otherArgs = spawnArgs.slice(spawnArgs.indexOf(')') + 1)
+  expect(otherArgs).toContain('--sync')
+  expect(otherArgs[otherArgs.indexOf('--sync') + 1]).toBe('1:-120,1.042709376')
+})
+
+test('MKVMerge reads the resampled audio of a file playing at another speed from its own file', async () => {
+  vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
+  vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())
+  const spy = genSpawnSpy()
+  const fullPath = getFakeAbsolutePath('Download', 'something.mkv')
+  const otherPath = getFakeAbsolutePath('Download', 'other.avi')
+  const resampledPath = getFakeAbsolutePath('Download', 'resampled.mkv')
+  const outputPath = getFakeAbsolutePath('Download', 'ReworkedTest')
+  const imported = new Track(1, '', TrackType.AUDIO, 'MP3', 'fr', {}, false, false, undefined, undefined)
+  imported.externalSourceUuid = 'other-uuid'
+  imported.sourceTrackId = 1
+  const tracks = [new Track(0, '', TrackType.VIDEO, 'AVC', 'en', {}, true, false, undefined, undefined), imported]
+
+  await MKVMerge.getInstance().processFile(path.basename(fullPath), fullPath, outputPath, [], tracks, undefined, [
+    {
+      uuid: 'other-uuid',
+      path: otherPath,
+      delayMs: 2244,
+      speedRatio: 25 / 23.976,
+      resampledAudio: { path: resampledPath, fileTrackIds: { 1: 0 } }
+    }
+  ])
+
+  const spawnArgs = spy.mock.lastCall[1] as string[]
+  const otherArgs = spawnArgs.slice(spawnArgs.indexOf(')') + 1)
+  expect(otherArgs).toStrictEqual([
+    '--no-video',
+    '--no-attachments',
+    '--no-chapters',
+    '--no-global-tags',
+    '--no-track-tags',
+    '--audio-tracks',
+    '0',
+    '--no-subtitles',
+    '--sync',
+    '0:2244',
+    '--language',
+    '0:fr',
+    '(',
+    resampledPath,
+    ')'
+  ])
+})
+
 test('MKVMerge subtitles imported from another file after a conversion', async () => {
   vi.spyOn(Processes, 'setPriority').mockImplementation(vi.fn())
   vi.spyOn(Files, 'mkdirSync').mockImplementation(vi.fn())

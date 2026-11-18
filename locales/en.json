@@ -773,7 +773,7 @@
   "track_list.external.measuring": "Measuring the audio offset...",
   "track_list.external.no_tracks": "No audio or subtitle track could be imported from this file.",
   "track_list.external.synced": "The offset was measured automatically.",
-  "track_list.external.drift": "This file plays at a different speed ({percent}%): its tracks will drift out of sync, this is not corrected yet.",
+  "track_list.external.drift": "This file plays at a different speed ({percent}%): its tracks are stretched to stay in sync.",
   "track_list.external.unknown": "The offset could not be measured, set it manually.",
   "track_list.external.delay.label": "Delay (ms)",
   "track_list.external.remove": "Remove this file and its tracks",
@@ -785,5 +785,17 @@
   "about.features.track_import.description": "Adds audio and subtitle tracks from another version of the same video, automatically aligned with it.",
   "processing.add_video_part.imported_tracks_tooltip": "Not available when tracks are imported from another file.",
   "track_list.external.video_parts_tooltip": "Not available when the video has additional parts.",
-  "settings.video_codec_in_filename.label": "Add the video codec to the movie file names"
+  "settings.video_codec_in_filename.label": "Add the video codec to the movie file names",
+  "video.message.loading_external_source": "Loading [{filename}]...",
+  "video.message.measuring_audio_offset_progress": "Measuring the audio offset of [{filename}]: part {current}/{total} at speed ratio {ratio}...",
+  "video.message.preparing_imported_tracks": "Preparing the imported tracks...",
+  "video.message.preparing_imported_tracks_progress": "Preparing the imported tracks: {percent}%...",
+  "video.message.trimming_video_progress": "Trimming the video: {percent}%...",
+  "video.message.cutting_part_progress": "Cutting the part {current}/{total}: {percent}%...",
+  "video.message.joining_parts_progress": "Joining the parts: {percent}%...",
+  "job.status.muxing.short": "Muxing",
+  "status_bar.muxing": "Muxing",
+  "video.message.preparing_imported_file": "Preparing the tracks of the imported file {number}/{total}...",
+  "video.message.preparing_imported_file_progress": "Preparing the tracks of the imported file {number}/{total}: {percent}%...",
+  "about.news.version_3_7_0.items": "A file playing at a different speed, such as a PAL version, now has its imported tracks kept in sync: the audio is resampled to the speed of the main video, pitch included, and the subtitles are stretched\nThe video shows a Loading status with the details and the progress while a file is loaded and its audio offset measured, instead of a spinner in the tracks\nA new Muxing queue, shown in the status bar, handles the preparation of the imported tracks and the cutting and joining of the video parts, with their progress\nThe imported tracks now get their compression settings like the other tracks\nAn error occurring while processing a video is now displayed instead of nothing happening, and the Process button can no longer be used a second time while the steps follow each other"
 }

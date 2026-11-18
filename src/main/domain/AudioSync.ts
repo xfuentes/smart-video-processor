@@ -26,6 +26,8 @@ const MIN_INLIERS = 4
 const INLIER_TOLERANCE_SECONDS = 0.03
 const MAX_RESIDUAL_SLOPE = 0.005
 const MAX_SYNCED_DRIFT_SECONDS = 0.1
+// Below this residual slope the usual speed ratio is exact, the difference only comes from the measure.
+const SNAP_SLOPE = 0.0002
 // The usual speed ratios between the 23.976, 24 and 25 frames per second versions of a film.
 const SPEED_RATIOS = [1, 25 / 23.976, 23.976 / 25, 25 / 24, 24 / 25]
 
@@ -43,6 +45,8 @@ export interface AudioSyncSource {
   audioIndex: number
   duration: number
 }
+
+export type AudioSyncProgress = (progress: { ratio: number; window: number; windowCount: number }) => void
 
 export type AudioWindowReader = (
   path: string,
@@ -210,7 +214,8 @@ const measurePoints = async (
   main: AudioSyncSource,
   other: AudioSyncSource,
   ratio: number,
-  isCancelled: () => boolean
+  isCancelled: () => boolean,
+  onProgress?: AudioSyncProgress
 ): Promise<Point[]> => {
   const points: Point[] = []
   const usable = Math.min(main.duration, other.duration * ratio) - WINDOW_SECONDS
@@ -220,6 +225,7 @@ const measurePoints = async (
   const windowLength = WINDOW_SECONDS * SYNC_SAMPLE_RATE
   const searchLength = (WINDOW_SECONDS + 2 * MAX_LAG_SECONDS) * SYNC_SAMPLE_RATE
   for (let i = 0; i < WINDOW_COUNT && !isCancelled(); i++) {
+    onProgress?.({ ratio, window: i + 1, windowCount: WINDOW_COUNT })
     const time = usable * (0.05 + (0.9 * i) / (WINDOW_COUNT - 1))
     const otherStart = Math.max(0, (time - MAX_LAG_SECONDS) / ratio)
     const reference = await reader(main.path, main.audioIndex, time, WINDOW_SECONDS)
@@ -242,18 +248,23 @@ export const measureAudioSync = async (
   reader: AudioWindowReader,
   main: AudioSyncSource,
   other: AudioSyncSource,
-  isCancelled: () => boolean = () => false
+  isCancelled: () => boolean = () => false,
+  onProgress?: AudioSyncProgress
 ): Promise<AudioSyncResult> => {
   const expectedRatio = other.duration > 0 ? main.duration / other.duration : 1
   const ratios = [...SPEED_RATIOS].sort((a, b) => Math.abs(a - expectedRatio) - Math.abs(b - expectedRatio))
   for (const ratio of ratios) {
-    const points = await measurePoints(reader, main, other, ratio, isCancelled)
+    const points = await measurePoints(reader, main, other, ratio, isCancelled, onProgress)
     if (isCancelled()) {
       break
     }
     const line = fitLine(points)
     if (line === undefined || line.inliers.length < Math.max(MIN_INLIERS, Math.ceil(points.length / 2))) {
       continue
+    }
+    if (ratio !== 1 && Math.abs(line.slope) <= SNAP_SLOPE) {
+      const delayMs = Math.round(median(line.inliers.map((p) => p.offset)) * 1000)
+      return { status: 'drift', delayMs, speedRatio: ratio }
     }
     const speedRatio = ratio / (1 - line.slope)
     if (Math.abs(speedRatio - 1) * main.duration <= MAX_SYNCED_DRIFT_SECONDS) {
