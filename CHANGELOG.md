@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.7.1] - 2026-11-20
+
+### Changed
+
+- The short and long descriptions of the application, in the About dialog, the README, the Microsoft Store listing and the Snap desktop entry, now mention the remux and the import of tracks with automatic sync, even when the other file plays at another speed.
+- The list of core features of the README and of the Microsoft Store listing is corrected: it now covers the lossless remux, the audio encoding to AAC and the queues of the processing steps.
+
 ## [3.7.0] - 2026-11-18
 
 ### Added

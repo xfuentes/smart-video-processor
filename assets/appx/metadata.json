@@ -18,27 +18,23 @@
     "en-us": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "processing",
-          "encoding",
-          "organizing"
-        ],
+        "keywords": ["video", "processing", "encoding", "organizing"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
         "websiteUrl": "",
-        "description": "This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Jellyfin-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.",
+        "description": "This tool automatically identifies your movies and TV shows using TheMovieDB and TheTVDB, then takes care of the whole cleanup in one place: it renames files with Jellyfin and Kodi friendly conventions, attaches artwork, corrects metadata (including the language and type of each track) and remuxes everything into a clean Matroska file without touching the quality. It can also cut or join videos, import audio and subtitle tracks from another version of the same video with an automatic sync, even when it plays at another speed, and re-encode to H.264, H.265 or AAC only when it is worth it.",
         "features": [
           "Automatic Media Recognition: Identifies movies and TV shows using TheMovieDB or TVDB",
           "Smart File Renaming: Renames files using Jellyfin/Kodi-friendly naming conventions",
           "Metadata Correction: Fetches and corrects title, year, episode name...",
           "Audio & Subtitle Track Management: Detects and labels audio/subtitle languages; renames and reorders tracks.",
-          "Track Import With Automatic Sync: Adds audio and subtitle tracks from another version of the same video, automatically aligned with it.",
+          "Track Import With Automatic Sync: Adds audio and subtitle tracks from another version of the same video, automatically aligned with it, even when that version plays at another speed (e.g. a PAL DVD rip).",
           "Poster & Thumbnail Download: Automatically downloads posters and thumbnails.",
+          "Lossless Remuxing: Rebuilds each video as a clean Matroska (.mkv) file without re-encoding what does not need it.",
           "Media File Splitting & Joining: Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.",
-          "Video Encoding (H.264 / H.265): Converts media to efficient formats with predefined presets.",
-          "Batch Processing: Handles multiple files simultaneously with queue management."
+          "Video & Audio Encoding (H.264 / H.265 / AAC): Converts the tracks worth shrinking to efficient formats with predefined presets.",
+          "Batch Processing: Handles multiple videos in queues, with the progress of each step (loading, muxing, encoding, merging)."
         ],
         "releaseNotes": "- Added a cleanup progress dialog that shows the deletion progress of temporary files when closing the application.\n\n- Fixed escaped newlines in the What's New list for version 1.8.5 so each item renders as a separate bullet.",
         "images": [
@@ -96,7 +92,7 @@
         "recommendedHardware": [],
         "minimumHardware": [],
         "title": "Smart Video Processor",
-        "shortDescription": "Automated video processing. Re-Organize, Re-encode, adds metadata and image.",
+        "shortDescription": "Automated video processing. Re-Organize, Re-mux, Re-encode, adds metadata and icon when needed.",
         "devStudio": "Xavier Fuentes"
       },
       "platformOverrides": {}
@@ -104,12 +100,7 @@
     "fr-fr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "vidéo",
-          "traitement",
-          "encodage",
-          "organisation"
-        ],
+        "keywords": ["vidéo", "traitement", "encodage", "organisation"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -190,12 +181,7 @@
     "de-de": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "Video",
-          "Verarbeitung",
-          "Kodierung",
-          "Organisation"
-        ],
+        "keywords": ["Video", "Verarbeitung", "Kodierung", "Organisation"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -276,12 +262,7 @@
     "it-it": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "elaborazione",
-          "codifica",
-          "organizzazione"
-        ],
+        "keywords": ["video", "elaborazione", "codifica", "organizzazione"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -362,12 +343,7 @@
     "es-es": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "vídeo",
-          "procesamiento",
-          "codificación",
-          "organización"
-        ],
+        "keywords": ["vídeo", "procesamiento", "codificación", "organización"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -448,12 +424,7 @@
     "pt-br": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "vídeo",
-          "processamento",
-          "codificação",
-          "organização"
-        ],
+        "keywords": ["vídeo", "processamento", "codificação", "organização"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -534,12 +505,7 @@
     "nl-nl": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "verwerking",
-          "codering",
-          "organiseren"
-        ],
+        "keywords": ["video", "verwerking", "codering", "organiseren"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -620,12 +586,7 @@
     "zh-cn": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "视频",
-          "处理",
-          "编码",
-          "组织"
-        ],
+        "keywords": ["视频", "处理", "编码", "组织"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -706,12 +667,7 @@
     "ja-jp": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "動画",
-          "処理",
-          "エンコーディング",
-          "整理"
-        ],
+        "keywords": ["動画", "処理", "エンコーディング", "整理"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -792,12 +748,7 @@
     "ko-kr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "동영상",
-          "처리",
-          "인코딩",
-          "정리"
-        ],
+        "keywords": ["동영상", "처리", "인코딩", "정리"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -878,12 +829,7 @@
     "ru-ru": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "видео",
-          "обработка",
-          "кодирование",
-          "организация"
-        ],
+        "keywords": ["видео", "обработка", "кодирование", "организация"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -964,12 +910,7 @@
     "ar-sa": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "فيديو",
-          "يعالج",
-          "التشفير",
-          "تنظيم"
-        ],
+        "keywords": ["فيديو", "يعالج", "التشفير", "تنظيم"],
         "licenseTerms": "هذا البرنامج برنامج حر: يمكنك إعادة توزيعه و/أو تعديله\nبموجب شروط رخصة جنو العمومية العامة كما نشرتها\nمؤسسة البرمجيات الحرة، سواء الإصدار 3 من الرخصة، أو\n(حسب اختيارك) أي إصدار لاحق.\n\nيُوزع هذا البرنامج على أمل أن يكون مفيدًا،\nولكن بدون أي ضمان؛ حتى بدون الضمان الضمني لقابلية التسويق أو الملاءمة لغرض معين. راجع\nرخصة جنو العمومية العامة لمزيد من التفاصيل.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1050,12 +991,7 @@
     "cs-cz": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "zpracování",
-          "kódování",
-          "organizování"
-        ],
+        "keywords": ["video", "zpracování", "kódování", "organizování"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1136,12 +1072,7 @@
     "da-dk": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "forarbejdning",
-          "kodning",
-          "organisering"
-        ],
+        "keywords": ["video", "forarbejdning", "kodning", "organisering"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1222,12 +1153,7 @@
     "el-gr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "βίντεο",
-          "επεξεργασία",
-          "κωδικοποίηση",
-          "οργανωτικός"
-        ],
+        "keywords": ["βίντεο", "επεξεργασία", "κωδικοποίηση", "οργανωτικός"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1308,12 +1234,7 @@
     "fi-fi": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "käsittely",
-          "koodaus",
-          "järjestäminen"
-        ],
+        "keywords": ["video", "käsittely", "koodaus", "järjestäminen"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1394,12 +1315,7 @@
     "hu-hu": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "videó",
-          "feldolgozás",
-          "kódolás",
-          "szervezés"
-        ],
+        "keywords": ["videó", "feldolgozás", "kódolás", "szervezés"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1480,12 +1396,7 @@
     "id-id": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "pengolahan",
-          "pengkodean",
-          "mengorganisir"
-        ],
+        "keywords": ["video", "pengolahan", "pengkodean", "mengorganisir"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1566,12 +1477,7 @@
     "nb-no": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "behandling",
-          "koding",
-          "organisering"
-        ],
+        "keywords": ["video", "behandling", "koding", "organisering"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1652,12 +1558,7 @@
     "pl-pl": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "wideo",
-          "przetwarzanie",
-          "kodowanie",
-          "organizowanie"
-        ],
+        "keywords": ["wideo", "przetwarzanie", "kodowanie", "organizowanie"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1738,12 +1639,7 @@
     "sv-se": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "bearbetning",
-          "kodning",
-          "organisering"
-        ],
+        "keywords": ["video", "bearbetning", "kodning", "organisering"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1824,12 +1720,7 @@
     "tr-tr": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "video",
-          "işleme",
-          "kodlama",
-          "organize etmek"
-        ],
+        "keywords": ["video", "işleme", "kodlama", "organize etmek"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1910,12 +1801,7 @@
     "uk-ua": {
       "baseListing": {
         "copyrightAndTrademarkInfo": "Copyright (c) 2025-2026. Xavier Fuentes <xfuentes-dev@serviam.cc>",
-        "keywords": [
-          "відео",
-          "обробка",
-          "кодування",
-          "організуючий"
-        ],
+        "keywords": ["відео", "обробка", "кодування", "організуючий"],
         "licenseTerms": "This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.",
         "privacyPolicy": "",
         "supportContact": "",
@@ -1994,10 +1880,7 @@
       "platformOverrides": {}
     }
   },
-  "hardwarePreferences": [
-    "Keyboard",
-    "Mouse"
-  ],
+  "hardwarePreferences": ["Keyboard", "Mouse"],
   "automaticBackupEnabled": true,
   "canInstallOnRemovableMedia": true,
   "isGameDvrEnabled": false,
@@ -2068,9 +1951,7 @@
       ],
       "minimumDirectXVersion": "None",
       "minimumSystemRam": "None",
-      "targetDeviceFamilies": [
-        "Windows.Desktop min version 10.0.17763.0"
-      ]
+      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
     },
     {
       "fileName": "smart-video-processor-x64.appx",
@@ -2112,9 +1993,7 @@
       ],
       "minimumDirectXVersion": "None",
       "minimumSystemRam": "None",
-      "targetDeviceFamilies": [
-        "Windows.Desktop min version 10.0.17763.0"
-      ]
+      "targetDeviceFamilies": ["Windows.Desktop min version 10.0.17763.0"]
     }
   ],
   "packageDeliveryOptions": {

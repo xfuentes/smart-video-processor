@@ -83,7 +83,7 @@ export const AboutDialog = () => {
               <p style={{ fontSize: 'small' }}>
                 {_('about.description', {
                   defaultValue:
-                    'This tool automatically identifies your movies and TV shows using popular databases, then streamlines the entire process: rename files using Jellyfin-friendly conventions, attach artwork, correct metadata (including track language and type), split or join media files and encode to H.264 or H.265—all in one place.'
+                    'This tool automatically identifies your movies and TV shows using TheMovieDB and TheTVDB, then takes care of the whole cleanup in one place: it renames files with Jellyfin and Kodi friendly conventions, attaches artwork, corrects metadata (including the language and type of each track) and remuxes everything into a clean Matroska file without touching the quality. It can also cut or join videos, import audio and subtitle tracks from another version of the same video with an automatic sync, even when it plays at another speed, and re-encode to H.264, H.265 or AAC only when it is worth it.'
                 })}
                 <br />
                 <Link onClick={() => window.open('https://github.com/xfuentes/smart-video-processor', '_blank')}>

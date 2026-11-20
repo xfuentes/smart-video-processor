@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.7.1' })}</h4>
+      <ul>
+        {_('about.news.version_3_7_1.items', {
+          defaultValue:
+            'The short and long descriptions of the application now mention the remux and the import of tracks with automatic sync, even when the other file plays at another speed\nThe list of core features of the README and of the Microsoft Store listing is corrected: it now covers the lossless remux, the audio encoding to AAC and the queues of the processing steps'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.7.0' })}</h4>
       <ul>
         {_('about.news.version_3_7_0.items', {

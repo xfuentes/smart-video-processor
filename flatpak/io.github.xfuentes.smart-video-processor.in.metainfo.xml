@@ -74,11 +74,8 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>A file playing at a different speed, such as a PAL version, now has its imported tracks kept in sync: the audio is resampled to the speed of the main video, pitch included, and the subtitles are stretched</li>
-          <li>The video shows a Loading status with the details and the progress while a file is loaded and its audio offset measured, instead of a spinner in the tracks</li>
-          <li>A new Muxing queue, shown in the status bar, handles the preparation of the imported tracks and the cutting and joining of the video parts, with their progress</li>
-          <li>The imported tracks now get their compression settings like the other tracks</li>
-          <li>An error occurring while processing a video is now displayed instead of nothing happening, and the Process button can no longer be used a second time while the steps follow each other</li>
+          <li>The short and long descriptions of the application now mention the remux and the import of tracks with automatic sync, even when the other file plays at another speed</li>
+          <li>The list of core features of the README and of the Microsoft Store listing is corrected: it now covers the lossless remux, the audio encoding to AAC and the queues of the processing steps</li>
         </ul>
       </description>
     </release>

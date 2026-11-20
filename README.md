@@ -5,10 +5,13 @@
 [![SVP Release](https://img.shields.io/github/v/release/xfuentes/smart-video-processor?logo=npm&sort=semver)](https://github.com/xfuentes/smart-video-processor/releases)
 ![GitHub License](https://img.shields.io/github/license/xfuentes/smart-video-processor)
 
-This tool automatically identifies your movies and TV shows using popular databases,
-then streamlines the entire process: rename files using Jellyfin-friendly conventions,
-attach artwork, correct metadata (including track language and type), split or join media files
-and encode to H.264 or H.265—all in one place.
+This tool automatically identifies your movies and TV shows using TheMovieDB and TheTVDB, then takes
+care of the whole cleanup in one place: it renames files with Jellyfin and Kodi friendly
+conventions, attaches artwork, corrects metadata (including the language and type of each track) and
+remuxes everything into a clean Matroska file without touching the quality. It can also cut or join
+videos, import audio and subtitle tracks from another version of the same video with an automatic
+sync, even when it plays at another speed, and re-encode to H.264, H.265 or AAC only when it is
+worth it.
 
 #### Core Features
 
@@ -16,11 +19,12 @@ and encode to H.264 or H.265—all in one place.
 - **Smart File Renaming:** Renames files using Jellyfin/Kodi-friendly naming conventions
 - **Metadata Correction:** Fetches and corrects title, year, episode name...
 - **Audio & Subtitle Track Management:** Detects and labels audio/subtitle languages; renames and reorders tracks.
-- **Track Import With Automatic Sync:** Adds audio and subtitle tracks from another version of the same video, automatically aligned with it.
+- **Track Import With Automatic Sync:** Adds audio and subtitle tracks from another version of the same video, automatically aligned with it, even when that version plays at another speed (e.g. a PAL DVD rip).
 - **Poster & Thumbnail Download:** Automatically downloads posters and thumbnails.
+- **Lossless Remuxing:** Rebuilds each video as a clean Matroska (.mkv) file without re-encoding what does not need it.
 - **Media File Splitting & Joining:** Splits large files or joins multiple parts (e.g., DVD1/DVD2) into one.
-- **Video Encoding (H.264 / H.265):** Converts media to efficient formats with predefined presets.
-- **Batch Processing:** Handles multiple files simultaneously with queue management.
+- **Video & Audio Encoding (H.264 / H.265 / AAC):** Converts the tracks worth shrinking to efficient formats with predefined presets.
+- **Batch Processing:** Handles multiple videos in queues, with the progress of each step (loading, muxing, encoding, merging).
 - **Multilingual Support:** Available in 23 languages.
 
 ## 1) Installation

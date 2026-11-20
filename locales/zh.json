@@ -1,7 +1,7 @@
 {
   "about.aria_label": "关于",
   "about.close": "关闭",
-  "about.description": "本工具可借助常用数据库自动识别您的电影和电视剧，并简化整个处理流程：按照 Jellyfin 友好的命名规范重命名文件、添加海报图片、修正元数据（包括轨道语言和类型）、拆分或合并媒体文件，以及编码为 H.264 或 H.265——一站式完成。",
+  "about.description": "此工具使用 TheMovieDB 和 TheTVDB 自动识别您的电影和电视剧,然后一站式完成全部整理工作:按照对 Jellyfin 和 Kodi 友好的命名规范重命名文件,添加海报等图片素材,修正元数据(包括每条轨道的语言和类型),并在不影响画质的前提下将所有内容重新封装为干净的 Matroska 文件。它还可以剪切或合并视频,从同一视频的另一个版本中导入音频和字幕轨道并自动同步(即使播放速度不同),并且仅在确有必要时才重新编码为 H.264、H.265 或 AAC。",
   "about.features.audio_subtitle_management.description": "检测并标注音频/字幕语言；重命名并重新排序轨道。",
   "about.features.audio_subtitle_management.title": "音频和字幕轨道管理：",
   "about.features.automatic_media_recognition.description": "使用 TheMovieDB 或 TVDB 识别电影和电视剧",
@@ -797,5 +797,6 @@
   "status_bar.muxing": "正在混流",
   "video.message.preparing_imported_file": "正在准备导入文件 {number}/{total} 的轨道...",
   "video.message.preparing_imported_file_progress": "正在准备导入文件 {number}/{total} 的轨道:{percent}%...",
-  "about.news.version_3_7_0.items": "以不同速度播放的文件（例如 PAL 版本），其导入的轨道现在可保持同步：音频会重新采样到主视频的速度（包括音调），字幕则会相应拉伸\n加载文件并测量其音频偏移时，视频会显示“正在加载”状态及详细信息和进度，而不再在轨道中显示转圈图标\n状态栏中新增“混流队列”，负责准备导入的轨道以及剪切和合并视频片段，并显示其进度\n导入的轨道现在也拥有与其他轨道相同的压缩设置\n处理视频时发生的错误现在会显示出来，而不是毫无反应；在各步骤依次执行期间，“处理”按钮也不能再被重复点击"
+  "about.news.version_3_7_0.items": "以不同速度播放的文件（例如 PAL 版本），其导入的轨道现在可保持同步：音频会重新采样到主视频的速度（包括音调），字幕则会相应拉伸\n加载文件并测量其音频偏移时，视频会显示“正在加载”状态及详细信息和进度，而不再在轨道中显示转圈图标\n状态栏中新增“混流队列”，负责准备导入的轨道以及剪切和合并视频片段，并显示其进度\n导入的轨道现在也拥有与其他轨道相同的压缩设置\n处理视频时发生的错误现在会显示出来，而不是毫无反应；在各步骤依次执行期间，“处理”按钮也不能再被重复点击",
+  "about.news.version_3_7_1.items": "应用程序的简短描述和详细描述现在都提到了混流(remux),以及带自动同步的轨道导入功能,即使另一个文件的播放速度不同也同样适用\nREADME 和 Microsoft Store 页面中的核心功能列表已更正,现已涵盖无损混流、音频编码为 AAC 以及处理步骤队列"
 }
