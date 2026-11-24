@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.8.0] - 2026-11-24
+
+### Added
+
+- The extras of a movie (trailer, making of, deleted scene, featurette, interview, scene, short film or other extra) are now supported: a new Content field in the matching tab sets the type, it is guessed from the file name, and the file gets the suffix recognised by Jellyfin and Plex (`-trailer`, `-behindthescenes`, `-deleted`...), also in the movie folder when it is enabled.
+- An optional title for the extra tells apart several extras of the same kind, such as two trailers.
+- The tooltip of the poster of a movie or a series lists all its genres.
+
+### Changed
+
+- The edition of a movie is only shown for the movie itself, not for its extras.
+- The genres moved from the tooltip of the title to the tooltip of the poster.
+
 ## [3.7.1] - 2026-11-20
 
 ### Changed

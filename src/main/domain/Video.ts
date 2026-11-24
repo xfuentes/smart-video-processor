@@ -31,7 +31,7 @@ import {
   ChangeSourceType,
   ChangeType
 } from '../../common/Change'
-import { Brain } from './Brain'
+import { Brain, MovieExtra } from './Brain'
 import { Hint } from './Hint'
 import { Job } from './jobs/Job'
 import { CopyJob } from './jobs/CopyJob'
@@ -83,7 +83,7 @@ import { MuxingJob, MuxingReporter } from './jobs/MuxingJob'
 import { FFprobe } from './programs/FFprobe'
 import { isEqual, omit } from 'lodash'
 import { Numbers } from '../util/numbers'
-import { hasTechnicalToken, parseFilename } from './FilenameParser'
+import { detectExtraType, hasTechnicalToken, parseFilename } from './FilenameParser'
 
 type VideoChangeListener = (video: Video) => void
 
@@ -420,7 +420,8 @@ export class Video implements IVideo {
       this.title,
       this.type === VideoType.MOVIE ? this.movie.tmdb : undefined,
       this.type === VideoType.MOVIE ? this.movie.edition : undefined,
-      this.computeVersions()
+      this.computeVersions(),
+      this.getMovieExtra()
     )
 
     const oldFilenameChange = this.changes.find(
@@ -451,6 +452,8 @@ export class Video implements IVideo {
       this.movie.setIMDB(data.movieIMDB)
       this.movie.setTMDB(data.movieTMDB)
       this.movie.setEdition(data.movieEdition)
+      this.movie.setExtraType(data.movieExtraType)
+      this.movie.setExtraTitle(data.movieExtraTitle)
       this.tvShow.setTitle(data.tvShowTitle)
       this.tvShow.setYear(data.tvShowYear)
       this.tvShow.setTheTVDB(data.tvShowTVDB)
@@ -577,7 +580,8 @@ export class Video implements IVideo {
         this.hints,
         this.type === VideoType.MOVIE ? this.movie.tmdb : undefined,
         this.type === VideoType.MOVIE ? this.movie.edition : undefined,
-        this.computeVersions()
+        this.computeVersions(),
+        this.getMovieExtra()
       )
       this.changes = processingResults.changes
       this.hints = processingResults.hints
@@ -1042,6 +1046,10 @@ export class Video implements IVideo {
   setTrackEncodingEnabled(source: string, value: boolean) {
     this.trackEncodingEnabled[source] = value
     this.generateEncoderSettings(false)
+  }
+
+  private getMovieExtra(): MovieExtra | undefined {
+    return this.type === VideoType.MOVIE ? { type: this.movie.extraType, title: this.movie.extraTitle } : undefined
   }
 
   getSelectedSearchResultID() {
@@ -1976,6 +1984,18 @@ export class Video implements IVideo {
     if (this.type === VideoType.OTHER) {
       const extPos = this.filename.lastIndexOf('.')
       this.other.title = this.filename.substring(0, extPos !== -1 ? extPos : undefined)
+    }
+
+    if (this.type === VideoType.MOVIE) {
+      const extra = detectExtraType(this.filename)
+      if (extra) {
+        this.movie.setExtraType(extra.type)
+        // The word of the extra must not be searched as a part of the movie title.
+        const titleExtra = detectExtraType(this.movie.title)
+        if (titleExtra) {
+          this.movie.title = titleExtra.cleanedName
+        }
+      }
     }
 
     this.audioVersions = AudioVersions.extractVersionsFromFilename(this.filename)

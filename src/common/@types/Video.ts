@@ -22,7 +22,7 @@ import { ITrack, TrackType } from './Track'
 import { ChangeProperty, ChangeSourceType, ChangeType, IChange } from '../Change'
 import { IHint } from './Hint'
 import { ISearchResult } from './SearchResult'
-import { EditionType, IMovie } from './Movie'
+import { EditionType, ExtraType, IMovie } from './Movie'
 import { ITVShow } from './TVShow'
 import { Container } from '../../main/domain/programs/MKVMerge'
 import { EncoderSettings } from './Encoding'
@@ -177,6 +177,8 @@ export type SearchInputData = {
   movieIMDB: string
   movieTMDB: string
   movieEdition: EditionType
+  movieExtraType: ExtraType
+  movieExtraTitle: string
   tvShowTitle: string
   tvShowYear: string
   tvShowTVDB: string

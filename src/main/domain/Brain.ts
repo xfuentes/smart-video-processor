@@ -29,8 +29,13 @@ import path from 'node:path'
 import { TrackType } from '../../common/@types/Track'
 import { Attachment, Change, ChangeProperty, ChangeSourceType, ChangeType } from '../../common/Change'
 import { HintType } from '../../common/@types/Hint'
-import { EditionType } from '../../common/@types/Movie'
+import { EditionType, EXTRA_FILENAME_SUFFIXES, ExtraType } from '../../common/@types/Movie'
 import { Country } from '../../common/Countries'
+
+export interface MovieExtra {
+  type: ExtraType
+  title?: string
+}
 
 const MAX_FORCED_FRAMES = 40
 
@@ -62,7 +67,8 @@ export class Brain {
     userHints: Hint[],
     tmdb?: number,
     edition?: EditionType,
-    versions?: string[]
+    versions?: string[],
+    extra?: MovieExtra
   ): { changes: Change[]; hints: Hint[] } {
     let changes: Change[] = []
     let hints: Hint[] = []
@@ -108,6 +114,7 @@ export class Brain {
       tmdb,
       edition,
       versions,
+      extra,
       poster,
       containerTitle,
       containerAttachments,
@@ -156,20 +163,25 @@ export class Brain {
     title: string,
     tmdb: number | undefined,
     edition: EditionType | undefined,
-    versions: string[] | undefined
+    versions: string[] | undefined,
+    extra?: MovieExtra
   ): Change | undefined {
     const currentFilename = path.basename(sourcePath)
 
     const isJellyfin = currentSettings.namingConvention === NamingConvention.JELLYFIN
-    let newFilename = title
+    const isExtra = extra !== undefined && extra.type !== ExtraType.NONE
+    let newFilename = isExtra && extra.title?.trim() ? `${title} - ${extra.title.trim()}` : title
     if (tmdb !== undefined) {
       newFilename += isJellyfin ? ` [tmdbid-${tmdb}]` : ` {tmdb-${tmdb}}`
     }
-    if (edition !== undefined && edition !== EditionType.THEATRICAL) {
+    if (!isExtra && edition !== undefined && edition !== EditionType.THEATRICAL) {
       newFilename += isJellyfin ? ` [edition-${edition}]` : ` {edition-${edition}}`
     }
     if (versions && versions.length > 0) {
       newFilename += `.${versions.join('.')}`
+    }
+    if (isExtra) {
+      newFilename += EXTRA_FILENAME_SUFFIXES[extra.type]
     }
     newFilename = Files.removeSpecialCharsFromFilename(newFilename + '.mkv')
     if (newFilename !== currentFilename) {
@@ -192,6 +204,7 @@ export class Brain {
     tmdb: number | undefined,
     edition: EditionType | undefined,
     versions: string[] | undefined,
+    extra: MovieExtra | undefined,
     poster: Attachment | undefined,
     containerTitle: string | undefined,
     containerAttachments: Attachment[] | undefined,
@@ -199,7 +212,7 @@ export class Brain {
   ) {
     const changes: Change[] = []
 
-    const filenameChange = this.generateFilenameChange(sourcePath, title, tmdb, edition, versions)
+    const filenameChange = this.generateFilenameChange(sourcePath, title, tmdb, edition, versions, extra)
     if (filenameChange) {
       changes.push(filenameChange)
     }

@@ -25,7 +25,7 @@ import { Countries, Country } from '../../common/Countries'
 import { LanguageIETF, Languages } from '../../common/LanguageIETF'
 import { debug } from '../util/log'
 import { SearchBy } from '../../common/@types/Video'
-import { EditionType, IMovie } from '../../common/@types/Movie'
+import { EditionType, ExtraType, IMovie } from '../../common/@types/Movie'
 import Path from 'node:path'
 import fs from 'node:fs'
 
@@ -41,6 +41,8 @@ export default class Movie implements IMovie {
   public rating?: number
   public originalCountries: Country[] = []
   public edition: EditionType = EditionType.THEATRICAL
+  public extraType: ExtraType = ExtraType.NONE
+  public extraTitle: string = ''
   public isAnimation: boolean = false
   public genres?: string[]
   private video: Video
@@ -219,6 +221,14 @@ export default class Movie implements IMovie {
     this.edition = edition
   }
 
+  setExtraType(extraType: ExtraType) {
+    this.extraType = extraType
+  }
+
+  setExtraTitle(extraTitle: string) {
+    this.extraTitle = extraTitle
+  }
+
   toJSON(): IMovie {
     return {
       title: this.title,
@@ -232,6 +242,8 @@ export default class Movie implements IMovie {
       rating: this.rating,
       originalCountries: this.originalCountries,
       edition: this.edition,
+      extraType: this.extraType,
+      extraTitle: this.extraTitle,
       isAnimation: this.isAnimation,
       genres: this.genres,
       database: this.tmdb

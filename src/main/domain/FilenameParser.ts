@@ -18,6 +18,7 @@
 
 import { Files } from '../util/files'
 import { VIDEO_EXTENSIONS } from '../util/videoExtensions'
+import { ExtraType } from '../../common/@types/Movie'
 
 export interface ParsedFilename {
   title?: string
@@ -253,4 +254,39 @@ export function parseFilename(filename: string): ParsedFilename {
   }
 
   return result
+}
+
+const EXTRA_PATTERNS: [ExtraType, RegExp][] = [
+  [ExtraType.TRAILER, /(?<=[\s._\-([])(?:trailer|teaser|bande[\s._-]?annonce)(?=$|[\s._\-)\]])/i],
+  [
+    ExtraType.BEHIND_THE_SCENES,
+    /(?<=[\s._\-([])(?:making[\s._-]?of|behind[\s._-]?the[\s._-]?scenes|dans[\s._-]les[\s._-]coulisses)(?=$|[\s._\-)\]])/i
+  ],
+  [
+    ExtraType.DELETED_SCENE,
+    /(?<=[\s._\-([])(?:deleted[\s._-]?scenes?|sc[èe]nes?[\s._-]coup[ée]es?)(?=$|[\s._\-)\]])|(?<=[\s._-])deleted$/i
+  ],
+  [ExtraType.FEATURETTE, /(?<=[\s._\-([])featurette(?=$|[\s._\-)\]])/i],
+  [ExtraType.INTERVIEW, /(?<=[\s._\-([])interview(?=$|[\s._\-)\]])/i],
+  // A short is only recognised as the last word so that titles like "Short Circuit" are left alone.
+  [ExtraType.SHORT, /(?<=[\s._-])short$/i],
+  // The suffixes of the media servers come last, as a single word at the end of the name.
+  [ExtraType.SCENE, /(?<=[\s._-])(?:scene|clip)$/i],
+  [ExtraType.OTHER, /(?<=[\s._-])(?:other|extra|sample)$/i]
+]
+
+// Finds the kind of extra (trailer, making of...) a file name stands for and removes its word from the name.
+export function detectExtraType(filename: string): { type: ExtraType; cleanedName: string } | undefined {
+  const name = normalize(filename)
+  for (const [type, pattern] of EXTRA_PATTERNS) {
+    const match = pattern.exec(name)
+    // A lone article before the word means that the word is the title itself, like "The Interview".
+    if (match && !/^(?:the|an?|le|la|les|l'|un|une)[\s._-]*$/i.test(name.substring(0, match.index))) {
+      const cleanedName = Files.megaTrim(
+        (name.substring(0, match.index) + ' ' + name.substring(match.index + match[0].length)).replace(/[\s._-]+/g, ' ')
+      )
+      return { type, cleanedName }
+    }
+  }
+  return undefined
 }

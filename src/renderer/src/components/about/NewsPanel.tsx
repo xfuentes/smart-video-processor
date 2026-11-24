@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.8.0' })}</h4>
+      <ul>
+        {_('about.news.version_3_8_0.items', {
+          defaultValue:
+            'The extras of a movie (trailer, making of, deleted scene, featurette, interview, scene, short film or other extra) are now supported: the type is chosen in the new Content field or guessed from the file name, and the file gets the suffix recognised by Jellyfin and Plex, in the movie folder when it is enabled\nAn optional title for the extra tells apart several extras of the same kind\nThe tooltip of the poster of a movie or a series lists all its genres'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.7.1' })}</h4>
       <ul>
         {_('about.news.version_3_7_1.items', {

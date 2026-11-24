@@ -20,6 +20,7 @@ import {
   Button,
   Checkbox,
   Field,
+  InfoLabel,
   Input,
   MessageBar,
   MessageBarGroup,
@@ -31,7 +32,7 @@ import { useState } from 'react'
 import { IVideo, SearchBy, SearchInputData, VideoType } from '../../../../common/@types/Video'
 import { SearchResultList } from '@renderer/components/preview/SearchResults'
 import { VideoPreview } from '@renderer/components/preview/VideoPreview'
-import { EditionType } from '../../../../common/@types/Movie'
+import { EditionType, ExtraType } from '../../../../common/@types/Movie'
 import { EPISODE_ORDER_LABELS, EpisodeOrder, getSelectableEpisodeOrders } from '../../../../common/@types/EpisodeOrder'
 import { ISearchResult } from '../../../../common/@types/SearchResult'
 import { FileSelectorField } from '@renderer/components/fields/FileSelectorField'
@@ -55,6 +56,8 @@ export const Matching = ({ video, disabled }: Props) => {
   const [movieIMDB, setMovieIMDB] = useState<string>(video.movie?.imdb ? video.movie.imdb : '')
   const [movieTMDB, setMovieTMDB] = useState<string>(video.movie?.tmdb ? '' + video.movie.tmdb : '')
   const [movieEdition, setMovieEdition] = useState<EditionType>(video.movie?.edition ?? EditionType.THEATRICAL)
+  const [movieExtraType, setMovieExtraType] = useState<ExtraType>(video.movie?.extraType ?? ExtraType.NONE)
+  const [movieExtraTitle, setMovieExtraTitle] = useState<string>(video.movie?.extraTitle ?? '')
 
   const [tvShowTitle, setTvShowTitle] = useState<string>(video.tvShow?.title ?? '')
   const [tvShowYear, setTvShowYear] = useState<string>(video.tvShow?.year ? '' + video.tvShow.year : '')
@@ -92,6 +95,9 @@ export const Matching = ({ video, disabled }: Props) => {
       setMovieTMDB(video.movie?.tmdb ? '' + video.movie.tmdb : '')
     movieEdition !== (video.movie?.edition ?? EditionType.THEATRICAL) &&
       setMovieEdition(video.movie?.edition ?? EditionType.THEATRICAL)
+    movieExtraType !== (video.movie?.extraType ?? ExtraType.NONE) &&
+      setMovieExtraType(video.movie?.extraType ?? ExtraType.NONE)
+    movieExtraTitle !== (video.movie?.extraTitle ?? '') && setMovieExtraTitle(video.movie?.extraTitle ?? '')
     tvShowTitle !== (video.tvShow?.title ?? '') && setTvShowTitle(video.tvShow?.title ?? '')
     tvShowYear !== (video.tvShow?.year ? '' + video.tvShow.year : '') &&
       setTvShowYear(video.tvShow?.year ? '' + video.tvShow.year : '')
@@ -140,6 +146,8 @@ export const Matching = ({ video, disabled }: Props) => {
         movieIMDB,
         movieTMDB,
         movieEdition,
+        movieExtraType,
+        movieExtraTitle,
         tvShowTitle,
         tvShowYear,
         tvShowTVDB,
@@ -296,24 +304,84 @@ export const Matching = ({ video, disabled }: Props) => {
                 </Field>
               </div>
             )}
-            <Field
-              size="small"
-              label={_('matching.field.edition.label', { defaultValue: 'Edition' })}
-              className={disabled ? 'disabled' : ''}
-            >
-              <Select
+            {movieExtraType === ExtraType.NONE && (
+              <div>
+                <Field
+                  size="small"
+                  label={_('matching.field.edition.label', { defaultValue: 'Edition' })}
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Select
+                    size="small"
+                    disabled={disabled}
+                    value={movieEdition}
+                    onChange={(_ev, data) => setMovieEdition(data.value as EditionType)}
+                  >
+                    {Object.values(EditionType).map((key) => (
+                      <option key={key} value={key}>
+                        {_(`edition_type.${key.toLowerCase().replace(/[' ]/g, '_')}.label`, { defaultValue: key })}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              </div>
+            )}
+            <div>
+              <Field
                 size="small"
-                disabled={disabled}
-                value={movieEdition}
-                onChange={(_ev, data) => setMovieEdition(data.value as EditionType)}
+                label={_('matching.field.extra_type.label', { defaultValue: 'Content' })}
+                className={disabled ? 'disabled' : ''}
               >
-                {Object.values(EditionType).map((key) => (
-                  <option key={key} value={key}>
-                    {_(`edition_type.${key.toLowerCase().replace(/[' ]/g, '_')}.label`, { defaultValue: key })}
-                  </option>
-                ))}
-              </Select>
-            </Field>
+                <Select
+                  size="small"
+                  disabled={disabled}
+                  value={movieExtraType}
+                  onChange={(_ev, data) => setMovieExtraType(data.value as ExtraType)}
+                >
+                  {Object.values(ExtraType).map((key) => (
+                    <option key={key} value={key}>
+                      {_(`extra_type.${key.toLowerCase().replace(/[' ]/g, '_')}.label`, { defaultValue: key })}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
+            {movieExtraType !== ExtraType.NONE && (
+              <div>
+                <Field
+                  size="small"
+                  label={{
+                    children: (_component, slotProps) => (
+                      <InfoLabel
+                        {...slotProps}
+                        size="small"
+                        style={{
+                          ...slotProps.style,
+                          display: 'flex',
+                          alignItems: 'center',
+                          height: 20,
+                          lineHeight: '20px'
+                        }}
+                        infoButton={{ style: { height: 16, minWidth: 16, padding: 0, marginTop: 0, marginBottom: 0 } }}
+                        info={_('matching.field.extra_title.hint', {
+                          defaultValue: 'Optional, only to tell apart several extras of the same kind, e.g. Teaser.'
+                        })}
+                      >
+                        {_('matching.field.extra_title.label', { defaultValue: 'Extra title' })}
+                      </InfoLabel>
+                    )
+                  }}
+                  className={disabled ? 'disabled' : ''}
+                >
+                  <Input
+                    size="small"
+                    disabled={disabled}
+                    value={movieExtraTitle}
+                    onChange={(_ev, data) => setMovieExtraTitle(data.value)}
+                  />
+                </Field>
+              </div>
+            )}
           </>
         )}
         {type === VideoType.TV_SHOW && (

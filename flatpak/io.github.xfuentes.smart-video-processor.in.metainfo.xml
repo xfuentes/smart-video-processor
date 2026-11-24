@@ -74,8 +74,9 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The short and long descriptions of the application now mention the remux and the import of tracks with automatic sync, even when the other file plays at another speed</li>
-          <li>The list of core features of the README and of the Microsoft Store listing is corrected: it now covers the lossless remux, the audio encoding to AAC and the queues of the processing steps</li>
+          <li>The extras of a movie (trailer, making of, deleted scene, featurette, interview, scene, short film or other extra) are now supported, with the suffix recognised by Jellyfin and Plex and the movie folder when it is enabled</li>
+          <li>An optional title for the extra tells apart several extras of the same kind</li>
+          <li>The tooltip of the poster of a movie or a series lists all its genres</li>
         </ul>
       </description>
     </release>

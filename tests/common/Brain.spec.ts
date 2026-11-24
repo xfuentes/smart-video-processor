@@ -26,7 +26,7 @@ import { Brain } from '../../src/main/domain/Brain'
 import { Languages } from '../../src/common/LanguageIETF'
 import { currentSettings } from '../../src/main/domain/Settings'
 import { NamingConvention } from '../../src/common/@types/Settings'
-import { EditionType } from '../../src/common/@types/Movie'
+import { EditionType, ExtraType } from '../../src/common/@types/Movie'
 import { Countries, Country } from '../../src/common/Countries'
 import { HintType } from '../../src/common/@types/Hint'
 import { Hint } from '../../src/main/domain/Hint'
@@ -4453,4 +4453,42 @@ describe('WandaVision - S01E01 FRENCH file with an audio track without language'
     const changes = changeListToMap(analyseFrench().changes)
     expect(changes['Audio 1']?.['Update_Name']?.newValue).toBe('VFI 2.0')
   })
+})
+
+test('generateFilenameChange - an extra gets the suffix recognised by the media servers', () => {
+  currentSettings.namingConvention = NamingConvention.JELLYFIN
+  const change = Brain.getInstance().generateFilenameChange(
+    '/tmp/movie.mkv',
+    'Movie Title (2024)',
+    58652,
+    EditionType.EXTENDED,
+    ['1080p'],
+    { type: ExtraType.TRAILER }
+  )
+  expect(change?.newValue).toBe('Movie Title (2024) [tmdbid-58652].1080p-trailer.mkv')
+  currentSettings.namingConvention = NamingConvention.PLEX
+})
+
+test('generateFilenameChange - the title of the extra tells several extras of the same kind apart', () => {
+  const change = Brain.getInstance().generateFilenameChange(
+    '/tmp/movie.mkv',
+    'Movie Title (2024)',
+    58652,
+    undefined,
+    undefined,
+    { type: ExtraType.BEHIND_THE_SCENES, title: ' The stunts ' }
+  )
+  expect(change?.newValue).toBe('Movie Title (2024) - The stunts {tmdb-58652}-behindthescenes.mkv')
+})
+
+test('generateFilenameChange - the movie type None leaves the name of a movie unchanged', () => {
+  const change = Brain.getInstance().generateFilenameChange(
+    '/tmp/movie.mkv',
+    'Movie Title (2024)',
+    58652,
+    undefined,
+    undefined,
+    { type: ExtraType.NONE, title: 'ignored' }
+  )
+  expect(change?.newValue).toBe('Movie Title (2024) {tmdb-58652}.mkv')
 })

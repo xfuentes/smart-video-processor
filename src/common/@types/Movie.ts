@@ -26,6 +26,31 @@ export enum EditionType {
   UNRATED = 'Unrated'
 }
 
+export enum ExtraType {
+  NONE = 'None',
+  TRAILER = 'Trailer',
+  BEHIND_THE_SCENES = 'Behind the scenes',
+  DELETED_SCENE = 'Deleted scene',
+  FEATURETTE = 'Featurette',
+  INTERVIEW = 'Interview',
+  SCENE = 'Scene',
+  SHORT = 'Short',
+  OTHER = 'Other'
+}
+
+// The file name suffixes recognised by Jellyfin, Plex and Kodi for the extras of a movie.
+export const EXTRA_FILENAME_SUFFIXES: Record<ExtraType, string> = {
+  [ExtraType.NONE]: '',
+  [ExtraType.TRAILER]: '-trailer',
+  [ExtraType.BEHIND_THE_SCENES]: '-behindthescenes',
+  [ExtraType.DELETED_SCENE]: '-deleted',
+  [ExtraType.FEATURETTE]: '-featurette',
+  [ExtraType.INTERVIEW]: '-interview',
+  [ExtraType.SCENE]: '-scene',
+  [ExtraType.SHORT]: '-short',
+  [ExtraType.OTHER]: '-other'
+}
+
 export interface IMovie {
   title: string
   year?: number
@@ -38,6 +63,8 @@ export interface IMovie {
   rating?: number
   originalCountries: Country[]
   edition: EditionType
+  extraType?: ExtraType
+  extraTitle?: string
   isAnimation?: boolean
   genres?: string[]
   database?: IDatabaseLink

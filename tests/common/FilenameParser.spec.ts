@@ -17,7 +17,8 @@
  */
 
 import { describe, expect, it, test } from 'vitest'
-import { parseFilename } from '../../src/main/domain/FilenameParser'
+import { detectExtraType, parseFilename } from '../../src/main/domain/FilenameParser'
+import { EXTRA_FILENAME_SUFFIXES, ExtraType } from '../../src/common/@types/Movie'
 
 test('parse TV show filename with dotted title and year before season/episode', () => {
   const result = parseFilename('Motive.Le.Mobile.Du.Crime.2013.S01E02.TRUEFRENCH.1080p.EAC3.x264-Darkjedi.mkv')
@@ -115,5 +116,103 @@ describe('multi-episode filenames', () => {
 
   it('does not treat a resolution as an episode range', () => {
     expect(parseFilename('Show.S01E01-1080p.mkv').episodeEnd).toBeUndefined()
+  })
+})
+
+describe('detectExtraType', () => {
+  test.each([
+    ['Movie.2020.Trailer.mkv', ExtraType.TRAILER, 'Movie 2020'],
+    ['Movie (2020) - bande annonce.mkv', ExtraType.TRAILER, 'Movie (2020)'],
+    ['Movie.2020.Making.Of.1080p.mkv', ExtraType.BEHIND_THE_SCENES, 'Movie 2020 1080p'],
+    ['Movie (2020) - Scènes coupées.mkv', ExtraType.DELETED_SCENE, 'Movie (2020)'],
+    ['Movie 2020 featurette.mkv', ExtraType.FEATURETTE, 'Movie 2020'],
+    ['Movie 2020 Interview.mkv', ExtraType.INTERVIEW, 'Movie 2020'],
+    ['Movie 2020 - short.mkv', ExtraType.SHORT, 'Movie 2020'],
+    [
+      'La Lapidation de Soraya M (2009)-behindthescenes.mkv',
+      ExtraType.BEHIND_THE_SCENES,
+      'La Lapidation de Soraya M (2009)'
+    ],
+    ['Movie (2020)-deleted.mkv', ExtraType.DELETED_SCENE, 'Movie (2020)'],
+    ['Movie (2020)-scene.mkv', ExtraType.SCENE, 'Movie (2020)'],
+    ['Movie (2020)-other.mkv', ExtraType.OTHER, 'Movie (2020)']
+  ])('%s is %s', (filename, type, cleanedName) => {
+    expect(detectExtraType(filename)).toEqual({ type, cleanedName })
+  })
+
+  test.each(['Short Circuit (1986).mkv', 'Trailer Park Boys (2019).mkv', 'The Interview (2014).mkv', 'Movie.2020.mkv'])(
+    '%s is not an extra',
+    (filename) => {
+      expect(detectExtraType(filename)).toBeUndefined()
+    }
+  )
+})
+
+// Suffixes listed by the Jellyfin documentation, with the kind of extra the application files them under.
+const JELLYFIN_SUFFIXES: [string, ExtraType][] = [
+  ['-trailer', ExtraType.TRAILER],
+  ['.trailer', ExtraType.TRAILER],
+  ['_trailer', ExtraType.TRAILER],
+  [' trailer', ExtraType.TRAILER],
+  ['-sample', ExtraType.OTHER],
+  ['.sample', ExtraType.OTHER],
+  ['_sample', ExtraType.OTHER],
+  [' sample', ExtraType.OTHER],
+  ['-scene', ExtraType.SCENE],
+  ['-clip', ExtraType.SCENE],
+  ['-interview', ExtraType.INTERVIEW],
+  ['-behindthescenes', ExtraType.BEHIND_THE_SCENES],
+  ['-deleted', ExtraType.DELETED_SCENE],
+  ['-deletedscene', ExtraType.DELETED_SCENE],
+  ['-featurette', ExtraType.FEATURETTE],
+  ['-short', ExtraType.SHORT],
+  ['-other', ExtraType.OTHER],
+  ['-extra', ExtraType.OTHER]
+]
+
+// Suffixes of the inline extras documented by Plex.
+const PLEX_SUFFIXES: [string, ExtraType][] = [
+  ['-behindthescenes', ExtraType.BEHIND_THE_SCENES],
+  ['-deleted', ExtraType.DELETED_SCENE],
+  ['-featurette', ExtraType.FEATURETTE],
+  ['-interview', ExtraType.INTERVIEW],
+  ['-scene', ExtraType.SCENE],
+  ['-short', ExtraType.SHORT],
+  ['-trailer', ExtraType.TRAILER],
+  ['-other', ExtraType.OTHER]
+]
+
+// Kodi only knows the trailer next to the movie file.
+const KODI_SUFFIXES: [string, ExtraType][] = [['-trailer', ExtraType.TRAILER]]
+
+describe.each([
+  ['Jellyfin', JELLYFIN_SUFFIXES],
+  ['Plex', PLEX_SUFFIXES],
+  ['Kodi', KODI_SUFFIXES]
+])('extras named for %s', (_server, suffixes) => {
+  test.each(suffixes)('the suffix "%s" is detected', (suffix, type) => {
+    expect(detectExtraType(`Movie (2020)${suffix}.mkv`)?.type).toBe(type)
+    expect(detectExtraType(`Movie (2020) [tmdbid-12].1080p.h264${suffix}.mkv`)?.type).toBe(type)
+    expect(detectExtraType(`Movie (2020) {tmdb-12}${suffix}.mp4`)?.type).toBe(type)
+  })
+
+  test.each(suffixes)('the suffix "%s" leaves the title of the movie untouched', (suffix) => {
+    expect(detectExtraType(`Movie (2020)${suffix}.mkv`)?.cleanedName).toBe('Movie (2020)')
+  })
+})
+
+describe('the suffixes written by the application', () => {
+  test.each(Object.values(ExtraType).filter((type) => type !== ExtraType.NONE))(
+    'the suffix of %s is known by Jellyfin and Plex and is detected back',
+    (type) => {
+      const suffix = EXTRA_FILENAME_SUFFIXES[type]
+      expect(JELLYFIN_SUFFIXES.map(([s]) => s)).toContain(suffix)
+      expect(PLEX_SUFFIXES.map(([s]) => s)).toContain(suffix)
+      expect(detectExtraType(`Movie (2020) [tmdbid-12]${suffix}.mkv`)?.type).toBe(type)
+    }
+  )
+
+  test('a movie has no suffix', () => {
+    expect(EXTRA_FILENAME_SUFFIXES[ExtraType.NONE]).toBe('')
   })
 })

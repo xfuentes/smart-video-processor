@@ -58,28 +58,37 @@ export const VideoPreview = ({
   database
 }: Props) => {
   const _ = useI18n()
+  const hasGenres = genres !== undefined && genres.length > 0
+  const posterElement = (
+    <div
+      className="poster"
+      style={{
+        backgroundSize: 'auto 100%',
+        backgroundRepeat: 'no-repeat',
+        ...(poster ? { backgroundImage: `url('${'svp:///' + poster.replaceAll('\\', '/')}')` } : {})
+      }}
+    />
+  )
   return (
     <div className="video-preview">
-      {altOverview ? (
-        <Tooltip content={altOverview} relationship="description">
-          <div
-            className="poster"
-            style={{
-              backgroundSize: 'auto 100%',
-              backgroundRepeat: 'no-repeat',
-              ...(poster ? { backgroundImage: `url('${'svp:///' + poster.replaceAll('\\', '/')}')` } : {})
-            }}
-          />
+      {altOverview || hasGenres ? (
+        <Tooltip
+          content={
+            <>
+              {altOverview && <div>{altOverview}</div>}
+              {hasGenres && (
+                <div style={altOverview ? { marginTop: 6 } : undefined}>
+                  {_('video_preview.genres', { defaultValue: 'Genres: {genres}', genres: genres.join(', ') })}
+                </div>
+              )}
+            </>
+          }
+          relationship="description"
+        >
+          {posterElement}
         </Tooltip>
       ) : (
-        <div
-          className="poster"
-          style={{
-            backgroundSize: 'auto 100%',
-            backgroundRepeat: 'no-repeat',
-            ...(poster ? { backgroundImage: `url('${'svp:///' + poster.replaceAll('\\', '/')}')` } : {})
-          }}
-        />
+        posterElement
       )}
       <div className="vertical-stack" style={{ justifyContent: 'space-between', flexGrow: 1, flex: '3' }}>
         <div>
@@ -93,12 +102,7 @@ export const VideoPreview = ({
           >
             <div className="title">
               <Tooltip
-                content={
-                  title +
-                  (year ? ` (${year})` : '') +
-                  (position ? ` - ${position}` : '') +
-                  (genres && genres.length > 0 ? ` | ${genres.join(', ')}` : '')
-                }
+                content={title + (year ? ` (${year})` : '') + (position ? ` - ${position}` : '')}
                 relationship="description"
               >
                 <div className="shrinkable-text">
