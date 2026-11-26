@@ -630,6 +630,7 @@
   "log.download.error": "Virhe tiedoston latauksessa: {message}",
   "log.process.spawning": "Käynnistetään {command} {args}",
   "log.process.priority": "Prosessin pid: {pid} asetettu prioriteettiin: {priority}",
+  "log.process.priority_denied": "Prosessin (pid: {pid}) prioriteettia ei voitu vaihtaa arvoon {priority}: {error}",
   "log.cache.reading": "{key} -> LUETAAN VÄLIMUISTISTA",
   "log.cache.caching": "{key} -> VASTAUS TALLENNETAAN VÄLIMUISTIIN",
   "log.tvdb.calling_episodes": "Kutsutaan /series/{tvdbId}/episodes/{order} parametreilla: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Valmistellaan tuodun tiedoston {number}/{total} raitoja...",
   "video.message.preparing_imported_file_progress": "Valmistellaan tuodun tiedoston raitoja {number}/{total}: {percent} %...",
   "about.news.version_3_7_0.items": "Tiedosto, joka toistuu eri nopeudella (esimerkiksi PAL-versio), pitää nyt tuodut raidat synkronoituna: ääni muunnetaan pääkuvan nopeuteen äänenkorkeus mukaan lukien, ja tekstitykset venytetään\nVideossa näkyy Ladataan-tila, jossa on tiedot ja edistyminen, kun tiedostoa ladataan ja sen äänen siirtymää mitataan. Aiemmin raidoissa näkyi vain pyörivä latauskuvake\nUusi Muxing-jono, joka näkyy tilapalkissa, hoitaa tuotujen raitojen valmistelun sekä videon osien leikkaamisen ja yhdistämisen edistymisen kanssa\nTuodut raidat saavat nyt pakkausasetuksensa kuten muutkin raidat\nVideon käsittelyn aikana tapahtunut virhe näytetään nyt sen sijaan, että mitään ei tapahtuisi, eikä Käsittele-painiketta voi enää käyttää toista kertaa, kun vaiheet seuraavat toisiaan",
+  "about.news.version_3_8_1.items": "Kun järjestelmä estää taustaprosessin prioriteetin muuttamisen, siitä kirjataan varoitus eikä käsittely enää epäonnistu\nUseille valituille videoille yhteisten raitojen nimi ja ominaisuudet eivät enää näytä tyhjää arvoa määrittelemättömänä",
   "about.news.version_3_8_0.items": "Elokuvan lisämateriaalit (traileri, kulissien takaa, poistettu kohtaus, oheisfilmi, haastattelu, kohtaus, lyhytelokuva tai muu lisämateriaali) ovat nyt tuettuja: tyyppi valitaan uudesta Sisältö-kentästä tai päätellään tiedostonimestä, ja tiedosto saa Jellyfinin ja Plexin tunnistaman päätteen elokuvan kansioon, kun se on käytössä\nLisämateriaalille voi antaa valinnaisen nimen, jonka avulla useat samantyyppiset lisämateriaalit erotetaan toisistaan\nElokuvan tai sarjan julisteen työkaluvihje näyttää kaikki sen lajityypit",
   "about.news.version_3_7_1.items": "Sovelluksen lyhyessä ja pitkässä kuvauksessa mainitaan nyt remux sekä raitojen tuonti automaattisella synkronoinnilla, vaikka toinen tiedosto toistuisi eri nopeudella\nREADME-tiedoston ja Microsoft Store -sivun ydinominaisuuksien luettelo on korjattu: se kattaa nyt häviöttömän remuxin, äänen enkoodauksen AAC-muotoon sekä käsittelyvaiheiden jonot"
 }

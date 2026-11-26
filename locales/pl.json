@@ -630,6 +630,7 @@
   "log.download.error": "Błąd pobierania pliku: {message}",
   "log.process.spawning": "Uruchamianie {command} {args}",
   "log.process.priority": "Proces o pid: {pid} otrzymał priorytet: {priority}",
+  "log.process.priority_denied": "Nie udało się zmienić priorytetu procesu o PID {pid} na {priority}: {error}",
   "log.cache.reading": "{key} -> ODCZYT Z PAMIĘCI PODRĘCZNEJ",
   "log.cache.caching": "{key} -> ZAPISYWANIE ODPOWIEDZI W PAMIĘCI PODRĘCZNEJ",
   "log.tvdb.calling_episodes": "Wywoływanie /series/{tvdbId}/episodes/{order} z parametrami: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Przygotowywanie ścieżek zaimportowanego pliku {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Przygotowywanie ścieżek zaimportowanego pliku {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "Plik odtwarzany z inną prędkością, na przykład wersja PAL, ma teraz zaimportowane ścieżki zachowane w synchronizacji: dźwięk jest resamplowany do prędkości głównego wideo, wraz z wysokością tonu, a napisy są rozciągane\nWideo wyświetla stan Wczytywanie ze szczegółami i postępem podczas wczytywania pliku i pomiaru przesunięcia dźwięku, zamiast wskaźnika ładowania w ścieżkach\nNowa kolejka muxowania, widoczna na pasku stanu, obsługuje przygotowanie zaimportowanych ścieżek oraz wycinanie i łączenie części wideo, wraz z ich postępem\nZaimportowane ścieżki mają teraz własne ustawienia kompresji, tak jak pozostałe ścieżki\nBłąd występujący podczas przetwarzania wideo jest teraz wyświetlany, zamiast braku jakiejkolwiek reakcji, a przycisku Przetwarzaj nie można już użyć drugi raz, gdy kolejne etapy następują po sobie",
+  "about.news.version_3_8_1.items": "Gdy system odmawia zmiany priorytetu procesu w tle, zamiast przerywać przetwarzanie, zapisywane jest ostrzeżenie w dzienniku\nNazwa i właściwości ścieżek wspólnych dla kilku wybranych filmów nie wyświetlają już pustej wartości jako „undefined”",
   "about.news.version_3_8_0.items": "Dodatki do filmu (zwiastun, kulisy produkcji, usunięta scena, materiał dodatkowy, wywiad, scena, krótki metraż lub inny dodatek) są już obsługiwane: typ wybiera się w nowym polu Zawartość lub jest odgadywany na podstawie nazwy pliku, a plik otrzymuje sufiks rozpoznawany przez Jellyfin i Plex, w folderze filmu, jeśli ta opcja jest włączona\nOpcjonalny tytuł dodatku pozwala rozróżnić kilka dodatków tego samego rodzaju\nPodpowiedź plakatu filmu lub serialu wyświetla wszystkie jego gatunki",
   "about.news.version_3_7_1.items": "Krótki i długi opis aplikacji wspominają teraz o remuksie oraz imporcie ścieżek z automatyczną synchronizacją, nawet gdy drugi plik jest odtwarzany z inną prędkością\nLista głównych funkcji w pliku README i na stronie w Microsoft Store została poprawiona: obejmuje teraz remuks bezstratny, kodowanie dźwięku do AAC oraz kolejki etapów przetwarzania"
 }

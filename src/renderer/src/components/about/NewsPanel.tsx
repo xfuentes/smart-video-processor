@@ -34,6 +34,17 @@ export const NewsPanel = (): React.JSX.Element => {
         boxSizing: 'border-box'
       }}
     >
+      <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.8.1' })}</h4>
+      <ul>
+        {_('about.news.version_3_8_1.items', {
+          defaultValue:
+            'When the system refuses to change the priority of a background process, a warning is logged instead of making the processing fail\nThe name and the properties of the tracks shared by several selected videos no longer show an empty value as undefined'
+        })
+          .split('\n')
+          .map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+      </ul>
       <h4>{_('about.news.version', { defaultValue: 'Version {version}', version: '3.8.0' })}</h4>
       <ul>
         {_('about.news.version_3_8_0.items', {

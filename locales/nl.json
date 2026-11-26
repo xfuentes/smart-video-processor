@@ -630,6 +630,7 @@
   "log.download.error": "Fout bij het downloaden van bestand: {message}",
   "log.process.spawning": "{command} {args} starten",
   "log.process.priority": "Proces-pid: {pid} ingesteld op prioriteit: {priority}",
+  "log.process.priority_denied": "De prioriteit van proces pid: {pid} kon niet worden gewijzigd naar {priority}: {error}",
   "log.cache.reading": "{key} -> LEZEN UIT CACHE",
   "log.cache.caching": "{key} -> RESPONSE CACHEN",
   "log.tvdb.calling_episodes": "/series/{tvdbId}/episodes/{order} aanroepen met parameters: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Sporen van het geïmporteerde bestand {number}/{total} voorbereiden...",
   "video.message.preparing_imported_file_progress": "Sporen van het geïmporteerde bestand {number}/{total} voorbereiden: {percent}%...",
   "about.news.version_3_7_0.items": "Een bestand dat met een andere snelheid wordt afgespeeld, zoals een PAL-versie, houdt nu de geïmporteerde tracks synchroon: de audio wordt opnieuw gesampled naar de snelheid van de hoofdvideo, inclusief toonhoogte, en de ondertitels worden uitgerekt\nDe video toont een status Laden met de details en de voortgang terwijl een bestand wordt geladen en de audio-offset ervan wordt gemeten, in plaats van een spinner in de tracks\nEen nieuwe Muxwachtrij, weergegeven in de statusbalk, verzorgt de voorbereiding van de geïmporteerde tracks en het knippen en samenvoegen van de videodelen, inclusief de voortgang ervan\nDe geïmporteerde tracks krijgen nu hun compressie-instellingen net als de andere tracks\nEen fout tijdens het verwerken van een video wordt nu weergegeven in plaats van dat er niets gebeurt, en de knop Verwerken kan niet meer een tweede keer worden gebruikt terwijl de stappen op elkaar volgen",
+  "about.news.version_3_8_1.items": "Wanneer het systeem weigert de prioriteit van een achtergrondproces te wijzigen, wordt er een waarschuwing gelogd in plaats van dat de verwerking mislukt\nDe naam en de eigenschappen van tracks die door meerdere geselecteerde video's worden gedeeld, tonen een lege waarde niet langer als undefined",
   "about.news.version_3_8_0.items": "Extra's bij een film (trailer, making of, verwijderde scène, featurette, interview, scène, korte film of overige extra) worden nu ondersteund: het type kies je in het nieuwe veld Inhoud of wordt afgeleid uit de bestandsnaam, en het bestand krijgt het achtervoegsel dat Jellyfin en Plex herkennen, in de filmmap als die is ingeschakeld\nEen optionele titel voor de extra onderscheidt meerdere extra's van hetzelfde type\nDe tooltip van de poster van een film of serie toont al zijn genres",
   "about.news.version_3_7_1.items": "De korte en lange beschrijvingen van de applicatie vermelden nu de remux en het importeren van tracks met automatische synchronisatie, zelfs wanneer het andere bestand met een andere snelheid wordt afgespeeld\nDe lijst met kernfuncties in de README en in de vermelding in de Microsoft Store is gecorrigeerd: deze omvat nu de verliesvrije remux, de audio-encodering naar AAC en de wachtrijen met verwerkingsstappen"
 }

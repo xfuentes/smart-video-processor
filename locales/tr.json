@@ -630,6 +630,7 @@
   "log.download.error": "Dosya indirilirken hata oluştu: {message}",
   "log.process.spawning": "Başlatılıyor: {command} {args}",
   "log.process.priority": "Süreç pid: {pid} için öncelik ayarlandı: {priority}",
+  "log.process.priority_denied": "Pid: {pid} işleminin önceliği {priority} olarak değiştirilemedi: {error}",
   "log.cache.reading": "{key} -> ÖNBELLEKTEN OKUNUYOR",
   "log.cache.caching": "{key} -> YANIT ÖNBELLEĞE ALINIYOR",
   "log.tvdb.calling_episodes": "/series/{tvdbId}/episodes/{order} şu parametrelerle çağrılıyor: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "İçe aktarılan dosyanın parçaları hazırlanıyor {number}/{total}...",
   "video.message.preparing_imported_file_progress": "İçe aktarılan dosyanın parçaları hazırlanıyor {number}/{total}: %{percent}...",
   "about.news.version_3_7_0.items": "PAL sürümü gibi farklı bir hızda oynatılan bir dosyanın içe aktarılan kanalları artık senkronize tutuluyor: ses, ana videonun hızına göre yeniden örnekleniyor (perde dahil) ve altyazılar uzatılıyor\nBir dosya yüklenirken ve ses ofseti ölçülürken video, kanallarda bir yükleniyor simgesi yerine ayrıntıları ve ilerlemeyi içeren bir Yükleniyor durumu gösteriyor\nDurum çubuğunda gösterilen yeni bir Muxing kuyruğu, içe aktarılan kanalların hazırlanmasını ve video parçalarının kesilip birleştirilmesini ilerlemeleriyle birlikte yönetiyor\nİçe aktarılan kanallar artık diğer kanallar gibi sıkıştırma ayarlarına sahip oluyor\nBir videoyu işlerken oluşan hata artık hiçbir şey olmuyormuş gibi bırakılmak yerine görüntüleniyor ve adımlar birbirini takip ederken İşle düğmesi artık ikinci kez kullanılamıyor",
+  "about.news.version_3_8_1.items": "Sistem bir arka plan işleminin önceliğini değiştirmeyi reddettiğinde, işlemenin başarısız olması yerine bir uyarı günlüğe kaydedilir\nBirden çok seçili videoda ortak olan izlerin adı ve özellikleri artık boş bir değeri tanımsız olarak göstermiyor",
   "about.news.version_3_8_0.items": "Bir filmin ek içerikleri (fragman, kamera arkası, silinen sahne, tanıtım filmi, röportaj, sahne, kısa film veya diğer ek içerik) artık destekleniyor: tür, yeni İçerik alanından seçilir veya dosya adından tahmin edilir ve dosya, Jellyfin ile Plex tarafından tanınan son ekle, etkinleştirilmişse film klasörüne yerleştirilir\nEk içerik için isteğe bağlı bir başlık, aynı türden birden fazla ek içeriği birbirinden ayırır\nBir filmin veya dizinin posterinin araç ipucu tüm türlerini listeler",
   "about.news.version_3_7_1.items": "Uygulamanın kısa ve uzun açıklamalarında artık remux işleminden ve izlerin otomatik senkronizasyonla içe aktarılmasından söz ediliyor; diğer dosya farklı bir hızda oynatılsa bile bu geçerli\nREADME dosyasındaki ve Microsoft Store sayfasındaki temel özellikler listesi düzeltildi: artık kayıpsız remux işlemini, sesin AAC formatına kodlanmasını ve işlem adımlarının kuyruklarını da kapsıyor"
 }

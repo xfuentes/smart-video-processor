@@ -630,6 +630,7 @@
   "log.download.error": "Chyba při stahování souboru: {message}",
   "log.process.spawning": "Spouštění {command} {args}",
   "log.process.priority": "PID procesu: {pid}, nastavená priorita: {priority}",
+  "log.process.priority_denied": "Proces s PID {pid}: nepodařilo se změnit prioritu na {priority}: {error}",
   "log.cache.reading": "{key} -> ČTENÍ Z CACHE",
   "log.cache.caching": "{key} -> UKLÁDÁNÍ ODPOVĚDI DO CACHE",
   "log.tvdb.calling_episodes": "Volání /series/{tvdbId}/episodes/{order} s parametry: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Příprava stop importovaného souboru {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Příprava stop importovaného souboru {number}/{total}: {percent} %...",
   "about.news.version_3_7_0.items": "U souboru, který se přehrává jinou rychlostí (například u verze PAL), zůstávají importované stopy nyní synchronizované: zvuk se převzorkuje na rychlost hlavního videa včetně výšky tónu a titulky se natáhnou\nBěhem načítání souboru a měření posunu jeho zvuku zobrazuje video stav Načítání s podrobnostmi a průběhem, místo indikátoru načítání ve stopách\nNová fronta muxování, zobrazená ve stavovém řádku, zajišťuje přípravu importovaných stop a stříhání a spojování částí videa a ukazuje jejich průběh\nImportované stopy nyní dostávají nastavení komprese stejně jako ostatní stopy\nChyba, ke které dojde při zpracování videa, se nyní zobrazí, místo aby se nestalo nic, a tlačítko Zpracovat už nelze použít podruhé, zatímco jednotlivé kroky na sebe navazují",
+  "about.news.version_3_8_1.items": "Pokud systém odmítne změnit prioritu procesu na pozadí, zaznamená se varování a zpracování už kvůli tomu neselže\nNázev a vlastnosti stop sdílených několika vybranými videi už u prázdné hodnoty nezobrazují „undefined“",
   "about.news.version_3_8_0.items": "Bonusy k filmu (trailer, making of, vystřižená scéna, featurette, rozhovor, scéna, krátký film nebo jiný bonus) jsou nyní podporovány: typ se vybírá v novém poli Obsah nebo se odhadne z názvu souboru a soubor získá příponu rozpoznávanou Jellyfin a Plex, a to ve složce filmu, pokud je tato možnost zapnutá\nVolitelný název bonusu umožňuje rozlišit několik bonusů stejného druhu\nNápověda u plakátu filmu nebo seriálu uvádí všechny jeho žánry",
   "about.news.version_3_7_1.items": "Krátký a dlouhý popis aplikace nyní zmiňuje remux a import stop s automatickou synchronizací, i když druhý soubor běží jinou rychlostí\nSeznam hlavních funkcí v souboru README a v nabídce Microsoft Store byl opraven: nově zahrnuje bezeztrátový remux, kódování zvuku do AAC a fronty kroků zpracování"
 }

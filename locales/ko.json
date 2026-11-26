@@ -630,6 +630,7 @@
   "log.download.error": "파일 다운로드 오류: {message}",
   "log.process.spawning": "{command} {args} 실행 중",
   "log.process.priority": "프로세스 PID: {pid}의 우선순위를 {priority}(으)로 설정함",
+  "log.process.priority_denied": "프로세스 pid: {pid}의 우선순위를 {priority}(으)로 변경할 수 없습니다: {error}",
   "log.cache.reading": "{key} -> 캐시에서 읽는 중",
   "log.cache.caching": "{key} -> 응답 캐싱 중",
   "log.tvdb.calling_episodes": "/series/{tvdbId}/episodes/{order} 호출 중, 매개변수: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "가져온 파일 {number}/{total}의 트랙을 준비하는 중...",
   "video.message.preparing_imported_file_progress": "가져온 파일 {number}/{total}의 트랙 준비 중: {percent}%...",
   "about.news.version_3_7_0.items": "PAL 버전처럼 재생 속도가 다른 파일에서 가져온 트랙의 싱크가 이제 유지됩니다. 오디오는 음높이를 포함해 메인 비디오의 속도에 맞게 리샘플링되고, 자막은 늘려서 맞춥니다.\n파일을 불러와 오디오 오프셋을 측정하는 동안, 트랙에 스피너가 표시되는 대신 비디오에 세부 정보와 진행률이 담긴 로드 중 상태가 표시됩니다.\n상태 표시줄에 표시되는 새로운 먹싱 대기열이 가져온 트랙의 준비 작업과 비디오 파트의 자르기 및 결합 작업을 진행률과 함께 처리합니다.\n가져온 트랙에도 이제 다른 트랙과 같은 압축 설정이 적용됩니다.\n비디오 처리 중 오류가 발생하면 아무 반응이 없는 대신 오류가 표시되며, 단계가 이어서 진행되는 동안에는 처리 버튼을 다시 누를 수 없습니다.",
+  "about.news.version_3_8_1.items": "시스템이 백그라운드 프로세스의 우선순위 변경을 거부하면 처리를 실패시키는 대신 경고를 로그에 기록합니다\n선택한 여러 비디오가 공유하는 트랙의 이름과 속성에서 빈 값이 더 이상 undefined로 표시되지 않습니다",
   "about.news.version_3_8_0.items": "영화의 부가 영상(예고편, 메이킹 영상, 삭제된 장면, 특집 영상, 인터뷰, 장면, 단편 영화 또는 기타 부가 영상)을 이제 지원합니다. 유형은 새로운 콘텐츠 필드에서 선택하거나 파일 이름에서 자동으로 추측하며, 파일에는 Jellyfin과 Plex에서 인식하는 접미사가 붙고 영화 폴더 옵션이 켜져 있으면 해당 영화 폴더에 저장됩니다\n부가 영상에 선택적으로 제목을 지정하여 같은 종류의 부가 영상을 여러 개 구분할 수 있습니다\n영화나 시리즈 포스터의 툴팁에 모든 장르가 표시됩니다",
   "about.news.version_3_7_1.items": "애플리케이션의 짧은 설명과 긴 설명에 리먹스와 자동 싱크 트랙 가져오기가 이제 언급됩니다. 다른 파일의 재생 속도가 달라도 해당됩니다\nREADME와 Microsoft Store 등록 정보의 핵심 기능 목록을 수정했습니다. 이제 무손실 리먹스, AAC 오디오 인코딩, 처리 단계 대기열이 포함됩니다"
 }

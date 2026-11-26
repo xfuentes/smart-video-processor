@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.8.1] - 2026-11-26
+
+### Fixed
+
+- When the system refuses to change the priority of a background process (it needs privileges on Linux and macOS), a warning is logged instead of making the processing fail.
+- The name and the properties of the tracks shared by several selected videos no longer show an empty value as undefined.
+
 ## [3.8.0] - 2026-11-24
 
 ### Added

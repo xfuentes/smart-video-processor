@@ -630,6 +630,7 @@
   "log.download.error": "Error downloading file: {message}",
   "log.process.spawning": "Spawning {command} {args}",
   "log.process.priority": "Process pid: {pid} set to priority: {priority}",
+  "log.process.priority_denied": "Process pid: {pid} priority could not be changed to {priority}: {error}",
   "log.cache.reading": "{key} -> READING FROM CACHE",
   "log.cache.caching": "{key} -> CACHING RESPONSE",
   "log.tvdb.calling_episodes": "Calling /series/{tvdbId}/episodes/{order} with params: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Preparing the tracks of the imported file {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Preparing the tracks of the imported file {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "A file playing at a different speed, such as a PAL version, now has its imported tracks kept in sync: the audio is resampled to the speed of the main video, pitch included, and the subtitles are stretched\nThe video shows a Loading status with the details and the progress while a file is loaded and its audio offset measured, instead of a spinner in the tracks\nA new Muxing queue, shown in the status bar, handles the preparation of the imported tracks and the cutting and joining of the video parts, with their progress\nThe imported tracks now get their compression settings like the other tracks\nAn error occurring while processing a video is now displayed instead of nothing happening, and the Process button can no longer be used a second time while the steps follow each other",
+  "about.news.version_3_8_1.items": "When the system refuses to change the priority of a background process, a warning is logged instead of making the processing fail\nThe name and the properties of the tracks shared by several selected videos no longer show an empty value as undefined",
   "about.news.version_3_8_0.items": "The extras of a movie (trailer, making of, deleted scene, featurette, interview, scene, short film or other extra) are now supported: the type is chosen in the new Content field or guessed from the file name, and the file gets the suffix recognised by Jellyfin and Plex, in the movie folder when it is enabled\nAn optional title for the extra tells apart several extras of the same kind\nThe tooltip of the poster of a movie or a series lists all its genres",
   "about.news.version_3_7_1.items": "The short and long descriptions of the application now mention the remux and the import of tracks with automatic sync, even when the other file plays at another speed\nThe list of core features of the README and of the Microsoft Store listing is corrected: it now covers the lossless remux, the audio encoding to AAC and the queues of the processing steps"
 }

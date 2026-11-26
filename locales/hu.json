@@ -630,6 +630,7 @@
   "log.download.error": "Hiba a fájl letöltésekor: {message}",
   "log.process.spawning": "Indítás: {command} {args}",
   "log.process.priority": "Folyamat PID: {pid}, beállított prioritás: {priority}",
+  "log.process.priority_denied": "A(z) {pid} azonosítójú folyamat prioritását nem sikerült {priority} értékre módosítani: {error}",
   "log.cache.reading": "{key} -> OLVASÁS A GYORSÍTÓTÁRBÓL",
   "log.cache.caching": "{key} -> VÁLASZ GYORSÍTÓTÁRAZÁSA",
   "log.tvdb.calling_episodes": "Hívás: /series/{tvdbId}/episodes/{order} a következő paraméterekkel: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Az importált fájl sávjainak előkészítése: {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Az importált fájl sávjainak előkészítése {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "A más sebességgel lejátszott fájl (például egy PAL-változat) importált sávjai mostantól szinkronban maradnak: a hangot a rendszer a fő videó sebességére mintavételezi újra, a hangmagasságot is beleértve, a feliratokat pedig széthúzza\nA videó „Betöltés” állapotot jelenít meg a részletekkel és a folyamattal, amíg egy fájl betöltődik, és a hangeltolását megmérik, a sávokban látható forgó jelző helyett\nAz állapotsorban megjelenő új Muxolási sor kezeli az importált sávok előkészítését, valamint a videórészek vágását és összefűzését, a folyamat megjelenítésével\nAz importált sávok mostantól a többi sávhoz hasonlóan kapnak tömörítési beállításokat\nA videó feldolgozása közben fellépő hibát a program mostantól megjeleníti ahelyett, hogy semmi sem történne, és a Feldolgozás gomb már nem használható másodszor, amíg a lépések egymást követik",
+  "about.news.version_3_8_1.items": "Ha a rendszer megtagadja egy háttérfolyamat prioritásának módosítását, a feldolgozás meghiúsulása helyett figyelmeztetés kerül a naplóba\nTöbb kijelölt videó közös sávjainak neve és tulajdonságai már nem jelenítenek meg üres értéket meghatározatlanként",
   "about.news.version_3_8_0.items": "Mostantól támogatottak a filmek extrái (előzetes, a kulisszák mögött, kihagyott jelenet, kisfilm, interjú, jelenet, rövidfilm vagy egyéb extra): a típust az új Tartalom mezőben lehet kiválasztani, vagy a program kitalálja a fájlnévből, a fájl pedig a Jellyfin és a Plex által felismert utótagot kapja, engedélyezés esetén a film mappájában\nAz extrák opcionális címe segít megkülönböztetni az azonos típusú extrákat\nA filmek és sorozatok plakátjának tippje felsorolja az összes műfajt",
   "about.news.version_3_7_1.items": "Az alkalmazás rövid és hosszú leírása mostantól megemlíti a remuxot és a sávok importálását automatikus szinkronizálással, még akkor is, ha a másik fájl eltérő sebességgel játszódik le\nA README és a Microsoft Store-adatlap fő funkcióinak listája javítva lett: mostantól szerepel benne a veszteségmentes remux, az AAC-re történő hangkódolás és a feldolgozási lépések sorai"
 }

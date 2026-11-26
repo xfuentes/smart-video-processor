@@ -20,7 +20,7 @@ import { SpawnOptionsWithStdioTuple, StdioPipe } from 'child_process'
 import * as child_process from 'node:child_process'
 import { ChildProcess, ChildProcessWithoutNullStreams } from 'node:child_process'
 import lcid from 'lcid'
-import { debug } from './log'
+import { debug, warning } from './log'
 import { _ } from '../i18n'
 import * as os from 'node:os'
 import * as fs from 'node:fs'
@@ -150,7 +150,20 @@ export class Processes {
         pid,
         priority: priorityLabel
       })
-      os.setPriority(pid, priorityNum)
+      try {
+        os.setPriority(pid, priorityNum)
+      } catch (e) {
+        // Raising the priority of a process needs privileges on Linux and macOS.
+        if ((e as NodeJS.ErrnoException).code !== 'ERR_SYSTEM_ERROR') {
+          throw e
+        }
+        warning('log.process.priority_denied', {
+          defaultValue: 'Process pid: {pid} priority could not be changed to {priority}: {error}',
+          pid,
+          priority: priorityLabel,
+          error: (e as Error).message
+        })
+      }
     }
   }
 

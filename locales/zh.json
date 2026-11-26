@@ -630,6 +630,7 @@
   "log.download.error": "下载文件时出错:{message}",
   "log.process.spawning": "正在启动 {command} {args}",
   "log.process.priority": "进程 PID:{pid} 已设置优先级:{priority}",
+  "log.process.priority_denied": "无法将进程 pid: {pid} 的优先级更改为 {priority}:{error}",
   "log.cache.reading": "{key} -> 从缓存读取",
   "log.cache.caching": "{key} -> 缓存响应",
   "log.tvdb.calling_episodes": "正在调用 /series/{tvdbId}/episodes/{order},参数:{params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "正在准备导入文件 {number}/{total} 的轨道...",
   "video.message.preparing_imported_file_progress": "正在准备导入文件 {number}/{total} 的轨道:{percent}%...",
   "about.news.version_3_7_0.items": "以不同速度播放的文件（例如 PAL 版本），其导入的轨道现在可保持同步：音频会重新采样到主视频的速度（包括音调），字幕则会相应拉伸\n加载文件并测量其音频偏移时，视频会显示“正在加载”状态及详细信息和进度，而不再在轨道中显示转圈图标\n状态栏中新增“混流队列”，负责准备导入的轨道以及剪切和合并视频片段，并显示其进度\n导入的轨道现在也拥有与其他轨道相同的压缩设置\n处理视频时发生的错误现在会显示出来，而不是毫无反应；在各步骤依次执行期间，“处理”按钮也不能再被重复点击",
+  "about.news.version_3_8_1.items": "当系统拒绝更改后台进程的优先级时,现在只会记录一条警告,而不会导致处理失败\n多个所选视频共有的轨道名称和属性不再将空值显示为 undefined",
   "about.news.version_3_8_0.items": "现已支持电影的附加内容(预告片、幕后花絮、删减片段、专题短片、访谈、片段、短片或其他附加内容):类型可在新增的“内容”字段中选择,也可根据文件名自动识别,文件会加上 Jellyfin 和 Plex 可识别的后缀,启用电影文件夹时则放入电影文件夹中\n可为附加内容设置可选标题,以区分同一类型的多个附加内容\n电影或剧集海报的提示信息现在会列出其所有类型",
   "about.news.version_3_7_1.items": "应用程序的简短描述和详细描述现在都提到了混流(remux),以及带自动同步的轨道导入功能,即使另一个文件的播放速度不同也同样适用\nREADME 和 Microsoft Store 页面中的核心功能列表已更正,现已涵盖无损混流、音频编码为 AAC 以及处理步骤队列"
 }

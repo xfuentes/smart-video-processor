@@ -630,6 +630,7 @@
   "log.download.error": "Kesalahan saat mengunduh file: {message}",
   "log.process.spawning": "Menjalankan {command} {args}",
   "log.process.priority": "PID proses: {pid} diatur ke prioritas: {priority}",
+  "log.process.priority_denied": "Prioritas proses pid: {pid} tidak dapat diubah menjadi {priority}: {error}",
   "log.cache.reading": "{key} -> MEMBACA DARI CACHE",
   "log.cache.caching": "{key} -> MENYIMPAN RESPons KE CACHE",
   "log.tvdb.calling_episodes": "Memanggil /series/{tvdbId}/episodes/{order} dengan parameter: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Menyiapkan trek dari file yang diimpor {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Menyiapkan track dari file yang diimpor {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "File yang diputar dengan kecepatan berbeda, seperti versi PAL, kini menjaga trek yang diimpor tetap sinkron: audio di-resample ke kecepatan video utama, termasuk pitch-nya, dan subtitel diregangkan\nVideo menampilkan status Memuat beserta detail dan progresnya saat file dimuat dan offset audionya diukur, bukan lagi spinner di dalam trek\nAntrean Muxing baru, yang ditampilkan di bilah status, menangani persiapan trek yang diimpor serta pemotongan dan penggabungan bagian video, lengkap dengan progresnya\nTrek yang diimpor kini mendapatkan pengaturan kompresi seperti trek lainnya\nError yang terjadi saat memproses video kini ditampilkan, tidak lagi tanpa respons, dan tombol Proses tidak bisa lagi digunakan untuk kedua kalinya selagi langkah-langkahnya berjalan berurutan",
+  "about.news.version_3_8_1.items": "Jika sistem menolak mengubah prioritas proses latar belakang, peringatan akan dicatat dalam log dan pemrosesan tidak lagi gagal\nNama dan properti track yang dimiliki bersama oleh beberapa video yang dipilih tidak lagi menampilkan nilai kosong sebagai undefined",
   "about.news.version_3_8_0.items": "Ekstra film (trailer, di balik layar, adegan yang dihapus, featurette, wawancara, adegan, film pendek, atau ekstra lainnya) kini didukung: jenisnya dipilih di kolom Konten yang baru atau ditebak dari nama file, dan file mendapat akhiran yang dikenali oleh Jellyfin dan Plex, di folder film jika opsi tersebut diaktifkan\nJudul opsional untuk ekstra membedakan beberapa ekstra dari jenis yang sama\nTooltip poster film atau serial menampilkan semua genre-nya",
   "about.news.version_3_7_1.items": "Deskripsi singkat dan panjang aplikasi kini menyebutkan remux dan impor track dengan sinkronisasi otomatis, bahkan ketika file lainnya diputar dengan kecepatan yang berbeda\nDaftar fitur utama pada README dan listing Microsoft Store telah diperbaiki: kini mencakup remux tanpa kehilangan kualitas, encoding audio ke AAC, dan antrean langkah-langkah pemrosesan"
 }

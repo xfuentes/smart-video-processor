@@ -74,9 +74,8 @@
     <release version="__VERSION__" date="__DATE__">
       <description>
         <ul>
-          <li>The extras of a movie (trailer, making of, deleted scene, featurette, interview, scene, short film or other extra) are now supported, with the suffix recognised by Jellyfin and Plex and the movie folder when it is enabled</li>
-          <li>An optional title for the extra tells apart several extras of the same kind</li>
-          <li>The tooltip of the poster of a movie or a series lists all its genres</li>
+          <li>When the system refuses to change the priority of a background process, a warning is logged instead of making the processing fail</li>
+          <li>The name and the properties of the tracks shared by several selected videos no longer show an empty value as undefined</li>
         </ul>
       </description>
     </release>

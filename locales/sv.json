@@ -630,6 +630,7 @@
   "log.download.error": "Fel vid nedladdning av fil: {message}",
   "log.process.spawning": "Startar {command} {args}",
   "log.process.priority": "Process-pid: {pid} har fått prioritet: {priority}",
+  "log.process.priority_denied": "Prioriteten för processen med pid: {pid} kunde inte ändras till {priority}: {error}",
   "log.cache.reading": "{key} -> LÄSER FRÅN CACHE",
   "log.cache.caching": "{key} -> CACHAR SVAR",
   "log.tvdb.calling_episodes": "Anropar /series/{tvdbId}/episodes/{order} med parametrar: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Förbereder spåren i den importerade filen {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Förbereder spåren i den importerade filen {number}/{total}: {percent} %...",
   "about.news.version_3_7_0.items": "En fil som spelas upp i en annan hastighet, till exempel en PAL-version, får nu sina importerade spår synkade: ljudet omsamplas till huvudvideons hastighet, tonhöjden inkluderad, och undertexterna sträcks ut\nVideon visar statusen Laddar med detaljer och förlopp medan en fil läses in och dess ljudförskjutning mäts, i stället för en snurra i spåren\nEn ny Muxningskö, som visas i statusfältet, hanterar förberedelsen av de importerade spåren samt klippning och sammanfogning av videodelarna, med deras förlopp\nDe importerade spåren får nu sina komprimeringsinställningar precis som de andra spåren\nEtt fel som uppstår när en video bearbetas visas nu i stället för att ingenting händer, och knappen Bearbeta kan inte längre användas en andra gång medan stegen följer på varandra",
+  "about.news.version_3_8_1.items": "När systemet nekar ändring av prioriteten för en bakgrundsprocess loggas nu en varning i stället för att bearbetningen misslyckas\nNamnet och egenskaperna för spår som delas av flera valda videor visar inte längre ett tomt värde som odefinierat",
   "about.news.version_3_8_0.items": "Extramaterial till en film (trailer, bakom kulisserna, borttagen scen, featurette, intervju, scen, kortfilm eller annat extramaterial) stöds nu: typen väljs i det nya fältet Innehåll eller gissas utifrån filnamnet, och filen får det suffix som Jellyfin och Plex känner igen, i filmmappen när den är aktiverad\nEn valfri titel på extramaterialet skiljer flera extramaterial av samma typ åt\nVerktygstipset för en films eller series affisch visar alla dess genrer",
   "about.news.version_3_7_1.items": "De korta och långa beskrivningarna av programmet nämner nu remux och import av spår med automatisk synkronisering, även när den andra filen spelas upp med en annan hastighet\nListan över huvudfunktioner i README och i Microsoft Store-sidan har korrigerats: den omfattar nu förlustfri remux, ljudkodning till AAC och köer för bearbetningsstegen"
 }

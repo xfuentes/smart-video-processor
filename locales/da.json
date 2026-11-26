@@ -630,6 +630,7 @@
   "log.download.error": "Fejl ved download af fil: {message}",
   "log.process.spawning": "Starter {command} {args}",
   "log.process.priority": "Proces-pid: {pid} sat til prioritet: {priority}",
+  "log.process.priority_denied": "Prioriteten for proces med pid: {pid} kunne ikke ændres til {priority}: {error}",
   "log.cache.reading": "{key} -> LÆSER FRA CACHE",
   "log.cache.caching": "{key} -> CACHER SVAR",
   "log.tvdb.calling_episodes": "Kalder /series/{tvdbId}/episodes/{order} med parametre: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Forbereder sporene i den importerede fil {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Forbereder sporene i den importerede fil {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "En fil, der afspilles med en anden hastighed, f.eks. en PAL-version, får nu sine importerede spor holdt synkroniseret: Lyden resamples til hovedvideoens hastighed, tonehøjden inklusive, og undertekster strækkes\nVideoen viser en indlæsningsstatus med detaljer og fremdrift, mens en fil indlæses, og dens lydforskydning måles, i stedet for en spinner i sporene\nEn ny muxing-kø, som vises i statuslinjen, håndterer forberedelsen af de importerede spor samt klipning og samling af videodelene med deres fremdrift\nDe importerede spor får nu deres komprimeringsindstillinger ligesom de andre spor\nEn fejl under behandling af en video vises nu, i stedet for at der ikke sker noget, og knappen Behandl kan ikke længere bruges en anden gang, mens trinnene følger efter hinanden",
+  "about.news.version_3_8_1.items": "Når systemet nægter at ændre prioriteten for en baggrundsproces, bliver der logget en advarsel i stedet for, at behandlingen mislykkes\nNavnet og egenskaberne for spor, der deles af flere valgte videoer, viser ikke længere en tom værdi som udefineret",
   "about.news.version_3_8_0.items": "Ekstramateriale til en film (trailer, bag kulisserne, slettet scene, featurette, interview, scene, kortfilm eller anden ekstra) understøttes nu: Typen vælges i det nye felt Indhold eller gættes ud fra filnavnet, og filen får det suffiks, som Jellyfin og Plex genkender, i filmmappen, hvis den er aktiveret\nEn valgfri titel til ekstramaterialet skelner mellem flere ekstramaterialer af samme type\nTooltippen på plakaten for en film eller en serie viser alle dens genrer",
   "about.news.version_3_7_1.items": "Programmets korte og lange beskrivelser nævner nu remux og import af spor med automatisk synkronisering, selv når den anden fil afspilles med en anden hastighed\nListen over hovedfunktioner i README og i Microsoft Store-oversigten er rettet: Den dækker nu det tabsfri remux, lydkodning til AAC og køerne med behandlingstrin"
 }

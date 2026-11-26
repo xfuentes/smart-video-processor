@@ -167,9 +167,11 @@ export const MultiTracks = ({ videos, disabled }: Props) => {
               <TableCell>{group.id}</TableCell>
               <TableCell>{trackTypeRenderer(group.type)}</TableCell>
               <TableCell>{commonValue(group, 'language', (t) => t.language ?? 'und')}</TableCell>
-              <TableCell>{commonValue(group, 'name', (t) => t.name)}</TableCell>
+              <TableCell>{commonValue(group, 'name', (t) => t.name ?? '')}</TableCell>
               <TableCell>{commonValue(group, 'codec', (t) => codecRenderer(t.codec))}</TableCell>
-              <TableCell>{commonValue(group, 'properties', (t) => trackPropertiesRenderer(t.properties))}</TableCell>
+              <TableCell>
+                {commonValue(group, 'properties', (t) => trackPropertiesRenderer(t.properties) ?? '')}
+              </TableCell>
               <TableCell>
                 <Tooltip
                   content={_('multi_tracks.forced_tooltip', {

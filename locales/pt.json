@@ -630,6 +630,7 @@
   "log.download.error": "Erro ao transferir o ficheiro: {message}",
   "log.process.spawning": "A iniciar {command} {args}",
   "log.process.priority": "PID do processo: {pid} definido com a prioridade: {priority}",
+  "log.process.priority_denied": "Não foi possível alterar a prioridade do processo com PID {pid} para {priority}: {error}",
   "log.cache.reading": "{key} -> A LER DA CACHE",
   "log.cache.caching": "{key} -> A GUARDAR RESPOSTA EM CACHE",
   "log.tvdb.calling_episodes": "A chamar /series/{tvdbId}/episodes/{order} com os parâmetros: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "A preparar as faixas do ficheiro importado {number}/{total}...",
   "video.message.preparing_imported_file_progress": "A preparar as faixas do ficheiro importado {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "Um ficheiro reproduzido a uma velocidade diferente, como uma versão PAL, passa a manter as faixas importadas sincronizadas: o áudio é reamostrado para a velocidade do vídeo principal, incluindo o tom, e as legendas são esticadas\nO vídeo mostra um estado de Carregamento com os detalhes e o progresso enquanto um ficheiro é carregado e o seu desfasamento de áudio é medido, em vez de um indicador de atividade nas faixas\nUma nova fila de Muxing, apresentada na barra de estado, trata da preparação das faixas importadas e do corte e junção das partes do vídeo, com o respetivo progresso\nAs faixas importadas passam a ter as suas definições de compressão, tal como as outras faixas\nUm erro que ocorra durante o processamento de um vídeo passa a ser apresentado, em vez de não acontecer nada, e o botão Processar já não pode ser utilizado uma segunda vez enquanto as etapas se sucedem",
+  "about.news.version_3_8_1.items": "Quando o sistema recusa alterar a prioridade de um processo em segundo plano, é registado um aviso em vez de fazer o processamento falhar\nO nome e as propriedades das faixas partilhadas por vários vídeos selecionados deixam de mostrar um valor vazio como indefinido",
   "about.news.version_3_8_0.items": "Os extras de um filme (trailer, making of, cena eliminada, featurette, entrevista, cena, curta-metragem ou outro extra) já são suportados: o tipo é escolhido no novo campo Conteúdo ou deduzido a partir do nome do ficheiro, e o ficheiro recebe o sufixo reconhecido pelo Jellyfin e pelo Plex, na pasta do filme quando esta opção está ativada\nUm título opcional para o extra permite distinguir vários extras do mesmo tipo\nA dica do cartaz de um filme ou de uma série apresenta todos os seus géneros",
   "about.news.version_3_7_1.items": "As descrições curta e longa da aplicação mencionam agora o remux e a importação de faixas com sincronização automática, mesmo quando o outro ficheiro é reproduzido a uma velocidade diferente\nA lista das funcionalidades principais do README e da página da Microsoft Store foi corrigida: passa a incluir o remux sem perdas, a codificação de áudio para AAC e as filas das etapas de processamento"
 }

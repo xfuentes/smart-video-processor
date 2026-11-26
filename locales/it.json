@@ -630,6 +630,7 @@
   "log.download.error": "Errore durante il download del file: {message}",
   "log.process.spawning": "Avvio di {command} {args}",
   "log.process.priority": "PID del processo: {pid}, priorità impostata su: {priority}",
+  "log.process.priority_denied": "Impossibile modificare la priorità del processo pid: {pid} in {priority}: {error}",
   "log.cache.reading": "{key} -> LETTURA DALLA CACHE",
   "log.cache.caching": "{key} -> MEMORIZZAZIONE DELLA RISPOSTA IN CACHE",
   "log.tvdb.calling_episodes": "Chiamata a /series/{tvdbId}/episodes/{order} con parametri: {params}",
@@ -811,6 +812,7 @@
   "video.message.preparing_imported_file": "Preparazione delle tracce del file importato {number}/{total}...",
   "video.message.preparing_imported_file_progress": "Preparazione delle tracce del file importato {number}/{total}: {percent}%...",
   "about.news.version_3_7_0.items": "Un file riprodotto a una velocità diversa, ad esempio una versione PAL, ora mantiene sincronizzate le tracce importate: l'audio viene ricampionato alla velocità del video principale, intonazione compresa, e i sottotitoli vengono allungati\nIl video mostra uno stato di caricamento con i dettagli e l'avanzamento mentre un file viene caricato e il suo sfasamento audio viene misurato, al posto di un indicatore di caricamento nelle tracce\nUna nuova coda di muxing, mostrata nella barra di stato, gestisce la preparazione delle tracce importate e il taglio e l'unione delle parti del video, con il relativo avanzamento\nLe tracce importate ora ricevono le impostazioni di compressione come le altre tracce\nUn errore che si verifica durante l'elaborazione di un video ora viene mostrato invece di non succedere nulla, e il pulsante Elabora non può più essere usato una seconda volta mentre le fasi si susseguono",
+  "about.news.version_3_8_1.items": "Quando il sistema rifiuta di modificare la priorità di un processo in background, viene registrato un avviso invece di far fallire l''elaborazione\nIl nome e le proprietà delle tracce condivise da più video selezionati non mostrano più un valore vuoto come non definito",
   "about.news.version_3_8_0.items": "Sono ora supportati gli extra di un film (trailer, dietro le quinte, scena eliminata, featurette, intervista, scena, cortometraggio o altro extra): il tipo si sceglie nel nuovo campo Contenuto oppure viene dedotto dal nome del file, e il file riceve il suffisso riconosciuto da Jellyfin e Plex, nella cartella del film se l''opzione è attiva\nUn titolo facoltativo per l''extra permette di distinguere più extra dello stesso tipo\nIl tooltip della locandina di un film o di una serie elenca tutti i suoi generi",
   "about.news.version_3_7_1.items": "Le descrizioni breve e lunga dell'applicazione ora menzionano il remux e l'importazione di tracce con sincronizzazione automatica, anche quando l'altro file viene riprodotto a una velocità diversa\nL'elenco delle funzionalità principali del README e della scheda del Microsoft Store è stato corretto: ora comprende il remux senza perdita di qualità, la codifica audio in AAC e le code delle fasi di elaborazione"
 }
